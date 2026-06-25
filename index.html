@@ -1,5 +1,6 @@
 <!doctype html><html lang=en><head><meta charset=utf-8>
 <meta name=viewport content="width=device-width,initial-scale=1"><title>Ludovico — @octopusinc_ digest</title>
+<link rel="icon" type="image/png" href="assets/favicon.png"><link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="alternate" type="text/markdown" href="llms.txt"><style>
 :root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
 --accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
@@ -97,6 +98,7 @@ footer .exp{border:1px solid var(--line);background:#fff;border-radius:8px;paddi
 <div id=catalogue class=hide>
 <div class=controls>
 <input id=qc class=q placeholder="Search the catalogue…" oninput=renderC()>
+<select id=psc onchange=renderC() title="page size"><option value=25>25 / page</option><option value=50>50 / page</option><option value=100>100 / page</option><option value=doom>Doom ∞</option></select>
 <span class=count id=cntc></span></div>
 <div class=pills id=typepills><button class="pill tp" data-t="software" onclick="toggletype(this)">software</button><button class="pill tp" data-t="hardware" onclick="toggletype(this)">hardware</button><button class="pill tp" data-t="other" onclick="toggletype(this)">other</button></div>
 <div class=catgrid id=catgrid></div><div class=pager id=pagerc></div>
@@ -175,10 +177,11 @@ function catCard(c){const link=c.l;const head=link?`<div class=cname><a href="${
 function saveCat(btn){const card=btn.closest('.flip'),key=card.dataset.name,r=card.querySelector('.erow');
  CE[key]={n:r.querySelector('.en').value.trim()||key,l:r.querySelector('.eu').value.trim()||null,t:r.querySelector('.et').value};
  saveCE();dirty();renderC();}
-function renderC(reset){if(reset!==false)shownC=48;const out=filteredC();
+const psC=()=>{const v=$('psc').value;return v=='doom'?24:parseInt(v);};
+function renderC(reset){if(reset!==false)shownC=psC();const out=filteredC();
  $('cntc').textContent=out.length+' / '+CAT.length+' items';
  const slice=out.slice(0,shownC);$('catgrid').innerHTML=slice.map(catCard).join('')||'<p style="color:var(--sub)">No items match.</p>';
- pager('catgrid','pagerc',out.length-slice.length,48,false,()=>{shownC+=48;renderC(false);});}
+ pager('catgrid','pagerc',out.length-slice.length,psC(),$('psc').value=='doom',()=>{shownC+=psC();renderC(false);},o=>{shownC+=24;renderC(false);});}
 // ---- shared ----
 function flip(el){const c=el.closest('.flip');const on=!c.classList.contains('flipped');c.classList.toggle('flipped',on);
  const fi=c.querySelector('.fi'),bk=c.querySelector('.bk');fi.style.minHeight=on?bk.scrollHeight+'px':'';}
