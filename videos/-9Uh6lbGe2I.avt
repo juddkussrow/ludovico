@@ -1,0 +1,396 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: I Built an Autonomous Cross-Agent Workflow (ClaudeCode to Hermes and Back)
+channel: @octopusinc_
+duration: 20:27
+source: https://www.youtube.com/watch?v=-9Uh6lbGe2I
+upload_date: 20260625
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:01] [scene:talk]
+VISUAL: 
+AUDIO: 'So, say you have some agent or model performing a task for you, but you want a different agent or model to audit it and to let deliver a report of findings back to the original agent, who then double-checks everything.'
+
+[00:14] [scene:talk]
+VISUAL: 
+AUDIO: 'I think this is a fairly common workflow that many people may want to use, but when you\'re going across Claude Code or Codex or Hermes Agent, it can be a little tricky. So, in this video, I\'m going to show you step-by-step, and we\'re actually going'
+
+[00:27] [scene:talk]
+VISUAL: 
+AUDIO: 'to create this kind of ultimate cross-agent workflow. So, that by the end of this video, you\'ll be able to set this up yourself. So, you\'ve seen me designing and going through multi-agent workflows before, and those were largely just in Hermes'
+
+[00:42] [scene:talk]
+VISUAL: 
+AUDIO: 'Agent using multiple profiles and multiple Hermes instances on the Kanban board to create these somewhat complicated agent workflows. But, in today\'s video, we\'re going to be using Hermes'
+
+[00:55] [scene:talk]
+VISUAL: 
+AUDIO: 'as well as Claude Code going cross-agent, not just within the same agent harness, but creating a workflow that goes across uh Claude Code and Hermes to create this real workflow that I\'m actually using on'
+
+[01:08] [scene:talk]
+VISUAL: 
+AUDIO: 'my live app. There\'s a couple different ways to do this. I\'ve been testing out several, and this is the best way I found so far. But, there\'s a lot of different ways you can do this. So, perhaps there\'s a different way that\'s'
+
+[01:20] [scene:talk]
+VISUAL: 
+AUDIO: 'better, and uh let me know in the comments if you have something similar that actually works better with it than what I\'m going to show you here. But, I\'m going to introduce this workflow,'
+
+[01:32] [scene:talk]
+VISUAL: 
+AUDIO: 'and the setup for this is that it\'s going to be a pipeline for creating new agent wikis for my app agentwikis.com. Now, you\'ve seen me work do uh pipelines for maintaining them'
+
+[01:44] [scene:talk]
+VISUAL: 
+AUDIO: 'and updating them and filling gaps, but that\'s a very different workflow and different requirements than actually creating new ones, cuz that creating new ones takes quite a bit of work. And I just really want to make sure that'
+
+[01:57] [scene:talk]
+VISUAL: 
+AUDIO: 'it has a sound foundation. So, there\'s going to be a lot of double-checking and triple-checking here, but let\'s get started. And if you like this video, please consider supporting the channel by joining Team Garage,'
+
+[02:09] [scene:talk]
+VISUAL: 
+AUDIO: 'which will give you early access to videos, or Team Garage Max, where you will get exclusive videos each week, as well as many other perks. I\'d like to continue providing as much free valuable content as possible, as well as better experiments on different'
+
+[02:22] [scene:talk]
+VISUAL: 
+AUDIO: 'hardware. So, these memberships will really make it possible. Okay, so first I\'m going to give you an overall view of what this pipeline\'s going to look like, and then I\'ll walk you through each step. So, first I\'m going to give you kind of an overall view of what we\'re'
+
+[02:35] [scene:talk]
+VISUAL: 
+AUDIO: 'doing here, and you can see the yellow is for my task, the orange is for Claude, and this blue one is for Hermes, but it\'s GPT 5.5 under the hood. So, it starts with me [clears throat]'
+
+[02:48] [scene:talk]
+VISUAL: 
+AUDIO: 'deciding the topics, then Claude building out the main scaffolding and doing the the heavy lifting, I would call it. And once it\'s done, I have uh Hermes with GPT 5.5 audit it,'
+
+[03:00] [scene:talk]
+VISUAL: 
+AUDIO: 'and then sends it back to Claude to reconcile. Don\'t necessarily assume that the audit is true, but try to double-check its findings. And then lastly, the wikis have been created, so I need to manually check'
+
+[03:12] [scene:talk]
+VISUAL: 
+AUDIO: 'them. Uh make sure there\'s nothing weird in there, and that all of my agents have properly worked, and then lastly, it gets synced into the VPS uh with Admiral, who is my other Hermes agent, actually. And this whole process process happens'
+
+[03:24] [scene:talk]
+VISUAL: 
+AUDIO: 'overnight, and I\'ve been doing it a couple times a week here or there. Uh but let me get into each step a little bit more. Okay, so this all starts with me um and I need to pick which topics I want'
+
+[03:36] [scene:talk]
+VISUAL: 
+AUDIO: 'to write new wikis for, and I have a couple different sources to find these topics. One is if you watched my video uh last week, I believe it was, that set up this kind of cron job that tells me the top wikis that are searched'
+
+[03:50] [scene:talk]
+VISUAL: 
+AUDIO: 'each day and all different information about the the traffic flows. This can kind of tell me, "Okay, what do people want to see?" And this comes to me every day. And it also sends a weekly report kind of synthesizing all the'
+
+[04:03] [scene:talk]
+VISUAL: 
+AUDIO: 'information. But you can see here here are some of the daily ones. Uh Hermes is usually on top. Hyper frames also very popular. Llama CPP popular. Uh you can see some of the topics here. So, from there I can kind of see what'
+
+[04:16] [scene:talk]
+VISUAL: 
+AUDIO: 'the demand is or at least what categories people are interested in. Um I also take requests from the the Team Garage members group. I reached out to them to ask for requests. Also just generally online what I see people are interested in.'
+
+[04:30] [scene:talk]
+VISUAL: 
+AUDIO: 'So, for this example you can see like Llama CPP is very popular in a a lot of these. So, I want to do something with local models. Hyper frames is also a visual AI tool, so'
+
+[04:43] [scene:talk]
+VISUAL: 
+AUDIO: 'in this example, let\'s say I picked Hugging Face, uh Ollama kind of local AI categories that I think people would be interested in and Stable Diffusion, which is a very popular uh line of local video generation and image generation'
+
+[04:57] [scene:talk]
+VISUAL: 
+AUDIO: 'models. So, I very simply put these in a blank file. Uh Hugging Face, Ollama, Stable Diffusion, and that\'s it. That\'s the bulk of my work for this part. And I do have a fresh file each day uh'
+
+[05:11] [scene:talk]
+VISUAL: 
+AUDIO: 'and I usually name it topics and then whatever the day it is. Just so we can keep organized. So, from there we go into Claude Code and I\'ve created this as a script'
+
+[05:23] [scene:talk]
+VISUAL: 
+AUDIO: 'new_wiki.py and this scaffolds and builds the uh the seed information, the seed data for the agent wiki. And this script and the related files'
+
+[05:36] [scene:talk]
+VISUAL: 
+AUDIO: 'are all the agent really needs. It doesn\'t need any further prompting from me. It tells it the size. It tells it what sources. It knows how to retrieve the sources, what to ingest, how big it should be,'
+
+[05:49] [scene:talk]
+VISUAL: 
+AUDIO: 'and then how to create the wiki itself. So, I\'ve done this several times, so I packaged it all into this new wiki uh Python script. And you may be asking why I\'m doing this'
+
+[06:02] [scene:talk]
+VISUAL: 
+AUDIO: 'in Claude code. I just think at this point on June 23rd, 2026, this changes constantly. So, I want to put a time stamp on this. I think at this point Opus 4.8 is just the best model overall'
+
+[06:15] [scene:talk]
+VISUAL: 
+AUDIO: 'that the general public has access to. So, this is a lot of work. It requires a lot of thinking to search down these sources, ingest them, and then design the wikis. So, this I really want my best model.'
+
+[06:28] [scene:talk]
+VISUAL: 
+AUDIO: 'Now, it\'d be great if Opus was available in the Hermes agent, but as we all know, that\'s not possible right now. Now, I usually run this manually right now. And for each of these topics, like we'
+
+[06:42] [scene:talk]
+VISUAL: 
+AUDIO: 'have three here, they\'ll take 30 minutes to around an hour for each, depending on the size of the topic. Okay, so you can see it\'s started on the'
+
+[06:54] [scene:talk]
+VISUAL: 
+AUDIO: 'workflow. Um it\'s starting gather.py, which is part of the overall workflow, to gather the different sources. So, it\'s going to start now. Once it\'s done verifying, collecting everything, creating the wikis,'
+
+[07:07] [scene:talk]
+VISUAL: 
+AUDIO: 'verifying everything, registering it in the in the config there, it\'s going to put this word finished at the top. Okay, so in order for us to have the the wiki agent'
+
+[07:20] [scene:talk]
+VISUAL: 
+AUDIO: 'job be operational, first of all, we need this pre-run script. Cuz this is what we\'re really going to be running in the cron job. And uh this is the prompt I\'m doing it here. I\'ll make it for for this agent. Uh but you can see this is what the'
+
+[07:34] [scene:talk]
+VISUAL: 
+AUDIO: 'prompt I have. I said uh create a pre-run script that checks if a certain file has a file line saying finished. First line saying finished. If not, do nothing. If so, wait use wake agent to tell the agent to review this'
+
+[07:47] [scene:talk]
+VISUAL: 
+AUDIO: 'file based on the instructions in review.md. Um after it\'s done, use command Claude /p. Uh goal, review the most recent created findings file. Do not assume the'
+
+[08:00] [scene:talk]
+VISUAL: 
+AUDIO: 'findings are accurate, but verify each finding. So, this is the instruction. This is the goal they\'re going to send to Claude once Hermes is done verifying. So, Hermes works as the auditor and it does that with this review file.'
+
+[08:13] [scene:talk]
+VISUAL: 
+AUDIO: 'So, this is a very long file, but this is what I hand to Hermes just so it knows exactly what it needs to do. And this is how it runs its audit basically. Discover what to review'
+
+[08:25] [scene:talk]
+VISUAL: 
+AUDIO: 'um and then check how the sources are gathered. The spec every wiki must fit. Can\'t show all of this. Um but this is'
+
+[08:38] [scene:talk]
+VISUAL: 
+AUDIO: 'all of the details and instructions that I tell Hermes to do when it runs its audit. And it\'s quite long. But this is I put this all in this one file so that the agent knows what to do every single time. There\'s no ambiguity'
+
+[08:52] [scene:talk]
+VISUAL: 
+AUDIO: 'and it\'s very clear instructions. Okay, so I created the pre-run script here. And this is what it is. We haven\'t created the cron. This is just creating the script. This is wiki review finished gate. And you can see this is using a wait'
+
+[09:06] [scene:talk]
+VISUAL: 
+AUDIO: 'agent gate. So, if it\'s not finished line one exactly for finished. If it has no finished, wake agent is false, so Hermes skips entirely. This costs us nothing, by the way. There\'s no API calls. If finished, it prints the review'
+
+[09:19] [scene:talk]
+VISUAL: 
+AUDIO: 'context and ends with wake agent true. So, Hermes wakes up and injects injects the instructions from the pre-run script. Okay, so I created the cron job. You see the schedule runs every 5'
+
+[09:32] [scene:talk]
+VISUAL: 
+AUDIO: 'minutes. And I can run it so frequently because it\'s it\'s only going to actually call the agent uh when it\'s actually needed. So, I can run it for whatever long I want without worrying about burning out all'
+
+[09:44] [scene:talk]
+VISUAL: 
+AUDIO: 'of my tokens. Okay, you see Opus is still working on the wikis. Uh so, I think I\'m going to let it continue to run here. So, we are currently in this stage, the Claude build stage, which is the longest. That\'s why I usually run this'
+
+[09:57] [scene:talk]
+VISUAL: 
+AUDIO: 'overnight um cuz it doesn\'t run into my other usage limits for the 5-hour sessions. And then once it finishes, it\'ll write finished on the top of that text file. And as you could see, we have the cron'
+
+[10:10] [scene:talk]
+VISUAL: 
+AUDIO: 'job set up. So, we\'re all set up for Hermes to to run the review. And that same cron job not only picks up the the wikis and audits them and reviews'
+
+[10:22] [scene:talk]
+VISUAL: 
+AUDIO: 'them, it also has the final handoff command, which is Claude P. So, that one cron job does a lot of the heavy lifting. So, I\'m going to go take a break. I\'m'
+
+[10:35] [scene:talk]
+VISUAL: 
+AUDIO: 'going to go watch some baseball and let my agents all do the work for me. So, I have some nice clean wikis once they\'re all done. But, just to quickly go over a Claude P, um this runs one query non-interactively, prints, and then'
+
+[10:49] [scene:talk]
+VISUAL: 
+AUDIO: 'exit. So, every P call is a fresh session. There\'s no memory of this audit. So, that\'s why it\'s very important to have very clear instructions and that\'s why I set it up as a goal and why I have verification scripts'
+
+[11:02] [scene:talk]
+VISUAL: 
+AUDIO: 'inside this directory. Goal is very useful here cuz it runs until the loop is done. It\'ll just repeat, it\'ll recheck each source, fix, re-verify it until the done condition holds.'
+
+[11:15] [scene:talk]
+VISUAL: 
+AUDIO: 'There\'s no custom command file and it\'s not going to ask me to to do any prompts or anything. So, there\'s been a lot of changes in terms of the policy for using Claude P. At one point, it got kind of banned or'
+
+[11:27] [scene:talk]
+VISUAL: 
+AUDIO: 'it was on separate usage. You\'d have to draw from your extra API usage, but as of as right now, um June 23rd, like I said, 2026, right now'
+
+[11:39] [scene:talk]
+VISUAL: 
+AUDIO: 'you can use it on your subscription. It\'ll draw from your normal plan usage limits. Um but I would check the exact policy if you\'re watching this at a later date because'
+
+[11:51] [scene:talk]
+VISUAL: 
+AUDIO: 'uh Claude or Anthropic, I guess, has been kind of changing the policy around this uh several times recently. It seems pretty clear that they\'re trying to get it uh banned from subscriptions. They seem to want to be pushing'
+
+[12:05] [scene:talk]
+VISUAL: 
+AUDIO: 'everything onto API usage. But for now, we can still use it. And you can see here, it\'s been a couple minutes, so I just want to show you. It did check the job here. Um it fired a couple minutes ago.'
+
+[12:17] [scene:talk]
+VISUAL: 
+AUDIO: 'Uh the status was okay, so the cron job didn\'t fail or anything, but it skipped by the wake gate because, as you can see, Claude is still working. So, it\'s running exactly as it should. So, I\'m going to go watch uh baseball'
+
+[12:29] [scene:talk]
+VISUAL: 
+AUDIO: 'and we\'ll be back hopefully to have some some nice wikis built and checked and then double-checked. Okay, so it\'s been a couple hours now. And we can see the files that have been'
+
+[12:41] [scene:talk]
+VISUAL: 
+AUDIO: 'produced. So, this was the original topics folder. You can see um it changed it. It didn\'t do the full report, but it just said finished on the top file. So, that did trigger the cron job.'
+
+[12:53] [scene:talk]
+VISUAL: 
+AUDIO: 'And then you can see it finished its audit. Hermes finished the audit. Uh let\'s look at these files. So, this is what Hermes wrote using GPT 5.5. You can see it. These are everything it checked based on'
+
+[13:07] [scene:talk]
+VISUAL: 
+AUDIO: 'the review.md instructions. Everything from Ollama, Stable Diffusion. So, that was kind of the summary and this is the full,'
+
+[13:19] [scene:talk]
+VISUAL: 
+AUDIO: 'you know, like Hugging Face needs fixed. There were a couple different pages that needed fixed. Um formatting, structure, Olama needs fix. Um'
+
+[13:34] [scene:talk]
+VISUAL: 
+AUDIO: 'couple different issues here. You can see nothing huge. A lot of these are like just formatting issues. Uh but we need to have those fixed as well. So down here it has potential fixes to'
+
+[13:46] [scene:talk]
+VISUAL: 
+AUDIO: 'review before implementation. Okay, so that was Codex\'s audit of Claude\'s work and then it went back to Claude. So this used the Claude P, which is also part of the cron job. And the last kind of task before'
+
+[14:00] [scene:talk]
+VISUAL: 
+AUDIO: 'um the original run was done was one more Claude to kind of double or triple check what Codex had done. And it produced this report. And this is what Claude wrote, findings verification'
+
+[14:12] [scene:talk]
+VISUAL: 
+AUDIO: 'report. So it took what Codex or Hermes had written and it checked all of them. Um and this process may seem a little bit elaborate, but seeding these wikis is a very important'
+
+[14:25] [scene:talk]
+VISUAL: 
+AUDIO: 'process. Like the foundational wiki has to be accurate information. And I think we\'ve all had experience with a single agent or a single model getting information wrong. So by this process, I have Opus 4.8 build it out originally.'
+
+[14:38] [scene:talk]
+VISUAL: 
+AUDIO: 'I can have what I consider the second best, second strongest model GPT 5.5 in my Hermes agent harness, which also has a lot of skills and workflows that make this all possible.'
+
+[14:52] [scene:talk]
+VISUAL: 
+AUDIO: 'I\'m able to have it kind of audit everything and then send it back to Claude to kind of double-check it just to make sure. So you can see a lot of these were false positives. Um'
+
+[15:07] [scene:talk]
+VISUAL: 
+AUDIO: 'and there was one verified true. Size discipline outside of the band. So no wiki content was edited. So this is kind of its'
+
+[15:19] [scene:talk]
+VISUAL: 
+AUDIO: 'report on uh this verification. There was a hugging face pricing blocker. That was a false positive. You can see a lot of these were false positives as well.'
+
+[15:31] [scene:talk]
+VISUAL: 
+AUDIO: 'Um so this was more of a formatting issue cuz I keep the wikis at a certain size. Uh but these ones went a little bit over. Uh but depending on the size'
+
+[15:45] [scene:talk]
+VISUAL: 
+AUDIO: 'or depending on the size of the topic, I guess. Uh I sometimes let it go a bit over. So there we go. No actual um errors were found in the actual content, which is good.'
+
+[15:58] [scene:talk]
+VISUAL: 
+AUDIO: 'So that\'s why we have this double-check cuz if I just gave it a Codex to review it, we would have uh been making changes that were actually false positives. So here I\'m back in Claude code and it I had it kind of check the logs, the'
+
+[16:11] [scene:talk]
+VISUAL: 
+AUDIO: 'deeper Claude code logs to verify that everything ran correctly. You can see yes, the whole root loop ran. Here\'s the evidence chain all corroborated uh corroborated independently. So we could see Claude who did it in'
+
+[16:23] [scene:talk]
+VISUAL: 
+AUDIO: 'this session. Our GPT 5.5 auditor ran the audit and then Claude P did the reconciliation. So that\'s the full workflow.'
+
+[16:35] [scene:talk]
+VISUAL: 
+AUDIO: 'So here\'s an example of one of the audit reports from last week that I was running on a couple different wikis. I did like Claude code and Codex. And some of these were actual genuine errors. So not everything is going to be as'
+
+[16:47] [scene:talk]
+VISUAL: 
+AUDIO: 'clean as in this case. So sometimes you\'re going to actually need proper fixes here. So that\'s the workflow. It\'s a multi-agent. You could see it\'s not very visual like the Kanban board. You can\'t actually see everything moving. Like I I just went'
+
+[16:59] [scene:talk]
+VISUAL: 
+AUDIO: 'and watched a baseball game and it did all the work and I\'m back and I can see all the reports. And we can check out the wikis. Like here\'s the hugging face one. Uh opened in Obsidian. So this has all'
+
+[17:11] [scene:talk]
+VISUAL: 
+AUDIO: 'the different concepts, authentication and tokens, data sets. uh, Hugging Face Hub CLIs. So, a lot of good data. Um, if you\'re working on a project that has to do with Hugging Face, you can'
+
+[17:23] [scene:talk]
+VISUAL: 
+AUDIO: 'just point your agent to this wiki and get all the information you need. And all these new wikis have been double-checked by separate different agent harness harnesses. Now, the last review before I\'m actually'
+
+[17:35] [scene:talk]
+VISUAL: 
+AUDIO: 'going to, you know, push these changes and have it live on the site, is I do have at the end of this whole loop, um, I have a manual check. So, this is the biggest bottleneck is myself, cuz I will have to manually go'
+
+[17:48] [scene:talk]
+VISUAL: 
+AUDIO: 'through all these concepts, read everything, make sure nothing, you know, looks too strange or is an obvious error. Um, but I had all of my agents and models double-check this, so it should'
+
+[18:00] [scene:talk]
+VISUAL: 
+AUDIO: 'be good. In the past, I haven\'t seen anything too crazy. When I\'ve done these manual checks, maybe here or there, I\'ll check like the pricing or something that\'s very that changes a lot, like a a specific policy.'
+
+[18:12] [scene:talk]
+VISUAL: 
+AUDIO: 'Uh, but otherwise, the core information here is usually pretty solid. So, once I go through that manual check, I just push them to my private GitHub repo and then my VPS agent Admiral'
+
+[18:25] [scene:talk]
+VISUAL: 
+AUDIO: 'will uh, pull the results and the VPS runs this deploy {slash} sync.ch script on a 15-minute timer. So, it act it reads the active wiki list from the'
+
+[18:38] [scene:talk]
+VISUAL: 
+AUDIO: 'registry, clones any listed but missing wikis, fast forward, pulls the rest, and starts the whole service only if the set changed. So, that deploy is just pushing the repos and the registry, and the box reconciles itself on the next tick. So,'
+
+[18:52] [scene:talk]
+VISUAL: 
+AUDIO: 'there\'s no hand coding, no hard-coded list, and using this health is Z command, uh, reports the live wiki status, so I can check to make sure everything is there. Um, and then the new wikis are then'
+
+[19:04] [scene:talk]
+VISUAL: 
+AUDIO: 'readable by agents and humans at agentwikis.com. So, let me go through my manual checks here, then we\'re going to push it to the side. Okay, so I finished my manual check and'
+
+[19:16] [scene:talk]
+VISUAL: 
+AUDIO: 'pushed everything onto the VPS and this is the real agentwikis.com. You can check this out yourself. And you can see Ollama hugging face are down here. And we should see, yep, stable diffusion'
+
+[19:28] [scene:talk]
+VISUAL: 
+AUDIO: 'down here. So, that was the whole process, the whole multi-agent cross-agent uh workflow. And I obviously use this for my wikis app, but I think this could be useful'
+
+[19:40] [scene:talk]
+VISUAL: 
+AUDIO: 'for a lot of people. Any kind of task that you have, you want to do it in one agent, you want a different agent with a different model doing an audit, reviewing it, making sure there\'s no mistakes, and then having the original agent'
+
+[19:52] [scene:talk]
+VISUAL: 
+AUDIO: 'or model kind of reconcile and double-verify that all the findings that the auditor found were correct. So, I think this is a very common workflow that people might find useful. Uh but that\'s going to be it for this'
+
+[20:05] [scene:talk]
+VISUAL: 
+AUDIO: 'video. I hope you found it useful, uh different kind of multi-agent agentic workflow. Um please leave a comment. I know there\'s a lot of other ways you can probably do this, perhaps more even more efficient.'
+
+[20:18] [scene:talk]
+VISUAL: 
+AUDIO: 'So, let me know. And if you like the video, please leave a like, please subscribe, and I\'ll see you in the next one. Thank you for watching.'

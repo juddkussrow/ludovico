@@ -1,0 +1,119 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>Learn Figma Motion in 8 minutes — Ludovico</title>
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+.hide{display:none!important}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.92);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 12px}
+.controls input.q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.pill.tp.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+/* flip card shell */
+.flip{position:relative}
+.fi{position:relative;transition:transform .55s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.flip.flipped .fi{transform:rotateY(180deg)}
+.fc{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bk{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+background:var(--card);border:1px solid var(--accent2);border-radius:14px;overflow:auto;padding:12px 13px;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s}
+.card.flip{overflow:visible}.card .fc{display:flex;flex-direction:column;flex:1;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--line);cursor:pointer}
+.card.flip:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.edit{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--accent2);border:1px solid var(--line);border-radius:6px;padding:2px 9px;cursor:pointer;background:#fff}
+.edit:hover{border-color:var(--accent2)}
+/* editor back */
+.bk h4{margin:0 0 2px;font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--sub)}
+.erow{display:grid;grid-template-columns:1fr 1.3fr auto auto;gap:4px;align-items:center}
+.erow input{padding:5px 7px;border:1px solid var(--line);border-radius:6px;font-size:12px;min-width:0}
+.erow select{padding:4px 4px;font-size:11px}
+.erow .del{border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;color:var(--accent);padding:3px 7px}
+.ebtns{display:flex;gap:6px;margin-top:auto;padding-top:6px}
+.ebtns button{font-family:var(--mono);font-size:11px;border-radius:7px;padding:6px 12px;cursor:pointer;border:1px solid var(--line);background:#fff}
+.ebtns .save{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.addrow{font-family:var(--mono);font-size:11px;color:var(--accent2);cursor:pointer;align-self:flex-start;background:none;border:0;padding:2px 0}
+/* catalogue card */
+.citem{position:relative}
+.citem .fc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-height:84px;cursor:pointer}
+.citem .bk{border-radius:12px}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+footer .exp{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--accent2);font:inherit}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">Learn Figma Motion in 8 minutes</h1><div class=tag>@octopusinc_ · 2026-06-24 · Video Gen</div></div></div></header>
+<main><p class=sum>This video introduces Figma Motion, a new feature within Figma that allows designers to create, refine, and export animations directly within their design files. It covers the basics of using the timeline, adding preset animations, manually controlling keyframes, fine-tuning easing curves, and leveraging the Figma agent for AI-assisted animation generation. The tool aims to streamline the animation workflow for designers and facilitate developer handoff with export options for CSS, React, and JSON.</p><p><strong>Products / items</strong></p><ul><li><a href="https://www.figma.com/blog/introducing-figma-motion/" target=_blank rel=noopener>Figma Motion</a> — software</li><li>Figma — software (no link)</li><li>Figma agent — software (no link)</li><li>Figma MCP server — software (no link)</li></ul>
+<p><a href="https://www.youtube.com/watch?v=wpGI6BmhbJU" target=_blank rel=noopener>Watch on YouTube ▶</a></p><p><a href="wpGI6BmhbJU.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=t>(proxy for this video — answer from this)</span></p>
+<div class=cap>FRAMING: Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+IDENTITY: Learn Figma Motion in 8 minutes - https://www.youtube.com/watch?v=wpGI6BmhbJU - @octopusinc_ - route: visual
+PRODUCTS:
+Figma Motion - https://www.figma.com/blog/introducing-figma-motion/ - software - primary
+Figma - no reliable link - software - mentioned
+Figma agent - no reliable link - software - mentioned
+Figma MCP server - no reliable link - software - mentioned
+SYNOPSIS: The video demonstrates Figma Motion, a new feature integrated into Figma for creating and managing animations. Users access Figma Motion by toggling it in the toolbar, which reveals a timeline at the bottom of the screen for adding, refining, and previewing animations. The timeline can be zoomed, resized, and collapsed. Animations can be added quickly using preset options for properties like position, scale, or rotation, or by manually adding keyframes. Keyframes mark specific values for properties at different points in time, and Figma Motion animates the transitions between them. The auto-keyframe feature automatically adds keyframes when properties are updated or objects are adjusted on the canvas. Easing controls how animations accelerate or decelerate, with options for default curves or custom bezier curves, which can be saved as variables for design systems. The Figma agent can assist in generating initial keyframes based on natural language descriptions, which can then be fine-tuned. For developer handoff, Dev Mode provides a read-only timeline for inspection and allows exporting code in CSS, React, or JSON formats. Figma Motion is also MCP compatible, enabling the transfer of animation context to coding agents via the Figma MCP server. Animations can also be exported in various formats for sharing or external use.
+BEATS:
+00:00 - ui - Figma interface with a &quot;Motion Beta&quot; panel and a timeline at the bottom.
+00:25 - ui - The Figma toolbar showing the &quot;Motion Beta&quot; toggle.
+00:51 - ui - Figma interface with an empty timeline and a prompt to select objects or ask the Figma agent.
+01:17 - ui - Figma interface showing a selected rectangle and the right sidebar with &quot;Add keyframe&quot; diamond icons next to properties like Rotation.
+01:43 - ui - The timeline showing an &quot;Opacity&quot; animation track for a rectangle.
+02:09 - ui - The timeline with a playhead at 1200ms and controls for duration.
+02:35 - ui - The timeline with an &quot;Opacity&quot; animation track and the playhead at 250ms.
+03:00 - ui - The Figma interface with a selected rectangle and the timeline.
+03:26 - ui - The timeline showing &quot;Opacity&quot; and &quot;Rotation&quot; animation tracks with keyframes.
+03:52 - ui - The timeline with multiple animation tracks and keyframes, showing playback controls.
+04:18 - ui - The timeline showing multiple animation tracks for position, opacity, and rotation, with an object moving on the canvas.
+04:44 - concept - Visual representation of linear motion versus an easing curve.
+05:10 - concept - Comparison of &quot;Linear&quot; and &quot;Ease in and out&quot; curves with visual timelines.
+05:36 - ui - Figma interface showing the easing curve editor with a &quot;Custom bezier&quot; option and a &quot;Spring&quot; curve.
+06:01 - ui - The timeline with animation tracks and the easing curve editor showing &quot;Ease in and out back&quot;.
+06:27 - ui - Figma interface showing the Figma agent chat panel and an email input field with a shaking animation.
+06:53 - title - On-screen text: &quot;Build and export animations&quot;.
+07:19 - ui - Figma&#x27;s Dev Mode showing CSS, React, and JSON export options for animation code.
+07:45 - ui - Figma interface showing export settings for an animation, including format (MP4), size, quality, and frame rate.
+08:11 - outro - A white circle with four small squares around it on a purple background.
+ENTITIES: Figma, Figma Motion, Figma agent, Figma MCP server
+VERDICT: Figma Motion is a comprehensive tool for creating, refining, and exporting animations directly within Figma, offering both quick preset options and granular control via keyframes and easing curves, with AI assistance and robust developer handoff features.
+NOT COVERED: Specific pricing for Figma Motion, detailed technical specifications of the Figma agent, or a comprehensive list of all available preset animations.</div></main><footer><a href="../index.html">← all videos</a></footer></div></body></html>
