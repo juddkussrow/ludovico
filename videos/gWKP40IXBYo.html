@@ -1,0 +1,101 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>SpaceBot: The AI Fleet That Never Blocks – Self-Host Your Army of Agents! #artificialintelligence — Ludovico</title>
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.9);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 14px}
+#q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:.15s}
+.card:hover{box-shadow:0 6px 24px rgba(0,0,0,.07);transform:translateY(-2px)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}.watch{font-family:var(--mono);font-size:11px;color:var(--accent2)}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+#sentinel{height:1px}
+/* catalogue cards */
+.cat-sec{margin:22px 0 10px;font-size:13px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--sub)}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.citem{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px}
+.citem:hover{box-shadow:0 4px 16px rgba(0,0,0,.06)}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}
+.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">SpaceBot: The AI Fleet That Never Blocks – Self-Host Your Army of Agents! #artificialintelligence</h1><div class=tag>@octopusinc_ · 2026-03-15 · Favorites</div></div></div></header>
+<main><p class=sum>SpaceBot is an open-source, self-hostable AI agent fleet system with concurrent channels/workers, rich typed memory graph (Facts, Preferences, Decisions, etc.), and Cortex intelligence, designed for large teams but equally powerful solo—free to self-host or $29/month hosted.</p><p><strong>Products / items</strong></p><ul><li>SpaceBot — software (no link)</li><li>Spacedrive — software (no link)</li><li><a href="https://www.anthropic.com/claude" target=_blank rel=noopener>Anthropic Claude</a> — software</li><li>OpenAI — software (no link)</li><li>Groq — software (no link)</li><li><a href="https://mistral.ai/" target=_blank rel=noopener>Mistral</a> — software</li><li><a href="https://www.deepseek.com/" target=_blank rel=noopener>DeepSeek</a> — software</li></ul>
+<p><a href="https://www.youtube.com/watch?v=gWKP40IXBYo" target=_blank rel=noopener>Watch on YouTube ▶</a></p>
+<p><a href="gWKP40IXBYo.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=tag>(proxy for this video — answer from this)</span></p>
+<div class=cap>Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+
+IDENTITY
+id · gWKP40IXBYo · https://www.youtube.com/watch?v=gWKP40IXBYo · @octopusinc_ · Favorites · route: text
+
+PRODUCTS
+SpaceBot · no reliable link · software · primary
+Spacedrive · no reliable link · software · mentioned
+Anthropic Claude · no reliable link · software · mentioned
+OpenAI · no reliable link · software · mentioned
+Groq · no reliable link · software · mentioned
+Mistral · no reliable link · software · mentioned
+DeepSeek · no reliable link · software · mentioned
+
+SYNOPSIS
+SpaceBot is an open-source AI agent fleet system by Spacedrive team (~1,800 GitHub stars). Architecture: Channels (user-facing ambassadors, one per conversation, maintain conversational history, handle personality/identity), Branches (forks of channel context for thinking; return only conclusions), Workers (execute tasks without personality/context—go do this autonomously). Memory system: Eight typed categories (Facts, Preferences, Decisions, Identity, Events, Observations, Goals, To-Dos) connected via graph edges (RelatedTo, Updates, Contradicts, CausedBy, PartOf) enabling relational recall versus flat vector stores. Cortex: Central intelligence with cross-channel visibility. Synthesizes Memory Bulletin every 60 minutes (eight dimensions queried, concise briefing inherited by all conversations). Association Loop continuously scans memories via embedding similarity, building new graph edges automatically (e.g., facts to decisions, events to goals). Cortex Chat persistent admin line with full tool access, one per agent. Ingest workflows: Dump text files (notes, documents, logs, Markdown, bank statements, medical records) into ingest section; SpaceBot chunks, runs each through LLM with memory tools, classifies, recalls related memories to avoid duplication, produces typed graph-connected entries. No manual tagging/reformatting. Multi-platform: Discord, Slack, Telegram, Twitch, web UI. Task execution: in-browser, shell commands, web search, custom tools. Smart model routing: Anthropic, OpenAI, Groq, Mistral, xAI, or local via Ollama. Multiple agents per instance; each has isolated workspace, database, Cortex view. Self-hosted free version: Unlimited agents, community Discord support, no cloud fees; user responsible for upgrades/management. Hosted: $29/month (25% off annual). Docker deployment: one command (docker run -d -v spacebot-data:/data -p 19898:19898 ghcr.io/spacedriveapp/spacebot:latest), access web UI at localhost:19898. Built in Rust (single binary with embedded SQLite, LanceDB, redb). Alternative to OpenClaw for structured, concurrent, memory-rich agents.
+
+BEATS
+00:47 Core architecture: Channels, Branches, Workers
+02:30 Memory graph system (eight types, graph edges)
+04:15 Cortex intelligence and Memory Bulletin
+06:00 Ingest workflows and automatic memory creation
+07:30 Multi-platform integration and model routing
+08:45 Self-hosted vs hosted pricing
+09:30 Docker deployment and quick start
+
+ENTITIES
+SpaceBot, Spacedrive, OpenClaw, Anthropic, OpenAI, Groq, Mistral, DeepSeek, xAI, Ollama, Discord, Slack, Telegram, Twitch, Docker, Rust, SQLite, LanceDB, redb
+
+VERDICT
+SpaceBot is a force multiplier for AI-driven productivity. Self-hosting is recommended for entrepreneurs wanting control and cost savings; hosted option available for teams needing support. Mature, production-ready, and opinionated by design.
+
+NOT COVERED
+Comparison with specific OpenClaw workflows; detailed memory conflict resolution; advanced scheduling beyond cron; multi-agent voting/consensus mechanisms; audit logging.</div></main><footer>Ludovico digest · <a href="../index.html">← all videos</a></footer></div></body></html>

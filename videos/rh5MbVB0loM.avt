@@ -1,0 +1,239 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Master Boogu-Image: The New 10B Open Source King of AI Design|Pro Commercial Design
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=rh5MbVB0loM
+upload_date: 20260622
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'Today we’re taking a look at a new image generation model called Boogu-Image Let’s start by looking at a few examples As you can see these images cover a lot of different types of content including some tasks that are genuinely difficult to generate'
+
+[00:12] [scene:talk]
+VISUAL:
+AUDIO: 'Boogu-Image is now officially supported by ComfyUI and its official showcase focuses on much more than straightforward photography It highlights complex text-and-image layouts'
+
+[00:24] [scene:talk]
+VISUAL:
+AUDIO: 'Chinese posters commercial design infographics and image editing So, what exactly is Boogu-Image? First of all it’s an open-source image generation and editing model with around ten billion parameters'
+
+[00:36] [scene:talk]
+VISUAL:
+AUDIO: 'At the moment there are three available versions: Base Turbo, and Edit In this video we’ll focus on Base and Edit'
+
+[00:48] [scene:talk]
+VISUAL:
+AUDIO: 'Turbo is essentially the same as Base but optimized to use fewer sampling steps and generate faster with some loss in quality So for a proper evaluation I’ll be testing the original Base model'
+
+[01:01] [scene:talk]
+VISUAL:
+AUDIO: 'Let’s quickly go over the installation Since ComfyUI officially supports this model the first thing you need to do is update ComfyUI to the latest version Then go to the Comfy-Org Boogu-Image repository and download the corresponding models You’ll see the three model types:'
+
+[01:17] [scene:talk]
+VISUAL:
+AUDIO: 'Base Edit, and Turbo I’m using the FP8 versions here For the text encoder we’re using Qwen3VL Keep in mind that this is a vision-language model I’ve also prepared two workflows:'
+
+[01:51] [scene:talk]
+VISUAL:
+AUDIO: 'one for the Base model used for generation tests and one for the Edit model used for editing tests Let’s look at the Base workflow first We start with a UNETLoader node which loads the Base FP8 model'
+
+[02:04] [scene:talk]
+VISUAL:
+AUDIO: 'Then we have CLIPLoader where we load Qwen3VL Make sure the type is set to Boogu For the VAE, use Flux VAE Use EmptyLatentImage to control the image size and use CLIPTextEncode to write your prompt'
+
+[02:16] [scene:talk]
+VISUAL:
+AUDIO: 'For negative conditioning you can write a negative prompt or use ConditioningZeroOut to create the negative condition Then use KSampler to generate the image Here'
+
+[02:29] [scene:talk]
+VISUAL:
+AUDIO: 'I’m using the Euler sampler with the Simple scheduler If you use the Turbo model you’ll probably want to use the LCM sampler instead I’m using forty sampling steps and a CFG value of four which should match the settings in the original paper In actual testing'
+
+[02:43] [scene:talk]
+VISUAL:
+AUDIO: 'I think somewhere between forty and fifty steps works well For resolution you can start at one thousand and twenty-four For portrait images you can use eight hundred and thirty-two by one thousand two hundred and sixteen or seven hundred and sixty-eight by one thousand three hundred and forty-four'
+
+[02:59] [scene:talk]
+VISUAL:
+AUDIO: 'For landscape images use one thousand three hundred and forty-four by seven hundred and sixty-eight The Edit workflow is mostly the same but there are a few changes'
+
+[03:12] [scene:talk]
+VISUAL:
+AUDIO: 'First we load the Edit model instead The biggest difference from Base is that we get a dedicated node called TextEncodeBooguEdit This node accepts an input image which you can think of as the original image or the reference image'
+
+[03:24] [scene:talk]
+VISUAL:
+AUDIO: 'And importantly it can accept more than one image So besides simple editing it can also do reference-based generation But keep this in mind:'
+
+[03:36] [scene:talk]
+VISUAL:
+AUDIO: 'if you feed in too many images the overall result can get worse Connect the original image from Load Image to the `image_1` input on the TextEncodeBooguEdit node This is your main reference image'
+
+[03:49] [scene:talk]
+VISUAL:
+AUDIO: 'Inside the node you can write instructions such as changing the clothes or keeping the person unchanged and only replacing the background The model looks at both the original image and your text instruction The sampler settings are slightly different here'
+
+[04:04] [scene:talk]
+VISUAL:
+AUDIO: 'I’m using the `dpmpp_2m` sampler with the Simple scheduler still at forty steps and CFG set to three point five You can also use four There’s also the shift value in the ModelSamplingAuraFlow node'
+
+[04:16] [scene:talk]
+VISUAL:
+AUDIO: 'Set that to three point sixteen Don’t randomly change these parameters Just use them as they are Although the model supports multiple reference images our tests show that single-image editing is the most stable approach'
+
+[04:28] [scene:talk]
+VISUAL:
+AUDIO: 'For this video we’re using the official gallery as the baseline In other words whatever the official examples say the model is good at that’s what we’re testing'
+
+[04:40] [scene:talk]
+VISUAL:
+AUDIO: 'while raising the difficulty a little We ran twelve tests for the Base model and nine for the Edit model Since I didn’t use Turbo the generation times were fairly long Every test has a clear purpose Let’s begin with the Base model'
+
+[04:53] [scene:talk]
+VISUAL:
+AUDIO: 'The first test checks whether its photorealistic foundation is strong enough We generated two images The first is a documentary-style photo of a breakfast stall We’re looking at whether the character’s skin'
+
+[05:05] [scene:talk]
+VISUAL:
+AUDIO: 'hands steam, morning light and street environment blend together naturally The second is an animal close-up specifically a snow leopard I personally really like this image Look at the overall structure'
+
+[05:18] [scene:talk]
+VISUAL:
+AUDIO: 'the fur the long-lens depth of field and the natural background This model is clearly quite capable For the second test we looked at Chinese text and commercial posters First'
+
+[05:30] [scene:talk]
+VISUAL:
+AUDIO: 'we generated a Chinese movie poster This was actually a fairly restrained test: just one main title and one subtitle These are the situations where text generation is most likely to work Then we raised the difficulty with a bilingual brand visual identity'
+
+[05:43] [scene:talk]
+VISUAL:
+AUDIO: 'This is a visual design task where the same brand needs to appear repeatedly across different materials It includes a Chinese name an English name'
+
+[05:55] [scene:talk]
+VISUAL:
+AUDIO: 'a menu, and prices So you need to see whether it actually feels like a coffee brand whether the design stays consistent throughout and whether the menu prices are randomly generated Then we raised the difficulty again'
+
+[06:09] [scene:talk]
+VISUAL:
+AUDIO: 'The hardest part of this image is not the artwork It’s the information organization It includes different times locations events and descriptions for morning afternoon, and evening It also has headline text in bubbles and reminder text at the bottom'
+
+[06:22] [scene:talk]
+VISUAL:
+AUDIO: 'The model needs to understand what should be the main title what is a section what is a card and what is explanatory text Finally we pushed it even further with a math exam paper It has complicated text'
+
+[06:36] [scene:talk]
+VISUAL:
+AUDIO: 'formulas and mathematical charts The point of this test is not to expect a ready-to-use exam paper It’s to find out where the model’s limits are My conclusion is very straightforward Boogu’s text capabilities deserve recognition'
+
+[06:49] [scene:talk]
+VISUAL:
+AUDIO: 'especially for large titles short text, brand visuals and designs with a clear structure But don’t turn it into magic The smaller the text the longer the content the denser the information'
+
+[07:02] [scene:talk]
+VISUAL:
+AUDIO: 'and the more mathematical symbols you add the more likely it is to make mistakes The third Base test focuses on infographics and multi-panel layouts This is where I think the model becomes genuinely interesting We have a men’s outfit infographic'
+
+[07:17] [scene:talk]
+VISUAL:
+AUDIO: 'a multi-panel hairstyle analysis and a pet profile image These kinds of images used to be extremely difficult for open-source models because the challenge is not aesthetics It’s information organization'
+
+[07:30] [scene:talk]
+VISUAL:
+AUDIO: 'In the outfit infographic we’re checking whether the person recommended items and outfit scenarios can be clearly separated In the hairstyle design we’re checking whether the same person stays consistent across multiple hairstyles In the pet profile image'
+
+[07:46] [scene:talk]
+VISUAL:
+AUDIO: 'we’re looking at whether the golden retriever in the middle correctly matches the eyes nose, ears and other information around it The value of this test is that the model can already generate a structurally complete first draft that looks visually close to a real design layout For social media content'
+
+[08:04] [scene:talk]
+VISUAL:
+AUDIO: 'outfit topics pet content product introductions and cover-image drafts I think this is highly usable The fourth Base test looks at commercial image generation First'
+
+[08:16] [scene:talk]
+VISUAL:
+AUDIO: 'we generated a commercial poster which is much closer to a real business use case The product needs to look like a real product while the brand, selling points and price all need to appear in the design The overall result also needs to look like an e-commerce hero image'
+
+[08:28] [scene:talk]
+VISUAL:
+AUDIO: 'As you can see the generated result is very good We also tested a distinctly Chinese style called gilded Chinese-style art This tests its understanding of style'
+
+[08:41] [scene:talk]
+VISUAL:
+AUDIO: 'not just ordinary landscape painting Both of these image types are a good fit for Boogu Product images can become first-pass design drafts while stylized visuals can become concept drafts that you refine later into social media images Finally'
+
+[08:58] [scene:talk]
+VISUAL:
+AUDIO: 'we tested one of its weaknesses: a nighttime camping scene with ten people There are lots of small hands and faces in the image Overall it still looks acceptable Now let’s move on to the Edit model The Edit model is more practical'
+
+[09:10] [scene:talk]
+VISUAL:
+AUDIO: 'For example if we generate an original image with Base we can use Edit to modify it afterward Let’s start with a common task: changing clothes The key is not whether it can replace the outfit The key is whether the face'
+
+[09:23] [scene:talk]
+VISUAL:
+AUDIO: 'hairstyle, pose and background remain unchanged after the outfit is replaced That’s foreground replacement Now let’s try a different task and replace the background In this image'
+
+[09:35] [scene:talk]
+VISUAL:
+AUDIO: 'a Western woman is sitting on a chair with a fairly simple background To be honest that makes the test a little easier A proper background-replacement test should use a much more complex original background Still, the result is good'
+
+[09:48] [scene:talk]
+VISUAL:
+AUDIO: 'The subject consistency is excellent If you want to say the chair disappeared I don’t think that’s a major issue What you should focus on is whether there are obvious cutout artifacts around the subject’s edges and whether the environmental lighting'
+
+[10:02] [scene:talk]
+VISUAL:
+AUDIO: 'new background and original subject blend together naturally Another very common task is adding an object In this scene there’s a book and a notebook on a desk and we add a cup of iced Americano'
+
+[10:14] [scene:talk]
+VISUAL:
+AUDIO: 'The model needs to understand placement glass ice cubes, reflections shadows, and occlusion Then we test object removal There’s a plastic bag on the road and we simply tell the model to remove the red plastic bag'
+
+[10:27] [scene:talk]
+VISUAL:
+AUDIO: 'The result after removal is very good It also needs to restore the ground texture and the shadow You can’t remove the plastic bag while leaving its shadow behind That would be a problem'
+
+[10:40] [scene:talk]
+VISUAL:
+AUDIO: 'These are simple tasks but I think they’re where the model is most useful For the second Edit test we move directly from image editing into graphic design First, we try a harder task: replacing text on a poster We previously generated a poster with the Base model'
+
+[10:53] [scene:talk]
+VISUAL:
+AUDIO: 'and now we ask it to replace the corresponding text Keep in mind that this text set is still fairly simple just a main title and subtitle For the second task'
+
+[11:06] [scene:talk]
+VISUAL:
+AUDIO: 'we turn an ordinary product image into a commercial poster Looking at the result the overall texture aesthetics, design and text treatment are all very good Next'
+
+[11:18] [scene:talk]
+VISUAL:
+AUDIO: 'we turn a person into a magazine cover We start with an image of a Western woman and turn it directly into a magazine cover Personally I think this cover is a little too simple Maybe our prompt wasn’t precise or detailed enough If we call this a magazine cover'
+
+[11:32] [scene:talk]
+VISUAL:
+AUDIO: 'I think that’s slightly forced Also pay attention to the small text Its accuracy does seem to have issues Then we look at outfit styling mainly by comparing infographic designs before and after the outfit change We call this design an AI Style Upgrade Report'
+
+[11:47] [scene:talk]
+VISUAL:
+AUDIO: 'In other words after changing into the outfit we provide what changes have happened? This is a very interesting application Boogu is not just doing basic photo retouching It actually contains a lot of design thinking'
+
+[12:00] [scene:talk]
+VISUAL:
+AUDIO: 'To wrap things up the most valuable part of Boogu-Image is not simply that it can generate a beautiful image It pushes open-source models another step toward design layout'
+
+[12:12] [scene:talk]
+VISUAL:
+AUDIO: 'and editable image generation It’s a great fit for first drafts of Chinese posters bilingual brand visual designs commercial product posters outfit analysis, pet profiles and social media graphic design'
+
+[12:24] [scene:talk]
+VISUAL:
+AUDIO: 'It has a lot of possible uses What it’s not especially good at is large amounts of text especially small text And it’s not alone there A lot of models struggle with that kind of task That’s all for today'
+
+[12:38] [scene:talk]
+VISUAL:
+AUDIO: 'Go try it for yourself and follow me to become someone who truly understands AI'

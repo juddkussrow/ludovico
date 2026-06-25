@@ -1,0 +1,227 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: How AI Agents Avoid Bot Detection with Camoufox
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=R_SlFcx5EuU
+upload_date: 20260612
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'Imagine two visitors loading the exact same webpage. My everyday browser passes as a human, but an automation browser, the kind that an AI agent uses, gets flagged as a bot in milliseconds. Now, I help engineers build AI agents, and browser agents are where most of them'
+
+[00:13] [scene:talk]
+VISUAL:
+AUDIO: 'break the moment that they touch a real site because they\'re just identified as bots immediately. By the end of this video, you can learn how to prevent this because you will know the eight signals that the pages use to tell them apart'
+
+[00:25] [scene:talk]
+VISUAL:
+AUDIO: 'from your human visitors and also how you can use a stealth browser to slip past most of these checks. Let me first start with a bit of theory. And don\'t worry, we\'re going to get to the demo very soon, but you first need'
+
+[00:37] [scene:talk]
+VISUAL:
+AUDIO: 'to understand how browser bot detection works to understand the demo. What\'s important to realize is that bot detection is not one clever check that catches a bot. It is a stack of small signals that all have to agree with each'
+
+[00:51] [scene:talk]
+VISUAL:
+AUDIO: 'other. You might have seen a CAPTCHA before when you\'re trying to submit a form or something like that, and this is a way to check for bots, but a lot of these smaller signals are hidden from you, and you might even realize they exist. Because if you are a real person'
+
+[01:03] [scene:talk]
+VISUAL:
+AUDIO: 'and you\'re using a real laptop, you\'re giving off thousands of these little signals without trying, and they\'re all consistent because you\'re using a real browser. A bot, however, has to fake every single one of them and keep those'
+
+[01:16] [scene:talk]
+VISUAL:
+AUDIO: 'fake actions consistent because the page only has to catch a single contradiction to be able to identify the bot. And that is why usually the verdict and the logic for these sites is worst off,'
+
+[01:28] [scene:talk]
+VISUAL:
+AUDIO: 'which means that any one check screaming that this user might be a bot makes a whole visit flagged as a bot visit, no matter how human the rest looks. Now, CAPTCHAs are not going to appear'
+
+[01:41] [scene:talk]
+VISUAL:
+AUDIO: 'anywhere in this story because in this case, the page doesn\'t ask anyone to click traffic lights. It decides whether or someone is a bot in silence. And that silent decision is what stops a lot of AI agents today. Now, the eight checks'
+
+[01:53] [scene:talk]
+VISUAL:
+AUDIO: 'split into two distinct layers and the two layers are really asking different questions altogether. First of all, we have a layer on the server which for example reads the HTTP headers which are sent when a web request is sent to the'
+
+[02:07] [scene:talk]
+VISUAL:
+AUDIO: 'server. And these headers declare everything about the visitor before any code runs. So these headers are very cheap to read and also kind of cheap to fake so it only catches the laziest types of bots which won\'t even pretend'
+
+[02:20] [scene:talk]
+VISUAL:
+AUDIO: 'to use the right headers. The client layer however runs JavaScript inside the browser and measures what the machine actually is and not what it claims to be. Now the JavaScript layer is much more dynamic and interactive cuz it'
+
+[02:33] [scene:talk]
+VISUAL:
+AUDIO: 'covers every interaction on the page. So if you have protocols to identify bots in there it\'s a much more difficult layer to fake and this is where most serious bots can still get caught. So let\'s quickly start with the server'
+
+[02:46] [scene:talk]
+VISUAL:
+AUDIO: 'layer because it\'s still used to prevent a lot of bots. And check one is to look at the user agent string, the line that every browser sends to announce what it is. This is not some special encoded string that only Chrome can technically'
+
+[02:58] [scene:talk]
+VISUAL:
+AUDIO: 'send. You can send this along with every request but again a lazy bot might just leave the default in place so it might say something like headless Chrome or Python requests or even just curl and then it\'s announcing that it\'s a script'
+
+[03:11] [scene:talk]
+VISUAL:
+AUDIO: 'before it does anything else. So it can be easily rejected, right? Now check two is something like an accept language header where a real browser will actually identify which languages you read. A human might set that in their'
+
+[03:23] [scene:talk]
+VISUAL:
+AUDIO: 'settings once so that a real browser always sends this accept language header. But real HTTP clients might forget to send it or send something malformed. And'
+
+[03:35] [scene:talk]
+VISUAL:
+AUDIO: 'check three is the rest of the header set. Things like the sec fetch headers and the accept header that\'s for example Firefox sends on every navigation through pages. Now these headers are'
+
+[03:47] [scene:talk]
+VISUAL:
+AUDIO: 'relatively easy to fake but here the same rule applies. If you\'re missing just one of them, that is already very suspicious. And these headers really describe how and why a certain request was made, and a real browser will fill'
+
+[03:59] [scene:talk]
+VISUAL:
+AUDIO: 'them in on its own, whereas a scripted request that\'s lazy just tends to drop them. Okay, so now let\'s move to the client layer on the right, where the page stops reading what you claim and starts measuring what you actually are based on your behavior when you\'re'
+
+[04:12] [scene:talk]
+VISUAL:
+AUDIO: 'interacting with the site. Check four is something like navigator.webdriver, and this one is very funny because it\'s a flag that\'s often built into the automation standard itself. What does the webdriver spec mean? Well, the'
+
+[04:26] [scene:talk]
+VISUAL:
+AUDIO: 'webdriver spec says that when a browser is being controlled by software, it has to set this flag to true so the page can know. So, a plain automation tool that\'s honest is just following the rules and'
+
+[04:38] [scene:talk]
+VISUAL:
+AUDIO: 'telling on itself. And on top of that, frameworks very often leak their own globals into the page names. So, for example, you might know that Playwright'
+
+[04:50] [scene:talk]
+VISUAL:
+AUDIO: 'is a very popular framework or platform rather to automate web testing. Well, if you\'re using Playwright, then your Playwright agent will definitely announce that it is actually investigating and clicking through the'
+
+[05:03] [scene:talk]
+VISUAL:
+AUDIO: 'page. So, you can very easily identify if a standard vanilla Playwright agent is browsing your web page. Check five is the WebGL vendor and renderer. When a page draws the the content with WebGL, it can ask the'
+
+[05:16] [scene:talk]
+VISUAL:
+AUDIO: 'browser which graphics card did the work. Now, if you have a real laptop, very often a browser page is still partially rendered with a real GPU, an Apple chip, an Nvidia card. However, a'
+
+[05:28] [scene:talk]
+VISUAL:
+AUDIO: 'server in a data center might not have a GPU at all, not even an onboard GPU, just a CPU. And so, it might turn WebGL off or report the renderer as null, or might even fall back to a software renderer'
+
+[05:42] [scene:talk]
+VISUAL:
+AUDIO: 'like LLVMpipe, a name that no normal person\'s machine would ever report. So, that\'s a little bit sus, right? Now, check six is something like the font fingerprint, and this is where'
+
+[05:54] [scene:talk]
+VISUAL:
+AUDIO: 'consistency becomes the weapon because the page will measure which fonts your machine has installed, and that set alone is close to unique. So, for example, if your user agent claims that you\'re using Windows, but you\'re on'
+
+[06:06] [scene:talk]
+VISUAL:
+AUDIO: 'missing fonts that usually ship with Windows like Segoe UI, then you have contradicted your own story, and in that contradiction, it might be quite obvious that you are a bot. Check seven, and this one is complex but'
+
+[06:19] [scene:talk]
+VISUAL:
+AUDIO: 'super effective, is screen and window geometry. When you think about it, a real browser window is wrapped in operating system Chrome, you know, the title bar, the toolbar, scroll bars. So, usually the'
+
+[06:31] [scene:talk]
+VISUAL:
+AUDIO: 'outer window is always a little bit bigger than the page inside of it. And then, based on these dimensions, you have more fingerprints. Now, check eight would be canvas and audio fingerprint.'
+
+[06:44] [scene:talk]
+VISUAL:
+AUDIO: 'So, the page tells the browser to draw an invisible image and process a snippet of sound, and then you can hash the exact result of that. On real hardware, the specific GPU driver and audio stack often leave tiny little imperfections.'
+
+[06:57] [scene:talk]
+VISUAL:
+AUDIO: 'So, the hash is unique to your specific browser session, and also plausible for real machine. Whereas, you can imagine if you have a botnet, a bunch of servers hammering a specific page,'
+
+[07:10] [scene:talk]
+VISUAL:
+AUDIO: 'they will eventually have the same be fingerprints, especially if you combine these different fingerprinting methods. Talking about fingerprinting, there\'s even more complex fingerprinting techniques. I mean, you can imagine that some websites will even look at how you'
+
+[07:23] [scene:talk]
+VISUAL:
+AUDIO: 'actually move your mouse. This really matters a lot, and it\'s a very easy way to actually catch bot behavior, too. The point here is that each of these individual checks may not sound very effective, but when you put'
+
+[07:35] [scene:talk]
+VISUAL:
+AUDIO: 'all of them together, you can actually realize that a real visitor might agree with all these different aspects, but a bot might contradict itself somewhere. Maybe not in the first five checks, but'
+
+[07:47] [scene:talk]
+VISUAL:
+AUDIO: 'it just needs to contradict itself on one of the checks. And this is also why a stealth browser usually has to be a custom build of a browser like Firefox and not just a simple script that you paste into the page because every one of'
+
+[08:00] [scene:talk]
+VISUAL:
+AUDIO: 'these client-side signals comes from deep inside the browser engine and even the operating system below the JavaScript that the page lets you touch directly. And you cannot hide these signals by overriding just a few values'
+
+[08:12] [scene:talk]
+VISUAL:
+AUDIO: 'in JavaScript. The page can see right through that. Now, let\'s talk about a project that allows you to hide from some of these. Camo Fox patches all of these in the engine itself in C++, so'
+
+[08:24] [scene:talk]
+VISUAL:
+AUDIO: 'there is no contradiction left to find at least in these eight aspects. So, let\'s actually see how this special version of Firefox avoids these bot flags.'
+
+[08:37] [scene:talk]
+VISUAL:
+AUDIO: 'In my normal browser, every card here is green and the banner reads looks human. So, I basically open this webpage and this webpage is checking for all those different aspects that I mentioned before and every signal agrees that this'
+
+[08:49] [scene:talk]
+VISUAL:
+AUDIO: 'is a real human on a real laptop. And so now let me reload the same page with a bot. So, this is vanilla Playwright running a real Firefox build, not a special one, and the window opens on its own and loads the page. And now the'
+
+[09:02] [scene:talk]
+VISUAL:
+AUDIO: 'verdict comes back as bot detected. So, let\'s have a look at which cards turned up red. Up top in the client section, navigator.webdriver'
+
+[09:14] [scene:talk]
+VISUAL:
+AUDIO: 'is flagged as true. So, that\'s the same flag that we talked about on the board earlier. While Camo Fox starts up, make sure you are subscribed because most of people watching this channel are not and you\'ll miss out on next wave of AI engineering. But anyway, Camo Fox now opens and you'
+
+[09:28] [scene:talk]
+VISUAL:
+AUDIO: 'can see here that on the exact same page, the verdict comes back and does say that this looks like a human. So, why is that the case? So, the navigator webdriver reports'
+
+[09:40] [scene:talk]
+VISUAL:
+AUDIO: 'false because it was patched in the Firefox engine itself, and the framework globals are gone, too. And now, the WebGL renderer reports a real GPU, too. And the fonts, of course, match the'
+
+[09:52] [scene:talk]
+VISUAL:
+AUDIO: 'operating system that the user agent claims because Camel Fox actually ships those fonts when you install it. So, now this whole story holds together, and you can see that it\'s actually not a bot,'
+
+[10:05] [scene:talk]
+VISUAL:
+AUDIO: 'according to this website, at least. The rest of the fingerprints check out, too. We have proper screen winner geometry, and we don\'t have any flags from the canvas or audio fingerprints. Now, my page does have a limitation. It only shows you the layers that a browser'
+
+[10:18] [scene:talk]
+VISUAL:
+AUDIO: 'can see, and production anti-bot stacks like Cloudflare and Akamai, they add layers below and above this. So, below this layer, they, for example, fingerprint the TLS handshake itself, the, you know, required handshake for'
+
+[10:30] [scene:talk]
+VISUAL:
+AUDIO: 'making HTTPS work. And they might also fingerprint how your HTTP/2 frames are laid out, and even the order of the way that the headers are being sent on the network. Now, these'
+
+[10:42] [scene:talk]
+VISUAL:
+AUDIO: 'are very complex interactions to work around, and to be honest, sometimes you should just not try to bot a site. But, in some cases, it is very useful to learn how to circumvent this to become a'
+
+[10:54] [scene:talk]
+VISUAL:
+AUDIO: 'really good AI engineer. So, so what I encourage you to do is, if you\'re interested to become a better AI engineer, you should check out the link in the description below to join my program. But, if you just want to get more free content, feel free to'
+
+[11:06] [scene:talk]
+VISUAL:
+AUDIO: 'subscribe, and I\'ll see you next time.'

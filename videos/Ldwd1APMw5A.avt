@@ -1,0 +1,251 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: New FREE Local 3D AI Generator is Here! (TripoSplat)
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=Ldwd1APMw5A
+upload_date: 20260603
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'A brand new open-source 3D air model just dropped called 3 post plat. It generates accurate 3D Gaussian splats from a single image, lets you control exactly how much detail you want, and the best thing is it\'s entirely free and runs on all systems. Today, I\'m going to'
+
+[00:13] [scene:talk]
+VISUAL:
+AUDIO: 'show you how to run it in ComfyUI, how good the results really are, and how it compares to Trellis too. And the best part, there are no installation scripts [music] needed, no custom nodes, no dependencies. It\'s natively built inside'
+
+[00:27] [scene:talk]
+VISUAL:
+AUDIO: 'ComfyUI and probably the easiest 3D air setup I\'ve ever shown on this channel. So, let\'s get into it. All [snorts] right, so what is 3 post plat exactly? If you have been following this channel, you know tools like Trellis too that'
+
+[00:40] [scene:talk]
+VISUAL:
+AUDIO: 'generates 3D meshes from 2D images and generate like triangles, vertices, the kind of 3D model you would then basically use in Blender or a game engine. 3 post plat is here a bit different because 3 post plat generates'
+
+[00:53] [scene:talk]
+VISUAL:
+AUDIO: 'Gaussian splats. You can compare to a sculpture made of clay basically because it has a solid surface and you can touch and reshape it directly. A Gaussian splat is a bit different because it\'s'
+
+[01:05] [scene:talk]
+VISUAL:
+AUDIO: 'more like a photograph made of thousands of tiny colored dots floating in 3D space. From any angle, it looks quite photoreal, but there\'s no solid surface underneath. This doesn\'t mean that we can\'t use Gaussian splats in production.'
+
+[01:18] [scene:talk]
+VISUAL:
+AUDIO: 'It\'s great for prototyping, also to visualize 3D scenes, and it\'s especially used in virtual reality and augmented reality. The great thing is as well that I\'m going to show you a ComfyUI workflow which directly generates you Gaussian'
+
+[01:31] [scene:talk]
+VISUAL:
+AUDIO: 'splat into a 3D mesh that you can then import into Blender. And I\'m going to show you now exactly how to set it up and what you need to take care of. Basically, when we are on the website on'
+
+[01:44] [scene:talk]
+VISUAL:
+AUDIO: 'the GitHub page of 3 post plat, you will basically see here that as a first thing we have an MIT license, which is really great because this basically means that we can use it commercially. It was'
+
+[01:56] [scene:talk]
+VISUAL:
+AUDIO: 'released by the triple team, so huge shout out here to the researcher team of Best AI basically to release it under an MIT license, which basically means it\'s open source. Super great thing is here as well that it has near to zero'
+
+[02:09] [scene:talk]
+VISUAL:
+AUDIO: 'dependencies, as you can see here, so it doesn\'t require Transformers, diffusers, or any version conflict hell. So, it runs basically on any platform, which is of course cool because you can use it'
+
+[02:21] [scene:talk]
+VISUAL:
+AUDIO: 'then under Windows, Linux, and Mac, as well as then on the Nvidia GPUs, and probably even AMD GPUs, even though I didn\'t test it yet myself. In case it works for you with AMD, for all the AMD'
+
+[02:33] [scene:talk]
+VISUAL:
+AUDIO: 'fans in our community, let us know down below if it works for you. So, let\'s get started with the installation. And to set this up up front because you guys are always wondering about how much VRAM it uses. Right now, it currently stands'
+
+[02:46] [scene:talk]
+VISUAL:
+AUDIO: 'at default settings around the 8 to 9 GB VRAM mark to generate the Gaussian splat as well as the video and the generated mesh then out of the Gaussian splat. So, definitely keep that in mind while'
+
+[02:58] [scene:talk]
+VISUAL:
+AUDIO: 'working with it. Probably, when you choose lower settings, you can run it on even less VRAM, but I think at least 8 GB VRAM are recommended for this workflow. In case you use it on six and you get it running, then let us know'
+
+[03:11] [scene:talk]
+VISUAL:
+AUDIO: 'down below. So, to get started is you can either use like ComfyUI desktop, you can also use ComfyUI portable default, or you use ComfyUI easy install, which I usually use in my videos. In case you would like to set up easy install, I'
+
+[03:24] [scene:talk]
+VISUAL:
+AUDIO: 'will have a direct link down below for you in the video description. To set it up now is super easy because all the thing we need to do is that we are on the latest ComfyUI version. And to do that is that you can go here to update'
+
+[03:36] [scene:talk]
+VISUAL:
+AUDIO: 'comfyui.bat that you see over here, and this will then open a terminal which will then update your ComfyUI to the latest version basically. Just make sure that you don\'t execute this one here because this might destroy remaining'
+
+[03:49] [scene:talk]
+VISUAL:
+AUDIO: 'dependencies that you have from other packages. So, I would always recommend to only use the update-conf.bat file. Once you have this done and it\'s saying here update completed, we can then close this already. Now, we can'
+
+[04:01] [scene:talk]
+VISUAL:
+AUDIO: 'already start ComfyUI. Just click here on start-conf.bat. All right, and once ComfyUI launched, you will see that we have here a blank'
+
+[04:13] [scene:talk]
+VISUAL:
+AUDIO: 'window. And now, to actually open a workflow, this is also incredibly easy because it\'s directly implemented into ComfyUI. Only thing you need to do is that you go here to the templates tab over here. Then, you can search here'
+
+[04:25] [scene:talk]
+VISUAL:
+AUDIO: 'tripo, and then make sure that you scroll down, and then you will see here basically tripo splat image to Gaussian splat. And this is the only workflow we need for this video, so you can directly click on it, and then you will see that'
+
+[04:38] [scene:talk]
+VISUAL:
+AUDIO: 'a new workflow is opening here with two issues that we are going to fix in a second. But basically, we have then here our load image node. We have here our create 3D model section, where the Gaussian splat is going to be created.'
+
+[04:51] [scene:talk]
+VISUAL:
+AUDIO: 'Then, we have here a video that is going to be saved out. It will even create us here a 3D model because it will extract the mesh from our splat and then save it as a 3D model as a GLB file that we\'re also going to import later on in'
+
+[05:04] [scene:talk]
+VISUAL:
+AUDIO: 'Blender. Basically, to get started is that we need to download all models. And you can do this very easily by checking out the model links that we have over here basically because you will see that all model links are linked for locally'
+
+[05:17] [scene:talk]
+VISUAL:
+AUDIO: 'users. So, you can then directly check out here the model storage location, so where the models should go. You can then directly click on it, and it will lead you then to the model that you can download and then save to the correct'
+
+[05:29] [scene:talk]
+VISUAL:
+AUDIO: 'ComfyUI folder that you see here. Once you have done that, most of the times you only need to hit R, or you can simply restart ComfyUI, and then it should pop up, and then just make sure that you\'re choosing here [music] then'
+
+[05:41] [scene:talk]
+VISUAL:
+AUDIO: 'the model that you will see over here basically, so you can then select it. As well as here you see I downloaded some of them already as well as here and do that with every step to make sure that you have them selected and downloaded'
+
+[05:53] [scene:talk]
+VISUAL:
+AUDIO: 'and set up all of them. Once you then set up all of them, what you can also do is that you go over here and now we\'re going to upload our first image that we would like to generate. So we\'re just clicking on this little sign over here'
+
+[06:05] [scene:talk]
+VISUAL:
+AUDIO: 'and then you can upload your first image. So I\'m going to upload for example this model here that you might remember from our Pixel 3D video where it\'s basically a small environment and this is also showing the strength of 3'
+
+[06:17] [scene:talk]
+VISUAL:
+AUDIO: 'plus flat because it\'s really good at one-to-one recognition. So it\'s really accurate with the details we have. So basically once you have that, all you need to do everything should be handled by the image to Gaussian splat node'
+
+[06:29] [scene:talk]
+VISUAL:
+AUDIO: 'already. Just make sure that you have everything selected here as mentioned and now you can then start running the workflow. All right, and then once generated you will see that the generation time took in total like 152 seconds with the additional 2 seconds I'
+
+[06:45] [scene:talk]
+VISUAL:
+AUDIO: 'had by simply enabling this workflow here this notes by pressing control and B to enable them and then to run the workflow again basically. But you will see basically that we now have our'
+
+[06:57] [scene:talk]
+VISUAL:
+AUDIO: 'generated mesh over here. So you will see that it captures all the tiny details that we have. For example this bench over here as well as the building and tiny details we have also here on the pond which I think is really amazing'
+
+[07:10] [scene:talk]
+VISUAL:
+AUDIO: 'to see and [music] you can also see that it saves us here a video so you can also play this. You can by the way also change the camera angle here in case you would like to see it from a different angle and so on. And the really great'
+
+[07:22] [scene:talk]
+VISUAL:
+AUDIO: 'thing is of course that we can also see here that it extracts us here a 3D model from our Gaussian splat which is really amazing of course because this one we can actually then import into blender and use for our project basically. And'
+
+[07:36] [scene:talk]
+VISUAL:
+AUDIO: 'as you can see this workflow is incredibly fast and delivers really solid results when it comes to that. To import your 3D model is also very easy, so you can go to Blender for example, then make sure that you go to file,'
+
+[07:49] [scene:talk]
+VISUAL:
+AUDIO: 'import, and then you choose here GLB. Then, once you\'re here in GLB, what you can do is that you navigate to your ComfyUI folder, and once you\'re here in your ComfyUI folder, just make sure that you go to ComfyUI, then output, then'
+
+[08:02] [scene:talk]
+VISUAL:
+AUDIO: 'here on 3D, and then, as you can see here, we have then have our generated triplesplat file over here. It will be always saved under output and 3D. Then, you can hit here merge vertices already'
+
+[08:14] [scene:talk]
+VISUAL:
+AUDIO: 'and import [music] GLTF. And then, you will see that we have our generated mesh over here, basically. You will still see that it has sometimes some artifacts around this area here where we get some'
+
+[08:26] [scene:talk]
+VISUAL:
+AUDIO: 'holes, and that of course the texture itself is not that high-res at the moment. Apart from that, you will see that we have here a quite nice representation on our mesh. We can spin around [music] it, and you will also see'
+
+[08:39] [scene:talk]
+VISUAL:
+AUDIO: 'that once I turn on here the wireframe and select it that it\'s obviously not a clean wireframe. So, if you\'re looking for this, then you [music] might need to further treat it on the line to retopologize it and so on. But, this is obviously not the purpose here from this'
+
+[08:52] [scene:talk]
+VISUAL:
+AUDIO: 'model because it serves here, you know, as a visual representation in our 3D scene. So, it can be used for background assets, and in case you still would like to use it as a base for your character, you can still go ahead and retopologize'
+
+[09:04] [scene:talk]
+VISUAL:
+AUDIO: 'it. To get even better results, what we can do basically back in ComfyUI is that we\'re choosing here our resolution. So, we can for example increase our'
+
+[09:17] [scene:talk]
+VISUAL:
+AUDIO: 'resolution from our generated mesh so that we have here the highest resolution. You could also change the kernel size, even though I leave it here as a default of five because so far it gave me good results. In case you have a'
+
+[09:29] [scene:talk]
+VISUAL:
+AUDIO: 'lot of holes in your mesh, you can change here the level to something lower, so something like 0.4 for example. One more thing I\'m always checking is that you have here the number of Gaussian set to the max number that we have over here. Quickly also put'
+
+[09:43] [scene:talk]
+VISUAL:
+AUDIO: 'other values here for you in a markdown node. By the way, I will also give you this as a small text file that you can also download in the video description down below. But, basically, you will see that for lightweight and fast, we can choose a number of Gaussians like at 32K'
+
+[09:56] [scene:talk]
+VISUAL:
+AUDIO: 'range. We have a 65K range for medium, and for high quality, 130K. This is already the maximum we have by default. What is basically shown here, which is this a number over here. You can, of'
+
+[10:09] [scene:talk]
+VISUAL:
+AUDIO: 'course, also play around with the seed to get different results. And you could even, you know, for the 3D file size. So, in case you would like to change it, you can change here the format, for example, also to ply, which is then basically a different format for you in'
+
+[10:22] [scene:talk]
+VISUAL:
+AUDIO: 'case you would like to handle your 3D Gaussian splat directly. And we can then run our workflow again, and we then have here our more refined mesh. You will notice that we have more detail around the tree, and overall a smoother result.'
+
+[10:35] [scene:talk]
+VISUAL:
+AUDIO: 'And what we can do now is that we quickly go back to Blender, then re-import our mesh, and then we have our high-quality mesh, which is basically this one. In this example here, it\'s'
+
+[10:47] [scene:talk]
+VISUAL:
+AUDIO: 'quite subtle difference-wise, but you will see that we get a bit more detailed shapes around here than compared to our other model. Usually, I can recommend you to always use the higher settings because it doesn\'t take that much more'
+
+[10:59] [scene:talk]
+VISUAL:
+AUDIO: 'time. So, here it was now around 73 seconds. Mark, you know, by regenerating it with the existing settings we had. So, which adds up to like 3 minutes around for this generation on my RTX 5080 card. Of course, you can not only'
+
+[11:12] [scene:talk]
+VISUAL:
+AUDIO: 'generate environments, but, for example, also characters. So, I took, for example, our monster here again, which I also showed you in the Trellis 2 GGF video. And you will basically see that we have here our Gaussian splat, which'
+
+[11:25] [scene:talk]
+VISUAL:
+AUDIO: 'is here turned upside down. Don\'t ask me why, but it\'s still working, as you can see here. And, once we have our generated video, this is then the 3D model that we get out of it. So, as you can see, it really respects really well'
+
+[11:37] [scene:talk]
+VISUAL:
+AUDIO: 'the one-on-one view that we have over here, basically, in terms of colors, as well, and so on, which is really cool. And, this one we could then, of course, also re-import into Blender and then work from there. So, definitely cool to'
+
+[11:51] [scene:talk]
+VISUAL:
+AUDIO: 'see that. And, ComfyUI also made a blog post about it, where you will basically see also further examples down the line, like this character over here, as well as this more stylized cartoony character, which is also a great thing'
+
+[12:04] [scene:talk]
+VISUAL:
+AUDIO: 'to mention, because basically, they have in their repository that it works especially well with stylized characters and props. So, definitely something to keep in mind. So, you will see here that it\'s open source, as mentioned already. We have image-in-3D, image-in, and 3D'
+
+[12:17] [scene:talk]
+VISUAL:
+AUDIO: 'splat. So, we don\'t require like multi-angle photo shoot. We have a smarter detail placement, and you can choose the detail level, basically, what I showed you with the settings we had. In case you would like to see more about'
+
+[12:29] [scene:talk]
+VISUAL:
+AUDIO: 'this stuff, then let me know down below, and make sure to subscribe to the channel to not miss out on any updates in the 3D air space. And, having said that, see you in the next video.'

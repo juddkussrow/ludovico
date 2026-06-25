@@ -1,0 +1,335 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: OpenAI Symphony: First Looks
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=5x3_U7b4eKU
+upload_date: 20260430
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'OpenAI just released Symphony, a multi-agent orchestration software. And the idea here is very simple. Instead of personally managing agent harnesses individually, you instead manage an issue tracker like Linear and assign'
+
+[00:12] [scene:talk]
+VISUAL:
+AUDIO: 'agents to the tickets. And these agents are fully automated. They scan for open tickets, read the description, start work on it, and then they will loop on that ticket until it is completed, and'
+
+[00:24] [scene:talk]
+VISUAL:
+AUDIO: 'then it creates a pull request. You, as a human, would manage just the start and the end of the coding life cycle, the requirements and the review of the finished changes. Now, don\'t get me wrong. This is an absolutely great way'
+
+[00:37] [scene:talk]
+VISUAL:
+AUDIO: 'to increase your coding productivity, but I will argue that the actual bottleneck that we really need to address isn\'t the code generation anymore. More on this on the later part of the video. For now, let me just show'
+
+[00:49] [scene:talk]
+VISUAL:
+AUDIO: 'you how Symphony works and how you could benefit from it. Now, regarding Symphony, what\'s immediately interesting is that OpenAI didn\'t ship a product or actual software. They released an idea'
+
+[01:01] [scene:talk]
+VISUAL:
+AUDIO: 'in the form of a spec or specifications document. They have a whole article talking about the release of Symphony, and I\'ll drop the link to it in the description if you\'d like to read it. There is one thing to note in the'
+
+[01:13] [scene:talk]
+VISUAL:
+AUDIO: 'article, and that is that while we are basically automating a lot of the feature development and the bug fixing to the autonomous agents, we aren\'t automating the exploratory work because that\'s something that you just cannot'
+
+[01:25] [scene:talk]
+VISUAL:
+AUDIO: 'automate. You still need to be able to understand the problem set that you\'re dealing with, and for that, the interactive agents harnesses will still provide the best experience. Now, going back to Symphony, they did just literally drop the spec.md and told you'
+
+[01:38] [scene:talk]
+VISUAL:
+AUDIO: 'to basically go figure it out the app yourself. Kind of like declarative programming, if you will, where you specify what you want, and you don\'t really care how you get there. That said, OpenAI was nice enough to give you'
+
+[01:50] [scene:talk]
+VISUAL:
+AUDIO: 'a reference application to kind of just get you off the ground with this spec, and it\'s written in Elixir because they literally wanted to show off that coding agents can code in any language whatsoever. So, if you want to start'
+
+[02:03] [scene:talk]
+VISUAL:
+AUDIO: 'using Symphony, you can obviously build your own, but for our demonstration purposes, I\'ll be using the reference application. Now, the first thing you should do is create a Linear account. Uh if you haven\'t done so, uh it\'s free.'
+
+[02:16] [scene:talk]
+VISUAL:
+AUDIO: 'They do have a very generous free tier that everyone can use. Once you\'ve done that, you should land on the dashboard page. Now, the first thing you want to do is create a project. Go into the project tab, press the plus button, and give it'
+
+[02:29] [scene:talk]
+VISUAL:
+AUDIO: 'a name. Click into that project you just created. And the very first thing you\'re going to need here is the project slug. And just be careful, you don\'t want to mix it up with your organization slug, which is Overseed AI in my case. You do'
+
+[02:42] [scene:talk]
+VISUAL:
+AUDIO: 'want to grab the project slug. Store this, and we\'re going to reference this later down in the video. The other thing you\'re going to do is kind of initialize it with some first issues. So, click on the issues tab here,'
+
+[02:55] [scene:talk]
+VISUAL:
+AUDIO: 'and just give it an issue like uh initialize repo. And what I like to do is click on this configuration button and view it as board. That way, I can easily visualize what status things are in. And the status is'
+
+[03:08] [scene:talk]
+VISUAL:
+AUDIO: 'really important here because Symphony will pick up these tickets based on which status these tickets are in. And by default, it\'s not going to pick up the ones in backlog. And so,'
+
+[03:20] [scene:talk]
+VISUAL:
+AUDIO: 'what we\'re going to do is we\'re going to click on empty uh show empty columns so we can show the rest of the columns here. And if we move this ticket to to do, Symphony further down the road will pick up this ticket because to do is one'
+
+[03:32] [scene:talk]
+VISUAL:
+AUDIO: 'of those default watched status lists. And the other thing you\'re going to need from Linear is an API token so that Symphony is able to actually talk to Linear. And to grab that token, we\'re'
+
+[03:44] [scene:talk]
+VISUAL:
+AUDIO: 'going to go into the settings. And inside of settings, go to security and access. And inside of that page, there is a tab called personal API keys, and you just want to click new API key and give it a name. And you can configure'
+
+[03:56] [scene:talk]
+VISUAL:
+AUDIO: 'the permissions if you like, but because this is just a demo, I\'m just going to give it all access. And grab that new token and store it for later. Okay, moving on to Symphony, first clone the repository, and the link for this will be down in the'
+
+[04:10] [scene:talk]
+VISUAL:
+AUDIO: 'description. And once you have it cloned, open up Elixir. That\'s where the reference application lives. Inside of this directory, let\'s open up workflow. And this file is basically a file that you would copy into the repositories that you want'
+
+[04:23] [scene:talk]
+VISUAL:
+AUDIO: 'Symphony to work on. And Symphony reads this workflow file to basically understand how to work with Linear and also how to clone that repository. So, for example,'
+
+[04:36] [scene:talk]
+VISUAL:
+AUDIO: 'that project that we created earlier in Linear, you\'ll plug in the project slug in here, and you\'ll specify the active states that Symphony is listening on. So, if a ticket is in one of these statuses, it will start working on it.'
+
+[04:50] [scene:talk]
+VISUAL:
+AUDIO: 'You can also specify the polling rate. So, with this default value of 5,000, it\'s going to pick up uh tickets every 5 seconds. And inside of the hooks, you\'ll see that there is a git clone command, and this'
+
+[05:02] [scene:talk]
+VISUAL:
+AUDIO: 'is exactly what Symphony uh runs to clone your uh repository. And here, you would update the command to basically point to the repository remote that you\'re looking at. And if you look down here, uh you\'ll see that'
+
+[05:14] [scene:talk]
+VISUAL:
+AUDIO: 'there is a Codex field. Uh this is basically the command that Symphony runs to actually uh run your coding sessions. And you\'ll also see that there is a max concurrent uh agents and max turns configuration here. And the max turns'
+
+[05:26] [scene:talk]
+VISUAL:
+AUDIO: 'basically is kind of like the Ralph loop uh config to say, "Hey, uh work on this ticket for 20 times, and if you still haven\'t finished it at that point, uh just stop." But yeah, once you have the'
+
+[05:38] [scene:talk]
+VISUAL:
+AUDIO: 'workflow file set up, the next thing you\'re going to do is open up the readme and follow the instructions inside of here. This walks you through setting up the Elixir application and some of the dependencies that are required with it.'
+
+[05:50] [scene:talk]
+VISUAL:
+AUDIO: 'Now, the reference application is using mise or mees to manage the uh the version for Elixir. I personally got my Codex app to just run it for me, so that was super easy. Uh you can do that as'
+
+[06:02] [scene:talk]
+VISUAL:
+AUDIO: 'well if you like. One thing to note here is that the API key that we grabbed for Linear has to go in the environment variables before you run the command. And so, to actually run the application, we\'re going to grab that API key that we'
+
+[06:14] [scene:talk]
+VISUAL:
+AUDIO: 'created earlier and plug it into the command as part of our environment variables. Now, if you look at the command that we are about to run, you\'ll notice that there is a flag that says, "I understand that this will be running'
+
+[06:27] [scene:talk]
+VISUAL:
+AUDIO: 'without the usual guardrails." Now, what this means is that the agent that runs, which is Codex, is running with all the permissions enabled. And that\'s kind of required for Symphony'
+
+[06:41] [scene:talk]
+VISUAL:
+AUDIO: 'for an autonomous system because it can\'t really be interactive and be asking you questions about some of this implementation detail. So, it\'s basically an inherent risk to the system that you are running these'
+
+[06:53] [scene:talk]
+VISUAL:
+AUDIO: 'agents in an unsupervised manner. Now, to kind of combat this, I do have a software called Vivo, uh which is short for virtual workspaces, that helps users run agents in a sandbox environment. And'
+
+[07:06] [scene:talk]
+VISUAL:
+AUDIO: 'I think Vivo would be a great solution to kind of help mitigate some of the security vulnerabilities that you would expect uh from running agents fully unsupervised in your system. If you\'re'
+
+[07:19] [scene:talk]
+VISUAL:
+AUDIO: 'interested in that project, I\'ll have the link to it down in the description as well. Uh unfortunately, right now, Vivo is currently locked to uh Cloud Code, but I have plans on making it more generalized to all the agent harnesses.'
+
+[07:31] [scene:talk]
+VISUAL:
+AUDIO: 'So, uh once that happens, I\'ll also have another video on it as well on my channel, so feel free to subscribe to be notified when that video does drop. And finally, moving back to this command, uh you\'ll see that we specified a port, and'
+
+[07:43] [scene:talk]
+VISUAL:
+AUDIO: 'we point the command to a specific workflow file. And like mentioned earlier, you you\'ll generally want to point this workflow file to the one that\'s inside of the repo that you\'re working on, but just for demonstration'
+
+[07:55] [scene:talk]
+VISUAL:
+AUDIO: 'purposes, we\'ll just point it to the Symphony file. Um to the Symphony directory inside of here. Now, running [snorts] the CLI, you will get a status update, but you\'ll also get a UI to help you kind of see what what\'s going on'
+
+[08:07] [scene:talk]
+VISUAL:
+AUDIO: 'with the application. Now, if you click on that, let\'s open it up. Now, opening up the application, you get a nice little UI dashboard to kind of encapsulate, you know, how many agents are running, how many are retrying, and'
+
+[08:20] [scene:talk]
+VISUAL:
+AUDIO: 'um that sort of stuff. Uh once we have an actual running uh session here, you\'ll see it in down here. And yeah, let\'s uh let\'s actually do a demo run to see how this works. Okay, so we\'re back on the Linear page for our sample'
+
+[08:32] [scene:talk]
+VISUAL:
+AUDIO: 'project, and we have this one ticket here, and I\'m going to give it a little bit more description just so that the AI has a little bit to work on. And if you remember how we configured'
+
+[08:44] [scene:talk]
+VISUAL:
+AUDIO: 'the workflow file, uh it actually only picks up the tickets when they are in specific buckets. So, in our case, it needs to be in the to do bucket for it to get picked up. And after we move it, Symphony should'
+
+[08:56] [scene:talk]
+VISUAL:
+AUDIO: 'pick up this ticket and start working on it. And yeah, going back to the dashboard, you\'ll see that now we have one running session, and the ticket is being worked on. And you\'ll get a live update as to what Codex is doing behind the scenes. And the first question I had'
+
+[09:09] [scene:talk]
+VISUAL:
+AUDIO: 'about this was that, yeah, you get a nice little update on this dashboard, but how do you actually see what\'s going on inside of that specific task? And the way that you would get visibility into it is on Linear. So, back on Linear,'
+
+[09:21] [scene:talk]
+VISUAL:
+AUDIO: 'you\'ll see that the ticket has now automatically moved to the in progress tab. And if you click on that ticket, you\'ll see that Codex has populated its plan, its course of action, and there\'s a whole bunch of them.'
+
+[09:33] [scene:talk]
+VISUAL:
+AUDIO: 'There\'s a lot, really. And as Codex goes through and completes these tasks, it will update them, and you can see here that ticket 1.1 has been completed, and it gets live updated. It\'s actually a really nice little way to kind of see'
+
+[09:46] [scene:talk]
+VISUAL:
+AUDIO: 'how the ticket is progressing. But yeah, this is a fairly large ticket that I just gave Codex to work on, so I I would assume that it\'s going to take some time to Now, the other nice thing about this is that you can provide better data to the'
+
+[09:59] [scene:talk]
+VISUAL:
+AUDIO: 'tickets. So, if you are to specify, you know, say one ticket is blocked by the completion of another ticket, you can specify all of that in the properties and before Codex starts working on it,'
+
+[10:11] [scene:talk]
+VISUAL:
+AUDIO: 'it\'ll see the metadata and it\'ll see that it\'s blocked by another ticket and it will pause working on that until that first ticket is completed. The other thing to kind of note is that the quality of the code output, it\'s going'
+
+[10:23] [scene:talk]
+VISUAL:
+AUDIO: 'to depend highly on the agent harness. Now, in this case, we\'re using Codex. Codex is a fairly capable agent harness in addition with the GPT model, so the results are going to be pretty good'
+
+[10:35] [scene:talk]
+VISUAL:
+AUDIO: 'here. And finally, the last point to make here is that because these are all very asynchronous in nature, you can spin up multiple of these tickets and have them all working simultaneously and you don\'t have to worry about coding'
+
+[10:48] [scene:talk]
+VISUAL:
+AUDIO: 'every single one of them by hand. But yeah, that\'s how Symphony works. Okay. So, let\'s talk about the real problem now. Now, don\'t get me wrong. Symphony is really cool. This integration to be'
+
+[11:00] [scene:talk]
+VISUAL:
+AUDIO: 'able to create tickets and start working on them super quickly, I I think is genuinely useful. OpenAI has reported internally that they\'ve had a 500% increase in landed pull request as a'
+
+[11:13] [scene:talk]
+VISUAL:
+AUDIO: 'result of something like this. But I want to push back on the framing just a little bit because more PR\'s is not necessarily the same thing as more value being shipped.'
+
+[11:26] [scene:talk]
+VISUAL:
+AUDIO: 'Code generation is not really the new bottleneck. It\'s review. Think about it. You can 5x the rate at which we create pull requests, but it\'s the humans that are still reviewing the code at human'
+
+[11:39] [scene:talk]
+VISUAL:
+AUDIO: 'speed and you haven\'t moved the bottleneck. And the other problem here is that when you have a whole metric ton of pull requests, what ends up happening is that these reviewers, they get they get pressured. They they feel rushed.'
+
+[11:52] [scene:talk]
+VISUAL:
+AUDIO: 'They rubber stamp and as a result, bugs slip through. Features are not complete. Context switching problems come back because now you have to review these problems and you have you\'re not the one'
+
+[12:04] [scene:talk]
+VISUAL:
+AUDIO: 'who coded it. You didn\'t wrestle with the code. You don\'t understand what the changes are. All of these problems, they come back. And so, what ends up happening is we solve one problem only to create another. And the other thing'
+
+[12:16] [scene:talk]
+VISUAL:
+AUDIO: 'to kind of talk about is that Symphony as a concept or even as a software in our case, is not necessarily new. There is also another piece of software that came out a few months ago called'
+
+[12:29] [scene:talk]
+VISUAL:
+AUDIO: 'AutoClaude. Well, at the time it was called that. It looks like they have since rebranded to Apparent, Apparents. But basically, this is a very similar software to Symphony. Now, if you look at the UI of Apparent,'
+
+[12:42] [scene:talk]
+VISUAL:
+AUDIO: 'it\'s very similar to Symphony or Linear in the sense that you create these tickets on a Kanban style issue tracker and then you click on the start and I I believe they have an automation where if'
+
+[12:54] [scene:talk]
+VISUAL:
+AUDIO: 'you move it to a certain status board, the it just starts automatically. The idea here is actually very similar. The difference being in the implementation of it where this application is more UI based and'
+
+[13:06] [scene:talk]
+VISUAL:
+AUDIO: 'Symphony is more CLI based. But what I\'m really trying to get at here is that we haven\'t really solved the way to trust or have confidence in the output of the AI.'
+
+[13:19] [scene:talk]
+VISUAL:
+AUDIO: 'And a lot of that is still quite very manual. You know, we have to write these tests, but we don\'t even know if the tests that the AI is writing is actually valid. We got to go back in, spin up the server and actually see things for ourselves or'
+
+[13:32] [scene:talk]
+VISUAL:
+AUDIO: 'you have automated UI tests, but again, brings up the question, how do you trust that the automated UI tests are good? And I think this is kind of a general trajectory of our industry is that while we are addressing these bottlenecks,'
+
+[13:45] [scene:talk]
+VISUAL:
+AUDIO: 'we\'re going to slowly realize that the trust part of the AI output is becoming the real problem. And I don\'t want to be the kind of guy who calls out a problem in our industry and does nothing about'
+
+[13:58] [scene:talk]
+VISUAL:
+AUDIO: 'it. I don\'t think that\'s particularly useful for anybody involved. So, so yeah, I\'m working on this new product that kind of has similar vibes to what this looks like, that kind of works like Symphony, but it goes over and beyond that. It\'s able to close the feedback'
+
+[14:12] [scene:talk]
+VISUAL:
+AUDIO: 'loop by giving you the confidence in the output of the AI agent. And the way that I think we can build confidence in the outputs of the AI is through seeing. I want to be able to see what'
+
+[14:25] [scene:talk]
+VISUAL:
+AUDIO: 'exactly that the AI has worked on through either screenshots or like a live preview. And I also want realistic test data. And what I mean by that is imagine a world where you can take'
+
+[14:38] [scene:talk]
+VISUAL:
+AUDIO: 'actual production data and you can shrink it down into a more much more manageable size so as you can run it in CI/CD pipelines and also mask the data so you\'re not you\'re not infringing on privacy rights.'
+
+[14:50] [scene:talk]
+VISUAL:
+AUDIO: 'And so, for every single automated task that the agent is working on, you\'re getting fully automated test suite with actual production data, masked of course, with a visual so you can see for yourself'
+
+[15:02] [scene:talk]
+VISUAL:
+AUDIO: 'that the feature that you\'re working on or the bug fix is actually fixed and then you have a pull request that brings all of these in together in a nice, clean and easy way to understand all of this so that you can have confidence'
+
+[15:15] [scene:talk]
+VISUAL:
+AUDIO: 'when you click that merge button. I believe that this is the way forward to actually increase our productivity tenfold because now we\'re addressing the bottleneck at both the start and end of the coding cycle. If you are interested'
+
+[15:27] [scene:talk]
+VISUAL:
+AUDIO: 'in a product like this and if you think that the idea is noteworthy, please do subscribe and follow me on social media so that I whenever I do have updates on this product that you\'re getting it as fast as possible. Anyway, that\'s my take on'
+
+[15:41] [scene:talk]
+VISUAL:
+AUDIO: 'Symphony. I believe that it\'s actually a very clean idea and I think it\'s going to be very useful for a lot of teams out there and that it\'s going to influence how a lot of teams structure their AI workflows. And the real neat thing is that because it\'s just a spec, it means'
+
+[15:55] [scene:talk]
+VISUAL:
+AUDIO: 'that you\'re able to take that idea and really make it your own. Add the things that really would help for your team, bring it all in and take out Linear if you don\'t if you don\'t want it, swap out the Codex for a different agent'
+
+[16:08] [scene:talk]
+VISUAL:
+AUDIO: 'harness. A lot of these things are very possible because now we have agent harnesses that can code these things for us. But yeah, I\'ll drop the links to the OpenAI article and the GitHub repo in the description down below so you can'
+
+[16:20] [scene:talk]
+VISUAL:
+AUDIO: 'check it out for yourself. If you found this video useful, please hit the like button, subscribe, do all the usual stuff and do let me know down in the comments if you really think that review is the new bottleneck. Perhaps I\'m'
+
+[16:33] [scene:talk]
+VISUAL:
+AUDIO: 'wrong. The agents might still have a long way to go. I personally think that they\'ve come such a long way that code generation for the most part is solved, but you might think differently. Let us know down in the comments and I will'
+
+[16:45] [scene:talk]
+VISUAL:
+AUDIO: 'catch you in the next one. Have a great rest of the week, you guys and bye.'

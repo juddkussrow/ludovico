@@ -1,0 +1,279 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Why I ditched ComfyUI for Diffusers
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=XogoQnkQUO8
+upload_date: 20260312
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'Hello everyone. This is Mateo and I guess a new video was long overdue. So, why the radio silence? It\'s not because of YouTube burnout. As you probably know, I\'m not a YouTuber in the sense that YouTube is not my work'
+
+[00:14] [scene:talk]
+VISUAL:
+AUDIO: 'and I don\'t want it to be. The real reason is ComfyUI. Don\'t get me wrong. Comfy is still the most powerful tool to interact with AI models and the'
+
+[00:27] [scene:talk]
+VISUAL:
+AUDIO: 'average tinkerer should look no further, but it\'s not for me anymore. My interest in machine learning is two-folded. First of all, I\'m fascinated by the math'
+
+[00:40] [scene:talk]
+VISUAL:
+AUDIO: 'behind it. And secondly, I simply like experimenting with it. I don\'t want to use AI to replace a tool that already exist.'
+
+[00:52] [scene:talk]
+VISUAL:
+AUDIO: 'I want to create a completely new tool that allows to do things that were not possible before. I know I won\'t make many friends by saying this, but I\'m not interested in shortcuts. I\'m not interested in make'
+
+[01:07] [scene:talk]
+VISUAL:
+AUDIO: 'money fast, in crypto, in not safe for work, in Hollywood is dead. I\'m here really just for the joy of experimentation.'
+
+[01:21] [scene:talk]
+VISUAL:
+AUDIO: 'And to do that, I need a software that is easy to tinker with and that puts the least amount of friction when I want to do some weird stuff. Now, I know that I\'m not a great'
+
+[01:35] [scene:talk]
+VISUAL:
+AUDIO: 'developer and probably not even a good one, but ComfyUI started to get too much in the way of my journey. And not only from a coding standpoint,'
+
+[01:47] [scene:talk]
+VISUAL:
+AUDIO: 'since the new logo with the most in your face color palette, comfy totally embraced the hype machine. Now, please don\'t rush to the comments.'
+
+[02:02] [scene:talk]
+VISUAL:
+AUDIO: 'I don\'t blame them. They do what they have to do. Simply, it\'s not for me anymore. It\'s a classic, it\'s not you, it\'s me situation. The alternative, as imperfect as it'
+
+[02:15] [scene:talk]
+VISUAL:
+AUDIO: 'might be, is diffusers. I won\'t deny that the overall structure of diffusers can be frustrating, but it\'s incredibly simple to hack and'
+
+[02:28] [scene:talk]
+VISUAL:
+AUDIO: 'customize, which is exactly what I need. So, I started playing with it, but I needed a flexible UI, and Gradio ain\'t it.'
+
+[02:42] [scene:talk]
+VISUAL:
+AUDIO: 'So, Melon was born. First thing first, Melon, double L, means friend in Elvish, you know, from Lord of the Rings, and it\'s not a fruit.'
+
+[02:55] [scene:talk]
+VISUAL:
+AUDIO: 'Now, before you get too excited, it\'s not a fully working software you can use. At the moment, it\'s mostly a proof of concept I use for my own projects. But, the guys at Hugging Face were crazy'
+
+[03:10] [scene:talk]
+VISUAL:
+AUDIO: 'enough to adopt it for one of their upcoming projects, namely modular diffusers. Modular diffusers is a new way of building diffusers pipeline by composing'
+
+[03:23] [scene:talk]
+VISUAL:
+AUDIO: 'reusable blocks. It\'s a very flexible way to interact with models and to extract the components they are built with. And since everything is split into'
+
+[03:36] [scene:talk]
+VISUAL:
+AUDIO: 'building blocks, using them in a node graph is a no-brainer. I highly encourage you to check the documentation. If you used diffusers before or you are interested in the'
+
+[03:49] [scene:talk]
+VISUAL:
+AUDIO: 'server side of generative AI, this is really a breath of fresh air in the Diffusers ecosystem. So, how is Melon different and how does'
+
+[04:02] [scene:talk]
+VISUAL:
+AUDIO: 'Modular Diffusers fit into this? Well, let\'s take a very simple text-to-image graph. This should look pretty familiar. We have the model loader, the text'
+
+[04:14] [scene:talk]
+VISUAL:
+AUDIO: 'encoder, the main denoise loop, and the preview. But with Melon, I wanted things to be a little more dynamic. If we look at the model loader, it\'s configured for Z'
+
+[04:28] [scene:talk]
+VISUAL:
+AUDIO: 'image. Let\'s say I want to use SDXL instead. You can see the nodes adapted to the new selection. First of all, the repository ID changed. This model will be automatically'
+
+[04:42] [scene:talk]
+VISUAL:
+AUDIO: 'downloaded if you don\'t have it already. Then the text encoder added a negative prompt because SDXL actually supports that.'
+
+[04:54] [scene:talk]
+VISUAL:
+AUDIO: 'If I go back to Z image, you can see the negative prompt disappears. And the denoise also gets different values. The steps are set to 25, and we even get an IP adapter input'
+
+[05:08] [scene:talk]
+VISUAL:
+AUDIO: 'that we didn\'t have otherwise. Basically, this is a master workflow that can handle anything and adapt itself to the model capabilities. If I select Flux 2, the graph changes'
+
+[05:21] [scene:talk]
+VISUAL:
+AUDIO: 'again, and I now can generate something like the most beautiful cat. And this is just the tip of the iceberg'
+
+[05:35] [scene:talk]
+VISUAL:
+AUDIO: 'because we can have an entire workflow inside a node loaded directly from Hugging Face. If you go to this repository and check the files, you\'ll see a suspicious Melon'
+
+[05:48] [scene:talk]
+VISUAL:
+AUDIO: 'Pipeline JSON file. If I open it, you\'ll see inside there\'s some sort of node definition. We have a text area, an image input, and a number'
+
+[06:00] [scene:talk]
+VISUAL:
+AUDIO: 'of steps. Let\'s try to copy this and put it in the custom block field. If I click the button now, the node will update itself with the fields defined in'
+
+[06:14] [scene:talk]
+VISUAL:
+AUDIO: 'the JSON file. And indeed, we got a prompt, an image input, and a number of steps. If I connect an image preview, I can generate the most beautiful cat.'
+
+[06:28] [scene:talk]
+VISUAL:
+AUDIO: 'And that\'s it. The whole Flax 2 workflow is just one simple node loaded directly from the web. I can also try to connect an image.'
+
+[06:40] [scene:talk]
+VISUAL:
+AUDIO: 'Let\'s try this one and see what happens. And this system is all from the guys at Hugging Face. I just offered the platform and they went completely'
+
+[06:54] [scene:talk]
+VISUAL:
+AUDIO: 'bonkers with something I didn\'t even know was possible in Melon. As I said, Melon is not ready for prime time. The code is messy and wasn\'t really meant for general consumption.'
+
+[07:09] [scene:talk]
+VISUAL:
+AUDIO: 'But if you really want a sneak preview, you can go to the Melon repository, then under modules, modular diffusers, you\'ll find a very detailed documentation and'
+
+[07:22] [scene:talk]
+VISUAL:
+AUDIO: 'how to install and use Melon with modular diffusers. Anyway, like I said, I\'m into experimenting and the way I interact with models is a bit different than what Hugging Face is doing. But'
+
+[07:36] [scene:talk]
+VISUAL:
+AUDIO: 'that\'s the beauty of this system. It gives developers complete freedom. For example, this is a graph I used to generate weird, abstract, and somewhat inspirational images. It doesn\'t use'
+
+[07:50] [scene:talk]
+VISUAL:
+AUDIO: 'modular diffusers. I just took the standard SD 3.5 pipeline and heavily customize it. I have the model loader, but I also load the text encoder and the'
+
+[08:03] [scene:talk]
+VISUAL:
+AUDIO: 'transformer separately. So, I can apply an int 8 quantization on the fly. Then, I have two text encoders. The first one describing the scene, a woman sitting on'
+
+[08:17] [scene:talk]
+VISUAL:
+AUDIO: 'a comfortable chair, and the second tries to define the style, abstract. Each prompt is connected to a multiplier. In this case, I want the style to be stronger, so it\'s multiplied'
+
+[08:31] [scene:talk]
+VISUAL:
+AUDIO: 'by 1.5. Then, I average the two tensors. And this node also shows an interesting feature. That is multiple inputs. Any input can'
+
+[08:44] [scene:talk]
+VISUAL:
+AUDIO: 'be set as a spawn. As soon as you connect to it, one new input is added, and you can keep adding tensors until you\'re happy. Finally, I\'m adding noise.'
+
+[08:56] [scene:talk]
+VISUAL:
+AUDIO: 'This is not latent noise that the sampler needs to remove in the the noise phase. This is actual noise added to the embeddings. What it does is to kind of'
+
+[09:08] [scene:talk]
+VISUAL:
+AUDIO: 'blur or spread your vector, leading to more unpredictable and, in my opinion, interesting results. One last thing I do'
+
+[09:20] [scene:talk]
+VISUAL:
+AUDIO: 'is to enable the guidance cut-off. Basically, at the beginning, the model generates the image with a strong guidance, five in this case, but at 35% of the denoise, it disables it entirely'
+
+[09:35] [scene:talk]
+VISUAL:
+AUDIO: 'to prevent the image to burn. This allows to use a very high guidance only in the first steps that are the most important. Let\'s try with something'
+
+[09:47] [scene:talk]
+VISUAL:
+AUDIO: 'different, an epic fantasy dragon spitting fire and in the style using volcano lava explosion cinematic. I probably need to lower the volcano and'
+
+[10:01] [scene:talk]
+VISUAL:
+AUDIO: 'increase the dragon a little. Let\'s see what happens. But anyway, this is just a quick example. I had an idea and I was able to'
+
+[10:13] [scene:talk]
+VISUAL:
+AUDIO: 'implement it very quickly without having to fight with the underlying system. These are few images I generated with this workflow and it was a really fun'
+
+[10:27] [scene:talk]
+VISUAL:
+AUDIO: 'experiment. So, what next? Well, first of all, code rewrite. I\'m rebuilding the whole system from scratch so it can be actually used by anyone.'
+
+[10:41] [scene:talk]
+VISUAL:
+AUDIO: 'The old melon still followed some comfy UI paradigms. The new one is a completely new breed. First of all, it runs in real time. Anything that can be executed right'
+
+[10:54] [scene:talk]
+VISUAL:
+AUDIO: 'away, it is. For example, I have this multiply node. I can connect an integer and display the output. If I change the input, the output value is updated in real time and'
+
+[11:08] [scene:talk]
+VISUAL:
+AUDIO: 'passed to all connected nodes. This is a simple spline. It outputs an interpolation of the curve at the specified resolution. If I change the'
+
+[11:22] [scene:talk]
+VISUAL:
+AUDIO: 'curve, the output updates automatically. Or I can update the resolution to get more points. All of this happens on the client. You could build a whole workflow that runs'
+
+[11:35] [scene:talk]
+VISUAL:
+AUDIO: 'entirely on your browser without even bothering any Python. The moment you need to run some serious code, you can connect a server. Here on this tab, I have the list of available'
+
+[11:49] [scene:talk]
+VISUAL:
+AUDIO: 'servers. The first one shows the nodes available from the client. And here I have the first server connected that features one new node.'
+
+[12:02] [scene:talk]
+VISUAL:
+AUDIO: 'And the cool thing about this is that I can run as many servers as I want. Each server can have its own environment, so you don\'t have to worry about conflicts'
+
+[12:15] [scene:talk]
+VISUAL:
+AUDIO: 'between libraries. You can even run multiple versions of the same nodes, each hosted on a new server, so they can have different set of dependencies.'
+
+[12:29] [scene:talk]
+VISUAL:
+AUDIO: 'Okay, this is all nice and ribbons, but I\'m having a bit of a hard time choosing how to proceed with this project. And I would like to know what you think about it. On one side, we have Vibe Coding. It'
+
+[12:42] [scene:talk]
+VISUAL:
+AUDIO: 'is becoming a problem for open source projects. No matter what the eyebrows tell you, coding agents are not yet able to replace humans in complex projects.'
+
+[12:56] [scene:talk]
+VISUAL:
+AUDIO: 'Especially if you want the code to be readable and maintainable. I\'m not saying that it won\'t happen. I\'m sure very soon we\'ll be able to just dictate our ideas, and agents will create the'
+
+[13:10] [scene:talk]
+VISUAL:
+AUDIO: 'best code ever. But right now, I simply don\'t have the time or the drive to review slop. Secondly, I don\'t hide I feel a bit frustrated by the whole AI'
+
+[13:24] [scene:talk]
+VISUAL:
+AUDIO: 'situation, especially in the last few months. Uh the cost of AI is out of control, and to make it profitable, they have to shove it down your throat in'
+
+[13:36] [scene:talk]
+VISUAL:
+AUDIO: 'literally anything. Everything is a cloud service, everything is a subscription, you own nothing, and good luck building a PC this year with no GPU'
+
+[13:48] [scene:talk]
+VISUAL:
+AUDIO: 'and the cost of RAM and SSDs to the roof. Lately, we\'ve got some really interesting local models. Some are also pretty easy to train,'
+
+[14:02] [scene:talk]
+VISUAL:
+AUDIO: 'but we both know what their main application will be. And everything seems to be shifting towards big corporation APIs, and I\'m wondering if we will ever get the'
+
+[14:15] [scene:talk]
+VISUAL:
+AUDIO: 'pioneering era of Stable Diffusion 1.5 back. Uh what do you think? Can we rely on the Chinese to keep releasing new local'
+
+[14:27] [scene:talk]
+VISUAL:
+AUDIO: 'models? Is the current AI sustainable, or the bubble will burst sooner than we expect? Yeah, I know, guys. I\'ve always been an overthinker. Sorry.'
+
+[14:40] [scene:talk]
+VISUAL:
+AUDIO: 'Anyway, I\'ll keep you posted with my future projects, and in the meantime, I don\'t know, go outside, touch some grass, and see you next time. Ciao.'

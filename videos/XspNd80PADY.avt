@@ -1,0 +1,263 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Untwisting RoPE in ComfyUI - One Style Transfer Framework for Most DiT Image Models
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=XspNd80PADY
+upload_date: 20260602
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'So, as we\'ve been talking about, a lot of new image generation models have dropped recently. And today, I want to show you what\'s possible with these models when you add some seriously enhanced style transfer capabilities. We\'re looking at something called'
+
+[00:13] [scene:talk]
+VISUAL:
+AUDIO: 'untwisting rope. It\'s a frequency control framework for shared attention in diffusion transformer models. The project is published by an anonymous author, doesn\'t want to expose their name, but they\'ve created this framework'
+
+[00:25] [scene:talk]
+VISUAL:
+AUDIO: 'that does style transfer with images. And it\'s pretty impressive. Think back to uh maybe two or three years ago when Tencent AI Lab created IP-Adapter. That was huge at the time.'
+
+[00:37] [scene:talk]
+VISUAL:
+AUDIO: 'We were all playing around with Stable Diffusion SDXL, those older models. IP-Adapter let you reference styles, character clothing, backgrounds. You could do a lot with it. And of course,'
+
+[00:50] [scene:talk]
+VISUAL:
+AUDIO: 'we had the IP-Adapter custom nodes back then. So, this is the ComfyUI untwisting rope custom nodes. I found it through one of our Discord community members, and we\'ve been playing around with it, exploring'
+
+[01:03] [scene:talk]
+VISUAL:
+AUDIO: 'what kind of capability it has for style transfer. Basically, you take your reference image, combine it with your text prompts, and you get your output. Simple as that. Another way to use it is frequency'
+
+[01:16] [scene:talk]
+VISUAL:
+AUDIO: 'aware. You take your existing image and a reference style image, and it transfers the style over. So, think of it like you\'ve got two images, and the output inherits the style from one while keeping the content'
+
+[01:29] [scene:talk]
+VISUAL:
+AUDIO: 'from the other. It\'s now supported with Z image, the Anima model, the Flux 2 whole image model, and the Kwen image and Kwen image edit families as well. And here\'s the best part. It\'s training'
+
+[01:42] [scene:talk]
+VISUAL:
+AUDIO: 'free. It doesn\'t require any additional model downloads. All you need is the framework running with your existing model. That\'s it. So, what you need to do is download these custom nodes and run them in ComfyUI.'
+
+[01:55] [scene:talk]
+VISUAL:
+AUDIO: 'And I\'ve noticed this custom node gets updated pretty frequently. The author keeps editing the code, updating documentation. So, big thanks to the author for creating this and keeping it maintained.'
+
+[02:07] [scene:talk]
+VISUAL:
+AUDIO: 'I just did a git clone of this repository into my ComfyUI custom nodes folder. And right here, we can start playing with it. Let me leave it empty for now, and we\'ll start with the workflow demo that comes with this custom node repo. One of the easiest'
+
+[02:20] [scene:talk]
+VISUAL:
+AUDIO: 'ones is Z image turbo. You can just drag and drop one of the example workflows into your ComfyUI. Talking about example workflows, once you download this custom node, you\'ll see a few folders. Go to the workflow'
+
+[02:33] [scene:talk]
+VISUAL:
+AUDIO: 'folder, and all the supported image generation models are listed there with example workflows. Coming back to here, first of all, when you load this, it looks kind of messy with all these different custom nodes'
+
+[02:46] [scene:talk]
+VISUAL:
+AUDIO: 'going around. But, if you take a closer look, this is basically the Z image turbo text-to-image workflow with an additional step. Loading the image that\'s going to be used for the untwisting rope framework. This'
+
+[02:58] [scene:talk]
+VISUAL:
+AUDIO: 'framework injects in between the model loader. So, here, we load the Z image turbo model, then pass it through the sampler. It goes through RF inversions with the untwisting rope framework, and that\'s'
+
+[03:10] [scene:talk]
+VISUAL:
+AUDIO: 'how we get our output. We load the image, scale the pixels to align the width and height with the empty latent, and then before that, we pass it through VAE encode, converting the pixels to latent data. That becomes'
+
+[03:23] [scene:talk]
+VISUAL:
+AUDIO: 'the reference latent for our untwisting rope to use for referencing your image styles in the generated output. Now, let\'s say Well, there are some other custom nodes the author provides,'
+
+[03:35] [scene:talk]
+VISUAL:
+AUDIO: 'image scale to pixels, or you can combine different features into one. But, you can also use the native node to do the same thing. For example, if you haven\'t downloaded those custom nodes, you can use the native node to create'
+
+[03:47] [scene:talk]
+VISUAL:
+AUDIO: 'the same actions. You can replace this and update the width and height on the empty latent as well. Just a little editing and you\'ve basically got Z image turbo set up. One more thing. Remember to modify the'
+
+[04:00] [scene:talk]
+VISUAL:
+AUDIO: 'correct files for loading the model. Let\'s test this one and see what we got. Okay, so the output looks like this. A little cartoonish, similar to the comfy UI demo image. It works already. This is'
+
+[04:12] [scene:talk]
+VISUAL:
+AUDIO: 'the most simple way of using untwisting rope with reference style transfer. And since we have text prompts for what we want to create, let me try with a different image. Like this one here, the same prompt.'
+
+[04:24] [scene:talk]
+VISUAL:
+AUDIO: 'I also added a different image. I have this previous generated image with Christmas decorations, a dining room, those warm lighting effects. We can put it side by side and we\'ll see how the'
+
+[04:36] [scene:talk]
+VISUAL:
+AUDIO: 'lighting, the house decorations, everything follows the reference image. The light straps, the wooden color from the table, now transferred to the piano. And this is really fun because you\'ll get a lot of different styles that you'
+
+[04:49] [scene:talk]
+VISUAL:
+AUDIO: 'wouldn\'t expect. You have the text prompts, but the outcome is going to be totally different. Like these examples, I have this little elf with those colorations and the output looks like this. Although'
+
+[05:01] [scene:talk]
+VISUAL:
+AUDIO: 'it\'s the same piano text prompts, it becomes a completely different style. Or for example, I use this cyberpunk image and the outcome looks more like this. The street, the characters, the eyes, the motion, the emotion, it all'
+
+[05:14] [scene:talk]
+VISUAL:
+AUDIO: 'follows the reference image. And if you have anime styles or other styles of reference, like this one here, it becomes something else entirely. It\'s a pretty cool concept. Same idea as IP adapter, as I just mentioned. And for'
+
+[05:27] [scene:talk]
+VISUAL:
+AUDIO: 'older comfy UI users, you\'ll pick this up really quickly. Now, the next model I\'m showing is the flux 2 Klein 9 billion parameter model. It\'s also supported with the untwisting'
+
+[05:39] [scene:talk]
+VISUAL:
+AUDIO: 'rope framework. The connections are the same. We use RF inversions, the extensions for untwisting rope. Three nodes in total, always attached together when you use this framework. The only'
+
+[05:51] [scene:talk]
+VISUAL:
+AUDIO: 'thing you\'ll be changing is the values in here. The author mentions what values to change for each model. For example, using Flux 2 Klein, we can use different blocks based on the reference.'
+
+[06:05] [scene:talk]
+VISUAL:
+AUDIO: 'And you can also play around with different block numbers. I\'ve reorganized this workflow and put it into groups. Basically, the reference image styles and the input styles are handled differently here. I\'m not using the other custom nodes to resize and'
+
+[06:18] [scene:talk]
+VISUAL:
+AUDIO: 'scale the image. I prefer using the native nodes as much as possible to run models in ComfyUI. And of course, the Flux 2 Klein model needs a reference latent. This is going to input this image. So basically, we\'re editing this'
+
+[06:31] [scene:talk]
+VISUAL:
+AUDIO: 'image as the base image in our output. Keep in mind, you have to scale the pixels and resize the image for both dimensions exactly the same. The width and height for the input image and the reference style image need to be exactly'
+
+[06:44] [scene:talk]
+VISUAL:
+AUDIO: 'the same dimensions. Now, here\'s the tricky part. You can resize the image and scale the pixel, which can cause different dimensions. So, what I do is rescale the total pixels first, then resize the image.'
+
+[06:56] [scene:talk]
+VISUAL:
+AUDIO: 'Make the width and height exactly the same, synchronized to the reference image. That way, you\'ll have another output with matching dimensions. This is from my own testing and trial'
+
+[07:08] [scene:talk]
+VISUAL:
+AUDIO: 'and error. Let\'s try this first. I want to turn the bed into a snowing bedroom. I\'m referencing this image. Although there\'s a monster here, let\'s also put that monster outside the window.'
+
+[07:20] [scene:talk]
+VISUAL:
+AUDIO: 'The snowing elements follow because this is from the rope, but that monster isn\'t going to follow the reference style. And here\'s why. The reference styles only inject the latent data to the untwisted rope.'
+
+[07:32] [scene:talk]
+VISUAL:
+AUDIO: 'This isn\'t the Flux 2 Klein multi-reference image input. So, when you run Flux 2 Klein with untwisted rope, the reference styles inherit the drawing colorations, shading, shadows, and lighting from the reference image to'
+
+[07:46] [scene:talk]
+VISUAL:
+AUDIO: 'our new generated image. If you want to put exactly that monster in your output, you\'ll use the existing way of Flux 2 client with multi-reference image input in the conditions. When you put that in the conditions, it'
+
+[07:59] [scene:talk]
+VISUAL:
+AUDIO: 'can do object referencing, what Flux 2 client is strong at. So, let\'s say I\'m putting another image here. You can link that up with the conditions. As you can see the data flowing, the'
+
+[08:12] [scene:talk]
+VISUAL:
+AUDIO: 'yellow line of negative and positive is flowing from the first image, then going to the second image. The conditions will take effect on what references appear in our generated output. If we still want to use this monster in'
+
+[08:25] [scene:talk]
+VISUAL:
+AUDIO: 'our text prompt, we can use another reference image here. Then you\'ll have this monster, exactly this one, appearing in the output. Just be aware of that, because some people might misunderstand why their reference'
+
+[08:37] [scene:talk]
+VISUAL:
+AUDIO: 'objects don\'t look the same as expected. It\'s because the mechanism here only handles the latent data for the untwisted rope. It passes the style elements for style transfer only. When you want to reference exact objects or'
+
+[08:51] [scene:talk]
+VISUAL:
+AUDIO: 'characters, you\'ll still need to use the reference latent in the conditions. So, it\'s a bit more complex with reference image editing when you\'re dealing with image editing models like Flux 2 client or Kwai Image Edit. They have more'
+
+[09:03] [scene:talk]
+VISUAL:
+AUDIO: 'complex conditioning and mechanisms you need to handle. Now you can see that the monster, exactly this one, is outside the window. Not like the previous example that'
+
+[09:15] [scene:talk]
+VISUAL:
+AUDIO: 'randomly generated another monster. That\'s the difference when you\'re using image editing models. You need a clear concept of the style transfer reference image. The latent here doesn\'t handle the reference image. It only passes the'
+
+[09:28] [scene:talk]
+VISUAL:
+AUDIO: 'latent data for untwisted rope to affect the style transfer. When you\'re referencing exactly those objects or characters, you\'ll still need to use the reference latent. For example, in flux 2 client to change the conditions. So,'
+
+[09:41] [scene:talk]
+VISUAL:
+AUDIO: 'that\'s how you play around with the flux 2 client 9 billion models with untwisted rope. Here\'s another one, quan image edit as I just mentioned, it works as well. Also, the quan image models for text to image'
+
+[09:54] [scene:talk]
+VISUAL:
+AUDIO: 'work, too. Like how we connected here. So, always have those three components for running the untwisting rope. The reference latent here always connects one of the images as the style reference. In this case, I\'m using this'
+
+[10:07] [scene:talk]
+VISUAL:
+AUDIO: 'fantasy world, one of my previous created videos as the styles. And what we want to edit this time is this scene. It looks kind of boring with the urban city, all that dust, smoke, and mist. Let\'s change it to something more'
+
+[10:21] [scene:talk]
+VISUAL:
+AUDIO: 'colorful. We have a very easy text prompt, simple one, not even a full sentence to instruct the AI what to do. And now we\'ve changed it to more fantasy styles with the text prompts, inheriting those trees and forest from my reference'
+
+[10:34] [scene:talk]
+VISUAL:
+AUDIO: 'image. If I\'m not using the keyword in the text prompts, you can just go through with easier, shorter text prompts. This will rely more on your reference image style. So, let\'s run it again, and you\'ll see'
+
+[10:47] [scene:talk]
+VISUAL:
+AUDIO: 'the difference. There\'s no exactly the same answers when testing because reference images like IP adapter are really freestyle sometimes in my opinion. What you\'re seeing right now is another'
+
+[10:59] [scene:talk]
+VISUAL:
+AUDIO: 'style. No fantasy world mushrooms or orbs, nothing like that. It just transfers the styles of your image. Let\'s come back here. If I want to change this to a cyberpunk style, see how that looks. Make sure you'
+
+[11:12] [scene:talk]
+VISUAL:
+AUDIO: 'have the correct text prompts. Mention what elements you want to change. Although this relies on the reference styles, as you can see, the output looks different. It will inherit the medium shot or close-up shot of that character.'
+
+[11:25] [scene:talk]
+VISUAL:
+AUDIO: 'The reference image\'s composition transfers over, and we still keep the guy standing on top of the roof from our reference image. The backgrounds, everything on the back, inherits that cyberpunk style.'
+
+[11:37] [scene:talk]
+VISUAL:
+AUDIO: 'Although it looks more cartoonish in some ways, the colorations and elements from the style reference image have been transferred to the new image. For example, we can play around with other images. Just randomly pick one and'
+
+[11:50] [scene:talk]
+VISUAL:
+AUDIO: 'you\'ll see the style transfer from whatever reference image you have. Pretty self-explanatory, easier than what we had before with IP adapter. Even back then with IP adapter, we still'
+
+[12:02] [scene:talk]
+VISUAL:
+AUDIO: 'needed the IP adapter models as a model loader to use the framework. This is just based on the diffusion transformer models. You connect the framework and it gives you training-free image styles. Like here, you got another pink color'
+
+[12:15] [scene:talk]
+VISUAL:
+AUDIO: 'inherited by my style reference image. And let\'s try something. You might get surprised what kind of things you\'ll see using different input images. In this one, I have to do a little more text prompting to actually change how it'
+
+[12:27] [scene:talk]
+VISUAL:
+AUDIO: 'references my style from that image. So this way, you\'ve got another method for mixing and matching different image styles. There\'s no exact answer, as I just mentioned, because playing around'
+
+[12:39] [scene:talk]
+VISUAL:
+AUDIO: 'with how IP adapter works is freestyle. You can mix and match with different images. You\'ll have something that surprises you. The elements you inject as influence, the original input image, even something like a car or whatever'
+
+[12:53] [scene:talk]
+VISUAL:
+AUDIO: 'unrelated style reference image, you\'re still able to create something absolutely different. Like for example here. So yeah, that is it for this video. It looks pretty fun. You can play around with all kinds of styles, whatever you'
+
+[13:06] [scene:talk]
+VISUAL:
+AUDIO: 'want to do. I\'ll see you guys on the next one.'

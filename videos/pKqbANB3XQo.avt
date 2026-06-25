@@ -1,0 +1,571 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Multi-database Tenancy in FilamentPHP - Build Your SaaS with SaaSykit
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=pKqbANB3XQo
+upload_date: 20250310
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'hey guys today I\'m coming to you with a new feature that I have been working on for quite some time now um a few weeks and it has to do with tency so as you know that in SES tency right now all the database models and the database yeah'
+
+[00:15] [scene:talk]
+VISUAL:
+AUDIO: 'database tables that we have um are in shared database uh so basically we have one database for all the tenants uh this change or this package that I have been working on introducing es the ability'
+
+[00:28] [scene:talk]
+VISUAL:
+AUDIO: 'for you to um have different tables like or different databases for for each tenant so um this is been has been accomplished by merging filament tency'
+
+[00:40] [scene:talk]
+VISUAL:
+AUDIO: 'along with LEL um tency for LEL package which is the very famous package that offers so many features when it comes to tency and also you can customize as much'
+
+[00:52] [scene:talk]
+VISUAL:
+AUDIO: 'as you want you can even if you would like to divide the caches divide the file systems for each tenant and so on you can dive deeper as much as you can but before we dive into the'
+
+[01:05] [scene:talk]
+VISUAL:
+AUDIO: 'details I would like uh to have like some ction to you or like a word of quoti if your application doesn\'t have um a need for having different databases'
+
+[01:17] [scene:talk]
+VISUAL:
+AUDIO: 'for each tenant please stay within the shared database model so have everything in one database because adding databases for each tenant will introduce much complexity to your application so you'
+
+[01:31] [scene:talk]
+VISUAL:
+AUDIO: 'will have to care about um migrating the databases for each tenant you have to uh if you decide to divide caches and file systems um even when you start to debug problems you will have to switch the'
+
+[01:44] [scene:talk]
+VISUAL:
+AUDIO: 'context of from that tenant with another tenant and so on so it will make things much much complicated on your side so you have to be very like you have to know what you are doing very well you'
+
+[01:56] [scene:talk]
+VISUAL:
+AUDIO: 'have to study the L uh the tency for LEL package very well and also how tency is implemented in filament so that you can know how to navigate any situation that you find yourself in so my advice to you'
+
+[02:08] [scene:talk]
+VISUAL:
+AUDIO: 'if you don\'t have a valid strong reason to switch to multi- databases for each tenant so please stay with the vanilla cesit teny which comes everything like'
+
+[02:22] [scene:talk]
+VISUAL:
+AUDIO: 'come everything comes within one database and this will be sufficient for your project but if you want to switch to a multi database setup please continue this tutorial so let\'s dive in'
+
+[02:34] [scene:talk]
+VISUAL:
+AUDIO: 'into the details and I have put together one graph here uh on the left side this is what we have currently so if we zoom'
+
+[02:46] [scene:talk]
+VISUAL:
+AUDIO: 'in a bit as you can see we have filament uh like the filament PHP or the S tency which be basically to take a tency uses'
+
+[02:58] [scene:talk]
+VISUAL:
+AUDIO: 'filament for for tency Builds on top of that what we have now is one shared database and in this share database we have all the user the the the models that come with within Tate tenant and we'
+
+[03:11] [scene:talk]
+VISUAL:
+AUDIO: 'link them to the tenant by the foreign key so basically each table would have uh a tenant uncore ID and then this is being linked to the tenant table this is'
+
+[03:24] [scene:talk]
+VISUAL:
+AUDIO: 'the relationship and what happens when filament tries to load uh some information uh for that tenant it it Scopes the query by the tenant ID so that information related to this tenant'
+
+[03:39] [scene:talk]
+VISUAL:
+AUDIO: 'will only be displayed and other tenant information will not be displayed so that\'s quite simple uh what comes within this package that I uh have been working on uh that'
+
+[03:51] [scene:talk]
+VISUAL:
+AUDIO: 'I\'m introducing in this tutorial we will have this setup the new setup the new setup will in basically mimics the setup of teny for LEL teny for LEL'
+
+[04:04] [scene:talk]
+VISUAL:
+AUDIO: 'has this two uh ways to store data we have a central database where we have some Central information uh regarding to the central'
+
+[04:16] [scene:talk]
+VISUAL:
+AUDIO: 'app so to say and what will happen here is that we will keep these models that we have that come within sassy tency we keep it as is here'
+
+[04:28] [scene:talk]
+VISUAL:
+AUDIO: 'because these models are more about the management of the system like plans like orders like uh subscriptions and so on so we will keep them as is and we will'
+
+[04:42] [scene:talk]
+VISUAL:
+AUDIO: 'keep them also linked to the tenant by ID as is but in addition to that there is uh another way where we can store data which is basically the tenant database so each tenant that will be'
+
+[04:55] [scene:talk]
+VISUAL:
+AUDIO: 'created will have its own database and you can choose to introduce models there or tables and store the data of the tenant there so let\'s say we are building like a to-do application for'
+
+[05:09] [scene:talk]
+VISUAL:
+AUDIO: 'just for Simplicity you would have like the to to-dos of that tenant stored in the tenant database so you will have a to-do table and this table will be here but the rest of the database uh tables'
+
+[05:22] [scene:talk]
+VISUAL:
+AUDIO: 'that are Center like more needed for the application uh to operate and more like should be Central will be stored in the central database so that basically would'
+
+[05:34] [scene:talk]
+VISUAL:
+AUDIO: 'give you a bit of idea about how things uh are working or will be working if you switch uh to the new model where you have different databases for each like database for each tenant with that said'
+
+[05:47] [scene:talk]
+VISUAL:
+AUDIO: 'let\'s install the plugin and see it uh in action and see how to configure it basically so as usual I have prepared uh documentation that you can go through'
+
+[05:59] [scene:talk]
+VISUAL:
+AUDIO: 'that will help you install and configure the new package and uh there is the word of ction that I have been talking about don\'t switch to uh multi database tency if you don\'t need that'
+
+[06:12] [scene:talk]
+VISUAL:
+AUDIO: 'one with that in mind let\'s go further so um I introduced a new uh plug-in here as a as a package or as a new repository that will be available at code. sas.com'
+
+[06:25] [scene:talk]
+VISUAL:
+AUDIO: 'you should have access to that um if you purchased as a kit you have already like a username and password you can login and you can use this package or install it from here so as usual this is uh a'
+
+[06:39] [scene:talk]
+VISUAL:
+AUDIO: 'private package so it\'s not a public one so you cannot just include it from uh like composer like or require require it via composer you need just to um add some definitions for composer to know'
+
+[06:52] [scene:talk]
+VISUAL:
+AUDIO: 'where to load this package from H what I did here is that I installed a new cesit tency just a vanilla cesit tency for the demo so that we can install the package on'
+
+[07:06] [scene:talk]
+VISUAL:
+AUDIO: 'and see how it works okay let\'s close this one no we need this one so um let\'s let\'s first uh go to the composer to the'
+
+[07:21] [scene:talk]
+VISUAL:
+AUDIO: 'composer and add the repositories okay and I will change the minimum stability to make it to be Dev you will not need to do that because I still didn\'t publish stable release or'
+
+[07:33] [scene:talk]
+VISUAL:
+AUDIO: 'release of that I\'m still working from the master Branch so that\'s why I have to switch that to Dev but you will not by the time that you will see this tutorial you will not need to do that basically you just uh go here and then'
+
+[07:45] [scene:talk]
+VISUAL:
+AUDIO: 'do a composer require and then the package name copy paste tuck um as you can see part of the'
+
+[08:03] [scene:talk]
+VISUAL:
+AUDIO: 'dependencies that we have is the stencil tency which is the tency for LEL uh package now let\'s go back okay we did this one we did this one and now let\'s start uh the installer of the'
+
+[08:17] [scene:talk]
+VISUAL:
+AUDIO: 'plugin so this installer will do quite a few things for you so to make your life easy because there are quite a few changes that need to be done here first'
+
+[08:29] [scene:talk]
+VISUAL:
+AUDIO: 'uh it will add a migration file so we we have a look at the data database um at migrations we should have here a data a new data field that is being added to'
+
+[08:43] [scene:talk]
+VISUAL:
+AUDIO: 'the tenants table which is being used by the tency for Lal package this is necessary for that so we added that we added a new um tency service provider um if we go'
+
+[08:59] [scene:talk]
+VISUAL:
+AUDIO: 'here provider a new tency service provider which we will talk about later and it also created the database migration SL'
+
+[09:11] [scene:talk]
+VISUAL:
+AUDIO: 'tenant folder this is basically where you should Define any tenant specific uh models in your database so we go here we go to migrations we go to'
+
+[09:24] [scene:talk]
+VISUAL:
+AUDIO: 'tenant it\'s an empty folder now but you can um add any table definitions that are is related to the tenant that tenant database basically and this will be only'
+
+[09:36] [scene:talk]
+VISUAL:
+AUDIO: 'like uh migrated to uh to all 10 databases that you have we will also uh have an example now okay with did that what we have here a question do you want'
+
+[09:49] [scene:talk]
+VISUAL:
+AUDIO: 'to modify aible models to use the central database trait this is very important so you need to write yes or this is the default option um what will happen here is that the script will do'
+
+[10:02] [scene:talk]
+VISUAL:
+AUDIO: 'some modifications to your um models here we will see that now so yes and then do you want to run the migrations yes I want to run the migrations and that migration is done so as you can see'
+
+[10:16] [scene:talk]
+VISUAL:
+AUDIO: 'models here all the model tables or all the tables basically have been changed to include this use Central database connection or Central'
+
+[10:30] [scene:talk]
+VISUAL:
+AUDIO: 'connection trait which enforces that these models should be loaded from the central database if you remember if recall here we have this Central database and then'
+
+[10:43] [scene:talk]
+VISUAL:
+AUDIO: 'we have the tenant database all the models that we have should be loaded from the central uh database and uh yes that\'s should be it and then we have the migration is done'
+
+[10:56] [scene:talk]
+VISUAL:
+AUDIO: 'we are fine let\'s continue with the next step so we run that one now we go to bootstrap and then providers and add this tency service'
+
+[11:09] [scene:talk]
+VISUAL:
+AUDIO: 'provider that we just introduced so bootstrap app sorry bootstrap providers and then we go'
+
+[11:22] [scene:talk]
+VISUAL:
+AUDIO: 'down we paste this line then uh in the dashboard panel provider so basically the panel where we have the tency within our project this'
+
+[11:36] [scene:talk]
+VISUAL:
+AUDIO: 'is the definition the definition of the panel and the configuration and so on what we need to do is uh introduce or like basically add the'
+
+[11:49] [scene:talk]
+VISUAL:
+AUDIO: 'plugin there uh so that it could be uh used so we go down here we paste this one and and these need to be imported this also needs to be imported'
+
+[12:02] [scene:talk]
+VISUAL:
+AUDIO: 'there are multiple versions if you notice here uh what we are interested in is the one that is in app providers the one that we just uh that has been added to the project by the installer not the stencil one but this one so make sure to'
+
+[12:15] [scene:talk]
+VISUAL:
+AUDIO: 'do that and uh we go to bootstrap app and copy this or let\'s copy this and uh here Bo strap and then app include the include these ones also this'
+
+[12:32] [scene:talk]
+VISUAL:
+AUDIO: 'is referencing the tency the tency service provider that we included and then we need to adjust the tenant model now uh the tency for Lille package needs some modifications or some'
+
+[12:46] [scene:talk]
+VISUAL:
+AUDIO: 'uh traits to be added and some functions to be added to the tenant model uh so all what you need to do is just to copy these all of these here until this'
+
+[12:58] [scene:talk]
+VISUAL:
+AUDIO: 'one and go to the models tenant and replace these two two lines with what we'
+
+[13:10] [scene:talk]
+VISUAL:
+AUDIO: 'got uh we can also copy this one and uh paste it here to be on the clean side of things and uh yeah that\'s it so that\'s'
+
+[13:22] [scene:talk]
+VISUAL:
+AUDIO: 'basically the idea here is uh one note that I would like to mention is that the tency for LEL package uses some kind of a virtual column this is where'
+
+[13:35] [scene:talk]
+VISUAL:
+AUDIO: 'we uh have the data column if you remember in the migrations and it stores adjacent of all um fields that are not um represented by columns within the'
+
+[13:50] [scene:talk]
+VISUAL:
+AUDIO: 'database this is kind of like to be flexible to store anything that has to do with the tenant on in this data so tenants um dot whatever like any any data point that they want to to'
+
+[14:02] [scene:talk]
+VISUAL:
+AUDIO: 'store and that\'s that\'s why they add this data uh so what you need to do is that for uh all the existing columns that we have um if we have here let\'s connect to the database so that we can'
+
+[14:17] [scene:talk]
+VISUAL:
+AUDIO: 'see actually it\'s not a post gra it\'s uh a myle my SQL my SQL yes and uh user is root test connection should be should'
+
+[14:33] [scene:talk]
+VISUAL:
+AUDIO: 'work fine should work fine okay we have the database we go there and we search for demo yes this one this is our database if you go there and we go'
+
+[14:46] [scene:talk]
+VISUAL:
+AUDIO: 'to see the tenants as you can see we have columns here and these are uh some columns then if you would like these columns or the'
+
+[14:58] [scene:talk]
+VISUAL:
+AUDIO: 'data to be sto still stored in these columns but and not to land in the data you need to um add these list of columns here to this get custom columns uh'
+
+[15:10] [scene:talk]
+VISUAL:
+AUDIO: 'function so what I\'m trying to say is that if you have any columns um in the table in the tenent table and if you added any further columns in the future you just need to list these columns here'
+
+[15:23] [scene:talk]
+VISUAL:
+AUDIO: 'in the get custom columns exactly like what you do in the in the failable so ideally you would copy this all the columns here or this array to to this function as'
+
+[15:36] [scene:talk]
+VISUAL:
+AUDIO: 'well yeah with that said we are done so what we need to do now is just go to the landing page I created I added a few products I didn\'t even set up the'
+
+[15:49] [scene:talk]
+VISUAL:
+AUDIO: 'payment provider because we will not need that but if we go down here uh we have three products let\'s say we want to buy one one of them so click on this product and click confirm and pay we'
+
+[16:01] [scene:talk]
+VISUAL:
+AUDIO: 'will have an error here because we don\'t have stripe configured but it doesn\'t matter because at this point we should have our uh dashboard or we should have our tenant created so if we go to the'
+
+[16:15] [scene:talk]
+VISUAL:
+AUDIO: 'database here and the tenants table we should find one record uh already created and if we go to the dashboard here we should see all the data database'
+
+[16:28] [scene:talk]
+VISUAL:
+AUDIO: 'now in this moment this the tenant has been resolved already and this data has been loaded from the central database all good and clear now let\'s'
+
+[16:41] [scene:talk]
+VISUAL:
+AUDIO: 'say uh if we stick with the with the with the to-do application that we would like to implement so let\'s say you would like to add a new Todo um model for your tenant and store this in your tenant'
+
+[16:56] [scene:talk]
+VISUAL:
+AUDIO: 'database not in the central database How would how to do that so we go first we need a new uh migration so a new model with the migration so let\'s'
+
+[17:09] [scene:talk]
+VISUAL:
+AUDIO: 'search for uh to do I think I have that I did that before so I make I make model A is I just uh add an alias for uh PHP art design just to make things uh like'
+
+[17:23] [scene:talk]
+VISUAL:
+AUDIO: 'easier for myself uh so a is PHP Artisan PHP artisan make model to do and add a migration also please um now the migration has been created if we go to the'
+
+[17:36] [scene:talk]
+VISUAL:
+AUDIO: 'migration let\'s add a few Fields so um let\'s say yeah good boy Ai and we can say uh maybe we can add like just a description whatever I description unable okay that that should'
+
+[17:50] [scene:talk]
+VISUAL:
+AUDIO: 'be that should be it and now we can HB Artisan migrate to no actually before we migrate yeah we shouldn\'t migrate we should uh go first to'
+
+[18:03] [scene:talk]
+VISUAL:
+AUDIO: 'the database migrations folder uh we would like to add that to the tenant and what we have outside here'
+
+[18:15] [scene:talk]
+VISUAL:
+AUDIO: 'just under migrations folder these are the central models so what we basically want to do is to just just move this one the create to-do table that we just'
+
+[18:30] [scene:talk]
+VISUAL:
+AUDIO: 'create added now the migration and add it under the tenant and confirm and that\'s it so we would like now to have this to-do stable for that'
+
+[18:43] [scene:talk]
+VISUAL:
+AUDIO: 'tenant now what we want to do is migrate a and then tenants migrate which is a command that comes with tency for LEL that allows you to migrate database for'
+
+[18:55] [scene:talk]
+VISUAL:
+AUDIO: 'tenants so enter ah sorry I did a mistake it should be tenants migrate tenants migrate yes and that should be um'
+
+[19:07] [scene:talk]
+VISUAL:
+AUDIO: 'migrated now the question is can we see that which is a good question um by default the tenant database will be'
+
+[19:19] [scene:talk]
+VISUAL:
+AUDIO: 'called tenant underscore and then the U ID of the tenant so if we go to the table here of tenants and then we have the uid of the tenant that has been created it\'s'
+
+[19:31] [scene:talk]
+VISUAL:
+AUDIO: 'like 563 CC we go here in the databases 5 563 CC uh I think we need to reload yes now'
+
+[19:44] [scene:talk]
+VISUAL:
+AUDIO: 'I think we should have it 563 CC yes it is this one so this is the database of the tenant now we can see it now we can open it and when we open it we will find'
+
+[19:57] [scene:talk]
+VISUAL:
+AUDIO: 'the to do is there yeah it\'s an empty table okay now we would like to add that resource to the dashboard to the filament dashboard to that so that our user can add to-dos to their to their'
+
+[20:09] [scene:talk]
+VISUAL:
+AUDIO: 'to-do to-do list or something so we search for resource because I did that also before to do now we are uh making a filament resource and call it to do and'
+
+[20:25] [scene:talk]
+VISUAL:
+AUDIO: 'then generated basically so and we would like to add that to the dashboard not to the admin panel and that should be it and then if we switch now to our tenant dashboard and'
+
+[20:39] [scene:talk]
+VISUAL:
+AUDIO: 'refresh we will have a toos here but if we click on to do we will get an error why this is'
+
+[20:51] [scene:talk]
+VISUAL:
+AUDIO: 'because teny is not aware that we have different databases now like the part that is aware of that is the tency for LEL package and the tency for LEL'
+
+[21:03] [scene:talk]
+VISUAL:
+AUDIO: 'package can deal with that already so because we configur that so it can load the data from the to-dos table but filament um still is using the older way of dealing with tency data basically'
+
+[21:17] [scene:talk]
+VISUAL:
+AUDIO: 'what what happens behind the scenes is that uh uh automatically filament automatically adds Scopes the query to the tenant so basically adds where tenant ID equals whatever to each query'
+
+[21:30] [scene:talk]
+VISUAL:
+AUDIO: 'to make sure that only the data that is related to that tenant is being shown here and when it tries to do that here it sees that there is no relationship to'
+
+[21:43] [scene:talk]
+VISUAL:
+AUDIO: 'the um to the to that table because that table is actually here it\'s it\'s in a different database doesn\'t know anything about the tenants which is in the central'
+
+[21:55] [scene:talk]
+VISUAL:
+AUDIO: 'database how to solve that is actually pretty easy so if we go to the to-do resource that we have that we just created in um in the dashboard the filament'
+
+[22:08] [scene:talk]
+VISUAL:
+AUDIO: 'dashboard all what you need to do here is to say is cop to tenant equals false what this does is it instructs filament to to a avoid this kind of'
+
+[22:22] [scene:talk]
+VISUAL:
+AUDIO: 'scoping that happens behind the scene so we are saying to filament hey this is not related to tenant as you know it but it is related to tenant that we Define'
+
+[22:34] [scene:talk]
+VISUAL:
+AUDIO: 'that the new tenant way of operations which is basically loading that data from the table which is in another database so that\'s it we go back we'
+
+[22:46] [scene:talk]
+VISUAL:
+AUDIO: 'refresh and that\'s it boom it\'s working uh and let\'s make sure that is working fine now we go to the a new okay we we don\'t see the oh yes the schema is'
+
+[23:01] [scene:talk]
+VISUAL:
+AUDIO: 'not populated we can populate the schema with some description let\'s say we want it we want a tit only the title and uh I'
+
+[23:13] [scene:talk]
+VISUAL:
+AUDIO: 'think what we need to do still also to go to the models what is model models and then to do and add that fill thingy to here because to be able to like'
+
+[23:30] [scene:talk]
+VISUAL:
+AUDIO: 'insert the title go the title title is one 2 3 create and then if we go back to to do uh we have an empty table an empty line'
+
+[23:44] [scene:talk]
+VISUAL:
+AUDIO: 'also because we don\'t have the columns here we have to define the column yes okay refresh we have the title and the title is 1 2 3 now if you go back to the database to'
+
+[23:56] [scene:talk]
+VISUAL:
+AUDIO: 'make sure that we have that record for that tenant database we go to the to-do and we will find it here that\'s that\'s basically it one thing uh one other thing that I would'
+
+[24:08] [scene:talk]
+VISUAL:
+AUDIO: 'like to mention is that you have also the option to use domains for each tenant so what we did until now is that we used the same standard way of'
+
+[24:21] [scene:talk]
+VISUAL:
+AUDIO: 'resolving the tenant um in filament by having the uid of the tenant in there in the'
+
+[24:34] [scene:talk]
+VISUAL:
+AUDIO: 'URL uh so uh if we go back here and go to the providers and the tency service provider that has been added by the plug-in for us this all of this here is'
+
+[24:46] [scene:talk]
+VISUAL:
+AUDIO: 'um what comes with tency for Lal uh package like these events and stuff and all of that is like just tency for Lal'
+
+[24:59] [scene:talk]
+VISUAL:
+AUDIO: 'boiler plate except this field where we have this tency initializer where we Define how we initialize the tenant and we have here by default this set to initialize tency by U ID which means'
+
+[25:13] [scene:talk]
+VISUAL:
+AUDIO: 'that we resolve the tenant from the URL using the uid this is the standard way we have an if you go there if we click here and we open the folder structure uh we have here another one'
+
+[25:27] [scene:talk]
+VISUAL:
+AUDIO: 'which is called initialized tency by domain this means that we can if you would like to have different domains for each tenants you can use that we can have a'
+
+[25:40] [scene:talk]
+VISUAL:
+AUDIO: 'look at that now so if we copy this one and we go here and we yes we make sure that we we use the S filament tendency for LEL uh initialized'
+
+[25:54] [scene:talk]
+VISUAL:
+AUDIO: 'tency by domain and what something else that we need to do to configure domains is I we already did that um yes we already did that and we'
+
+[26:07] [scene:talk]
+VISUAL:
+AUDIO: 'need to change a bit the definition in the dashboard panel provider so we go here um provider FM'
+
+[26:23] [scene:talk]
+VISUAL:
+AUDIO: 'let\'s basically replace this with that and that should be it um what what we are trying to say here uh to filament'
+
+[26:37] [scene:talk]
+VISUAL:
+AUDIO: 'is that hey we have this domain field in the tenant um model please use it um as the identification for that tenant and'
+
+[26:49] [scene:talk]
+VISUAL:
+AUDIO: 'we also because we set the uh tenant identification uh here in the package also to be loaded by domain'
+
+[27:01] [scene:talk]
+VISUAL:
+AUDIO: 'here uh this means that a lot of tency for L will also use the domain so we are trying to align two like two things together filament hey filament use the domain and hey tenants if for L please'
+
+[27:13] [scene:talk]
+VISUAL:
+AUDIO: 'also use the domain to resolve the tenant and uh what you will need to do is to make sure that this domain this this domain field is not empty so'
+
+[27:25] [scene:talk]
+VISUAL:
+AUDIO: 'basically depending on your application you might want uh to ask your users maybe on the onboarding we have by the way an on onboarding plugin that you can use and there is a video already for'
+
+[27:37] [scene:talk]
+VISUAL:
+AUDIO: 'that and you can find it also in the documentation but you can while you are onboarding the your customer uh to ask them okay what\'s what\'s domain what domain you would like to to have and save that in their tenant uh like in the'
+
+[27:52] [scene:talk]
+VISUAL:
+AUDIO: 'tenant model basically but for the sake of this demo we can use the same domain here let\'s say we have we want to use a subdomain of our domain so let\'s'
+
+[28:07] [scene:talk]
+VISUAL:
+AUDIO: 'say T1 dots whatever uh of course we don\'t need that and we don\'t need that and then'
+
+[28:19] [scene:talk]
+VISUAL:
+AUDIO: 'we store it let\'s let\'s make sure that is correct it should be correct and yeah let\'s copy that one go to a new page let\'s see T1 do blah blah blah then'
+
+[28:33] [scene:talk]
+VISUAL:
+AUDIO: 'we don\'t need the U ID anymore and we go to the todus what we will see now is you need to login um and that\'s for a reason because'
+
+[28:45] [scene:talk]
+VISUAL:
+AUDIO: 'by default the login session that you have is linked to The Domain that you did the login from and because the domain now changed it\'s now t1. demo blah blah blah it\'s now the session has'
+
+[28:59] [scene:talk]
+VISUAL:
+AUDIO: 'been um expired or you you are not logged in anymore you need to log in again so because this uh domain uh is being stored to your session you you might need to change that there is a way'
+
+[29:12] [scene:talk]
+VISUAL:
+AUDIO: 'to change that and I will also add that in the documentation uh that you can just change some configuration to make like some kind of like a wild card uh domain uh so basically whenever the user logs in from anything'
+
+[29:26] [scene:talk]
+VISUAL:
+AUDIO: 'demo blah blah blah uh they they will stay there and this will allow the users also to switch between tenant because as you know that in the tency panel in the filament panel we we can have a tenant'
+
+[29:39] [scene:talk]
+VISUAL:
+AUDIO: 'selector and you can choose between the different Ts that you have but for the sake of this demo we can just log in again I have the same user the same user and'
+
+[29:51] [scene:talk]
+VISUAL:
+AUDIO: 'then we go and then here we go we are here on our domain and let\'s make it a bit light yes and we have everything and we are there we don\'t have a uid anymore'
+
+[30:03] [scene:talk]
+VISUAL:
+AUDIO: 'and yeah that\'s basically it that\'s what I have been cooking for uh quite some time now I hope that you like that I hope that you use that in your projects and it will make your life easier and again if you don\'t need that please'
+
+[30:17] [scene:talk]
+VISUAL:
+AUDIO: 'don\'t use it don\'t go this route because this will make your life hard um is doesn\'t mean that it\'s a bad way but some projects need that only if you need that do it if not then please don\'t and'
+
+[30:31] [scene:talk]
+VISUAL:
+AUDIO: 'see you in the next video for another feature bye'

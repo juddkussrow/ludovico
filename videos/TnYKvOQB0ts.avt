@@ -1,0 +1,587 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Introduction to Agregore - a minimal P2P web browser
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=TnYKvOQB0ts
+upload_date: 20200813
+transcript_source: captions
+route: text
+
+---
+
+[00:12] [scene:talk]
+VISUAL:
+AUDIO: 'all right uh next talk is from someone who is uh really special is really part of the community and it\'s a great contributor of many many modules that we use in the community too uh let\'s'
+
+[00:25] [scene:talk]
+VISUAL:
+AUDIO: 'welcome Mo with introduction to AG sorry just figuring out the webcam'
+
+[00:39] [scene:talk]
+VISUAL:
+AUDIO: 'stream cool thank you for the warm welcome Diego um I really appreciate it it\'s been really fun kind of doing stuff with the community over the past couple'
+
+[00:53] [scene:talk]
+VISUAL:
+AUDIO: 'years something like that um so uh hello uh today I\'m going to be talking about my web browser aggregor since you know we haven\'t had enough web browsers'
+
+[01:05] [scene:talk]
+VISUAL:
+AUDIO: 'uh in the conference so far um so just a quick intro for the recording um I\'m move everywhere that matters I\'m at Ranger move so follow me on Twitter and'
+
+[01:18] [scene:talk]
+VISUAL:
+AUDIO: 'the such I do peer-to-peer stuff and I usually do that through my consulting company move software Inc so if you\'re interested in developing'
+
+[01:30] [scene:talk]
+VISUAL:
+AUDIO: 'some sort of peerto peer thing hit me up in like a couple months because I\'m way too busy um so today we\'re going to look at kind of this web browser and why it exists'
+
+[01:45] [scene:talk]
+VISUAL:
+AUDIO: 'and what what the goals are of it but um before I do that let\'s just quickly look at what kind of the state of that on the web has been for the past while so kind of the most obvious and most popular um'
+
+[02:00] [scene:talk]
+VISUAL:
+AUDIO: 'that web thing is of course Beaker and honestly that\'s kind of the thing that got me super into um that in the first'
+
+[02:12] [scene:talk]
+VISUAL:
+AUDIO: 'place so it\'s just like the idea of um having a web browser and then just being able to author content and load it over this peer-to-peer Network without having'
+
+[02:24] [scene:talk]
+VISUAL:
+AUDIO: 'to use any servers was like super exciting um which is really cool but one limitation was that it\'s a new browser and um you know it didn\'t work on other'
+
+[02:37] [scene:talk]
+VISUAL:
+AUDIO: 'places in the web so I started searching around and messing around with how do I get like the existing that content on the web and so I started working with'
+
+[02:50] [scene:talk]
+VISUAL:
+AUDIO: 'that Gateway and also there was a similar thing with the HTTP proxy flag in um the at CLI so that was cool because now we can load that content in regular websites but that wasn\'t as nice'
+
+[03:04] [scene:talk]
+VISUAL:
+AUDIO: 'as an actual web browser and uh because it wasn\'t actually peer-to-peer so another cool project that\'s in the ecosystem is the DAT web extension by'
+
+[03:17] [scene:talk]
+VISUAL:
+AUDIO: 'Sam McBeth and so that is a Firefox extension which supports uh both the old stat protocol and the new hyper protocol stuff and it\'s wild cuz um here\'s just'
+
+[03:30] [scene:talk]
+VISUAL:
+AUDIO: 'like a standard browser running this peer-to-peer code which is cool but now there\'s this limitation of um uh you need to use Firefox nightly'
+
+[03:44] [scene:talk]
+VISUAL:
+AUDIO: 'and you need special flags and you know it\'s kind of a pain to set up sometimes um and then finally another thing I\'ve been playing around with is how to get'
+
+[03:57] [scene:talk]
+VISUAL:
+AUDIO: 'applications on kind of the Legacy web using dat and that those kind of the goals of uh the DAT SDK project in that you can take the same code that you\'d run in node.js or electron and then take'
+
+[04:11] [scene:talk]
+VISUAL:
+AUDIO: 'it and compile it for the web and suddenly you can load pretty much the same hyperdrives and hypercores and it works great except the fine print is it\'s um you know uh using prox under the'
+
+[04:24] [scene:talk]
+VISUAL:
+AUDIO: 'hood and isn\'t actually local isn\'t as local first as it could be like it\'ll work offline but you can\'t use like local Wi-Fi networks to connect to'
+
+[04:38] [scene:talk]
+VISUAL:
+AUDIO: 'others and the peer peer-to-peer portions use web RTC which is only browser to browser and also requires internet to function um so kind of this'
+
+[04:50] [scene:talk]
+VISUAL:
+AUDIO: 'has been what the DAT ecosystem has looked like on the web for a while and recently I was thinking like you know I kind of want to play around with something else'
+
+[05:03] [scene:talk]
+VISUAL:
+AUDIO: 'that isn\'t out there yet so with that in mind I started thinking about aggor so um throughout kind of late winter I\'ve been working on this'
+
+[05:18] [scene:talk]
+VISUAL:
+AUDIO: 'project called nataku which is a peer-to-peer File Transfer app for indigenous groups in Canada and it\'s an electron app and part of the um code was adding support for the hyper protocol as'
+
+[05:33] [scene:talk]
+VISUAL:
+AUDIO: 'an electron protocol Handler so that I could load files directly from hypercore um and what was cool is it was actually not that hard at all uh nataku'
+
+[05:46] [scene:talk]
+VISUAL:
+AUDIO: 'uh natak um so it\'s open source check it out it\'s great'
+
+[05:59] [scene:talk]
+VISUAL:
+AUDIO: 'uh so honestly it was like less than a dozen lines of code because uh most of the stuff that I was doing for trying to get all of this uh that stuff working on the web before I can now just shove into'
+
+[06:11] [scene:talk]
+VISUAL:
+AUDIO: 'a protocol Handler an electron and it suddenly worked and I thought you know what this is kind of cool I think I\'m on to something with this um protocol Handler approach to working with that um'
+
+[06:24] [scene:talk]
+VISUAL:
+AUDIO: 'it was in a module called that fetch uh maybe I should go and turn this into like an actual app because um I\'ve been mostly messing with the web uh and that\'s been kind of limiting because I'
+
+[06:38] [scene:talk]
+VISUAL:
+AUDIO: 'want like you know actual peer-to-peer I want to have um to actually have local first stuff uh and another thing I wanted to do which I wasn\'t seeing out in the'
+
+[06:53] [scene:talk]
+VISUAL:
+AUDIO: 'ecosystem was mixing different protocols together so I was kind of thinking like okay we have all of these competing peer-to-peer competing peer-to-peer protocols um a lot of them were like oh'
+
+[07:05] [scene:talk]
+VISUAL:
+AUDIO: 'yeah we\'re going to be the protocol or at least externally it seems like they\'re going to be the protocol but they\'re all actually very different and have different tradeoffs and they\'re actually better for different use cases'
+
+[07:19] [scene:talk]
+VISUAL:
+AUDIO: 'and I was thinking you know it\' be nice to kind of mix these together and give developers more options like say using ipfs for um caching static contents which it is very good at and using D or'
+
+[07:32] [scene:talk]
+VISUAL:
+AUDIO: 'sorry hypercore protocol with hyperdrives for mutable content that\'s a little bit more private or say using bit torrent for just loading contents off of'
+
+[07:44] [scene:talk]
+VISUAL:
+AUDIO: 'the bit torrent Network which you know bit torrent is great it\'s been around for a while why aren\'t we using it as a web protocol and then lastly I wanted to kind of play around with new AP for'
+
+[07:57] [scene:talk]
+VISUAL:
+AUDIO: 'interacting with these protocols so a lot of things like um that SDK or beakers uh Beaker apis or the ipfs um JavaScript API they\'re all like'
+
+[08:10] [scene:talk]
+VISUAL:
+AUDIO: 'these JavaScript things and they\'re very opinionated and they\'re very tied to kind of like their peer-to-peer protocol and their ecosystem and I was thinking'
+
+[08:22] [scene:talk]
+VISUAL:
+AUDIO: 'it would be cool if we could experiment with something a little bit more Webby and and specifically I was thinking like how much can we do uh in the protocol Handler level how much can we do with'
+
+[08:34] [scene:talk]
+VISUAL:
+AUDIO: 'the fetch API which is what developers are already using for web apps so with that in mind I kind of put together a little prototype and got something out there and then that\'s kind'
+
+[08:46] [scene:talk]
+VISUAL:
+AUDIO: 'of given me an idea of like what are my actual goals with this project like what am I trying to achieve so oh that\'s the wrong'
+
+[08:59] [scene:talk]
+VISUAL:
+AUDIO: 'window so what are my goals I think the number one thing that I care about is to just enable local first web apps um and for me that means kind of like trying to'
+
+[09:12] [scene:talk]
+VISUAL:
+AUDIO: 'separate or like get rid of as much as possible just have the most simple API surface I can think of so that developers can just kind of pick it up and then start running with it and also'
+
+[09:24] [scene:talk]
+VISUAL:
+AUDIO: 'make that simple API go up cross um protocols as much as possible so that learning one pro protocol makes it easier to learn another as well one thing that I think is really important'
+
+[09:38] [scene:talk]
+VISUAL:
+AUDIO: 'is actually partnering with Pro uh projects so what I really want to do is not just make like this browser for myself which you know obviously it is partially for myself but I really want'
+
+[09:52] [scene:talk]
+VISUAL:
+AUDIO: 'to find projects that have a need for this peer-to-peer thing and kind of partner with them and like help them develop something that actually works for their communities or for their use case and then kind of part of my'
+
+[10:06] [scene:talk]
+VISUAL:
+AUDIO: 'reasoning for this too is that we should have extendable examples and whatever people build for their specific use cases should be extendable by others so for instance right now if I want to'
+
+[10:20] [scene:talk]
+VISUAL:
+AUDIO: 'build an app um that\'s peer-to-peer it\'s actually a huge pain in in the ass to make something from scratch unless you\'re going to jump through like a'
+
+[10:32] [scene:talk]
+VISUAL:
+AUDIO: 'bunch of Hoops and learn a ton of developments like on the Legacy web um you know you have to learn about all of these Cloud things and web servers and orchestration and all of that stuff'
+
+[10:45] [scene:talk]
+VISUAL:
+AUDIO: 'which we get rid of with this peer-to-peer layer but even then actually building your app for the web having something work on mobile and desktop and all of these crazy'
+
+[10:57] [scene:talk]
+VISUAL:
+AUDIO: 'environments is it\'s actually a huge learning curve and if I see an app someone made I can\'t just like take it copy paste some code and work and have it work in a different context because'
+
+[11:09] [scene:talk]
+VISUAL:
+AUDIO: 'it\'s just so complicated to actually get that initial app uh started up so kind of my hope is that if we have these higher level Primitives and these more Webby apis um you know I don\'t have to'
+
+[11:21] [scene:talk]
+VISUAL:
+AUDIO: 'worry as much about all of the initial setup I can just kind of look at what this local first approach did and try to do my own thing so one of the things too with partnering with projects is'
+
+[11:34] [scene:talk]
+VISUAL:
+AUDIO: 'figuring out like what they\'re doing and then having the tools and patterns they have develop become available to other projects that are doing similar things or things on their own like I mentioned before this nataku app for which is file'
+
+[11:47] [scene:talk]
+VISUAL:
+AUDIO: 'transfer IND for uh indigenous groups my ideal is that you know you don\'t need a contractor to come in and do this complex um peer-to-peer stuff for you ideally you'
+
+[12:00] [scene:talk]
+VISUAL:
+AUDIO: 'train you have skills in your community so that you can make tools for yourselves and kind of have um sovereignty over your own data and kind of like be able to rely more on'
+
+[12:16] [scene:talk]
+VISUAL:
+AUDIO: 'your community and have more kind of autonomy rather than having to rely on third parties and third party expertise and keeping it simple is part of making that'
+
+[12:29] [scene:talk]
+VISUAL:
+AUDIO: 'possible um speaking of simple I think uh one thing I really want to do is try to be as minimal as possible with this uh project so really I want to invent as little as possible which has'
+
+[12:42] [scene:talk]
+VISUAL:
+AUDIO: 'kind of been my um ideology for um you know just development in general I want to kind of use what\'s already there and use patterns that already exist instead'
+
+[12:56] [scene:talk]
+VISUAL:
+AUDIO: 'of creating a bunch of new things that will require new explanations and new training material um this second part I mean it\'s partially minimalism partially laziness I was like you know uh why'
+
+[13:10] [scene:talk]
+VISUAL:
+AUDIO: 'should I bother like doing tabs um when windows will do so I was like you know all these other applications use Windows um why don\'t know just ditch this part of the web that\'s been like so integral'
+
+[13:24] [scene:talk]
+VISUAL:
+AUDIO: 'to pretty much all web browsers and then just have windows so if you click a link you just open a new window and if you want to navigate to a page you just click on the window using your OS um also like layout um you use your'
+
+[13:38] [scene:talk]
+VISUAL:
+AUDIO: 'os\'s layout manager wow ex exciting um also I wanted to just get rid of like extra UI kind of um what you see here is all the UI there\'s um also like a little'
+
+[13:54] [scene:talk]
+VISUAL:
+AUDIO: 'drop down with some commands but uh generally speaking there\'s not much to it it\'s just kind of the URL and some basic uh navigational'
+
+[14:06] [scene:talk]
+VISUAL:
+AUDIO: 'stuff um one other thing which I thought would be cool which I haven\'t implemented yet is getting rid of bookmarks as a browser concept and thinking of bookmarks as just files So'
+
+[14:18] [scene:talk]
+VISUAL:
+AUDIO: 'like um instead of saving a thing to your browser and then having your browser have some internal mechanism for syn stuff what if your bookmark was just a file on your file system and you'
+
+[14:31] [scene:talk]
+VISUAL:
+AUDIO: 'double clicked it and it opened up your web browser and then if you wanted to put it in a folder you just put it in a folder and if you want to move it somewhere you just put it on a USB stick and then put it on your other computer'
+
+[14:43] [scene:talk]
+VISUAL:
+AUDIO: 'so just like whoa that\'s suddenly in the user\'s hands and in the os\'s hands rather than another thing to maintain in a browser and also have opinions about'
+
+[14:57] [scene:talk]
+VISUAL:
+AUDIO: 'um so that\'s kind of some of the design approach um next kind of the other thing was I want to be open to anything decentralized so I don\'t want to focus'
+
+[15:09] [scene:talk]
+VISUAL:
+AUDIO: 'on just the hypercore protocol even though that\'s probably my favorite um I think it\' be really cool to kind of experiment with things so kind of next on my road map after hypercore protocol is this new thing called Earth Star by'
+
+[15:23] [scene:talk]
+VISUAL:
+AUDIO: 'cinnamon from the I guess SSB community and so they\'re kind of they kind of looked at um secure Scuttle butt and its structure and some of the places where'
+
+[15:35] [scene:talk]
+VISUAL:
+AUDIO: 'there were paint points and some of the strengths that it had and they kind of made this new protocol and it\'s totally different from everything else and I\'m really excited to be like have you know a'
+
+[15:49] [scene:talk]
+VISUAL:
+AUDIO: 'web place to build stuff with earthstar and also combine it with that like say you have an earthstar app that\'s distributed through that because you can update um that archives or hyperdrives really easily um also I want to support'
+
+[16:03] [scene:talk]
+VISUAL:
+AUDIO: 'ipfs because you know they\'re a really big player and we\'re actually trying to like find a way to do a Dev grants with ipfs to work on this other thing that'
+
+[16:16] [scene:talk]
+VISUAL:
+AUDIO: 'will kind of like benefit ipfs and then take some of that stuff and put it into aggregor eventually um in my spare time but just just kind of like have reusable'
+
+[16:28] [scene:talk]
+VISUAL:
+AUDIO: 'pieces and also try to get the same stuff that works in aggregor into other environments um I\'m still a huge fan of bit Torrance and I really want to do bit'
+
+[16:40] [scene:talk]
+VISUAL:
+AUDIO: 'torrent stuff in the web um so like loading torrent say web pages we\'ll see how it goes um blockchain for payment stuff I know this is probably like super'
+
+[16:53] [scene:talk]
+VISUAL:
+AUDIO: 'controversial um you know boiling the oceans but honestly I think like blockchain for payments has some advantages namely that'
+
+[17:05] [scene:talk]
+VISUAL:
+AUDIO: 'it\'s nice that people don\'t have to have like legal addresses and be inside um countries that are allowed to do monetary stuff like if you\'re in some'
+
+[17:17] [scene:talk]
+VISUAL:
+AUDIO: 'let\'s say country that isn\'t on the US\'s good books um it\'s a huge pain in gas to participate financially um on a global market and honestly um'
+
+[17:29] [scene:talk]
+VISUAL:
+AUDIO: 'you know I want to be pragmatic and be like if blockchain people want to have payments then you know let\'s just do it and use one of the existing standards rather than inventing a whole bunch of'
+
+[17:43] [scene:talk]
+VISUAL:
+AUDIO: 'ones that are now tied with individual peer-to-peer protocols and of course I\'m open to whatever your favorite protocol is so anything decentralized just open up a GitHub issue be like yeah I I have like'
+
+[17:55] [scene:talk]
+VISUAL:
+AUDIO: 'this thing I want to just play around with and get integrated in there and then let\'s figure it out and add it in and then just mix it all in the soup and just have a whole mess of decentralized things so uh send those GitHub'
+
+[18:09] [scene:talk]
+VISUAL:
+AUDIO: 'issues um as well I was thinking that it\' be nice to rely more on extensions so honestly extensions are really cool um for web browsers and uh I think that'
+
+[18:24] [scene:talk]
+VISUAL:
+AUDIO: 'they give the opportunity to put more features of your browser in userland so if aggregor does almost nothing you can take it add a few extensions that you'
+
+[18:38] [scene:talk]
+VISUAL:
+AUDIO: 'want for your use case repackage it and now you have like a more fully featured browser that does all of the things you want and I find that really exciting as well one of the benefits of using fetch'
+
+[18:51] [scene:talk]
+VISUAL:
+AUDIO: 'for all of the peer-to-peer stuff is that fetch is a available in every single context so you can use peer-to-peer apis inside service workers inside extensions inside pretty much any'
+
+[19:03] [scene:talk]
+VISUAL:
+AUDIO: 'context so this could give us a whole new set of um browser extensions that make use of peer-to-peer stuff like imagine um The Bookmark scenario I said before but this is like a bookmark sync'
+
+[19:17] [scene:talk]
+VISUAL:
+AUDIO: 'that uses hypercore protocol and then I linked my two um I like take Gateway and I take aggregor and I scan a QR code and suddenly I\'m exchanging bookmarks between the two or say I\'m working on'
+
+[19:29] [scene:talk]
+VISUAL:
+AUDIO: 'like a local service Discovery thing and I again just have the extension and it\'s doing all of the fancy browser stuff for me or like I I rightclick something and'
+
+[19:42] [scene:talk]
+VISUAL:
+AUDIO: 'I want to save the web page to uh peer-to-peer archive for later um it kind of opens the door for a lot of cool things that exists kind of on a higher level than just a web page'
+
+[19:54] [scene:talk]
+VISUAL:
+AUDIO: 'um but are still kind of um applications um lastly I think it\' be cool if we could load extensions from peer-to-peer protocols so say I want to distribute an extension instead of'
+
+[20:09] [scene:talk]
+VISUAL:
+AUDIO: 'having like a proprietary App Store like um you know Google\'s extension thing or firefox\'s extension thing I can just load it from a peer-to-peer protocol and what\'s cool is I can get updates that are distributed over local'
+
+[20:23] [scene:talk]
+VISUAL:
+AUDIO: 'first networks so you can potentially have someone author an extension inside the web browser inside a peer-to-peer web browser then install it into their browser and then go like to some remote'
+
+[20:35] [scene:talk]
+VISUAL:
+AUDIO: 'Village and then have them install it directly from your device and then come back later with an update and have them propagate it out so um it kind of enables like this whole new way of'
+
+[20:49] [scene:talk]
+VISUAL:
+AUDIO: 'um application distribution outside of just regular web pages um yeah and then lastly like I\'m glad glad that uh comrade mentions mesh'
+
+[21:02] [scene:talk]
+VISUAL:
+AUDIO: 'networks because I\'m super into it um and sadly this is like a little bit less of a browser concern and more of a protocols concern but I think ideally in the future I\'d want protocols working over'
+
+[21:15] [scene:talk]
+VISUAL:
+AUDIO: 'ad hoc network so that I can go somewhere with a laptop or a phone and then just mesh directly with someone else\'s laptop or phone rather than'
+
+[21:27] [scene:talk]
+VISUAL:
+AUDIO: 'having to go through these third party things or setting up distributed hash tables um and pretty much you know what like Bluetooth could be a cool way of um connecting to people and whatever other'
+
+[21:40] [scene:talk]
+VISUAL:
+AUDIO: 'mesh protocols like apple has their own proprietary one why don\'t we use that um anyway so that\'s kind of what the plan was let\'s quickly take a look'
+
+[21:52] [scene:talk]
+VISUAL:
+AUDIO: 'at what we have right now I\'m going to uh play with fire and do a live demo okay so uh obviously this testing'
+
+[22:04] [scene:talk]
+VISUAL:
+AUDIO: 'is happening inside aggregor so we can go to the homepage this is kind of what you see when you boot it up um so we can load stuff off of the hyper protocol um'
+
+[22:18] [scene:talk]
+VISUAL:
+AUDIO: 'we have support for uh DNS and this is using the existing oh there\'s some bugs when I go too fast'
+
+[22:35] [scene:talk]
+VISUAL:
+AUDIO: 'there\'s um support for the existing DNS system so um I don\'t have to have these messy URLs all the time and as well we\'ve got a fetch API for interacting'
+
+[22:48] [scene:talk]
+VISUAL:
+AUDIO: 'with things so I\'ve just got a bunch of uh stuff in my uh well here I can kind of show you how'
+
+[23:00] [scene:talk]
+VISUAL:
+AUDIO: 'to do a fetch of the current page and uh Live'
+
+[23:14] [scene:talk]
+VISUAL:
+AUDIO: 'code right so here I loaded the current web page which is a hyper protocol or I can actually um do the same thing but'
+
+[23:27] [scene:talk]
+VISUAL:
+AUDIO: 'pass in the full URL or is this like legible should I make it smaller okay'
+
+[23:44] [scene:talk]
+VISUAL:
+AUDIO: 'cool readable so here I\'m loading a web page but what\'s cool is you can actually create um uh hyperdrives with the fetch interface so I\'ve got a little bit of a'
+
+[23:56] [scene:talk]
+VISUAL:
+AUDIO: 'um pre pre-made command here so fetch is an interface for doing HTTP requests and so in HTTP requests there\'s a few pieces'
+
+[24:09] [scene:talk]
+VISUAL:
+AUDIO: 'there\'s a URL um there\'s some headers and there\'s some body so some potentially some content for the body and then what you get back is a response which has a status code some headers and'
+
+[24:23] [scene:talk]
+VISUAL:
+AUDIO: 'a body again so what what we already have and Beaker has this too and I\'m pretty sure uh Gateway has this too is a get interface for hyperdrives so we can get content out'
+
+[24:38] [scene:talk]
+VISUAL:
+AUDIO: 'and that\'s just something that exists um so in addition we now have a put method so I can say if I can get a file I should be able to put one in so uh under'
+
+[24:50] [scene:talk]
+VISUAL:
+AUDIO: 'the hood aggregor uses the DAT SDK um and what that means is that uh there\'s this concept called named drives or named hypercores and so if I give a'
+
+[25:04] [scene:talk]
+VISUAL:
+AUDIO: 'name that\'s not a hypercore key and that\'s not a DNS name that gets used as kind of like a name for generating a new drive so I can put any name here like uh'
+
+[25:16] [scene:talk]
+VISUAL:
+AUDIO: 'hello.c and then this will create a new drive so when I post this what happens is under the hood or'
+
+[25:28] [scene:talk]
+VISUAL:
+AUDIO: 'here uh status code I think it was oh my God live coding'
+
+[25:40] [scene:talk]
+VISUAL:
+AUDIO: 'never always a mistake uh wait what am I'
+
+[25:54] [scene:talk]
+VISUAL:
+AUDIO: 'yeah Icarus flew too close to the Sun and now my browser crashed um all right no'
+
+[26:11] [scene:talk]
+VISUAL:
+AUDIO: 'problem all part of the plan totally didn\'t just mess up let me quickly uh get a new window going'
+
+[26:25] [scene:talk]
+VISUAL:
+AUDIO: 'um see the um the demo gods did not smile upon me today but that\'s okay we don\'t need'
+
+[26:39] [scene:talk]
+VISUAL:
+AUDIO: 'their smiles okay so [Music] um bam so what I just did was I sent a post request to this URL and now if I'
+
+[26:54] [scene:talk]
+VISUAL:
+AUDIO: 'copy paste paste that URL I\'ve actually got oops I\'ve got a new archive so I don\'t know if you can see that but that says hello'
+
+[27:07] [scene:talk]
+VISUAL:
+AUDIO: 'world now what I can also do is create an index.html which will render whenever I um load the'
+
+[27:19] [scene:talk]
+VISUAL:
+AUDIO: 'page and so since you know I\'m really um masochistic Let\'s uh just Live code a little bit of HTML'
+
+[27:32] [scene:talk]
+VISUAL:
+AUDIO: 'and see if it works oh all right so if I refresh this and go'
+
+[27:47] [scene:talk]
+VISUAL:
+AUDIO: 'to the root um we\'ve now got that empty page we can have some'
+
+[28:00] [scene:talk]
+VISUAL:
+AUDIO: 'text and this doesn\'t have beaker\'s fancy um live reloading but it works cool all'
+
+[28:14] [scene:talk]
+VISUAL:
+AUDIO: 'right let\'s go back to the oh yeah so also this has some really basic browser features which is like um I\'ve been wanting to use this as just my browser so for that I needed like some essential'
+
+[28:28] [scene:talk]
+VISUAL:
+AUDIO: 'features which was the autocomplete for um URLs and finding page because finding page is like I didn\'t know how much I used it until I didn\'t have'
+
+[28:41] [scene:talk]
+VISUAL:
+AUDIO: 'it and that\'s about it anyway so that was the demo um the fetch interface is like super simple right now it\'s just get and put and there\'s a special thing'
+
+[28:53] [scene:talk]
+VISUAL:
+AUDIO: 'for dealing with um uh the index. Json file which might need to get changed um and also a special way to get directory listings as'
+
+[29:07] [scene:talk]
+VISUAL:
+AUDIO: 'a Json array um but other than that it\'s not really inventing too much from what is there already so in the near future kind of what I\'m hoping to do is get the'
+
+[29:19] [scene:talk]
+VISUAL:
+AUDIO: 'hyperdrive fetch to uh more getting blobs um so there\'s a question in the chat getting blobs you can get blobs um it\'s just fetch so when you do the get'
+
+[29:33] [scene:talk]
+VISUAL:
+AUDIO: 'you can either get it as an array buffer or as text or parse it as Json so if you have a Json file there\'s actually it\'s easier to deal with Json as well I think you can post Json more easily um which'
+
+[29:47] [scene:talk]
+VISUAL:
+AUDIO: 'is cool uh so in the near future I\'m hoping to add a little bit more to the hyperdrive fetch API um figuring out how to get metadata and also how to deal with extension messages because that\'s'
+
+[30:01] [scene:talk]
+VISUAL:
+AUDIO: 'super important to me I want to implement that bookmarks as file thing because I think it\' be super sci-fi or lowii I don\'t know and get the Earth star protocol in there so that we can'
+
+[30:15] [scene:talk]
+VISUAL:
+AUDIO: 'start playing around with what it means to have multiple protocols in one place um so you might be wondering how do I get involved and uh please get involved'
+
+[30:28] [scene:talk]
+VISUAL:
+AUDIO: 'cuz you know the more the merrier uh there\'s a to-do list which is just like a giant um road map with a bunch of items bunch of them are finished a bunch'
+
+[30:40] [scene:talk]
+VISUAL:
+AUDIO: 'of them aren\'t finished if you\'re interested in working on anything just open up a GitHub issue or if you want to just kind of shoot the or discuss random ideas just ping me in my DMs either on Twitter or Matrix or Discord'
+
+[30:54] [scene:talk]
+VISUAL:
+AUDIO: 'or telegram or I\'m not on cabal that much yet but pretty much anywhere and let\'s just like think about what it means to make a peer-to-peer web uh what'
+
+[31:07] [scene:talk]
+VISUAL:
+AUDIO: 'it means to interface with this peer-to-peer stuff using um a Webby interface and also how can we get this useful for actual projects and useful'
+
+[31:19] [scene:talk]
+VISUAL:
+AUDIO: 'for people that actually want to make stuff that is local first and benefits from local first um I don\'t know if I\'m over time but thank you so much for listening and uh'
+
+[31:31] [scene:talk]
+VISUAL:
+AUDIO: 'yeah keep keep fighting the power Etc excellent excellent thank you very much mob all'
+
+[31:44] [scene:talk]
+VISUAL:
+AUDIO: 'right well uh coming up next is building a network library with James and Dennis H it\'s about to start in a couple of minutes actually so see you there'

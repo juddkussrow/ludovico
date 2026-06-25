@@ -1,0 +1,295 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: ComfyUI With New Phantom 14B - Another Level Of Reference2Video AI Model!
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=Ti3Z3DSRDw8
+upload_date: 20250529
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'Hello everyone, Phantom from Bite Dance. The reference to video AI released the 14 billion parameter size model. Previously, we talked about the 1.3 billion size models that were released last month. Just by May 27th, they'
+
+[00:12] [scene:talk]
+VISUAL:
+AUDIO: 'released the 14B models. This is based on Juan 2.1 as the base model. When we checked the updates for Juan 2.1, we saw the base 14B was released two weeks ago along with the fine-tuned'
+
+[00:26] [scene:talk]
+VISUAL:
+AUDIO: 'models from Bite Dance, the Phantom, which use one 2.1 as the base and fine-tune it for more character or subject lookalike referencing. By using their models, we can get more accuracy'
+
+[00:38] [scene:talk]
+VISUAL:
+AUDIO: 'in our reference images for generating videos for our subjects or characters. Basically, once the base 14B was released, that\'s why their timeline is just behind it to release the Phantom'
+
+[00:51] [scene:talk]
+VISUAL:
+AUDIO: '14B right after. Then companies put people on it and train on the Phantom for 14 billion, which is what we\'re seeing now. But with more accurate referencing for videos, we can achieve better reference-based video generation'
+
+[01:04] [scene:talk]
+VISUAL:
+AUDIO: 'in AI videos. So, today we\'re going to test it out and see how we can use it in Comfy UI, too. The thing is, previously with Phantom in 1.3, it was generating pretty slow, like over 5 minutes for 81'
+
+[01:19] [scene:talk]
+VISUAL:
+AUDIO: 'frames. Since we now have the cost V14B Laura models, we can improve the generation speed significantly while maintaining the quality of the Phantom, which has been fine-tuned for more'
+
+[01:31] [scene:talk]
+VISUAL:
+AUDIO: 'accurate subject referencing. Of course, when I tested these models working with the Cosvid Laura models, it looked like there were some losses in the reference styles. compared to when I didn\'t use'
+
+[01:43] [scene:talk]
+VISUAL:
+AUDIO: 'cosvid Laura to generate but when I did use cosvid Laura obviously it shortened the generation time within 3 minutes and I was able to generate the 81 frames without any problem without using cos'
+
+[01:55] [scene:talk]
+VISUAL:
+AUDIO: 'vid in the one video wrapper here and without connecting the Laura it would take about 9 minutes to create an 81 frame video including two subjects or two references attached as images so'
+
+[02:07] [scene:talk]
+VISUAL:
+AUDIO: 'here we\'re going to try that out first we have to download our model which you can find in the W video wrapper hugging face repo. It\'s listed here for both the 14BFP16 versions and the FP8 versions.'
+
+[02:22] [scene:talk]
+VISUAL:
+AUDIO: 'You can see the file size is way larger compared to the 1.3 billion we tested previously. Even the 1.3 billion FP32 floating point costs about 5.6 GB in'
+
+[02:35] [scene:talk]
+VISUAL:
+AUDIO: 'file size. When we\'re dealing with the 14B, just like the W2.1 base models, we download the 14B models and the file size is much bigger.'
+
+[02:47] [scene:talk]
+VISUAL:
+AUDIO: 'Of course, because the data set is way larger in this model weight, even though the safe tensor files are trimmed down to FP8, it still costs around 15 GB of storage. So either one works, 16B'
+
+[03:00] [scene:talk]
+VISUAL:
+AUDIO: 'obviously or 14bp16 which is going to be way higher quality than the 1.3bp16 if you compare the build and parameter size. But if you compare the'
+
+[03:12] [scene:talk]
+VISUAL:
+AUDIO: '14B between FP16 and FP8, you\'ll need to measure whether you have enough VRAM first to handle the FP16 because the FP16 right now costs about 29 GB of file storage. And during execution, it uses'
+
+[03:26] [scene:talk]
+VISUAL:
+AUDIO: 'over 30 something GB of VRAM. The FP8 that I tested cost about 16 GB of VRAM on average during processing time, and at peak times, it hit about 20 GB of'
+
+[03:38] [scene:talk]
+VISUAL:
+AUDIO: 'VRAM. Anyway, it costs more VRAM to run the 14B just like the other W2.114B models. Same concept, but the good thing is that we have the W video'
+
+[03:52] [scene:talk]
+VISUAL:
+AUDIO: 'wrapper. We can do block swaps, swap over like normally 10 to 20 blocks. The setup I\'m using works well for my situation, but it depends on your hardware configuration. If you have say an Nvidia 490 with 24 GB of VRAM, then'
+
+[04:06] [scene:talk]
+VISUAL:
+AUDIO: '10 blocks of swap or play it safe with 20 blocks is enough. Then COVID. If you connect this, of course, you\'ll lower your sampling steps between 8 to 12.'
+
+[04:19] [scene:talk]
+VISUAL:
+AUDIO: 'That will be the ideal range of sampling steps for doing video generation with the Cosvid Laura model. I\'m currently using step 10 and you can try using flow match cosvid if you\'re using the cos'
+
+[04:32] [scene:talk]
+VISUAL:
+AUDIO: 'vura models. This way it\'s going to be way better optimized when you use the cos vvid lura to run any one 2.1 models based on those models for inferencing especially the phantom when it\'s 14b'
+
+[04:45] [scene:talk]
+VISUAL:
+AUDIO: 'since it\'s based on one 2.114b text to video and also works with referencing models. This overview of the workflow is the example workflow for the Juan video wrapper to run Phantom 14B as'
+
+[04:58] [scene:talk]
+VISUAL:
+AUDIO: 'well as 1.3B. You can check that out in the Comfy UI Juan video wrapper. You can drag and drop that on top of this and it will appear mostly like this UI, the'
+
+[05:10] [scene:talk]
+VISUAL:
+AUDIO: 'workflow layout as I\'ve tested in this example. As you can see, I have a young lady carrying a backpack and this comes from the two images I provided. So, although the pants aren\'t exactly the'
+
+[05:23] [scene:talk]
+VISUAL:
+AUDIO: 'same as my reference image, you can see here we got the similarity of the young lady with the backpack, the backpack style is black with an orange zipper pull, and that matches what I have in the reference image. So, especially with'
+
+[05:35] [scene:talk]
+VISUAL:
+AUDIO: 'the Phantom models, even in 1.3B, it\'s really specialized in replicating things like handbags, backpacks, shoes, or t-shirts, turning those subject styles into video. That\'s where I see these'
+
+[05:48] [scene:talk]
+VISUAL:
+AUDIO: 'models shine after understanding their fine-tuning method and how they\'re used to fine-tune this model outcome. And then this example is two singers. Although the singer\'s dress is'
+
+[06:00] [scene:talk]
+VISUAL:
+AUDIO: 'influenced by the blue colored dress of the other singer where we see both outfits share a similar color, you can see that the character faces are referenced by the input images. Both characters can be identified as having'
+
+[06:12] [scene:talk]
+VISUAL:
+AUDIO: 'two different faces putting the subjects into the video. Here\'s another video I tried after downloading the model. You can see it\'s very obvious that something is able to replicate, but something else isn\'t fully able to reference from my'
+
+[06:26] [scene:talk]
+VISUAL:
+AUDIO: 'image. Well, because at that time I was setting something different. I wanted to try another method, but most likely it can replicate the subjects, which is the red dress lady who\'s able to do that.'
+
+[06:38] [scene:talk]
+VISUAL:
+AUDIO: 'And then here\'s another example where I have two warriors walking on the street. As you can see, the character on the right side has elf ears, which you can also see from the reference image. The'
+
+[06:50] [scene:talk]
+VISUAL:
+AUDIO: 'reference image shows the styles and face identity, which are able to replicate using 14b. And this isn\'t only about style transfer. This is also about how the identity of the character is'
+
+[07:02] [scene:talk]
+VISUAL:
+AUDIO: 'able to translate into our AI videos, especially this one. I was kind of happy with what it could perform locally with this model. You know, having two similar characters with their outfits. But when'
+
+[07:14] [scene:talk]
+VISUAL:
+AUDIO: 'you see the generated video, you can identify that the two characters have their own unique different faces and appearances, especially this character. The ears are able to be rendered as elf ears, and the other character is able to'
+
+[07:27] [scene:talk]
+VISUAL:
+AUDIO: 'replicate the hairstyle like the ponytail and the face from the reference character image. Another example here is totally different styles of characters, different colors of outfits, hairstyles,'
+
+[07:39] [scene:talk]
+VISUAL:
+AUDIO: 'and face identities. You can see that it\'s able to replicate these two characters. Even the background from the reference characters image background, it\'s able to replicate those elements into our video as well. So, the 14B is'
+
+[07:52] [scene:talk]
+VISUAL:
+AUDIO: 'pretty nice. As you can reference and see, the lookalike of the character is spot-on. Let\'s try one more time with this one. I want to include the outfit of my reference image for this character'
+
+[08:06] [scene:talk]
+VISUAL:
+AUDIO: 'here as well. So, by running this, I\'ll describe the character\'s outfit a little bit in the text prompt. Here\'s the generated result. And this time, it\'s even better. As I\'ve seen, the referencing of the video is able to'
+
+[08:19] [scene:talk]
+VISUAL:
+AUDIO: 'replicate these two reference images where you can clearly see this time from the reference, I got the black backpack with the orange zipper pull and some straps, too. We can see that from our generated video. It\'s exactly the same shape. the Yzipper, the iconic design of'
+
+[08:32] [scene:talk]
+VISUAL:
+AUDIO: 'the Mystery Ranch brand, and the backpack strap. Also, how the shape is designed is able to replicate throughout different angles when the character picks it up from the ground and holds it'
+
+[08:44] [scene:talk]
+VISUAL:
+AUDIO: 'in hand. The character on the other side is able to show the style of her outfit because I emphasize that in the text prompts as well. I referenced the image I\'m inputting, so therefore, it can be'
+
+[08:56] [scene:talk]
+VISUAL:
+AUDIO: 'done without problems. I think this is really great news for e-commerce businesses. If you want to try something like this for your product page details, not just using images for your product'
+
+[09:08] [scene:talk]
+VISUAL:
+AUDIO: 'page. Maybe you can include something like short video clips to demonstrate how your products work. That could be an idea for applying this in real situations, not just for fun and generating video content. And I think'
+
+[09:20] [scene:talk]
+VISUAL:
+AUDIO: 'this way it looks pretty nice, especially since I\'ve seen this backpack in real life. I know how the shape and form look and it really resembles the real item from the videos here. It really looks like the real thing, but'
+
+[09:33] [scene:talk]
+VISUAL:
+AUDIO: 'just the little details on the logo or texture are kind of blurry. If we can enhance this part, then that would be perfect for an e-commerce product video demonstration. Even the example workflows in the wrapper nodes are able'
+
+[09:46] [scene:talk]
+VISUAL:
+AUDIO: 'to create such quality of video. This isn\'t about how detailed or how many settings you need to do in the workflow. Sometimes it\'s all about the AI model itself. Obviously, more parameters in the model size make it easier to tell'
+
+[09:59] [scene:talk]
+VISUAL:
+AUDIO: 'how much better it is compared to a smaller model size like what a 1.3B model can do. That\'s the reality of it. But in reality, if you shrink the'
+
+[10:11] [scene:talk]
+VISUAL:
+AUDIO: 'model size, like when we played around with the Phantom 1.3B, it can do subject to video. But sometimes it\'s not able to replicate the detailed shape of an item like this. So that\'s the pros and cons'
+
+[10:23] [scene:talk]
+VISUAL:
+AUDIO: 'of different model sizes and the advantage of a larger AI model. Next, I\'ve also updated the Phantom workflow that I did previously when the 1.3B was released. Now, I\'ve changed the'
+
+[10:36] [scene:talk]
+VISUAL:
+AUDIO: 'reference image to a subject that\'s simpler. Here we\'re going to do the image path to match the exact width and height with our video canvas. All the settings and inputs, I grouped them into one group like this. So we\'re going to'
+
+[10:49] [scene:talk]
+VISUAL:
+AUDIO: 'set the width, height, video length, and how many frames we\'re inputting here. And then we\'ve got four video reference subjects. For example, we have four images we can input. That\'s the maximum'
+
+[11:03] [scene:talk]
+VISUAL:
+AUDIO: 'the Phantom AI models can handle. In this case, I\'m using the first two references to generate the video content. So, I enable reference one and reference two. Mostly, we\'ll be using'
+
+[11:16] [scene:talk]
+VISUAL:
+AUDIO: 'these two for most cases, reference three and four. Most likely, we\'ll just turn these off in the reference subject groups underneath here. That\'s the layout of it. And if you want to connect the reference subjects just like one and'
+
+[11:28] [scene:talk]
+VISUAL:
+AUDIO: 'two here, we connect the samples, the purple dot here to the one video phantom embed. The image preview, you can connect that or not. It\'s up to you. I just put reroute notes here on each of'
+
+[11:42] [scene:talk]
+VISUAL:
+AUDIO: 'these groups to make it easier to merge those images together. If you have four references, then you put the input counter to four and you\'ll have four image inputs here for your reference preview. This is just the layout for'
+
+[11:54] [scene:talk]
+VISUAL:
+AUDIO: 'human readability and understanding. You don\'t really need that for the AI to do the generation. The sample latent is the main important thing for the AI to process. So, we can go back to the upper'
+
+[12:06] [scene:talk]
+VISUAL:
+AUDIO: 'layout of this workflow. As you can see, I\'m currently using theuler flow match covid because I\'ve connected cosvid to test it out and run it with low sampling steps to cut down on generation times.'
+
+[12:18] [scene:talk]
+VISUAL:
+AUDIO: 'Each time we use it, it takes about 10 minutes to generate here using Phantom in Comfy UI. So if we\'re using Cosvid Laura, go to the model loader group here. As you can see, I\'ve got the'
+
+[12:30] [scene:talk]
+VISUAL:
+AUDIO: 'Cosvid 14B Laura models connected. With this, the average time is about 2 or 3 minutes. It depends on how strong your GPU is. Of course, we can\'t have a one-sizefits-all answer for everyone.'
+
+[12:43] [scene:talk]
+VISUAL:
+AUDIO: 'You\'ll have to test it out yourself. Within the range of frame numbers 81 to 129, we can generate in two to three minutes. Sometimes if you set high resolutions, it might take five or six'
+
+[12:55] [scene:talk]
+VISUAL:
+AUDIO: 'minutes. If you\'re using covid with sampling steps between 8 to 12, and the other basic settings are the same as one 2.1 for the VAE and text encoder, you don\'t need to change much. You can check'
+
+[13:08] [scene:talk]
+VISUAL:
+AUDIO: 'out those settings if you\'re new to one 2.1 in comfy UI. I\'ve got previous videos talking about that and I\'ve included the video output here where you can see the generated videos, actual videos and demos combining two subjects'
+
+[13:21] [scene:talk]
+VISUAL:
+AUDIO: 'references together in one canvas for the output video. Of course, you can also add more stuff after generating the video like doing video upscaling. Recently, I\'ve been liking a'
+
+[13:33] [scene:talk]
+VISUAL:
+AUDIO: 'very simple video upscale node. It\'s faster than using a diffusion-based upscaling method. Using this video upscaling with models is very similar to the conf UI upscaler when we use the image upscale nodes here which come by'
+
+[13:47] [scene:talk]
+VISUAL:
+AUDIO: 'default with conf UI. The video upscale nodes here are really similar. They don\'t need to use the ultimate SD upscale node to run sampling steps frame by frame doing tiling etc. It\'s all based on the upscale models to perform'
+
+[14:01] [scene:talk]
+VISUAL:
+AUDIO: 'the upscaling. And the factor is how many times you want to upscale. Normally we upscale two times in Comfy UI and that\'s how the quality goes using Comfy UI. If you want to upscale even more to'
+
+[14:13] [scene:talk]
+VISUAL:
+AUDIO: '4K then bring the two times upscale results to other upscale AI software to do that. It will be better. That\'s how it works. I really like the 14B models just like the'
+
+[14:27] [scene:talk]
+VISUAL:
+AUDIO: 'W2.114B and also the vase 14B models. They\'re doing really well. So, you can expect this fine-tuned model to work well, too. As you can see, we\'ve got the princess holding the magical box, and'
+
+[14:40] [scene:talk]
+VISUAL:
+AUDIO: 'then a bunch of zombies are chasing her like this. It\'s pretty funny to play around with something like that, crossing over different styles of characters into one scene. So, check it out. The Bite Dance Phantom 14B release.'
+
+[14:52] [scene:talk]
+VISUAL:
+AUDIO: 'And I\'ll see you guys in the next one. Have a nice day. See you.'

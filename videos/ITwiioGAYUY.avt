@@ -1,0 +1,251 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: LTX 2.3 Multi Reference Video on 8GB VRAM | Local AI Workflow | MSR Lora Full Tutorial
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=ITwiioGAYUY
+upload_date: 20260614
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'Today, I\'m bringing you a very practical LTX 2.3 multi-reference video workflow. It can use multiple images at the same time as references to generate video, dramatically improving character consistency and scene control. Honestly, I think this is one of the'
+
+[00:13] [scene:talk]
+VISUAL:
+AUDIO: 'most interesting local video generation pipelines I\'ve tested so far. [music] And in this video, I\'m not just showing you how to use it. I\'ll also share a complete low VRAM optimization setup and walk through how to generate high-quality cinematic'
+
+[00:27] [scene:talk]
+VISUAL:
+AUDIO: 'videos using only an 8 GB GPU. All right, let\'s jump in. Hello, welcome to Smart Vision. On this channel, [music] I keep sharing the latest AI tutorials and practical tools.'
+
+[00:40] [scene:talk]
+VISUAL:
+AUDIO: 'All workflows, materials, and resources from this video are on my Patreon and are available to download after you register. &gt;&gt; [music] &gt;&gt; For supporters, I provide extra professional tools and deeper guides. If you like this content, consider'
+
+[00:52] [scene:talk]
+VISUAL:
+AUDIO: 'subscribing and supporting the channel. Now, let\'s get started. First, let\'s start with installation. We need to install ComfyUI. Just search for it on Google and install the version'
+
+[01:04] [scene:talk]
+VISUAL:
+AUDIO: 'that matches your system. Once installed, open the workflow I provided in ComfyUI. At this point, it will prompt you about missing nodes and models and will need to install those. Click the logo in the top left corner,'
+
+[01:17] [scene:talk]
+VISUAL:
+AUDIO: 'open extensions, go to missing nodes, and install everything required. One thing to [music] note, this Licon node needs to be downloaded manually from GitHub because it doesn\'t appear in ComfyUI node search. The process is'
+
+[01:29] [scene:talk]
+VISUAL:
+AUDIO: 'simple, you don\'t need Git. Just download the repository as a zip, extract, [music] and place it into the ComfyUI custom nodes folder, and restart ComfyUI. Next, download the models. Here, I\'m mainly using the LTX 2.3'
+
+[01:44] [scene:talk]
+VISUAL:
+AUDIO: 'models provided by KJ. I\'ve already organized the download links, so just follow the instructions. And finally, download today\'s key component, Licon multi-reference Lora from Hugging Face.'
+
+[01:56] [scene:talk]
+VISUAL:
+AUDIO: 'And place it into ComfyUI models LoRAs folder. Once installation is complete, let\'s look at the workflow. &gt;&gt; [music] &gt;&gt; At first glance, it can be divided into five groups, but the core idea is'
+
+[02:08] [scene:talk]
+VISUAL:
+AUDIO: 'actually much simpler than it looks. Essentially, this workflow adds an MSR LoRA on top of the original LTX 2.3 video generation pipeline, &gt;&gt; [music]'
+
+[02:20] [scene:talk]
+VISUAL:
+AUDIO: '&gt;&gt; allowing the model to reference multiple images simultaneously during generation. The three groups on the left are the main sections you need to configure, including reference images, output resolution, FPS, video duration, and prompts.'
+
+[02:33] [scene:talk]
+VISUAL:
+AUDIO: 'This section loads the model LTX 2.3, and this is today\'s core component, MSR LoRA. I\'ll explain the underlying mechanism later, but for now, you can think of MSR as something beyond traditional image'
+
+[02:45] [scene:talk]
+VISUAL:
+AUDIO: 'prompting. Instead of simply treating images as hints, it allows the model to reference characters, backgrounds, and visual elements across multiple images at the same time. So, how do we use it? It\'s actually very simple. Load the'
+
+[02:57] [scene:talk]
+VISUAL:
+AUDIO: 'reference images here. It supports up to five images. One should be used as the background reference, while the remaining images can contain characters, objects, [music] or elements you want to preserve.'
+
+[03:09] [scene:talk]
+VISUAL:
+AUDIO: 'Then set the output resolution, FPS, and duration. One important detail, try to keep the generation resolution close to the background image resolution because the background isn\'t just providing style,'
+
+[03:21] [scene:talk]
+VISUAL:
+AUDIO: 'it directly participates in building the spatial structure of the video. For prompts, I also recommend not keeping them too simple. MSR helps preserve content, but prompts still determine motion, camera movement,'
+
+[03:33] [scene:talk]
+VISUAL:
+AUDIO: 'and atmosphere. So, try to describe character actions, environment, camera language, and lighting. Now, let\'s talk about one of the most important parameters in this workflow, the frame setting inside the LyCORIS MSR'
+
+[03:46] [scene:talk]
+VISUAL:
+AUDIO: 'node. There are four options, 17, 25, 33, and 41. This parameter doesn\'t directly control influence strength. Instead, it controls how reference images are'
+
+[03:58] [scene:talk]
+VISUAL:
+AUDIO: 'organized into the reference sequence used by the model, essentially the visual memory we talked about earlier. You can think of it this way: higher values preserve more reference information and usually improve consistency, while lower values increase'
+
+[04:10] [scene:talk]
+VISUAL:
+AUDIO: 'freedom and often create more natural motion. My recommendation is, if you\'re using two to three reference images, start with 17. It usually gives a good balance between consistency and naturalness. If you\'re using four to'
+
+[04:23] [scene:talk]
+VISUAL:
+AUDIO: 'five images, especially with characters, backgrounds, and objects together, try 41 first to give the model more room to integrate information. &gt;&gt; [music] &gt;&gt; But higher isn\'t always better. If the output starts feeling stiff or over'
+
+[04:36] [scene:talk]
+VISUAL:
+AUDIO: 'constrained, reduce the value. Next is image input. This node supports up to five reference images, and you only need to connect however many you\'re actually using. Another important node is LTxV Add Guide Multi.'
+
+[04:48] [scene:talk]
+VISUAL:
+AUDIO: 'Here you must specify the actual number of reference images and match the connections correctly, otherwise some references may not participate in generation. You can also set guide strength'
+
+[05:00] [scene:talk]
+VISUAL:
+AUDIO: 'independently for each image. For example, character images can use higher values, while background images use lower values. That way, the model prioritizes character consistency while still keeping some scene flexibility.'
+
+[05:13] [scene:talk]
+VISUAL:
+AUDIO: 'Once everything is configured, click generate and start rendering. Before testing, I want to spend a minute explaining the idea behind this workflow, [music] because it\'s actually pretty interesting. Traditional image'
+
+[05:26] [scene:talk]
+VISUAL:
+AUDIO: 'reference video workflows usually compress reference images into feature vectors and continuously remind the model what the character looks like. The problem is that information gets lost during compression. That\'s why outputs often look accurate at the beginning,'
+
+[05:39] [scene:talk]
+VISUAL:
+AUDIO: 'but drift once the camera moves or actions become more complex. MSR approaches this differently. It doesn\'t add another control model, and it doesn\'t introduce an extra encoder. Instead, it converts multiple reference images into a pseudo video and places'
+
+[05:53] [scene:talk]
+VISUAL:
+AUDIO: 'them into the exact same representation space as the target video. &gt;&gt; [music] &gt;&gt; You can imagine it like this. Older methods give the model a single character photo before an exam. This method lets the model read an entire'
+
+[06:05] [scene:talk]
+VISUAL:
+AUDIO: 'character design book before generation begins. Those reference images stop being prompts. They become visual memory. During generation, the model decides dynamically which parts should reference the character, which should'
+
+[06:17] [scene:talk]
+VISUAL:
+AUDIO: 'reference clothing, and which should reference the environment. It can even combine different elements across images. For example, one image provides character identity, another provides clothing, and another provides the environment, all merged into a single'
+
+[06:29] [scene:talk]
+VISUAL:
+AUDIO: 'video. That\'s why it can support multiple characters and multiple visual elements while maintaining consistency. Of course, it\'s not perfect yet. The official notes also mention that fast motion or aggressive camera movement can still cause hand artifacts or character'
+
+[06:42] [scene:talk]
+VISUAL:
+AUDIO: 'drift. So next, let\'s see how far this visual memory concept can really go. Now let\'s move into testing. Test one, character consistency. Here I input two girls and one forest background. The'
+
+[06:55] [scene:talk]
+VISUAL:
+AUDIO: 'prompt asks them to hug each other. We\'ll focus on character preservation, motion naturalness, and background stability. As you can see, the result looks really'
+
+[07:15] [scene:talk]
+VISUAL:
+AUDIO: 'good. Character consistency and scene reconstruction are working very well, and overall there are no obvious issues there. The only downside is that there seems to be some kind of watermark appearing in the frame, which is a bit distracting.'
+
+[07:27] [scene:talk]
+VISUAL:
+AUDIO: 'Next, I\'ll keep the seed fixed and adjust guide strength only so we can isolate the impact of strength values. Notice that the seed remains unchanged intentionally to observe only the guide strength effect. For example, here I'
+
+[07:40] [scene:talk]
+VISUAL:
+AUDIO: 'changed the strength of character one to 0.5 while keeping everything else the same. Let\'s see what happens. As you can see, the appearance of the'
+
+[07:58] [scene:talk]
+VISUAL:
+AUDIO: 'first girl starts to drift a bit. She doesn\'t really look like the original character anymore. So, this parameter is something you can adjust depending on your goal. But realistically, most of the time you\'ll probably keep it at one.'
+
+[08:10] [scene:talk]
+VISUAL:
+AUDIO: 'Because if you\'re using reference images in the first place, who actually wants inconsistent characters? Test two combines character, prop, and background. We input a girl, a sword, and a street scene and observe how the'
+
+[08:23] [scene:talk]
+VISUAL:
+AUDIO: 'model blends different visual elements. &gt;&gt; [music] &gt;&gt; Here, I asked the character to hold the'
+
+[08:37] [scene:talk]
+VISUAL:
+AUDIO: 'sword from the reference image and swing it inside the background scene. And honestly, the result is pretty amazing. Not only did it successfully preserve both the character and the object, but the motion also looks very smooth. What'
+
+[08:49] [scene:talk]
+VISUAL:
+AUDIO: 'impressed me the most is that when the character turns around and looks back at the camera, the identity still stays consistent. That\'s a really good sign of strong character consistency because in older workflows, this kind of movement'
+
+[09:01] [scene:talk]
+VISUAL:
+AUDIO: 'would very often cause the character to drift or completely change appearance. &gt;&gt; [music] &gt;&gt; Test three is the stress test. We use all five reference slots and see whether consistency still holds. Here, I asked all three characters to'
+
+[09:23] [scene:talk]
+VISUAL:
+AUDIO: 'carry the same sword and walk through the forest. As you can see, once the number of reference images becomes too high, the output quality starts to drop quite noticeably. &gt;&gt; [music]'
+
+[09:35] [scene:talk]
+VISUAL:
+AUDIO: '&gt;&gt; Even though the characters still roughly preserve their identities, the model seems to reinterpret them into a more stylized or slightly cartoon-like appearance. There\'s also some visible degradation in overall quality. And honestly, at this point, I\'m not even completely sure'
+
+[09:48] [scene:talk]
+VISUAL:
+AUDIO: 'whether they\'re holding swords or sticks. At this point, what I care about more isn\'t whether it can outperform commercial models. What I care about is whether it can reduce my overall production cost.'
+
+[10:00] [scene:talk]
+VISUAL:
+AUDIO: 'Because at the end of the day, this is still a local model, and we shouldn\'t expect it to solve every problem in one pass. If you compare it directly against the strongest commercial video models, there are definitely areas where it still'
+
+[10:13] [scene:talk]
+VISUAL:
+AUDIO: 'falls behind. But I don\'t think that\'s the point. What really matters is understanding what it does well and where its limitations are. For example, things like character consistency and multi-element composition are already surprisingly'
+
+[10:26] [scene:talk]
+VISUAL:
+AUDIO: 'strong here. So, my approach is to let local models handle these high-frequency, low-cost tasks. And reserve difficult shots, extreme consistency requirements, or maximum visual quality for stronger paid models.'
+
+[10:38] [scene:talk]
+VISUAL:
+AUDIO: 'That usually gives you a much better balance between quality and cost. Especially if you generate content at scale, this kind of hybrid workflow is often far more cost-effective than running everything in the cloud. So now,'
+
+[10:50] [scene:talk]
+VISUAL:
+AUDIO: 'let\'s keep pushing and see where the limits actually are. And that brings us to the part I care about most. Can this run on 8 GB VRAM? Can 8 GB VRAM run this? The answer is yes.'
+
+[11:03] [scene:talk]
+VISUAL:
+AUDIO: 'But the strategy needs to change, otherwise generation speed can become extremely slow. For example, [music] generating a 10-seconds video here took me around 20 minutes. One approach is to generate at a lower resolution first.'
+
+[11:15] [scene:talk]
+VISUAL:
+AUDIO: 'Make sure character consistency is preserved. Make sure the motion feels smooth. Then apply high-resolution enhancement afterward, and use frame interpolation if necessary. This approach is usually more stable'
+
+[11:27] [scene:talk]
+VISUAL:
+AUDIO: 'than generating high-resolution video directly. &gt;&gt; [music] &gt;&gt; For example, here I reduced both the output resolution and video duration during generation. And the final result actually comes surprisingly close to high VRAM'
+
+[11:39] [scene:talk]
+VISUAL:
+AUDIO: 'workflows, but at a much lower cost. So, how do we improve the video quality? One approach is to use the RTX video super resolution node. This is a technology developed by Nvidia. So, as long as you have an RTX 30 series GPU or'
+
+[11:53] [scene:talk]
+VISUAL:
+AUDIO: 'newer, you should be able to use it. Just make sure your GPU driver is updated to the latest version. The workflow is very simple. Just select your target resolution here, load in your video, and click run. That\'s it.'
+
+[12:05] [scene:talk]
+VISUAL:
+AUDIO: 'This way, instead of generating everything at extremely high resolution from the beginning, we can first focus on getting good motion and character consistency, then upscale and recover details'
+
+[12:17] [scene:talk]
+VISUAL:
+AUDIO: 'afterward. &gt;&gt; [music] &gt;&gt; In my experience, this approach is usually much more stable and cost-effective, especially on lower VRAM GPUs. Overall, after using this workflow, I think its biggest value isn\'t replacing'
+
+[12:29] [scene:talk]
+VISUAL:
+AUDIO: 'cloud services. It\'s making multi-reference video generation truly accessible on consumer GPUs. &gt;&gt; [music] &gt;&gt; If you\'d like the complete workflow, the low VRAM version, and all the optimized settings, I\'ll make them available on'
+
+[12:41] [scene:talk]
+VISUAL:
+AUDIO: 'Patreon. &gt;&gt; [music] &gt;&gt; Everything will be free, so feel free to subscribe. That\'s it for today. See you in the next video.'

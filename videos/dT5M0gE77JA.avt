@@ -1,0 +1,235 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: 4 Essential Tips for SCAIL-2: Motion, Expression & Masking|How to Master SCAIL
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=dT5M0gE77JA
+upload_date: 20260615
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'Do you still remember SCAIL? When it first came out I think the most impressive thing about it was that it could transfer the motion from a reference video onto a reference image But the first version had a very obvious limitation: it relied more on intermediate control information such as depth maps contour maps, and pose maps'
+
+[00:16] [scene:talk]
+VISUAL:
+AUDIO: 'Now SCAIL-2 is here and its biggest change is that it no longer limits the reference video to depth contour, and pose maps It is starting to become an end-to-end video control model You can directly give the model a reference video and a reference image'
+
+[00:31] [scene:talk]
+VISUAL:
+AUDIO: 'and let it understand the relationship between motion characters and regions on its own Of course this does not mean it can do everything In this video we’ll break down a complete ComfyUI workflow'
+
+[00:43] [scene:talk]
+VISUAL:
+AUDIO: 'and then use six tests to show you which scenarios work very well which parts require parameter adjustments and which scenarios look possible but are actually easy to fail Right now'
+
+[00:56] [scene:talk]
+VISUAL:
+AUDIO: 'official ComfyUI already supports SCAIL-2 First we need to update ComfyUI to the latest version Then in the official ComfyUI Hugging Face repository we need to download more models These models come in different formats'
+
+[01:08] [scene:talk]
+VISUAL:
+AUDIO: 'and as usual I downloaded the FP8 version In addition SCAIL-2 also needs some special models The first one is CLIP Vision which is our vision model'
+
+[01:20] [scene:talk]
+VISUAL:
+AUDIO: 'The second is the SAM three point one segmentation model This workflow also uses a LightX2V acceleration LoRA For easier demonstration I also built the workflow on RunningHub In the ComfyUI space'
+
+[01:33] [scene:talk]
+VISUAL:
+AUDIO: 'RunningHub is a really great online workflow platform because whenever new models or new extensions appear it usually follows up very quickly RunningHub also provides an online community platform for ComfyUI creators where you can find a lot of creative inspiration and practical workflows'
+
+[01:47] [scene:talk]
+VISUAL:
+AUDIO: 'This workflow is divided into two parts The first part is basic video generation The second part continues extending the video after the base video In our workflow settings'
+
+[02:00] [scene:talk]
+VISUAL:
+AUDIO: 'the first generated segment is sixty-five frames and the second extended segment is eighty-one frames So can you guess the final total frame count? Pay attention: it is not one hundred forty-six It is one hundred forty-one'
+
+[02:13] [scene:talk]
+VISUAL:
+AUDIO: 'because five frames overlap This is what we call overlap From the overall structure the workflow can be divided into several parts The first part is model loading The second is processing the reference image and reference video'
+
+[02:25] [scene:talk]
+VISUAL:
+AUDIO: 'The third is SAM three point one segmentation The fourth is basic video generation The fifth is extended video generation Finally, we decode'
+
+[02:37] [scene:talk]
+VISUAL:
+AUDIO: 'stitch, and output the result First let’s look at loading the main model Here, we use the FP8 model SCAIL-2 or the overall SCAIL model is based on the Wan two point one system The text encoder and VAE are inherited directly from Wan two point one'
+
+[02:50] [scene:talk]
+VISUAL:
+AUDIO: 'We also use CLIP Vision here The reference image is first encoded by this vision encoder and then the output is sent to the WanSCAILToVideo node In addition'
+
+[03:03] [scene:talk]
+VISUAL:
+AUDIO: 'this workflow also uses SAM three point one to generate masks Next is the processing of the reference image and reference video First the reference video goes through a resize but the reference image does not'
+
+[03:15] [scene:talk]
+VISUAL:
+AUDIO: 'My current resolution is set to five hundred twelve by eight hundred ninety-six Pay attention here: the resolution is set through this resize component The reference image does not need to be resized Its main role has two parts'
+
+[03:28] [scene:talk]
+VISUAL:
+AUDIO: 'First SAM three point one performs segmentation and generates the corresponding mask Second it goes through CLIP Vision encoding to generate the CLIP Vision output So the quality of the reference image is very important'
+
+[03:41] [scene:talk]
+VISUAL:
+AUDIO: 'Now let’s talk about prompts I wrote this very simply I only used “best quality” and “dynamic pose ” For the negative prompt I left it empty'
+
+[03:53] [scene:talk]
+VISUAL:
+AUDIO: 'This is because SCAIL-2 is not a model controlled mainly through complex prompts It relies more on the reference video and reference image So the prompt is more like a light guide Next'
+
+[04:05] [scene:talk]
+VISUAL:
+AUDIO: 'let’s talk about the key part: SAM three point one This is a very important step in the whole workflow and we call it segmentation In this workflow both the reference image and the reference video need to be segmented Here'
+
+[04:19] [scene:talk]
+VISUAL:
+AUDIO: 'we use two SAM3 Video Track nodes one for the reference video and one for the reference image I also recommend writing the prompts separately If it is a two-person scene you must write them accurately enough For example'
+
+[04:32] [scene:talk]
+VISUAL:
+AUDIO: 'here I write it in a slightly verbose way: “the person on the left side and the person on the right side ” There is also one issue people easily overlook Inside the node there is a very important parameter called max object which means the maximum number of objects you want to capture'
+
+[04:47] [scene:talk]
+VISUAL:
+AUDIO: 'By default it is usually set to one If you are only processing a single character that is fine But if there are two people in the video and you do not change this value before tracking'
+
+[04:59] [scene:talk]
+VISUAL:
+AUDIO: 'you will often only capture one person In addition there is a node called SCAIL2ColoredMask It converts the masks from the reference image and reference video into the colored-region representation required by SCAIL-2 Now let’s talk about the core node'
+
+[05:17] [scene:talk]
+VISUAL:
+AUDIO: 'called WanSCAILToVideo This node looks like a normal video conditioning node but it has some very special inputs The regular inputs include positive conditioning negative conditioning VAE'
+
+[05:30] [scene:talk]
+VISUAL:
+AUDIO: 'resolution, and video length But the truly important parts of SCAIL-2 are these special inputs The pose video is the reference video The pose video mask is the mask extracted and tracked from the reference video The reference image is the reference image'
+
+[05:44] [scene:talk]
+VISUAL:
+AUDIO: 'and the reference image mask is the mask from the reference image CLIP Vision output is the result after the reference image is encoded through CLIP Vision Finally, we have replacement mode'
+
+[05:56] [scene:talk]
+VISUAL:
+AUDIO: 'This parameter is also very important If it is not in replacement mode the final effect is motion transfer But if replacement mode is set to true then it becomes replacement In other words'
+
+[06:08] [scene:talk]
+VISUAL:
+AUDIO: 'it extracts the character from the reference image and replaces the subject in the original video Finally we have the sampling part In basic sampling we generate sixty-five frames The sampler is Euler the scheduler is simple'
+
+[06:20] [scene:talk]
+VISUAL:
+AUDIO: 'and the step count is six The extension part also uses WanSCAILToVideo but with a few extra special settings The first is previous frames It needs to pass in the video generated in the first stage which means the second stage does not start from nothing'
+
+[06:34] [scene:talk]
+VISUAL:
+AUDIO: 'The second is video frames offset which passes in the total frame count of the first-stage video The third is previous frame count which you can understand as the overlap The extended video will reference the last five frames of the previous stage'
+
+[06:47] [scene:talk]
+VISUAL:
+AUDIO: 'making the stitching more natural Now let’s move into testing The first group is the simplest and most commonly used one: motion transfer This means using the motion from a video to drive an image and make it move'
+
+[07:00] [scene:talk]
+VISUAL:
+AUDIO: 'Here, I use non-replacement mode The reference video provides the motion and the reference image provides the main character Look at the result I think this group works very well'
+
+[07:12] [scene:talk]
+VISUAL:
+AUDIO: 'The character can follow the body motion from the reference video and the pose is fairly stable Most importantly it does not simply copy the character from the original video It really brings the character from the reference image into the motion'
+
+[07:24] [scene:talk]
+VISUAL:
+AUDIO: 'This is the most important part of SCAIL-2 It no longer only looks at skeletons or contours Now'
+
+[07:36] [scene:talk]
+VISUAL:
+AUDIO: 'as long as it sees the reference video it can use that motion as a reference The second test is close-up expression driving Most models can handle body motion without too many issues But once we move closer and ask the model to drive facial expressions problems often appear'
+
+[07:51] [scene:talk]
+VISUAL:
+AUDIO: 'That is because facial details are much denser and facial details are not especially prominent in common depth maps pose maps, or contour maps Now let’s look at the result It is actually much better than I expected'
+
+[08:04] [scene:talk]
+VISUAL:
+AUDIO: 'Focus on the lips, eyes and face direction They are indeed consistent with the reference video But pay attention: this kind of transfer is still different from lip sync If you are making a digital human'
+
+[08:18] [scene:talk]
+VISUAL:
+AUDIO: 'you still cannot use this model for that purpose The third test is a two-person scene because a video may contain one person but it may also contain two people So what happens when there are two people?'
+
+[08:31] [scene:talk]
+VISUAL:
+AUDIO: 'In a two-person test the most important part is actually not the SCAIL node but whether SAM three point one can accurately capture the masks for both characters Here'
+
+[08:43] [scene:talk]
+VISUAL:
+AUDIO: 'you must set max object to two and the prompt should also be more precise That way SAM knows that we need not one person but the two characters on the left and right Now look at the result'
+
+[08:55] [scene:talk]
+VISUAL:
+AUDIO: 'The overall effect is also very good Since I am not using replacement mode here we can see that the two characters are fighting and the action still feels very direct and physical Let me emphasize again: in two-person scenes'
+
+[09:08] [scene:talk]
+VISUAL:
+AUDIO: 'the mask is actually the most important part Next, let’s test replacement mode The logic of replacement mode is to extract the character from the reference image and replace the character in the original video This sounds very attractive'
+
+[09:22] [scene:talk]
+VISUAL:
+AUDIO: 'because in video editing we often want to replace one person with another The overall result of this test is acceptable The character is indeed replaced and the motion transfers very well'
+
+[09:34] [scene:talk]
+VISUAL:
+AUDIO: 'But I feel that it is not as stable as non-replacement mode That is because the two masks may not perfectly match This means there needs to be some additional handling in the middle and if that handling is not ideal'
+
+[09:46] [scene:talk]
+VISUAL:
+AUDIO: 'the overall visual result will be affected So replacement mode is more demanding when it comes to source materials Next, let’s look at a failed case This case is very useful as a reference There are two people in the scene'
+
+[10:00] [scene:talk]
+VISUAL:
+AUDIO: 'and we want to replace only one of them In theory this sounds reasonable We only segment the person on the left and replace only that person But in practice both characters are affected At that point'
+
+[10:13] [scene:talk]
+VISUAL:
+AUDIO: 'both people may get replaced and the scene becomes unstable I think there may be two reasons First replacement mode itself tends to change the main subject more strongly Second, in a two-person scene if the relationship between the mask'
+
+[10:26] [scene:talk]
+VISUAL:
+AUDIO: 'reference image and target is not clear enough the model may easily map one person onto both people After a lot of testing I think replacing only one character in a two-person scene currently needs to be handled carefully This is especially true when the two people are close together'
+
+[10:42] [scene:talk]
+VISUAL:
+AUDIO: 'when their actions interact or when clothing or bodies overlap In those cases failure becomes much more likely The final test is still a two-person scene but now we process both people at the same time instead of replacing only one of them'
+
+[10:54] [scene:talk]
+VISUAL:
+AUDIO: 'In this case you’ll notice the result is much better Again we need to set max object inside SAM3 Video Track to two This shows a very interesting point:'
+
+[11:08] [scene:talk]
+VISUAL:
+AUDIO: 'in two-person scenes do not try to control only one person If you want to replace them replace both That result is much more reliable If you only replace one problems are more likely to appear So across all of these tests'
+
+[11:21] [scene:talk]
+VISUAL:
+AUDIO: 'most of the cases we showed were successful But there is one scene that is especially easy to fail: replacing only one character in a two-person scene The biggest value of SCAIL-2 is that reference videos are no longer limited to depth maps'
+
+[11:33] [scene:talk]
+VISUAL:
+AUDIO: 'contour maps and pose maps It feels more like an end-to-end reference-video control model For ComfyUI users'
+
+[11:45] [scene:talk]
+VISUAL:
+AUDIO: 'the scenarios worth testing include single-person motion transfer expression driving two-person non-replacement mode and replacement mode The scenario that is not very suitable is replacing only one character in a two-person scene'
+
+[11:57] [scene:talk]
+VISUAL:
+AUDIO: 'Alright, that’s all for today So what are you waiting for? Go try it yourself Follow me and become someone who truly understands AI'

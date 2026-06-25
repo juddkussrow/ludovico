@@ -1,0 +1,115 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: WebAssembly might actually save web dev...
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=O8uazkirvVo
+upload_date: unknown
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'I know we all hate JavaScript and the world would be a better place if we could write code for the browsers in literally any other language. The good news is that Web Assembly has been quietly working toward exactly that. And with the newly released version 3.0, it'
+
+[00:12] [scene:talk]
+VISUAL:
+AUDIO: 'is finally becoming an actual runtime environment that can handle things like garbage collection, exceptions, and even tail calls. That means languages that were previously a nightmare to compile for the web now have first class'
+
+[00:25] [scene:talk]
+VISUAL:
+AUDIO: 'support. In other words, the browser is finally starting to look like a place where serious programming languages can run without pretending to be JavaScript. So, let\'s spend the next few minutes reviewing five of the most important improvements that landed in 3.0 and then'
+
+[00:38] [scene:talk]
+VISUAL:
+AUDIO: 'look at some basic examples showcasing what we can achieve with Web Assembly today. The first headline change is memory 64. Up until now, Web Assembly memory was limited to 32-bit addresses, which meant a hard cap of 4 GB. That\'s'
+
+[00:52] [scene:talk]
+VISUAL:
+AUDIO: 'fine for the browser, but in non-web environments, it was a pretty big limitation. With 3.0, Web Assembly supports 64-bit addressing, theoretically giving you access to 16 xab of memory. Of course, hardware isn\'t'
+
+[01:05] [scene:talk]
+VISUAL:
+AUDIO: 'going to let you play with that much, and browsers are kept at 16 GB, but for standalone web assembly engines, this opens the door to handling truly massive workloads. On top of that, multiple memories are now properly supported in a'
+
+[01:18] [scene:talk]
+VISUAL:
+AUDIO: 'single module. This might sound like a small detail, but before 3.0, 0. If you wanted more than one memory space, you had to split things across modules. Now you can just declare and access multiple memories directly in one place. That'
+
+[01:31] [scene:talk]
+VISUAL:
+AUDIO: 'makes tools like web assembly merge actually usable and opens up better approaches to security and instrumentation since you can isolate sensitive data in separate address spaces. Another huge addition is garbage'
+
+[01:43] [scene:talk]
+VISUAL:
+AUDIO: 'collection. Web Assembly has always focused on raw linear memory, but now it also has built-in support for managed memory. This is still very low level, but compilers can define strrus and arrays and the runtime handles'
+
+[01:56] [scene:talk]
+VISUAL:
+AUDIO: 'allocation and lifetime. Everything else ranging from closures, vtables or higher level abstractions is still the responsibility of the language compiler. But with a GC in place, highle languages can now target web assembly without'
+
+[02:09] [scene:talk]
+VISUAL:
+AUDIO: 'resorting to hacks. Next, if you\'ve worked with functional languages, you know how important tail call optimization is. Web Assembly now supports them natively, both for statically defined functions and dynamic'
+
+[02:21] [scene:talk]
+VISUAL:
+AUDIO: 'calls through tables or references. Exception handling also got a complete overhaul. In the past, compiling try catch blocks to web assembly was awkward and often relied on escaping to JavaScript. With 3.0, exceptions are finally native. You declare exception'
+
+[02:35] [scene:talk]
+VISUAL:
+AUDIO: 'tags, throw them with payloads, and catch them using handlers directly in Web Assembly code. And as a bonus, there is a neat improvement for JavaScript developers, too. So now instead of awkwardly converting strings back and'
+
+[02:48] [scene:talk]
+VISUAL:
+AUDIO: 'forth, Web Assembly modules can directly manipulate JavaScript string values through a small library of built-in functions. Next, let\'s look at a practical example that you could actually use in the real world. Clientside image resizing before upload,'
+
+[03:01] [scene:talk]
+VISUAL:
+AUDIO: 'is really useful because it trims upload sizes, keeps the UI responsive, and removes work from your back end. So we\'ll write the pixel loop in Rust, compile to web assembly, and wire it to a file input on a canvas. We\'ll start by'
+
+[03:14] [scene:talk]
+VISUAL:
+AUDIO: 'installing the web assembly target and dependencies and creating a new RS library. Then we\'ll implement a tiny nearest neighbor scaler that operates on rgba pixels. The method receives an array of pixels from the browser,'
+
+[03:26] [scene:talk]
+VISUAL:
+AUDIO: 'performs the resize, and returns a new array. The implementation of the algorithm is really straightforward. For each output pixel, we just calculate where it maps back into the source image and copy those rgba values over. We'
+
+[03:38] [scene:talk]
+VISUAL:
+AUDIO: 'prefer to do this in Rust and Web Assembly rather than in JavaScript directly because performance matters. A tight pixel loop like this can easily touch millions of array entries for a single image. In JavaScript, that means'
+
+[03:50] [scene:talk]
+VISUAL:
+AUDIO: 'running through a garbage collected runtime with type coercions and safety checks on every iteration. In Rust compile to web assembly, the loop is compiled down to efficient low-level instructions that run much closer to'
+
+[04:02] [scene:talk]
+VISUAL:
+AUDIO: 'native speed. Once we compile this library with web assembly pack, we can import it like any other ES module. In the browser, we grab an image from a file input, paint it into a canvas, and then extract the pixel data. That pixel'
+
+[04:14] [scene:talk]
+VISUAL:
+AUDIO: 'buffer gets passed directly to our Rust function, which scales it down to the target resolution and hands back a new array of pixels. In practice, this means your users can upload a 5 megabyte photo straight from their phone, and the'
+
+[04:28] [scene:talk]
+VISUAL:
+AUDIO: 'browser quietly trims it down to, say, 1 megaby before it ever hits your server. You save bandwidth, uploads finish faster, and your back end doesn\'t have to waste CPU cycles doing basic image prep-processing. Databases like SQ Lite'
+
+[04:40] [scene:talk]
+VISUAL:
+AUDIO: 'are running entirely inside the browser through web assembly, which means you can ship a full relational database to the client without installing anything. Figma famously used Web Assembly to bring desktop level performance to a'
+
+[04:53] [scene:talk]
+VISUAL:
+AUDIO: 'collaborative design tool in the browser and security companies are experimenting with web assembly sandboxes to safely execute untrusted code. So, while the hello world of web assembly might be resizing an image or parsing JSON'
+
+[05:05] [scene:talk]
+VISUAL:
+AUDIO: 'faster, the real story is that the browser is slowly evolving into a genuine multi- language runtime. So, soon enough, the Java prophecy will finally come true. And trust me, we\'ll actually end up missing good old'
+
+[05:17] [scene:talk]
+VISUAL:
+AUDIO: 'JavaScript. If you like this video, you should check out one of these ones next. Don\'t forget to like, subscribe, hype, and whatever else YouTube demands these days. Until next time, thank you for watching.'

@@ -1,0 +1,235 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Master LTX 2.3 MSR: Perfect Multi-Subject Consistency Guide|5 Professional Ways to Use LTX 2.3 MSR
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=uirABckAK4o
+upload_date: 20260611
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'LTX two point three can now do all-in-one reference generation as well Here we have two characters and one background This is a very simple reference-generation example and you can see the result is really strong This one uses two character sheets'
+
+[00:12] [scene:talk]
+VISUAL:
+AUDIO: 'which is what we call Character Sheet references With this kind of setup the characters feel more three-dimensional and the final presentation is better Here we have a character plus a sports car which is the character-plus-prop mode'
+
+[00:24] [scene:talk]
+VISUAL:
+AUDIO: 'The final result is still very solid This next one is a special use case It uses three storyboard images to control a scene where a beautiful woman turns her head Through this method'
+
+[00:38] [scene:talk]
+VISUAL:
+AUDIO: 'we can control the result more precisely And the final one is an extreme test We use all five reference images at once just to see whether the generation quality will drop The model we’re talking about today is called LTX two point three MSR'
+
+[00:50] [scene:talk]
+VISUAL:
+AUDIO: 'stands for Multiple Subject Reference The name already explains its core purpose It does not only let the model reference one image It lets the model reference multiple images at the same time'
+
+[01:02] [scene:talk]
+VISUAL:
+AUDIO: 'But this reference mode is fundamentally different from the other models we talked about before It does not simply throw several images into the model Instead'
+
+[01:14] [scene:talk]
+VISUAL:
+AUDIO: 'through a node called LiconMSR it packages multiple reference images into a short reference video You can understand it like this: we prepare a piece of visual memory for the model in advance In this memory'
+
+[01:27] [scene:talk]
+VISUAL:
+AUDIO: 'the first few frames may be characters the middle frames may be props and the later frames may be the background Then when the model generates the target video it can occasionally look back at these reference frames This is roughly the innovative mechanism behind it'
+
+[01:40] [scene:talk]
+VISUAL:
+AUDIO: 'Next let’s talk about setting up the environment If you want to use this model inside ComfyUI we need to install a few extensions The first is the LTXVideo-related nodes'
+
+[01:52] [scene:talk]
+VISUAL:
+AUDIO: 'This extension is officially provided by LTX The main reason we install it is to use IC LoRA because the MSR model we’re talking about today is itself an IC LoRA The second extension is very important for this workflow'
+
+[02:06] [scene:talk]
+VISUAL:
+AUDIO: 'It is a dedicated MSR node package called ComfyUI-Licon-MSR The core node it provides is LiconMSR The role of this node is to package multiple reference images and the background image into a reference video in a fixed order The installation is also very simple'
+
+[02:23] [scene:talk]
+VISUAL:
+AUDIO: 'You can go to its GitHub page clone the repository into your custom_nodes folder and then install the corresponding dependencies Next are the model files Here'
+
+[02:36] [scene:talk]
+VISUAL:
+AUDIO: 'the main model is basically the same set of models used by LTX two point three What we additionally need is an MSR LoRA As we mentioned earlier it is an IC LoRA You can download the corresponding LoRA from Hugging Face'
+
+[02:48] [scene:talk]
+VISUAL:
+AUDIO: 'place it into your LoRA directory and that’s it Now let’s look at the workflow The most important part of this workflow is not how many nodes it has but the very clever combination of nodes'
+
+[03:00] [scene:talk]
+VISUAL:
+AUDIO: 'Overall the chain looks like this: first we input multiple reference images Then, through the LiconMSR node we package these reference images into a reference video After that'
+
+[03:14] [scene:talk]
+VISUAL:
+AUDIO: 'this video enters the LTX Add Video IC LoRA Guide node The role of this node is to turn the MSR reference video into conditions suitable for sampling At the same time the original reference images also go into another node called LTXV Add Guide Multi'
+
+[03:26] [scene:talk]
+VISUAL:
+AUDIO: 'We use this node quite often Essentially it gives the latent multi-image guidance So in this workflow reference generation actually has two chains One chain is MSR'
+
+[03:39] [scene:talk]
+VISUAL:
+AUDIO: 'and the other is Multi Guide But if we only explain it this way it is still not accurate enough because the cleverest part of this workflow is here: LTXV Add Guide Multi and LTX Add Video IC LoRA Guide can both generate new positive conditioning negative conditioning'
+
+[03:57] [scene:talk]
+VISUAL:
+AUDIO: 'and latent data for sampling In other words both of them can independently influence sampling However this workflow does not connect them in a simple sequence Instead'
+
+[04:09] [scene:talk]
+VISUAL:
+AUDIO: 'it uses a mixed strategy When we actually enter sampling the latent we use comes from LTXV Add Guide Multi But the positive and negative conditioning used for sampling come from the conditioning output by LTX Add Video IC LoRA Guide This point is very important'
+
+[04:24] [scene:talk]
+VISUAL:
+AUDIO: 'You can think of it this way: LTXV Add Guide Multi gives the image a stronger visual starting point It helps the model understand how these reference images roughly enter the video space Meanwhile'
+
+[04:37] [scene:talk]
+VISUAL:
+AUDIO: 'LTX Add Video IC LoRA Guide turns the MSR reference video into positive and negative conditions that are easier for the model to read There are two frame counts here that we need to focus on One is the frame_count inside LiconMSR'
+
+[04:50] [scene:talk]
+VISUAL:
+AUDIO: 'The other is the total frame count used for sampling These two are not the same thing The LiconMSR frame_count controls how many frames the reference video has In other words after we package several reference images into a video'
+
+[05:02] [scene:talk]
+VISUAL:
+AUDIO: 'this setting determines how long that memory clip is When setting it we also need to make sure it follows the rule of being a multiple of four plus one For the final generated video'
+
+[05:15] [scene:talk]
+VISUAL:
+AUDIO: 'I’m using two hundred forty-one frames which is almost a ten-second video So don’t mix these two values up For this test we divide it into five groups The first group is two characters plus a background We first check whether the characters’ faces get mixed up'
+
+[05:30] [scene:talk]
+VISUAL:
+AUDIO: 'The second group uses Character Sheets or character reference sheets We test whether this kind of three-view reference works better than a single-view reference The third group is character plus prop'
+
+[05:42] [scene:talk]
+VISUAL:
+AUDIO: 'Here we use the classic beautiful woman and luxury car setup to test whether the final result is strong enough The fourth group uses storyboard images This is actually another form of reference generation The final group is an extreme test'
+
+[05:56] [scene:talk]
+VISUAL:
+AUDIO: 'Because the MSR reference node can take four reference images and one background image we use all five images at once and see how well it can maintain everything Let’s first look at a simple setup with two characters and one background'
+
+[06:09] [scene:talk]
+VISUAL:
+AUDIO: 'Some people may ask why we need to add a background Pay attention here: in this node the background is a required reference image You can provide one or two character images but the background must be provided'
+
+[06:23] [scene:talk]
+VISUAL:
+AUDIO: 'It cannot be omitted Our first reference image is a female character wearing a white long dress The second reference image is a male character wearing a dark blue formal suit The background is a path in a moonlit garden'
+
+[06:36] [scene:talk]
+VISUAL:
+AUDIO: 'very romantic This test looks simple but it is actually very important because the most basic ability of multi-subject reference is making sure two characters do not get their faces mixed together In the prompt'
+
+[06:50] [scene:talk]
+VISUAL:
+AUDIO: 'we write very clearly that the woman is on the left the man is on the right and the two slowly walk toward each other hold hands and walk toward the lake in the distance When we look at the result the key point is not simply whether the image looks good'
+
+[07:02] [scene:talk]
+VISUAL:
+AUDIO: 'We need to check three things First do the clothing colors of the woman and man contaminate each other? Second is the position relationship between the two characters relatively stable? Third'
+
+[07:16] [scene:talk]
+VISUAL:
+AUDIO: 'does the key hand-holding action appear? From the result the relationship between the characters is basically represented The hand details are of course not one hundred percent perfect but the hand-holding action is there Overall'
+
+[07:29] [scene:talk]
+VISUAL:
+AUDIO: 'the reference effect is really strong For the second test we simply replace the reference images with Character Sheets This test is very interesting because when many people work on character consistency the ideal situation is to have a character sheet that includes a side view'
+
+[07:42] [scene:talk]
+VISUAL:
+AUDIO: 'or even a three-quarter view So I recommend trying Character Sheets but they should be clean Three-view or five-view sheets can both work but they should not be too complex'
+
+[07:55] [scene:talk]
+VISUAL:
+AUDIO: 'The female character here is a character sheet with a pink long dress The male character is a character sheet with a cream-colored suit We also changed the background into a glass greenhouse filled with flowers In the prompt'
+
+[08:11] [scene:talk]
+VISUAL:
+AUDIO: 'we ask the two characters to run lightly along a flower path and finally stop under a glass arch We need to check whether duplicates appear If you suddenly see three women or three men in the video that means the model did not recognize the Character Sheet as one single character'
+
+[08:24] [scene:talk]
+VISUAL:
+AUDIO: 'Overall the result is still very good If it really treats the character sheet as three separate people don’t panic First simplify the character sheet and see whether the one you provided was too complicated'
+
+[08:36] [scene:talk]
+VISUAL:
+AUDIO: 'The third test is character plus prop We use the beautiful woman and luxury car setup The background becomes a rooftop in a futuristic city We have a beautiful woman in a black couture dress'
+
+[08:50] [scene:talk]
+VISUAL:
+AUDIO: 'and a metallic red supercar The prompt design is also very simple: the beautiful woman walks across the rooftop of a futuristic city toward the red sports car circles around the front of the car'
+
+[09:03] [scene:talk]
+VISUAL:
+AUDIO: 'runs her fingers across the hood and finally stops beside the car while looking at the camera Here you need to pay attention to four points First does the character keep the black couture dress? Second'
+
+[09:18] [scene:talk]
+VISUAL:
+AUDIO: 'is the sports car still metallic red? Third does the interaction between the character and the car actually work? Next is storyboard reference This is a special use case inside reference generation'
+
+[09:31] [scene:talk]
+VISUAL:
+AUDIO: 'Essentially we use three images as three keyframes in the camera transition or three storyboard frames The first image is a rear medium shot The second is the moment when the character turns her head'
+
+[09:45] [scene:talk]
+VISUAL:
+AUDIO: 'The third is a front close-up smile Since these are storyboard images they are frames of the same character and the same shot captured from different stages or angles Now look at the final result'
+
+[09:59] [scene:talk]
+VISUAL:
+AUDIO: 'I think it is pretty good There are some issues, though In the final character image the generated clothing color is slightly different from the first two original images But overall the camera transition logic is there'
+
+[10:11] [scene:talk]
+VISUAL:
+AUDIO: 'The final test is the five-reference-image extreme test These five references are: first a priestess; second, a sacred white tiger; third, a moonlight staff; fourth, a glowing magic book;'
+
+[10:24] [scene:talk]
+VISUAL:
+AUDIO: 'and the background is a magical temple This group is clearly much harder because the model has to maintain not only the character but also the animal, the props the book'
+
+[10:36] [scene:talk]
+VISUAL:
+AUDIO: 'and their relationship with the background When looking at the result we still check a few things First does the overall image feel chaotic? Second does each subject keep its original characteristics? Third'
+
+[10:48] [scene:talk]
+VISUAL:
+AUDIO: 'do the interactions between the subjects follow the prompt? And finally do those interactions look visually pleasing? Generally speaking generating a video with five reference images usually will not work that well which is why we call this an extreme test'
+
+[11:02] [scene:talk]
+VISUAL:
+AUDIO: 'Overall I think the value of MSR is not simply making one image move What is truly interesting is multi-reference generation and this reference capability is very strong You’ll notice that many models are now trying this kind of all-in-one reference ability'
+
+[11:15] [scene:talk]
+VISUAL:
+AUDIO: 'This includes the WAN two point two Bernini technology we talked about in the previous video which also belongs to this category But the advantage of LTX two point three is that its generation speed is very fast'
+
+[11:28] [scene:talk]
+VISUAL:
+AUDIO: 'Right now MSR should be one of the best models in LTX two point three for multi-visual reference generation In this video, through five tests'
+
+[11:40] [scene:talk]
+VISUAL:
+AUDIO: 'I mainly wanted to help you understand what it can do where it can easily fail and how we should design the reference images and prompts as much as possible For example did you notice that the backgrounds in my reference images are all relatively simple? Also'
+
+[11:56] [scene:talk]
+VISUAL:
+AUDIO: 'although we did a five-image extreme test in normal use I still recommend focusing on three images: two reference images and one background Alright, that’s all for today So what are you waiting for? Go try it yourself'
+
+[12:08] [scene:talk]
+VISUAL:
+AUDIO: 'Follow me and become someone who truly understands AI'

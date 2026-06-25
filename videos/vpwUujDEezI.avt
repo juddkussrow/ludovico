@@ -1,0 +1,267 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Fix Plastic Skin in HiDream O1: ComfyUI Workflow
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=vpwUujDEezI
+upload_date: 20260526
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'Hey guys, if your new HighDream 01 images are coming out with fuzzy details and weird plastic skin, in this video I\'ll show you exactly how to fix it in seconds. So, there is a new model named HighDream 01 image, which is great for text to'
+
+[00:13] [scene:talk]
+VISUAL:
+AUDIO: 'image, image to image, image editing, and storyboards. But, whenever a new model releases, it comes with many, many problems. Right now, people are getting fuzzy'
+
+[00:25] [scene:talk]
+VISUAL:
+AUDIO: 'results and plastic-looking skin, and they\'re struggling to get better outputs. So, we have the solution for it, and we\'re going to fix that in this video. So, first, let\'s talk about what\'s new'
+
+[00:38] [scene:talk]
+VISUAL:
+AUDIO: 'in this 8-billion parameter model. Other models use a VAE to compress the image, but HighDream 01 is completely different.'
+
+[00:50] [scene:talk]
+VISUAL:
+AUDIO: 'According to official research, it removes the VAE completely and operates directly on raw image pixels using a single token space. In my first test, the result showed'
+
+[01:03] [scene:talk]
+VISUAL:
+AUDIO: 'plastic skin and colors that popped too much. So, I tried another image, and you can see the skin still looks plastic, and the background is not perfectly black.'
+
+[01:16] [scene:talk]
+VISUAL:
+AUDIO: 'And to fix this, I add one more node, which is model sampling SD3. I place it between these nodes and set the value to three. And why do I use this?'
+
+[01:28] [scene:talk]
+VISUAL:
+AUDIO: 'Because HighDream 01 processes raw pixels instead of compressed latents, it mathematically needs a custom noise removal curve that ComfyUI doesn\'t apply by default.'
+
+[01:41] [scene:talk]
+VISUAL:
+AUDIO: 'I added model sampling SD3 and set the value to three, which fixes the skin problem. Now, everything else stays the same, and I just hit run. So, by adding this one node, you can'
+
+[01:56] [scene:talk]
+VISUAL:
+AUDIO: 'immediately see the difference between these two images. Because the model needs a custom noise removal curve that ComfyUI doesn\'t apply automatically, this node fixes it.'
+
+[02:08] [scene:talk]
+VISUAL:
+AUDIO: 'You can see the result is good, but the skin is still not perfect. So, what else can we do to make it better?'
+
+[02:20] [scene:talk]
+VISUAL:
+AUDIO: 'So, here I tried changing the settings. First, I set my LoRA strength value to 0.5. Then I changed the sampler to Euler SDE and made the scheduler beta.'
+
+[02:33] [scene:talk]
+VISUAL:
+AUDIO: 'But with the strength at 0.5, the quality drops. Something is missing, so I don\'t think this is the right value. Next, I decided to test a LoRA strength'
+
+[02:47] [scene:talk]
+VISUAL:
+AUDIO: 'of 0.2, increased the CFG to two, and increased the steps to 40 just to see what happens. Now, this gives me a better result, but'
+
+[03:00] [scene:talk]
+VISUAL:
+AUDIO: 'the skin is still too smooth. So, let\'s try one more method. We\'ll keep the strength at 0.2, the steps at 40, and the CFG at two. With these exact settings, the standard'
+
+[03:15] [scene:talk]
+VISUAL:
+AUDIO: 'sampler is not the best choice. So, we switch the sampler back to Euler SDE and keep the beta scheduler. Now, you can see the image looks much better.'
+
+[03:28] [scene:talk]
+VISUAL:
+AUDIO: 'Now, here is the most important part. With 40 steps and a CFG of two, we can finally use negative prompts. This was the real problem. We were getting bad results earlier'
+
+[03:41] [scene:talk]
+VISUAL:
+AUDIO: 'because I had removed the negative prompt node. And by using a CFG of two and 40 steps along with a negative prompt, the image brings back a lot of details.'
+
+[03:53] [scene:talk]
+VISUAL:
+AUDIO: 'So, when we use the CFG of one, those details were removed. If you want maximum detail with the full model, this is the best method to use. Now, we get the result and we know the'
+
+[04:13] [scene:talk]
+VISUAL:
+AUDIO: 'settings. Now, you can try this by yourself and see which settings works best for you. But, this model has one more problem, which is prompting.'
+
+[04:25] [scene:talk]
+VISUAL:
+AUDIO: 'Hydream Oven uses the Scalist prompting framework, which means if you use too many commas or text style prompts, the model will get confused. So, our next step is fixing the skin'
+
+[04:38] [scene:talk]
+VISUAL:
+AUDIO: 'completely. And the question arises, how can we do that? And to fix that, we have to write a prompt that is supported by this model. You must write your prompt in the'
+
+[04:53] [scene:talk]
+VISUAL:
+AUDIO: 'Scalist format, which stands for subject, composition, action, location, image style, specs, and text. This is the full form of Scalist. Now, you have to write in this exact'
+
+[05:05] [scene:talk]
+VISUAL:
+AUDIO: 'format using simple English. And the prompt should be between 80 to to 20 words. Now, what I found is that if you use prompts like editorial color grading or'
+
+[05:17] [scene:talk]
+VISUAL:
+AUDIO: 'too many cinematic studio keywords, this model gets confused. And to fix that problem, I use the Gemma 4 model, which helps me write and improve my prompt.'
+
+[05:31] [scene:talk]
+VISUAL:
+AUDIO: 'I copy my worst prompt and paste it here into Gemma 4. Then, I connect this text generation node to my prompt and now I hit run. Now, you can see it writes the prompts'
+
+[05:46] [scene:talk]
+VISUAL:
+AUDIO: 'for us, and it follows all the rules that the model needs. Look closely at the difference between these two images. Now, the skin doesn\'t look plastic'
+
+[05:58] [scene:talk]
+VISUAL:
+AUDIO: 'anymore. This is exactly how we fix the skin problem. Now, there is one more question. Can we improve the image even more? So, I have one more trick to add.'
+
+[06:12] [scene:talk]
+VISUAL:
+AUDIO: 'I added another model called Z Image Turbo. You know, Z Image Turbo is one of the best models for making images. We can generate the mean output with the new High Dream model, and then send it'
+
+[06:25] [scene:talk]
+VISUAL:
+AUDIO: 'to Z Image Turbo to refine it more. Now, here you can set the denoise value between 0.3 and 0.4. I also use a ZIT FDPO Lora, which helps'
+
+[06:37] [scene:talk]
+VISUAL:
+AUDIO: 'improve my image even more. Now, I hit run. And as you can see, I added Z Image Turbo here, and you can see the details. It adds more details to the image, and'
+
+[06:53] [scene:talk]
+VISUAL:
+AUDIO: 'it looks fantastic. This is how you can get the best result with the High Dream 01 image model. What if you want to copy a specific visual style?'
+
+[07:06] [scene:talk]
+VISUAL:
+AUDIO: 'Here, I have a reference image, and I want a similar type of image with High Dream. So, I connect this image to my text generation node. I use the Gemini 4 model here to write a description.'
+
+[07:19] [scene:talk]
+VISUAL:
+AUDIO: 'I will I will also give you a prompt. If you are going to use a reference image, use the first prompt. And if you are going to use a text only, use a second prompt. I add my prompt here, apply our best'
+
+[07:32] [scene:talk]
+VISUAL:
+AUDIO: 'settings, and then I hit run. Now, we have got our result. You can see how well it copies the style. I get almost the exact same result as'
+
+[07:45] [scene:talk]
+VISUAL:
+AUDIO: 'the image I uploaded. And the final output is insane. So, this is the best way to use this model. And finally, this model is also best for'
+
+[07:57] [scene:talk]
+VISUAL:
+AUDIO: 'creating a storyboard. You can see it keeps the character consistency and the character stays consistent during the storyboard frames. That\'s all about text to image. Now, we'
+
+[08:10] [scene:talk]
+VISUAL:
+AUDIO: 'are going to do image editing. First, I remove all of this. For image editing, we need a custom node called Hi Dream Oven Reference Images.'
+
+[08:22] [scene:talk]
+VISUAL:
+AUDIO: 'I connect my positive and negative prompts into this node. You can connect it simply by doing this. I add a load image node and then another node called Image Scale to Total Pixels.'
+
+[08:35] [scene:talk]
+VISUAL:
+AUDIO: 'So, whenever you upload an image, its resolution must be divisible by 32. If the resolution is wrong, you will get a bad result surely.'
+
+[08:47] [scene:talk]
+VISUAL:
+AUDIO: 'So, I added this math node to correct my resolution and ensure it\'s divided by 32. So, there is also a megapixel value here. If you get an out of memory error,'
+
+[08:59] [scene:talk]
+VISUAL:
+AUDIO: 'you can lower this value. Right now, I\'m going with four. So, here is our image. Now, our image editing workflow is ready. For this mode, you don\'t have to write a'
+
+[09:13] [scene:talk]
+VISUAL:
+AUDIO: 'long prompt. You can keep it simple. So, I made a small change here by adding a Resize Image V2 node. When I send the image to the Hi Dream Oven Reference Images node, it'
+
+[09:26] [scene:talk]
+VISUAL:
+AUDIO: 'needs to have the correct resolution. That\'s why I added Resize Image V2. Now, I set my lower strength value to one, steps to 28,'
+
+[09:39] [scene:talk]
+VISUAL:
+AUDIO: 'CFG to one, the sampler to Euler, and the scheduler to simple. We don\'t have to use our previous text to image settings here.'
+
+[09:52] [scene:talk]
+VISUAL:
+AUDIO: 'So, first I set everything to default, and if we need to change anything, we can do that later. First, let\'s check the result. In image editing, you do not need to'
+
+[10:05] [scene:talk]
+VISUAL:
+AUDIO: 'write a long prompt. For example, if I want to change the dress of this woman, so I simply write, "Change the pink dress to a flowing emerald green silk evening gown." Now, let\'s wait for the result.'
+
+[10:18] [scene:talk]
+VISUAL:
+AUDIO: 'Okay, I think I forgot to connect the image. Now, we get the proper resolution image, and as you can see, it successfully changed the dress just like I commanded.'
+
+[10:31] [scene:talk]
+VISUAL:
+AUDIO: 'Now, I give it a slightly harder task. I add, "Add stylish red high heels to her feet and a delicate gold necklace." You can see it added high heels and a'
+
+[10:46] [scene:talk]
+VISUAL:
+AUDIO: 'gold necklace, but the necklace did not create correctly. So, I load another image to test further. I load an image of a woman and simply type, "Change the hair color to red."'
+
+[10:59] [scene:talk]
+VISUAL:
+AUDIO: 'Now, you can see it perfectly changes the hair color. This shows that in image editing, you don\'t need a long prompt. You can just write in simple English. Just change'
+
+[11:13] [scene:talk]
+VISUAL:
+AUDIO: 'this to that, and that\'s it. You are done. Next, I copy and paste one more image node to connect a second image. In image one, I load a picture of a'
+
+[11:26] [scene:talk]
+VISUAL:
+AUDIO: 'woman, and in image two, I load a picture of a t-shirt. I simply write here, change her dress with a t-shirt. I do not confuse the AI with a long prompt.'
+
+[11:39] [scene:talk]
+VISUAL:
+AUDIO: 'So, here is an interesting part. If the size of your second image is different from your first image, you will surely get a bad result. That is why I make sure both images are the exact same size.'
+
+[11:52] [scene:talk]
+VISUAL:
+AUDIO: 'Now, look at the result. It successfully replaces the women\'s dress with a t-shirt, but it also changes our background. Which I did not ask for that in the prompt.'
+
+[12:06] [scene:talk]
+VISUAL:
+AUDIO: 'So, I try one more prompt. So, here I type, "Edit image one only." Preserve the exact same women from image one, same face, same shape, same facial features, framing, background, and'
+
+[12:19] [scene:talk]
+VISUAL:
+AUDIO: 'lighting. Only change the dress with a t-shirt. And even with this prompt, the background still changes. So, to fix this problem, I disabled the'
+
+[12:31] [scene:talk]
+VISUAL:
+AUDIO: 'LoRA and changed the settings to 50 steps with a CFG of three. Now, you can see it successfully changes the dress without ruining the background. If you don\'t get a good result at first,'
+
+[12:44] [scene:talk]
+VISUAL:
+AUDIO: 'just disable the LoRA and try 50 steps with a CFG of three. Using this method, you can edit up to 10 images. Now, finally, I tested a prompt to add a'
+
+[12:56] [scene:talk]
+VISUAL:
+AUDIO: 'group of four people standing side by side in a brightly lit modern city. As you can see, it added the four people.'
+
+[13:08] [scene:talk]
+VISUAL:
+AUDIO: 'Their clothes are correct, but their faces changed. Because uploading full-body images confused the model in previous test, so I changed the setup and upload only their faces.'
+
+[13:21] [scene:talk]
+VISUAL:
+AUDIO: 'Now, you can see it generated the image and correctly followed the faces from images I uploaded. Here the skin still looks a little plastic, but you can easily fix that using this exact same method we used'
+
+[13:35] [scene:talk]
+VISUAL:
+AUDIO: 'earlier in this video. You just fix the prompt, lower the strength, and adjust the node values. That\'s it for today\'s video. If you like this tutorial, please subscribe to our'
+
+[13:47] [scene:talk]
+VISUAL:
+AUDIO: 'channel for more content like this. Thank you. Bye-bye.'

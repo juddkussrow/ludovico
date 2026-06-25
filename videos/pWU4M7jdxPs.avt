@@ -1,0 +1,211 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Build an App to Track Instagram Follower Counts
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=pWU4M7jdxPs
+upload_date: 20260618
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'About one out of every five people in the world logs onto Instagram at least once a day. And on an average day, half a billion accounts post a story. It\'s also a massive e-commerce platform. Users spend about a hundred million dollars per day through interacting with'
+
+[00:12] [scene:talk]
+VISUAL:
+AUDIO: 'shopping posts or business accounts. With such high levels of engagement, and some may say addiction, Instagram is a treasure trove of user and marketing data. But this data is also notoriously'
+
+[00:24] [scene:talk]
+VISUAL:
+AUDIO: 'difficult to fetch at scale. The user interface is constantly changing, and the algorithm feels like it\'s updated every other week. So today, I want to show you our new Instagram profile API that we\'ve launched here at SerpApi,'
+
+[00:36] [scene:talk]
+VISUAL:
+AUDIO: 'which is going to let you grab all the profile and post data belonging to an account with a simple API call. With our API, you\'ll be able to scrape hundreds or thousands of Instagram profiles in just a few minutes, saving you tons of manual labor. Instead of spending hours'
+
+[00:49] [scene:talk]
+VISUAL:
+AUDIO: 'scrolling through Instagram profiles to find the highest performing reels, you can use our Instagram profile API to get all the post details and then filter for the highest or lowest performing reels. In fact, let\'s jump into the online'
+
+[01:02] [scene:talk]
+VISUAL:
+AUDIO: 'playground so I can show you what the data you get back from the API looks like. But before we get started, make sure that you\'ve created a free account on serpapi.com so that you can get access to 250 free search credits. Next, head to our online playground. You can'
+
+[01:14] [scene:talk]
+VISUAL:
+AUDIO: 'find it by going through the documentation or clicking the link in the description below. Just make sure that when you\'re in the playground, the engine is set to Instagram profile. And today, we\'re going to fetch the profile details of the famous footballer Lionel'
+
+[01:27] [scene:talk]
+VISUAL:
+AUDIO: 'Messi. A quick Google gives me his Instagram handle, and all I need to do is pass that into the profile ID and click search. Within about a second, you should be able to see the JSON data over here on'
+
+[01:39] [scene:talk]
+VISUAL:
+AUDIO: 'the right-hand side that contains his profile details, as well as an array called posts that contains all the posts details on his public profile. This JSON data contains all the information that'
+
+[01:52] [scene:talk]
+VISUAL:
+AUDIO: 'you would be able to see on Instagram\'s own user interface, such as the number of posts they have, the followers, their following count, and much more. And on top of that, you even get back data'
+
+[02:04] [scene:talk]
+VISUAL:
+AUDIO: 'that\'s hard to find on their user interface, such as whether or not it\'s a relatively new account, um what business category they\'re in, and whether or not it\'s a news organization that\'s restricted in Canada. [music] To show you how easy it'
+
+[02:16] [scene:talk]
+VISUAL:
+AUDIO: 'is to integrate this API call into an existing code base, today I\'m going to build a simple Express JS backend to fetch the preview for a public Instagram profile. I\'ll also grab the last 50 Instagram posts and get the post with'
+
+[02:28] [scene:talk]
+VISUAL:
+AUDIO: 'the most and fewest [music] likes. So, we\'re now in VS Code and I\'ve set up a skeleton app with a basic Express JS server as well as a React frontend. For this tutorial, we\'ll be mostly focused'
+
+[02:40] [scene:talk]
+VISUAL:
+AUDIO: 'on the backend so that I can show you how to make a call using Scrap API. And before we get started, make sure that you\'ve copied your API key from the dashboard into your .env file. I\'ve also created and styled a basic React'
+
+[02:53] [scene:talk]
+VISUAL:
+AUDIO: 'frontend, which is going to display the data from our Express server. I\'m not going to go into too much detail on the design or the CSS because that\'s not really the focus of this video, but I will leave a link to the code in the description below. And this is optional,'
+
+[03:05] [scene:talk]
+VISUAL:
+AUDIO: 'but I\'ve also installed and imported the JavaScript SDK from Scrap API. And get JSON is essentially a wrapper function around the fetch API. Of course, you can'
+
+[03:17] [scene:talk]
+VISUAL:
+AUDIO: 'just make a fetch call directly, but this makes it a little bit easier to make the API [music] call. Now, I\'m going to start the server just to make sure that\'s running as expected. Perfect. So, it\'s listening on port 3000. And again, this is just a basic Express server. And now, let\'s implement'
+
+[03:31] [scene:talk]
+VISUAL:
+AUDIO: 'the endpoint that is going to call Scrap API\'s Instagram profile API. And let\'s name this route API Instagram with the route parameter profile ID. That way, we can access the Instagram'
+
+[03:44] [scene:talk]
+VISUAL:
+AUDIO: 'handle that the user passes in. And of course, we need to destructure profile ID from our request.params object. And this is just basic Express syntax, nothing new here.'
+
+[03:58] [scene:talk]
+VISUAL:
+AUDIO: 'Now, to make the API call to SerpHouse API, all we need to do is call get_json and we\'ll pass in an object with three parameters. [music] The first parameter is going to be engine and that is going'
+
+[04:10] [scene:talk]
+VISUAL:
+AUDIO: 'to be Instagram profile since we\'re asking for Instagram data. Next is the API key of course and that is going to be our SerpHouse API key.'
+
+[04:22] [scene:talk]
+VISUAL:
+AUDIO: 'And lastly, the profile that we want to get the data for. And finally, we need to send this back to the front end. And I almost forgot since this is an'
+
+[04:36] [scene:talk]
+VISUAL:
+AUDIO: 'asynchronous API call, we need to use await here and async. All right, now let\'s test it out. On the front end side, I\'ve already wrote some very basic React code that\'s going to'
+
+[04:48] [scene:talk]
+VISUAL:
+AUDIO: 'call our Express endpoint and it\'s going to console.log in the browser what we get back. And we\'ll use Lionel Messi again. So, it looks like we got data back from'
+
+[05:00] [scene:talk]
+VISUAL:
+AUDIO: 'SerpHouse API and it does match the schema that is described in the documentation. Inside the JSON object, you\'re going to see search metadata which basically contains information about this particular request. Search parameters which you\'ll recognize are'
+
+[05:13] [scene:talk]
+VISUAL:
+AUDIO: 'the parameters that we passed into this API call. And then also SerpHouse API pagination which we\'re going to use later on and that contains the next page token which is what we\'re going to use to grab the next set of results.'
+
+[05:25] [scene:talk]
+VISUAL:
+AUDIO: 'Now, the property that we\'re probably most interested in is profile results and this contains all the data linked to that account such as their biography, follower account, etc. It also contains'
+
+[05:37] [scene:talk]
+VISUAL:
+AUDIO: 'the array of their latest posts. [music] Essentially, it contains all the data that I showed you earlier in the online playground. Inside this JSON data, we also get back an HTML file, which is a snapshot of their Instagram profile. And'
+
+[05:51] [scene:talk]
+VISUAL:
+AUDIO: 'using this, we can actually display a preview of their account. And as I mentioned earlier, I already wrote some basic front-end code to display this data. So, all I need to do now is pass the data into the state, and this should'
+
+[06:05] [scene:talk]
+VISUAL:
+AUDIO: 'work out of the box. Awesome. So, now we can see a preview of their Instagram profile.'
+
+[06:17] [scene:talk]
+VISUAL:
+AUDIO: 'The next thing I want to do is get the posts with the most and fewest number of likes out of the last 50 posts. What we\'re going to do is create a separate endpoint to fetch these posts because by default, the Instagram profile API only'
+
+[06:30] [scene:talk]
+VISUAL:
+AUDIO: 'returns 12 posts at a time. So, we\'re going to make five consecutive API calls to SerpHospital and add up all the posts into [music] an array. And again, to be clear, the reason why we need to make'
+
+[06:42] [scene:talk]
+VISUAL:
+AUDIO: 'five API calls is because we need to fetch at least 50 posts, and each API call returns 12 posts at a time. And as I mentioned earlier, we\'ll be using the next page token returned to us by each API call to get the next set of 12'
+
+[06:55] [scene:talk]
+VISUAL:
+AUDIO: 'posts. [music] Let\'s name this route API Instagram posts profile &gt;&gt; [music] &gt;&gt; ID since we\'re exclusively returning posts from this endpoint. Let\'s copy'
+
+[07:08] [scene:talk]
+VISUAL:
+AUDIO: 'over the code from the previous route to here [music] because we\'ll be reusing a lot of it. We\'ll initialize an empty array to store the posts. And let\'s write a for loop to make the five API calls.'
+
+[07:21] [scene:talk]
+VISUAL:
+AUDIO: 'And inside this for loop, we\'ll be calling get JSON. Let\'s actually extract this out. And now, all we need to do is grab the'
+
+[07:38] [scene:talk]
+VISUAL:
+AUDIO: 'posts [music] from the JSON data and push it into the posts array. And looking back at the JSON data, it looks like the posts are under the property profile results, so we\'ll just'
+
+[07:52] [scene:talk]
+VISUAL:
+AUDIO: 'use that. And of course, we need to de-structure the array. And before I forget, I\'m going also going to wrap this in a try-catch so that we can handle exceptions or network request errors'
+
+[08:05] [scene:talk]
+VISUAL:
+AUDIO: 'more gracefully. &gt;&gt; [music] &gt;&gt; And we also need to declare new variable next page token. And this is going to store the page token from each API call that we\'re going to pass into the next API call to get the next set of results,'
+
+[08:18] [scene:talk]
+VISUAL:
+AUDIO: 'right? And oops, I just realized this should'
+
+[08:30] [scene:talk]
+VISUAL:
+AUDIO: 'actually be inside the for loop. There we [music] go. And of course, we need to update the next page token after each API call. And just as a recap, here we\'re passing'
+
+[08:47] [scene:talk]
+VISUAL:
+AUDIO: 'in the next page token as one of the parameters that we pass into our Serp API call. And at the end of each API call, we\'ll reset the next page token variable to the new next page token to get the next set of 12 posts. And if a next page token doesn\'t exist, which'
+
+[09:01] [scene:talk]
+VISUAL:
+AUDIO: 'means we\'ve reached the end of the posts and there\'s no more next page, um we\'ll break out of the loop. I\'m also going to add some optional chaining so that it doesn\'t throw errors if posts [music] doesn\'t exist on'
+
+[09:13] [scene:talk]
+VISUAL:
+AUDIO: 'profile results. And here on the front end, I\'ve just added some very basic sorting code so that we can get the highest and lowest like post out of the top 50. All right,'
+
+[09:26] [scene:talk]
+VISUAL:
+AUDIO: 'now let\'s test this out. So, not surprisingly, the post where he'
+
+[09:38] [scene:talk]
+VISUAL:
+AUDIO: 'talks about going back to the stadium where he spent most of his career playing got the most engagement at over 36 million likes. And the lowest likes came from a post where he\'s promoting his product.'
+
+[09:51] [scene:talk]
+VISUAL:
+AUDIO: '&gt;&gt; With this API, you could build an app that tracks the posting frequency over time, the follower count and engagement of an influencer, a thumbnail picture downloader, and much more. The possibilities are endless. This API unlocks a ton of new capabilities for'
+
+[10:03] [scene:talk]
+VISUAL:
+AUDIO: 'your AI agent or SAS application by giving you access to real-time data. With an average response time of 1.15 seconds and a 99.9% success [music] rate, SerpApi\'s simple-to-use APIs lead the web scraping market with unmatched'
+
+[10:17] [scene:talk]
+VISUAL:
+AUDIO: 'reliability and performance. SerpApi makes pulling data from the web insanely easy, and you no longer have to waste time dealing with Google\'s changing layouts, getting IP blocked, or solving CAPTCHAs. If you have any questions at all, leave me a comment below or contact'
+
+[10:30] [scene:talk]
+VISUAL:
+AUDIO: 'us at much for watching, and make sure to leave a like and subscribe if you found this video helpful. See you in the next one.'

@@ -1,0 +1,143 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: This One File Fixed My Dev Environment (Devbox)
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=U7YDcqP0dlI
+upload_date: 20260528
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'Your readme is lying to you. It says setup takes 5 minutes, then Node is wrong, Python is wrong, Postgres is missing, Docker is taking forever. And now we\'re debugging before we even get started. Your dev environment should not'
+
+[00:13] [scene:talk]
+VISUAL:
+AUDIO: 'live in a readme, it should live in Git. That\'s what Devbox does. One devbox.json file, one command, devbox shell, same environment for every dev. With no'
+
+[00:25] [scene:talk]
+VISUAL:
+AUDIO: 'global installs and no Nix knowledge required. Let me show you. &gt;&gt; [music] &gt;&gt; At first, Devbox looks almost too simple. You make a devbox.json, you list'
+
+[00:38] [scene:talk]
+VISUAL:
+AUDIO: 'the tools your project needs. Node, Go, Python, Postgres, whatever your stack actually needs. You commit that file, then anyone else can just run devbox shell, and they get the same environment'
+
+[00:51] [scene:talk]
+VISUAL:
+AUDIO: 'you do. Same versions, tools, scripts, no global installs, no please install these eight things first, no Homebrew state from years ago. Your setup stops living in someone\'s memory, it starts'
+
+[01:04] [scene:talk]
+VISUAL:
+AUDIO: 'living in your repo. Now, that sounds small, but if you\'ve ever lost half a day to a broken local setup, you already know that this is not small. If you enjoy coding tools that speed up your workflow, be sure to subscribe. We have'
+
+[01:17] [scene:talk]
+VISUAL:
+AUDIO: 'videos coming out all the time. Now, we\'re starting off here, so I\'m going to start with an empty project. I\'m going to make a new folder, we\'ll call it devbox demo. We CD into the folder, and all we need to do once we have Devbox is'
+
+[01:29] [scene:talk]
+VISUAL:
+AUDIO: 'run devbox init. Devbox creates a file called devbox.json. Right now, it\'s basically empty. It\'s just the boilerplate that Devbox gives us. Now, let\'s add the tools this project'
+
+[01:41] [scene:talk]
+VISUAL:
+AUDIO: 'actually needs. To add tools, we can say devbox add, and I\'m going to install things like Go, Node.js, and some Python. Now, here\'s the important part. I\'m not installing these globally. I\'m'
+
+[01:53] [scene:talk]
+VISUAL:
+AUDIO: 'not changing my system node. I\'m not touching my system with Python. These tools belong to this project. Now, when I run devbox shell, and I\'m inside a clean project environment. Now that'
+
+[02:08] [scene:talk]
+VISUAL:
+AUDIO: 'you\'re in this environment, you can just check the versions, right? Go version, node version, Python version, right? I can check everything to make sure it\'s right. Now, that\'s the big payoff. The project asked for specific tools. Devbox gave me those tools. Now, let\'s add a'
+
+[02:23] [scene:talk]
+VISUAL:
+AUDIO: 'script. And inside devbox.json, we can actually define a test. And And I\'m just going to echo back these running tests, and I\'ll get the node and the go version. When you run devbox run test,'
+
+[02:35] [scene:talk]
+VISUAL:
+AUDIO: 'and now that same command works for anyone using this repo. Same script, same tools, same environment. Now, watch what happens when I leave. You can just run exit, you are going to leave that'
+
+[02:47] [scene:talk]
+VISUAL:
+AUDIO: 'environment, and I\'m back to my normal machine environment. So, that was a dead simple, right? Like, what is devbox actually doing? Well, devbox uses Nix under it all. Nix is great because it\'s built for reproducibility. Instead of'
+
+[03:00] [scene:talk]
+VISUAL:
+AUDIO: 'saying install whatever happens to be the latest today, it can pin the exact tools your project actually needs. Now, that is the good part. The hard part is that Nix can feel like a whole new'
+
+[03:12] [scene:talk]
+VISUAL:
+AUDIO: 'world. There are a lot of concepts that are great, but not exactly friendly when all you wanted was the right node version. Devbox takes shows us something different here. It says, "What if we kept the reproducibility, but made the'
+
+[03:25] [scene:talk]
+VISUAL:
+AUDIO: 'workflow feel normal?" So, instead of writing Nix expressions, you can use commands like devbox add, devbox search, shell, run, services. All of these commands are much more simpler. And your'
+
+[03:38] [scene:talk]
+VISUAL:
+AUDIO: 'project gets two important files. You get a JSON file and a lock file. Think of the devbox.json as what our environment needs. Think of the devbox.lock file as the pin to pin'
+
+[03:50] [scene:talk]
+VISUAL:
+AUDIO: 'exactly what you got. You commit both, now your environment is not just a paragraph in a readme file, it\'s part of the actual project. Devbox works on macOS, Linux, and WSL. It can integrate'
+
+[04:02] [scene:talk]
+VISUAL:
+AUDIO: 'with VS Code, it can define scripts, it can manage services like databases. And when you need to, it can export to things like Docker, dev containers, and CI workflows. The value of this isn\'t'
+
+[04:14] [scene:talk]
+VISUAL:
+AUDIO: 'just cool tool, right? It\'s a dead simple tool. The value is, I think, just time. The first problem is the readme, right? The readme could say really anything. It could say, "Hey, install'
+
+[04:26] [scene:talk]
+VISUAL:
+AUDIO: 'Node 18." But the app has changed, it really needs Node 20. The second problem this actually helps with is onboarding. It\'s your first day on the job, it should be easy to get going. We know that\'s not the case, right? So, you shouldn\'t need to ask, "Which Node'
+
+[04:39] [scene:talk]
+VISUAL:
+AUDIO: 'version do I need?" You shouldn\'t need to ping someone, "Hey, which Python version are we on? Do I really need Postgres locally? And why does this only work for little Timmy over there?" They should just have to clone the repo, enter the shell, and run the project. If'
+
+[04:52] [scene:talk]
+VISUAL:
+AUDIO: 'something breaks, at least everyone is starting from the same environment. The problem is global pollution. Trying tools should not wreck your laptop. You want Go 1.22 for this repo? You add it. You want Node 20 here, but something'
+
+[05:06] [scene:talk]
+VISUAL:
+AUDIO: 'else elsewhere? Fine. Okay, that\'s fine. The tools live with the project, your system stays cleaner. With Devbox, your environment definition can be shared between local development and automation. Does that fix every CI'
+
+[05:19] [scene:talk]
+VISUAL:
+AUDIO: 'problem? No, it\'s not going to, but it removes a huge class of dumb problems. And dumb problems are the ones that hurt us the most. They\'re simple, we still have them all the time. Finally here is'
+
+[05:31] [scene:talk]
+VISUAL:
+AUDIO: 'Docker, heavy local Docker workflow more specifically. Docker is still great by far. If you need containers, use containers. But a lot of teams use Docker locally because they don\'t have a'
+
+[05:43] [scene:talk]
+VISUAL:
+AUDIO: 'better way to manage tools. Now, what\'s good here is the workflow is dead simple. Devbox add shell run. You don\'t have to learn that much. The environment becomes a real part of your project, a real file in the repo. When everyone'
+
+[05:56] [scene:talk]
+VISUAL:
+AUDIO: 'uses the same versions and scripts, debugging gets easier. But, that\'s great, super simple. What\'s going to annoy you is, well, the first Nix store download, it took a while to download. It\'s fine. It\'s the first time, okay?'
+
+[06:09] [scene:talk]
+VISUAL:
+AUDIO: 'JSON is simple, but it can get ugly, as we know, if we add too much into it. For basic scripts, it\'s fine. For complex setup logic, don\'t cram a giant shell command in a JSON, just put the logic in a SH file, then call that from Devbox.'
+
+[06:23] [scene:talk]
+VISUAL:
+AUDIO: 'And finally, Devbox is not a full cloud IDE. If you need browser-based coding, instant preview URLs, you may still want something like CodeSpaces. Devbox is best at local and CI reproducibility.'
+
+[06:36] [scene:talk]
+VISUAL:
+AUDIO: 'Devbox is not going to solve every development problem, but it can solve the ones that annoy us the most, which is really just getting the project to run. So, could be worth a shot, especially if your project has more than'
+
+[06:48] [scene:talk]
+VISUAL:
+AUDIO: 'one language or more than one CLI tool. If you enjoy coding tools like this, be sure to subscribe to the Better Stack channel. We\'ll see you in another video.'

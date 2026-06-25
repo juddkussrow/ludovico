@@ -1,0 +1,379 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Claude Code Just Made Fine-Tuning AI Images Stupid Easy!
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=wZYD-zTKe7Y
+upload_date: 20260619
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'AI image models are incredible at giving you something new every time you prompt them, but that\'s also their biggest weakness. You see, the moment you need to make the same thing twice, the same character, the same product, your own face, it starts to get distorted and lose the details. But the good news is'
+
+[00:14] [scene:talk]
+VISUAL:
+AUDIO: 'that you don\'t have to sit around waiting for some company to fix it, because you can train your own AI image model that locks onto exactly what you want and recreates it perfectly every single time. Now, you might be wondering, why can\'t I just use Nanao'
+
+[00:26] [scene:talk]
+VISUAL:
+AUDIO: 'Banana Pro and give it a reference image instead? Well, a reference image only knows that one photo. A new angle, a new pose, different lighting, and it starts guessing, which is exactly where those details fall apart. And that\'s where in'
+
+[00:38] [scene:talk]
+VISUAL:
+AUDIO: 'this video, we are going to create our own custom Laura, which means Laura and character adaptation. And I know you might be thinking, this sounds super complicated. I might need years of experience to actually do this, but no, you really don\'t, because I\'ll walk you through the entire process. And we\'re'
+
+[00:51] [scene:talk]
+VISUAL:
+AUDIO: 'even going to get Claude code to hold our hand throughout it. Also, you don\'t need a $5,000 graphics card for this, because we\'re going to use a cloud computer for just $2. Now, once we have our Laura, we are going to generate our'
+
+[01:03] [scene:talk]
+VISUAL:
+AUDIO: 'own images inside of ComfyUI. And ComfyUI is basically the most powerful generative AI tool. It\'s based on nodes, which you can think of like blocks, and you can connect many different blocks to create an entire workflow. And these'
+
+[01:15] [scene:talk]
+VISUAL:
+AUDIO: 'nodes can do a lot, like load the AI models, encode text prompts, set image dimensions, run the diffusion sampling process, a bunch more stuff that we don\'t really need to understand, because we won\'t even touch any of it. Because as I said, this is going to be our'
+
+[01:28] [scene:talk]
+VISUAL:
+AUDIO: 'workflow. We\'re just going to talk in plain English. If you can speak English, you can do this. To Claude code and get it to set up all these complicated workflows and nodes for us. And there\'s also many more less known benefits of using ComfyUI as opposed to a regular'
+
+[01:42] [scene:talk]
+VISUAL:
+AUDIO: 'image model, such as your generations can be entirely free, because ComfyUI is open source, meaning you can run it on your own hardware. You can also have far more customizability. These are just three very simple examples, but it goes'
+
+[01:54] [scene:talk]
+VISUAL:
+AUDIO: 'to show how many little tweaks and details that you can actually change since you have full control over this process. And since I\'ll be showing you how to actually create a Laura to fine-tune these AI image models, you can build characters that stay identical'
+
+[02:06] [scene:talk]
+VISUAL:
+AUDIO: 'across the entire workflow. And since you can run it locally, meaning on your own computer, your data and your face never need to touch someone else\'s servers, and also it works offline. And even if you have a really terrible PC,'
+
+[02:18] [scene:talk]
+VISUAL:
+AUDIO: 'all of the skills that you learn can still be applied because you can just use Comfy Cloud, which is the cloud version of Comfy UI. So, in this video, I\'m about to show you how to create your own custom Laura for less than $2. We\'re going to wire up Comfy UI without'
+
+[02:31] [scene:talk]
+VISUAL:
+AUDIO: 'touching a single node. I\'ll explain everything you need to know about this process in super simple terms, even if you\'re a complete beginner. And if you follow along and actually watch until the end, you\'re going to be able to set everything up yourself and recreate your subject perfectly every single time. So,'
+
+[02:44] [scene:talk]
+VISUAL:
+AUDIO: 'let\'s get into it. So, the first step we\'re going to do is just download Comfy UI. I\'m going to leave a link for it in the description, but it\'s super simple. Open the link in the description and then click on download desktop. This video is not sponsored, by the way. The'
+
+[02:56] [scene:talk]
+VISUAL:
+AUDIO: 'second step is to install Cloud Code. Cloud Code is basically a powerful AI agent that you can give access to your PC so that it can perform tasks, and not just generate responses or chat with you. It can actually take actions on'
+
+[03:08] [scene:talk]
+VISUAL:
+AUDIO: 'your computer, which is why we\'re going to connect it to Comfy UI. So, to install Cloud Code, I\'m going to leave another link in the description, and you can just scroll down here to install Cloud Code, and just download it for whatever operating system you have. So, I have Mac, so I can copy this. I\'m'
+
+[03:21] [scene:talk]
+VISUAL:
+AUDIO: 'going to press command space and type in terminal. Once I have my terminal opened up, I\'m just going to paste the command that I just copied from the Cloud Code docs and hit enter. And this is going to bring you through a bunch of different steps, super simple, super easy to'
+
+[03:34] [scene:talk]
+VISUAL:
+AUDIO: 'follow along to actually install Cloud Code. You can give it all the permissions, and if you have a Cloud subscription, you can also use that to power Cloud Code, so you don\'t need to spend money on extra credits or tokens if you\'re already paying for the $20 a'
+
+[03:46] [scene:talk]
+VISUAL:
+AUDIO: 'month subscription. So, by this point, you should have Comfy UI downloaded and Cloud Code installed. So, what we\'re going to do now is just open up ComfyUI, which might take a few minutes since again this is running locally on my machine. Now, while Cloud is starting,'
+
+[03:58] [scene:talk]
+VISUAL:
+AUDIO: 'I\'m going to open up Cloud Code. So, if you close it for whatever reason, you can reopen it, and I recommend reopening it by typing cloud {dash} {dash} dangerously {dash} skip {dash} permissions because this is basically going to give it full access, and you\'re'
+
+[04:10] [scene:talk]
+VISUAL:
+AUDIO: 'not going to need to approve every single command that comes up. For the model, I recommend always going with the most powerful model. So, whenever you\'re watching this video, Fable 5 might be re-released, so maybe use that. For now, I have {slash} model click, and you can'
+
+[04:22] [scene:talk]
+VISUAL:
+AUDIO: 'change the model. So, I have Opus 4.8 selected with 1 million context, so we can select that. And then {slash} effort, we can change it to whatever we want, basically how much thinking Cloud Code is going to have to do. So, I\'m just going to leave it at high. And as'
+
+[04:34] [scene:talk]
+VISUAL:
+AUDIO: 'you can see this red text, bypass permissions is on. So, ultimately this is the most risky approach because it\'s going to be able to do whatever it wants on your PC. This is where I recommend using the most powerful models so that it makes the least mistakes. Now, I had'
+
+[04:46] [scene:talk]
+VISUAL:
+AUDIO: 'a ComfyUI update, so this me a bit longer than usual, but I just want to say before we do open up ComfyUI, if you want all of the prompts that I\'m using, then I\'m going to leave all of the resources completely for free in the Editing Evolution. It\'s going to be the'
+
+[04:58] [scene:talk]
+VISUAL:
+AUDIO: 'first link below the video where you can just copy all these prompts that I\'m using throughout this video and paste them into your workflows. Okay, now we have ComfyUI opened up on the desktop app. The only things I want to show you is up the top left, you can click on plus to create and delete workflows. You'
+
+[05:10] [scene:talk]
+VISUAL:
+AUDIO: 'can right click anywhere if you want to add any nodes, which is the thing we talked about earlier, but again, you don\'t even need to do this. But okay, now it\'s time to connect Cloud Code to ComfyUI. So, we have this prompt ready right here, which has a link to this'
+
+[05:22] [scene:talk]
+VISUAL:
+AUDIO: 'GitHub, which basically allows you to create your ComfyUI instance as a server so that it\'s easier to connect Cloud Code to it. You don\'t need to understand any of this, by the way. That\'s why I\'m just linking it to Cloud Code. So, now we\'re going to open up the terminal'
+
+[05:34] [scene:talk]
+VISUAL:
+AUDIO: 'again, paste in the prompt we just sent, and we\'re just going to send that off. Now, once that\'s sending, let me explain a bit more of the prompt. So, firstly, this is called a GitHub repository. So, we\'re saying to analyze this repository, copy it, and install the skill. And'
+
+[05:46] [scene:talk]
+VISUAL:
+AUDIO: 'then, I\'m not even telling my Mac where the ComfyUI is installed, I\'m telling it to find the Mac ComfyUI installation path automatically and adapt all the paths to it, and also to not assume a Windows path. So, this part you need to'
+
+[05:59] [scene:talk]
+VISUAL:
+AUDIO: 'change if you do have a Windows and you don\'t have a Mac. Now, I\'m also telling it to not download any models and not build any pipelines yet, because we\'re going to do that later. I just wanted to set up the skill and connect it to my local ComfyUI. That\'s all this prompt'
+
+[06:12] [scene:talk]
+VISUAL:
+AUDIO: 'is. So, as you can see, it says connection confirmed. It found 1,024 node types, and now it\'s writing the adapted skill. And as you can see, that\'s how easy it is to connect ComfyUI to CloudCode. Now, I\'m about to show you how you can actually fine-tune an image'
+
+[06:24] [scene:talk]
+VISUAL:
+AUDIO: 'model so that you can get these consistent results. And keep in mind, you can be creative with this, because you can make money by doing this for brands, for companies, for influencers, whatever it is. Companies have strict policies, especially for marketing and'
+
+[06:36] [scene:talk]
+VISUAL:
+AUDIO: 'for showing off their products. So, you can\'t have inconsistent images if you\'re doing a marketing campaign. That\'s why this is actually a valuable skill to learn. For influencers, you want to make sure that their face is actually consistent, whether it\'s for thumbnails, whether it\'s for X posts, blog posts,'
+
+[06:49] [scene:talk]
+VISUAL:
+AUDIO: 'Instagram, whatever it is. So, you can offer them this kind of a service. Again, there\'s lots of different use cases that you can actually use this for. So, I highly recommend that you just stay open-minded when watching this video and see what use cases you can find for yourself. Reason being, because'
+
+[07:03] [scene:talk]
+VISUAL:
+AUDIO: 'I use my face a lot in thumbnails, and sometimes they get distorted and low quality. That\'s why I\'m actually using this for my own use case. Now, by the way, if you are finding this video valuable, then I highly recommend that you just scroll down a little bit and'
+
+[07:16] [scene:talk]
+VISUAL:
+AUDIO: 'check if you\'re subscribed, because 90% of you guys are not subscribed, and this is a totally free way to show your support to the channel and to also get more videos just like this one in your for you page. So, if you did subscribe, thank you very much. Now, once you send'
+
+[07:28] [scene:talk]
+VISUAL:
+AUDIO: 'off the prompt I just showed you a minute ago, you can type into the CloudCode something like check what AI models I have installed locally, if you have any AI models. I\'ll show you how to do that in just a second. Just to test if you have the connection made. Now, for context, these are the models that I have installed. Flux 2 is really good,'
+
+[07:41] [scene:talk]
+VISUAL:
+AUDIO: 'and the reason it\'s also really good is because it\'s open source. You can generate all of these images completely for free. These are all generated by Flux 2. And if you don\'t have any image model installed on your computer, I\'m about to show you how to do that right'
+
+[07:54] [scene:talk]
+VISUAL:
+AUDIO: 'now. Firstly, we can open up Hugging Face, which is like a store for these AI image models. And once you\'re on Hugging Face, and again, I\'ll leave a link to the exact model I\'m going to use below, but you can just click down here on the download button, which will install Koh Image_ComfyUI.'
+
+[08:06] [scene:talk]
+VISUAL:
+AUDIO: 'It\'s basically a free and open-source image model. Now, this is 19 GB in size, so this might take a while. But once you install it, you can basically tell CloudCode that you just installed a model, can it move that model to the correct position inside of your Mac. So,'
+
+[08:20] [scene:talk]
+VISUAL:
+AUDIO: 'this way, you don\'t even need to know exactly where to install it to. You can just download it into downloads, and then tell CloudCode to move it into the right place, move it into the right folder, so that you can use it. So, once you have your AI image model downloaded,'
+
+[08:32] [scene:talk]
+VISUAL:
+AUDIO: 'I\'ve prepared this prompt for you to just copy. Again, top link in the description. And the only things you need to change here are the three things in this red box. If you\'re using the same exact model that I\'m using, you don\'t even need to change these things. And you could also even remove this'
+
+[08:44] [scene:talk]
+VISUAL:
+AUDIO: 'model that I already have on disk section. So, let me just copy this first, and then paste it into CloudCode so that I can start working while I explain the prompt. Basically, I want to do everything inside of ComfyUI. I don\'t want to use the file.ai website, which'
+
+[08:56] [scene:talk]
+VISUAL:
+AUDIO: 'I\'ll get into in just a second. The goal is to train custom LoRAs on the Koh Image model, and then generate images with them locally on my Mac. Then, I\'m just telling it to set things up so that ComfyUI can train on a LoRA on Koh. Some description of what I need. Make the'
+
+[09:10] [scene:talk]
+VISUAL:
+AUDIO: 'training workflow universal so that I can train a face, style, or an object without rebuilding it, and then generate images with the trained LoRA locally on my Mac. Basically, handle the whole thing. So, while this is generating, I want to go to file.ai, which is'
+
+[09:22] [scene:talk]
+VISUAL:
+AUDIO: 'basically where we can develop and fine-tune models with serverless GPUs. So, we can use their computers to actually create our own LoRA. Now, what is a LoRA, because I haven\'t really explained this yet. So, in simple terms,'
+
+[09:34] [scene:talk]
+VISUAL:
+AUDIO: 'it\'s basically a small add-on to a large AI model that teaches it one specific thing without touching the actual model itself. So when you add this to a model, it\'ll know exactly what that specific thing looks like. So let\'s say we give'
+
+[09:47] [scene:talk]
+VISUAL:
+AUDIO: 'it a data set of 50 different images of your face, it will know what your face looks like so that it doesn\'t have to distort the image and guess when you\'re when you\'re changing facial positions, lighting, style, clothes, etc. Because inside of a LoRA, there are billions of'
+
+[10:00] [scene:talk]
+VISUAL:
+AUDIO: 'numbers which are called weights. I mean, this is the same for regular neural networks, but those weights basically tell the model how the specific thing will look like. And obviously, these LoRAs are created during LoRA training, which we\'ll do on file.io website in just a second. And'
+
+[10:13] [scene:talk]
+VISUAL:
+AUDIO: 'the only thing we need to train is the actual data set. So what is that you want to train on? Are you trying to train some sort of a product or some sort of a face or a style? The more data you have, the better your training is'
+
+[10:26] [scene:talk]
+VISUAL:
+AUDIO: 'going to turn out. And also, the same goes for the more high-quality data you have. So if you\'re taking pictures of a product, make sure to take as many and as many high-quality images of that product as possible. So then we can add a trigger word which helps the model'
+
+[10:39] [scene:talk]
+VISUAL:
+AUDIO: 'understand what it should learn, like a man, a style, a cop, etc. You set up some parameters like how many steps it should do to learn, and you can just simply ask Claude how many steps for your specific use case you need, but I\'ll get into more of this in just a'
+
+[10:52] [scene:talk]
+VISUAL:
+AUDIO: 'moment. Now the inside process looks kind of like this. The LoRA adds a tiny number of weights to the diffusion model and trains these until the modified model understands the concept. So basically, it adds noise to the image and then asks the model with the LoRA to'
+
+[11:05] [scene:talk]
+VISUAL:
+AUDIO: 'guess what noise was added. Based on response, it knows how wrong it was and then it adjusts its answers over time to make better and better predictions. Now after that, it sends the corrections to change the LoRA by a tiny step until'
+
+[11:17] [scene:talk]
+VISUAL:
+AUDIO: 'eventually it basically has as little error loss as possible. And when everything is done, you get the safe tensors file, which is your trained LoRA. This is just a bunch of different numbers or a bunch of different weights, which we spoke about earlier. And these'
+
+[11:29] [scene:talk]
+VISUAL:
+AUDIO: 'safe tensors is basically what you apply to the image model. And as you can see, it\'s cloud just finished. It was taking It basically took 6 and 1/2 minutes for this to finish. Okay, it\'s not done yet. Now it\'s actually building the first node. But we\'re going to let it cook because as I said, we don\'t need to do'
+
+[11:42] [scene:talk]
+VISUAL:
+AUDIO: 'much with the actual workflow process here. What we do need to do is go to the file.io website and we need to get our own API key. An API key is basically an authentication method. It just allows you to connect to external services. So for this use case, we\'re going to use it'
+
+[11:56] [scene:talk]
+VISUAL:
+AUDIO: 'to connect our cloud code instance to file.io\'s website. Once you\'re at the file.io website, you can go up here to credits, go to API keys, and simply add a new key. You can add a description, and then just click on create key. And'
+
+[12:08] [scene:talk]
+VISUAL:
+AUDIO: 'this is basically your password to your file website, which means anyone that has this key can take your credits, can use your account. So don\'t share this with anyone. But once you have this API key, copy it. Now once you have it copied, we can go back to cloud code and'
+
+[12:20] [scene:talk]
+VISUAL:
+AUDIO: 'we can see that everything is built, verified, and the generation workflow is valid against the live server. So this is what we need to do. We need to Step one, paste your file AI key in this file. So rather than looking for the file, I\'m going to say, "Open the file for me where I need to paste my API'
+
+[12:33] [scene:talk]
+VISUAL:
+AUDIO: 'key." And as you can see, it opened up this .txt file. So I\'m just going to paste my key in here. Okay, I replaced my key and I\'m just going to say done. Okay, basically I stopped recording and I forgot to continue recording. So I already done a couple of steps here, so let me explain what I done. We just added our API key into the text file. So'
+
+[12:45] [scene:talk]
+VISUAL:
+AUDIO: 'now the key is saved correctly and I have more instructions. What we need to do now is quit Comfy Desktop completely and reopen it. So obviously just quit and reopen. Then click on workflows, and as you can see, we have two new'
+
+[12:57] [scene:talk]
+VISUAL:
+AUDIO: 'workflows ready to go. Train and generate. We\'re going to click on train, and we\'re going to click on workflows once again. And now we can see that we have a readme file right here. This is basically instructions for you the human to follow along. So what I did is I clicked shift command four, took a'
+
+[13:10] [scene:talk]
+VISUAL:
+AUDIO: 'screenshot of this, pasted the screenshot into the terminal, and simply said, "Open the file where you want me to add the images into." Because if you read the steps, the step one is put your file key into this file, which we already done. Step two is put 10 to 25'
+
+[13:23] [scene:talk]
+VISUAL:
+AUDIO: 'images into a folder, and then it gives you the folder directory. Well, I cannot be asked looking for this, so I just told Cloud Code to open it for me and it done just that. It opened this folder for me and then I just dragged all of my images, all of my data into this folder.'
+
+[13:36] [scene:talk]
+VISUAL:
+AUDIO: 'So, any process that you are struggling with throughout this video, tell Cloud Code to help you, give it exact, detailed instructions and explain to it what you\'re struggling with. There\'s no excuses. If I\'m going too fast, just consult with Cloud Code about what it is'
+
+[13:50] [scene:talk]
+VISUAL:
+AUDIO: 'that you want to change or what it is that you are struggling with. Anyways, the next step in this read me is to set images folder, so we\'re going to do that. So, I\'m just going to leave it as is right here. Trigger word, I\'ll just do face. Subject type, we have three'
+
+[14:02] [scene:talk]
+VISUAL:
+AUDIO: 'different types. We have face, person, style and object. So, I have face person. So then going back into ComfyUI, for the steps, you can just ask Cloud Code how many steps should I do? Same thing with learning rate. Okay, so this'
+
+[14:15] [scene:talk]
+VISUAL:
+AUDIO: 'is actually a good example cuz right now it\'s saying I need to queue it\'s start training off. When I checked this, it also said leave start training off and click queue. But there is no queue. So, I have a question, so I\'m going to basically screenshot the screen and then'
+
+[14:27] [scene:talk]
+VISUAL:
+AUDIO: 'I just pasted the screenshot into my terminal into the Cloud Code and I\'m going to say there is no queue button. Do I just click on run? Does everything look correct? Double check. And as you can see, I got my answer. So, I want to keep this in because I want to show you'
+
+[14:39] [scene:talk]
+VISUAL:
+AUDIO: 'anything that you\'re struggling with, you can just ask Cloud Code. This was a perfect use case for it. There was no queue button, but I presumed it was the run button, but I wasn\'t sure. So, that\'s why I asked. So again, it said start training dry run, no changes. If you click on this, you can change now,'
+
+[14:51] [scene:talk]
+VISUAL:
+AUDIO: 'but let\'s just do a dry run. So, let\'s click on run. And so now we just did that. It run and now to see result, open the console on the left side bar near the bottom. Okay, so as you can see, we have the estimated cost, which is going to be about $1.50. So, sorry for lying'
+
+[15:03] [scene:talk]
+VISUAL:
+AUDIO: 'earlier cuz I said $2, but it\'s actually $1.50 and we can see the amount of images was correct cuz I have 35 images in that folder. So, everything is correct. Well, okay, in that case, we can, I guess, change the start training to train now and we can just click on'
+
+[15:16] [scene:talk]
+VISUAL:
+AUDIO: 'run. And this is only going to take a few minutes cuz this isn\'t running on my machine right now. This is connected once again to file.ai via the API key that we pasted in earlier. And as you can see, it even says cloud right here.'
+
+[15:28] [scene:talk]
+VISUAL:
+AUDIO: 'So, you shouldn\'t worry too much about the costs because firstly, you will need to have a certain amount of credits topped up. So, unless you have auto top-up enabled, it\'s not going to just drain your wallet. It might drain your credits if you topped up, I don\'t know,'
+
+[15:40] [scene:talk]
+VISUAL:
+AUDIO: '$1,000 in credits. But even at that, we just have the estimated price. So, there is no need to worry about how much is actually going to cost. Now, what I\'m going to do is send another screenshot and just ask how long does this process take cuz I\'m curious how long am I going'
+
+[15:53] [scene:talk]
+VISUAL:
+AUDIO: 'to be waiting here. I\'m also going to ask, "What is the status? Can you see the status?" Okay, nice. So, I can see it\'s live pulled from comfyui log. So, for some reason this is saying 0% but it\'s saying it is about 21% done. So, yeah, about 10 minutes remaining. But'
+
+[16:06] [scene:talk]
+VISUAL:
+AUDIO: 'again, if you were to do this locally, I mean, if you have a regular PC, it would probably be somewhere in the range of 6 hours maybe. I\'m just estimating here, I don\'t know. But doing this on cloud for 10 to 20 minutes for $2 is definitely worth it. That\'s why I\'m showing you'
+
+[16:18] [scene:talk]
+VISUAL:
+AUDIO: 'this method. If you want to do this locally, you can do this locally as well if you have your own rig. But I\'m just going to let it cook and I\'ll come back to it when it\'s ready. And as you can see, it\'s saying that it\'s completely done, 1,000 out of 1,000 steps. So, the next step is to generate the Laura. So,'
+
+[16:31] [scene:talk]
+VISUAL:
+AUDIO: 'what we need to do is go back to workflows and open the generate section. So, we\'re going to click on workflows, double tap on generate, press R just to refresh. And by the way, I didn\'t do any of this workflow. Again, this workflow was entirely designed by Cloud Code. I\'m'
+
+[16:43] [scene:talk]
+VISUAL:
+AUDIO: 'going to just separate these a little bit. So, I wasn\'t over exaggerating when I said that you can just create all the workflows for you. And as you can see, I\'m also just following what Cloud Code is telling me to do. I didn\'t script this part of it. I\'m just doing it in'
+
+[16:55] [scene:talk]
+VISUAL:
+AUDIO: 'real time. So, we need to go to your Laura A node, click on the drop down, pick the my coin Laura save tensors. So, this is your Laura A. Click on the drop down and my coin Laura save tensors. Set its strength to one to turn it on. So,'
+
+[17:08] [scene:talk]
+VISUAL:
+AUDIO: 'let\'s do one. On the prompt edit me, write a prompt that includes your trigger word, face. Okay, so this is the trigger word that we added earlier. So, what I\'m going to say is face wearing a space suit. Super simple prompt. Leave'
+
+[17:20] [scene:talk]
+VISUAL:
+AUDIO: 'the lighting at one, keeps it fast, and I think that should be it. So, let\'s basically double-check. I mean, it looks good. Let\'s just click on run. So, now it is actually running manually on my machine, so we can see which node is'
+
+[17:34] [scene:talk]
+VISUAL:
+AUDIO: 'actually being worked on in real time. But, it\'s also saying that maybe causing problems since it\'s a very generic word. So, if this is causing problems, we can retrain it with a more rare token name like mache or with a four, which fixes'
+
+[17:46] [scene:talk]
+VISUAL:
+AUDIO: 'it cleanly because no one\'s ever going to say this in their regular prompt. But, face is a bit more common, so I guess that\'s a tip that you can take with you that I didn\'t personally do, but we\'ll see what it turns out like. While I\'m waiting, I\'m just going to say open a folder where these saved images'
+
+[17:58] [scene:talk]
+VISUAL:
+AUDIO: 'are going to be located. Okay? As you can see, it opened up this folder, so I presume that this is where the images are going to be located. And so, we have our result. This is me in a space suit. It doesn\'t really look like a space suit, I\'ll be honest, but this isn\'t too'
+
+[18:10] [scene:talk]
+VISUAL:
+AUDIO: 'much of the fault of the Laura. This is more a fault of the model that we used. So, the biggest problem right now is just the fact that I don\'t have a GPU cluster, I guess. So, I do personally think that running this on comfy cloud is a better option because we\'ll be able'
+
+[18:23] [scene:talk]
+VISUAL:
+AUDIO: 'to actually use more powerful PCs and actually get better quality images, but the face looks good. This face does look like me. And again, if I wanted to regenerate this, it already has all the context, and all I would need to do is just change one prompt. I don\'t need to'
+
+[18:35] [scene:talk]
+VISUAL:
+AUDIO: 'repeat this over and over again. The workflow is created, the Laura is created, and now you know how to do this. And we can do this again and again for different products, styles, people. So again, we did not even need to touch any of these nodes because cloud code'
+
+[18:47] [scene:talk]
+VISUAL:
+AUDIO: 'just simply don\'t order that for us. Now, if you want to see how cloud code can also edit videos and create motion graphics, not like this one, this is the old one, kind of like this one, the one you\'re seeing on screen right now, then just click on the video that\'s going to be somewhere on screen right now, and'
+
+[18:59] [scene:talk]
+VISUAL:
+AUDIO: 'I\'ll see you there.'

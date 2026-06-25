@@ -1,0 +1,163 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Apple Just Built WSL for the Mac (Container Machines)
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=xXtsuDnapqc
+upload_date: 20260622
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'Hidden behind all of the Apple Intelligence stuff at WWDC this year, Apple quietly released their own version of Windows Subsystem for Linux called Container Machines. These give you a lightweight persistent Linux environment on your Mac in a really easy to use way and they\'re actually built on top of Apple\'s container project which they'
+
+[00:12] [scene:talk]
+VISUAL:
+AUDIO: 'released last year which is a Docker alternative. All of which of course is optimized for Apple silicon. So let\'s take a look at what container machines are, how they work, and I\'ll also do a quick recap of Apple containers for everyone who missed them. So I\'m going to start by setting up a'
+
+[00:29] [scene:talk]
+VISUAL:
+AUDIO: 'container machine and then I\'ll talk through how all of this is working in a bit. But the one I want is going to be a YUbuntu Linux environment. So I simply have a Docker file here with the Ubuntu image and then some things in here to install some common tools. This will work with any OCI compatible image. So'
+
+[00:42] [scene:talk]
+VISUAL:
+AUDIO: 'pretty much all of the ones that you have working with Docker. The only thing it needs to include to be a VM is the system initialization program. Once we have the Docker file or image that we want to use for our VM, all we need to do is build this using Apple\'s container'
+
+[00:54] [scene:talk]
+VISUAL:
+AUDIO: 'tool. So you can see this is the command that I\'m using for mine since I have the Docker file in this folder. And I\'m simply going to tag this as local Ubum 2 machine. And we can go ahead and hit enter on that and build. The container tool, by the way, works on Mac OS 26 and above. And you can install it from'
+
+[01:07] [scene:talk]
+VISUAL:
+AUDIO: 'GitHub by simply going to the repo, going to releases, and downloading the latest package. It looks like the build of my image is done here. And you can see it\'s very similar to Docker. It\'s just building an OCI image. That\'s all we need for a container machine. So now we can simply run container machine'
+
+[01:19] [scene:talk]
+VISUAL:
+AUDIO: 'create. Say the image that we want for our container machine. Give it a friendly name. And I\'m also going to set this as default. So any command that I run is going to assume I\'m on about this container machine. And I don\'t have to specify it by name. With this, we can hit enter. And in literally seconds, it'
+
+[01:31] [scene:talk]
+VISUAL:
+AUDIO: 'is all set up. We can see a bit of information about the container machine that I just created by doing container machine list. Here you can see it has the Ubuntu one that I just created, the IP address, 7 CPUs, and 18 GB of memory. CPU and memory are configurable by the'
+
+[01:43] [scene:talk]
+VISUAL:
+AUDIO: 'way, but by default, it will use half of the memory of your Mac. To actually get using your container machine, though, all you need to do is container machine run. And you can leave this blank if you want to enter the interactive terminal. Or you can actually just add a command after that if you want to run that on'
+
+[01:55] [scene:talk]
+VISUAL:
+AUDIO: 'your Linux machine. In this case, you can see I just hit enter and now I\'m on an interactive terminal on my Linux environment. We can confirm this by doing something like you- a and you see this is printing back that it\'s Linux yubuntu as opposed to when I run this on my Mac and we get back Darwin. Now one'
+
+[02:08] [scene:talk]
+VISUAL:
+AUDIO: 'of the cool things about container machines is it\'s got automatic user sharing. So my user has already been copied from my Mac onto my Linux environment. And the same actually goes for your home directory. This will mount your entire home directory as readrite. So I have access in this Linux'
+
+[02:20] [scene:talk]
+VISUAL:
+AUDIO: 'environment to all of the files that I have on my Mac. You can see where I actually ran container run, it\'s put me straight into that file in the Linux environment. And we already have those files in there. It does also have its own volume though. So if we navigate to the home directory of this Ubuntu'
+
+[02:32] [scene:talk]
+VISUAL:
+AUDIO: 'machine, you can see there\'s currently nothing in there, even though there is on my Mac. And that is because this one is the Linux environment. And this is where you\'d put your dot files that are specific to Linux. The folder sharing makes it super easy to develop something on your Mac using all of your normal'
+
+[02:45] [scene:talk]
+VISUAL:
+AUDIO: 'tools and maybe even some that only compatible with Mac OS. and then simply switch to Linux when you need to test something. For example, I have a very simple bun application here and I want to compile this into a single executable that will work on Linux, but I can\'t actually test Linux on my Mac OS. So,'
+
+[02:58] [scene:talk]
+VISUAL:
+AUDIO: 'running this, I don\'t know whether it\'s worked or not. If we switch over to the container machine though, you can see I can simply run the command straight away. I don\'t have to transfer files or anything thanks to the fact that it shares the same file system. If I hit enter here, it works nicely. This'
+
+[03:11] [scene:talk]
+VISUAL:
+AUDIO: 'application was just a very simple web server with this web page here which prints what it\'s running on. So, it\'s currently running on Ubuntu 24. You can also see there\'s a subscribe going around. Something you should definitely do. Now, I was just testing out running the bun development server on the Linux environment and it does all work, which'
+
+[03:24] [scene:talk]
+VISUAL:
+AUDIO: 'we can see here. It\'s running on bundde dev and it\'s not compiled. But if I modify one of the source files from my Mac here, maybe say hello instead of subscribe. I am noticing that the hot reloading doesn\'t seem to be picking up on that behavior and I have to restart'
+
+[03:36] [scene:talk]
+VISUAL:
+AUDIO: 'the bun development server to get the changes to apply. There we go. Now it says hello. I think hot reloading will work the same way that breakpoints do where they don\'t actually work if you\'re on your Mac OS code version. But what you can do is get your editor to connect to the container machine via SSH and'
+
+[03:48] [scene:talk]
+VISUAL:
+AUDIO: 'then edit the files that way and that way breakpoints and hot reloading will probably work. They actually have a tutorial for how to do this in their documentation. That\'s basically all there is to show you when it comes to actually using a container machine. I mean it\'s just a yubuntu environment'
+
+[04:00] [scene:talk]
+VISUAL:
+AUDIO: 'now. And honestly the whole experience is pretty seamless. It\'s also worth pointing out that you\'re not limited to just one machine. You could have an Alpine machine, a yubuntu one, and a Davian one sitting side by side. So you have one DRO per target. And honestly,'
+
+[04:12] [scene:talk]
+VISUAL:
+AUDIO: 'it\'s very nice if you\'re doing cross-target work. Plus, because these machines can actually run a real systemd, you can test a proper service stack in there, like having Postgress running as an actual service with your app next to it, and the whole thing is'
+
+[04:24] [scene:talk]
+VISUAL:
+AUDIO: 'going to behave like the Linux server that you\'re going to deploy to. The simplicity is one of the core design principles that Apple was pushing for when developing container machines. They wanted fast, lightweight VMs that integrate into your existing workflow and are super easy to spin up as needed'
+
+[04:36] [scene:talk]
+VISUAL:
+AUDIO: 'as well as be persistent over time so that you can set up a whole dev environment VM that has all of the tools that you normally need ready for when you need them. Again, it\'s pretty similar to what Windows Subsystem for Linux was trying to achieve. As for how all of this is built and how it compares'
+
+[04:49] [scene:talk]
+VISUAL:
+AUDIO: 'to Docker and Orbstack, we first need to understand the container tool that was released last year. This is written in Swift and it\'s meant to be a Docker alternative that can run containers and it runs any standard OCI image. So anything that you could pull from Docker Hub is still going to work. The unique'
+
+[05:02] [scene:talk]
+VISUAL:
+AUDIO: 'thing about Apple\'s approach though is that every container got its own lightweight virtual machine through their virtualization framework rather than a bunch of containers sharing one big Linux VM which is what Docker Desktop does. Some benefits of that approach can be security since each'
+
+[05:15] [scene:talk]
+VISUAL:
+AUDIO: 'container has the isolation properties of a full VM. Then there\'s also privacy since you\'re only mounting the necessary data into each VM. Whereas when you have a shared VM, you actually mount all of the data into that shared VM so it can be mounted selectively into the'
+
+[05:28] [scene:talk]
+VISUAL:
+AUDIO: 'individual containers. Finally, there can also be a performance benefit since containers created using Apple container actually require less memory than a full VM and the boot times are pretty similar to Docker and other tools. If we actually look at some benchmarks that'
+
+[05:40] [scene:talk]
+VISUAL:
+AUDIO: 'Repo Flow did here, comparing Apple Containers with Orbstack and Docker Desktop, we can see the results aren\'t actually too bad. It\'s hard to tell here, but Apple containers actually does achieve the most singlethreaded CPU events, but Orbstack was pretty close.'
+
+[05:52] [scene:talk]
+VISUAL:
+AUDIO: 'There is fractions in it. And that same story continues when we go to multi-threaded as well. They all perform very well. Where Apple does seem to pull a bit of a lead though is in memory throughput with Orbstack coming in second and Docker Desktop last. But when'
+
+[06:04] [scene:talk]
+VISUAL:
+AUDIO: 'it comes to startup times for a tiny container, it seems that Apple does have some work left to do here. But it is still sub-second. It\'s just Docker Desktop and Orbstack do it in less than a quarter of a second. There\'s loads more benchmarks here, so I\'ll leave a'
+
+[06:16] [scene:talk]
+VISUAL:
+AUDIO: 'link to this. But basically, the rest of them show that orbstack has exceptional file system and small file performance. But they also show that Apple containers is pretty much level if not better than Docker Desktop. There is a few catches though that you want to be aware of'
+
+[06:28] [scene:talk]
+VISUAL:
+AUDIO: 'before you use container machines. And the first one is memory. As I mentioned earlier, the machine defaults to half of your system RAM. So it is worth knowing that actually never gives this back. So if you have a memory intensive workload in the container, maybe during a big build, that memory is actually held'
+
+[06:41] [scene:talk]
+VISUAL:
+AUDIO: 'until you restart the machine. This is actually one of the unique benefits of Orbstack where it has dynamic memory which reduces the memory usage by releasing that unused memory back to Mac OS. As far as I know, nothing else does this. Second, there\'s also no GPU and'
+
+[06:54] [scene:talk]
+VISUAL:
+AUDIO: 'USB pass through. I have seen open issues for both of these on that GitHub, though, so maybe it\'ll be supported in the future. Third, it also seems a little complex to get GUI apps running. Like maybe if you wanted to run the Linux version of VS Code or other Linux only apps, it\'s definitely not a'
+
+[07:07] [scene:talk]
+VISUAL:
+AUDIO: 'seamless experience. I\'d probably use something else for this. Finally, there\'s also a security trade-off because as I mentioned earlier, that home directory mount that makes everything so convenient is read write by default, which means that anything that you run inside of that Linux'
+
+[07:20] [scene:talk]
+VISUAL:
+AUDIO: 'machine can touch your SSH keys, your cloud credentials, and everything on your Mac. It seems you can actually only set the mount to read only or turn it off entirely. There doesn\'t seem to be an ability to only mount a specific folder. Overall, having tried out Apple'
+
+[07:32] [scene:talk]
+VISUAL:
+AUDIO: 'container machines, I\'m probably going to stick to Orbstack as it feels like the more polished option today with better resource management and more features. But I know some people don\'t like that orbstack is paid for if you want business and commercial use. So without Orbstack, I probably would'
+
+[07:44] [scene:talk]
+VISUAL:
+AUDIO: 'choose Apple containers over Docker Desktop. And there\'s also KMA which is another great alternative. What do you use? Is it Orbstack, Docker Desktop, or Lemur? Let me know in the comments down below. While you\'re there, subscribe. And as always, see you in the next one.'

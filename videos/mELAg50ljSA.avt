@@ -1,0 +1,263 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: An exciting new feature just dropped - Tailscale Services
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=mELAg50ljSA
+upload_date: 20251028
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'Well, if you\'re watching this video, then I guess the embargo must have lifted. So I can finally share that Tailscale has just released Tailscale Services. This is a brand new beta feature that makes hosting and scaling internal applications simpler and more secure than ever.'
+
+[00:13] [scene:talk]
+VISUAL:
+AUDIO: 'So simply put, Tailscale Services lets you publish internal resources just like any other node on your Tailnet. So anything that binds to a port, you can now publish as effectively a Tailscale node service on your network.'
+
+[00:26] [scene:talk]
+VISUAL:
+AUDIO: 'Behind the scenes, Tailscale automatically routes the traffic to the available service instances across your Tailnet infrastructure. And as you\'ll see in the demo portion later on,'
+
+[00:39] [scene:talk]
+VISUAL:
+AUDIO: 'it dynamically picks the node which is closest to your users. So you can kind of think of the concept a little bit like a traditional application load balancer mixed with, I don\'t know, a reverse proxy or something, all sort of rolled into one.'
+
+[00:52] [scene:talk]
+VISUAL:
+AUDIO: 'But it\'s built natively into Tailscale. So you can use all of the Tailscale features with this thing and continue to rely on Tailscale\'s secure mesh network and Natraversal technologies. This release is part of our week-long Tailscale full update celebration.'
+
+[01:09] [scene:talk]
+VISUAL:
+AUDIO: 'We are releasing new features every day, and there\'s going to be a plethora of content on the blog. We\'ve got webinars coming up. We had a live stream yesterday with the founders on our Discord.'
+
+[01:21] [scene:talk]
+VISUAL:
+AUDIO: 'So if you want to catch these things in future, make sure that you\'re subscribed to the channel and also our newsletter as well. Now, we\'re already on Tuesday and there\'s still loads of exciting announcements in the pipeline ahead. So do make sure you are subscribed to the channel and keeping an eye on our blog over the next few days.'
+
+[01:35] [scene:talk]
+VISUAL:
+AUDIO: 'Now, just like any tailscale feature, the way that I like to learn is by experimenting and trying stuff, right? So in the admin console, you may have noticed over the years this services button.'
+
+[01:47] [scene:talk]
+VISUAL:
+AUDIO: 'Well, you may not have noticed. Well, if you didn\'t, now you know it exists. So what we\'ve got here are a couple of services. And you can think of these a little bit like a reverse proxy for your tail net.'
+
+[01:59] [scene:talk]
+VISUAL:
+AUDIO: 'So first of all, I\'ve got this one, px.velociraptor-noodlefish. And this service, if we jump inside it for a second, it only has one machine on its back end, right? So what we\'re doing is we are proxying this address, pve.velociraptor, to the name px.velociraptor.'
+
+[02:17] [scene:talk]
+VISUAL:
+AUDIO: 'And if I put that in here, we can now see that my front end loads just fine for Proxmox. And I can log in, same as I always would.'
+
+[02:31] [scene:talk]
+VISUAL:
+AUDIO: 'But instead of going directly to the node itself, it\'s going through the tailscale services feature, just like you would expect, like any other load balancer or reverse proxy. The really interesting part comes when you want to start having multiple backends for one specific service or one single service, just like I\'ve got here for app one.'
+
+[02:43] [scene:talk]
+VISUAL:
+AUDIO: 'So let me grab this, for example. In fact, I think I need to load up Ghosty and SSH into this node called app one, because here I have possibly the world\'s most simple Node.js application.'
+
+[02:55] [scene:talk]
+VISUAL:
+AUDIO: 'I don\'t know.'
+
+[03:07] [scene:talk]
+VISUAL:
+AUDIO: 'But if I do app.js, you\'ll see that I\'ve got a very basic service running on port 3000. So if I do port 3000, you can see that I get a very, very simple Hello World application served by the node named app1.'
+
+[03:22] [scene:talk]
+VISUAL:
+AUDIO: 'And that name is the name of that node on my tail net. And likewise, if I copy this now and change this to app2, guess what? I have a second one.'
+
+[03:34] [scene:talk]
+VISUAL:
+AUDIO: 'Okay, so what we want to do now is load balance or kind of make these services more highly available than if they would be just tied to a specific node. Now, what you probably don\'t notice behind the scenes is that app one is running in that rack behind me over here in my house.'
+
+[03:47] [scene:talk]
+VISUAL:
+AUDIO: 'And app two is running in a DigitalOcean droplet somewhere in Virginia. But it would be nice if I could access these services without having to go to the specific node names in question.'
+
+[03:59] [scene:talk]
+VISUAL:
+AUDIO: 'And this has always been a bit of a bugbear of mine as to why we have to have one Docker sidecar container proxy per service. Well, it\'s so that we get an individualized node name per service on the tail net.'
+
+[04:14] [scene:talk]
+VISUAL:
+AUDIO: 'Well, now, if you\'re running 20 containers on your hosts, you can have 20 services now pointed at those 20 containers without 20 extra sidecars. Just think about that. That\'s a really cool use case. But I\'m going to continue on with this app'
+
+[04:28] [scene:talk]
+VISUAL:
+AUDIO: 'one right here. So if I go to app.velociraptor, first of all, we handle all of the TLS for you. So all of this is done through Let\'s Encrypt. But you can see that I\'ve load balanced this to app one. And that\'s because TailScale\'s dynamic geographic routing features, which previewed most recently'
+
+[04:45] [scene:talk]
+VISUAL:
+AUDIO: 'with our automatic exit node selection stuff, has intelligently figured out that the node with the lowest latency from my recording laptop here to the application backend running behind me'
+
+[04:57] [scene:talk]
+VISUAL:
+AUDIO: 'via the tailscale service remember tailscale has figured out that the most performant option for me is going to be going through app one now i\'m only ever going to see app one from this geographic location so let me log in and drain this node so i can do this thing called tailscale serve'
+
+[05:14] [scene:talk]
+VISUAL:
+AUDIO: 'drain service and then put the name of the service here and watch what happens so i\'m now basically if you\'re familiar with low balance at all this won\'t be particularly impressive to you but'
+
+[05:27] [scene:talk]
+VISUAL:
+AUDIO: 'using the same url i\'m now accessing app 2 do you see that how that\'s changed here from app 1 to app 2 just simply by virtue of draining the service draining app 1\'s connections from the service so you could have multiple instances of well anything really now backed by a single url'
+
+[05:45] [scene:talk]
+VISUAL:
+AUDIO: 'extremely powerful i\'m sure you can already think of the use cases and indeed now if i want to bring this one back in again i believe it\'s just tailscale serve advertise and then service and then the name'
+
+[05:58] [scene:talk]
+VISUAL:
+AUDIO: 'of the service is app and if i refresh this page now it it goes back to app one because that\'s the one that\'s geographically closest to me and most performant. So that\'s the basic gist of how'
+
+[06:13] [scene:talk]
+VISUAL:
+AUDIO: 'Tailscale services works. If you want to set one up from scratch, let\'s do that real quick. Now, of course, everything that we\'re about to cover is documented here in the Tailscale knowledge base. And you can see in our example here, we have a very simple way of setting up a'
+
+[06:29] [scene:talk]
+VISUAL:
+AUDIO: 'basic HTTP server running on port 80. You then go through the Tailscale backend, create the service proxy using the tailscale serve commands on the node itself and then you go to the tailscale web interface and approve the connections so we\'re going to do that exact same process but we\'re going'
+
+[06:48] [scene:talk]
+VISUAL:
+AUDIO: 'to do it for proxmox because proxmox is a little tricky with this because proxmox has a self-signed tls certificate so you can do this all day long with a basic http connection or an https connection that has a trusted certificate.'
+
+[07:06] [scene:talk]
+VISUAL:
+AUDIO: 'But when you start using self-signed certificates, there\'s no route to that trust. Like we don\'t know. I mean, the whole point of a CA is to establish a commonality of trust as part of the TLS chain.'
+
+[07:20] [scene:talk]
+VISUAL:
+AUDIO: 'And that doesn\'t exist with a self-signed certificate like Proxmox uses. So you can see out of the box here, HTTPS is untrusted. So how do we configure this service to work for Proxmox?'
+
+[07:33] [scene:talk]
+VISUAL:
+AUDIO: 'Okay, well, first of all, we\'ve got to make sure are no existing serve configurations here because they will interfere with what we\'re doing. So tailscale serve status, I am assuming by the way that this node is already on your tail net. So let\'s do a tailscale status. We can see that this node is already fine and working on my tail net'
+
+[07:47] [scene:talk]
+VISUAL:
+AUDIO: 'just fine. So tailscale serve status showed us no serve config. So what we want to do now is just go through the process of creating the service. So we will use tailscale serve, which you may well'
+
+[08:01] [scene:talk]
+VISUAL:
+AUDIO: 'be familiar with as a way to expose services from your local node to your tail net. But now we\'re exposing the service from the local node to the service, and then the service exposes it to the'
+
+[08:13] [scene:talk]
+VISUAL:
+AUDIO: 'tail net after that. So we\'ve got tailscale serve, and then we\'re passing in the name of the service. And in this case, because I\'ve already got PX as an existing service, I\'m going to do PX2.'
+
+[08:25] [scene:talk]
+VISUAL:
+AUDIO: 'just because this is a demo and I want to show you the entire process end to end. So we\'ve got service and then SVC colon and then the name of the service in the Tailscale admin console which we\'ll do in just a second. I then want that to proxy on port 443 so when I go to'
+
+[08:40] [scene:talk]
+VISUAL:
+AUDIO: 'the name of the service I don\'t have to type a port it literally just listens on the HTTPS default port of 443. Now remember when I talked about how Proxmox runs with an untrusted'
+
+[08:54] [scene:talk]
+VISUAL:
+AUDIO: 'local certificate well when that happens we need to add this line here this little option here of plus insecure and this will tell tailscale to ignore those self-signed certificate errors now'
+
+[09:06] [scene:talk]
+VISUAL:
+AUDIO: 'before we press go on this we need to jump into the tailscale admin console under services and define a new service so i think we\'re going to call this px2 i\'m going to run this on port 443'
+
+[09:19] [scene:talk]
+VISUAL:
+AUDIO: 'Now you will see here that there are other port options available, and we can proxy any TCP service for right now. We can also add tags to the service if we want to,'
+
+[09:34] [scene:talk]
+VISUAL:
+AUDIO: 'so we can use our ACLs or grants to granularly control and permit access to specific resources across the tail net. I\'m going to leave that alone for right now,'
+
+[09:46] [scene:talk]
+VISUAL:
+AUDIO: 'and I\'ve now defined the service. So I\'m going to go back to my Proxmox instance. Well, actually, I need to point out a very small gotcha before we get started, before we go any further.'
+
+[09:58] [scene:talk]
+VISUAL:
+AUDIO: 'The node that is running the service that you\'re going to proxy to the service, there\'s too many. I\'ve said the word service so many times in recording this video, it\'s kind of lost all meaning.'
+
+[10:12] [scene:talk]
+VISUAL:
+AUDIO: 'Service, service, service, service. Anyway, there\'s a name for that. I forget what it is, but it\'s a real thing. But anyway, I digress. you must make sure that the host, the machine in your tail net, that is going to be hosting the service that is going to proxy the port out to the tail scale service is tagged.'
+
+[10:26] [scene:talk]
+VISUAL:
+AUDIO: 'For right now, it must be a tagged node. You can\'t have it owned by your user, for example. It must be owned, in this case, by the tag Proxmox.'
+
+[10:39] [scene:talk]
+VISUAL:
+AUDIO: 'And you configure tags in your access controls right here. Very straightforward. So I create a tag owner of tag Proxmox. I tag the Proxmox node with the tag Proxmox, and now I can expose this service. You\'ll see that PX2 right here has zero hosts.'
+
+[10:56] [scene:talk]
+VISUAL:
+AUDIO: 'So let me go in here and actually just press go. So we\'ve now configured the Proxmox side, the local side. We\'ve got one more job to do.'
+
+[11:10] [scene:talk]
+VISUAL:
+AUDIO: 'We need to jump back to our admin console and manually approve that this node is allowed to advertise port 8006 into the load balancer backend, the service backend that is PX2.'
+
+[11:23] [scene:talk]
+VISUAL:
+AUDIO: 'So let\'s head back over here and see that PVE, the machine in our tail net, wants to advertise and do I want to approve it? So I\'m going to click on yes. And suddenly PX2 as a service is now online.'
+
+[11:35] [scene:talk]
+VISUAL:
+AUDIO: 'So it\'s always a nervous moment when I\'m doing a live demo. What\'s going to happen in the background is that this is going to go out to Let\'s Encrypt and generate a TLS certificate for this service.'
+
+[11:48] [scene:talk]
+VISUAL:
+AUDIO: 'So px2.phelociraptor-noodlefish.ts.net. It\'s going to verify that you are who you say you are. And sometimes this happens where you end up with this scary message'
+
+[12:01] [scene:talk]
+VISUAL:
+AUDIO: 'despite everything actually being plumbed incorrectly underneath because the timeouts are just a fraction too short for the average length of time that that Let\'s Encrypt dance takes. You can see we have a valid certificate right here.'
+
+[12:13] [scene:talk]
+VISUAL:
+AUDIO: 'Connection is secure. Despite the fact that this browser session is upset with me, it\'s telling you lies. It\'s telling you porkies. So I can now log in to my Proxmox instance. Look, I\'m not accessing the name of the machine on the tail net anymore directly.'
+
+[12:26] [scene:talk]
+VISUAL:
+AUDIO: 'I\'m accessing the name of the service directly. And I could indeed add multiple Proxmox instances to this service and have them kind of load balance if I don\'t know why you\'d want to do that but you could'
+
+[12:40] [scene:talk]
+VISUAL:
+AUDIO: 'right yeah I mean all options are open to you now you can also use this service with our tailscale identity provider and there\'s a video about that coming later in the week tsidp you might see a'
+
+[12:52] [scene:talk]
+VISUAL:
+AUDIO: 'little sneak peek right here don\'t look too closely the continuity police will tell me off I recorded the tsidp video that comes out later this week before this one it\'s been a very busy week around here preparing for the tailscale fall update round of announcements are coming throughout'
+
+[13:07] [scene:talk]
+VISUAL:
+AUDIO: 'the week do not forget to get registered for our webinar that\'s happening this week there\'ll be a link to that in the description down below i\'m hosting that with one of our solution engineers jay and we\'ll be answering all sorts of questions about well there\'s so many features coming this'
+
+[13:20] [scene:talk]
+VISUAL:
+AUDIO: 'week i can\'t even list them all so broadly speaking i think that is all you need to know for a quick overview of the brand new tailscale services feature this is a brand new beta feature to all tailnets but we do have a favor to ask of you dear viewer we need to know how you think'
+
+[13:37] [scene:talk]
+VISUAL:
+AUDIO: 'you\'re going to be using this feature come find us on the discord at discord.gg slash tailscale tell us what\'s missing tell us what\'s difficult tell us how we can improve this feature moving'
+
+[13:49] [scene:talk]
+VISUAL:
+AUDIO: 'forward we\'re also going to put a feedback button directly into the tailscale ui right next to the services feature as well you can come find us on reddit you could also open a support ticket or even a GitHub issue if you want to.'
+
+[14:04] [scene:talk]
+VISUAL:
+AUDIO: 'There are so many ways you can get in touch with us. It\'s kind of hard to keep track sometimes, but we do our best. All right, so make sure you are subscribed to the channel because as I say, there are lots more updates coming this week. This is just the beginning.'
+
+[14:18] [scene:talk]
+VISUAL:
+AUDIO: 'As always, thank you so much for watching and until next time, I\'ve been Alex from Tailscale. video.'

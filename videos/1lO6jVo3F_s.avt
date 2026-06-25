@@ -1,0 +1,227 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: I Ran a FREE AI Talking Avatar Tool on Google Colab (And It's Insane)
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=1lO6jVo3F_s
+upload_date: 20260308
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'All right, check this out. Every talking head tool I\'ve tested on this channel has had the same problem. They\'re VRAM monsters. You try running them on free Google Colab, they crash before they even finish loading. You try them locally without a high-end GPU, same'
+
+[00:13] [scene:talk]
+VISUAL:
+AUDIO: 'story. So, when I came across this new AI avatar lip sync tool, I had to dig in properly. And everything you\'re watching on screen right now, every single clip, was generated with it. The lip sync is'
+
+[00:25] [scene:talk]
+VISUAL:
+AUDIO: 'clean, the head movement actually feels natural. And the best part? I got this running on the free T4 GPU in Google Colab. It took me days to crack, but the notebook is ready for you today, and I\'m'
+
+[00:37] [scene:talk]
+VISUAL:
+AUDIO: 'going to walk you through the whole thing. And I\'ll also show you a trick at the end that lets you squeeze out seriously high-quality results at fast speed, completely for free. So, stick around because that part alone is worth'
+
+[00:49] [scene:talk]
+VISUAL:
+AUDIO: 'it. So, the tool is called SoulX FlashHead, built by the AIGC team at Soul AI Lab. It\'s a 1.3 billion parameter model, and it ships in two versions. The light variant, on a single'
+
+[01:02] [scene:talk]
+VISUAL:
+AUDIO: 'RTX 4090, runs at 96 frames per second. That is real-time generation. You feed it audio, it\'s basically already done. The pro variant is slower, running at around 10.8 FPS on the same GPU, but you'
+
+[01:15] [scene:talk]
+VISUAL:
+AUDIO: 'get noticeably better output quality and smoother head movement. Now, here\'s something interesting. If you check the Hugging Face repo, both models are almost identical in size. Light is 6. 11'
+
+[01:27] [scene:talk]
+VISUAL:
+AUDIO: 'GB, pro is 6.03 GB. The reason one is so much faster comes down to the VAE. Light uses the LTX VAE, fast and lean. Pro uses the WaN VAE, slower inference but'
+
+[01:41] [scene:talk]
+VISUAL:
+AUDIO: 'higher fidelity. Same weight on paper, completely different performance under the hood. All right, let me show you their official examples before we touch anything. First up, a dialogue between two talking heads, a male and female'
+
+[01:55] [scene:talk]
+VISUAL:
+AUDIO: 'speaking in turn. I\'ll play it now. Okay, see that? Every syllable is'
+
+[02:35] [scene:talk]
+VISUAL:
+AUDIO: 'landing cleanly. No floating mouth, no lag. And watch the head. There are actual natural tilts and shifts happening. It\'s not locked in place. That\'s genuinely impressive for a model this lightweight. Now, one thing I want'
+
+[02:48] [scene:talk]
+VISUAL:
+AUDIO: 'to flag. I did try to replicate this dual face dialogue myself, and I couldn\'t produce both in a single generation. My best guess is they are going to release multi-character lip sync variant in future. I just want to'
+
+[03:00] [scene:talk]
+VISUAL:
+AUDIO: 'be transparent about that. Here\'s where it gets really interesting. This next clip is a 1-minute long generation comparison against SadTalker, DITTO, Hollow-3, and EchoMimic V3. Let me play it and walk you through what\'s'
+
+[03:14] [scene:talk]
+VISUAL:
+AUDIO: 'happening. Everything looks fine at the start, no'
+
+[03:49] [scene:talk]
+VISUAL:
+AUDIO: 'surprises there. But watch as we get past the halfway mark. Okay, SadTalker is starting to warp around the face edges. DITTO\'s breaking down, too. EchoMimic, honestly, that\'s pretty rough. And look at Hollow-3 right now.'
+
+[04:01] [scene:talk]
+VISUAL:
+AUDIO: 'The crown on the subject\'s head has literally disappeared. It was there at the start, now it\'s gone. Meanwhile, FlashHead light and pro still completely clean. No drift, no artifacts, holding'
+
+[04:13] [scene:talk]
+VISUAL:
+AUDIO: 'sharp all the way to the final frame. I ran my own 2 to 3-minute generations and got the same result. Zero artifacts from start to finish. Long-form consistency is genuinely one of this model\'s'
+
+[04:26] [scene:talk]
+VISUAL:
+AUDIO: 'strongest qualities. Now, here they\'ve done them side by side with the same image and same audio. Pro on top, light on the bottom. Let me play this. &gt;&gt; [singing]'
+
+[04:39] [scene:talk]
+VISUAL:
+AUDIO: '&gt;&gt; So, right away you can see the pro'
+
+[05:08] [scene:talk]
+VISUAL:
+AUDIO: 'output is sharper, more defined, and the head movement has a bit more range. The light version is softer and slightly more static. The difference is real, but it\'s not massive. And let me play the Leonardo DiCaprio clip that generated'
+
+[05:20] [scene:talk]
+VISUAL:
+AUDIO: 'with the pro version. It\'s about 11 seconds. Here we go. Okay, look at that quality. Sharp skin'
+
+[05:37] [scene:talk]
+VISUAL:
+AUDIO: 'texture, natural movement through the whole clip, not a single artifact. That\'s pro. Now, here\'s the same subject with the same audio on the light model. You can see it\'s softer, a bit more'
+
+[06:02] [scene:talk]
+VISUAL:
+AUDIO: 'rigid in the head movement, but still completely usable. The pro clearly wins on quality, but it comes with a major speed cost, and I\'ll show you exactly how slow it gets on Colab when we run it. One more thing, this isn\'t limited'
+
+[06:14] [scene:talk]
+VISUAL:
+AUDIO: 'to realistic faces. Check these cartoon and monkey clips. They work well. And here\'s one from a stone statue, an actual statue talking. And interestingly, on this statue comparison, pro on top, light on the'
+
+[06:26] [scene:talk]
+VISUAL:
+AUDIO: 'bottom, the gap between them is barely noticeable. That brings me to the trick that changes everything, and I\'ll show you exactly what I mean when we get into the demo. Okay, let\'s get this running. The Colab notebook link is in the'
+
+[06:39] [scene:talk]
+VISUAL:
+AUDIO: 'description. It\'s from my GitHub repo where I keep all my Colab notebooks. The FlashHead one is at the very top at the moment. Click it, and it opens directly in Colab. First thing, before you do anything else, check your runtime, top'
+
+[06:51] [scene:talk]
+VISUAL:
+AUDIO: 'right corner. It needs to say T4 GPU. If it\'s showing CPU, click the drop down, go to change runtime type, select T4, and save. Now, before you hit run all,'
+
+[07:03] [scene:talk]
+VISUAL:
+AUDIO: 'let me explain one thing I built into this notebook. The default FlashHead setup as a frustrating limitation. No matter what aspect ratio you give it, the output always comes out as a one-to-one square, totally useless for'
+
+[07:16] [scene:talk]
+VISUAL:
+AUDIO: 'YouTube or social content. So, I wrote a patch that detects your input aspect ratio, crops just the face to one-to-one for the generation, then stitches the result back onto your original frame.'
+
+[07:28] [scene:talk]
+VISUAL:
+AUDIO: 'You put in 16:9, you get 16:9 back. 9:16 in, 9:16 out. The background stays static, which is completely fine since all the movement is in the head anyway. Now, hit run all, and let me walk you'
+
+[07:41] [scene:talk]
+VISUAL:
+AUDIO: 'through each cell. Firstly, it connects to the GPU. Watch the top right corner, it\'ll flip from connecting to connected. Once that\'s done, everything runs automatically. Cell one verifies your CUDA setup and available VRAM. Cell two'
+
+[07:54] [scene:talk]
+VISUAL:
+AUDIO: 'clones the repo. Cell three installs dependencies. This takes about 2 to 3 minutes, just let it run. Cell four downloads the models from Hugging Face. You\'ll see progress bars for the pro'
+
+[08:06] [scene:talk]
+VISUAL:
+AUDIO: 'model, light model, Wave2Vec, and the remaining FlashHead components. Wait for all of them to hit 100%. Cell five runs my aspect ratio and Gradio patch. Cell six locks in the face crop behavior. And'
+
+[08:18] [scene:talk]
+VISUAL:
+AUDIO: 'the final cell launches the Gradio interface. You\'ll get two links. Use the public one, not the local URL. The Gradio UI is minimal and clean. Image on the left, audio on the right, generate button below. There\'s a default'
+
+[08:31] [scene:talk]
+VISUAL:
+AUDIO: 'sample image and audio already loaded, so you can test immediately. Under advanced settings, the model is set to light by default. Faster, and with the trick I\'ll show you, the quality gets very close to pro. If you want the best'
+
+[08:43] [scene:talk]
+VISUAL:
+AUDIO: 'quality and you\'re willing to wait, switch to pro from the drop-down. On the inference tab, there\'s a stream versus once toggle. It doesn\'t matter which you pick on a T4, you\'ll only see the output once generation is fully complete either'
+
+[08:56] [scene:talk]
+VISUAL:
+AUDIO: 'way. Leave everything else as is. The face crop is already forced on, and the model paths are pre-filled. Let me show you a live generation now. I\'m uploading a 9:16 portrait image of a model. This will also confirm the aspect ratio fix'
+
+[09:10] [scene:talk]
+VISUAL:
+AUDIO: 'is working. Audio file is in, about 15 seconds long. Hit generate. Now, the first generation is going to take longer than anything after it because the models are loading cold into VRAM right now. Watch the VRAM counter. It\'s at'
+
+[09:23] [scene:talk]
+VISUAL:
+AUDIO: 'zero currently. Wave2Vec loads first. There it goes. Timing. Now, FlashHead is coming in on top, and it\'s stabilized at 9.6 GB. Both models are fully loaded and sitting in memory.'
+
+[09:36] [scene:talk]
+VISUAL:
+AUDIO: 'Every generation after this will be significantly faster. On the Gradio side, you can see it\'s now on step one of 16. For a 15-second clip, FlashHead runs 16 steps. Let it finish all 16, and'
+
+[09:48] [scene:talk]
+VISUAL:
+AUDIO: 'the video will appear automatically in the output panel. Okay, first generation is done, about 7 minutes total, but three to four of those were model loading. From here, a 15-second clip should come in at two to three minutes.'
+
+[10:02] [scene:talk]
+VISUAL:
+AUDIO: 'Let me play this back. [laughter] Oh, wow. My mortal enemy, Mr. Thompson\'s problem sets. Thanks for rescuing me from that F. Is this your sneaky way of saying you want to study together, Lucas? Because I'
+
+[10:14] [scene:talk]
+VISUAL:
+AUDIO: 'saw you staring during lab partner sign-up. &gt;&gt; All right, lips are tracking, head is moving, eyes look natural. It\'s a solid generation. Definitely usable, but it\'s not at the level I know this model can'
+
+[10:26] [scene:talk]
+VISUAL:
+AUDIO: 'produce, and that\'s where the trick comes in. The trick is simple, it\'s your input image quality. The model has more detail to work with, it gives you more detail back. If you feed it a compressed low-res JPEG, the output reflects that.'
+
+[10:39] [scene:talk]
+VISUAL:
+AUDIO: 'But if you upscale your image to 4K first and then upload it, the results are on a completely different level. Let me show you. I\'ve got a 4K upscaled image here. It\'s my Bigfoot character I'
+
+[10:51] [scene:talk]
+VISUAL:
+AUDIO: 'generated in 16:9, which also shows you this works on non-realistic subjects. Audio file is around 22 seconds, both uploaded, hit generate. Now the models are warm, so watch how quickly the steps'
+
+[11:03] [scene:talk]
+VISUAL:
+AUDIO: 'move this time. Step 1, 2, 3. See that? Much faster cadence, no loading overhead. Let it run through all 23 steps. Generation\'s done, 6 minutes for 22 seconds, 23 steps, free T4, light'
+
+[11:16] [scene:talk]
+VISUAL:
+AUDIO: 'model. Now look at this output. &gt;&gt; You dropped your calculus notebook. I mean, I think it\'s yours, maybe? Uh no problem.'
+
+[11:29] [scene:talk]
+VISUAL:
+AUDIO: 'I actually kind of finished those already. If you want to compare answers or something. What? No. I mean, yes, but not like I just think your your titration technique is really precise. See how sharp that'
+
+[11:43] [scene:talk]
+VISUAL:
+AUDIO: 'is? The skin texture is holding detail, the lips are crisp, the movement is natural all the way through. Same model, same settings. The only difference was a high-quality input image. That\'s the trick, and it works every single time.'
+
+[11:56] [scene:talk]
+VISUAL:
+AUDIO: 'I could keep testing all day, cartoons, paintings, different audio lengths, but the collab is free and it\'s in the description. Go run your own experiments. Try whatever art style you want, and drop your results in the'
+
+[12:08] [scene:talk]
+VISUAL:
+AUDIO: 'comments because I genuinely want to see what you get with this. Huge credit to the team at Soul AI Lab, a 1.3 billion parameter model running on 782 hours of data, and running in real-time on a'
+
+[12:21] [scene:talk]
+VISUAL:
+AUDIO: 'single GPU, and still beating tools that needed a dedicated workstation. That\'s a serious piece of work. The collab notebook, the GitHub repo, and the official project page are all linked in the description. If this helped you out,'
+
+[12:33] [scene:talk]
+VISUAL:
+AUDIO: 'a like takes 2 seconds and it makes a real difference for the channel. Subscribe if you want to catch what\'s coming next. I\'ve already got some tools lined up that are going to surprise you. See you in the next one.'

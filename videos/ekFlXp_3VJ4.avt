@@ -1,0 +1,175 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Best Uncensored LTX Image2Video Model 10Eros based on Sulphur-2  | ComfyUI Workflow Low VRAM Support
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=ekFlXp_3VJ4
+upload_date: 20260519
+transcript_source: captions
+route: text
+
+---
+
+[00:05] [scene:talk]
+VISUAL:
+AUDIO: 'Welcome to Vantage with AI. I was actually supposed to make this video last week, but due to some unexpected circumstances, it got delayed a bit. But finally, here we are. Now, this video is basically a continuation of my previous Sulfur 2 video. In that one, we explored how Sulfur 2 improves human focus,'
+
+[00:18] [scene:talk]
+VISUAL:
+AUDIO: 'motion, and anatomy consistency compared to standard LTX 2.3, especially in more physically dynamic scenes. But today, we\'re taking things one step further and looking at LTX 2.3 Ten Eros.'
+
+[00:31] [scene:talk]
+VISUAL:
+AUDIO: 'Now, one important thing to understand here is that Ten Eros is actually based on Sulfur 2, but it\'s been further optimized specifically for image to video workflows. And honestly, after spending some time testing it, that'
+
+[00:44] [scene:talk]
+VISUAL:
+AUDIO: 'focus becomes pretty obvious. Because image to video is usually where LTX based models become the hardest to control. Sometimes the model ignores parts of the prompt, sometimes it clings'
+
+[00:56] [scene:talk]
+VISUAL:
+AUDIO: 'too tightly to the source image, and sometimes the motion evolution just starts becoming inconsistent as the sequence progresses. According to the creator, Ten Eros uses layer scaled merges from different training stages'
+
+[01:09] [scene:talk]
+VISUAL:
+AUDIO: 'rather than being just a straight weight merge, and the goal here was to improve I2V behavior while maintaining stronger prompt adherence and more stable motion evolution overall. And from my testing so far, I think it actually does a'
+
+[01:22] [scene:talk]
+VISUAL:
+AUDIO: 'pretty impressive job at that. Motion feels more intentional, prompt adherence feels stronger, and character consistency during latent evolution feels noticeably more stable compared to standard LTX 2.3, especially in scenes'
+
+[01:34] [scene:talk]
+VISUAL:
+AUDIO: 'involving close interaction, detailed body movement, breathing motion, weight shifts, and more cinematic camera behavior. And honestly, one of the biggest things I\'ve noticed while'
+
+[01:46] [scene:talk]
+VISUAL:
+AUDIO: 'working with these models is that detailed prompting matters a lot more than most people realize. These models don\'t automatically invent cinematic motion for you. You still need to describe how the scene evolves, how the character moves, camera behavior,'
+
+[02:00] [scene:talk]
+VISUAL:
+AUDIO: 'environmental motion, lighting changes, sound cues, and the overall progression of movement throughout the shot. The more intentional your motion description is, the more stable and cinematic the final result usually becomes. In this'
+
+[02:12] [scene:talk]
+VISUAL:
+AUDIO: 'video, we\'re going to go through the workflow, the model setup, and a PG-13 test generation so you can see how it behaves compared to a more standard sulfur workflow. Now, one important thing before we'
+
+[02:24] [scene:talk]
+VISUAL:
+AUDIO: 'begin, this workflow also requires a custom node from the 10 strip team, the creators behind 10 arrows, in order to work properly and efficiently. And this workflow requires the latest version of that node. So, if you\'re unable to'
+
+[02:36] [scene:talk]
+VISUAL:
+AUDIO: 'update nightly builds through comfy UI manager, you may need to grab the latest version directly from the GitHub repository instead. So, with that said, let\'s jump into it. All right, so let\'s take a quick look at'
+
+[02:48] [scene:talk]
+VISUAL:
+AUDIO: 'the workflow itself. First, let\'s go over the models you actually need for this setup. The main model is, of course, the 10 arrows model itself. It\'s available in BF16, FP8, and quantized GGUF formats, depending on your hardware'
+
+[03:02] [scene:talk]
+VISUAL:
+AUDIO: 'and VRAM limitations. Next, you\'ll need the distilled Laura. Now, larger distilled Lauras can sometimes negatively affect the fine-tune quality of the model, so for this workflow, we\'ll be using the consafe distilled'
+
+[03:14] [scene:talk]
+VISUAL:
+AUDIO: 'Laura instead. And in this setup, we\'re actually using different Laura strengths across different passes, including separate waiting behavior for the audio and video stages. You can also load any other Lauras that you want to use by'
+
+[03:27] [scene:talk]
+VISUAL:
+AUDIO: 'adding them here. Next, you\'ll need the LTX 2.3 VAE along with the LTX 2.3 audio VAE, which handle the video latents and synchronized audio generation. This workflow also uses two text encoders,'
+
+[03:41] [scene:talk]
+VISUAL:
+AUDIO: 'the Gemma 3 12 B text encoder and the standard LTX 2.3 text encoder. And for higher final output resolution, you\'ll also need the LTX 2.3 spatial upscaler model, which enables multi-stage latent'
+
+[03:55] [scene:talk]
+VISUAL:
+AUDIO: 'upscaling. Now, the good thing is all download links for these models are already included directly inside the workflow itself. I\'ve also added them in the video description below, so you'
+
+[04:07] [scene:talk]
+VISUAL:
+AUDIO: 'don\'t have to go hunting everything down manually. And while you\'re down there, if you find the workflow useful, don\'t forget to like the video and subscribe to the channel. It genuinely helps support the content and future workflow breakdowns like this. Now, let\'s jump'
+
+[04:20] [scene:talk]
+VISUAL:
+AUDIO: 'into how everything is wired together inside ComfyUI. We start with the model section. This is where everything required by the workflow gets loaded, the 10 arrows base model, all required LoRAs, the video and audio VAEs, and'
+
+[04:33] [scene:talk]
+VISUAL:
+AUDIO: 'both text encoders. Next comes the prompt section. This is where you define your scene in detail, including character behavior, camera motion, environmental movement, and the overall'
+
+[04:45] [scene:talk]
+VISUAL:
+AUDIO: 'cinematic progression of the shot. After that, we have the control section, which is where most of the workflow configuration happens. Here you define the video width and height, the video duration, and the target FPS. You can'
+
+[04:57] [scene:talk]
+VISUAL:
+AUDIO: 'also enable custom audio if you want to provide your own audio track. If you\'re using an AMD GPU or working on a Mac, make sure to disable RTX video super resolution. That feature only works on'
+
+[05:09] [scene:talk]
+VISUAL:
+AUDIO: 'Nvidia consumer GPUs, so leaving it enabled on unsupported hardware can cause unnecessary issues or simply won\'t do anything at all. And there\'s also a toggle for selecting whether you want to run the SafeTensors version of the model'
+
+[05:22] [scene:talk]
+VISUAL:
+AUDIO: 'or the GGML version, depending on your setup. Next, we move into the generate latent section. This is where you upload your starting image. This block generates both the video latents and the audio latents together, which helps keep'
+
+[05:36] [scene:talk]
+VISUAL:
+AUDIO: 'motion and audio synchronization much more stable during generation. After that, comes the custom audio section. Here you can load an external audio file to use as the audio source for the generated video if'
+
+[05:48] [scene:talk]
+VISUAL:
+AUDIO: 'custom audio is enabled in the control section. You can also trim the audio by adjusting the trim audio duration node and specifying the start and end points manually. And when custom audio is'
+
+[06:00] [scene:talk]
+VISUAL:
+AUDIO: 'enabled, the video duration setting from the control section gets ignored automatically because the total frame count gets calculated directly from the length of the audio file instead. Finally, we reach the sampler section'
+
+[06:13] [scene:talk]
+VISUAL:
+AUDIO: 'where the actual generation happens. This workflow uses a two-stage sampling pipeline. The first stage generates the video at half resolution and focuses mainly on motion, composition, scene'
+
+[06:26] [scene:talk]
+VISUAL:
+AUDIO: 'structure, and overall temporal coherence. Then, the second stage performs a 2x latent upscaling pass, producing the final output at the target'
+
+[06:38] [scene:talk]
+VISUAL:
+AUDIO: 'resolution. This two-stage generation approach helps reduce overall generation time quite a bit while still maintaining very good final image quality and motion stability.'
+
+[06:50] [scene:talk]
+VISUAL:
+AUDIO: 'Now, obviously, the primary purpose of this model is more uncensored human-focused generation, which I can\'t directly showcase here on YouTube. So, instead, I\'ll show you a more PG-13 example generation that still'
+
+[07:04] [scene:talk]
+VISUAL:
+AUDIO: 'demonstrates the motion quality, anatomy consistency, cinematic camera behavior, and overall latent stability of the model. &gt;&gt; [music]'
+
+[07:28] [scene:talk]
+VISUAL:
+AUDIO: '&gt;&gt; All right, so that was a look at the LTX 2.3 10 Euros workflow inside ComfyUI. And honestly, after spending time testing it, I think the biggest strength of this model is that it feels much more intentional during image-to-video generation. Compared to standard LTX'
+
+[07:41] [scene:talk]
+VISUAL:
+AUDIO: '2.3, motion evolution feels more stable, prompt adherence feels stronger, and scenes involving close interaction and more dynamic human movement tend to stay coherent for much longer. Now, again,'
+
+[07:53] [scene:talk]
+VISUAL:
+AUDIO: 'this doesn\'t mean it\'s universally better for every single generation task, but for human-focused cinematic workflows, especially image to video, it definitely feels like a meaningful improvement over standard LTX 2.3'
+
+[08:06] [scene:talk]
+VISUAL:
+AUDIO: 'behavior. I think this is also a good example of how much the ecosystem around LTX models is evolving right now. We\'re starting to see workflows becoming more specialized, more modular, and much more focused on'
+
+[08:19] [scene:talk]
+VISUAL:
+AUDIO: 'solving specific generation problems instead of trying to do everything with one generic setup. So, if you\'ve been experimenting with LTX workflows already, I\'d definitely recommend trying this one out and seeing how it behaves'
+
+[08:31] [scene:talk]
+VISUAL:
+AUDIO: 'on your own prompts and source images. As always, the workflow links and required model downloads are in the description below. And if you enjoyed the video or found the workflow useful, don\'t forget to like the video,'
+
+[08:43] [scene:talk]
+VISUAL:
+AUDIO: 'subscribe to the channel, and drop a comment about what kind of workflows or models you\'d like to see covered next. Thanks for watching, and I\'ll see you in the next one.'

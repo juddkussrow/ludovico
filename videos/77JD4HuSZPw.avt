@@ -1,0 +1,435 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Electrobun Gives You 12MB Desktop Apps in Pure TypeScript
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=77JD4HuSZPw
+upload_date: 20260315
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'Electron apps are everywhere. Slack, Discord, VS Code, Figma. But they all share the same problem. They ship an entire copy of Chromium, they eat hundreds of megabytes of RAM, and their install sizes are enormous. For years,'
+
+[00:13] [scene:talk]
+VISUAL:
+AUDIO: 'developers have been looking for something better. Tauri tried to solve this with Rust and system web views, but that meant learning a new language. What if you could build desktop apps in pure'
+
+[00:26] [scene:talk]
+VISUAL:
+AUDIO: 'TypeScript, ship 12 megabyte binaries, and push updates as small as 14 kilobytes? That is exactly what Electron bun promises. And after digging through its entire source code, I can tell you'
+
+[00:38] [scene:talk]
+VISUAL:
+AUDIO: 'it is one of the most ambitious and cleverly engineered desktop frameworks I have ever seen. Let me break down everything you need to know. So, what exactly is Electron bun? It is a'
+
+[00:50] [scene:talk]
+VISUAL:
+AUDIO: 'complete solution for building, updating, and shipping cross-platform desktop applications, all written in TypeScript. The name is a mashup of its two core runtime technologies. Electron'
+
+[01:02] [scene:talk]
+VISUAL:
+AUDIO: 'minus the bloat plus bun. Under the hood, it uses bun as its main process runtime instead of node, and it has native bindings written in Zig, the'
+
+[01:14] [scene:talk]
+VISUAL:
+AUDIO: 'systems programming language known for its performance and safety. The project is built by Blackboard Technologies. It is MIT licensed, and it officially supports macOS 14 and above, Windows 11 and above, and Ubuntu 22.04'
+
+[01:29] [scene:talk]
+VISUAL:
+AUDIO: 'and above with community support for other Linux distros. The pitch is simple. You write TypeScript for both your main process and your web views without thinking about it. You get fast,'
+
+[01:42] [scene:talk]
+VISUAL:
+AUDIO: 'type-safe RPC between them. Your app bundles are tiny, around 12 megabytes when using the system web view, and your updates can be as small as 14 kilobytes because Electron bun uses binary diff'
+
+[01:56] [scene:talk]
+VISUAL:
+AUDIO: 'patches instead of downloading whole new versions. You can go from writing code to distributing your app in about 10 minutes. That is the promise. Now, let me show you how it actually works under'
+
+[02:09] [scene:talk]
+VISUAL:
+AUDIO: 'the hood. Let us start with the architecture because this is where ElectroBun gets really interesting. It uses a multi-process model similar to Electron, but with a very different tech stack. You have three main layers.'
+
+[02:22] [scene:talk]
+VISUAL:
+AUDIO: 'First, the main process, which runs on Bun. This is where your application logic lives. Things like creating windows, handling menus, managing state, and communicating with your web views.'
+
+[02:34] [scene:talk]
+VISUAL:
+AUDIO: 'Second, the renderer processes, which are your web views. These can use either the system\'s native web view engine like WebKit on macOS, WebView2 on Windows, and WebKit GTK on Linux, or they can use'
+
+[02:48] [scene:talk]
+VISUAL:
+AUDIO: 'CEF, the Chromium Embedded Framework, for a consistent cross-platform rendering experience. Third, the native layer, which is a C++ and Objective-C++ library called library called lib native'
+
+[03:02] [scene:talk]
+VISUAL:
+AUDIO: 'wrapper that bridges Bun to the operating system\'s native APIs through Bun\'s FFI, or foreign function interface. This three-layer architecture is one of the key design decisions that'
+
+[03:15] [scene:talk]
+VISUAL:
+AUDIO: 'makes ElectroBun different. In Electron, both the main process and the renderer run on V8 Chrome\'s JavaScript engine. In ElectroBun, the main process runs on Bun\'s JavaScript core engine, which is'
+
+[03:28] [scene:talk]
+VISUAL:
+AUDIO: 'the same engine that powers Safari. The renderer can use whatever web view engine you choose. This separation means you\'re not shipping an entire copy of Chromium just to run your main process'
+
+[03:40] [scene:talk]
+VISUAL:
+AUDIO: 'logic. Now, let us talk about one of the most important parts of any desktop framework, how the main process communicates with the web views. ElectroBun has a custom RPC system that is fully type safe, bidirectional, and'
+
+[03:53] [scene:talk]
+VISUAL:
+AUDIO: 'transport agnostic. When I read through the RPC source code, I was impressed by how cleanly it is designed. The wire protocol has three packet types, request'
+
+[04:05] [scene:talk]
+VISUAL:
+AUDIO: 'packets, which carry a method name and parameters, and expect a response. Response packets, which carry either a success payload or an error. And message packets, which are fire and forget,'
+
+[04:19] [scene:talk]
+VISUAL:
+AUDIO: 'meaning you send them without expecting anything back. The really clever part is how you define the RPC schema. You define a TypeScript type that describes exactly what methods exist, what'
+
+[04:32] [scene:talk]
+VISUAL:
+AUDIO: 'parameters they accept, and what they return. Then, when you create an RPC instance, the TypeScript compiler enforces that you are calling methods correctly with the right parameters and handling the'
+
+[04:44] [scene:talk]
+VISUAL:
+AUDIO: 'right return types. The actual method calls use JavaScript proxies, so you can write natural-looking code like RPC.request.getFC.getAC with some parameters. And it just works.'
+
+[04:59] [scene:talk]
+VISUAL:
+AUDIO: 'But the RPC system is not just about convenience. It is also about security. Communication between the main process and web views goes through an encrypted web socket channel. Each web view gets a'
+
+[05:13] [scene:talk]
+VISUAL:
+AUDIO: 'unique 32-byte secret key when it is created. All messages are encrypted with AES-256-GCM, which is authenticated encryption. This'
+
+[05:25] [scene:talk]
+VISUAL:
+AUDIO: 'means that even if something manages to intercept the communication between your main process and your web view, it cannot read or tamper with the messages. The encryption happens on both sides.'
+
+[05:37] [scene:talk]
+VISUAL:
+AUDIO: 'The main process uses Node\'s crypto module through Bun, and the web view side uses the browser\'s built-in Web Crypto API. This is a level of security that Electron does not provide out of'
+
+[05:49] [scene:talk]
+VISUAL:
+AUDIO: 'the box. Electro bun also has a sandbox mode for web use that are loading untrusted content. Like if your app is a web browser, when you enable sandbox mode, the web view loses access to RPC'
+
+[06:01] [scene:talk]
+VISUAL:
+AUDIO: 'entirely. It can only send one way event messages through a restricted event bridge. No bidirectional communication, no JavaScript execution from the main process, nothing. This is important for'
+
+[06:15] [scene:talk]
+VISUAL:
+AUDIO: 'apps that need to display arbitrary web content safely, like the collab browser that Blackboard built with Electrobun. Let me talk about the web view system itself. When you create a browser window'
+
+[06:27] [scene:talk]
+VISUAL:
+AUDIO: 'in Electrobun, it automatically creates a primary browser view inside it. You can add more views to the same window if you need a multi-panel layout. Each browser view can load a URL or render'
+
+[06:40] [scene:talk]
+VISUAL:
+AUDIO: 'inline HTML. You can choose between the native system web view or CEF for rendering. The system web view option is what gives you those tiny 12 megabyte bundles because you are using the web'
+
+[06:53] [scene:talk]
+VISUAL:
+AUDIO: 'view that is already installed on the user\'s operating system. But if you need pixel-perfect cross-platform consistency, you can bundle CEF. The trade-off is size. CEF adds significant'
+
+[07:05] [scene:talk]
+VISUAL:
+AUDIO: 'weight to your application bundle. There\'s also a really interesting feature called the web view tag system. This works similarly to Electron\'s web view tag, where you can embed a web view'
+
+[07:18] [scene:talk]
+VISUAL:
+AUDIO: 'inside another web view. Under the hood, Electrobun implements these as out of process iframes, meaning each embedded web view runs in its own process with its own security context. The'
+
+[07:31] [scene:talk]
+VISUAL:
+AUDIO: 'communication between parent and child web views goes through the internal bridge, a separate RPC channel dedicated to internal Electrobun\'s operations. Now, let me get into one of Electron bonds most impressive technical'
+
+[07:44] [scene:talk]
+VISUAL:
+AUDIO: 'achievements, the update system. I spent a lot of time reading through the updater source code and it is genuinely clever. Most desktop app update systems work by downloading the entire new version of the app and replacing the old'
+
+[07:57] [scene:talk]
+VISUAL:
+AUDIO: 'one. Electron does something different. It uses binary diff patching with a tool called bsdiff. Here is how it works. When you release a new version of your app, Electron creates a binary patch'
+
+[08:09] [scene:talk]
+VISUAL:
+AUDIO: 'file that represents only the differences between the old version and the new version. These patch files can be incredibly small, sometimes as little as 14 kilobytes. When the app checks for'
+
+[08:22] [scene:talk]
+VISUAL:
+AUDIO: 'updates, it first looks for a patch from its current version hash to the next version hash. If a patch is available, it downloads it and applies it to the current version\'s tarball to produce the'
+
+[08:34] [scene:talk]
+VISUAL:
+AUDIO: 'next version\'s tarball. Then it checks again for another patch from that version to the next one and so on, chaining patches together until it reaches the latest version. There is cycle detection built in, so it does not'
+
+[08:47] [scene:talk]
+VISUAL:
+AUDIO: 'get stuck in infinite loops. If patching fails or if no patches are available, it falls back to downloading the full bundle. The update process has over 20 distinct status states from idle and'
+
+[08:59] [scene:talk]
+VISUAL:
+AUDIO: 'checking all the way through downloading patch, applying patch, extracting, replacing app, and launching new version. Each status change fires a callback, so you can build detailed progress UI for your users. The actual'
+
+[09:13] [scene:talk]
+VISUAL:
+AUDIO: 'app replacement is platform specific. On macOS, it extracts the new app bundle, swaps it in, removes the quarantine attribute, and relaunches using the open command. On Linux, it extracts to the'
+
+[09:27] [scene:talk]
+VISUAL:
+AUDIO: 'app data folder and relaunches the launcher binary. On Windows, it uses the Windows task scheduler to create a self-deleting batch script that waits for the current process to exit, then'
+
+[09:40] [scene:talk]
+VISUAL:
+AUDIO: 'replaces the files and relaunches. Let me talk about the self-extracting bundle system because this is another area where Electron is doing something unique. When you build your app for distribution, Electron creates a'
+
+[09:53] [scene:talk]
+VISUAL:
+AUDIO: 'self-extracting executable. This is a standalone binary with your compressed app bundle appended to it. The extractor is written in Zik and looks for magic markers inside itself, specifically the'
+
+[10:06] [scene:talk]
+VISUAL:
+AUDIO: 'strings Electron archive V1 and Electron metadata starts. It reads metadata like the app identifier, name, channel, and hash, then extracts the compressed'
+
+[10:19] [scene:talk]
+VISUAL:
+AUDIO: 'tarball to the appropriate app data directory for the platform. On Linux, it even tries to show a native progress dialogue using Zenity or KDialog with a fallback to a console spinner. The app'
+
+[10:32] [scene:talk]
+VISUAL:
+AUDIO: 'bundles use Zstandard compression, which provides excellent compression ratios with very fast decompression. Now, let me cover the native layer in more detail because this is where a lot of the'
+
+[10:44] [scene:talk]
+VISUAL:
+AUDIO: 'engineering complexity lives. Electron\'s native wrapper is a single shared library per platform, libnativewrapper.dylib on macOS, .dll on Windows, and .so on Linux.'
+
+[10:58] [scene:talk]
+VISUAL:
+AUDIO: 'But on Linux, there is actually a dual binary approach. There is a smaller libnativewrapper.so that only links against GTK and WebKitGTK, and a larger libnativewrapper_cef.so'
+
+[11:10] [scene:talk]
+VISUAL:
+AUDIO: 'that also links against CEF. The reason for this is that Linux does not have reliable weak linking for shared libraries. On macOS, you can use weak frameworks, and on Windows, you can use'
+
+[11:22] [scene:talk]
+VISUAL:
+AUDIO: 'delay-loaded DLLs. But on Linux, if you hard link against CEF and it is not present at runtime, the library simply will not load. So, Electrobun, based on'
+
+[11:34] [scene:talk]
+VISUAL:
+AUDIO: 'your configuration, the native wrapper exposes over 100 FFI functions to Bun. Window creation, web view management, menu systems, tray icons, file dialogues, clipboard access, screen'
+
+[11:48] [scene:talk]
+VISUAL:
+AUDIO: 'information, global shortcuts, notifications, session management with cookies and storage, and even web GPU surface creation. The macOS implementation is about 8,800'
+
+[12:01] [scene:talk]
+VISUAL:
+AUDIO: 'lines of Objective-C++. The Windows implementation is about 11,500 lines of C++. The Linux implementation is about 10,900'
+
+[12:14] [scene:talk]
+VISUAL:
+AUDIO: 'lines. Each platform implements the same abstract interface, but uses completely different native APIs underneath. One detail I found particularly interesting'
+
+[12:26] [scene:talk]
+VISUAL:
+AUDIO: 'is the menu system. Electrobun takes a JSON representation of your menu structure, parses it in the native layer, and maps menu roles to platform-specific selectors. On macOS, this means mapping to Cocoa selectors'
+
+[12:40] [scene:talk]
+VISUAL:
+AUDIO: 'like order front standard, about panel for the about menu item, perform many tries for minimize, and so on. There are over 100 map menu roles covering everything from basic operations like'
+
+[12:54] [scene:talk]
+VISUAL:
+AUDIO: 'copy and paste to advanced features like text alignment, speech synthesis, and window management. You define your menus in TypeScript as a simple data structure, and the native layer handles'
+
+[13:06] [scene:talk]
+VISUAL:
+AUDIO: 'all the platform-specific translation. Speaking of features, let me cover web GPU support, cuz this is something you do not see in most desktop frameworks. Electrobun has full web GPU FFI'
+
+[13:18] [scene:talk]
+VISUAL:
+AUDIO: 'bindings, over 100 functions, that lets you access the GPU directly from your bun main process. You can create GPU windows, which are like browser windows, but for GPU rendered content. You can'
+
+[13:32] [scene:talk]
+VISUAL:
+AUDIO: 'create webGPU rendering surfaces that you can position and layer within a window alongside regular web views. Electron even bundles 3.js and babylon.js'
+
+[13:44] [scene:talk]
+VISUAL:
+AUDIO: 'as first class exports, so you can do 3D rendering directly from your main process. The demo apps include a bull running through webGPU, which gives you a sense of the'
+
+[13:56] [scene:talk]
+VISUAL:
+AUDIO: 'performance potential. Let us talk about the developer experience. Getting started with Electron is designed to be fast. You run npx electron bun in and it gives you a choice of 19 templates. There is a basic hello world framework'
+
+[14:10] [scene:talk]
+VISUAL:
+AUDIO: 'specific templates for react, view, spelt, solid and angular, practical templates like a notes app, a photo booth, and a sequel light crud app, and advanced templates for webGPU with 3.js'
+
+[14:22] [scene:talk]
+VISUAL:
+AUDIO: 'and babylon.js. The templates are actually embedded directly into the CLI binary, so you do not need to download them from anywhere. Each template gives you a complete'
+
+[14:34] [scene:talk]
+VISUAL:
+AUDIO: 'project structure with an electron.config.ts file, a package.json typescript configuration, a main process entry point, and a web view entry point. The configuration file is where you'
+
+[14:47] [scene:talk]
+VISUAL:
+AUDIO: 'define everything about your app, the app name and identifier, version URL schemes for deep linking, build targets, view entry points, platform specific settings like macOS code signing and'
+
+[14:59] [scene:talk]
+VISUAL:
+AUDIO: 'notarization, Windows installer configuration, and Linux app image and duration. You can configure chromium flags to pass through to CEF, choose your default renderer, set up ASAR'
+
+[15:11] [scene:talk]
+VISUAL:
+AUDIO: 'archive packing, and even override the versions of bun, CEF, and webGPU that electron bun uses. The build system handles cross-platform builds, so you can target macOS ARM64,'
+
+[15:25] [scene:talk]
+VISUAL:
+AUDIO: 'macOS X64, build 664, and Linux X64, and Linux ARM64 from a single codebase. Now, let us talk about what you should'
+
+[15:38] [scene:talk]
+VISUAL:
+AUDIO: 'consider if you are thinking about building an app with Electrobun. First, platform maturity. Electrobun is still in beta. The version as of my research is 1151, but the project\'s own documentation still refers to beta'
+
+[15:51] [scene:talk]
+VISUAL:
+AUDIO: 'releases. It is actively developed and evolving quickly, but it is not as battle-tested as Electron, which has been around since 2013. If you are building a production app for a large'
+
+[16:03] [scene:talk]
+VISUAL:
+AUDIO: 'user base, you need to weigh the risk of running on a newer framework against the performance and size benefits. Second, ecosystem and community. Electron has a massive ecosystem of plugins, tools, and'
+
+[16:15] [scene:talk]
+VISUAL:
+AUDIO: 'community knowledge. Electrobun is much smaller. You will find fewer Stack Overflow answers, fewer third-party libraries specifically designed for it, and fewer people who have encountered'
+
+[16:28] [scene:talk]
+VISUAL:
+AUDIO: 'the same problems you might run into. That said, the project has an active Discord community, and the maintainers are responsive. Third, the Bun dependency. Electrobun is built entirely on Bun, not Node. Bun is'
+
+[16:42] [scene:talk]
+VISUAL:
+AUDIO: 'excellent and very fast, but it does not have perfect compatibility with every NPM package. If your app depends on Node-specific APIs or packages that use'
+
+[16:54] [scene:talk]
+VISUAL:
+AUDIO: 'native Node addons, you might run into issues. Bun\'s compatibility has improved dramatically over the past year, but it is worth testing your specific dependencies. Fourth, the web view'
+
+[17:06] [scene:talk]
+VISUAL:
+AUDIO: 'rendering question. If you use system web views, you get tiny bundles, but you lose cross-platform rendering consistency. Different versions of WebKit, WebView 2, and WebKit GTK on different operating system versions'
+
+[17:21] [scene:talk]
+VISUAL:
+AUDIO: 'might render things slightly differently. If you bundle CEF for consistency, your bundles get much larger. This is a trade-off you need to think about based on your app\'s requirements. Fifth, and this is important, the CEF licensing situation.'
+
+[17:35] [scene:talk]
+VISUAL:
+AUDIO: 'CEF itself is BSD licensed, and Electrobond is MIT licensed, so there are no licensing issues. But CEF is essentially Chromium, and keeping it up'
+
+[17:47] [scene:talk]
+VISUAL:
+AUDIO: 'to date with security patches is important. Electrobond has a weekly automated check for new CEF versions, and they make it easy to bump versions, but you should be aware that bundling'
+
+[17:59] [scene:talk]
+VISUAL:
+AUDIO: 'CEF means you are taking on the responsibility of keeping Chromium up to date in your app. Sixth, Zig is a build dependency. Electrobond\'s build system vendors and uses the Zig compiler for'
+
+[18:12] [scene:talk]
+VISUAL:
+AUDIO: 'building the launcher and self-extractor. You do not need to write any Zig yourself, but if you want to contribute to Electrobond or debug issues at the native level, you will need to understand Zig and C++. For most'
+
+[18:25] [scene:talk]
+VISUAL:
+AUDIO: 'app developers, this does not matter, but it is worth knowing. Seventh, native API coverage. While Electrobond covers a lot of ground with its native bindings,'
+
+[18:37] [scene:talk]
+VISUAL:
+AUDIO: 'it may not expose every single native API you need. Electron has had over a decade to build out its API surface. Electrobond is still adding features. If your app needs something very specific,'
+
+[18:51] [scene:talk]
+VISUAL:
+AUDIO: 'like advanced accessibility APIs, custom window shapes, or deep integration with platform-specific features, check the API documentation first. Let me also cover what Electrobond does particularly'
+
+[19:04] [scene:talk]
+VISUAL:
+AUDIO: 'well compared to the alternatives. The update system with binary diff patching is genuinely best in class. No other mainstream desktop framework offers this out of the box. 14 kilobyte updates'
+
+[19:17] [scene:talk]
+VISUAL:
+AUDIO: 'instead of 40 megabyte downloads is a huge win for your users, especially on slow connections. The type-safe RPC system is also excellent. In Electron, IPC between main and renderer processes'
+
+[19:30] [scene:talk]
+VISUAL:
+AUDIO: 'is loosely tied by default and you need third-party libraries to add type safety. In Electron it is built in from day one with full TypeScript inference. The bundle size story is also'
+
+[19:44] [scene:talk]
+VISUAL:
+AUDIO: 'compelling. A 12 megabyte app bundle using system web views is dramatically smaller than a typical Electron app, which can easily be 150 megabytes or more. Even bundling CEF, Electron\'s'
+
+[19:57] [scene:talk]
+VISUAL:
+AUDIO: 'total size is competitive because of the Z standard compression and the self-extracting bundle approach. Bun as the main process runtime is also a significant performance advantage. Bun'
+
+[20:10] [scene:talk]
+VISUAL:
+AUDIO: 'is substantially faster than Node at startup and at many common operations, which translates to faster app launch times. The security model is thoughtful. The encrypted RPC channel, the sandbox'
+
+[20:23] [scene:talk]
+VISUAL:
+AUDIO: 'mode for untrusted content, and the permission caching system with 24-hour expiry show that security was considered from the beginning, not bolted on later. So, who should use Electron? If you are'
+
+[20:35] [scene:talk]
+VISUAL:
+AUDIO: 'starting a new desktop app project today and you are comfortable with TypeScript, Electron is worth serious consideration. It is especially attractive if you care about small bundle sizes, fast updates,'
+
+[20:48] [scene:talk]
+VISUAL:
+AUDIO: 'and strong TypeScript integration. If you are building something like a developer tool, a creative app, a productivity app, or anything where performance and user experience matter, Electron gives you a very modern and'
+
+[21:02] [scene:talk]
+VISUAL:
+AUDIO: 'efficient foundation. The WebGPU support makes it particularly interesting for apps that need GPU acceleration like 3D editors, visualization tools, or even games. If you are maintaining an'
+
+[21:15] [scene:talk]
+VISUAL:
+AUDIO: 'existing Electron app, migrating to Electrobun would be a significant effort. The APIs are not compatible and you would need to rewrite your IPC layer, your window management code, and'
+
+[21:27] [scene:talk]
+VISUAL:
+AUDIO: 'possibly deal with bun compatibility issues for your dependencies. It might be worth it for the performance and size improvements, but it is not a drop-in replacement. If you need maximum'
+
+[21:39] [scene:talk]
+VISUAL:
+AUDIO: 'stability and ecosystem support right now, Electron is still the safer choice. But if you are willing to be on the cutting-edge and you want to see what the future of desktop app development looks like, Electrobun is one of the'
+
+[21:52] [scene:talk]
+VISUAL:
+AUDIO: 'most exciting projects in this space. The combination of bun, zig, type-safe RPC, binary diff updates, WebGPU support, and tiny bundle sizes is unlike'
+
+[22:04] [scene:talk]
+VISUAL:
+AUDIO: 'anything else available today. The project is open source on GitHub under the blackboard SH organization. You can get started with NPX Electrobun and knit, join their discord for community'
+
+[22:16] [scene:talk]
+VISUAL:
+AUDIO: 'support, and follow the maintainer Yav on X for updates. Whether you end up using Electrobun or not, it is worth understanding how it works because the ideas in this project are going to'
+
+[22:28] [scene:talk]
+VISUAL:
+AUDIO: 'influence how we build desktop apps for years to come.'

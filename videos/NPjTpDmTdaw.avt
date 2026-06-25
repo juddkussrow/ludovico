@@ -1,0 +1,91 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: LTX-2 IC LoRA Tutorial
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=NPjTpDmTdaw
+upload_date: 20260106
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'Hi everyone. Following our release of LTX2, we are excited to walk you through our IC Laura workflow. IC Laura, or in-context Laura\'s, are a powerful way to transfer the structure and motion from a reference video onto a completely'
+
+[00:12] [scene:talk]
+VISUAL:
+AUDIO: 'new generation. This workflow includes three separate IC Laura groups: Canny, Depth, and Pose. To avoid running out of memory, we suggest running just one of the groups'
+
+[00:25] [scene:talk]
+VISUAL:
+AUDIO: 'each time and muting the other two groups. Let\'s quickly cover when to use which. Canny is ideal for preserving the edges of your shot. Depth captures camera movement and the'
+
+[00:38] [scene:talk]
+VISUAL:
+AUDIO: '3D geometry of the scene. Pose focuses on human joints and body movement, making it ideal for complex motion or dance routines. We start by uploading our guiding video in the load'
+
+[00:50] [scene:talk]
+VISUAL:
+AUDIO: 'video node and a reference image. Even if you intend to use the workflow in text-to-image mode, an image is required to run the workflow. Right next to it, you\'ll see a text-only switch, which is set to false by default,'
+
+[01:04] [scene:talk]
+VISUAL:
+AUDIO: 'meaning the workflow acts as an image-to-video generator using a custom-generated image as the starting point for your video, in addition to the reference video. &gt;&gt; [music] &gt;&gt; When set to true, the workflow switches'
+
+[01:16] [scene:talk]
+VISUAL:
+AUDIO: 'to text-to-video mode. It will generate the video pixels entirely from scratch based on your prompt, while still strictly adhering to the structure of your reference video. An important note for image-to-video:'
+
+[01:29] [scene:talk]
+VISUAL:
+AUDIO: 'For the best results, try generating the first frame using a ControlNet or another image model derived from your reference video\'s first frame. If the first frame of your video and custom image don\'t align closely, you'
+
+[01:41] [scene:talk]
+VISUAL:
+AUDIO: 'might see a jump cut or visual artifacts in your output video. In terms of prompting for IC Laura, since the motion is handled by the Laura, your prompt should focus on'
+
+[01:53] [scene:talk]
+VISUAL:
+AUDIO: 'visual style and subject description. &gt;&gt; [music] &gt;&gt; Make sure to describe background items, textures, lighting, but avoid describing the motion of the camera or character, as this will be automatically derived from the input video.'
+
+[02:06] [scene:talk]
+VISUAL:
+AUDIO: 'For your convenience, we have packed most of the workflow\'s architecture into a subgraph. For those of you who want to customize more parameters, let\'s dive deeper into one of these subgraphs. Let\'s look at the pose group.'
+
+[02:19] [scene:talk]
+VISUAL:
+AUDIO: 'Inside, you will find the Laura loader, in this case the pose I see Laura. We also load the LTX2 checkpoint, the LTX up sampler model, the Gemma clip encoder, and the audio VAE. If we unpack'
+
+[02:32] [scene:talk]
+VISUAL:
+AUDIO: 'the sampler subgraph as well, we\'ll see the whole structure of our workflow. First, we have the preprocessor. The video passes through a specific preprocessor, in this case DW pose,'
+
+[02:44] [scene:talk]
+VISUAL:
+AUDIO: 'which extracts the skeleton and joints from your video. This is similar to how control nets work for images, but applied across multiple frames. To improve your text to video outputs,'
+
+[02:56] [scene:talk]
+VISUAL:
+AUDIO: 'your prompts go through our custom prompt enhancer node, which includes an elaborate system prompt. In image to video mode, this node is bypassed by default. It\'s a good practice in general to take the enhanced'
+
+[03:09] [scene:talk]
+VISUAL:
+AUDIO: 'prompt and manually adjust it, especially if you want your character to say a specific phrase. Next is the LTX V add guide node. This is your control center. Frame index, set to zero, ensures the'
+
+[03:22] [scene:talk]
+VISUAL:
+AUDIO: 'guidance starts from the very beginning. Strength is set to one by default. Usually, you don\'t want to change this. A value below 1.0 can make the reference video pop in the output.'
+
+[03:34] [scene:talk]
+VISUAL:
+AUDIO: 'Finally, the latents go through our multi-stage sampler. Just like the distilled image to video workflow, we generate at a lower resolution first using Euler ancestral sampler with eight sigma steps, and then'
+
+[03:46] [scene:talk]
+VISUAL:
+AUDIO: 'upscale it to the final resolution in stage two. The result is a video that completely reimagines the style of your input while locking in the original motion perfectly. We can\'t wait to see what you create.'
+
+[03:59] [scene:talk]
+VISUAL:
+AUDIO: 'Download the workflow, try training your own IC Laura\'s using our LTXV trainer, and help us push the boundaries of open-source AI video. Thank you for watching.'

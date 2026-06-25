@@ -1,0 +1,295 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: How a Pipecat Pipeline Works | Pipecat Tutorial | Voice AI
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=taAFXaQXCcI
+upload_date: 20251019
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'Hello. So in this video I\'m going to go through how a Pipecat pipeline works. I\'m hoping this is going to serve as a useful guide to any developers getting started on building in Pipcat and also for anyone interested in how voice AI'
+
+[00:12] [scene:talk]
+VISUAL:
+AUDIO: 'orchestration works at a low level. We\'ll go through the topics on screen. So how frames and processes are fundamental building blocks in Pipcat. How frames flow through a pipeline in a typical conversational turn. how the'
+
+[00:25] [scene:talk]
+VISUAL:
+AUDIO: 'pipeline handles interruptions, how the voice activity detector and smart dome detector work together, what observers are and how they\'re used in Pipcat, how to make the bot say specific things at'
+
+[00:37] [scene:talk]
+VISUAL:
+AUDIO: 'specific times, how to make the bot uninterruptible at certain times, and also at the end, as a bonus, I\'ll be sharing some tips on how you can make the most out of this video using AI tools. So, if you don\'t understand what'
+
+[00:49] [scene:talk]
+VISUAL:
+AUDIO: 'a TTS speak frame is by the end of this video, you shall. So, this is what a pipeline looks like. Essentially a pipeline has user speech coming in and has bot speech going out and then you loop and to do this you need to get data'
+
+[01:01] [scene:talk]
+VISUAL:
+AUDIO: 'coming into the pipeline and that is done using frames. Frames are how you store data in pipecat. Now processors take those frames and they either transform them and pass them down'
+
+[01:15] [scene:talk]
+VISUAL:
+AUDIO: 'the line or they pass them down the line unchanged or some processes will just remove them from the pipeline. You should know also that a pipeline itself is a processor which at the beginning of the um bots creation links all the'
+
+[01:27] [scene:talk]
+VISUAL:
+AUDIO: 'processors to their neighbors. So essentially each processor is aware then of which processor comes before it and which processor comes after it. And'
+
+[01:39] [scene:talk]
+VISUAL:
+AUDIO: 'that\'s because there\'s two types of frames. Um control frames and just standard frames. Standard frames just flow downwards from top to bottom. Those are the ones you see here. And control frames can flow upwards and those are'
+
+[01:51] [scene:talk]
+VISUAL:
+AUDIO: 'used so that frames further up the pipeline can understand the state of frame of processes further down the pipeline in certain cases like when you\'re handling handling interruptions'
+
+[02:03] [scene:talk]
+VISUAL:
+AUDIO: 'which I\'ll explain later. So now we\'ll go through how frames flow through a pipeline in standard conversational turn beginning with the users parts the user speech part. So the processes involved'
+
+[02:15] [scene:talk]
+VISUAL:
+AUDIO: 'in that. First of all, there\'s the transport. The transport is responsible for moving audio from the user\'s microphone into the pipeline. That\'s what the transport input does. And what'
+
+[02:27] [scene:talk]
+VISUAL:
+AUDIO: 'it does is it takes that audio, packages them up in 20 millisecond chunks and sends them through to the transcriber, the speechtoext processor. Now also in the transport input lives the voice'
+
+[02:40] [scene:talk]
+VISUAL:
+AUDIO: 'activity detection. And this outputs certain control frames such as the user started speaking frame and the user stopped speaking frame. And these are signals to the ST which buffers incoming audio until a complete utterance has'
+
+[02:57] [scene:talk]
+VISUAL:
+AUDIO: 'been detected by the transport when it outputs the user stopped speaking frame. And at that point the ST processor will send the complete utterance as a WAV file through to whatever service it\'s'
+
+[03:10] [scene:talk]
+VISUAL:
+AUDIO: 'using for transcription. Now once that\'s done transcriptions come streaming in to the ST and it outputs actually both interim transcription frames and once the complete transcription is through it'
+
+[03:24] [scene:talk]
+VISUAL:
+AUDIO: 'outputs a full transcription frame containing the complete transcribed utterance. This goes through to a context aggregator which builds that into a um universal context suitable for the LLM. So the context looks like ro'
+
+[03:40] [scene:talk]
+VISUAL:
+AUDIO: 'user what they said in the next turn. It might be ro assistant what the assistant said in response and then so on so that the LLM can generate the appropriate'
+
+[03:52] [scene:talk]
+VISUAL:
+AUDIO: 'output for what the user just said on this turn. Now you may be wondering what interrint transcription frames are used for. Those are actually for observability. So in some circumstances where you\'re not using telephony, you'
+
+[04:06] [scene:talk]
+VISUAL:
+AUDIO: 'may be using web RTC and there may be a web client. You can show live transcription as the user is speaking so that they can check what they\'ve said and correct anything that\'s been mis mistranscribed. But the LLM needs the'
+
+[04:18] [scene:talk]
+VISUAL:
+AUDIO: 'complete utterance of what the user just said in order to generate the correct output. So that\'s why this outputs the transcription frame. That\'s what\'s used by the contracts aggregator and then by the LLM.'
+
+[04:31] [scene:talk]
+VISUAL:
+AUDIO: 'Now for the assistant part. So buffering works here a little bit differently because you can optimize latency here as I\'ll explain. So the LLM the LLM outputs once it starts streaming tokens which it'
+
+[04:43] [scene:talk]
+VISUAL:
+AUDIO: 'does. So LLMs as you\'ll have seen will um return token by token as it generates its output. The LLM processor outputs an LLM full response frame and then'
+
+[04:55] [scene:talk]
+VISUAL:
+AUDIO: 'multiple LLM text frames, each containing a token that the LLM has generated. It streams these to the TTS. And when it has finished its response, it outputs the LLM full response end frame. Now, the TTS doesn\'t wait for'
+
+[05:08] [scene:talk]
+VISUAL:
+AUDIO: 'that before it starts streaming to the TTS service that it\'s using. There\'s actually two levels of buffering going on here. So, the TTS, if you\'re just directly streaming tokens there, you can'
+
+[05:20] [scene:talk]
+VISUAL:
+AUDIO: 'do that. There\'s a setting to do that. The TTS will do the buffering until it has enough of the sentence typically at a sentence boundary to generate natural speech because obviously if it just had word single word at the time it wouldn\'t'
+
+[05:34] [scene:talk]
+VISUAL:
+AUDIO: 'it would sound like a robot essentially. So there is also then buffering going on within the TTS processor itself and there\'s comments in the code saying that this produces more natural output. So they actually have something that'
+
+[05:46] [scene:talk]
+VISUAL:
+AUDIO: 'buffers in the TTS to a word boundary and then sends the full word boundary out to the TTS to produce more natural speech. And they apparently get better results that way. And that\'s cool'
+
+[05:58] [scene:talk]
+VISUAL:
+AUDIO: 'because actually if you\'re buffering to word boundaries, you can actually run potentially additional processes here to like potentially modify that to um have some some TTS providers support a'
+
+[06:10] [scene:talk]
+VISUAL:
+AUDIO: 'markup. So you can like for example spell things more slowly. So that\'s useful. And then also the TTS once it\'s actually done the conversion to audio will send out TTS audio row raw frames'
+
+[06:24] [scene:talk]
+VISUAL:
+AUDIO: 'and TTS text frames. The transport takes the raw frames and transport those up to the users\'s speaker so that they can hear the bot\'s output. And the context'
+
+[06:36] [scene:talk]
+VISUAL:
+AUDIO: 'aggregator aggregator takes the text frames. And like before, this is where it builds the assistant part and what the bot actually said. Okay, so that\'s how it goes and then you loop back. Now'
+
+[06:49] [scene:talk]
+VISUAL:
+AUDIO: 'let\'s go through how interruptions are handled in the pipeline. So the transport output when it starts sending output audio frames, it outputs a bot started speaking frame. Now this frame'
+
+[07:01] [scene:talk]
+VISUAL:
+AUDIO: 'gets sent up the pipeline until it gets all the way to the transport input where this sets a flag. It maintains state saying whether or not the bot is'
+
+[07:13] [scene:talk]
+VISUAL:
+AUDIO: 'speaking. Right? So if at that point then the VAD detects that the user has started speaking again, it generates a interruption task frame and sends this'
+
+[07:25] [scene:talk]
+VISUAL:
+AUDIO: 'up to the pipeline task. The pipeline task then converts this to a high priority control frame and sends that down the pipeline until well it sends yeah an interruption frame down the'
+
+[07:39] [scene:talk]
+VISUAL:
+AUDIO: 'pipeline and all these processes if they\'re doing anything at that time cancel their tasks and then the bot when it gets here stops speaking. Now the way it does this is actually each processor'
+
+[07:51] [scene:talk]
+VISUAL:
+AUDIO: 'maintains two different cues. There\'s a standard queue where all the frames come in and then there\'s a function there which checks is this a high priority frame. If it is then it sends it on'
+
+[08:04] [scene:talk]
+VISUAL:
+AUDIO: 'right away and if it\'s not if it\'s just a normal frame it goes on another queue which is just normal Q which serves as a filtered version of just standard frames. Okay. So let\'s talk about voice activity and turn detection. So as I'
+
+[08:17] [scene:talk]
+VISUAL:
+AUDIO: 'mentioned there is a voice activity detector living in the transport input and this is a small model tasked with determining for a given chunk of audio is there a human speaking in this and'
+
+[08:30] [scene:talk]
+VISUAL:
+AUDIO: 'this has certain settings to tune it like start seconds which is how long must a human have been speaking for before you determine that they\'ve started speaking and stop seconds so how long must there have been silence for'
+
+[08:45] [scene:talk]
+VISUAL:
+AUDIO: 'before you determine the user has stopped speaking and there\'s a confidence threshold beyond which you can be confident you will output the user stop speaking frame. So this outputs a probability'
+
+[08:57] [scene:talk]
+VISUAL:
+AUDIO: 'of whether or not there is human um a human speaking there and beyond that confidence threshold that\'s when it outputs the user stopped speaking frame. Now there is also then an additional um'
+
+[09:10] [scene:talk]
+VISUAL:
+AUDIO: 'turn detector you can use in here called a smart turn detector. Now what that does is for a given bit of audio if it works on audio tokens or bit of text if it\'s a textbased smart turn detector um'
+
+[09:22] [scene:talk]
+VISUAL:
+AUDIO: 'what is the probability that the user user has finished their thought and this similarly has similar tuning parameters. So there is the stop seconds which is'
+
+[09:34] [scene:talk]
+VISUAL:
+AUDIO: 'actually works differently. So even if you\'ve determined that the user hasn\'t finished their thought past this point you need to say something and again there\'s a confidence threshold because'
+
+[09:47] [scene:talk]
+VISUAL:
+AUDIO: 'it outputs probabilities that the user has finished their thought. Now, when we all all we had was the voice activity detection detection, you would set the um stop seconds to around 700 to 800 milliseconds for natural speech. But it'
+
+[10:02] [scene:talk]
+VISUAL:
+AUDIO: 'wasn\'t reliable because if you stopped for that just to think, then the bot would interrupt you. So what you can do then with when you\'re using it in conjunction with the conjunction with'
+
+[10:15] [scene:talk]
+VISUAL:
+AUDIO: 'the smart turn detector is set this very low to about 200 milliseconds because then it serves only really to delay inference on the smart turn detector module um which can check whether or not at 200 milliseconds the first person has'
+
+[10:29] [scene:talk]
+VISUAL:
+AUDIO: 'likely finished their thought and potentially respond sooner without interrupting them. So you will know in certain circumstances then you will want the bot to say a fixed message. For example, at the start of the call you'
+
+[10:42] [scene:talk]
+VISUAL:
+AUDIO: 'might have a welcome message and at the end of the call you might have a farewell message that you wanted to say. So the way this is done is through the frame of legend the most interesting frame in the world the TTS speak frame.'
+
+[10:54] [scene:talk]
+VISUAL:
+AUDIO: 'So the pipeline task which handles the lifetime the life cycle of this pipeline has certain event hooks such as on user joined or on user ready depending on'
+
+[11:08] [scene:talk]
+VISUAL:
+AUDIO: 'what transport you\'re using. At that point you can cue up a TTS speak frame which contains the text you want it to say and pass that through to the'
+
+[11:20] [scene:talk]
+VISUAL:
+AUDIO: 'pipeline. And then when that gets to the TTS, the TTS will say it out loud through the normal process that I\'ve just described. So in conjunction with that, then you might want to make the bot uninterruptible while it\'s saying'
+
+[11:33] [scene:talk]
+VISUAL:
+AUDIO: 'it\'s opening speech. So to do that, you would actually add an additional processor just here. And that processor is called the ST mute filter. Now this can have various different settings for'
+
+[11:46] [scene:talk]
+VISUAL:
+AUDIO: 'state where it will not speak. But the most interesting one to me is mute until bot\'s first utterance essentially. So what this does then is it maintains a variable saying should mute or not. And'
+
+[11:58] [scene:talk]
+VISUAL:
+AUDIO: 'in this case it starts off with true until it gets the first bot stopp speaking frame in which case it switches it. And so while the state is true and the bot shouldn\'t be interrupted, it'
+
+[12:13] [scene:talk]
+VISUAL:
+AUDIO: 'essentially stops sending these input audio roll frames to the ST. So it\'s basically muting it. So this is the case where you\'re taking frames and conditionally removing them from the pipeline until a state switches to the'
+
+[12:25] [scene:talk]
+VISUAL:
+AUDIO: 'case where you should be sending it through. So another thing that the pipeline task can do then is maintain a list of observers. So these then are connected sort of outside to the'
+
+[12:37] [scene:talk]
+VISUAL:
+AUDIO: 'pipeline task and if you imagine the observers here as eyeballs you can have a bunch of them here basically they live outside the pipeline looking in and they get to see every time a frame has been'
+
+[12:49] [scene:talk]
+VISUAL:
+AUDIO: 'pushed. So you can use this then to convert internal frame messages to external messages. So for example, the transcription frame um or any particular'
+
+[13:01] [scene:talk]
+VISUAL:
+AUDIO: 'frame that goes through there, you can potentially use this to send it to a server so that it can monitor those events. Now the observers are meant to be unintrusive.'
+
+[13:15] [scene:talk]
+VISUAL:
+AUDIO: 'They don\'t they just see frames. They don\'t monitor they don\'t change frames in the pipeline. But what you should know is actually that they are awaited in line in the um code that um runs these. So you do if you want if you\'re'
+
+[13:30] [scene:talk]
+VISUAL:
+AUDIO: 'doing a run long longunning task such as sending something to an external server, you do have to do an async io create task to run this in a different thread so that it doesn\'t block execution of the normal pipeline which might be counterintuitive but that\'s just how it'
+
+[13:42] [scene:talk]
+VISUAL:
+AUDIO: 'works. So then as promised um some tips on getting the most out of this video using some AI tools. So, I\'ve actually made a video transcription tool where you can pass in a YouTube URL and get a transcription of that video. Um, you can'
+
+[13:55] [scene:talk]
+VISUAL:
+AUDIO: 'take that and you can clone the pipe cat repository and then you can use clawed code or something like that. Claude code specifically I find is very good. But you can give it the transcription and'
+
+[14:08] [scene:talk]
+VISUAL:
+AUDIO: 'you can ask it for each of the concepts I\'ve mentioned to make a document listing those. And then for each of those concepts spawn a sub agent to investigate the pipecat repo and put together an explanation with code'
+
+[14:21] [scene:talk]
+VISUAL:
+AUDIO: 'snippets of how things work in the actual code repository. And then you instruct the main orchestrating agent which is spawning these sub agents to put together a document that explains'
+
+[14:34] [scene:talk]
+VISUAL:
+AUDIO: 'everything together with code examples for you to go through. So that\'s going to be all for this video. If you found this useful at all, then please drop a like. If you want to see more like this,'
+
+[14:46] [scene:talk]
+VISUAL:
+AUDIO: 'then you should consider subscribing. And if you have any questions, comments, or suggestions for future tutorial topics, then please drop those in the comments. So that\'s all for today and'
+
+[14:58] [scene:talk]
+VISUAL:
+AUDIO: 'bye for'

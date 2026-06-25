@@ -1,0 +1,131 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Microsoft Just Solved Document Ingestion for AI Devs (MarkItDown)
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=9ZaiZzp4XcY
+upload_date: 20260422
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'We spend way more time processing documents than actually building our AI apps. We connect multiple libraries, finally get a PDF into the pipeline, and the LLM still gives bad answers. Not because the model is bad, because the markdown is. This is markdown, a tool by'
+
+[00:13] [scene:talk]
+VISUAL:
+AUDIO: 'Microsoft that\'s blown up with over 110,000 stars on GitHub, and it fixes the whole pipeline in basically one line of code. I\'ll show you how all this works in just a few minutes.'
+
+[00:26] [scene:talk]
+VISUAL:
+AUDIO: 'Okay, now basically every AI project starts the same. You\'ve got files everywhere, Word docs, slides,'
+
+[00:38] [scene:talk]
+VISUAL:
+AUDIO: 'spreadsheets, PDFs, screenshots, maybe even like audio files. And then comes the cool part, which us devs love. We can start actually stacking tools. So, we\'re going to have a tool for PDFs, a tool for Excel, for Word, right? All'
+
+[00:51] [scene:talk]
+VISUAL:
+AUDIO: 'these libraries that we\'re linking together to help us build out this pipeline. At first it feels fine, it works, sure. Then things start to break. Tables lose structure, headings are'
+
+[01:03] [scene:talk]
+VISUAL:
+AUDIO: 'going to disappear, and then token usage obviously starts to blow up. And now the rag pipeline is basically just pulling garbage, and the agent is giving us bad answers. And we\'re debugging ingestion'
+
+[01:15] [scene:talk]
+VISUAL:
+AUDIO: 'instead of actually shipping. And really, what\'s this doing? It\'s just wasting time. Not minutes, but hours every single week. So, instead of fixing your model, you actually need to fix your input. Let me show you what that'
+
+[01:28] [scene:talk]
+VISUAL:
+AUDIO: 'actually looks like. If you enjoy tools to speed up your workflow, be sure to subscribe. We have videos coming out all the time. All right, now let me run through this real quick. It\'s all Python, so it\'s pretty simple. First, I'
+
+[01:40] [scene:talk]
+VISUAL:
+AUDIO: 'pip install it all in my virtual environment. I\'ve got a PDF here, just in doc.pdf. And I can run this in my terminal. I\'m going to run markdown doc.pdf output.md. That\'s it. It makes me a file'
+
+[01:55] [scene:talk]
+VISUAL:
+AUDIO: 'automatically. We can open that file, and inside is sort of what we\'re hoping to expect here. Headings are clean, tables actually look like tables, structure is still here. And now when you write some code in Python for this,'
+
+[02:09] [scene:talk]
+VISUAL:
+AUDIO: 'we can do even more with it. So, with my imports and using OpenAI, I can make a client and then a markdown object. I\'m going to pass in my API key and the model that we want to run.'
+
+[02:22] [scene:talk]
+VISUAL:
+AUDIO: 'When I run the code, the output is generated in my terminal, so it\'s super clean. And better yet, what\'s really cool is I can get a PNG image. For this, I got a chart from Nvidia. Here is my image with some data on it.'
+
+[02:36] [scene:talk]
+VISUAL:
+AUDIO: 'Now I can convert the chart into markdown. So, I can let markdown do its thing just by using the convert function again. This time we\'re giving it our image, our PNG.'
+
+[02:48] [scene:talk]
+VISUAL:
+AUDIO: 'And here now we get the summary of what that chart is and what we could extract and use for rag. This is huge, as it now allows us to extract what we need faster, right here in our code, so we can keep working without jumping between'
+
+[03:02] [scene:talk]
+VISUAL:
+AUDIO: 'a bunch of different tabs. So, what is markdown really? It\'s an open-source Python tool from Microsoft Research. It\'s MIT licensed, it\'s built specifically for LLM workflows. Its job is to take messy files and turn them'
+
+[03:16] [scene:talk]
+VISUAL:
+AUDIO: 'into clean markdown, so models can actually understand them. It supports a lot more than we\'d actually expect, Word, PowerPoint, Excel, PDF, audio, images, um and also things like links, really'
+
+[03:28] [scene:talk]
+VISUAL:
+AUDIO: 'anything, you name it. It even has an MCP server now, so you can plug it directly into tools like Claude desktop or even your own agent. Plus the plugins. So, instead of building'
+
+[03:40] [scene:talk]
+VISUAL:
+AUDIO: 'ingestion pipelines, we\'re now basically just calling one tool. Devs weren\'t struggling with models, they were struggling with inputs. And the expectation was, okay, just use better models. But the whole reality of this is'
+
+[03:54] [scene:talk]
+VISUAL:
+AUDIO: 'better inputs is equal to better outputs. So, now instead of writing scripts that are breaking, people are now using one tool for everything, markdown. Rag pipelines, agents, fine-tuning data sets, knowledge bases,'
+
+[04:08] [scene:talk]
+VISUAL:
+AUDIO: 'document analysis, all of this stuff we\'re already doing. And the key detail most people miss is it produces structure, token-efficient markdown. So, there\'s less noise going into this,'
+
+[04:20] [scene:talk]
+VISUAL:
+AUDIO: 'getting better answers, that better output. But that doesn\'t mean it\'s perfect. Now, let\'s compare this to what you\'re probably already using or you\'ve seen around. Now, we do have a tool called Pandoc, so you\'d expect Pandoc to'
+
+[04:32] [scene:talk]
+VISUAL:
+AUDIO: 'win here, all right? But it\'s solving a different problem from markdown. Pandoc is for humans, so publishing, formatting, LaTeX. Markdown is for machines, LLMs, pipelines, automation.'
+
+[04:45] [scene:talk]
+VISUAL:
+AUDIO: 'It\'s kind of the same idea, but the goal is different. And then we have things like unstructured or docQuery. These aren\'t great, but also these are really heavy. They use ML models, they take'
+
+[04:57] [scene:talk]
+VISUAL:
+AUDIO: 'more setup, and are better for really complex documents. Markdown takes the opposite approach to all this. There\'s less setup, super easy, faster results, and it\'s good enough for most files. So,'
+
+[05:09] [scene:talk]
+VISUAL:
+AUDIO: 'here\'s the real tradeoff. Do you want perfect extraction, or do you want something that works really fast and reliably? For most of us, speed is going to win. Now, of course the downsides, complex PDFs are still going to break'
+
+[05:21] [scene:talk]
+VISUAL:
+AUDIO: 'it, right? Especially dense tables or weird layouts. If you deal with messy scanned documents every day, tools like docQuery or unstructured are going to do way better. But if you want image descriptions, you\'ll need to plug in an'
+
+[05:33] [scene:talk]
+VISUAL:
+AUDIO: 'LLM. So, it\'s not perfect, but it is a pretty cool tool that\'s solving a real problem. So, is it worth using? Yeah, for most people, absolutely. If you\'re building AI apps right now, this is probably what'
+
+[05:45] [scene:talk]
+VISUAL:
+AUDIO: 'your ingestion layer should actually look like. You should try and use markdown, just try it, if you want clean input for rag or agents. You deal with mixed file types, it\'s really good for that stuff, and you don\'t want to'
+
+[05:58] [scene:talk]
+VISUAL:
+AUDIO: 'maintain a bunch of fragile scripts that could break, right? Skip it or combine it if you\'re working with extremely complex PDFs every single day, there\'s other tools out there. If you enjoy open-source tools and coding tips like'
+
+[06:10] [scene:talk]
+VISUAL:
+AUDIO: 'this, be sure to subscribe to the Better Stack channel. We\'ll see you in another video.'

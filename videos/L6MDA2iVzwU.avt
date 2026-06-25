@@ -1,0 +1,163 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: FLW Ltx-2.3 The Craziest Transition LoRA Yet | IC-LoRA for seamless shot-to-shot transitions. #ltx23
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=L6MDA2iVzwU
+upload_date: unknown
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'Welcome back. In this video, we will be&nbsp; exploring another interesting Ltx-2.3&nbsp;&nbsp; IC LoRa. The SYSTMS FLW IC LoRA introduces a&nbsp; powerful new way to create seamless shot-to-shot&nbsp;&nbsp; transitions in AI video generation.&nbsp; Instead of relying only on prompts,&nbsp;&nbsp;'
+
+[00:13] [scene:talk]
+VISUAL:
+AUDIO: 'IC-LoRA transfers motion, camera movement, and&nbsp; scene structure directly from reference footage,&nbsp;&nbsp; helping maintain smooth continuity between clips. In ComfyUI, this makes it possible to blend&nbsp;&nbsp; scenes, morph environments, or transition&nbsp; between characters with far more cinematic&nbsp;&nbsp;'
+
+[00:30] [scene:talk]
+VISUAL:
+AUDIO: 'consistency. Whether you’re creating subtle camera&nbsp; handoffs or dramatic visual transformations,&nbsp;&nbsp; IC-LoRA gives LTX-2.3 a much more&nbsp; controlled, production-style workflow for&nbsp;&nbsp; AI filmmaking. It works by extracting structural&nbsp; guidance information from reference videos,&nbsp;&nbsp;'
+
+[00:47] [scene:talk]
+VISUAL:
+AUDIO: 'allowing LTX-2.3 to preserve motion continuity&nbsp; while completely changing visual style. So, let\'s start with opening the shared workflow&nbsp; and handle the required models and missing nodes,&nbsp;&nbsp; if any. You may want to skip a bit ahead&nbsp; if you are already comfortable with how to&nbsp;&nbsp; download and load models into a workflow. Open&nbsp; the saved workflow from the menu. Once opened,&nbsp;&nbsp;'
+
+[00:59] [scene:talk]
+VISUAL:
+AUDIO: 'you may see the error messages&nbsp; here, and some red nodes in the&nbsp;&nbsp; canvas. The message warns us about some&nbsp; missing nodes and required models. Okay,&nbsp;&nbsp; let\'s start with the missing models first. Model&nbsp; links are listed inside this red model links node.&nbsp;&nbsp;'
+
+[01:14] [scene:talk]
+VISUAL:
+AUDIO: 'All models are required to run this Ltx-2.3&nbsp; workflow. Models links with the word "Options"&nbsp;&nbsp; mean that you can choose whichever fits your&nbsp; requirement, no need to download all of them.'
+
+[01:28] [scene:talk]
+VISUAL:
+AUDIO: 'Therefore, you will see that 9 models are missing,&nbsp; but only 7 are needed. If we click the show errors&nbsp;&nbsp; button, we will be shown all missing models. Here&nbsp; there are 9 missing models. As the shared workflow&nbsp;&nbsp; has all the model loader nodes made available,&nbsp; including GGUF, all will need to be populated with&nbsp;&nbsp;'
+
+[01:43] [scene:talk]
+VISUAL:
+AUDIO: 'a valid model. So, we just need to download the&nbsp; ones that actually makes the workflow functional,&nbsp;&nbsp; then disable the loaders for the unused ones.&nbsp; When downloading the models, map their download&nbsp;&nbsp; locations to this chart. I also have noted their&nbsp; exact download location at the end of each link.'
+
+[01:59] [scene:talk]
+VISUAL:
+AUDIO: 'In this video, I will test run the LoRa&nbsp; using the smallest possible variant,&nbsp;&nbsp; the Q2-K GGUF. Click the link and navigate to the&nbsp; models\' "unet" subdirectory, then click save. Same&nbsp;&nbsp; applies to the rest of the models. If you are&nbsp; lost, you may want to slow the video down a bit&nbsp;&nbsp;'
+
+[02:16] [scene:talk]
+VISUAL:
+AUDIO: 'or replay the section. Okay. 6 models ready.&nbsp; After re-checking, I am still missing 1 more. Next, we will load the majority of our models&nbsp; here. You need to hit the "r" shortcut key to&nbsp;&nbsp;'
+
+[02:28] [scene:talk]
+VISUAL:
+AUDIO: 'refresh the "Nodes Definitions "so that&nbsp; new models will be available to use in&nbsp;&nbsp; Comfy. If I try to select the fp8 variant,&nbsp; which I did not download, there will be no&nbsp;&nbsp; models to choose from. But the node needs&nbsp; to be populated as it is an "active" node.&nbsp;'
+
+[02:44] [scene:talk]
+VISUAL:
+AUDIO: 'But if I click the GGUF loader, the downloaded&nbsp; GGUF model will be available for me to select.&nbsp;&nbsp; Once selected, the red box disappears. Therefore,&nbsp; if we do not use the fp8 and bf16 loaders nodes,&nbsp;&nbsp;'
+
+[02:56] [scene:talk]
+VISUAL:
+AUDIO: 'we need to bypass or mute them like this.&nbsp; Next are the text encoders or "clip". Here we have 2 choices. Either we use the&nbsp; text encoder nodes, which require models,&nbsp;&nbsp;'
+
+[03:13] [scene:talk]
+VISUAL:
+AUDIO: 'or use Gemma-3 API to encode our prompt&nbsp; free online. If you are using the clip,&nbsp;&nbsp; you will have 2 choices. Either use the&nbsp; safetensors or the GGUF models. Select&nbsp;&nbsp; the loader of your choice and bypass or mute the&nbsp; other. Then, you also have to bypass the API node&nbsp;&nbsp;'
+
+[03:30] [scene:talk]
+VISUAL:
+AUDIO: 'group. One more thing. If you decide to use the&nbsp; API, make sure to select the text projection file&nbsp;&nbsp; here as well. Here we have our prompt enhancer&nbsp; node using the latest powerful Gemma 4. This is&nbsp;&nbsp;'
+
+[03:43] [scene:talk]
+VISUAL:
+AUDIO: 'used to describe our videos and to create an&nbsp; enhanced prompt from that description, which&nbsp;&nbsp; is required for this LoRa to work as intended. Currently, all GGUF clip loader nodes do not&nbsp;&nbsp;'
+
+[03:55] [scene:talk]
+VISUAL:
+AUDIO: 'support the Gemma 4 GGUF variant yet, so&nbsp; we only have 1 choice left. Save the file&nbsp;&nbsp; in the text encoders folder, and refresh&nbsp; the definitions by hitting the "R" key.'
+
+[04:07] [scene:talk]
+VISUAL:
+AUDIO: 'Now that we are done with the models, let\'s handle&nbsp; the missing nodes next. Go to "Manager" and click&nbsp;&nbsp; "Install Missing Custom Nodes". Then hit the&nbsp; install button and restart Comfy after done. All&nbsp;&nbsp;'
+
+[04:22] [scene:talk]
+VISUAL:
+AUDIO: 'errors have been handled. Here, you will need to&nbsp; re-wire the correct connections from the loader&nbsp;&nbsp; node you want to use. Next, let\'s talk about how&nbsp; to setup our videos to use with this LoRA. We need&nbsp;&nbsp;'
+
+[04:35] [scene:talk]
+VISUAL:
+AUDIO: 'to load 2 video clips in this node group. Once&nbsp; loaded, you may want to set the frames to use&nbsp;&nbsp; for each clip. We use the "frame load cap" to&nbsp; cap the length of the clip from the very first&nbsp;&nbsp;'
+
+[04:47] [scene:talk]
+VISUAL:
+AUDIO: 'frame. Both of my clips are 81 frames long at&nbsp; 16-fps. If I set the cap of the clip to 32,&nbsp;&nbsp; only the first 32 frames will be loaded, which is&nbsp; 2 seconds long. I can reset it by entering "zero".'
+
+[05:01] [scene:talk]
+VISUAL:
+AUDIO: 'As for the "skip first frames", the loaded&nbsp; frames will start after the number of frames&nbsp;&nbsp; skipped. If I input 32, the video will&nbsp; start or load from frame 33 onwards.&nbsp;&nbsp; We can use both these input fields together&nbsp; to select a specific section of the video.&nbsp;&nbsp;'
+
+[05:18] [scene:talk]
+VISUAL:
+AUDIO: 'The pink nodes are where we need to be&nbsp; cautious and re-check every time before&nbsp;&nbsp; running a new transition operation. Next,&nbsp; we need to set the total number of frames,&nbsp;&nbsp; or the length of the output video, and the FPS.&nbsp; Here I use 16-fps to match my input clips. Both&nbsp;&nbsp;'
+
+[05:33] [scene:talk]
+VISUAL:
+AUDIO: 'of my clips are 33 frames long, and I will add&nbsp; 2 seconds in the middle for transition effects,&nbsp;&nbsp; which is 32 frames. A total of 98 frames for&nbsp; the merged video with gray frames for transition&nbsp;&nbsp;'
+
+[05:46] [scene:talk]
+VISUAL:
+AUDIO: 'processing. Some tests that I did earlier turned&nbsp; out much better with a 3-second transition frames. This workflow, by the way, is based on SYSTEMS\'&nbsp; original workflow. There are some notes that you&nbsp;&nbsp;'
+
+[05:58] [scene:talk]
+VISUAL:
+AUDIO: 'should also read for clarification. Okay. After&nbsp; finishing the settings for our output video,&nbsp;&nbsp; we can preview the merged clips by running&nbsp; this node. You can see that a 2-second blank&nbsp;&nbsp;'
+
+[06:10] [scene:talk]
+VISUAL:
+AUDIO: 'or gray frames have been added in the&nbsp; middle of the 2 clips for transitioning. Next, we will need to re-check our text encoder&nbsp; nodes. If you choose to use the GGUF node,&nbsp;&nbsp; just drag the output and connect it here. Then,&nbsp; connect both positive and negative outputs like&nbsp;&nbsp;'
+
+[06:26] [scene:talk]
+VISUAL:
+AUDIO: 'so, as shown here. If you choose to use the API,&nbsp; just enable the group and connect them like so.&nbsp;&nbsp; I prefer to bypass the nodes I do not use so it&nbsp; becomes easier for me to debug the flow if needed.&nbsp;'
+
+[06:42] [scene:talk]
+VISUAL:
+AUDIO: 'Last thing we need to do before we can run the&nbsp; workflow is to set the audio input. According to&nbsp;&nbsp; the dev, it is recommended that we use an&nbsp; audio reference for the video, as strange&nbsp;&nbsp; artifacts might occur when processing with this&nbsp; LoRA. First, we load our audio via this node. We&nbsp;&nbsp;'
+
+[06:57] [scene:talk]
+VISUAL:
+AUDIO: 'can then crop the audio with this node. It does&nbsp; not have to be the same length as the video.&nbsp;&nbsp; Audio will be added to the whole video, if the&nbsp; audio is not shorter than the video length.'
+
+[07:10] [scene:talk]
+VISUAL:
+AUDIO: 'I have included 2 nodes for audio crop&nbsp; for you to use. They are essentially the&nbsp;&nbsp; same. I have mostly color coded the&nbsp; nodes for easy identification. So,&nbsp;&nbsp; you just need to connect the audio latent you&nbsp; want to use. Dark blue is for ref audio input,&nbsp;&nbsp;'
+
+[07:23] [scene:talk]
+VISUAL:
+AUDIO: 'and light blue is for LTX audio generation. The prompt enhancer or generator can be&nbsp;&nbsp; very handy. Gemma 4 will scan through the merged&nbsp; video and generates the description of each clip,&nbsp;&nbsp; as well as the transitions, according&nbsp; to the system prompt from the dev.'
+
+[07:40] [scene:talk]
+VISUAL:
+AUDIO: 'I have no Gemini subscription, so I choose&nbsp; not to use the default enhancer node that&nbsp;&nbsp; comes with the original workflow. Let\'s do a&nbsp; quick first run on the prompt enhancer node&nbsp;&nbsp; group. It took about 30 seconds to scan&nbsp; all 98 frames and generating the prompt.&nbsp;'
+
+[07:53] [scene:talk]
+VISUAL:
+AUDIO: 'Okay. Now that we are done with all the setting,&nbsp;&nbsp; let\'s do a full demo run of the&nbsp; workflow. And this will be the first run. By looking at the log in the terminal,&nbsp; we are able to see what went wrong.&nbsp;'
+
+[08:09] [scene:talk]
+VISUAL:
+AUDIO: 'So, the required model input is&nbsp; missing. I have chosen to use the GGUF,&nbsp;&nbsp; but forgot to hook the loader node up. Now let\'s hit run again. Often times&nbsp;&nbsp; if you show the error messages from&nbsp; the log to, say, Chat-GPT or Claude,&nbsp;&nbsp;'
+
+[08:23] [scene:talk]
+VISUAL:
+AUDIO: 'they will instantly be able to tell&nbsp; you what these specific errors mean,&nbsp;&nbsp; and how to fix them, fast and free. Okay, the workflow works. Also,&nbsp;&nbsp; before you go, please remember to re-check&nbsp; the video input section before hitting that&nbsp;&nbsp;'
+
+[08:36] [scene:talk]
+VISUAL:
+AUDIO: '"run" button. Re-check your loaded frame length&nbsp; for both clips, and re-check the pink nodes.&nbsp; I have included the link to a few "MP-4"&nbsp; test clips and a background audio file for&nbsp;&nbsp; your testing, if you are interested. The links are&nbsp; in the description. If you need any help, please&nbsp;&nbsp;'
+
+[08:50] [scene:talk]
+VISUAL:
+AUDIO: 'leave me a comment. I\'ll be happy to help as much&nbsp; as I can. Thanks for watching, and see you again.'

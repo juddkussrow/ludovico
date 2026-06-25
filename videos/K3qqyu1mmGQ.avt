@@ -1,0 +1,143 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: preview! audio & video streaming with iroh
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=K3qqyu1mmGQ
+upload_date: 20250313
+transcript_source: captions
+route: text
+
+---
+
+[00:01] [scene:talk]
+VISUAL:
+AUDIO: 'hello my name is France or frando on the internets I work at number zero computer and um today I want to give you a quick update um what we\'ve been doing lately around some experiments with media streaming and real-time communication'
+
+[00:13] [scene:talk]
+VISUAL:
+AUDIO: 'over iro so um iro as um many of you might know is um a library written in Rust that um makes direct connections peer to-peer connections between devices'
+
+[00:25] [scene:talk]
+VISUAL:
+AUDIO: 'simple and easy the connections are always always end to end encrypted in um under the hood these connections are quick connections we do the whole punching and everything else um you just have direct connections so um if we want'
+
+[00:38] [scene:talk]
+VISUAL:
+AUDIO: 'to do real-time media over um these connections um one of the most common protocols to use is RTP a real time protocol I think um RTP usually works'
+
+[00:51] [scene:talk]
+VISUAL:
+AUDIO: 'over UDP um but there is a um RFC or a draft for an R C written um called RTP over quii that um specifies a very simple uh protocol on how to uh transfer'
+
+[01:04] [scene:talk]
+VISUAL:
+AUDIO: 'RTP packets over quick connections and as um iro uh connections are quick connections under the hood um this made a lot of sense for us as a starting'
+
+[01:17] [scene:talk]
+VISUAL:
+AUDIO: 'point so um recently dig from our team um wrote a small crate called iro Rock it\'s an iro protocol that um implements this RTP over quick speec basically um'
+
+[01:31] [scene:talk]
+VISUAL:
+AUDIO: 'pushing and pulling RTP packets over quick connections um they are multiplexed with something called a flow identifier so that if you have distinct'
+
+[01:43] [scene:talk]
+VISUAL:
+AUDIO: 'um media streams like like an audio and a video stream for example um run they can run on the same connection without um uh being mixed up um so this is all quite low level but'
+
+[01:56] [scene:talk]
+VISUAL:
+AUDIO: 'um it works it\'s likely not production ready but um we did some further experiments using this so um what I did in the past two weeks is I wrote a small'
+
+[02:09] [scene:talk]
+VISUAL:
+AUDIO: 'tool called call me um and call me does um audio audio calls over iro so it\'s like a phone call um but you um give it an iro node ID um to call and you can'
+
+[02:22] [scene:talk]
+VISUAL:
+AUDIO: 'reply to calls it uses um uh the native um audio interfaces of the devices and I managed to get it running so far on Linux Mac and um Android there\'s still'
+
+[02:35] [scene:talk]
+VISUAL:
+AUDIO: 'some issues um there\'s some C dependencies that cause some pain to build on some platforms but we will nevertheless try to do a quick demo all right here see call me running'
+
+[02:48] [scene:talk]
+VISUAL:
+AUDIO: 'on my computer here is the same app running on my phone and now we will do a call from my um computer to my phone um I need to copy the note ID and'
+
+[03:00] [scene:talk]
+VISUAL:
+AUDIO: 'clicked on call here you see the phone that is initiating the call and the computer is getting the connection we accept the call and now we get a bad feedback so we turn it off again um this'
+
+[03:13] [scene:talk]
+VISUAL:
+AUDIO: 'is um the quick demo that I could do today there\'s still some issues with call me um on various platforms due to the native audio dependencies uh we\'ll keep'
+
+[03:25] [scene:talk]
+VISUAL:
+AUDIO: 'working on that bit um but the direct connections through iro already work very well and the audio is flowing through'
+
+[03:38] [scene:talk]
+VISUAL:
+AUDIO: 'thanks so there\'s one other thing that I wanted to show you um the past few days um I\'ve been hacking on a iro plugin um for gstreamer so gstreamer is a very versatile um audio video media framework'
+
+[03:52] [scene:talk]
+VISUAL:
+AUDIO: 'that is used in lots of um professional um tooling and also in lots of end user tools um and G streamer is this um huge collection of plugins for all kinds of'
+
+[04:07] [scene:talk]
+VISUAL:
+AUDIO: 'codecs and network protocols and so on and so what I did um is I added a very simple a quite simple um plug-in that use again uses iro um rock um iro RTP um over quick um to transfer uh to'
+
+[04:23] [scene:talk]
+VISUAL:
+AUDIO: 'implement a gstreamer source and sync um the nice thing about that is that as iro um is addressed by Keys um you don\'t have to care about who sends who'
+
+[04:35] [scene:talk]
+VISUAL:
+AUDIO: 'receives who is in which network situation you just um build a pipeline from a video source to an iro sync and it comes out at the other iro device addressed by their node ID um as um a'
+
+[04:48] [scene:talk]
+VISUAL:
+AUDIO: 'video source and that you can push wherever so it works quite well with G streamer pipelining um and yeah it\'s very uh uh proof of concept uh style at'
+
+[05:00] [scene:talk]
+VISUAL:
+AUDIO: 'the moment but um nevertheless I want to give you a quick demo to see where we were at all right demo time um I have two'
+
+[05:12] [scene:talk]
+VISUAL:
+AUDIO: 'computers sitting on my desk and um what we are going to do is we will stream audio and video from one computer to the other over iro using the gstreamer um iro plugin that we\'re developing at the'
+
+[05:25] [scene:talk]
+VISUAL:
+AUDIO: 'moment so so um G streamer um has this pipeline syntax um and what you see here is the send side that we will will be running in a second um there\'s two'
+
+[05:38] [scene:talk]
+VISUAL:
+AUDIO: 'pipelines in there one is taking audio from the auto audio source which is the default microphone and uh then it encodes it to Opus and sends it through'
+
+[05:50] [scene:talk]
+VISUAL:
+AUDIO: 'the iru RTP sync to our other Pier um below you see the video side it takes the camera encodes it to vp8 and sends it over the same connection to the pier'
+
+[06:03] [scene:talk]
+VISUAL:
+AUDIO: 'um the receive side on the other computer looks rather similar it takes the um audio and video from the sources then we have to um manually assign the capabilities because this is just raw'
+
+[06:17] [scene:talk]
+VISUAL:
+AUDIO: 'RTP there\'s no signaling or anything else involved so um the application doesn\'t know the um encoding um of the data it receives so we tell it and then we pass it to the decode bin 3 which is'
+
+[06:30] [scene:talk]
+VISUAL:
+AUDIO: 'um like a general purpose decode bin and G streamer that can um take whatever and decode it and then we pass it to the respective syns so let\'s'
+
+[06:42] [scene:talk]
+VISUAL:
+AUDIO: 'go start the receive side start the send side and there we are I think you can hear it there\'s some Echo because they'
+
+[06:56] [scene:talk]
+VISUAL:
+AUDIO: 'are sending next to each other other but here you see me with my smartphone point to the other computer thank you'

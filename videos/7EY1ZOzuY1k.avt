@@ -1,0 +1,503 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: The Most ADVANCED SMS AI Agent You Can Build (No-Code, n8n)
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=7EY1ZOzuY1k
+upload_date: 20250522
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'Hello legends. In this video, I\'m going to show you how to build this AI SMS assistant in N. We\'re going to be using Twilio for the inbound and outbound of our SMS. We\'ll be building an AI agent that uses GPT 4.1 as the brain. We\'ve got Postgress for memory, so we can'
+
+[00:12] [scene:talk]
+VISUAL:
+AUDIO: 'actually remember the entire conversation we have with individual users. And for our rag, we\'re just using the perplexity API and plugging it directly into our website and our support page. So, we have the latest up-to-date information about our products and services, um, and any of'
+
+[00:24] [scene:talk]
+VISUAL:
+AUDIO: 'the technical information we need to know as well. And the cool thing about this system is that it will batch messages for us because when you\'re SMSing or messaging on like social media chats like Facebook and Instagram, um typically you actually message multiple'
+
+[00:36] [scene:talk]
+VISUAL:
+AUDIO: 'times and it\'s meant to represent just one single message. So you just need one response and uh instead of us each time a message comes in triggering an operation and then responding to that message individually. So like this high would get a high how can I help? How'
+
+[00:48] [scene:talk]
+VISUAL:
+AUDIO: 'much is the hot tap will get a price? Then the one with the pump would actually be more context. So it\'s actually a different model of the hot tap which is a totally different price and then thanks might get no worries let me know how I can help. Uh but over here'
+
+[01:00] [scene:talk]
+VISUAL:
+AUDIO: 'since we\'re batching it we\'re just getting one context aware um complete and accurate response to the customer and that\'s taken care of using these four nodes up the top. So as soon as a message comes in we actually hold it and we wait for a period of about 5 10 seconds and that should actually get all'
+
+[01:13] [scene:talk]
+VISUAL:
+AUDIO: 'the rest of the messages into a batch. After the 5 10 seconds we then progress through collect all the messages and then put them into our AI agent for the response. And in this video, I\'m going to break down exactly how to set up this entire thing from scratch. We\'ll be'
+
+[01:25] [scene:talk]
+VISUAL:
+AUDIO: 'starting from a blank canvas, but let me quickly just test the workflow and show you how it works. So, with the workflow in test mode, I\'m going to be sending in, hi, what products does Jula sell? Let\'s hit send. And this actually goes to the Twilio number first. And then in'
+
+[01:37] [scene:talk]
+VISUAL:
+AUDIO: 'Twilio, we\'ve configured the settings to actually send that message to this web hook. And now we\'re actually taking that message, adding it to a Google Sheets. If I sent more messages right now, they\'d actually be added as a batch. Um, but as you can see here, the process'
+
+[01:49] [scene:talk]
+VISUAL:
+AUDIO: 'went through. We collect the messages back from the Google sheet. And now we go into our SMS agent. For this question, what products does JUKA sell? We actually use the, like I said before, the perplexity API on our own website and the response is Jooka sells um the'
+
+[02:01] [scene:talk]
+VISUAL:
+AUDIO: 'hot tap portable water heater, on suite double room shower tent, got to go and a bunch of different accessories. And you can click here to learn more. And this is my e-commerce store. This is jula.com and that\'s what we have here. So got a bunch of different products. We have the'
+
+[02:13] [scene:talk]
+VISUAL:
+AUDIO: 'hot tap shower. We\'ve got the got to go toilet, the shower tents, and a bunch of different stuff. So, this is actually the easiest way I find to do rag just because you don\'t have to have a third party database somewhere that you have to manually keep updated all the time. Um, most likely your website and your'
+
+[02:26] [scene:talk]
+VISUAL:
+AUDIO: 'support pages are going to be up to date 24/7 because this is like the key source of truth for your customers. And now a very quick test just to be sure that we actually have memory in this conversation. So, what was my last question? Let\'s hit send. And thanks to'
+
+[02:38] [scene:talk]
+VISUAL:
+AUDIO: 'this Postgress memory node, we actually have an off-site storage. So, we\'re using superbase to store all the messages. And the cool thing is that each message is actually stored by the unique um phone number of the user. We\'re not using any other random'
+
+[02:51] [scene:talk]
+VISUAL:
+AUDIO: 'variable. It\'s literally um whatever the phone number is messaging us. That\'s the storage key in our superbase table. So, hi, what products does sell? That\'s the exact same question we had before. So, this agent has memory, this agent has'
+
+[03:03] [scene:talk]
+VISUAL:
+AUDIO: 'rag. You can trigger this for inbound customer support or you can trigger this for outbound sales or appointment reminders or pretty much any other workflow that you have in mind. All right, so starting in a brand new canvas, the first thing we need to do is'
+
+[03:15] [scene:talk]
+VISUAL:
+AUDIO: 'set up a web hook. So this web hook is going to be used to receive the message that\'s coming in from Twilio. And we\'ve got a test and a production URL over here. For testing, I\'m going to use the yeah test URL just so I can actually see the nodes execute and get the data for'
+
+[03:28] [scene:talk]
+VISUAL:
+AUDIO: 'each execution. So I\'m going to copy this. So now over in Twilio, I\'ve got to adjust the settings for my phone number to actually point all inbound messages across to N. So to do that, I\'m just going to go to my region, choose phone numbers, manage, and active numbers. So,'
+
+[03:40] [scene:talk]
+VISUAL:
+AUDIO: 'I\'m going to be using this number for testing. This is Bitech testing. Let\'s click it open. Awesome. Now, since I\'m using a US number, I actually had to complete the A2P registration. Without the A2P registration, you won\'t be able to send or receive SMSS using Twilio.'
+
+[03:53] [scene:talk]
+VISUAL:
+AUDIO: 'So, you can just follow the steps to do this. Once that\'s done, in this settings page, you actually have two different configurations you can do. One for voice configuration and then one for messaging configuration. So the voice configuration just means that um'
+
+[04:05] [scene:talk]
+VISUAL:
+AUDIO: 'whenever you call this phone number, you can set a web hook that\'s going to point that phone number or that phone call across to a different endpoint. So let\'s say you had an AI caller using retail or 11 Labs, you would just put the endpoint to that caller over here. And then'
+
+[04:17] [scene:talk]
+VISUAL:
+AUDIO: 'whenever someone calls this phone number, they\'re going to speak to your AI agent. In our case, we\'re going to go to the very bottom. We want the messaging configuration. And then we want to change this URL over here. This just means that every new inbound message is going to be pushed across to'
+
+[04:29] [scene:talk]
+VISUAL:
+AUDIO: 'this URL. So back in nan, I\'m going to grab this URL from here. Then I\'m going to backspace this old URL. Paste a new one in. And we can see over here we\'re setting it as a post request. So back in nan, let\'s just change this to post. And now I just got to hit save on'
+
+[04:43] [scene:talk]
+VISUAL:
+AUDIO: 'configuration. And now I can actually test this web hook. So I\'m going to go test listen for event. Open up my messaging app and just say hi there. And now this is going to go across to that Twilio number. But since we pointed Twilio to this web hook, we\'re going to'
+
+[04:55] [scene:talk]
+VISUAL:
+AUDIO: 'receive the message in here. So if I just look at the data that we received, uh firstly it was a success because we actually fired some information off to here. But here we have that message that I just sent in. So the body of the message is hi there. And then we have the uh to phone number which is that'
+
+[05:08] [scene:talk]
+VISUAL:
+AUDIO: 'Twilio phone number we had. Then we have the from phone number which is the in my case the customer\'s phone number. Now the next thing we want to do is actually figure out that batching function. So we want to go ahead and send every new message that comes in initially into a'
+
+[05:20] [scene:talk]
+VISUAL:
+AUDIO: 'temporary holding table within Google Sheets. So I\'m going to go Google Sheets. And this just means that as we get this batch of messages, they\'re typically sent within you know a 10 20 second window. Um, on some of my automations sometimes because customers'
+
+[05:32] [scene:talk]
+VISUAL:
+AUDIO: 'might take a little bit longer to kind of batch messages together, I might have this uh timer open for like a minute. So for a minute period, I\'m actually just batching all the messages that come in. And we just need to select append row and sheets. I\'ve got my AI SMS Google'
+
+[05:45] [scene:talk]
+VISUAL:
+AUDIO: 'sheet selected. And now the tab I\'m going to be using is holding. So this is how that sheet is going to look. I\'ve got a date column, which I\'m not actually using right now. Um, I\'ve got a from number and then I\'ve got a message. So let\'s say for example I was to get a'
+
+[05:58] [scene:talk]
+VISUAL:
+AUDIO: 'message from number 1 2 3 4 and there was three separate messages sent across a 5 or 10 second window. I would log each of those messages directly like this. So hi there, how are you? Thanks. And the unique key for each of these is just the from phone number. So now to'
+
+[06:11] [scene:talk]
+VISUAL:
+AUDIO: 'set that up in my sheet really what I want to be doing is pulling in the from number and then the message. So let\'s scroll down and find the message which is this body variable here. So message is hide there and then my from number is here. So now if I just test this step,'
+
+[06:25] [scene:talk]
+VISUAL:
+AUDIO: 'there we go. It was successfully added. So let\'s check the Google sheet. And there we go. It was added into our Google sheet over here. So we have the from number and then we have the high there. Now there\'s actually one thing wrong with how we added this number and that is that it\'s not in the E164'
+
+[06:38] [scene:talk]
+VISUAL:
+AUDIO: 'format. So whenever we\'re using Twilio or any API services for sending and receiving messages and calls, we actually have to have the phone number in this E164 format. And for our case, we actually don\'t have that plus listed'
+
+[06:50] [scene:talk]
+VISUAL:
+AUDIO: 'in that Google sheet. It actually should be right there. But then looking at the Google sheet setting, we actually have the plus because it came from Twilio with the plus, but it\'s not being transferred across. So all we need to do is just get a single quotation mark. Put it there. There we go. So now when we'
+
+[07:03] [scene:talk]
+VISUAL:
+AUDIO: 'add it with the single quotation mark, it\'s going to be added to the sheet and it\'s actually going to keep the plus there. This is important because later on when we\'re taking that phone number and sending the message back to the user, we need to have this plus listed here in order for it to be formatted'
+
+[07:16] [scene:talk]
+VISUAL:
+AUDIO: 'correctly for the API. So let\'s test it again. Let\'s go test step. All right, it was added. Awesome. and it was added perfectly with the plus listed as well. Now, the next thing we want to do is get a wait node. So, this weight node is going to be what we\'re using to wait 5'
+
+[07:29] [scene:talk]
+VISUAL:
+AUDIO: 'seconds, 10 seconds, 30 seconds to actually collect all the messages. So, for testing, I probably would only go 5 seconds because really we just want to see if we send multiple messages within a 5second window is the actual process of adding them to Google Sheets working.'
+
+[07:42] [scene:talk]
+VISUAL:
+AUDIO: 'So, 5 seconds is enough for me. So, let\'s test that out. I\'m going to go across to this web hook. I\'m going to flick over to production. I\'m going to copy this. So, I\'m actually going to test in production mode right now, mainly because if I hit test workflow, as soon as I send one message, then'
+
+[07:54] [scene:talk]
+VISUAL:
+AUDIO: 'that\'s going to uh take the workflow out of testing and I\'m not going to be able to send another message into the system. But, if I actually flick this across to active, um, then I\'m going to be able to send multiple messages at one time and then see them being added to the Google'
+
+[08:06] [scene:talk]
+VISUAL:
+AUDIO: 'sheet in real time. So, now with this active, let\'s go back into Twilio and just update this URL into the production URL. So, let\'s paste this into here and hit save configuration. And now this is going to be ready to receive multiple'
+
+[08:18] [scene:talk]
+VISUAL:
+AUDIO: 'messages at one time. Awesome. So let\'s test this out. It\'s going to send a bunch of quick messages. Hi there, how are you? They\'re going to go across to Twilio first. Then it\'s going to be pointing to our production nan web hook. And then yeah, we\'re basically adding to the Google'
+
+[08:30] [scene:talk]
+VISUAL:
+AUDIO: 'sheet here. So this initial function is working. So now let\'s say we\'ve waited for 5 10 seconds and we\'ve collected a batch of multiple messages. Now what we want to do is actually go back into Google sheet and then pull out that entire batch of messages. So to do that, I\'m just going to go copy this, paste it'
+
+[08:43] [scene:talk]
+VISUAL:
+AUDIO: 'into here. already has the configuration set for the worksheet that I need. And I\'m going to change this to uh get rows. So now for get rows, I actually need to get the rows that are associated to that phone number that was messaging. So I\'m'
+
+[08:56] [scene:talk]
+VISUAL:
+AUDIO: 'going to add a filter and I\'m going to go to column and from number. And now I actually need to send some test information into here. I\'m going to go back to this web hook and actually pull out that from number that we initially received the message from. So there is a little bit of jumping around, but I\'m'
+
+[09:09] [scene:talk]
+VISUAL:
+AUDIO: 'going to go back to this web hook over here. Choose the test web hook. Then back in Twilio, just reinstall that test web hook and hit save configuration. Let\'s listen out for a test event and then send a new message. Awesome. So, we received the message. We\'ve added it'
+
+[09:21] [scene:talk]
+VISUAL:
+AUDIO: 'into Google sheet. And now we actually just have to add it into our filter over here. So, let\'s open up this Google sheet. Go back into the filter. And then we want to go back to the web hook. That\'s the uh that\'s the phone number we want to be using. So, this from phone number, we\'re going to paste it into'
+
+[09:34] [scene:talk]
+VISUAL:
+AUDIO: 'here. So, now if I actually just hit test step, we\'re going to be returning all these messages. So all the initial two ones that I sent before and then this third one from this test because they all have that same phone number. So now let\'s just hit test. And there we go. We got row number two, row number'
+
+[09:47] [scene:talk]
+VISUAL:
+AUDIO: 'three, row number four, and we got the hi there, how are you, and then hi there again. So now at this stage, since we have all the messages returned to us, uh we actually want to turn all those separate messages into one string that we can then add into the AI agent. So'
+
+[10:00] [scene:talk]
+VISUAL:
+AUDIO: 'this data set is actually an array of objects. So each of these between these squiggly brackets is actually just one object. So it contains the row number, the date, the from number, and the message. So we want to take each of these packets of information and then'
+
+[10:12] [scene:talk]
+VISUAL:
+AUDIO: 'just append this value, the message value, uh, to each of these separate message values as a string. So we\'re going to get a code node to do that for us. Okay. So let\'s open up and get a code node. Awesome. And now what I want to do'
+
+[10:24] [scene:talk]
+VISUAL:
+AUDIO: 'is actually go across the chat GPT and just tell it and say, hey, this is the information that we have from the previous Google Sheets node. I need to write a code node with an nan that\'s going to take that information and then just combine all these message variables'
+
+[10:36] [scene:talk]
+VISUAL:
+AUDIO: 'into one string and then output that as a variable that I can use. So I\'m going to go ahead and copy uh by pressing this button here. I\'m going to copy this entire data set. So this is what I\'m sending to chat gbt. I\'m just saying that hey I am within nan and I need a code node for nan. I\'m doing this'
+
+[10:49] [scene:talk]
+VISUAL:
+AUDIO: 'because when you\'re coding in JavaScript or Python um in an unrestricted environment like cursor or replet there\'s a bunch of different libraries that you can use when you\'re coding to just simplify the amount of code that you need within nan we cannot use those'
+
+[11:01] [scene:talk]
+VISUAL:
+AUDIO: 'libraries which means we have to use like raw basic JavaScript so just by prefacing saying hey I\'m within nan you know you know I\'ve got some restrictions I can\'t use libraries blah blah blah um just write me a code node that\'ll be'
+
+[11:13] [scene:talk]
+VISUAL:
+AUDIO: 'suitable for n uh anyway so here I am saying write me a code node that\'s going to take all the messages from the data set that I gave you and put them into on variable. By the way, this is a dynamic data set. It might have one message, it might have five, it might have 10. So, the actual code needs to be dynamic. And'
+
+[11:26] [scene:talk]
+VISUAL:
+AUDIO: 'then over here, I\'m just pasting in the data set that I got directly from N. So, let\'s hit send and just see what code we get back out of this. All right, wicked. Let\'s copy this and back in N. Let\'s paste it into here and just see if this works. So, we\'re going to hit test step.'
+
+[11:38] [scene:talk]
+VISUAL:
+AUDIO: 'Uh, undefined uh is not valid JSON in line two. So, it seems like there was an error over here. Let\'s paste this into chat GPT. See if it can fix itself. All right, the updated code. Let\'s paste it into here and test step. Okay, awesome.'
+
+[11:50] [scene:talk]
+VISUAL:
+AUDIO: 'So, hi there. How are you? Hi there. So, I actually do a variation for this from my production ready um SMS systems. Um sometimes what you might want to do is maybe get it to return the messages in'
+
+[12:02] [scene:talk]
+VISUAL:
+AUDIO: 'markdown format like message one, hi there. Message two, how are you? Message three, hi there. Or you can use like a um a comma between each message. But yeah, you might find that you do want to have some way of just distinguishing'
+
+[12:14] [scene:talk]
+VISUAL:
+AUDIO: 'between messages. I\'m going to leave that for you to decide. But yeah, for now this is going to be working for us because now we just have one literally like one string that we can input into the AI agent. So now before we actually go and input this message into the AI agent to generate a response, we'
+
+[12:27] [scene:talk]
+VISUAL:
+AUDIO: 'actually have to come back into this Google sheet and just clean it up because this is just like a temporary storage for messages while we\'re batching, we don\'t actually want to leave them here because if we just leave them here and then, you know, 5 minutes later they the person replies again and they reply again, we\'re going to have'
+
+[12:39] [scene:talk]
+VISUAL:
+AUDIO: 'like just it\'s going to be very very dirty and the context of the message is not going to be clean. So we essentially want to wipe these out. So to wipe that out, we\'re just going to duplicate this Google Sheets node, paste it over here. Once again, it\'s already plugged into the Google sheet that we need. Let\'s'
+
+[12:51] [scene:talk]
+VISUAL:
+AUDIO: 'open it up. And now for the operation, we\'re going to go to delete rows or columns. So for our settings over here, we\'ve got two delete rows, start number row, and then the uh number of rows to delete. So what that means is that we'
+
+[13:03] [scene:talk]
+VISUAL:
+AUDIO: 'have to find out what\'s the starting row, which is two, for example, and how many rows we need to delete. It\'s 1, two, and three. So in order for us to get that information and put it into here. So the start row number and then number of rows to delete. We can actually go back into this code node and'
+
+[13:16] [scene:talk]
+VISUAL:
+AUDIO: 'if I open this up, we can see that we actually have this information here already. Which row number is it? Which row number is it? And which row number is it? So technically we can just go back to chat GPT and say now um you know output two more variables. We need one variable that\'s the start row number and'
+
+[13:29] [scene:talk]
+VISUAL:
+AUDIO: 'then one variable that just uh tells us how many um rows we would need to delete. So now I\'m just saying please update the code to also output the start row number and then the number of rows. Um this is probably very very bad instructions. Let\'s see if we can just'
+
+[13:42] [scene:talk]
+VISUAL:
+AUDIO: 'do it though. Okay, so we\'ve got a code over here. Let\'s copy that. And now let\'s uh paste it into here. Hit test step. And we\'ve got Okay, so we got the original message. Hi there. How are you doing? Start row number is two and'
+
+[13:54] [scene:talk]
+VISUAL:
+AUDIO: 'number of rows is three. Let\'s confirm that start row number is two and number of rows is 1 2 and three. All right, so that\'s perfect. Now in our Google Sheets delete function, we need to pull in the start row dynamically from this code'
+
+[14:06] [scene:talk]
+VISUAL:
+AUDIO: 'node and then the number of rows. Let\'s backspace that and put it into here as well. So now if I just test this step, we should actually see, okay, it\'s already deleted it before we can'
+
+[14:19] [scene:talk]
+VISUAL:
+AUDIO: 'actually come back and test it. So yeah, those three messages were here. I tested that step and it deleted the messages for us. So now this is blank. It\'s ready. And technically, um, how you want this sheet to look is as often as possible blank. uh aside from when you\'re just batching messages. So that\'s'
+
+[14:32] [scene:talk]
+VISUAL:
+AUDIO: 'all good. We have a success, which means it was deleted. And now we can actually go around and uh plug in the variable or the single message uh variable from the code node directly into our AI agent. So let\'s go ahead and build an AI agent. Uh'
+
+[14:44] [scene:talk]
+VISUAL:
+AUDIO: 'for this step, you guys will have like your own requirement for what you want the agent to do. I\'m just going to build out what we had before, just a very basic agent that can do um question and answers based on company information. So the first thing I want to set is just'
+
+[14:57] [scene:talk]
+VISUAL:
+AUDIO: 'the source prompt. Um, this is just saying like, all right, what information do you want to input as the user info? So, we want to input the uh string of messages here. So, I\'m going to go across to Google Sheets over here and just click on code node and then input'
+
+[15:09] [scene:talk]
+VISUAL:
+AUDIO: 'this message variable. So, now this AI agent is going to receive this message from the user. Hi there, how are you? Hi there. All right, let\'s get out of this. Let\'s set up some other stuff that we need. So, the chat model, I\'m just going to be using OpenAI. I\'m going to go for'
+
+[15:21] [scene:talk]
+VISUAL:
+AUDIO: 'GPT 4.1. Now, I\'m going to use 4.1 for two reasons. one, it\'s the best model for following instructions. Um, which is actually what I like to do when I\'m doing customer communication. Uh, but also I want to be using 4.1 because'
+
+[15:34] [scene:talk]
+VISUAL:
+AUDIO: 'let\'s say I\'ve got a really long conversation with the customer, like someone\'s just messaging me a lot about, I don\'t know, a sophisticated problem or a product or whatever. Um, I\'ve got a really long context window. I got 1 million tokens uh in the 4.1 API which means that when I\'m actually building'
+
+[15:48] [scene:talk]
+VISUAL:
+AUDIO: 'out my memory variable over here using the um superbase database whenever I get a message from the user I can actually take in whatever size of me like they\'re never going to meet 1 million tokens. So this just gives me some security there. It probably is a little bit overkill but'
+
+[16:01] [scene:talk]
+VISUAL:
+AUDIO: 'yeah 4.1 is actually very good at following instructions and I just I want that as well. So for memory I\'m going to be using Postgress chat memory. Now, I\'m going to be linking a video about how to set this up um in the description of this video just to make this video, this current one, fly through a little bit'
+
+[16:14] [scene:talk]
+VISUAL:
+AUDIO: 'faster. Um, but what we\'re doing here is we actually need a session ID key. So, the session ID is it\'s just a unique identifier that denotes who like who does this message belong to. So, for us, the message belongs to the sender and'
+
+[16:28] [scene:talk]
+VISUAL:
+AUDIO: 'that sender, the unique ID for that sender is just their phone number. So, we\'re going to go to session ID and we\'re going to go define below. And now I\'m going to go back down to my initial web hook. Scroll down and take the from number, which is here. And now I\'m using'
+
+[16:42] [scene:talk]
+VISUAL:
+AUDIO: 'the from number as the key for our uh chat messages. It\'s just red right now because I haven\'t executed this to run with the agent, but that\'s going to be working for us. So now we have the 4.1 brain plugged in. We have the memory'
+
+[16:54] [scene:talk]
+VISUAL:
+AUDIO: 'connected as well and that memory is going to be scraping together um every single message we get from the user as well as every single update or every single message that the AI is going to be sending back to us uh back to the user sorry. All right, awesome. So then'
+
+[17:06] [scene:talk]
+VISUAL:
+AUDIO: 'the final thing we want to do is give our agent some um product and service information. So we\'re going to be using a HTTP request tool. So this is just like making an API call and we\'re placing this API call directly to our website and we\'re going to be using the'
+
+[17:19] [scene:talk]
+VISUAL:
+AUDIO: 'perplexity API to do that for us. Okay, so over in the Perplexity API documentation, I\'m going to go across to API reference and over here I have the API call we\'re going to be making. So I\'m just going to be copying this API'
+
+[17:31] [scene:talk]
+VISUAL:
+AUDIO: 'call. But before I do that, um I just want to speak about how this is going to work for us. So when we\'re sending the actual API call, we\'re able to send a message like a dynamic question into the API which is going to be generated by the AI agent uh based on whatever the'
+
+[17:43] [scene:talk]
+VISUAL:
+AUDIO: 'SMS messages that\'s coming in. and this AI agent is going to dynamically insert into this uh Plexity web search API that specific question. So that\'s what we can do over here. We can actually dynamically insert it. But now the next thing we want to do is actually scroll'
+
+[17:55] [scene:talk]
+VISUAL:
+AUDIO: 'down and we\'ve got a bunch of different parameters we can set when we\'re actually building this API call. And one of those parameters is search domain filter. Search domain filter is going to give us the ability to restrict the web searches only to the websites that we'
+
+[18:07] [scene:talk]
+VISUAL:
+AUDIO: 'want. So for example in my case I\'ve got my um sales website which is the front end website where anyone can come in purchase a product and it has all the products all the pricing some highle specs but I also have like a backend website which is for my customer'
+
+[18:20] [scene:talk]
+VISUAL:
+AUDIO: 'support. So this has like all the proper detailed specs um user guides troubleshooting information about warranty purchasing everything that they that a customer might need to know. So then using the search domain filter, I'
+
+[18:32] [scene:talk]
+VISUAL:
+AUDIO: 'can literally have it plugged into my sales website, into my support website, and have all the information that I would need to give to a customer. So to build this out, we\'re right now we\'re in the curl settings. I\'m just going to zoom back in. We\'ve got curl selected. And if you\'ve updated your nan to the'
+
+[18:45] [scene:talk]
+VISUAL:
+AUDIO: 'latest version, you can actually just copy this entire curl request as it is and go back to the nan API call and just go uh import curl. We paste it into here. We hit import and it\'s going to get all the settings that we need for'
+
+[18:58] [scene:talk]
+VISUAL:
+AUDIO: 'this API call to work. Um, it\'s going to just plug them all in. So, we\'ve got the post method. We\'ve got the URL for the endpoint. Um, we\'ve got headers here. So, our authorization header. We\'re going to get the API key in just a second. And then we actually have the'
+
+[19:10] [scene:talk]
+VISUAL:
+AUDIO: 'body of the JSON that we\'re sending. This is how we\'re going to be configuring our API call. But what I want to do is actually copy this and go across to chat GPT. And then I\'m saying I want to add search domain filtering. I\'ve pasted in the explanation from the'
+
+[19:23] [scene:talk]
+VISUAL:
+AUDIO: 'API documents. And then over here I\'ve got I want to add the search domain filter for julka.com and then support.j jeweler.com as well. So, let\'s hit enter and we\'re going to get the body returned to us with that search domain filter uh parameter actually installed. We can'
+
+[19:36] [scene:talk]
+VISUAL:
+AUDIO: 'just copy and paste it directly back. So, here\'s the body returned for us. We have model messages and then search domain filter for both of those sites. So, awesome. This is ready for us to use. So, let\'s go ahead and paste it into here. Now the only thing is that'
+
+[19:48] [scene:talk]
+VISUAL:
+AUDIO: 'now we actually need some way for uh the AI agent to dynamically insert the question because if we just hit this API call uh we have the system role which is be precise and concise. Cool. But then we have the content which is what'
+
+[20:01] [scene:talk]
+VISUAL:
+AUDIO: 'question we\'re asking the internet and it says how many stars are in the galaxy. What we really want to do is actually just take this out make it a dynamic variable and call this web search question. close this off and'
+
+[20:13] [scene:talk]
+VISUAL:
+AUDIO: 'whoops, this should be underscore. Um, and now when we actually make this API call, the uh AI assistant is going to be able to basically replace this with the question. Um, but to make this work, we'
+
+[20:25] [scene:talk]
+VISUAL:
+AUDIO: 'have to copy this. Let\'s backspace it. Let\'s click this button over here. Let the model define a parameter. And right underneath, we actually have this add a description. And in the description, I\'m just pasting in that body of the API'
+
+[20:37] [scene:talk]
+VISUAL:
+AUDIO: 'call. So this way I actually have um just instructions for the model to know that okay this is the body that we\'re using. You\'re dynamically replacing web search question over here um with whatever question it is that you decide'
+
+[20:50] [scene:talk]
+VISUAL:
+AUDIO: 'since we\'re using the define by model. So now the final thing we need to set up here is the API token. So over in my perplexity settings I\'m going to go to API keys and I\'ve already got a key over here generated. If you don\'t you just click create key. So let\'s just copy'
+
+[21:02] [scene:talk]
+VISUAL:
+AUDIO: 'this and back in nan let\'s backspace that. Let\'s paste it into here. And now this is ready to go. All right, done. So, at this stage, I want to just test the workflow to make sure that everything works start to finish. Now, I'
+
+[21:14] [scene:talk]
+VISUAL:
+AUDIO: 'still do need to put a Twilio um like send message note over here, but I just don\'t want to send the message just yet. Let\'s actually test this out. So, I\'m just going to say hi there. So, the message will come in. We got the test'
+
+[21:26] [scene:talk]
+VISUAL:
+AUDIO: 'web hook still being used. So, the message comes in. We\'ve added to the Google sheet. We\'re waiting for 5 seconds um or 10 seconds actually. We\'ve deleted it from the Google sheet. We\'ve taken all the messages, turned them into one variable. Uh we plugged it into the AI agent. So now we have the response'
+
+[21:39] [scene:talk]
+VISUAL:
+AUDIO: 'from the agent. If I double click this, hello, how can I assist you today? So that\'s actually perfect. Um one thing we didn\'t do before is actually add a system message and this is just going to define what kind of response we want out. So we want to make sure that we'
+
+[21:51] [scene:talk]
+VISUAL:
+AUDIO: 'know this is an AI SMS assistant and then what you know tool calls that we have available. So we\'re going to be using this prompt. It\'s very very basic. Um, you guys should definitely change it around depending on what your use case is, but uh, you\'re a helpful SMS assistant for dual.com. Always use the'
+
+[22:03] [scene:talk]
+VISUAL:
+AUDIO: 'web search tool for questions and then keep your responses short and sweet to a maximum of 160 characters. So, in Twilio, um, if you\'ve got more than 160 characters, it\'s going to take that message and then chunk it down and send'
+
+[22:15] [scene:talk]
+VISUAL:
+AUDIO: 'it as two messages. I I don\'t like that. I want to send it as one message. So, just keep it below 160 characters. And now we just need to do one more thing and just change that tool name uh over here to be called web search so it makes sense in the instructions as well. So'
+
+[22:27] [scene:talk]
+VISUAL:
+AUDIO: 'I\'m just going to copy this. Click on tool down here. And now we\'re in our tool settings. Go up to HTTP request. Change this to web search. And now let\'s just give it a accurate description of what this tool is. Awesome. So use this'
+
+[22:39] [scene:talk]
+VISUAL:
+AUDIO: 'tool to search for uh questions about JAR. Done. And now the final thing we want to do is actually configure our Twilio node. So the Twilio node is going to be what we\'re sending messages with. So, let\'s go to Twilio and then choose'
+
+[22:51] [scene:talk]
+VISUAL:
+AUDIO: 'send an SMS. So, I\'ve already got some credentials configured over here, but I\'m just going to show you how to add them from scratch. So, to create our new credentials, we just need to get the account SID and the O token from Twilio. To do that, let\'s go into the account'
+
+[23:03] [scene:talk]
+VISUAL:
+AUDIO: 'dashboard, and then scrolling down, we\'ve got the account SID and the O token. So, let\'s copy the SID, paste it into here, copy the token, paste it into here, and I\'m just going to rename this to dash test, and hit save. Awesome.'
+
+[23:15] [scene:talk]
+VISUAL:
+AUDIO: 'that was successfully added. So, let\'s get back out of here. So, now to configure the rest of the settings. So, the from number is actually going to be the number um that we messaged. So, the Twilio number that we had, you can just'
+
+[23:27] [scene:talk]
+VISUAL:
+AUDIO: 'go into the web hook, which is that first node that received the message. Um, and this is that phone number that we\'re going to be sending from. I would just actually hardcode it into here. We don\'t need to um use it as a variable because it\'s always going to be from the'
+
+[23:40] [scene:talk]
+VISUAL:
+AUDIO: 'same phone number as an outbound. And the two numbers going to be dynamic. So, we just need to pull this in from uh where is the from number? Uh over here. There we go. Paste the phone number into here. And now the message. Let\'s go back to the AI agent and paste this into'
+
+[23:53] [scene:talk]
+VISUAL:
+AUDIO: 'here. And now if I just go test step and open up my messaging, we should see the response. There we go. Hi, how can I help you with your Jera products or info today? All right. So now let\'s test out that everything is plugged in and'
+
+[24:05] [scene:talk]
+VISUAL:
+AUDIO: 'working well. Let\'s go test workflow. And now let\'s send the message. Hi there. So we\'ll get the message into here. Cool. It\'s adding to the Google sheet. We\'re going to wait 5 or 10 seconds. We then get the message back'
+
+[24:17] [scene:talk]
+VISUAL:
+AUDIO: 'from the Google sheet. Turn it into one variable. Delete the messages from the Google sheet. And now let\'s see if the AI agent is configured correctly. Also in our response is, hi, how can I assist you today? So that worked perfectly well. I actually now want to test that'
+
+[24:29] [scene:talk]
+VISUAL:
+AUDIO: 'the web search works as well. So let\'s go test workflow and let\'s say what products does Jula sell. So once again into the Google sheet. We\'re waiting 5 10 seconds. All right. Nice. Now let\'s see if we hit the web search. Okay, so'
+
+[24:41] [scene:talk]
+VISUAL:
+AUDIO: 'it seems to be working. Seems like it returned some information back for us and Jooker sells the hot tap portable water heaters, the got to go toilet and everything like that. Okay guys, so that actually works perfectly. Um, from here I would actually just go in and change'
+
+[24:54] [scene:talk]
+VISUAL:
+AUDIO: 'this up and say, "Hey, um, always include the URL in your response." I think that\'s pretty cool just to have the URL like click through here and buy the hot tap if you want. So that\'s pretty how I would improve the'
+
+[25:07] [scene:talk]
+VISUAL:
+AUDIO: 'system. Um, but yeah, guys, now you have a fully working productionready AI SMS agent that can handle your um, inbound SMSs. If you stuck around to the very end of the video, I appreciate you watching to now. Um, please hit like, please drop a comment, please subscribe.'
+
+[25:20] [scene:talk]
+VISUAL:
+AUDIO: 'Um, yeah, help me get some more engagement on this video to keep pushing it out to more people. Thank you very much guys and enjoy your SMS agent.'

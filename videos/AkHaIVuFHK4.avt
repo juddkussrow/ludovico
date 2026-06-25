@@ -1,0 +1,335 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: A tour of iroh
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=AkHaIVuFHK4
+upload_date: 20250117
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'today we\'re going to do a full-blown fullbore overview of an iro connection touching on five Core Concepts and a bunch of supporting Tech we\'re going to start simple and then ramp up to a complex explanation very quickly it might feel strange to start'
+
+[00:14] [scene:talk]
+VISUAL:
+AUDIO: 'with this kind of hard mode explanation but I personally think it\'s nicer to start in the deep end for a few reasons first and foremost if you\'re watching this video you\'re a smart person and you have access to the internet this is'
+
+[00:27] [scene:talk]
+VISUAL:
+AUDIO: 'super dense material and it can be a great jump off point for searches and reading documentation at least you have the DSE stuff to start with secondly we can do deep Dives on all kinds of topics that we\'ll gloss over here so this video can serve as an overview of how those'
+
+[00:40] [scene:talk]
+VISUAL:
+AUDIO: 'deep Dives fit together the first time you hear this stuff it is all going to sound a little complicated and foreign but you know your knowledge has progressed if you re-watch this later and it feels a little more natural before we get to the thick part a'
+
+[00:52] [scene:talk]
+VISUAL:
+AUDIO: 'reminder of where we\'re trying to get iro is peerto peer that works you put it in your app and you get connections then add protocols to do cool stuff so once IO is installed you can tell any note in your app to connect to'
+
+[01:06] [scene:talk]
+VISUAL:
+AUDIO: 'any other node regardless of where it is in the world and that connection will be bidirectional and end to end encrypted we also touched lightly on the idea of protocols a second ago we\'ll talk more about protocols in a bit but'
+
+[01:19] [scene:talk]
+VISUAL:
+AUDIO: 'first The Thing Worth understanding in detail is a single connection between two nodes you can build all sorts of really cool multi-node things but the hard thing thing Ira does for you is consistently get you a connection to'
+
+[01:31] [scene:talk]
+VISUAL:
+AUDIO: 'another node when you ask for one that abstraction is pretty simple at the end of the day all iro is really doing is send and receive data to that other node how that actually works when things are moving around that\'s the part that takes'
+
+[01:44] [scene:talk]
+VISUAL:
+AUDIO: 'a little bit of explaining so as a super dense first cut here\'s a dark matter density paragraph that describes iro iro is a library for establishing the most'
+
+[01:56] [scene:talk]
+VISUAL:
+AUDIO: 'direct quick connection possible between two devices every endpoint uses the public half of a cryptographic key pair to identify itself assuming at least one configured relay server is reachable and'
+
+[02:08] [scene:talk]
+VISUAL:
+AUDIO: 'endpoint keeps exactly one TCP connection to a home relay that other nodes use for connection establishment and as a fallback transport IR uses a suite of Discovery services to resolve home relays and endpoint identifiers'
+
+[02:20] [scene:talk]
+VISUAL:
+AUDIO: 'connections between endpoints use Quick alpn to distinguish between protocols while routers automate the endpoint accept Loop for protocol multiplexing it\'s hard to even like say out loud I know it\'ll take us a long'
+
+[02:33] [scene:talk]
+VISUAL:
+AUDIO: 'time to unpack that paragraph but that paragraph covers 99% of what iro does so to break that down the first thing we\'re going to do is highlight all the existing Open Standards that iro is built on or at least the ones we touched'
+
+[02:46] [scene:talk]
+VISUAL:
+AUDIO: 'on in that paragraph We have quick TLS which is inside of quick we have key pairs in this case Edwards curve keys and then connections like websockets we\'re not going to go into detail on those but I want to call out the'
+
+[02:58] [scene:talk]
+VISUAL:
+AUDIO: 'intentional choice to use mature and Open Standards whenever possible all of the Technologies on this list are in the browser you\'re using to watch this video we\'re also pretty emphatic about choosing exactly one standard for each role in the stack wherever possible to'
+
+[03:11] [scene:talk]
+VISUAL:
+AUDIO: 'cut down on both bloat and configuration we\'ll go into each of these standards and how they\'re used in later videos but for now we\'re just going to completely ignore all of this and Forge ahead our Dark Matter paragraph touches on five'
+
+[03:23] [scene:talk]
+VISUAL:
+AUDIO: 'Core Concepts with an iro that are worth spending some time on and those five things are endpoints relays Discovery protocols and routers these we are going to go into some detail on'
+
+[03:36] [scene:talk]
+VISUAL:
+AUDIO: 'now the journey of a connection starts with an endpoint an endpoint is the end point of a connection it\'s one of the tin cans that the wire is connected to because this is peer-to-peer endpoints'
+
+[03:50] [scene:talk]
+VISUAL:
+AUDIO: 'can both initiate and accept connections the endpoint handles both sides we\'re going to build up a pseudo code description talking through each of these highle points if you want to run this code for real there\'s a link to a'
+
+[04:02] [scene:talk]
+VISUAL:
+AUDIO: 'docs page version of this video in the description that actually compiles but with that let\'s get started four lines and one of them is a print statement that\'s it that first line constructs an endpoint 99% of apps will have a single'
+
+[04:15] [scene:talk]
+VISUAL:
+AUDIO: 'endpoint in the entire app so you build the endpoint once and then refer to it bunch then we call bind to ass the operating system for a networking Port this calling to bind will kick off work'
+
+[04:27] [scene:talk]
+VISUAL:
+AUDIO: 'in the background that we\'ll flush out in more detail in a second on the third line we print the endpoints node identifier every endpoint has an identifier used to uniquely name the endpoint here\'s what one looks'
+
+[04:40] [scene:talk]
+VISUAL:
+AUDIO: 'like yeah it looks like a bunch of random gak it is not random though what you\'re looking at is the base 32 serialization of the public half of a cryptographic key pair the'
+
+[04:52] [scene:talk]
+VISUAL:
+AUDIO: 'serializations can be different but at the end these are always ed25519 keys to be exact and if Ed 25519 sounds like a madeup Star Wars droid to you feel free to ignore it but using key pairs as identifiers has two really big'
+
+[05:05] [scene:talk]
+VISUAL:
+AUDIO: 'advantages first we can safely generate a new key pair locally on the device without talking to anyone else and know that it will be unique to all other nodes this is because the set of possible Keys is really really big so'
+
+[05:17] [scene:talk]
+VISUAL:
+AUDIO: 'that we can pick one at random and be incredibly confident that no one else will pick the same one second identifiers an iro double as having a way to send that node encrypt messages we can use the public half of the key'
+
+[05:30] [scene:talk]
+VISUAL:
+AUDIO: 'pair to encrypt things for that node and only the possessor of the private half can read that message so this one ey identifier looks a little bit uh ridiculous but it\'s doing double duty as both an ID and a'
+
+[05:43] [scene:talk]
+VISUAL:
+AUDIO: 'source for computer communication and networking keeping the btes lower is better neat these node identifiers are what we pass around to other nodes that they can dial us now one problem with Note IDs and tutorials they\'re super'
+
+[05:56] [scene:talk]
+VISUAL:
+AUDIO: 'hard to distinguish so we\'re going to be using things like Susie node ID and Bob node ID instead of the nonsense letter GAC you\'ll just have to kind of sub that in in your head when you start working with the code for real now anyways getting back to our diagram on the'
+
+[06:09] [scene:talk]
+VISUAL:
+AUDIO: 'fourth line we use the endpoint to initiate a connection dialing another node with their node identifier the result is a connection we can send and read data from those four lines are the Beating Heart of adding iro to an app everything else builds up from'
+
+[06:21] [scene:talk]
+VISUAL:
+AUDIO: 'here okay let\'s talk about work that happens in the background when you call bind the first thing an endpoint will do after binding is probe the network to get a sense of what is and isn\'t'
+
+[06:34] [scene:talk]
+VISUAL:
+AUDIO: 'possible based on the current networking conditions one of the most important parts of that Network status report is figuring out a home relay relays are servers that help establish connections between devices they\'re the backbone of'
+
+[06:46] [scene:talk]
+VISUAL:
+AUDIO: 'an iron Network when your endpoint starts it sends pings to all of the configured relays and measures how long the pongs take to come back this is also known as a measure of roundtrip latency relay servers are spread around the'
+
+[07:00] [scene:talk]
+VISUAL:
+AUDIO: 'world and the one with the lowest latency is usually the relay server that you are physically closest to but we don\'t worry so much about physical proximity all we really care about is which one answers the fastest your endpoint will pick the relay with the'
+
+[07:12] [scene:talk]
+VISUAL:
+AUDIO: 'lowest latency the one that answered first and use that as a home relay with a home relay picked our endpoint opens a single websocket connection and works with the relay to figure out details like our endpoint\'s public IP address among other things at this point our'
+
+[07:24] [scene:talk]
+VISUAL:
+AUDIO: 'endpoint is ready to dial and be dialed now keep in mind this entire process happens in Z to 3 seconds at the beginning of calling bind aside from being a public facing home base on the internet relays have a second crucial'
+
+[07:37] [scene:talk]
+VISUAL:
+AUDIO: 'role which is to relay meaning that when no one node doesn\'t have a direct connection to another node it\'ll use the relay to send data to that node this means that even if we can\'t establish a direct connection data will still flow'
+
+[07:49] [scene:talk]
+VISUAL:
+AUDIO: 'between the two devices this is the part that lets us say it\'s peer-to-peer that works because sometimes peer-to-peer isn\'t possible so we have a seamless fall back baked in and keep in mind the connections are end to end encrypted and'
+
+[08:01] [scene:talk]
+VISUAL:
+AUDIO: 'that includes the relays because they can\'t read traffic they can only pass along encrypted packets intended for the other side of the connection relays do however know the list of node identifiers that are connected to it and which nodes are connected to whom just'
+
+[08:14] [scene:talk]
+VISUAL:
+AUDIO: 'again not what they are saying and here we\'re also going to encounter our first surprise the initial bites of our connection will almost always flow over the relay while the direct connection is established in'
+
+[08:26] [scene:talk]
+VISUAL:
+AUDIO: 'parallel then once the direct connection actually works we switch to it all in the background the reason for this is pretty simple keep initial connection times fast this also leverages a critical feature baked into iro as'
+
+[08:39] [scene:talk]
+VISUAL:
+AUDIO: 'networking conditions change iro adapts automatically this is always happening as the beginning of a connection transitions from having flowing data through a relay to being cor direct but this is the same thing that happens when'
+
+[08:51] [scene:talk]
+VISUAL:
+AUDIO: 'your phone switches from 5G to Wi-Fi iro monitors changes to network conditions continuously and reacts to them all with without configuration or intervention coming back to our pseudo code let\'s add support for'
+
+[09:03] [scene:talk]
+VISUAL:
+AUDIO: 'relays as not a mistake there are no changes because iro comes with a set of freeo use public relays that are turned on by default they\'re run by the number zero team and you\'re more than welcome to run your own relays use your own'
+
+[09:15] [scene:talk]
+VISUAL:
+AUDIO: 'hostage solution like one we run at io. Network or run entirely your own infrastructure ideally all of the above the code for Relay servers is in the main iro repo and we release compiled binaries for relays on each release of'
+
+[09:27] [scene:talk]
+VISUAL:
+AUDIO: 'iro you can take this code run it on a phone and expected switching Wi-Fi networks won\'t destroy the connection it might HIC up for a second but it will recover and if things truly fall apart we always have the relay to fall back'
+
+[09:40] [scene:talk]
+VISUAL:
+AUDIO: 'to there are lots of details we didn\'t talk about during connection setup but there is one I do want to cover now our pseudo code dials a node identifier but this is networking for a direct'
+
+[09:52] [scene:talk]
+VISUAL:
+AUDIO: 'connection we need an IP address so what gives well Discovery gives discover is the glue that connects a node identifier to something we can dial there are a few different types of Discovery services but for all of them you put a node ID in'
+
+[10:05] [scene:talk]
+VISUAL:
+AUDIO: 'and get back either a home relay of that node IP addresses to dial or both there are different implementations of the discovery service within iro the most popular of which are DNS and local'
+
+[10:17] [scene:talk]
+VISUAL:
+AUDIO: 'Discovery DNS uses the same domain name system that connects example.com to its backing IP address to map node identifiers to relay servers and local Discovery uses your local network to'
+
+[10:29] [scene:talk]
+VISUAL:
+AUDIO: 'find nodes to talk to on your local Wi-Fi even if that Wi-Fi network doesn\'t have a wider internet connection looking at our pseudo code example we can configure our endpoint to use both local and DNS Discovery so here we\'ve added Discovery to the endpoint Constructor'
+
+[10:43] [scene:talk]
+VISUAL:
+AUDIO: 'passing in our two Discovery services and that\'s it IO will now use these two services to get something it can dial for a given node ID local Discovery has the extra trick of being able to actually find new nodes but that\'s a story for another day this is also the'
+
+[10:55] [scene:talk]
+VISUAL:
+AUDIO: 'first non-default configuration we\'re going for on the endpoint so now is a good time to talk about configuration as we mentioned at the top generally we try to keep configuration of an endpoint to an absolute minimum Focus only on providing configuration'
+
+[11:09] [scene:talk]
+VISUAL:
+AUDIO: 'that we know is useful in at least a few contexts there is additional configuration you can perform on an endpoint before actually starting an endpoint between these two lines here more on that in a minute oh I guess okay more on that now'
+
+[11:23] [scene:talk]
+VISUAL:
+AUDIO: 'at this point we\'re connected yay now we just have to do something with that connection and that\'s where protocols come in Protocols are modules you compose together to add functionality to connections protocols exist for file'
+
+[11:36] [scene:talk]
+VISUAL:
+AUDIO: 'transfer game server synchronization message broadcasting document collaboration all kinds of gak you can use these off-the-shelf protocols to quickly add functionality work directly with quick streams instead and filled a'
+
+[11:48] [scene:talk]
+VISUAL:
+AUDIO: 'fully custom protocol that does exactly what you want or something in the Middle where you take an existing protocol Fork it change a few things and get what you need coming from the world of http client server models Protocols are kind of like request handlers in middleware'
+
+[12:01] [scene:talk]
+VISUAL:
+AUDIO: 'but they can go beyond the request response creating multiple streams of data and usually code up both the initiating and accepting protocol Connections in the same file Protocols are an Ever growing topic'
+
+[12:13] [scene:talk]
+VISUAL:
+AUDIO: 'but to give you just like a quick smattering here\'s some pseudo code that sets up the blobs protocol for data transfer and this is the additional configuration before starting we were alerting to earlier this code sets up'
+
+[12:25] [scene:talk]
+VISUAL:
+AUDIO: 'everything we need to both provide data we have locally when others request it and ask other nodes that run the blob\'s protocol for data so let\'s walk through this together starting at the top we first construct the endpoint then we'
+
+[12:38] [scene:talk]
+VISUAL:
+AUDIO: 'construct an instance of the blob\'s protocol then configure our endpoints except Loop to wire incoming requests for blobs to the blob\'s Handler with our endpoint configured we bind it to a socket and run it in the'
+
+[12:51] [scene:talk]
+VISUAL:
+AUDIO: 'background then use the blobs protocol to initiate a request for a blob called hash of cat photo from Suzie node ID this is the first time we\'re seeing the accept Loop in our pseudo code the'
+
+[13:03] [scene:talk]
+VISUAL:
+AUDIO: 'accept Loop is the server part of an endpoint where we handle incoming requests for every new connection we\'ll get a call to the accept Loop in earlier examples we hadn\'t provide a function to the accept Loop which meant it would not'
+
+[13:16] [scene:talk]
+VISUAL:
+AUDIO: 'accept any incoming requests a big shift you might notice here is looking at client and server code right next to each other often in the same file it can feel strange coming from the usual ual client server'
+
+[13:28] [scene:talk]
+VISUAL:
+AUDIO: 'Paradigm where you\'re writing front ends and back ends but this is your there is no spoon moment client and server are arbitrary roles under the hood it\'s all networking instead of thinking about clients and servers just kind of smush'
+
+[13:40] [scene:talk]
+VISUAL:
+AUDIO: 'them together in your head and think about nodes instead thinking about every node in the network as having the same or similar roles is the source of all of the good parts of peer-to-peer including putting literal server side capabilities'
+
+[13:52] [scene:talk]
+VISUAL:
+AUDIO: 'directly into your user\'s hands most apps will use more than one protocol a router lets you stack protocols on top of iro peer-to-peer'
+
+[14:04] [scene:talk]
+VISUAL:
+AUDIO: 'connections routers handle the accept side of an arrow endpoint the connection initiation side is still handled by the protocol instance itself so to give an example of that here we\'re adding an'
+
+[14:16] [scene:talk]
+VISUAL:
+AUDIO: 'echo protocol mainly for the purpose of seeing what multiple protocols can look like under the hood this is really just adding Branch handlers to route to the right protocol based on the alpn the amount of code here is small but the'
+
+[14:29] [scene:talk]
+VISUAL:
+AUDIO: 'conceptual shift is what\'s important wrapping an endpoint in a rouer makes the design intent here clear we set up an endpoint we pull in the protocols we need we feed them to the router and then bind our way to'
+
+[14:42] [scene:talk]
+VISUAL:
+AUDIO: 'glory and there you have it we\'ve done a first passive iro there\'s a lot to unpack here yeah but before we go I think we should talk through a little bit of what iro doesn\'t cover first and foremost iro doesn\'t magically ensure'
+
+[14:55] [scene:talk]
+VISUAL:
+AUDIO: 'that the device you\'re trying to dial is online it doesn\'t buffer messages and wait for you to return your phone back on or anything like that the technical term for this is Network turn and programming around the reality that no'
+
+[15:07] [scene:talk]
+VISUAL:
+AUDIO: 'nodes can come back online and go offline whenever they want is a core concern of all distributed systems programming but it\'s highlighted like wild and peer-to-peer second iro doesn\'t obscure your IP address nodes accepting connections will'
+
+[15:20] [scene:talk]
+VISUAL:
+AUDIO: 'know your IP address this is one of the biggest reasons that we think iro should be a library that users build into apps because apps come with their own boundaries of trust keep in mind sharing IP addresses is incredibly common in the'
+
+[15:33] [scene:talk]
+VISUAL:
+AUDIO: 'wild nearly all major video conferencing tools do this by directly connecting you today video games do this your web browser can do this heck Spotify used to do this and keep in mind that every time you dial any server on the internet you are always giving them your IP'
+
+[15:46] [scene:talk]
+VISUAL:
+AUDIO: 'address and lastly Ira doesn\'t come with a built-in peer signaling mechanism that is a way to get Alice\'s note ID to Bob this might seem like a massive oversight but it\'s on purpose different apps have'
+
+[15:58] [scene:talk]
+VISUAL:
+AUDIO: 'different opinions about how peers should learn about each other this is part of that trust thing in some simple cases it\'s as basic as taking note IDs sticking them in a database and passing them out as API responses and in other cases it\'s local Discovery only or maybe'
+
+[16:11] [scene:talk]
+VISUAL:
+AUDIO: 'you\'re using tickets to move around stuff and direct messages between users we\'ll be spending a lot of time talking about signaling patterns their upsides their downsides and how to implement them in future videos well if you made it to this part'
+
+[16:23] [scene:talk]
+VISUAL:
+AUDIO: 'congratulations that was an extremely tense overview of Ira from here we will spend a lot of time going into detail explaining all of these Concepts in a slower more thorough fashion while also'
+
+[16:35] [scene:talk]
+VISUAL:
+AUDIO: 'showing lots of examples and trying to connect those to broader patterns in peer-to-peer design to practice what we preach you should be able to come back to that initial paragraph now and ideally it looks a little bit less'
+
+[16:47] [scene:talk]
+VISUAL:
+AUDIO: 'intimidating I\'ll leave that as an exercise for you but until next time I hope to see you somewhere around the internet and enjoy your day thanks my'

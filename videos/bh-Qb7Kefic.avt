@@ -1,0 +1,207 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: 🟠 The Ultimate ComfyUI Camera Angle Workflow: Qwen Edit Consistent Character (ComfyUI Deep Dive)
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=bh-Qb7Kefic
+upload_date: 20260619
+transcript_source: captions
+route: text
+
+---
+
+[00:02] [scene:talk]
+VISUAL:
+AUDIO: 'Welcome back to another deep dive from the 3 minute node. If you have been working with Q and image edit 2509 in comfy UI, you might have felt like you were losing your mind trying to get consistent results. I recently spent six straight hours'
+
+[00:14] [scene:talk]
+VISUAL:
+AUDIO: 'debugging a strange behavior that was driving me crazy, and today I am going to save you from repeating my mistake. Let me lay out the mystery first. I was running a test with the Q and image edit 2509 multiple angles low res see how'
+
+[00:27] [scene:talk]
+VISUAL:
+AUDIO: 'well it could change camera perspectives. Naturally, I used the power low res loader from RG3 to stack the models. In my setup, I built two branches. One branch had the Q and image edit unblur low res added but disabled,'
+
+[00:41] [scene:talk]
+VISUAL:
+AUDIO: 'and the other branch left it out completely. Theoretically, if a low res disabled in your stack and you use a fixed seed of zero, the output images from both branches should be identical down to the exact pixel. Except they were not.'
+
+[00:54] [scene:talk]
+VISUAL:
+AUDIO: 'I started pulling my hair out trying to figure out what was broken. First, I used our custom 3 minute node code interrogator to look directly at the RG3'
+
+[01:06] [scene:talk]
+VISUAL:
+AUDIO: 'source code. Everything looked completely fine. I checked the official GitHub repository for bugs or reported issues with the power low res loader, but found'
+
+[01:18] [scene:talk]
+VISUAL:
+AUDIO: 'absolutely nothing. Assuming my installation might have been corrupted by the breakneck pace of comfy UI updates, I wiped it and used our one click comfy UI installation script to'
+
+[01:30] [scene:talk]
+VISUAL:
+AUDIO: 'spin up a completely fresh environment. The problem was still there. I even tried disconnecting the VAE from the text encoder nodes on both the positive and negative sides, but that'
+
+[01:42] [scene:talk]
+VISUAL:
+AUDIO: 'did nothing to fix the discrepancy. I was completely devastated and had to walk away for the day. The next morning, I couldn\'t stop thinking about it. I sat down, opened'
+
+[01:54] [scene:talk]
+VISUAL:
+AUDIO: 'the workflow, and ran the generation with seed zero, then switched to seed one. They were different as expected, but when I switched back to seed zero and hit generate a second time, the new'
+
+[02:06] [scene:talk]
+VISUAL:
+AUDIO: 'image did not match the first seed zero image. Every single generation was different. I tested Z Image Turbo with the exact same test, and it was pixel-for-pixel'
+
+[02:18] [scene:talk]
+VISUAL:
+AUDIO: 'perfect. I tested Flux 2 Klein 9B, and it was flawlessly deterministic. Here is what is happening under the hood. Most AI models are built to be deterministic, meaning if you feed them the exact same'
+
+[02:31] [scene:talk]
+VISUAL:
+AUDIO: 'seed, the mathematical calculations follow the exact same path and spit out the exact same image. However, the specific quantized version we are using, QN Image Edit FP8 Mixed, is inherently non-deterministic because'
+
+[02:46] [scene:talk]
+VISUAL:
+AUDIO: 'of the way the mixed 8-bit floating-point math runs across certain hardware kernels. Rounding errors occur randomly on every single pass. It is floating-point randomness at a code level. So, if you are running tests and'
+
+[02:58] [scene:talk]
+VISUAL:
+AUDIO: 'your images don\'t match, you aren\'t crazy, and your custom nodes aren\'t broken. The model itself is just dynamically shifting every time you hit prompt. Now that the mystery is solved, let us'
+
+[03:12] [scene:talk]
+VISUAL:
+AUDIO: 'move on to our main event. How to drastically change camera angles without losing your character\'s fine details. For this test, our base image is a young man standing in a busy street taking a selfie.'
+
+[03:25] [scene:talk]
+VISUAL:
+AUDIO: 'Our test LoRA stack includes five specific models. The QN Image Edit 2509 Lightning 4 Steps, the QN Edit 2509 Multiple Angles LoRA, the Next Scene LoRA, the QN Image Edit Unblur Upscale,'
+
+[03:37] [scene:talk]
+VISUAL:
+AUDIO: 'and the QN Edit Skin LoRA. First, a quick note on generation steps. We found that cranking the settings up to 40 steps at a 4.0 CFG provides absolutely minimum benefit for QN Edit 2509. It'
+
+[03:50] [scene:talk]
+VISUAL:
+AUDIO: 'simply does not make the image look any better. Because of that, we are keeping the lightning four steps model active across all our tests to maximize efficiency. Step one is establishing our perspective'
+
+[04:06] [scene:talk]
+VISUAL:
+AUDIO: 'change. For this workflow, the multiple angles LoRA is completely non-negotiable. Our prompt text reads, "Rotate the camera 60° to the left." If you try to run this prompt using'
+
+[04:21] [scene:talk]
+VISUAL:
+AUDIO: 'native QN edit without the LoRA, the model gets confused. It will just physically rotate or warp the canvas and the boundaries of the image rather than moving the virtual camera. When you switch the multiple angles LoRA'
+
+[04:33] [scene:talk]
+VISUAL:
+AUDIO: 'on, you finally get a true professional perspective change. The downside, however, is that this shift introduces a noticeable blur. The skin texture gets smoothed out and fine facial details are lost in the'
+
+[04:46] [scene:talk]
+VISUAL:
+AUDIO: 'process. To combat this loss of detail, step two introduces the next scene LoRA V2. This model is incredibly versatile because it plays nicely with both the'
+
+[04:58] [scene:talk]
+VISUAL:
+AUDIO: '2509 and 2511 versions of QN. To make it work, you must include the explicit trigger phrase next scene right at the beginning of your text prompt. When comparing the generation side by'
+
+[05:13] [scene:talk]
+VISUAL:
+AUDIO: 'side, the difference is massive. The stack using both the multiple angles LoRA and the next scene LoRA retains a significantly higher amount of realistic skin texture. Testing this across seed zero and seed'
+
+[05:28] [scene:talk]
+VISUAL:
+AUDIO: 'one confirms the results are stable. The camera angle successfully rotates and the details stay locked in. And remember, as we proved at the start of the video, simply clicking the check'
+
+[05:40] [scene:talk]
+VISUAL:
+AUDIO: 'mark to disable a LoRA inside the RG3 loader will alter your baseline image due to the model\'s non-deterministic nature. For step three, I wanted to see if we'
+
+[05:52] [scene:talk]
+VISUAL:
+AUDIO: 'could simplify things, so I tested the next scene LoRA entirely on its own against the multiple angles LoRA on its own. The answer is a definitive no.'
+
+[06:05] [scene:talk]
+VISUAL:
+AUDIO: 'When left alone, the next scene LoRA completely fails to execute significant camera rotations. Its actual strength lies in generating an entirely new contextually related environment, making'
+
+[06:17] [scene:talk]
+VISUAL:
+AUDIO: 'it a terrible primary tool for camera manipulation. It must be stacked on top of the multiple angles LoRA to act purely as a detail enhancer. For step four, we switched up our'
+
+[06:30] [scene:talk]
+VISUAL:
+AUDIO: 'strategy to test a different pairing. The multiple angles LoRA combined with the unblur upscale LoRA, having deleted the next scene LoRA to maintain a clean test. The trigger phrase for this setup is unblur and upscale.'
+
+[06:43] [scene:talk]
+VISUAL:
+AUDIO: 'The results here were disastrous for perspective control. At a full strength of 1.0, the unblur LoRA completely overpowers the system and breaks the model\'s ability to rotate'
+
+[06:57] [scene:talk]
+VISUAL:
+AUDIO: 'the camera. The before and after images showed zero perspective change. To rule out any custom node weirdness, we bypassed the RG3 loader entirely and manually chained the native comfy UI load LoRA nodes for'
+
+[07:10] [scene:talk]
+VISUAL:
+AUDIO: 'the lightning, multiple angles, and unblur models. The result was identical. The unblur LoRA aggressively fights against camera rotation.'
+
+[07:23] [scene:talk]
+VISUAL:
+AUDIO: 'Dropping its strength down to 0.5 restores some of the angle change, but it is still severely muted. The takeaway here is that you should never use the unblur LoRA in your initial perspective pass. Save it for a secondary refinement'
+
+[07:36] [scene:talk]
+VISUAL:
+AUDIO: 'pass, which we will discuss later. In step five, we evaluated the QN edit skin Laura using the trigger phrase, "Make the subject skin details more'
+
+[07:48] [scene:talk]
+VISUAL:
+AUDIO: 'prominent and natural." Unlike the unblur model, this Laura does allow the camera to rotate successfully while adding subtle improvements to the skin texture.'
+
+[08:00] [scene:talk]
+VISUAL:
+AUDIO: 'However, when you compare it directly to the clean angle only result, the perspective shift becomes slightly exaggerated and the character begins to lose his visual identity. We also tested the updated version 1.1'
+
+[08:14] [scene:talk]
+VISUAL:
+AUDIO: 'of the skin Laura. While version 1.1 does a much better job of preserving the exact camera angle we wanted, it still introduces unwanted alterations to the character\'s facial'
+
+[08:27] [scene:talk]
+VISUAL:
+AUDIO: 'structure. This brings us to our final professional conclusion. For a clean, high-quality workflow, we highly recommend stacking only the multiple angles Laura and the'
+
+[08:40] [scene:talk]
+VISUAL:
+AUDIO: 'next scene Laura together in your initial generation. Do not try to jam a third detailer Laura into the stack. Instead, once you have successfully'
+
+[08:54] [scene:talk]
+VISUAL:
+AUDIO: 'executed your camera rotation, take that output image and feed it directly into a second, fresh QN image edit input node. From that clean second pass, you can safely run your unblur and upscale'
+
+[09:06] [scene:talk]
+VISUAL:
+AUDIO: 'prompts or apply the skin detailing prompts to polish the final image. You can even stack both Laura\'s together. However, there are some major caveats to keep in mind. Since our initial pass'
+
+[09:18] [scene:talk]
+VISUAL:
+AUDIO: 'already does a fantastic job, throwing heavy detailer on top might completely overdo the effect. It is a common trap to think that adding more textured noise automatically equals more realism, so'
+
+[09:30] [scene:talk]
+VISUAL:
+AUDIO: 'you really need to use your own professional judgment here. Yes, it requires a two-pass system, but that is how pro workflows operate. Trying to achieve a perfect one-click'
+
+[09:43] [scene:talk]
+VISUAL:
+AUDIO: 'result in a single pass rarely works. Splitting your generations makes your pipeline modular, controllable, and easy to edit. Looking ahead to our next video, we are'
+
+[09:57] [scene:talk]
+VISUAL:
+AUDIO: 'putting together a massive showdown. We will be comparing a mega architecture setup to see who reigns supreme at perspective shifts, putting QN edit 2509, 2509 with low res, 2511, 2511 with low res, flux 2 Klein 9B, the 9B KV'
+
+[10:12] [scene:talk]
+VISUAL:
+AUDIO: 'version, and the 9B base model into a head-to-head combat. Here is a quick snapshot of the upcoming layout on screen. So, make sure to hit subscribe and stay tuned.'
+
+[10:24] [scene:talk]
+VISUAL:
+AUDIO: 'And that\'s the node. All open source, no filler. Thank you for watching. Grab the file, keep creating.'

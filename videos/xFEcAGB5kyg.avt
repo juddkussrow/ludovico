@@ -1,0 +1,179 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Gemma 4 QAT: BF16 Quality at Q4 Size?
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=xFEcAGB5kyg
+upload_date: 20260610
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'Okay, so last week Google just made a quantized model run at the quality of an unquantized one, which is amazing because while everyone\'s shouting that AI is slowing down, that the whole AI bubble is about to burst, there\'s this slow shift happening underneath. Local AI is getting smarter and cheaper to'
+
+[00:14] [scene:talk]
+VISUAL:
+AUDIO: 'run, and that Google drop is the clearest sign yet. The smart part of AI didn\'t stop getting better. It just stopped needing a giant data center to run. It moved off the servers onto a'
+
+[00:26] [scene:talk]
+VISUAL:
+AUDIO: 'graphics card you can actually buy. Everybody else is staring at the wrong chart. So, that\'s what we\'re getting into, what Google actually shipped on June 5th, how it works, and why it'
+
+[00:38] [scene:talk]
+VISUAL:
+AUDIO: 'quietly wrecks this whole AI is slowing down story. Not my benchmarks, not a hot take, just what\'s in the release. First though, real quick because somebody always brings this up. Gemma 4 itself'
+
+[00:50] [scene:talk]
+VISUAL:
+AUDIO: 'isn\'t new. Google\'s had it out for a while now. That\'s not the thing that dropped this week. What actually dropped is a new set of versions of it. Same models basically, but retrained with this one trick that kind of changes who'
+
+[01:03] [scene:talk]
+VISUAL:
+AUDIO: 'gets to run them, and the trick\'s called QAT, quantization-aware training. I know, the name\'s pretty dull, but it matters way more than it sounds like it does. Okay, but to really get why that\'s'
+
+[01:15] [scene:talk]
+VISUAL:
+AUDIO: 'a big deal, you need to know what quantization even is. So, a model is basically just billions of numbers, and each number is stored with a certain precision, which is really just how many'
+
+[01:27] [scene:talk]
+VISUAL:
+AUDIO: 'digits you bother keeping. More digits means more accurate, but it eats up more memory. Think of writing out pi. You could go 3.14159 and on and on, or you could just round'
+
+[01:41] [scene:talk]
+VISUAL:
+AUDIO: 'it to 3.1. The short one\'s lighter, it just loses a tiny bit of detail, and that\'s the whole game. If you chop that precision down, fewer bits for every number, the entire model suddenly takes'
+
+[01:53] [scene:talk]
+VISUAL:
+AUDIO: 'way less memory. That\'s how a model goes from needing a data center to fitting on a graphics card in your room. That move, shrinking the numbers down, that\'s quantization. So, normally,'
+
+[02:05] [scene:talk]
+VISUAL:
+AUDIO: 'here\'s how that shrinking actually happens. The model gets trained in those big, heavy, full precision numbers, which like I said is way too much to fit on a normal graphics card. So, the usual move is you train it like that, and then'
+
+[02:18] [scene:talk]
+VISUAL:
+AUDIO: 'only afterwards you shrink it down. You round all those numbers off into tiny little four-bit ones. If you\'ve ever grabbed a GGUF file, one of the Q4 ones, that\'s exactly what that is. The fancy'
+
+[02:31] [scene:talk]
+VISUAL:
+AUDIO: 'name for it is post-training quantization, and it works fine, mostly. But the catch is the model was never trained to deal with that. So, when you shrink it, it gets a little worse, slightly dumber answers, a few more'
+
+[02:45] [scene:talk]
+VISUAL:
+AUDIO: 'mistakes. And most people just kind of put up with it. It\'s sort of the price you pay for running this stuff on your own machine. So, why does that actually make it dumber? Well, the model picked all those exact numbers while it was'
+
+[02:59] [scene:talk]
+VISUAL:
+AUDIO: 'training, back when it still had full precision to work with. Round them all off afterwards, and it\'s a bit like smudging a drawing somebody did really carefully. It\'s close, but it\'s a little'
+
+[03:11] [scene:talk]
+VISUAL:
+AUDIO: 'off. And those little errors pile up. So, what QAT does is flip that around. Instead of training at full size and crushing it at the end, Google does the rounding the whole way through training.'
+
+[03:23] [scene:talk]
+VISUAL:
+AUDIO: 'Every single step, it squishes the numbers down to four-bit, checks how wrong the answer got, and nudges them back. Do that millions of times, and the model basically learns to pick numbers'
+
+[03:35] [scene:talk]
+VISUAL:
+AUDIO: 'that still work after they\'ve been shrunk. So, you\'re not left with a big model that got banged up on the way down. You\'ve got one that was built small from the start and never knew any different. And the payoff is honestly a'
+
+[03:48] [scene:talk]
+VISUAL:
+AUDIO: 'little ridiculous. It\'s the same model using something like 70% less memory and the quality barely moves. It lands pretty much right next to the full-size original instead of that shrunk down slightly worse one you\'d normally end up'
+
+[04:00] [scene:talk]
+VISUAL:
+AUDIO: 'with. And you still get the same handy little file you would have downloaded anyway. You\'re just not paying the price for it anymore. And this isn\'t some research paper you\'ll never actually touch. The whole collection is already up on Hugging Face. Every size, the'
+
+[04:13] [scene:talk]
+VISUAL:
+AUDIO: 'regular ones and the mobile ones, just sitting there ready to download and run today. And they didn\'t just do this to one model either. It\'s the whole lineup. Like the smallest one, the E2B, that used to need almost 10 gigs of memory.'
+
+[04:26] [scene:talk]
+VISUAL:
+AUDIO: 'Now it\'s down to around 2 gigs, which is, you know, phone territory at that point. Although honestly the phone stuff isn\'t really the part I care about. The ones I think are actually interesting are kind of in the middle. So the 12B is'
+
+[04:38] [scene:talk]
+VISUAL:
+AUDIO: 'probably the one most people are going to actually use day-to-day. Shrunk down it sits around 6-7 gigs. That\'s just a normal mid-range gaming card. Nothing fancy. No server, no monthly bill, not sitting in a queue waiting your turn'
+
+[04:51] [scene:talk]
+VISUAL:
+AUDIO: 'behind 10,000 other people. And then there\'s a kind of weird one. So on paper it\'s a 26 billion parameter model, which should be way too big for a normal machine, right? But the thing with this one is it\'s what they call a mixture of experts. So picture like 128 little'
+
+[05:04] [scene:talk]
+VISUAL:
+AUDIO: 'specialists all living inside the one model. And when you ask it something it doesn\'t wake all of them up. Just a few, maybe eight or so, switch on for each word. So it\'s got 26 billion parameters'
+
+[05:17] [scene:talk]
+VISUAL:
+AUDIO: 'worth of knowledge sitting in there, but at any one moment it\'s only really doing about 4 billion worth of work. So it\'s a big brain, but it stays pretty light on its feet, if that makes sense. And what'
+
+[05:30] [scene:talk]
+VISUAL:
+AUDIO: 'you actually get out of that is kind of wild. It scores around 97% of what the full 31B model gets on a hard reasoning test called MMLU Pro. And it does that using something like an'
+
+[05:44] [scene:talk]
+VISUAL:
+AUDIO: 'eighth of the work. And the whole thing loads in about 14 gigs. So, a single 16 gig card, like the kind of model that not long ago would have meant a whole rack of servers and a cloud bill, just'
+
+[05:56] [scene:talk]
+VISUAL:
+AUDIO: 'kind of fits on a graphics card you could buy used now. And here\'s the part I genuinely love. Because it\'s a mixture of experts, you can push all of those expert layers down into your regular'
+
+[06:08] [scene:talk]
+VISUAL:
+AUDIO: 'system memory and just keep the attention layers on the GPU. Then your CPU handles whichever experts get picked for each word, while the graphics card only deals with the'
+
+[06:20] [scene:talk]
+VISUAL:
+AUDIO: 'attention. So, the card itself barely has to hold anything. Which means a 26 billion model can run on a GPU with way less memory than its size would ever suggest.'
+
+[06:33] [scene:talk]
+VISUAL:
+AUDIO: 'That to me is the real magic of mixture of experts for running this stuff at home. Okay, quick side chat. This is the stuff I cover on here. Every time one of these local model drops lands, I pull it apart that same week. So, the whole AI'
+
+[06:46] [scene:talk]
+VISUAL:
+AUDIO: 'is dead crowd doesn\'t get the last word. So, if that\'s your kind of thing, hit subscribe. There\'s already another one coming pretty soon. Okay, so back to the thing that I think actually breaks the whole slowing down argument. So, the'
+
+[06:58] [scene:talk]
+VISUAL:
+AUDIO: 'research on where scaling kind of flattens out, it keeps landing in roughly the same range. Like general knowledge gains start to slow down somewhere around 30 billion parameters.'
+
+[07:11] [scene:talk]
+VISUAL:
+AUDIO: 'Language understanding even lower than that. And that range right there, that\'s basically the wall everyone keeps pointing at. But, look again at what just turned into a 14 gig download. That'
+
+[07:23] [scene:talk]
+VISUAL:
+AUDIO: '26B model. It sits pretty much right where that curve flattens out. So, the spot where the top model supposedly run out of steam is kind of the same spot that just became something you can run'
+
+[07:37] [scene:talk]
+VISUAL:
+AUDIO: 'at home. Now, I do want to be fair here because it kind of cuts both ways. The big companies are not finished. Altman literally said there\'s no wall, and honestly from where he\'s standing, he\'s'
+
+[07:49] [scene:talk]
+VISUAL:
+AUDIO: 'kind of right. The top models are still slowly getting better. It\'s just that every step costs way more now, and some of these new data centers are sitting there waiting like 5-7 years just to get'
+
+[08:01] [scene:talk]
+VISUAL:
+AUDIO: 'enough power hooked up to run. So, the frontier hasn\'t stopped. It\'s just gotten really, really expensive to push. So, you\'ve really got these two curves going at the same time. Up at the top,'
+
+[08:14] [scene:talk]
+VISUAL:
+AUDIO: 'cost just heading straight up. And down here, the stuff you can actually run yourself, that\'s going up, too. Same week, basically. So, next time somebody shows you that flat chart and goes, "See, look, AI is slowing down." They\'re'
+
+[08:26] [scene:talk]
+VISUAL:
+AUDIO: 'not really wrong about the data. They\'ve got the right numbers. They\'re just kind of landing on the wrong takeaway. The smart part didn\'t stop getting better. It just stopped needing this giant'
+
+[08:38] [scene:talk]
+VISUAL:
+AUDIO: 'warehouse full of GPUs to exist. It moved. And this past week, it pretty much moved on to like a gaming PC. Which, when you actually sit with it for a second, is sort of the opposite of slowing down.'

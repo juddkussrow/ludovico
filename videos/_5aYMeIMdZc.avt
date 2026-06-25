@@ -1,0 +1,219 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: SCAIL-2 ComfyUI Tutorial & Review | Character Replacement, Multi-Character  Motion Transfer
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=_5aYMeIMdZc
+upload_date: 20260614
+transcript_source: captions
+route: text
+
+---
+
+[00:05] [scene:talk]
+VISUAL:
+AUDIO: 'Welcome back to Vampped with AI. After a long wait, Scale 2 has finally been released, marking the next major evolution of the Scale project following the launch of Scale Preview last year. And based on what we\'ve seen so far, this is not just an incremental update.'
+
+[00:17] [scene:talk]
+VISUAL:
+AUDIO: 'Scale 2 brings some genuinely exciting advancements to the world of AI character animation. Scale 2 is a completely open-source model designed for end-to-end control of character animation. Simply put, it can animate a'
+
+[00:30] [scene:talk]
+VISUAL:
+AUDIO: 'reference character using a driving video, while also supporting character replacement and even multi-character scenes. What makes Scale 2 particularly interesting is how it approaches motion transfer. Most character animation'
+
+[00:42] [scene:talk]
+VISUAL:
+AUDIO: 'models rely heavily on intermediate representations such as pose skeletons, segmentation masks, or other control signals. These methods work well in many situations, but they can struggle with'
+
+[00:54] [scene:talk]
+VISUAL:
+AUDIO: 'complex movements, limit the types of motion that can be transferred, and often make character replacement more difficult. Scale 2 takes a different approach. Instead of depending on these intermediate representations, it performs end-to-end motion transfer'
+
+[01:07] [scene:talk]
+VISUAL:
+AUDIO: 'directly from the driving source to the target character. &gt;&gt; [snorts] &gt;&gt; This allows the model to handle a much wider range of animation scenarios while simplifying the overall workflow. To achieve this, the developers generated'
+
+[01:19] [scene:talk]
+VISUAL:
+AUDIO: 'more than 60,000 motion pairs using multiple animation systems like Scale Preview, One Animate, and Mocha. These data sets were used to train Scale 2 through a unified motion transfer'
+
+[01:31] [scene:talk]
+VISUAL:
+AUDIO: 'framework designed to learn motion across many different animation styles and sources. The result is a model that not only matches many capabilities of its teacher models, but also demonstrates several impressive emergent abilities.'
+
+[01:45] [scene:talk]
+VISUAL:
+AUDIO: 'These include cross-identity character replacement, animal-driven animation scenes, and even zero-shot support for advanced control inputs such as SAM 3D body mesh rendering. Another addition is support for multiple resolutions. It'
+
+[01:58] [scene:talk]
+VISUAL:
+AUDIO: 'works with both 512p and 704p outputs, while pose-driven and replacement workflows perform best at 704p resolution. The model was also trained using mixed resolutions and frame rates, helping it'
+
+[02:10] [scene:talk]
+VISUAL:
+AUDIO: 'adapt to a wider variety of source videos. In today\'s video, we\'ll take a detailed look at Scale 2 inside ComfyUI. We\'ll go through the required models, available options, test its animation'
+
+[02:22] [scene:talk]
+VISUAL:
+AUDIO: 'capabilities, examine its strengths and limitations, and see whether this new release lives up to the expectations built over the past year. Now, let\'s go through all the models required for this workflow. First, we\'ll'
+
+[02:34] [scene:talk]
+VISUAL:
+AUDIO: 'need the Scale 2 model itself. The model is available in both FP16 and FP8 variants. If you\'re working with a very limited amount of VRAM, you can also use one of the GG UF versions instead. Next,'
+
+[02:48] [scene:talk]
+VISUAL:
+AUDIO: 'we\'ll need the Light X2VI2V distilled LoRA, which allows us to generate videos in as few as six sampling steps, significantly reducing generation time while maintaining good quality. For the text encoder, we\'ll be'
+
+[03:01] [scene:talk]
+VISUAL:
+AUDIO: 'using UMT5XXL text encoder. We\'ll also need Clip Vision H. Safe tensors for image understanding and conditioning. For the VAE, we\'ll use the standard WaN 2.1 VAE.'
+
+[03:14] [scene:talk]
+VISUAL:
+AUDIO: 'Finally, for the SAM 3D base segmentation used to create masks, we\'ll need the SAM 3.1 multiplex checkpoint. To make setup easier, all of the download links are included directly'
+
+[03:27] [scene:talk]
+VISUAL:
+AUDIO: 'inside the workflow, and I\'ve also added them in the description below. And while you\'re down there, if you find these workflows helpful, please take a moment to like, comment, and subscribe. It really helps support the channel and'
+
+[03:40] [scene:talk]
+VISUAL:
+AUDIO: 'lets us keep bringing more AI content your way. Once all of the required models have been downloaded, we can start exploring the workflow itself. The first section is the models section. This is where all of the required models'
+
+[03:52] [scene:talk]
+VISUAL:
+AUDIO: 'are loaded including scale to the text encoder, clip vision, VAE, and any additional components used by the workflow. Next is the control section. Here we define the width and height of the'
+
+[04:05] [scene:talk]
+VISUAL:
+AUDIO: 'generated video along with the window size used for each sampling loop when generating longer videos. This section also allows us to select which generation mode we want to use. If replacement mode is enabled, the'
+
+[04:18] [scene:talk]
+VISUAL:
+AUDIO: 'workflow can replace characters within an existing scene. For best results, the replacement character should be positioned similarly to the original character in the first frame of the guiding video. When replacement mode is disabled, the'
+
+[04:30] [scene:talk]
+VISUAL:
+AUDIO: 'workflow operates in standard animation mode. The guiding video provides the motion while the reference image provides both the character and scene information. Just like in replacement mode, the closer the reference image'
+
+[04:43] [scene:talk]
+VISUAL:
+AUDIO: 'matches the first frame of the driving video, the better the final results tend to be. We can also specify how many characters the segmentation model should track. If you only need to replace a single character or transfer motion from'
+
+[04:55] [scene:talk]
+VISUAL:
+AUDIO: 'one person, leave this value set to one. For scenes containing multiple characters that need to be replaced or have their motion transferred, simply increase this value to match the number of characters you want the workflow to'
+
+[05:07] [scene:talk]
+VISUAL:
+AUDIO: 'process. This section also lets you choose whether to use the safe tensors version of the model or a GG UF version by enabling the appropriate toggle. We can also define the maximum number of frames to generate from the guiding'
+
+[05:20] [scene:talk]
+VISUAL:
+AUDIO: 'video. If this value is set higher than the total frame count of the input video, the workflow will simply use all available frames. However, if the value is lower, the input video will be automatically truncated and only the'
+
+[05:33] [scene:talk]
+VISUAL:
+AUDIO: 'specified number of frames will be used for generation. The next section is the input section where we load our reference image and guiding video. After that comes the prompt section where we can define our positive and'
+
+[05:45] [scene:talk]
+VISUAL:
+AUDIO: 'negative prompts to further influence the generated output. Next is the segmentation section. This is where masks are generated for both the reference image and the guiding video. If the driving video contains multiple'
+
+[05:57] [scene:talk]
+VISUAL:
+AUDIO: 'characters, we can specify a segmentation prompt to identify exactly which character should be tracked and animated throughout the generation process. Finally, we arrive at the sampling'
+
+[06:09] [scene:talk]
+VISUAL:
+AUDIO: 'section where the actual video generation takes place. The workflow first generates an initial segment of the video. If the input video is longer than the selected window size, the workflow automatically enters a looping'
+
+[06:21] [scene:talk]
+VISUAL:
+AUDIO: 'process to generate the remaining sections. During each subsequent pass, the color palette and visual characteristics from the previously generated segment are transferred to the next segment. This greatly reduces color'
+
+[06:33] [scene:talk]
+VISUAL:
+AUDIO: 'shifting and helps maintain visual consistency throughout longer animations. For our first test, we\'ll use this guiding video featuring an elderly man and woman dancing together in a kitchen. As our reference image,'
+
+[06:46] [scene:talk]
+VISUAL:
+AUDIO: 'we\'ll use this image of a young man standing in a bar. Since we want to replace the elderly man in the original video while preserving the overall motion and interaction within the scene, we\'ll enable replacement mode for this test.'
+
+[06:59] [scene:talk]
+VISUAL:
+AUDIO: 'For this test, we\'ll be using the following prompt. Young man is dancing with an old woman. For the segmentation prompt, we\'ll use the man on left. This tells the segmentation model exactly which character we want to track and'
+
+[07:11] [scene:talk]
+VISUAL:
+AUDIO: 'replace within the guiding video. Let\'s run it. As we can see, the reference image has been segmented correctly with the young man cleanly isolated from the'
+
+[07:23] [scene:talk]
+VISUAL:
+AUDIO: 'background. The guiding video has also been processed successfully with the elderly man accurately masked while excluding the woman from the selection. The result is excellent. Scale 2 has'
+
+[07:36] [scene:talk]
+VISUAL:
+AUDIO: 'seamlessly replaced the elderly man with the young man from the reference image while preserving the motion, timing, and overall interaction within the scene. What\'s particularly impressive is that the rest of the scene remains intact.'
+
+[07:49] [scene:talk]
+VISUAL:
+AUDIO: 'The woman, the kitchen environment, and other background elements are preserved with remarkable consistency, making the replacement appear natural and believable. For our next test, let\'s see how Scale 2 handles multiple characters at the same'
+
+[08:03] [scene:talk]
+VISUAL:
+AUDIO: 'time. This time, we\'ve disabled replacement mode since our goal is not to replace these characters, but simply to transfer motion from the guiding video to the characters in our reference image. We\'ve also increased max objects to two, so the workflow can track and'
+
+[08:17] [scene:talk]
+VISUAL:
+AUDIO: 'animate both characters simultaneously. For the guiding video, we\'ll use this clip featuring two boxers in a fight. As our reference image, we\'ll use this image of two martial artists. The'
+
+[08:29] [scene:talk]
+VISUAL:
+AUDIO: 'objective is to transfer the movements and interactions from the boxers onto the martial artists while preserving their appearance and the overall scene from the reference image. For the prompt, we\'ll keep things'
+
+[08:43] [scene:talk]
+VISUAL:
+AUDIO: 'simple. Two men are fighting in an arena. Since there are two subjects that need to be tracked, we\'ll use the following segmentation prompt, the two men. This allows the segmentation model to identify both characters and generate masks for each of them, ensuring the'
+
+[08:56] [scene:talk]
+VISUAL:
+AUDIO: 'motion is transferred correctly to the corresponding subjects. Let\'s run it. The results look fantastic. Scale 2 has'
+
+[09:08] [scene:talk]
+VISUAL:
+AUDIO: 'successfully transferred the motion from the guiding video into an entirely new scene while using our reference image as the visual template. What\'s particularly impressive is how well the model preserves the interaction between both'
+
+[09:21] [scene:talk]
+VISUAL:
+AUDIO: 'characters. The movements, timing, and overall fighting choreography from the original boxing video have been accurately transferred to the martial artists in the generated scene, creating a natural and convincing result. Even more impressive is the model\'s'
+
+[09:34] [scene:talk]
+VISUAL:
+AUDIO: 'performance during these fast-paced action sequences. Rapid movements, changing poses, and close character interactions are often challenging for animation models. Yet, Scale 2 handles them remarkably well. The generated'
+
+[09:47] [scene:talk]
+VISUAL:
+AUDIO: 'video remains coherent throughout the sequence with both characters maintaining their identities while faithfully reproducing the motion from the guiding video. Overall, this demonstrates that Scale 2 is not only'
+
+[09:59] [scene:talk]
+VISUAL:
+AUDIO: 'capable of single character animation, but can also deliver excellent results in complex multi-character action scenes where accurate motion transfer is critical. The ability to perform end-to-end character animation without'
+
+[10:13] [scene:talk]
+VISUAL:
+AUDIO: 'relying on traditional pose extraction pipelines opens up a wide range of possibilities from character replacement and motion transfer to multi-character animation and even more advanced workflows using custom control inputs.'
+
+[10:25] [scene:talk]
+VISUAL:
+AUDIO: 'Of course, as with any AI model, the quality of the inputs plays an important role. Using reference images that closely match the first frame of the guiding video will generally produce the best results. But, when configured'
+
+[10:38] [scene:talk]
+VISUAL:
+AUDIO: 'properly, Scale 2 is capable of generating remarkably convincing animations with very little effort. If you found this video helpful, please consider giving it a thumbs up and subscribing to the channel. It really helps support future content and lets me'
+
+[10:51] [scene:talk]
+VISUAL:
+AUDIO: 'know you\'d like to see more workflow guides, model reviews, and AI animation tutorials. As always, thank you for watching and I\'ll see you in the next one.'

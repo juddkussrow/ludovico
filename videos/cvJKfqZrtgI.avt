@@ -1,0 +1,239 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: This Open-Source Auth Stack Might Replace Auth0 (Ory Kratos)
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=cvJKfqZrtgI
+upload_date: 20251213
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'Identity and authentication are one of those things every app needs, but most developers don\'t really enjoy building. Ideally, you want an identity stack that is secure, flexible, reliable, and doesn\'t take weeks to assemble. Sure,'
+
+[00:12] [scene:talk]
+VISUAL:
+AUDIO: 'there are providers like Ozero, Octto, but they are all tightly controlled ecosystems with their own limitations. What many developers don\'t realize is that there is a fully open-source identity server that covers all the'
+
+[00:25] [scene:talk]
+VISUAL:
+AUDIO: 'essentials without locking you in. That server is AI Kratos. In this video, we\'ll look at what makes Kratos such a powerful choice and then I will walk you through how to use it to set up your own'
+
+[00:37] [scene:talk]
+VISUAL:
+AUDIO: 'identity stack. [music] It\'s going to be a lot of fun. So, let\'s dive into it. Oriratos is a very powerful identity management server that lets you'
+
+[00:50] [scene:talk]
+VISUAL:
+AUDIO: 'implement user management and authentication in a secure and straightforward way. It has all the features you might expect from an advanced identity provider. Different login flows, account activation, multiffactor authentication tools,'
+
+[01:03] [scene:talk]
+VISUAL:
+AUDIO: 'profile and session management and user recovery methods. And you can easily spin it up through a Docker image. It aims to be a backendon interface. So you can hook it up to any kind of'
+
+[01:15] [scene:talk]
+VISUAL:
+AUDIO: 'application or any kind of UI interface you are developing. But if you do need a readytouse UI solution for Kratos, there\'s also a library called AI elements which provides all the basic UI components for a complete login flow and'
+
+[01:28] [scene:talk]
+VISUAL:
+AUDIO: 'you will see it in action later in this video. Another cool thing is that Kratos is very secure and GDPR compliant. It applies all the necessary security standards established by experts from'
+
+[01:40] [scene:talk]
+VISUAL:
+AUDIO: 'National Institute of Sciences, Internet Engineering Task Force, Microsoft Research, Google Research, Troy Hunt, and many others. And Kratos is just the core server. But if you\'re looking for a'
+
+[01:52] [scene:talk]
+VISUAL:
+AUDIO: 'really sophisticated bespoke solution for your own project, Kratos has other tools available that you can plug in like Hydra for OOTH 2 flows, Ketto for complex user permission structures,'
+
+[02:04] [scene:talk]
+VISUAL:
+AUDIO: 'Polus for enterprise level SSO bridge, and Oathkeeper for an identity aware proxy. So as you can see, you can build a very very complex open-source identity stack with all these tools, but today'
+
+[02:18] [scene:talk]
+VISUAL:
+AUDIO: 'we\'re just going to be focusing on the basics. We\'re going to be building a simple Nex.js app that uses Kratos as the core server and we will also use AI elements to leverage their readyto-use UI components for our login flow. So'
+
+[02:31] [scene:talk]
+VISUAL:
+AUDIO: 'without further ado, let\'s build our identity stack. I will guide you through the entire code and setup process. But in case you want to check out the full project, I will put a link to it down in the description below. First, I\'m going'
+
+[02:45] [scene:talk]
+VISUAL:
+AUDIO: 'to make a directory called Kratos demo. Then I\'m going to CD into that directory. And then let\'s make another directory called docker. Let\'s cd into the docker directory. And let\'s create a docker compose yamo file. Next we\'re'
+
+[02:59] [scene:talk]
+VISUAL:
+AUDIO: 'going to create another directory called config and cd into that directory. And here we will need to create two files identity.s schema.json andr kratos.yamo file. Now let\'s go back to the root'
+
+[03:13] [scene:talk]
+VISUAL:
+AUDIO: 'directory. And the last file we need to create here is an SQL light database file which we\'ll call users DB where we will store all our authenticated users registered by Kratos. Now that we have'
+
+[03:25] [scene:talk]
+VISUAL:
+AUDIO: 'all the files set up, we can open up our code editor. And I\'m just going to copy and paste the sample docker compose file that is provided for us by AI. And here I have just changed a few things to make'
+
+[03:37] [scene:talk]
+VISUAL:
+AUDIO: 'it more compatible with our Kratos instance which we will be running locally. First, you can see here that I\'m using the local users database file. We bind that to the docker image and then we also bind our Kratos.yaml config'
+
+[03:51] [scene:talk]
+VISUAL:
+AUDIO: 'file from the config directory which we will set up in a second. We also need to specify what is going to be the Kratos public URL and the Kratos browser URL. And all the other properties below are'
+
+[04:04] [scene:talk]
+VISUAL:
+AUDIO: 'just defaults from the given YAML file. We will leave the default ports as they are and we will also be using a mail server which we will check out a bit later in the video. Next, I\'m going to copy the default identity schema which'
+
+[04:17] [scene:talk]
+VISUAL:
+AUDIO: 'is also provided for us by Kratos. The schema is very powerful because here you can define what kind of traits your user object needs to have. But I\'m not going to change anything here because the'
+
+[04:29] [scene:talk]
+VISUAL:
+AUDIO: 'default setup is good enough here for our sample demo. So our user object will only have an email, a first name and a last name and of course a password as the main credential. And then we will also paste in the sample Kratos YAML'
+
+[04:42] [scene:talk]
+VISUAL:
+AUDIO: 'file. And here the most important thing is to make sure that our base URL and our allowed origins are pointing to our local host instance. And also make sure that we have allowed all the request'
+
+[04:54] [scene:talk]
+VISUAL:
+AUDIO: 'methods and that our URLs are added to the allowed return URLs list. Next is the flow configuration section. And here it\'s important to double check that each of the flow has the correct UI URL value'
+
+[05:07] [scene:talk]
+VISUAL:
+AUDIO: 'which corresponds to the route in our app which we will build in a second because these are the routes where Kratos will redirect us after successful operations. Next, we have a section where we specify our secrets. For this'
+
+[05:20] [scene:talk]
+VISUAL:
+AUDIO: 'demo, I\'ll just leave it as is, but make sure you\'re using strong secrets if you plan to deploy this to production in the future. And lastly, we bind our identity schema to our config and also set up our SMTP server for verification emails. So'
+
+[05:34] [scene:talk]
+VISUAL:
+AUDIO: 'now that we\'ve set up the essential config files, we can now go ahead and run docker compose up to launch our Kratos server. And as we can see, we get a message saying that we are now running'
+
+[05:47] [scene:talk]
+VISUAL:
+AUDIO: 'Kratos in dev mode. So everything from Kratos side is now set up and ready to go. Now let\'s connect our Kratos server to our front-end application. So for the front end, I\'m going to spin up a simple Nex.js app. And there are also two'
+
+[06:00] [scene:talk]
+VISUAL:
+AUDIO: 'dependencies that we want to add. One is the AI next.js package and the other is the AI elements package that I mentioned earlier. And we will also need an environment file, a middleware file, and'
+
+[06:12] [scene:talk]
+VISUAL:
+AUDIO: 'an AI.config file. Once we\'ve added all of those, we can now open our code editor and start filling in the missing pieces. And just so you know, I\'m following the template Kratos has'
+
+[06:24] [scene:talk]
+VISUAL:
+AUDIO: 'provided in one of their quick start examples. So first we need to create an AI config object in the AI config file which specifies basic settings of our identity setup. For example, we need to'
+
+[06:36] [scene:talk]
+VISUAL:
+AUDIO: 'explicitly specify which routes correspond to the login page, the registration page, etc. Once that is done, let\'s head to our middleware file. And here we\'re going to create an AI middleware with the config object we'
+
+[06:48] [scene:talk]
+VISUAL:
+AUDIO: 'just created. Next, I went ahead and added a bunch of OFL flow routes that we will need for AI to work properly. And don\'t worry, these are all very simple. They all follow the same structure. We'
+
+[07:00] [scene:talk]
+VISUAL:
+AUDIO: 'define an async function that checks if there is a flow present. If there is, then we render the specific UI component of that flow. And as you can see, they are all coming from AI elements. So, we don\'t really need to do much here. And'
+
+[07:14] [scene:talk]
+VISUAL:
+AUDIO: 'again, you can find all of these page templates in the same quick start samples guide. It is literally the same code just for different routes. Login, registration, settings page, verification. The only file that I made custom because it wasn\'t well defined in'
+
+[07:28] [scene:talk]
+VISUAL:
+AUDIO: 'the example is the logout flow. Basically, in the logout route, we check if there\'s a logout token present. If there is, then we call Kratos self-service route with that token to log us out. And then we get directed to'
+
+[07:41] [scene:talk]
+VISUAL:
+AUDIO: 'the login page. And you might be wondering, what is the AI SDK URL variable here? Well, that\'s the next thing we need to add. Let\'s go to our environment file and add the SDK URL, which should be the port that we defined'
+
+[07:55] [scene:talk]
+VISUAL:
+AUDIO: 'in our Kratos YAML file earlier, which basically just connects to the Kratos API that is running on our Docker container. And the UI URL, which is the URL of our Nex.js application. And the very very last thing that I added is the'
+
+[08:09] [scene:talk]
+VISUAL:
+AUDIO: 'main page where we basically just get the server session object coming from Kratos. If there is one, then we show a welcome message and a log out button. But if the session is not found, that means we are not logged in and we need'
+
+[08:22] [scene:talk]
+VISUAL:
+AUDIO: 'to show a login and a register button. And that\'s [clears throat] basically it for our setup. We are now ready to launch our app and see Kratos in action. When we open the app for the first time, we now see our logged out state. And if'
+
+[08:34] [scene:talk]
+VISUAL:
+AUDIO: 'we click login, look at that. We have a full login UI component rendered with AI elements. And we didn\'t even need to add any input fields or anything. It\'s all laid out there. So now I can click on'
+
+[08:48] [scene:talk]
+VISUAL:
+AUDIO: 'the sign up button and we will be redirected to the registration page where we will see a similar UI component. We can fill out our information here. Click sign up. And now we are taken to the password step. And'
+
+[09:00] [scene:talk]
+VISUAL:
+AUDIO: 'this is really cool. Check this out. If I try to add a very weak password like hello 123, Kratos will immediately recognize that this password has been found in data breaches and must no'
+
+[09:12] [scene:talk]
+VISUAL:
+AUDIO: 'longer be used. How cool is that? Such a nice password protection feature included here right out of the box. Okay, so I\'m going to choose a strong password. And normally you would have your own SMTP server hooked up to send'
+
+[09:25] [scene:talk]
+VISUAL:
+AUDIO: 'you the verification email. But since this is a quick start demo, we are using a fake SMTP server which is running on the port 4438. And if we now open up that page, we will see that Kratos has'
+
+[09:39] [scene:talk]
+VISUAL:
+AUDIO: 'already sent out the verification code. So let\'s copy that and enter it in our verification step. And there you go. We have now been successfully verified. So now we can safely log in our app. So'
+
+[09:51] [scene:talk]
+VISUAL:
+AUDIO: 'let\'s log back in again. And now we see that welcome message I showed you earlier followed by a debug window where we just output the information about our current session. And if we click log'
+
+[10:03] [scene:talk]
+VISUAL:
+AUDIO: 'out, we are successfully logged out. But there is one more cool feature that I want to show you. So for this, let\'s go back to the code editor and I\'m going to add a button that takes us to the settings page. So now let\'s click on'
+
+[10:15] [scene:talk]
+VISUAL:
+AUDIO: 'that button and this will open up a full settings dashboard which is also provided for us out of the box by Kratos and AI elements. And here we can modify our profile, change our password. But if we scroll all the way down, there\'s an'
+
+[10:29] [scene:talk]
+VISUAL:
+AUDIO: 'option to hook up your profile to the authenticator app. I tried this offscreen and I scanned the QR code with the authenticator app and I added the verification code and this automatically adds two factor authentication setting'
+
+[10:42] [scene:talk]
+VISUAL:
+AUDIO: 'to my profile. So now next time I log in I am now presented with the additional screen to enter my two-factor O code coming from my authenticator app. I mean how cool is that? A full integration'
+
+[10:56] [scene:talk]
+VISUAL:
+AUDIO: 'with the authenticator app provided by Kratos right out of the box. So there you have it. In just few minutes, we managed to set up a full authentication flow for our app using Ary Kratos and Ary elements. And the best thing is this'
+
+[11:10] [scene:talk]
+VISUAL:
+AUDIO: 'is all opensource. Our Kratos server is running on our own docker container. Our data is stored on our own database. There is no vendor lockin and we have full control over the entire identity'
+
+[11:24] [scene:talk]
+VISUAL:
+AUDIO: 'stack. If you want to dive deeper into their features, they also provide the option to store your data in other databases. And there is also a guide on how to migrate your existing user base from O0 to AI. Honestly, I think this'
+
+[11:37] [scene:talk]
+VISUAL:
+AUDIO: 'might be my favorite identity stack and I will definitely be using it in my own projects going forward. But those are just my two cents. What do you think about Ory Kratos? Have you tried it? Would you use it? Let us know in the'
+
+[11:51] [scene:talk]
+VISUAL:
+AUDIO: 'comment section down below. And folks, let me know if you want to see an even deeper dive into the AI stack. There\'s so much to explore that we didn\'t get a chance to do in this video. And also, if you like this video, be sure to smash'
+
+[12:04] [scene:talk]
+VISUAL:
+AUDIO: 'that like button underneath it. And don\'t forget to subscribe to our channel. This has been Andress from Better Stack, and I will see you in the next videos. [music] &gt;&gt; [music]'

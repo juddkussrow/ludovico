@@ -1,0 +1,131 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: How to Get Fable-ish Performance From Any AI Model
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=vMqfk5gpVI0
+upload_date: 20260615
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'Anthropic\'s Fable 5 is, right now, about the most capable coding model on the planet. It sits a whole tier above Opus, but it is premium priced, and you\'re probably not going to run it on every little task. So, here\'s the interesting question. How much of what makes Fable'
+
+[00:13] [scene:talk]
+VISUAL:
+AUDIO: 'special can you get out of a cheaper model, or even a local one? It turns out, a surprising amount, and it mostly comes down to two techniques you can set up today. Neither one requires access to Fable itself, and'
+
+[00:25] [scene:talk]
+VISUAL:
+AUDIO: 'both work with whatever model you\'re already paying for, or even one running on your own machine. To copy it, you first have to understand what actually makes Fable feel different. The best write-up comes from the developer, Simon'
+
+[00:37] [scene:talk]
+VISUAL:
+AUDIO: 'Willison, who spent a session just watching a debug a tiny CSS issue. His one-line summary, which has kind of stuck, is that Fable is relentlessly proactive. It does not sit around asking permission. It just goes and solves the'
+
+[00:50] [scene:talk]
+VISUAL:
+AUDIO: 'problem using every trick it knows, and proactive is not an exaggeration. Ask to look at one scrollbar bug. Fable opened Firefox and Safari by itself, spun up a Python web server and custom test pages'
+
+[01:03] [scene:talk]
+VISUAL:
+AUDIO: 'to reproduce it, injected JavaScript into the app to measure the layout, and when one macOS command got blocked, it quietly switched to a different tool to get around it. Nobody told it to do any of that, and it was all for what turned'
+
+[01:16] [scene:talk]
+VISUAL:
+AUDIO: 'out to be a two-line CSS fix. Now, Simon also flagged the flip side, and it really matters. That same relentless drive is a security risk. In his words, "If it gets subverted by malicious instructions, the amount of damage it'
+
+[01:29] [scene:talk]
+VISUAL:
+AUDIO: 'can do given its proactivity is terrifying." And as a footnote, that single debugging session cost him about $12.11 in tokens. So, the goal we are chasing is not raw proactivity, it is proactivity with judgment, and you'
+
+[01:42] [scene:talk]
+VISUAL:
+AUDIO: 'should never run an agent like this without a sandbox. Here is the key realization, and it is what this whole video hangs on. A lot of what looks like raw intelligence is actually behavior, the way the model approaches a task, and'
+
+[01:54] [scene:talk]
+VISUAL:
+AUDIO: 'behavior can be written down. If you can capture the operating principles a great agent follows, and hand them to a more ordinary model as a system prompt, that model starts acting a lot more like the'
+
+[02:06] [scene:talk]
+VISUAL:
+AUDIO: 'great one. And somebody has already done the hard part. It is a single file called fable5.md. Think about what is actually happening when a top model impresses you. It is not just that it knows more facts, it is'
+
+[02:18] [scene:talk]
+VISUAL:
+AUDIO: 'that it checks its work. It does not give up at the first obstacle, and it tells you honestly what it is unsure about. Those are habits. And habits are exactly the kind of thing a system prompt is good at instilling. Here it'
+
+[02:30] [scene:talk]
+VISUAL:
+AUDIO: 'is, on GitHub, fable5.md was distilled by the community on the Claude code subreddit by carefully comparing fable\'s sessions and writing down the operating instructions it seemed to be following. You drop this one file into your agent'
+
+[02:43] [scene:talk]
+VISUAL:
+AUDIO: 'system prompt, your Claude.md, or your rules file, and you are essentially installing fable\'s work ethic into whatever model you happen to be running. The file is organized into five plain English sections, and the very first one'
+
+[02:55] [scene:talk]
+VISUAL:
+AUDIO: 'sets the tone. Verify before you claim. It tells the model to label every important claim as either confirmed with real evidence like a file and line number, or a command it actually ran, or merely inferred. Trace the real call'
+
+[03:07] [scene:talk]
+VISUAL:
+AUDIO: 'chain. Do not guess what code does from its name, and get a baseline of passing and failing tests before you ever claim you did not break anything. That is the line that separates a proactive agent from a reckless one. The rest of the file is what keeps all that'
+
+[03:20] [scene:talk]
+VISUAL:
+AUDIO: 'initiative safe. On scope and safety, it says stage only you actually changed, so you never silently revert a teammate\'s work. And before anything destructive, a delete, a migration, a deploy, write one line on how to undo it, and then wait'
+
+[03:34] [scene:talk]
+VISUAL:
+AUDIO: 'for a yes. On communication, it says end every turn with honest status. What you ran, with the commit hash and the test counts. What you only assumed, and what only the user can check on their own machine. That combination, bold action'
+
+[03:47] [scene:talk]
+VISUAL:
+AUDIO: 'plus disciplined reporting, is the whole fable feeling. and now any model can just read it. And this directly answers Simon\'s security worry. A model that is merely proactive is dangerous, but a model that is proactive and is required'
+
+[04:00] [scene:talk]
+VISUAL:
+AUDIO: 'to pause and name the rollback before it deletes or deploys anything is something you can actually trust to work on its own. The discipline is not a tax on the proactivity. It is what makes the proactivity usable. Operating'
+
+[04:13] [scene:talk]
+VISUAL:
+AUDIO: 'instructions get you most of the way on a single model, but some tasks are genuinely hard. The kind where even a great model has blind spots, and what you really want is several strong models attacking the problem and then'
+
+[04:25] [scene:talk]
+VISUAL:
+AUDIO: 'reconciling their answers. That is the second lever, and OpenRouter packaged it into a clean feature called fusion. Instead of betting everything on one model, you convene a panel. This is the same intuition behind asking three'
+
+[04:37] [scene:talk]
+VISUAL:
+AUDIO: 'senior engineers to review a tricky design instead of one. The disagreements are where the real insight hides. A single model, no matter how good, has one perspective and one set of blind spots. Fusion is how you buy a second'
+
+[04:50] [scene:talk]
+VISUAL:
+AUDIO: 'and third opinion automatically. Using it is almost too easy. The simplest form is just a model name. You point your request at OpenRouter/fusion, and behind the scenes a panel of up to eight models, each able to search the'
+
+[05:03] [scene:talk]
+VISUAL:
+AUDIO: 'web, answers your prompt in parallel. A separate judge model then reads all of their answers and writes a structured comparison where they agree, where they contradict each other, and what each one uniquely caught.'
+
+[05:15] [scene:talk]
+VISUAL:
+AUDIO: 'Finally, your model uses that analysis to write the real answer. And if you do not want to handpick models, you just name a preset like general high for the strongest panel, or general budget for a fast and cheap one. Why does this beat a'
+
+[05:28] [scene:talk]
+VISUAL:
+AUDIO: 'single model? Because models fail in different ways. One hallucinates a detail, another misses an edge case, a third nails it. The judge does not just average them together. It explicitly surfaces the contradictions and the'
+
+[05:40] [scene:talk]
+VISUAL:
+AUDIO: 'blind spots, so the final answer is built from the best of all of them. The default panel is Claude Opus, the latest GPT, and Gemini Pro. Three different labs with three different failure modes. You trade some extra cost for accuracy,'
+
+[05:54] [scene:talk]
+VISUAL:
+AUDIO: 'which is exactly the trade you want on the tasks that actually matter. So, two levers. Give any model Fables operating instructions to make it proactive and disciplined, and reach for fusion when a single model is not enough.'
+
+[06:07] [scene:talk]
+VISUAL:
+AUDIO: 'You will not perfectly match Fable 5, but you will get a lot closer than you would expect on a fraction of the budget. Subscribe to Prism Labs for more deep dives into the tools shaping AI.'

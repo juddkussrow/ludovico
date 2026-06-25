@@ -1,0 +1,327 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: ComfyUI daVinci-MagiHuman - New AI Video Model Create Realistic Talking Heads?
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=QzXFaMGn6n0
+upload_date: 20260403
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'Hey everyone. So, we\'re checking out a new AI model called DaVinci Meiji human. This thing generates realistic characters talking right in front of the camera, and honestly, it does a pretty great job with that talking avatar style.'
+
+[00:13] [scene:talk]
+VISUAL:
+AUDIO: 'Hey babe. &gt;&gt; [music] &gt;&gt; It\'s day 147 up here. Can you believe it?'
+
+[00:25] [scene:talk]
+VISUAL:
+AUDIO: 'Almost a year. I look [music] at Earth every morning. I find our city. I find our street. [music] I find our house. I wave.'
+
+[00:37] [scene:talk]
+VISUAL:
+AUDIO: 'Every single day, I wave at you. &gt;&gt; [music] &gt;&gt; If I don\'t make it, look up at the stars sometimes. These models are laser-focused on'
+
+[00:49] [scene:talk]
+VISUAL:
+AUDIO: 'human-centric video generation, handling both video and audio using just a single self-attention layer. No cross-attention needed here. They work similarly to the Z image model by leveraging self-attention for generation. The'
+
+[01:02] [scene:talk]
+VISUAL:
+AUDIO: 'result? Super fast generation times. Plus, the character\'s speech comes with some really natural movement. First up, let\'s dive into the GitHub repositories. As you can see on the page, these models'
+
+[01:14] [scene:talk]
+VISUAL:
+AUDIO: 'are built on a single stream architecture designed specifically for fast audio-video generative foundation models. They\'re releasing a massive foundation model, 15 billion parameters wrapped in a 40-layer transformer that'
+
+[01:26] [scene:talk]
+VISUAL:
+AUDIO: 'handles text-to-video and audio self-attention all in one go. That means you don\'t need any extra plugins or Loras. This model can generate video with audio output straight out of the box. Since it\'s human-centric, expect'
+
+[01:38] [scene:talk]
+VISUAL:
+AUDIO: 'most footage to be close-ups or medium shots of a character talking. That\'s their sweet spot. You might see some demos showing dancing characters, but in my testing so far, the OpenWave version hasn\'t quite hit that yet. Now, language'
+
+[01:52] [scene:talk]
+VISUAL:
+AUDIO: 'support? Lucky us, it\'s not just English. We\'re looking at Mandarin, Cantonese, English, Japanese, Korean, German, and French. It supports multiple languages, and I bet they\'ll add even'
+
+[02:04] [scene:talk]
+VISUAL:
+AUDIO: 'more once fine-tuning options open up. About benchmarks compared to other models, I\'m not fully buying every stat just yet. The best way to know? Test it ourselves. Looking at their demos, yeah, it looks'
+
+[02:17] [scene:talk]
+VISUAL:
+AUDIO: 'good. But remember, that\'s running on their servers. When I tried it locally, the quality didn\'t quite reach demo levels. Obviously, that happens a lot with open-source models. So, let\'s see what\'s actually doable with the local'
+
+[02:31] [scene:talk]
+VISUAL:
+AUDIO: 'versions in our video. Quick note on who made this. Two teams, Sense AI and Gear. Gear is the research lab behind Meiji AI human. They\'ve got the whole Meiji AI series going. Sand.ai is the company'
+
+[02:44] [scene:talk]
+VISUAL:
+AUDIO: 'backing it. On their front page, you\'ll see this is labeled Magai 1.1, which is the cloud version. We need to check the actual model size and precision. Clicking into files and'
+
+[02:56] [scene:talk]
+VISUAL:
+AUDIO: 'versions, you\'ll see folders for 1080p SR, super resolution, and 540p super resolution weights, plus a base model. There\'s a base folder and a distill'
+
+[03:08] [scene:talk]
+VISUAL:
+AUDIO: 'folder for the distilled versions. Both the turbo VAE and normal VAE used here rely on the 1 2.2 VAE for video generation. But here\'s the catch. The total file'
+
+[03:21] [scene:talk]
+VISUAL:
+AUDIO: 'size is 216 GB. We aren\'t downloading all that to run on a local PC. Honestly, the 1080p SR models, and generally the super res ones, are practically impossible to run locally. They demand'
+
+[03:34] [scene:talk]
+VISUAL:
+AUDIO: 'way too much VRAM. One single super resolution weight file is 61 GB, and clicking through shows the precision is FP32. Be realistic. This isn\'t running on a standard local PC.'
+
+[03:47] [scene:talk]
+VISUAL:
+AUDIO: 'However, the ComfyUI community has a custom node called ComfyUI Maggie human that converts this for local AI use. I tested the GitHub repo, and there are still bugs. It\'s very early-stage'
+
+[04:00] [scene:talk]
+VISUAL:
+AUDIO: 'development. If you\'re testing this now, don\'t expect production-grade quality yet. In fact, I recorded my entire testing process, ran into errors, and had to fork the repo myself to fix them. Check the link in the description to see'
+
+[04:14] [scene:talk]
+VISUAL:
+AUDIO: 'my updates. First fix, I updated the attention block. The original repo only supported flash attention mode. I implemented optional modes like Sage attention or defaulted to SDPA attention'
+
+[04:26] [scene:talk]
+VISUAL:
+AUDIO: 'mode, standard in ComfyUI PyTorch. This gives you a choice. If you don\'t have flash attention, which is tough to install on many Windows systems, you can just stick with SDPA, and it still works'
+
+[04:38] [scene:talk]
+VISUAL:
+AUDIO: 'perfectly. Second bug fix, audio input. Testing the original repo, trying to use my own audio as input, threw an error. I\'ll show you the runtime error later and how I fixed it.'
+
+[04:51] [scene:talk]
+VISUAL:
+AUDIO: 'The audio VAE encoding was producing this weird sea noise constantly. I tried different playback resampling methods. Sometimes it was clearer, but the issues persisted. Bottom line, these custom nodes are still raw.'
+
+[05:04] [scene:talk]
+VISUAL:
+AUDIO: 'Basic features cover text-to-video and image-to-video only. The hyped-up dance videos or TikTok-style clips people are asking for? Not included yet. To control character movement like that,'
+
+[05:16] [scene:talk]
+VISUAL:
+AUDIO: 'we probably need extra coding, ControlNet integration, or some kind of injection method. Let\'s talk installation. Obviously, you need to drop these custom nodes into your ComfyUI subfolder. You can'
+
+[05:28] [scene:talk]
+VISUAL:
+AUDIO: 'copy-paste the command line to get clone the repo right there. Alternatively, you could use the original repo, but I don\'t recommend it. It still has unfixed errors despite recent updates. I\'ve already patched those, though it\'s still'
+
+[05:40] [scene:talk]
+VISUAL:
+AUDIO: 'not quite server quality. You also need an additional compiler for the Meiji AI human video model called the Meiji AI compiler. It\'s another repo published by Sand AI. Think of this as a dedicated framework'
+
+[05:54] [scene:talk]
+VISUAL:
+AUDIO: 'for their models to run inference and training. Plug and play. Download this repo on your local machine, too. My suggestion? After grabbing the Maggie human custom nodes, download the Maggie compiler repo'
+
+[06:06] [scene:talk]
+VISUAL:
+AUDIO: 'inside that same custom nodes folder. Keeps everything tidy in one place without messing with external paths. Installation requires a few extra steps beyond just get clone and pip install. You have to download the Maggie compiler'
+
+[06:20] [scene:talk]
+VISUAL:
+AUDIO: 'inside the custom nodes folder and run pip install requirements within that compiler repo. Big heads-up, Python versions matter. If you\'re below 3.12, you\'ll need to configure the make compiler pi project files to match your'
+
+[06:33] [scene:talk]
+VISUAL:
+AUDIO: 'version. Let the compiler know you\'re on an older Python. If you\'re on 3.12 or above, you\'re good to go. No config needed. During pip install, Windows users hit a snag. You might not be able to directly'
+
+[06:46] [scene:talk]
+VISUAL:
+AUDIO: 'install dependencies like flash attention via the command line. Specifically, the requirements.txt includes Trident, which doesn\'t play nice with standard Windows command'
+
+[06:58] [scene:talk]
+VISUAL:
+AUDIO: 'lines. You\'ll need the Windows-specific Trident build. I\'ve posted the exact command prompt in the description below. Go check it out. Also, regarding flash attention in this compiler, since I changed my fork to'
+
+[07:10] [scene:talk]
+VISUAL:
+AUDIO: 'fall back to SDPA for ComfyUI PyTorch, you won\'t need to stress about flash attention errors anymore. It just works. Downloading the model files is crucial. The ComfyUI custom nodes created a'
+
+[07:23] [scene:talk]
+VISUAL:
+AUDIO: 'Hugging Face repo merging everything into safe tensor files. Inside, you\'ll find BF16 models for the distillation video models, the 1 2.2 VAE, and the SD audio VAE files. There are three files'
+
+[07:37] [scene:talk]
+VISUAL:
+AUDIO: 'handling the text encoder. This depends on your GPU. If you can handle the BF16 text encoder, great. If not, you can fall back to Q4 GGUF or Q6 GGUF quantized models. It all comes down to'
+
+[07:51] [scene:talk]
+VISUAL:
+AUDIO: 'your total VRAM and RAM capacity. One detail, the super resolution merger files in this repo currently don\'t include the 540p resolution merger. A note in Chinese from the author says it'
+
+[08:03] [scene:talk]
+VISUAL:
+AUDIO: 'can\'t be used, likely because it consumes too much memory when both models run in the pipeline. That\'s probably why they pulled the super res models from this specific repo. So, to recap, we\'ve downloaded the'
+
+[08:15] [scene:talk]
+VISUAL:
+AUDIO: 'ComfyUI custom nodes, cloned the repos, and get cloned the compiler into the subfolder. First step is running requirements.txt for dependencies. Remember to check that file again for any version number tweaks'
+
+[08:28] [scene:talk]
+VISUAL:
+AUDIO: 'needed. Once that\'s done, restart ComfyUI and check for errors. Importing the custom nodes is the easiest way to verify. If ComfyUI Maggie human appears, you\'re good. I successfully ran the'
+
+[08:41] [scene:talk]
+VISUAL:
+AUDIO: 'downloads, installed dependencies, and launched it with no problems. Now, let\'s look at the workflow. This is the example workflow for Maggie human. You\'ll see two red-highlighted nodes due to missing models. By default, it uses'
+
+[08:54] [scene:talk]
+VISUAL:
+AUDIO: 'the T5 Glama 9B model with Q6 GGUF quantization. If you have that, perfect. In my case, I didn\'t, so I selected none and switched to the clip encoder'
+
+[09:06] [scene:talk]
+VISUAL:
+AUDIO: 'instead. My AI helped me auto-download the T5 Glama 9B BF16 models, so I had to make that switch. The second red box is for the Mega human SMVAE. Overall, it\'s pretty simple. You\'ve got a model loader'
+
+[09:21] [scene:talk]
+VISUAL:
+AUDIO: 'dedicated to running Mega human. The SR Diet node is for super resolution files, but the repo doesn\'t have those yet, probably because they\'d eat up too much VRAM. Anyway, let\'s test the distillation merger and see how the'
+
+[09:34] [scene:talk]
+VISUAL:
+AUDIO: 'video looks. For super resolution, we can just use ComfyUI upscalers later. Step by step, this group handles text encoding, showing tensor outputs from the T5 Glama 9B models using default'
+
+[09:47] [scene:talk]
+VISUAL:
+AUDIO: 'prompts. The Meiji AI human clip encoder loader is working. I hit an error, need flash attention installed. My comfy UI was fresh, so no flash attention. No big deal. We can fix that. For Windows'
+
+[10:00] [scene:talk]
+VISUAL:
+AUDIO: 'users, you can install flash attention directly. Check out the Windows AI builds repo on GitHub. It lists pre-built wheels for all kinds of AI frameworks. Click on flash attention, find the combo that matches your'
+
+[10:13] [scene:talk]
+VISUAL:
+AUDIO: 'PyTorch, Python, and CUDA versions. I\'m on CUDA 12.8, so I grabbed the matching wheel. Head to the command prompt, pip install the file name you just downloaded. Back to Comfy UI.'
+
+[10:25] [scene:talk]
+VISUAL:
+AUDIO: 'Quick demo on how to get flash extensions working on Windows. This is the first run with default prompts. The model has a unique format for positive text prompts. Describe the scene, include dialogue for the character,'
+
+[10:37] [scene:talk]
+VISUAL:
+AUDIO: 'specify the text-to-speech sections, and add background sounds. It\'s different from Waifu 2.2 prompts, even though it runs on the Waifu 2.2 VAE. Right now, I\'m doing text-to-video purely from prompts describing the character. Let\'s'
+
+[10:50] [scene:talk]
+VISUAL:
+AUDIO: 'check the output. The kid is speaking Mandarin, and the'
+
+[11:14] [scene:talk]
+VISUAL:
+AUDIO: 'pronunciation is smooth. Lip sync and wording, especially in Mandarin, are accurate. Now, let\'s test image-to-video. By the way, I forked the Comfy UI custom nodes repo to my own version. I tweaked'
+
+[11:27] [scene:talk]
+VISUAL:
+AUDIO: 'the inference code to support running without flash attention, so you don\'t need to struggle with it. From my experience, generating this video didn\'t take long. They claim fast inference times, and it feels true. Right now,'
+
+[11:39] [scene:talk]
+VISUAL:
+AUDIO: 'we\'re running 5-second videos at 256p, since super resolution isn\'t enabled yet. Hopefully, Hugging Face releases the SR file soon, so I can test the speed. Let\'s wait and see.'
+
+[11:52] [scene:talk]
+VISUAL:
+AUDIO: 'If you\'re stuck at 256p, you can upscale using something like SeedVR2 video upscaler. Or, faster option, RTX video super resolution. That one zips through upscaling.'
+
+[12:04] [scene:talk]
+VISUAL:
+AUDIO: 'Here\'s what I did. Connected the video encode output image frames to the super resolution node. Kept the audio separate for now, using video combine to merge them. I set it to uprez the video 2x.'
+
+[12:16] [scene:talk]
+VISUAL:
+AUDIO: 'Then, I connected the audio directly. Whether you use native save video or not, doesn\'t matter for testing. Once I confirm it works, I\'ll switch everything to video combine to save space. Let\'s'
+
+[12:28] [scene:talk]
+VISUAL:
+AUDIO: 'run it and see how the character looks. Another output with the same prompts, random seed this time. Speech content is identical. Check the timing. My system took 1 minute 47 seconds for sampling steps. The rest was VAE decoding.'
+
+[12:41] [scene:talk]
+VISUAL:
+AUDIO: 'If you have less VRAM, you can enable offloading here. Turn it on, set the block numbers. So, even with low VRAM, but plenty of RAM, you can still run this. Output of the second gen RTX super res'
+
+[12:55] [scene:talk]
+VISUAL:
+AUDIO: 'upscale. In Comfy UI, right click the video in video combine to see the tiny resolution FPS text. Upscaled 2x with RTX, now it\'s 512 resolution at 25 FPS.'
+
+[13:08] [scene:talk]
+VISUAL:
+AUDIO: 'After playing around, I modified the model loader from the default repo. What I added, flexible attention modes. If you have flash attention, use it. Have Sage attention, use that. Default is'
+
+[13:20] [scene:talk]
+VISUAL:
+AUDIO: 'auto, falling back to whatever\'s available. No attention modes, it defaults to SDPA, which comes standard with Comfy UI torch. Let\'s try an example, a cyberpunk character hacking. Here are the prompts.'
+
+[13:34] [scene:talk]
+VISUAL:
+AUDIO: 'I used Qwen 3.6, which released recently. Qwen has tons of models, image, video, language. We played with Qwen 3.5 for vision language tasks, but 3.6 is better for performance and'
+
+[13:46] [scene:talk]
+VISUAL:
+AUDIO: 'context understanding. I used the enhanced prompt design instructions from the official Defeng Ji Ma Ji Human repo. Go to the GitHub, click the prompts folder, and you\'ll see guidelines on format and structure. Instead of reading'
+
+[13:59] [scene:talk]
+VISUAL:
+AUDIO: 'all that manually, I fed the link to Qwen 3.6. I told it, here\'s the theme, here\'s what the character is doing. Like a doctor helping a patient. It generated the full structured prompt'
+
+[14:12] [scene:talk]
+VISUAL:
+AUDIO: 'for me. Scene description, dialogue, background sounds. Same format as the official examples. Back to Comfy UI for image-to-video. You need an image feeding into the latent data input. You can also add your own'
+
+[14:25] [scene:talk]
+VISUAL:
+AUDIO: 'audio files. Haven\'t tested this specific example yet, but coming up. Connect both the video VAE and audio VAE to the correct inputs, so it understands the first frame. Testing image-to-video'
+
+[14:37] [scene:talk]
+VISUAL:
+AUDIO: 'now. I also tried 480p resolution, and it works. You don\'t have to stick to 256p. That\'s way too small and blurry. Upscaling later won\'t save the quality. It\'s a trade-off. Higher resolution'
+
+[14:49] [scene:talk]
+VISUAL:
+AUDIO: 'means longer generation times, but totally worth it for better video quality. Here\'s another attempt. I wasn\'t satisfied with the default workflow, so I enhanced it. I ran into an error originally with the audio input in the'
+
+[15:02] [scene:talk]
+VISUAL:
+AUDIO: 'author\'s repo. I trimmed 10 seconds of audio, a female voice I wanted to use for the speech line. When I clicked run, error. The audio was passed as a different tensor format for'
+
+[15:15] [scene:talk]
+VISUAL:
+AUDIO: 'math calculations, causing a subprocess FFmpeg failure. Updated the custom node, restarted, and let\'s see. Now, we can run with audio input and get a custom voice for the output.'
+
+[15:27] [scene:talk]
+VISUAL:
+AUDIO: 'Basically, it acts like voice cloning. It won\'t use the exact audio file for the speech content, you still type the text prompt, but the character\'s voice will mimic the audio file you uploaded. Tried 4 seconds first.'
+
+[15:40] [scene:talk]
+VISUAL:
+AUDIO: 'Freedom isn\'t gone, it\'s just sleeping. Peace, it\'s still here in our hands, and love It worked, but the timeline was too short for the whole speech line. Trying a longer length now.'
+
+[15:53] [scene:talk]
+VISUAL:
+AUDIO: 'Before versus after adding audio input. Freedom isn\'t gone. It\'s just sleeping. Peace'
+
+[16:05] [scene:talk]
+VISUAL:
+AUDIO: 'still here. Hear the difference? The voice is distinct from the default. Not top-tier studio quality, still compressed, but definitely better. Maybe the custom node implementation just'
+
+[16:17] [scene:talk]
+VISUAL:
+AUDIO: 'needs polish. We\'ll see if there are updates. Since I modified the code, I even fixed the video processing for the audio format. Now, I can use the audio output without errors, connecting it to the latent input. Let\'s check out some'
+
+[16:30] [scene:talk]
+VISUAL:
+AUDIO: 'output, and I will see you in the next one. Finally'
+
+[17:16] [scene:talk]
+VISUAL:
+AUDIO: 'speaks to me. It\'s a lie.'

@@ -1,0 +1,499 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Dockhand: A Smarter, Safer Docker Manager
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=faq1HFS0D7w
+upload_date: 20260508
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'If you are managing Docker containers across multiple hosts and environments, you probably know this already. Keeping image updates and security under control, this is where it gets challenging pretty fast. And that is exactly why DocHand caught my attention'
+
+[00:13] [scene:talk]
+VISUAL:
+AUDIO: 'because with DocHand, you can manage multiple remote Docker environments, create and manage compose stacks, inspect logs for troubleshooting, even run built-in security scans, and on top'
+
+[00:25] [scene:talk]
+VISUAL:
+AUDIO: 'of that, you can handle automated updates or just get notified when a new image is available. So, in this video, we will take a look at DocHand. We will install and set it up together. And of'
+
+[00:38] [scene:talk]
+VISUAL:
+AUDIO: 'course, I\'m also going to tell you my opinion about DocHand. So, now, let\'s get started with DocHand, the Docker management for everyone. And what they mean by this is that they\'re providing a powerful, intuitive Docker platform that'
+
+[00:51] [scene:talk]
+VISUAL:
+AUDIO: 'is free for home labs, but also ready for enterprise. So, they have different kind of feature sets and use cases. Like, if you\'re a home lab enthusiast, you can deploy DocHand with a simple'
+
+[01:04] [scene:talk]
+VISUAL:
+AUDIO: 'SQLite database in the back end so that does not require a separate database server. It runs on your Raspberry Pi. It has zero telemetry and is free forever. So, perfect for self-hosting. But, if you\'re running a small business'
+
+[01:18] [scene:talk]
+VISUAL:
+AUDIO: 'environment or you have a bigger team that needs single sign-on, audit logging, container activity logging, or Git-based deployments, they also have features for this. And if you want to use that in enterprise because you have'
+
+[01:31] [scene:talk]
+VISUAL:
+AUDIO: 'thousands of containers and services, you even get role-based access, LDAP Active Directory integration, compliance-grade audit logging, whatever that means. And yeah, some of these great features for enterprise that might'
+
+[01:44] [scene:talk]
+VISUAL:
+AUDIO: 'be interesting for bigger companies. So, that tells you a little about the project. But, if you scroll down, you can also see it\'s super simple to set up. Yeah, you can run it in just a few seconds using Docker. Here you can get a'
+
+[01:57] [scene:talk]
+VISUAL:
+AUDIO: 'list of all the detailed features. I don\'t want to go through all of them because you can just take a look yourself. What I really like, there is a lot included in the free version. There\'s even the vulnerability scanning completely included in the free version,'
+
+[02:10] [scene:talk]
+VISUAL:
+AUDIO: 'which is really great. But, of course, if you need premium support and blah blah blah, you can upgrade. One thing that is really special here that caught my attention is the Horizontally Agent. So, this is an open-source agent written in Go that lets you manage Docker hosts'
+
+[02:23] [scene:talk]
+VISUAL:
+AUDIO: 'behind NAT firewalls and dynamic IPs. So, that at first got me thinking of of Well, might this replace something like TwinGate or NetBird? It actually does not, but more about that later. Anyways,'
+
+[02:36] [scene:talk]
+VISUAL:
+AUDIO: 'it still lets you connect to remote Docker environments when you deploy Dockhand somewhere centrally available, but your Docker host is behind a NAT firewall. You can use the edge'
+
+[02:49] [scene:talk]
+VISUAL:
+AUDIO: 'deployments so that the Docker host can sit behind a NAT firewall, but it you can still manage it using Dockhand. All right. So, yeah, screenshot love developers. Let\'s skip that. And let\'s go directly to documentation because'
+
+[03:01] [scene:talk]
+VISUAL:
+AUDIO: 'that tells us how to install and set this up. You can just run this on your local machine, take a first look if you want. Here are also some more detailed deployments like if you want to use a PostgreSQL database backend and so'
+
+[03:15] [scene:talk]
+VISUAL:
+AUDIO: 'forth, but I want to show you a much easier way to get started, and that is by using my Boilerplates tool that I just recently updated. You can just go to the Boilerplates repository, paste this one-liner command in your terminal,'
+
+[03:28] [scene:talk]
+VISUAL:
+AUDIO: 'install the new Boilerplates CLI tool, and then run boilerplates repo update. So, this will pull down the latest updates from my template library, and then you\'re ready. So, here you can get a list of all the templates Dockhand.'
+
+[03:42] [scene:talk]
+VISUAL:
+AUDIO: 'So, let\'s take a closer look at this. So, this automatically deploys that with a specific encryption key that you can define for database backups, or you can also let that uh be auto-generated. You'
+
+[03:54] [scene:talk]
+VISUAL:
+AUDIO: 'can automatically add traffic label and change the database backend from SQLite to Postgres. So, I\'m going to do this. You can just run this on your local device because I just created a new'
+
+[04:06] [scene:talk]
+VISUAL:
+AUDIO: 'feature to deploy this on one of my new servers. Let\'s uh generate a new Dockhand deployment. I say yes, customize some of these variables. For example, set the restart policy to unless stopped. I think that\'s fine. The'
+
+[04:19] [scene:talk]
+VISUAL:
+AUDIO: 'encryption key can be auto-generated. And uh user and group ID, we don\'t need that now. And I want to go with the embedded SQLite database. I think that\'s much easier for simple and small environment. If you don\'t have more'
+
+[04:32] [scene:talk]
+VISUAL:
+AUDIO: 'than, I don\'t know, 100 Docker containers in your home lab, just use SQLite. It\'s going to be much, much easier. But if you are a larger environment, set up Postgres. That\'s much more performant. And uh no, I don\'t want to disable login, but I want to'
+
+[04:45] [scene:talk]
+VISUAL:
+AUDIO: 'enable traffic because I want to deploy Dockhand securely behind my reverse proxy running on one of my demo servers. So, I\'m going to say yes. I\'m going to say Dockhand, and uh the domain is'
+
+[04:58] [scene:talk]
+VISUAL:
+AUDIO: 'home.seecrave.de. Yes, I\'ve already defined that using default variables in boilerplates. Entry point, the network is proxy. I think that\'s correct. And yes, I also want to enable TLS uh so that'
+
+[05:11] [scene:talk]
+VISUAL:
+AUDIO: 'automatically drops the port exposure and only securely exposes that via the traffic reverse proxy. And yep, my certificate resolver name is Cloudflare. That should be fine. And now I can'
+
+[05:24] [scene:talk]
+VISUAL:
+AUDIO: 'select if I want to deploy this on my local machine, but of course, I want to run this on my remote server. Uh more precisely, the server test one. And now I can specify a target directory. I just'
+
+[05:36] [scene:talk]
+VISUAL:
+AUDIO: 'going to go with the default. It will create a new Dockhand directory in my user directory. And yes, that has been uploaded. Now we can SSH into my server test one. So, there should be a new'
+
+[05:48] [scene:talk]
+VISUAL:
+AUDIO: 'directory DocHand. Yep. Let\'s CD into that. And this is the file that has been created. You can see I\'ve stored the encryption keys securely in a .env file in the same directory. All the traffic'
+
+[06:02] [scene:talk]
+VISUAL:
+AUDIO: 'labels should be attached correctly. This is the network, the CloudFlare cert resolver, my proxy network. Yeah, so I think everything should be correct. Let\'s just execute docker compose up -d. Of course, if you don\'t want to use my'
+
+[06:16] [scene:talk]
+VISUAL:
+AUDIO: 'boilerplate CLI tool, you can still just use the officially maintained compose examples if you want to do that. And now, let\'s open a new browser window and let\'s connect to DocHand.servertes'
+
+[06:30] [scene:talk]
+VISUAL:
+AUDIO: 't1.home.seagrave.ee. So, that should take us to the DocHand setup. So, it\'s really as easy as that to set up everything. Okay, good. So, this is DocHand By default, you don\'t'
+
+[06:43] [scene:talk]
+VISUAL:
+AUDIO: 'see any environment because we haven\'t connected anything yet. What is important to manage Docker containers on your local service where DocHand is deployed, you have to specifically mount'
+
+[06:55] [scene:talk]
+VISUAL:
+AUDIO: 'the Docker socket into the container because then DocHand can manage the local environments, but it doesn\'t generate this by default. So, first of all, we have to create a new environment, go to settings, and click on add environment. So, here we need to'
+
+[07:09] [scene:talk]
+VISUAL:
+AUDIO: 'specify the details. We can pick an icon something like I don\'t know what what fits best for local environment. Let\'s just use the server icon, yeah. I\'m going to call this test server one because this is where DocHand is'
+
+[07:21] [scene:talk]
+VISUAL:
+AUDIO: 'deployed. And I want to use the connection type Unix socket. So, this is the local machine. Later, we will also take a look at the Harvester agent, how to connect this to remote services, but here'
+
+[07:33] [scene:talk]
+VISUAL:
+AUDIO: 'this is the Docker socket path, the public IP address. Because we\'re using traffic anyway, I think this is not really important. So, let\'s click on add. And now, we can test if the connection is successful connected. So,'
+
+[07:45] [scene:talk]
+VISUAL:
+AUDIO: 'everything is right. And now, we can take a look at the dashboard. Now, we should see our environment. And we can also resize this window here if we have multiple environments that will show us some details about the top containers by'
+
+[07:57] [scene:talk]
+VISUAL:
+AUDIO: 'CPU, some uh monitoring statistics about CPU memory utilization, uh how many containers are running on this, how many stacks we have created, volumes, networks, images. So, it really gets us'
+
+[08:09] [scene:talk]
+VISUAL:
+AUDIO: 'a great overview of all the Docker environments that we might have. And when we go to containers, you can see all the containers running on this machine also in one single table with all the metrics that are important such'
+
+[08:23] [scene:talk]
+VISUAL:
+AUDIO: 'as uptime, CPU, memory, net IO, disk IO, IP address. So, this is of course the internal IP address. And also, the exposed ports and the stack that it is connected to. So, that means the Docker'
+
+[08:37] [scene:talk]
+VISUAL:
+AUDIO: 'Compose file that manages this container. And of course, uh we can also start, stop, and inspect certain things here. For example, uh if we go to authentic, we can get more detailed'
+
+[08:49] [scene:talk]
+VISUAL:
+AUDIO: 'statistics here, but we can also drill into logs. So, these are the container logs, of course. And inspect the different layers of Docker images. That might not be interesting for a sysadmin, but certainly if you\'re managing your'
+
+[09:02] [scene:talk]
+VISUAL:
+AUDIO: 'own container images with the different layers, um that might be interesting. Also, the processes. That is really great to see what type of processes are running inside the container, what networks do we have, what mount points'
+
+[09:15] [scene:talk]
+VISUAL:
+AUDIO: 'do we have, even the files. So, we could easily hook into the file. And what is also pretty cool, we can download here something. We can also create new directories, upload stuff inside the'
+
+[09:27] [scene:talk]
+VISUAL:
+AUDIO: 'Docker containers file system. I think this is really super useful that you can natively drill into the file system of the container and really upload and download files. You can also see the environment variables. Now, here you can'
+
+[09:40] [scene:talk]
+VISUAL:
+AUDIO: 'see some credentials sometimes. Yeah, that is not so great, I think. They should have some form of feature to I don\'t know, maybe mark certain credentials as secret. Also, I know this is not really supported feature in'
+
+[09:53] [scene:talk]
+VISUAL:
+AUDIO: 'Docker anyway, so Docker Swarm is much much better for this use case, but I still I still don\'t like that you click on this tab and you immediately see everything. So, it should be something like do you want to reveal that value or whatever, I don\'t know. Even though it\'s'
+
+[10:07] [scene:talk]
+VISUAL:
+AUDIO: 'a test environment, so I don\'t care, but yeah, it is what it is. Also, labels. So, here you can see all the labels, security settings, resources, health. So, this is really really detailed and you can edit certain things. So, for'
+
+[10:20] [scene:talk]
+VISUAL:
+AUDIO: 'example, here you can always change the restart policy, the network mode, and stuff like that. That, of course, is the same as if you would go here and click on create container. You can pull an'
+
+[10:33] [scene:talk]
+VISUAL:
+AUDIO: 'image, you can start a container from that image, and yeah, select all the different settings. I think I don\'t need to walk you through this menu, but if you take a look here, there are many many features included in the UI, such'
+
+[10:46] [scene:talk]
+VISUAL:
+AUDIO: 'as GPU settings, health checks, security settings like capabilities. And I really like the look and feel of this web UI. The design, the icons, that looks all really good. So, yeah, in my opinion,'
+
+[10:58] [scene:talk]
+VISUAL:
+AUDIO: 'this does provide you a lot more like other competitive like Portainer, for example. Um it is even more flexible. I will show you something more. So, here you can inspect the logs from a separate menu. You can open a shell inside any'
+
+[11:12] [scene:talk]
+VISUAL:
+AUDIO: 'container, and you can also manage the Docker Compose stacks deployed on your machine. And it has one specific feature that makes it a lot better than Portainer, honestly, guys. I I\'m sorry, I have to say it, but'
+
+[11:25] [scene:talk]
+VISUAL:
+AUDIO: 'one thing that I really dislike in Portainer is that when you\'re managing container stacks outside of Portainer, you cannot manage them. They just appear as externally managed or so. The same is'
+
+[11:37] [scene:talk]
+VISUAL:
+AUDIO: 'here, of course, because it is a technical limitation, yeah? The Docker Compose file that manages this is not really stored on the device or it doesn\'t know where the Compose file is'
+
+[11:49] [scene:talk]
+VISUAL:
+AUDIO: 'actually stored. Uh but, what is pretty cool, you can see that if you click on the stack, just browse the Compose file, and then automatically link this project. So, then you can manage it here. And if you create Compose stacks inside Doc Hand, you have an awesome'
+
+[12:03] [scene:talk]
+VISUAL:
+AUDIO: 'editor here with syntax highlighting. And what is also pretty cool, it does have a GitOps feature, like you can synchronize or pull this down from GitHub or GitLab or whatever uh Git uh platform or repository that you like.'
+
+[12:18] [scene:talk]
+VISUAL:
+AUDIO: 'You can enable a scheduled resync, or you can use webhooks with a webhook secret. So, then you can automatically push updates to Compose files and automatically redeploy this using Doc'
+
+[12:30] [scene:talk]
+VISUAL:
+AUDIO: 'Hand. Uh so, um yeah, it has many, many features, and it supports, of course, non-public repositories with private credentials. Really useful. And, of course, uh you can also manage your'
+
+[12:43] [scene:talk]
+VISUAL:
+AUDIO: 'images, you can manage your volumes, you can manage your networks, container registries, get an activity log. So, this is nothing in here, but if you would start, stop containers, you have'
+
+[12:55] [scene:talk]
+VISUAL:
+AUDIO: 'some form of audit logging. So, what somebody has done on your Docker host through Doc Hand. And you can also see schedules here. This is something that I have to explain because here you cannot'
+
+[13:07] [scene:talk]
+VISUAL:
+AUDIO: 'really create custom schedules. You just have an overview of all the schedules the system is running, and that depends on your environment settings. For example, if you go to dashboard environments, you can edit this here.'
+
+[13:20] [scene:talk]
+VISUAL:
+AUDIO: 'And if you go to updates, you can enable an automated update track. So, that means whenever your Docker containers have an outdated image version, they can automatically check this, yeah?'
+
+[13:32] [scene:talk]
+VISUAL:
+AUDIO: 'Then you get notified, automatically update containers. This you can turn on or off. I personally would say don\'t turn this on. I don\'t like automated updates to container images because they might introduce new'
+
+[13:45] [scene:talk]
+VISUAL:
+AUDIO: 'versions that do breaking changes or stuff like that. But, you will receive a notification when updates are available. So, containers won\'t get modified. You can still have a daily check, hey if there is a new image version published by the'
+
+[13:58] [scene:talk]
+VISUAL:
+AUDIO: 'vendor, and then you get a notification, hey do you want to update from traffic 2.5 to 2.6? You can check in the breaking changes or the documentation, is there a migration path that I need to follow? Or can I safely do this update?'
+
+[14:11] [scene:talk]
+VISUAL:
+AUDIO: 'I think this is already pretty good. But, if you are not so conservative, then you can also turn that on and don\'t get worried about anything, yeah? Let everything be updated automatically,'
+
+[14:23] [scene:talk]
+VISUAL:
+AUDIO: 'that\'s also fine. And of course, uh it supports automatic image pruning, so that means it uh on a weekly, daily, or custom base, it will prune dangling images or all unused images. By default, if you start stop containers and you\'re'
+
+[14:38] [scene:talk]
+VISUAL:
+AUDIO: 'updating images, those old images won\'t get deleted by default, so they start stacking up on your disk and taking disk space that is really not necessary. So, I would certainly always enable image'
+
+[14:51] [scene:talk]
+VISUAL:
+AUDIO: 'pruning. All unused images or dangling images only, that\'s a decision you need to um make for yourself. But, I would certainly enable these two settings at least. Have your Docker hosts being cleaned up and get notified about any'
+
+[15:03] [scene:talk]
+VISUAL:
+AUDIO: 'updates. So, that is really amazing. Even if you don\'t automatically check for updates, you can do that manually. And then it\'s checking and uh notifying you, ah here, okay, for example, this here, this network container has a new'
+
+[15:16] [scene:talk]
+VISUAL:
+AUDIO: 'image, and you can easily just update them all, and then it\'s pulling down the latest version and automatically restarting the environment. It\'s super easy, and yeah, that also works on a'
+
+[15:28] [scene:talk]
+VISUAL:
+AUDIO: 'scheduled or automated basis. Now, one thing that I also want to show you is the security scanning because it has built-in security scanning using Grype and Trivy. Grype, for example, this is a specific vulnerability scanner for'
+
+[15:42] [scene:talk]
+VISUAL:
+AUDIO: 'container images and file systems. It is a free and open-source tool. That\'s also a reason why it is not included in any business license, so you can just use use that. And it also supports Trivy, which is the second familiar project'
+
+[15:56] [scene:talk]
+VISUAL:
+AUDIO: 'more this all-in-one security scanner that might give you some insights into binary artifacts, container images also, but also Kubernetes clusters and misconfigurations. So, they\'re more like'
+
+[16:08] [scene:talk]
+VISUAL:
+AUDIO: 'other dependencies and stuff, while Grype is a little more focused on Docker. So, I certainly would say just enable both, then you get more vulnerabilities found. And the'
+
+[16:20] [scene:talk]
+VISUAL:
+AUDIO: 'interesting part is that these vulnerability scans at first, when you save this, I was a bit confused. Where do I see this now because under containers you don\'t find anything. But, um this is always done automatically'
+
+[16:32] [scene:talk]
+VISUAL:
+AUDIO: 'when you update images because the security scans don\'t really run on the actual workloads on your server. These are container image scanners, so they scan the dependencies and the libraries'
+
+[16:44] [scene:talk]
+VISUAL:
+AUDIO: 'included in these images, not the processes in the actual workloads. So, therefore, you can run these scans automatically when you pull down a new image, it will find security vulnerabilities and tell this to you, or'
+
+[16:57] [scene:talk]
+VISUAL:
+AUDIO: 'if you inspect the images on the actual servers and run a security test on these. For example, if I want to run a security scan on Authentik, for example. Yeah, let\'s pick'
+
+[17:10] [scene:talk]
+VISUAL:
+AUDIO: 'Authentik Traffic. Traffic is a bit smaller. Let\'s pick Traffic. You can click on the small security icon here and that now starts scanning these images, pulling down the latest, um, artifacts. First of all, it scans it'
+
+[17:22] [scene:talk]
+VISUAL:
+AUDIO: 'with Grype and then later with Trivy and then you will see the results. All right, so that is complete now. And, yeah, don\'t let yourself be worried by the vulnerabilities found. As you can'
+
+[17:35] [scene:talk]
+VISUAL:
+AUDIO: 'see here, there are over a hundred security vulnerabilities found in the Traefik container image. Two of them are critical, which sounds pretty bad. Uh, 20 29 are high, 20 are medium, two are low. And, yeah, at first you might'
+
+[17:49] [scene:talk]
+VISUAL:
+AUDIO: 'be worried about this, but actually, it really depends on the actual impact and what is the security vulnerability. Because that is one thing that you have to understand. Even though it sounds'
+
+[18:01] [scene:talk]
+VISUAL:
+AUDIO: 'critical, it doesn\'t mean that the impact is actually relevant to the service applications. Sometimes these are also dependencies from other libraries and programs that the developer of the application is using.'
+
+[18:13] [scene:talk]
+VISUAL:
+AUDIO: 'By the way, I can also do a security vulnerability scanning at Docker Hub myself. So, let\'s see if it finds something on their own image. That would be really funny, but, yeah, that would probably demonstrate how these tools should be interpreted. And, yeah, that'
+
+[18:26] [scene:talk]
+VISUAL:
+AUDIO: 'is what I thought actually. So, you see a lot less vulnerabilities, but two critical ones, one for the Docker CLI. Just because you find a hundred security vulnerabilities does not mean that your server or your application is insecure.'
+
+[18:39] [scene:talk]
+VISUAL:
+AUDIO: 'It just means that some of these libraries or packages inside the image might have security vulnerabilities that might be critical or could be exposed in a specific way. So, therefore, when you go back to dashboard environments and'
+
+[18:52] [scene:talk]
+VISUAL:
+AUDIO: 'you go to automated updates, uh, once you start adding security vulnerability scanning and you do update checks and automatically update your containers, there is a new setting that says block updates with vulnerabilities. And, here'
+
+[19:05] [scene:talk]
+VISUAL:
+AUDIO: 'the default is never blocked. You can certainly define or decide any vulnerabilities or critical or high, but just as you have seen, like almost every Docker image has at least high or'
+
+[19:17] [scene:talk]
+VISUAL:
+AUDIO: 'critical vulnerabilities, so that would basically disable all updates. So, therefore, I would say, and by the way, this is even mentioned in the official Doc Hand documentation, right? Pick never block or more than the current'
+
+[19:30] [scene:talk]
+VISUAL:
+AUDIO: 'image, because that actually means, all right, we know about every security vulnerability in the current version, but if something new might be applied during an update, that is where we would want to pay attention to, right? But'
+
+[19:43] [scene:talk]
+VISUAL:
+AUDIO: 'again, if you disable this setting, it\'s basically your job and you\'re doing the updates manually anyways, and then you can always go into these images, scan them, and yeah, then decide if you want to install them or not. Honestly, guys,'
+
+[19:56] [scene:talk]
+VISUAL:
+AUDIO: 'my personal opinion on this is this is more like a business enterprise feature. You really cannot keep up to all the updates and always verify everything. This is completely crazy. So, I honestly think 99% of all the home lab people'
+
+[20:09] [scene:talk]
+VISUAL:
+AUDIO: 'will just ignore this and not do any security hunting. I think it is still incredible that we have this in the free version, yeah? Don\'t get me wrong. I think security is important and it\'s an important feature, but on the other'
+
+[20:22] [scene:talk]
+VISUAL:
+AUDIO: 'hand, I think it doesn\'t add so much value to a usual home lab use case. I think this is more for the experts and the software developers. People that develop and test these images just want to have their'
+
+[20:34] [scene:talk]
+VISUAL:
+AUDIO: 'environments clean and want to get notified about any finding, and there it is important. I think for home lab people, you can turn this on, but you I know you guys, you most likely will'
+
+[20:47] [scene:talk]
+VISUAL:
+AUDIO: 'never touch this. But yeah, that\'s just my personal opinion. Okay, guys, so, one more thing that I want to show you is how to connect remote using Hoża, because this is one of the features that I think is really cool. So, if we click'
+
+[20:59] [scene:talk]
+VISUAL:
+AUDIO: 'on add environment, here we can choose the Hoża agent or the Hoża Edge. There is a quick install script that we can use. So, perfect. Let\'s copy this and let\'s log into my remote server and let\'s just paste that in. That\'s'
+
+[21:11] [scene:talk]
+VISUAL:
+AUDIO: 'installing the latest version of the Harvester agent and then we can just use sudo systemctl start Harvester. First of all, I would certainly go in the etc. Harvester config file because here you'
+
+[21:23] [scene:talk]
+VISUAL:
+AUDIO: 'can define a few settings. Like here you can configure the Docker socket that it connects to manage this, the standard port. So, if you\'re using the edge mode, you have to comment this out. I would'
+
+[21:36] [scene:talk]
+VISUAL:
+AUDIO: 'certainly in production environments configure TLS with self-hosted certificates, but you also need to make sure if you\'re configuring TLS certificates, you have to update or upload them here when you select'
+
+[21:48] [scene:talk]
+VISUAL:
+AUDIO: 'protocol HTTPS CA certificate for self-signed one. So, otherwise the doc hand will not trust the CA that signed the self-signed certificate for the'
+
+[22:00] [scene:talk]
+VISUAL:
+AUDIO: 'Harvester agent. Anyway, I think most of us home lab guys probably won\'t mess around with this. You could also certainly use VPNs to connect your remote environment, so then you can probably also use HTTP is fine and add an agent token. At least it is a little'
+
+[22:13] [scene:talk]
+VISUAL:
+AUDIO: 'more secure. So, let us just add our secret token secret. So, let\'s restart. By the way, it does not have a restart command, so let\'s stop Harvester and let\'s start it. All right. So, now it'
+
+[22:26] [scene:talk]
+VISUAL:
+AUDIO: 'should be up and running. You can check with the systemctl status is up and running listing on port 2376. All right. So, let\'s add our environment. I will just use'
+
+[22:38] [scene:talk]
+VISUAL:
+AUDIO: 'uh I don\'t know. Let\'s use this here. Test server two. Harvester agent, of course, we need to set up the IP address or the fully qualified domain name. HTTP is correct.'
+
+[22:50] [scene:talk]
+VISUAL:
+AUDIO: 'Secret is the agent token and then let\'s click on add and let\'s test the connection. Connected. Awesome, right? So, if you by the way, have an agent that is behind a firewall, again, use'
+
+[23:03] [scene:talk]
+VISUAL:
+AUDIO: 'Harvester Agent Edge and then generate a connection token. Copy this token and in your Harvester configuration, comment out this part here and the token and uncomment this here, the Docker server'
+
+[23:17] [scene:talk]
+VISUAL:
+AUDIO: 'URL. So, the address where the agent can reach your Docker environment. &gt;&gt; If you\'re using the traffic reverse proxy that gets you trusted certificates, you don\'t have to upload a CA and you can just ignore the skip TLS.'
+
+[23:29] [scene:talk]
+VISUAL:
+AUDIO: 'Very fine. Give this an agent name and the other way will initiate the connection from Docker to your agent. Once you\'ve done that, you can see it in the dashboard. &gt;&gt; You can uh resize it, you can drag and drop it to really build your own custom'
+
+[23:42] [scene:talk]
+VISUAL:
+AUDIO: 'dashboard, see everything at a glance, and then you can jump into the different environments, manage containers, and basically do all the other stuff as well. You can check for updates, you can'
+
+[23:54] [scene:talk]
+VISUAL:
+AUDIO: 'create and edit containers, create stacks, and when you want to switch an environment, just go here and switch that. And yeah, that\'s all you have to consider.'
+
+[24:06] [scene:talk]
+VISUAL:
+AUDIO: 'I think Docker is absolutely incredible once you start managing more than one Docker server, but also certainly for a single Docker server, it\'s great, yeah? It has many, many advanced features for managing compose stacks on one server.'
+
+[24:18] [scene:talk]
+VISUAL:
+AUDIO: 'It can link existing compose stacks to compose files. That is a feature that I am missing so much in Portainer. And yeah, that alone makes it a lot more interesting than most of the other'
+
+[24:31] [scene:talk]
+VISUAL:
+AUDIO: 'Docker management UIs. It also has built-in security scanning, even though the actual use case in home labs is a bit limited if we\'re being honest. But still, I think it is really great. And for enterprise or small business, it'
+
+[24:44] [scene:talk]
+VISUAL:
+AUDIO: 'certainly is a much more interesting tool. I still would say that compared to other Docker management UIs, if we would just compare this to a Portainer, Portainer has one big advantage over Dock Hand. If you\'re managing Kubernetes'
+
+[24:57] [scene:talk]
+VISUAL:
+AUDIO: 'or Swarm, well, Dock Hand is not the right tool. But I think it is still great. Uh like I can think of a use case in a business environment when you have a fleet of edge environments, right? So, many different smaller services around'
+
+[25:11] [scene:talk]
+VISUAL:
+AUDIO: 'your customers and landscape that might be behind firewalls, are connected to different networks, and it is just a mess to control all this stuff. With Dock Hand, it\'s super easy. You can just connect the whole Tsar agent in edge'
+
+[25:24] [scene:talk]
+VISUAL:
+AUDIO: 'mode back to your environment and manage everything. For these type of use cases, Dock Hand is absolutely amazing. But yeah, that\'s it about Dock Hand. I think I showed you everything you need to know. Now, it\'s your turn. So, please'
+
+[25:36] [scene:talk]
+VISUAL:
+AUDIO: 'tell me your opinion about Dock Hand. Do you like this? Is this your preferred way to manage Docker containers or compose stacks? Let me know in the comments. And of course, thank you so much for supporting. You guys are really amazing. If you like this video, please'
+
+[25:49] [scene:talk]
+VISUAL:
+AUDIO: 'give this a thumbs up and subscribe to the channel. And of course, I\'m going to catch you in the next one. Take care. Bye-bye.'

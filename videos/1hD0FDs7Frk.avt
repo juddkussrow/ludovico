@@ -1,0 +1,671 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Build Your First AI Voice Agent for Inbound Calls & Bookings
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=1hD0FDs7Frk
+upload_date: 20260105
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'Hello legends. In this video, I\'m going to show you how to build an AI voice agent that can handle all your inbound business calls. We\'re going to be using a combination of Retail AI as the actual voice agent that\'s plugged into a phone number and then N to run the backend tasks for us. I\'m going to show you how'
+
+[00:13] [scene:talk]
+VISUAL:
+AUDIO: 'to build the Retail AI agent using a single prompt. And I\'m going to show you all the main features that you need to know over here so that you can actually get started within the next hour and have a live voice agent built. I\'ll also'
+
+[00:25] [scene:talk]
+VISUAL:
+AUDIO: 'show you how to connect your retail AI agent into NAN so that you can actually run various actions like plug into your own tools and run your own tasks. So even if you\'re not doing exactly what I\'m doing in this video, you will be'
+
+[00:37] [scene:talk]
+VISUAL:
+AUDIO: 'totally okay on your own. Okay, so let me just demo what we\'ve built in this video. It might be a little bit hard to hear. &gt;&gt; Hello, you\'ve reached Bart\'s Automotive. Sophie speaking. How can I help you today? &gt;&gt; Hi. Uh I\'m just wondering how much your'
+
+[00:49] [scene:talk]
+VISUAL:
+AUDIO: 'basic service costs. Our basic service starts from $220. If you\'d like more details or want to book in, just let me know. &gt;&gt; Can you book me in for tomorrow at 12:00'
+
+[01:01] [scene:talk]
+VISUAL:
+AUDIO: 'p.m.? &gt;&gt; Let me check availability for a basic service tomorrow at 12:00 p.m. Unfortunately, 12 p.m. isn\'t available, but we can book you in at 1 p.m. tomorrow instead. Would that work for you?'
+
+[01:14] [scene:talk]
+VISUAL:
+AUDIO: '&gt;&gt; Yes, it would. Can you please book me in? booking you in for a basic service tomorrow at 1 p.m. You\'re all booked in for a basic service tomorrow at 1 p.m. Thanks for calling Barts Automotive. We\'ll see you then. Have a great day. &gt;&gt; Nice. And that was a demo of the call.'
+
+[01:27] [scene:talk]
+VISUAL:
+AUDIO: 'Let\'s get into it. Okay, so this is the schema that we\'re using for this video. We\'re going to be using Retail AI to build our voice agent because Retail AI lets us build a voice agent and plug it into a phone number so that we can either accept inbound phone calls or we'
+
+[01:40] [scene:talk]
+VISUAL:
+AUDIO: 'can actually place outbound phone calls to customers. So, we\'re going to have our customer call our retail AI agent. The agent\'s going to be able to answer basic FAQs from a PDF that I will upload. And then we\'re going to be able'
+
+[01:53] [scene:talk]
+VISUAL:
+AUDIO: 'to book in services into a Google calendar. To book that service in, we\'re going to be using N as our automation backend engine. And really, what I want to show you in this video is a start to finish process that you can use to build'
+
+[02:06] [scene:talk]
+VISUAL:
+AUDIO: 'out your own agent as well. And then this ability to actually speak between retail AI and NAN to build these custom functions is going to give you the ability to also integrate your own third party tools or or your own actions that'
+
+[02:18] [scene:talk]
+VISUAL:
+AUDIO: 'you need to take as well. So the process is very easy. The first thing we want to do is go across to retail AI and start building out our voice agent. So I\'m going to go to create an agent, click on voice agent, and then click on single prompt agent. If you don\'t have a Retail'
+
+[02:31] [scene:talk]
+VISUAL:
+AUDIO: 'AI account just yet, then I have an affiliate code that you can use to sign up. It\'s in the description of this video to give you an overview of all the stuff that you see on this page. If this is the first time that you\'re here, you have this setting is the brain of your'
+
+[02:44] [scene:talk]
+VISUAL:
+AUDIO: 'agent. So, you have a bunch of different models that you can use. This is the voice of your agent. So, you can choose from voices from 11 Labs and Open AI. And then you have the language of your agent. Then up here we have the average'
+
+[02:56] [scene:talk]
+VISUAL:
+AUDIO: 'cost per minute. And then the latency, which is just the time the agent takes to respond to to humans. So 1,300 milliseconds is 1.3 seconds. Now just be mindful that if you like as you adjust'
+
+[03:10] [scene:talk]
+VISUAL:
+AUDIO: 'the brain of the agent to use something like GPT 5.2 that is going to change the average cost per minute of your agent. So you can just start with like GPT 4.1 and then find what works for you. And'
+
+[03:23] [scene:talk]
+VISUAL:
+AUDIO: 'also your latency will change as you add some different functions and features for your agent. So, just quickly over here is where we\'re going to be inputting our prompt, which is the plain text set of instructions that our agent'
+
+[03:36] [scene:talk]
+VISUAL:
+AUDIO: 'will follow for every phone call. And then over here, this is the like hands and feet of our agent. So, there\'s a bunch of different things here. For this video, we\'re going to be using this functions tab, which lets us introduce functions for our agent. The end call'
+
+[03:50] [scene:talk]
+VISUAL:
+AUDIO: 'function is really, really cool because it lets your agent end the call at a natural ending point. So instead of just having like a an endless phone call where your agent just never hangs up the phone and maybe your customer is being a'
+
+[04:02] [scene:talk]
+VISUAL:
+AUDIO: 'little bit cheeky and just draining your AI credits, you can have a natural way to end a phone call. You also have a bunch of built-in functions like transferring to a human, booking into cal.com, sending an SMS, but we\'ll be using this custom function. This custom'
+
+[04:16] [scene:talk]
+VISUAL:
+AUDIO: 'function is a little bit intimidating when you look at it like this, but I\'m going to show you how to plug this into nan so you can actually run any any like function calls for your agent using nan as the back end. So we\'ll be using'
+
+[04:29] [scene:talk]
+VISUAL:
+AUDIO: 'functions a lot. We\'ll also be using this knowledge base where we\'re going to be uploading our PDF. So this is my sample PDF. It just lists this is all fake information by the way. This is not a real Bars Automotive Workshop, but it'
+
+[04:41] [scene:talk]
+VISUAL:
+AUDIO: 'lists all the services and then the pricing that our agent will be able to reference. And then finally, we have this is the last setting we actually we I\'m not going to be using it for this video just to kind of keep things short,'
+
+[04:53] [scene:talk]
+VISUAL:
+AUDIO: 'but this is where you can send your post call transcripts. So, like after every phone conversation your agent has, you can send the transcript to an N workflow and you can like peel it back and you can see who was the caller, what was'
+
+[05:05] [scene:talk]
+VISUAL:
+AUDIO: 'their name, what was the call about, and you can build a big database of all the conversations you\'ve had. So then for future phone calls, you can actually rejig your agent to then first like get the phone number that\'s calling you'
+
+[05:18] [scene:talk]
+VISUAL:
+AUDIO: 'before you pick up the phone call, go to your database and then try and find historical conversation so you have more context for this specific conversation you have with your customer. So if you want to see a follow-up video of how to create like memory and this memory'
+
+[05:31] [scene:talk]
+VISUAL:
+AUDIO: 'database for your phone calling systems using retail AI, let me know. But this is yeah, this is definitely something that you would want to look at. Now your latency will change as you change some of these settings over here. So if you'
+
+[05:43] [scene:talk]
+VISUAL:
+AUDIO: 'add certain functions, if you add a knowledge base, if you change some of these speed settings and transcription settings, that does have an impact on your latency. So just be mindful of that as well. And then finally over here we have the testing section. So, you can'
+
+[05:56] [scene:talk]
+VISUAL:
+AUDIO: 'test your audio by just speaking with your microphone into the computer and just like see how your agent sounds, what the latency is, and you can kind of like change all these fine dials and controls and prompts as you go. But my'
+
+[06:08] [scene:talk]
+VISUAL:
+AUDIO: 'preference is typically just to just test with the chat, which just means you\'re sending a free text conversation. You\'re typing the words in and then you\'re hitting send and you\'re having that kind of conversation. The cool thing is that as we\'re testing, we'
+
+[06:21] [scene:talk]
+VISUAL:
+AUDIO: 'actually see all the tool calls and we can expand and see like what was sent in a tool call, what was responded back in a tool call as well. So, it\'s really good for debugging as well. So, the first thing that I recommend you do is'
+
+[06:33] [scene:talk]
+VISUAL:
+AUDIO: 'actually go across to chat GPT and just have a conversation and basically write down all the stuff that you want your agent to do. I would choose two to three things max to start with just so you can build out your phone caller. Turn it on,'
+
+[06:45] [scene:talk]
+VISUAL:
+AUDIO: 'have customers call it, and then you can see all the transcripts of your conversations. Like after you run it for a couple of weeks and you get 10, 20, 50 phone calls, you can review those phone calls and you can see what are customers actually asking, what kind of'
+
+[06:58] [scene:talk]
+VISUAL:
+AUDIO: 'information are they looking for? And then you can kind of come back and keep uh optimizing or iterating the agent as you go. So I wouldn\'t try and build out something perfect from the start. just have a basic conversation, explain the top stuff that you want this agent to'
+
+[07:11] [scene:talk]
+VISUAL:
+AUDIO: 'do, and get chat GBT to create a prompt for you. So, I\'ve just gone ahead and done that process already. So, over here, you can see that I have the persona for my agent, like, hey, you\'re Brian, you\'re friendly and professional, and you\'re receptionist for Barts'
+
+[07:23] [scene:talk]
+VISUAL:
+AUDIO: 'Automotive in Melbourne, Australia. I\'m going to go through this slowly so you can actually read the entire prompt. One of the key things that I\'m doing for my booking the service function is I need to remember the the exact name that I'
+
+[07:35] [scene:talk]
+VISUAL:
+AUDIO: 'give to this function because we\'re going to be using it over here when we\'re building out our custom function. But I\'ve actually spent some time in nan to look at what are the variables that I need for the actual automation to be'
+
+[07:47] [scene:talk]
+VISUAL:
+AUDIO: 'able to build this out. So in just a second I\'m going to go across to nan and start building this out and it\'ll make sense why I need the date, the time and the service type. Okay. Okay, so the next thing you want to do is go across to the dynamic variables documentation'
+
+[07:59] [scene:talk]
+VISUAL:
+AUDIO: 'page from Retail AI and scroll down till you see this section over here. So it\'s important that you give your agent the ability to know what current what the current date and time is for your specific time zone. So you can just use'
+
+[08:12] [scene:talk]
+VISUAL:
+AUDIO: 'this thing over here which is current current time and then the time zone. So for me I\'m going to be using current_time Australia/Melbourne which is what I\'ve done over here. here.'
+
+[08:24] [scene:talk]
+VISUAL:
+AUDIO: 'So, I\'ve got these two squiggly brackets and now I\'m using this. So, let\'s say I actually test this agent with a new conversation. Uh, right now for me, it is 6:00 p.m. on Monday, 5th of Jan. So, I can say what is the current date and'
+
+[08:36] [scene:talk]
+VISUAL:
+AUDIO: 'time. Uh, it\'s actually 6:04 p.m. So, let\'s see. I just have a 6 p.m. There we go. 5th of January, 2026. And you actually want this so that when your customer is'
+
+[08:49] [scene:talk]
+VISUAL:
+AUDIO: 'calling, they can say, "Hey, book me in for tomorrow or book me in for next Thursday." And your agent\'s able to actually know the exact time and date so that you send that so that you send the accurate information across to N. So'
+
+[09:01] [scene:talk]
+VISUAL:
+AUDIO: 'before we go to Nan to build out this booking functionality, I want to really quickly add my knowledge base. So I\'m going to go to knowledge base and click on add and add new knowledge base. Once again, I\'m just uploading this PDF to my'
+
+[09:13] [scene:talk]
+VISUAL:
+AUDIO: 'agent. Uh the main things that I want to showcase are what are the services that we offer and what\'s the price of those services. So then after you click add over here, you\'re taken to this knowledgebased section. We\'re going to'
+
+[09:25] [scene:talk]
+VISUAL:
+AUDIO: 'click on plus. So I\'m going to call this B autootive and click on add documents. I can either plug it into my my website or upload files or add free text. The'
+
+[09:37] [scene:talk]
+VISUAL:
+AUDIO: 'cool thing with the website is that you can actually get the robots.txt. So, if you\'re not familiar with what this is, basically if you\'ve got like 10 different URLs on your website, pretty much every website has this like library'
+
+[09:49] [scene:talk]
+VISUAL:
+AUDIO: 'page, which is your website for/root.txt and that lists all the different URLs for your website. So, you just add in that one URL and you can scrape your entire site. So, all 10, 20, 50 pages'
+
+[10:01] [scene:talk]
+VISUAL:
+AUDIO: 'that you have. For me, I\'m just going to go upload files. And this is that PDF I\'m going to be uploading. I\'m going to click on save. And now retail AI in the back end is going to take this and actually upload it to a vector database.'
+
+[10:13] [scene:talk]
+VISUAL:
+AUDIO: 'So back in my main agent page, I\'m just going to refresh this page. Then come back into knowledge base. Click on add. And now I have Bart\'s automotive. So that was a knowledge base that I just'
+
+[10:25] [scene:talk]
+VISUAL:
+AUDIO: 'added with all the FAQs about services and pricing. So let\'s test this out. might want to go to test chat, click on manual and say what services do you offer,'
+
+[10:37] [scene:talk]
+VISUAL:
+AUDIO: 'including general car services, log book, brake repairs. Okay. What is the price of a basic service? Let\'s hit enter. 220 bucks. And here we go. Basic service'
+
+[10:49] [scene:talk]
+VISUAL:
+AUDIO: 'from 220 bucks. So, that was super easy to add our knowledge base. And the next thing we want to do is add the custom function that goes across to nan. So now my next step is to go across to nan and'
+
+[11:03] [scene:talk]
+VISUAL:
+AUDIO: 'build out the workflow. I\'m not going to build with the web hook just yet. I\'m just going to go trigger manually. I actually want to build out this workflow first, get it working, and then I\'m going to use the web hook at the very end to plug everything in together. So'
+
+[11:15] [scene:talk]
+VISUAL:
+AUDIO: 'I\'m going to get the edit fields node. If you\'ve watched some of my other videos, I have this video. I\'ll link it in the description of this one. It\'s about working with data in nan workflows. So what I really like to do'
+
+[11:27] [scene:talk]
+VISUAL:
+AUDIO: 'is at the start of the workflow or at key stages of workflows just establish my primary variables, the stuff that I\'m going to need to call on at different stages of my workflow. Now I know that when I\'m booking into the calendar, I need to have some time of the booking,'
+
+[11:40] [scene:talk]
+VISUAL:
+AUDIO: 'the date of the booking, and then I\'m also going to want to use the title of the booking itself to be the service that we\'re booking in. So that\'s why I had in my prompt I had the time, I had the date, and then I also had the'
+
+[11:53] [scene:talk]
+VISUAL:
+AUDIO: 'service type. Now the the way that I want my agent to communicate with this workflow is to give our timing something like this. So when we\'re working with time,'
+
+[12:05] [scene:talk]
+VISUAL:
+AUDIO: 'it\'s going to be something like 9.00 00 a.m. or it could even be something like 12:30 p.m. This is the format that I\'m going to be expecting to receive for date because we\'re in Australia. I want'
+
+[12:18] [scene:talk]
+VISUAL:
+AUDIO: 'to have it to be day day day month month year. So for example, tomorrow was the 6th of the 1st 6th of January 2026 and then service type I will say basic'
+
+[12:30] [scene:talk]
+VISUAL:
+AUDIO: 'service. So this is basically me doing like I have a web hook call. As soon as the web hook call comes in pulling out those I\'m extracting those variables for time, date and service type. So let\'s'
+
+[12:42] [scene:talk]
+VISUAL:
+AUDIO: 'hit this to start the workflow. I\'m going to hit this to keep going with the workflow. So now I I actually want to go across to the Google calendar and see what the information needs to look like'
+
+[12:56] [scene:talk]
+VISUAL:
+AUDIO: 'for me to be able to work with it. So over here I have my edit fields note of 9:00 a.m. Date is day day month year year. But over here you can see that Google calendar is expecting a different date format. So they\'re expecting'
+
+[13:09] [scene:talk]
+VISUAL:
+AUDIO: 'something like this. So what I need to do is actually bring in a code node to take my input data and then output it in the same type of variable that Google Google calendar is expecting. So what'
+
+[13:23] [scene:talk]
+VISUAL:
+AUDIO: 'you can do here is write some instructions that you paste into chat GBT later on. So now I\'ve written out these instructions where I\'m going to tell chat GPT to write me an N code node that\'s going to take the time variable and I\'ve just taken this and I\'ve'
+
+[13:36] [scene:talk]
+VISUAL:
+AUDIO: 'plunked it into here. So that\'s what you see here. Takes the time variable. I\'ve explained the format that we\'re going to be receiving. So like 9.00 a.m. or 12:30 p.m. Uh takes the date variable which is in a format of day day'
+
+[13:49] [scene:talk]
+VISUAL:
+AUDIO: 'month and then year and it turns it into the format that Google calendar expects. I\'ve just taken this from the Google calendar node just before. I\'ve pasted it into here. And then uh what I want as the output of this code node is the'
+
+[14:03] [scene:talk]
+VISUAL:
+AUDIO: 'start time in the format of Google calendar and the end time uh which is basically start plus 1 hour. Now over here is where you get creative and you might actually look at your service type and see that basic service might take'
+
+[14:15] [scene:talk]
+VISUAL:
+AUDIO: 'you 1 hour but if you were to do something like brake pad replacement that might take you two hours. So then what you might say over here is you might have a third condition that says for service types do plus 1 hour for break for basic services do plus 1 hour'
+
+[14:29] [scene:talk]
+VISUAL:
+AUDIO: 'for breaks do plus 2 hours for major engine rebuilds do one week so you can actually customize this however you like and then um I\'m just reiterating that this has to be in Melbourne Australia'
+
+[14:41] [scene:talk]
+VISUAL:
+AUDIO: 'time zone so I actually like to write my prompts in the code node like this because it\'s very easy to drag and drop the variables and let\'s paste this into chat GPT and we\'ll get the response and then paste paste it into that code node. Okay, so we have our response. I\'m going'
+
+[14:54] [scene:talk]
+VISUAL:
+AUDIO: 'to copy it and just backspace the instructions and paste this into here. So let\'s execute this code node. Oh, we have some error. Let\'s bring this back into chat GPT. Let\'s paste this. Let\'s paste the updated code. So backspace'
+
+[15:08] [scene:talk]
+VISUAL:
+AUDIO: 'this. Paste it into here. And now we have start time, end time, and time zone. Let\'s give this a test. So now let\'s bring this into here. Start time, end time. There we go. And I\'ll just'
+
+[15:24] [scene:talk]
+VISUAL:
+AUDIO: 'choose my calendar bar test. So my calendar is open right now. I\'m on Sunday the 4th. So Monday the 5th today. So it\'s completely open. Let\'s run this function. Execute step.'
+
+[15:38] [scene:talk]
+VISUAL:
+AUDIO: 'And it\'s available right now, which is true. So from here, I\'m going to have an if node. And actually what I want my this overall this nan workflow to do is either book it in if it\'s available but'
+
+[15:50] [scene:talk]
+VISUAL:
+AUDIO: 'if it\'s not available I want to uh recommend an alternative time back to my AI agent so that we can actually try and book something in proactively. So over here I\'m going to say if available is equal to'
+
+[16:03] [scene:talk]
+VISUAL:
+AUDIO: 'true we execute step and we\'ll be taking the top route and then over here I\'m just going to be booking it into Google calendar as well. So Google calendar and let\'s book this in. So create an'
+
+[16:15] [scene:talk]
+VISUAL:
+AUDIO: 'event and I want to be doing couple nodes back the start time and then my end time and uh I\'m also going to be including'
+
+[16:28] [scene:talk]
+VISUAL:
+AUDIO: 'the description and a summary. So the summary is what you see in the actual calendar when you add the event into the calendar and as you click into the event you see the description in the back end.'
+
+[16:40] [scene:talk]
+VISUAL:
+AUDIO: 'So the summary can just be new basic service or we can even go back to our edit fields and okay basic service and maybe it\'s not going to say it might'
+
+[16:52] [scene:talk]
+VISUAL:
+AUDIO: 'you might just say basic service and later on when I get the phone number or the person\'s name I might put a h like a dash like this and then leave some kind of input for the name but for now I\'m just going to go with this and a description it can be the person\'s phone'
+
+[17:04] [scene:talk]
+VISUAL:
+AUDIO: 'number which we can\'t get just yet because we\'re not testing with an actual phone number but we might put a placeholder for phone number 2 3 4 5 6 7 8 and you can have other information'
+
+[17:16] [scene:talk]
+VISUAL:
+AUDIO: 'here as well. So go to an expression, hit enter a new line, and you might just reiterate that same information, date, and then the service type. And you might even ask during a phone call'
+
+[17:28] [scene:talk]
+VISUAL:
+AUDIO: 'conversation some like special notes like what car do you have, how many KS, what specific are you specifically are you looking for your service? So you can actually include a bunch of information here. So let\'s go execute step to create this event. I wouldn\'t choose the'
+
+[17:41] [scene:talk]
+VISUAL:
+AUDIO: 'calendar B test. execute this and let\'s come into here. There we go. Uh, basic service 6:00 to 7:00 p.m. Okay, so I think we\'re defaulting to the Europe'
+
+[17:53] [scene:talk]
+VISUAL:
+AUDIO: 'Berlin time zone for some reason. Just going to hit save. Come back into settings and let\'s see if we just change this to do we have Melbourne. Do we have Sydney? This might actually change something for'
+
+[18:07] [scene:talk]
+VISUAL:
+AUDIO: 'us. Just going to delete this event and execute the step one more time. refresh this page. 6:00 to 7:00 p.m. For some reason, it\'s'
+
+[18:19] [scene:talk]
+VISUAL:
+AUDIO: 'going here at this time. Okay, so this is actually incorrect. Let\'s get this. And I\'ve just included the screenshot to chat GPT. And I\'ve said that I\'ve actually set it at 9:00'
+
+[18:31] [scene:talk]
+VISUAL:
+AUDIO: 'a.m., but it\'s putting it. It\'s outputting it at 6:00 p.m. So, this should be able to see that. Yeah, there\'s some just some confusion between the actual time zones. So your code converted to Melbourne then nan Google treated it as UTC again which pushed the'
+
+[18:45] [scene:talk]
+VISUAL:
+AUDIO: 'time. So your output shows this. Let\'s see if we get the updated code node. Okay. So let\'s copy this. Come back into our workflow. Let\'s backspace paste this in.'
+
+[18:58] [scene:talk]
+VISUAL:
+AUDIO: 'And let\'s follow this through. This should be everything empty. Okay. And let\'s execute this. So, it\'s booked it in. We\'ll refresh the'
+
+[19:11] [scene:talk]
+VISUAL:
+AUDIO: 'page. There we go. 9:00 a.m. on a 6. That was actually the wrong date as well. So, basic service. So, we click into here. As I mentioned before, basic service is the summary and the the description is the um all the other'
+
+[19:25] [scene:talk]
+VISUAL:
+AUDIO: 'heavy information that we want for here as well. So, in this case, we actually built out pretty much all the workflow that we need for booking the service. So at the end I\'m going to do respond with'
+
+[19:37] [scene:talk]
+VISUAL:
+AUDIO: 'the web hook node and I\'m just going to do a custom message using the response variable and I\'m going to say successfully booked in and that\'s going to be my'
+
+[19:49] [scene:talk]
+VISUAL:
+AUDIO: 'entire response back to my AI agent because in my prompt over here oh wrong page in my prompt I actually said that when you try and book something in it\'s either going to say that um it was'
+
+[20:01] [scene:talk]
+VISUAL:
+AUDIO: 'successfully booked in or uh it\'s going to give an alter alternative time in case that time is already taken. So, back in Nan, this is what we\'re just saying over here. Successfully booked in. But for the for the time if it\'s already taken. So, if we come back to'
+
+[20:15] [scene:talk]
+VISUAL:
+AUDIO: 'here, since we already have a 9:00 a.m. slot, the availability is going to be false now. So, I\'m just going to re-trigger this availability check. There we go. False. And come into here. So now what I might want to do is figure'
+
+[20:27] [scene:talk]
+VISUAL:
+AUDIO: 'out some algorithm to basically go into my calendar and then try and pitch or propose an alternative time. So instead of just saying, "Hey, we don\'t have the time available. Deal with it." We\'re going to say, "That\'s not available, but'
+
+[20:40] [scene:talk]
+VISUAL:
+AUDIO: 'this new time is available." So for me, I\'m just going to keep it very simple. I\'m just going to try if the exact time 9:00 a.m. to 10 a.m. is not available, I\'m just going to try and get the very next hour and see if that\'s available.'
+
+[20:52] [scene:talk]
+VISUAL:
+AUDIO: 'So to do this, if I go back into this code node, technically this is my start time, which is 9:00 a.m., and this is my end time, which is 10:00 a.m. So if I want to check the next hour, this now'
+
+[21:04] [scene:talk]
+VISUAL:
+AUDIO: 'becomes my start time. And then I just need to do plus an hour of this to be my new end time. And I\'m just asking chat GPT to give me one more output variable where the new alternative end time is'
+
+[21:17] [scene:talk]
+VISUAL:
+AUDIO: 'the original start time plus 2 hours. So yeah, you\'ll have to make this work for your specific use case. I\'m keeping it very simple for this video. So the exact same code node that we\'re using at this'
+
+[21:29] [scene:talk]
+VISUAL:
+AUDIO: 'location, we\'re going to preemptively do an alternative time slot as well. So coming back into chat GPT. There we go. It\'s all done. Let\'s copy this and let\'s reopen'
+
+[21:42] [scene:talk]
+VISUAL:
+AUDIO: 'backspace. Paste in this new code node. Paste in a new code. And we have alternative ending. Okay, here we go. We\'re going to be not available. We\'re going to take the false route. And now I\'m going to check the'
+
+[21:54] [scene:talk]
+VISUAL:
+AUDIO: 'availability one more time. So I\'m just copying that availability node. And I have to take some of these and flip them around. So going back to our code node here once again. This is the original'
+
+[22:06] [scene:talk]
+VISUAL:
+AUDIO: 'start time, original end time. Since we\'re now checking the alternative, I\'m taking the original end time as my new start and then my alternative ending over here. So now we\'re checking instead of 9:00 a.m. we\'re checking for 10:00'
+
+[22:18] [scene:talk]
+VISUAL:
+AUDIO: 'a.m. So execute step. then that\'s going to be available true and I\'m going to have my if node. So from here, yeah, you\'ll definitely have to build this out to suit your needs. But if my boolean equals to true, so if the availability'
+
+[22:31] [scene:talk]
+VISUAL:
+AUDIO: 'is true, we\'re now going to respond with the web hook node and say, hey, your existing time that you set is it\'s not possible for us to use that. So I\'m going to say that time is not available'
+
+[22:44] [scene:talk]
+VISUAL:
+AUDIO: 'but we can do and now I actually want to just figure out how to convert this time back into something that\'s human readable like the 9 a.m. time that we'
+
+[22:57] [scene:talk]
+VISUAL:
+AUDIO: 'had before. So now I\'ve come back into chat GPT and with very poor spelling I\'ve asked to also give me the human readable times because now I need to send the response back to my AI agent saying hey that\'s not available but this'
+
+[23:10] [scene:talk]
+VISUAL:
+AUDIO: 'specific time is. So the code node is finished let\'s take this now copy and back in nan let\'s go back to our code node and resend this. So the original start'
+
+[23:23] [scene:talk]
+VISUAL:
+AUDIO: 'is nine original end and new end. Awesome. So let\'s just execute up until this point. We have true. And now that time is not available. So I\'m just going to say'
+
+[23:36] [scene:talk]
+VISUAL:
+AUDIO: 'make it a bit more personalized. And we have 9:00 a.m. Oops, I should have taken this to expression first, but that\'s no big deal. 9:00 a.m. is not available,'
+
+[23:48] [scene:talk]
+VISUAL:
+AUDIO: 'but we can do 10:00 a.m. There we go. And now the actual output\'s'
+
+[24:01] [scene:talk]
+VISUAL:
+AUDIO: 'going to say 9:00 a.m. is not available, but we can do 10:00 a.m. So, your message here can be very personalized. You might want to put the date in one more time so that your agent actually gets that information back. But from here, we\'re pretty much done with the'
+
+[24:14] [scene:talk]
+VISUAL:
+AUDIO: 'flow. So at a high level, we receive the information from the hook call from the retail agent. We check the availability. If it\'s available, we book it in and we respond back that it\'s successful. If it\'s not available, we recheck a new'
+
+[24:27] [scene:talk]
+VISUAL:
+AUDIO: 'time and then we respond back with that new time. So I\'m going to save this. And now it\'s time for us to go back into Retail AI and build that function. So I\'m going to go to functions, create custom function, and here the name has to be the exact same as this. So book'
+
+[24:41] [scene:talk]
+VISUAL:
+AUDIO: 'service book service use this tool call to book in a car service. Typically the description for your tool calls it it should be very'
+
+[24:53] [scene:talk]
+VISUAL:
+AUDIO: 'descriptive but this is this is enough because we only have like one or two function calls. The the actual model won\'t get too confused. We\'ll be using a post endpoint. And now we need to paste in our web hook endpoint over here. So'
+
+[25:05] [scene:talk]
+VISUAL:
+AUDIO: 'I\'m just going to remove this. add in a web hook. There we go. Let\'s change this to post and respond using the respond to web hook node and choose'
+
+[25:18] [scene:talk]
+VISUAL:
+AUDIO: 'the test URL. For now, we\'re just going to be listening for test events and we\'re going to map in all the variables. So, let\'s hit save. So, we save this version and I\'m going to go listen for test event.'
+
+[25:31] [scene:talk]
+VISUAL:
+AUDIO: 'Back in retail, we\'re going to paste this here. That\'s the end point. And now you can add security. So you can add like authentication like an authorization header and have an API key that\'s shared between Retail AI and your NAN workflow. I\'ve got another video for'
+
+[25:44] [scene:talk]
+VISUAL:
+AUDIO: 'webbook security that I\'ll link below. But really we now want to send specific variables as part of this API call. We need to send the the time, the date, and the service type. So I\'m going to be'
+
+[25:56] [scene:talk]
+VISUAL:
+AUDIO: 'adding three fields. This is the time, this is the date, and this is the service type. Now in my instructions I already basically said what the format is of the date what the format is of the'
+
+[26:09] [scene:talk]
+VISUAL:
+AUDIO: 'time as well. So I don\'t have to re I don\'t have to mention those things here again. So the the time of the service the date of the service and the type of'
+
+[26:21] [scene:talk]
+VISUAL:
+AUDIO: 'service and let\'s make all these required and only send the payload arguments. So if I just leave this off, you\'ll see that the web hook information'
+
+[26:34] [scene:talk]
+VISUAL:
+AUDIO: 'we get in nan is going to be like really really long list of all the call information up to this point. If I choose this, it\'s going to be a scaled back data that we\'re sending across to nan. So you can speak during execution. If this is going to take a while to'
+
+[26:47] [scene:talk]
+VISUAL:
+AUDIO: 'actually get a response back, more than 2 seconds, you might want to say like, let me check that for you or I\'m, you know, I\'m searching our records to get that information for you. So let me check that for you. whatever custom message you want. The'
+
+[27:02] [scene:talk]
+VISUAL:
+AUDIO: 'key value pair, this is a good one. So, our actual the web hook response that we\'re using has a response variable and I think they should be able to map it directly as response as well. So, in'
+
+[27:14] [scene:talk]
+VISUAL:
+AUDIO: 'nan in our web hook response, if you want to send multiple variables back to your AI caller to the retail agent, you can actually just map all those back into the prompt as well. But we\'re just'
+
+[27:26] [scene:talk]
+VISUAL:
+AUDIO: 'we\'re just mapping back the response variable. So I\'m going to hit save. And now I want to test this out. So my workflow is not waiting for a test event. Now it\'s waiting for a test'
+
+[27:38] [scene:talk]
+VISUAL:
+AUDIO: 'event. Let\'s test a new event over here. Hi. What services do you offer? We offer a wide range of services. How much is the basic service'
+
+[27:51] [scene:talk]
+VISUAL:
+AUDIO: 'from 220 if you\'d like to book one car in? Yes, please book for let\'s go 10:00 a.m. 6th of Jan. So now we should actually fire off the book service API'
+
+[28:06] [scene:talk]
+VISUAL:
+AUDIO: 'call. Okay. Yes, I confirm. And let\'s see if we fired anything off here. There we go. So we fired it off. And we have the date is 6th of Jan 2026. It\'s a basic service and it\'s 10:00 a.m.'
+
+[28:20] [scene:talk]
+VISUAL:
+AUDIO: 'So, we now have to map these variables back into here, which is the the awesome thing about using the edit fields node. Sorry, let me just get this correct. You can interchange the the trigger node'
+
+[28:32] [scene:talk]
+VISUAL:
+AUDIO: 'very easily now. So, now we have time, which is 10:00 a.m. and then basic service. Perfect. Execute step. And everything should flow from here. Let\'s check a few'
+
+[28:44] [scene:talk]
+VISUAL:
+AUDIO: 'of these nodes. Everything seems to be going good. and the 10:00 a.m. should be available and it should be true. Okay, so I\'m going to save this. Let\'s hit it one more time. Execute workflow. Let\'s say a brand new conversation.'
+
+[28:59] [scene:talk]
+VISUAL:
+AUDIO: 'You book me in for a basic service at 10 a.m. tomorrow. There we go. So, let me check the availability for a basic service at 10:00 a.m. for you'
+
+[29:11] [scene:talk]
+VISUAL:
+AUDIO: 'tomorrow. Back to our nan workflow. we fully executed and successfully booked in was our response. Okay, so that was perfect. I\'m now going to try the exact same message again because since we\'re booked at that time, we should get a'
+
+[29:25] [scene:talk]
+VISUAL:
+AUDIO: 'unavailable response back. So, I\'m going to send this message. Can you book me in for a service? Let me just check. Unfortunately, 10 a.m. is already booked, but we do have 11:00 a.m. Would you like to go ahead'
+
+[29:38] [scene:talk]
+VISUAL:
+AUDIO: 'with 11:00 a.m. instead? There we go. We took the failed route and our response was 10 a.m. is not available, but we do have 11:00 a.m. Let\'s re-execute this. And let\'s say yes, please.'
+
+[29:51] [scene:talk]
+VISUAL:
+AUDIO: 'And it looks like our workflow was triggered one more time. And since that time was available, we booked it in. So, here we are. 11:00 a.m. was uh available and it was booked in. So, let\'s come back into our calendar. And there we go.'
+
+[30:04] [scene:talk]
+VISUAL:
+AUDIO: 'That\'s the 11:00 a.m. service. Okay. Okay, so the final thing we want to do is actually go back into nan. Let\'s publish this workflow so it\'s actually live and we\'re going to be'
+
+[30:16] [scene:talk]
+VISUAL:
+AUDIO: 'using the live endpoint. So come back into the web hook, click on production URL, go back into retail and change out that URL. So we\'re no longer testing. Let\'s update this. And now we want to publish our workflow as well and hit'
+
+[30:30] [scene:talk]
+VISUAL:
+AUDIO: 'publish. Let\'s actually rename this as well to Bart\'s Automotive to make it easy for us to distinguish between our callers. Back in our main menu, now we\'re going to be'
+
+[30:43] [scene:talk]
+VISUAL:
+AUDIO: 'adding the phone number to the Barts Automotive voice agent. And then I\'m going to go across to phone numbers. And now there\'s two ways that you can actually connect a phone number. You can either purchase a phone number through retail AI. So you can just click on uh'
+
+[30:56] [scene:talk]
+VISUAL:
+AUDIO: 'this dropown. You\'re limited to United States or Canada right now or telnix and you can get some different phone numbers, but you can actually go to Retail AI directly, get your phone number for whatever region that you want'
+
+[31:09] [scene:talk]
+VISUAL:
+AUDIO: 'and then you can do SIP trunking. There\'s a really good video from Retail AI about how to do this. Takes about 5 10 minutes and it\'s instantaneous as well. So, I\'m just going to buy a new phone number. Let\'s go with this first one. Let\'s hit save. Uh realistically,'
+
+[31:23] [scene:talk]
+VISUAL:
+AUDIO: 'if you\'re doing this for your business, then you want to find one in the area code of where your business operates just to make it a little bit more personal. So when your customers call that phone number, they recognize the'
+
+[31:35] [scene:talk]
+VISUAL:
+AUDIO: 'area or if you do call your customers, it\'s from a similar area of where you operate. And from here, we just need to drop down, go to our agent that we\'re plugging this phone number to, and click on the live published version. And this is for inbound calls. For outbound'
+
+[31:49] [scene:talk]
+VISUAL:
+AUDIO: 'calls, same thing. You can actually add an outbound agent to this phone number. So, when you trigger outbound calls, you\'re actually calling people. If you want to see a video about how to do outbound calling, let me know. I\'m not going to do that do that for this video.'
+
+[32:01] [scene:talk]
+VISUAL:
+AUDIO: 'And I also mentioned at the start of this video about taking all the completed call transcripts across to an N workflow and then adding them to a adding them to a memory database. If you wanted to then tap into that database.'
+
+[32:14] [scene:talk]
+VISUAL:
+AUDIO: 'So every time you get a brand new call before you pick up that call, you go to that database and you grab all the information about that specific user so that you can have a really personalized greeting like, "Hey bar, I see you\'re calling again. You called last week to'
+
+[32:27] [scene:talk]
+VISUAL:
+AUDIO: 'book your service in. It\'s for tomorrow. Did you want to change the time or is there anything that I can help you with?" That level of personalization you can do with this inbound web hook. The URL over here is just the web hook URL of your NAN workflow that takes that'
+
+[32:39] [scene:talk]
+VISUAL:
+AUDIO: 'that basically goes to extract that information for you. If you want to see a video with me doing this as well, let me know in the comments of this video. For now, I\'m just going to leave it as unsaved. And if we go back to the agents'
+
+[32:51] [scene:talk]
+VISUAL:
+AUDIO: 'tab, you can see that our phone number is now added to the agent that we created. So, I\'m just going to dial the number and give this agent a call. Okay, let\'s dial the agent. &gt;&gt; Good day. You\'ve reached Barts'
+
+[33:05] [scene:talk]
+VISUAL:
+AUDIO: 'Automotive. This is Brian speaking. How can I help you today? &gt;&gt; Hi, what services do you offer? &gt;&gt; We offer a range of services including general car servicing, log book services, brake repairs and'
+
+[33:17] [scene:talk]
+VISUAL:
+AUDIO: 'replacements, engine diagnostics, testing and replacement. &gt;&gt; What is the basic service cost? &gt;&gt; The basic service starts from $220. If you\'d like more details or want to &gt;&gt; Can you book me in for 11:00 a.m.'
+
+[33:29] [scene:talk]
+VISUAL:
+AUDIO: 'tomorrow? &gt;&gt; Sure thing. Just to confirm, is this for a basic service or did you need something else done as well? &gt;&gt; Basic service, please. &gt;&gt; Let me just check availability for a basic service at 11:00 a.m. tomorrow.'
+
+[33:42] [scene:talk]
+VISUAL:
+AUDIO: 'Unfortunately, 11:00 a.m. is booked out, but we do have 12:00 p.m. available tomorrow. Okay. &gt;&gt; Would you like to take that spot? &gt;&gt; Yes, please book it in for 12:00 p.m. &gt;&gt; Booking you in for a basic service at 12:00 p.m. tomorrow. You\'re all booked'
+
+[33:55] [scene:talk]
+VISUAL:
+AUDIO: 'in for a basic service at 12:00 p.m. tomorrow. Thanks for calling Barts Automotives. We\'ll see you then. Have a great day. and it hung up as well. Okay, perfect. So, from that very basic test, we can see that we actually have the agent'
+
+[34:08] [scene:talk]
+VISUAL:
+AUDIO: 'called Brian, but we need to change this to a a male voice. So, we can just change the name to be a female name. And we might come back into here and kind of play around with one of these different models. So, maybe 5.1 mini or maybe one'
+
+[34:20] [scene:talk]
+VISUAL:
+AUDIO: 'of these flash Gemini flash models, which will be pretty fast as well. So, this is totally up to you what direction you want to take the next steps in. But you\'ve now completely uh you\'ve now built a an AI caller from start to'
+
+[34:32] [scene:talk]
+VISUAL:
+AUDIO: 'finish using retail AI and N. You know how to make these custom functions. So yeah, I would go out and build a basic caller for your system today. Run it for a week, get that feedback, analyze the phone calls, and then go and iterate on'
+
+[34:45] [scene:talk]
+VISUAL:
+AUDIO: 'it week on week as well. All right, thanks very much for watching, guys.'

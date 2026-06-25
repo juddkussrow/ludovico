@@ -1,0 +1,111 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: This New Engine Runs Local AI Using 10x Less RAM! (Cactus)
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=nVhdDgYf_rI
+upload_date: 20260517
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'This is Cactus. It\'s a low-latency inference engine designed to treat mobile and edge devices as first-class citizens. So, usually when we try to run AI models on edge devices, they feel heavy and battery draining and prone to'
+
+[00:12] [scene:talk]
+VISUAL:
+AUDIO: 'getting killed by the mobile operating system\'s memory manager. But, Cactus is trying to solve this problem because it\'s built specifically for the constraints of the neural processing units and limited RAM. So, today we\'re'
+
+[00:26] [scene:talk]
+VISUAL:
+AUDIO: 'going to look at Cactus, [music] see how it works, and test it out on an edge device to see how it performs. [music] So, let\'s dive into it. The biggest bottleneck for local AI'
+
+[00:40] [scene:talk]
+VISUAL:
+AUDIO: 'isn\'t actually compute, it\'s the memory overhead. On a standard mobile device, the operating system is extremely aggressive about killing apps that spike in RAM usage. But, Cactus solves this by'
+
+[00:52] [scene:talk]
+VISUAL:
+AUDIO: 'using a zero-copy memory mapping. Instead of the usual approach where you load everything to RAM, Cactus maps model weights directly from storage. It\'s a zero-copy system that only pulls'
+
+[01:05] [scene:talk]
+VISUAL:
+AUDIO: 'specific tensors into the active compute cycle as they are needed. You get the reasoning power of a large model without the risk of the operating system shutting your app down. And to achieve this, they\'ve even transitioned away'
+
+[01:19] [scene:talk]
+VISUAL:
+AUDIO: 'from the traditional GGUF format and have their own proprietary {dot}cact format that allows this mapping to be effective on edge devices. But, the real heavy lifting happens in the NPU or the'
+
+[01:31] [scene:talk]
+VISUAL:
+AUDIO: 'neural processing unit. While most local engines default to the GPU, Cactus is built to be NPU first. If you\'ve looked at modern chips from Apple, Qualcomm, or'
+
+[01:43] [scene:talk]
+VISUAL:
+AUDIO: 'MediaTek, they all have dedicated silicon just for neural networks. Cactus communicates with these units directly, bypassing the usual translation layers that slow down your inference. And'
+
+[01:55] [scene:talk]
+VISUAL:
+AUDIO: 'they\'ve actually optimized specific models to take full advantage of these matrix multiplication units. If you head over to the Cactus dashboard, you\'ll see a list of NPU optimized models ready for'
+
+[02:07] [scene:talk]
+VISUAL:
+AUDIO: 'download. And another cool feature Cactus has is the hybrid router. Now, the reality is that on edge devices, local models, no matter how optimized, eventually hit that reasoning ceiling.'
+
+[02:19] [scene:talk]
+VISUAL:
+AUDIO: 'And this is where the hybrid router comes in. Instead of forcing you to choose between a fast but limited local model and a smart but expensive cloud model, Cactus can handle both and swap'
+
+[02:31] [scene:talk]
+VISUAL:
+AUDIO: 'between them. It uses a confidence-based routing system, and if you ask it a simple question, it stays on the NPU because it\'s fast, private, and costs you nothing. But if the local model'
+
+[02:43] [scene:talk]
+VISUAL:
+AUDIO: 'senses that the task is too complex or require a massive context window, it automatically hands the specific request off to a frontier model on the cloud. Your code stays the same, the engine'
+
+[02:55] [scene:talk]
+VISUAL:
+AUDIO: 'just manages the failover in the background. So, it\'s a production-ready way to keep costs low without sacrificing the user experience when things get complicated. Now, all that sounds cool, but I want to try it out'
+
+[03:08] [scene:talk]
+VISUAL:
+AUDIO: 'for myself. So, on their landing page, they have this demo where they show how you can do a real-time transcription with about 100 ms latency on an edge device. So, I went ahead and vibe coded'
+
+[03:20] [scene:talk]
+VISUAL:
+AUDIO: 'a little Swift app using their Swift Cactus package that supports running a real-time transcription using their Parakeet speech model locally and a Gemini model on the cloud. So, let\'s try'
+
+[03:33] [scene:talk]
+VISUAL:
+AUDIO: 'it out. As you can see, locally, we are averaging about 260 ms of latency with live streaming. And mind you, I\'m running this on an older iPhone model, the 12 Pro. So, for an older model like'
+
+[03:46] [scene:talk]
+VISUAL:
+AUDIO: 'this one, I think this performance on edge is pretty good. And if we switch to cloud, Cactus switches to Gemini 2.5 flash as the cloud alternative. And for some reason, they don\'t have the same'
+
+[04:00] [scene:talk]
+VISUAL:
+AUDIO: 'Parakeet model on their cloud side, so I was forced to use Gemini. And we can see here that this is averaging at about 2,000 milliseconds for a 3-second batch transcription. And I guess this is to be expected because it is doing a round'
+
+[04:13] [scene:talk]
+VISUAL:
+AUDIO: 'trip to the data server. But realistically, most of the time you would end up using the on-Edge transcription anyway. But the cloud option is useful for other tasks like heavy image analysis or something else'
+
+[04:25] [scene:talk]
+VISUAL:
+AUDIO: 'that would be a heavier task. So there you have it, folks. That is the Cactus engine in a nutshell. I think they are doing something really interesting here. I like how they are thinking about on-Edge optimization using a custom'
+
+[04:38] [scene:talk]
+VISUAL:
+AUDIO: 'MPU-friendly architecture. And I like the fact that they offer so many SDKs and so many models for all sorts of multimodal tasks. And I\'m really curious to see how their product evolves, so'
+
+[04:50] [scene:talk]
+VISUAL:
+AUDIO: 'I\'ll be keeping an eye on their progress for sure. But what do you folks think about Cactus? Have you tried it? Let us know in the comments section down below. And folks, if you like these types of breakdowns, please let me know by'
+
+[05:02] [scene:talk]
+VISUAL:
+AUDIO: 'smashing that like button underneath the video. And also, don\'t forget to subscribe to our channel. This has been Andres from Better Stack, and I will see you in the next videos. &gt;&gt; [music]'

@@ -1,0 +1,359 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: LTX2.3 Music Video Creator V5.1- ComfyUI - Full Walkthrough
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=LwG-zxY684M
+upload_date: 20260508
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'In this tutorial, I\'m going to walk you through the first part of my LTX music video workflow. This workflow is designed to automate the process of creating music videos using LTX, which can generate video from text or images. The full system is split into two parts.'
+
+[00:12] [scene:talk]
+VISUAL:
+AUDIO: 'The first workflow prepares the song, analyzes the timing, and creates the prompts. The second workflow uses those prompts to generate the actual video scenes. For this first part, we\'ll start with workflow one, which is a prompt'
+
+[00:25] [scene:talk]
+VISUAL:
+AUDIO: 'creator. The first thing you\'ll do is open the user interface and choose your audio file. Click choose and upload audio, then select the song you want to use. Next, go down to the subgraph settings section. Here, you\'ll see a frames per'
+
+[00:38] [scene:talk]
+VISUAL:
+AUDIO: 'second option. This needs to match the frame rate you plan to use in the second workflow. You\'ll also see settings for the minimum and maximum scene duration. These control how short or long each scene is allowed to be. The bias setting controls'
+
+[00:51] [scene:talk]
+VISUAL:
+AUDIO: 'how strongly the beat detection affects scene cuts. Lower values create more even or random timing, while higher values favor stronger beats and downbeats. There are also duration presets. Impact weighted follows'
+
+[01:04] [scene:talk]
+VISUAL:
+AUDIO: 'stronger beats more closely. Varied, no repeat avoids using similar scene lengths back to back. Clustered, no repeat keeps scene lengths closer together, while still avoiding repeated timing patterns. If your song is in a'
+
+[01:17] [scene:talk]
+VISUAL:
+AUDIO: 'different language, you can set the whisper language here as well. You\'ll also see an option called use SRT durations. Even though SRT files are usually used for captions, in this workflow they are being used to store'
+
+[01:29] [scene:talk]
+VISUAL:
+AUDIO: 'scene timing. When this option is turned on, the workflow uses beat detection to create different scene cuts throughout the song. When it\'s turned off, you can enter a fixed scene length instead, so every scene uses the same duration.'
+
+[01:41] [scene:talk]
+VISUAL:
+AUDIO: 'There is also a button to download the LLM model if you don\'t already have it. Once the model is available, you can load it from the drop-down. Below that, you\'ll enter the full lyrics for your song. If you don\'t have lyrics yet,'
+
+[01:54] [scene:talk]
+VISUAL:
+AUDIO: 'there\'s a button that opens a custom GPT I created to help generate them. You can then copy the lyrics into your favorite AI music creator like Suno Auto or Suno. Next is the style and theme section. You can enter this manually or use the GPT'
+
+[02:08] [scene:talk]
+VISUAL:
+AUDIO: 'button to generate a style and theme based on your lyrics. Then there\'s the story idea section. This works the same way. You can write your own story idea or use the GPT button to create one from the lyrics, style, and theme. The last'
+
+[02:21] [scene:talk]
+VISUAL:
+AUDIO: 'section is subjects and locations. This is where you define the main characters, subjects, and locations that should appear in the video. You can create this manually or use the GPT to generate a list based on the song, story, and'
+
+[02:34] [scene:talk]
+VISUAL:
+AUDIO: 'theme. Everything here can still be edited before you continue. Once everything is filled out, click apply settings, then click save text files. Both steps are important. Apply settings applies the workflow settings and save'
+
+[02:48] [scene:talk]
+VISUAL:
+AUDIO: 'text files saves the lyrics, style, story, subjects, and locations into a temporary folder inside your ComfyUI output folder. That temporary folder is used by the next workflow. So, unless'
+
+[03:01] [scene:talk]
+VISUAL:
+AUDIO: 'you\'re an advanced user and know exactly what you\'re doing, don\'t edit or move anything inside it. Changing those files manually can break the workflow downstream. After the settings and text files are saved, click close user'
+
+[03:13] [scene:talk]
+VISUAL:
+AUDIO: 'interface. Before running the workflow, there\'s one thing to check. The workflow has several text file loader nodes. These load the saved lyrics, style, story, subjects, and locations back into the workflow. Each one should show the'
+
+[03:26] [scene:talk]
+VISUAL:
+AUDIO: 'correct file. For example, the lyrics loader should show the full lyrics file. If one of them says something like file not found, use the refresh list button on that node. I\'ve added notes next to these nodes, so you know what each one'
+
+[03:39] [scene:talk]
+VISUAL:
+AUDIO: 'should say. Once everything looks correct, you can run the workflow. At this point, the workflow will process the song, analyze the timing, use the lyrics and story information, and generate the prompts that will be used'
+
+[03:51] [scene:talk]
+VISUAL:
+AUDIO: 'in the second workflow. One possible issue to be aware of is the Gemma LLM node. If the LLM node gets stuck or throws an error related to llama.cpp, it usually means the required llama.cpp installation does not match'
+
+[04:04] [scene:talk]
+VISUAL:
+AUDIO: 'your system. This part is system specific. You need to know your Python version, CUDA version, and other setup details. Don\'t just install a random file because it worked for someone else. To help with this, I included a'
+
+[04:17] [scene:talk]
+VISUAL:
+AUDIO: 'diagnostic section in the workflow. If you run into this issue, mute or bypass the main workflow section, unmute the diagnostic section, and run that instead. It will create a report with your system information and'
+
+[04:29] [scene:talk]
+VISUAL:
+AUDIO: 'instructions. You can give that report to ChatGPT or another LLM, and it will help you figure out the correct installation commands for your setup. Once workflow one finishes successfully, you\'ll have the prompt files ready for'
+
+[04:41] [scene:talk]
+VISUAL:
+AUDIO: 'the next part of the process. In the next workflow, those prompts will be used to generate the actual music video scenes. Okay, that\'s the end of the part one walk-through. See you in the part two. Now we\'re moving on to part two of the'
+
+[04:54] [scene:talk]
+VISUAL:
+AUDIO: 'workflow. This section covers the image-to-video workflow. There is also a text-to-video version, but we\'ll start with image-to-video first. The two workflows are very similar, but image-to-video gives you more control'
+
+[05:06] [scene:talk]
+VISUAL:
+AUDIO: 'over character consistency. Here is a quick example of part of a video that uses a character Laura for both Z image and LTX 2.3. As you can see, it really helps keep the character\'s face consistent throughout the different'
+
+[05:19] [scene:talk]
+VISUAL:
+AUDIO: 'scenes. This workflow uses Z image turbo as the'
+
+[05:31] [scene:talk]
+VISUAL:
+AUDIO: 'text-to-image model. The setup uses a two-pass Z image process to create a higher-quality starting image. The first pass creates the initial image at a lower resolution. Then the workflow runs an enhancement and upscale pass to clean'
+
+[05:45] [scene:talk]
+VISUAL:
+AUDIO: 'up the image and improve the final result before sending it into LTX 2.3. Character LoRAs are highly recommended here, especially if you want consistent characters throughout your music video. This is one of the main reasons to use'
+
+[05:58] [scene:talk]
+VISUAL:
+AUDIO: 'the image-to-video workflow. A Z image character LoRA can help keep your subject consistent from scene to scene. This workflow has two main stages. First, it creates the image using Z image, then it sends that image into LTX'
+
+[06:10] [scene:talk]
+VISUAL:
+AUDIO: '2.3 to generate the video scene. To begin, open the user interface. Advanced users can adjust the workflow manually, but I recommend starting with the UI because it handles most of the setup for'
+
+[06:22] [scene:talk]
+VISUAL:
+AUDIO: 'you. Inside the user interface, you\'ll see two tabs. Start with the first tab, workflow settings. The first section is for models. Each model has a download link, so if you don\'t already have the required model, click the link and'
+
+[06:34] [scene:talk]
+VISUAL:
+AUDIO: 'download it. After downloading models, refresh the ComfyUI canvas by pressing R. This refreshes the model lists, so the new files show up in the drop-downs. You can select your models from the UI'
+
+[06:46] [scene:talk]
+VISUAL:
+AUDIO: 'drop-downs, or you can choose them directly in the nodes if that\'s easier for you. If you have a lot of models in your folders, the node drop-downs may be easier to navigate. Next is the LoRA section. There are options for both Z image LoRAs and LTX'
+
+[06:59] [scene:talk]
+VISUAL:
+AUDIO: 'LoRAs. You can use one or both depending on what you have. If you have a character LoRA for Z image, select it here. If you also have an LTX LoRA, you can select that as well. By default, LoRAs are turned off.'
+
+[07:12] [scene:talk]
+VISUAL:
+AUDIO: 'To use them, enable the LoRA section. Once enabled, more options will appear. If your LoRA uses a trigger word, check the trigger word box. A text field will appear where you can enter the trigger'
+
+[07:24] [scene:talk]
+VISUAL:
+AUDIO: 'word. If your LoRA does not need a trigger word, leave that box unchecked. You can also choose how many Z image LoRAs you want to use. For example, you might use one LoRA for a character and another for style. Increase the LoRA'
+
+[07:36] [scene:talk]
+VISUAL:
+AUDIO: 'count, choose the additional LoRA, and adjust the strength for each one. The LTX Laura section works the same way. You can enable it, choose one or more Lauras, enter trigger words if needed,'
+
+[07:48] [scene:talk]
+VISUAL:
+AUDIO: 'and adjust the strengths. One important note for LTX Lauras, this workflow applies the Laura at half strength on the first pass, then full strength on the second pass. After a lot of testing, this helped reduce smearing'
+
+[08:00] [scene:talk]
+VISUAL:
+AUDIO: 'and motion issues that can happen with Lauras trained on images. This is the setup I used for all of my sample videos, so I implemented it by default. If you\'d rather have each pass at full strength, you can simply turn this off.'
+
+[08:12] [scene:talk]
+VISUAL:
+AUDIO: 'Next is the main setting section. The use SRT duration option is turned on by default. This uses the duration file created in the first workflow. If you used fixed scene lengths instead, turn this option off and enter the same'
+
+[08:26] [scene:talk]
+VISUAL:
+AUDIO: 'duration you used in workflow one. The frames per second setting must match the FPS used in the first workflow. Then you can set the width and height. I recommend starting with the default values. In my testing, lower resolutions caused audio sync issues that were'
+
+[08:40] [scene:talk]
+VISUAL:
+AUDIO: 'difficult to resolve, so the defaults are the safest place to start. You\'ll also see the LTX seed. You can leave it as is or set your own seed if you have a favorite. The last section is for the prompts from workflow one. There is a'
+
+[08:52] [scene:talk]
+VISUAL:
+AUDIO: 'button that pastes the prompts from the previous workflow automatically, so you don\'t have to copy and paste them manually. If you created your own prompts outside of workflow one, make sure they are either in JSON format or written as plain text with at least one'
+
+[09:05] [scene:talk]
+VISUAL:
+AUDIO: 'blank line between each prompt. If the prompts are only separated by a single line break, they won\'t split correctly. Then paste them into the prompt field. Once everything is set, click apply part two settings. After that, you can move'
+
+[09:18] [scene:talk]
+VISUAL:
+AUDIO: 'to the advanced settings tab. This section is optional, but it gives you more control over how the video prompts are customized. To use it, turn on the advanced settings checkbox. You can create multiple advanced setting groups'
+
+[09:31] [scene:talk]
+VISUAL:
+AUDIO: 'by changing the settings count. There There presets for things like camera motion, character movement, facial expressions, and emotion. There is also a custom option. For example, if you choose camera motion,'
+
+[09:43] [scene:talk]
+VISUAL:
+AUDIO: 'the workflow provides a default list of camera movements that work well with LTX 2.3. These camera motion details are sent to the LLM along with the prompt from workflow one. The LLM then uses them to customize the video prompt for'
+
+[09:56] [scene:talk]
+VISUAL:
+AUDIO: 'each scene. If you do not provide advanced settings, the LLM will create those details on its own. There is also a GPT helper if you want to create custom camera motion for each prompt. You can paste your prompts into the GPT'
+
+[10:08] [scene:talk]
+VISUAL:
+AUDIO: 'and it will generate camera motion ideas that match each scene. Or you can just tell it to send you back both camera motion and character movement, for example, each in their own code block like this. After you paste those results into the workflow, set the selection'
+
+[10:21] [scene:talk]
+VISUAL:
+AUDIO: 'mode to index if you want the items to be used in order. If you\'re using the prompts from ChatGPT, you will want to use index as they are based off the prompts in order. Otherwise, if you\'re using the preset list or a custom list,'
+
+[10:33] [scene:talk]
+VISUAL:
+AUDIO: 'you can change the selection mode. If you want the workflow to choose randomly, use random or random no repeat. Random no repeat will shuffle through the list without repeating the same item right away. There is also a more advanced option called items per'
+
+[10:46] [scene:talk]
+VISUAL:
+AUDIO: 'prompt. This lets you combine multiple items into one prompt. For example, you could have the camera start with a zoom in, then transition into a pan left. The item template controls how those items'
+
+[10:58] [scene:talk]
+VISUAL:
+AUDIO: 'are written. If you use two items, make sure the template includes both item one and item two. If you use three items, include item three as well. You can customize the wording around those items, such as start with item one, then'
+
+[11:11] [scene:talk]
+VISUAL:
+AUDIO: 'transition into item two. For most users, I recommend starting with one item per prompt until you\'re comfortable with how the settings work. You can add another advanced setting group if you want to control something else, like character movement. For example, one'
+
+[11:24] [scene:talk]
+VISUAL:
+AUDIO: 'group can control camera motion and another can control character movement. Each preset can be edited, so you can customize the lists however you want. The goal is to give the LLM more specific direction instead of letting it'
+
+[11:37] [scene:talk]
+VISUAL:
+AUDIO: 'guess everything. Once your advanced settings are ready, click apply part two settings again. Then close the user interface. At this point, the workflow should be ready to run. If you set everything in the UI, you should not need to manually adjust the nodes. The'
+
+[11:50] [scene:talk]
+VISUAL:
+AUDIO: 'model selection, Laura handling, prompt input, timing settings, and advanced options should already be applied. Now you can run the workflow. When the workflow starts, it will automatically'
+
+[12:02] [scene:talk]
+VISUAL:
+AUDIO: 'queue the generations for each scene. For auto queue to work, you need to have the Impact Pack custom node installed. Depending on the length of your song and the number of prompts, rendering can take a while. A longer song may take several hours, so this is the kind of'
+
+[12:15] [scene:talk]
+VISUAL:
+AUDIO: 'workflow you may want to let run overnight. Once it finishes, the workflow stitches the generated scenes together into the final music video. For scene stitching with audio to work, you\'ll need FFmpeg installed and'
+
+[12:27] [scene:talk]
+VISUAL:
+AUDIO: 'available on your system path. Otherwise, the workflow may create the video without audio, and you\'ll need to add the audio manually later. Everything is saved in your ComfyUI output folder, inside a folder named'
+
+[12:39] [scene:talk]
+VISUAL:
+AUDIO: 'after the song. If you stop the run partway through and want to continue where you left off, open that song folder, open the VRGDG temp folder, then delete the temp JSON file in there, and run the'
+
+[12:51] [scene:talk]
+VISUAL:
+AUDIO: 'workflow again. It will pick up from the last completed scene. If you want to start over from the beginning, either delete that song folder or rename it before running the workflow again. When renaming the folder, be sure to prepend'
+
+[13:04] [scene:talk]
+VISUAL:
+AUDIO: 'to the file name instead of append. There is also a remake mode feature if you want to redo specific clips without rerunning the entire workflow. To use it, drop the clip or clips you want to remake into the remake folder, enable'
+
+[13:16] [scene:talk]
+VISUAL:
+AUDIO: 'remake mode in the LTX2 node subgraph, change the seed, and run the workflow again. It will automatically loop through the remake folder, regenerate only those scenes, and then restitch the final video using the updated clips.'
+
+[13:29] [scene:talk]
+VISUAL:
+AUDIO: 'You can repeat this process as many times as needed. The text-to-video workflow works almost the same way as the image-to-video workflow, but it skips the Z image image creation step. Instead of creating a'
+
+[13:41] [scene:talk]
+VISUAL:
+AUDIO: 'starting image first, it sends the prompts directly into LTX to generate each scene. The main way I recommend using this workflow is with an LTX character Laura or an LTX style Laura\'s. If you\'re using a style Laura, the key'
+
+[13:55] [scene:talk]
+VISUAL:
+AUDIO: 'is to add a trigger phrase after the trigger word. The trigger word activates the Laura, and the trigger phrase should fully describe the character. This phrase gets used in each prompt, which helps keep the character more consistent across scenes. My sample videos that use'
+
+[14:08] [scene:talk]
+VISUAL:
+AUDIO: 'a style Laura do not use a character Laura. The character consistency comes from the trigger phrase and the way the character is described in each prompt. That said, you can still use a character Laura together with a style Laura if you'
+
+[14:20] [scene:talk]
+VISUAL:
+AUDIO: 'want stronger character consistency while keeping the visual style from the style Laura. That covers the full workflow from preparing the song and generating prompts to creating and stitching the final music video. Workflow one handles'
+
+[14:33] [scene:talk]
+VISUAL:
+AUDIO: 'the setup, lyrics, timing, story details, subjects, locations, and prompt generation. Workflow two takes those prompts and turns them into the final video either through image-to-video or'
+
+[14:45] [scene:talk]
+VISUAL:
+AUDIO: 'text-to-video. The goal of this setup is to automate as much of the music video creation process as possible while still giving you control over the important creative choices like style, characters, camera motion, scene timing, and Laura'
+
+[14:58] [scene:talk]
+VISUAL:
+AUDIO: 'usage. &gt;&gt; [music] &gt;&gt; Once you understand the basic flow, you can start experimenting with different prompts, Laura\'s, advanced settings, seeds, and remake mode to refine the final result. I recommend starting with'
+
+[15:10] [scene:talk]
+VISUAL:
+AUDIO: 'the default settings first, then making small changes as you get more comfortable with the workflow. And that\'s it. You now have a full LTX music video workflow that can take a song, generate scene prompts, create the video'
+
+[15:23] [scene:talk]
+VISUAL:
+AUDIO: 'clips, and stitch everything together into a finished music video. In terms of manual setup time, creating a full video can take under 15 minutes. All you need to do is upload your song, add the lyrics, style and theme, story details,'
+
+[15:35] [scene:talk]
+VISUAL:
+AUDIO: 'subjects, and locations, then adjust a few settings in the simple user interface. After that, you run the workflow and it handles the rest. However, you can also spend more time'
+
+[15:47] [scene:talk]
+VISUAL:
+AUDIO: 'refining the video if you want a more polished result. For example, I\'ll sometimes run the workflow multiple times with different settings and scene styles. One run might focus on close-up shots, another might use wider shots,'
+
+[15:59] [scene:talk]
+VISUAL:
+AUDIO: 'and another might be used for no lip sync scenes or B-roll. From there, you can bring the different renders into a video editor. I use CapCut, but you can use any editor you prefer.'
+
+[16:11] [scene:talk]
+VISUAL:
+AUDIO: '&gt;&gt; [music] &gt;&gt; This lets you mix and match the best clips and make the final video feel much more custom. For example, this video was created with the text-to-video workflow using a custom Laura trained on both the character and the location. Because of'
+
+[16:23] [scene:talk]
+VISUAL:
+AUDIO: 'that, I only needed one Laura to handle everything. I ran the workflow about four different times, then spent around two hours in post-production editing everything together. I hope you enjoyed this workflow. I\'ll'
+
+[16:35] [scene:talk]
+VISUAL:
+AUDIO: 'continue making updates as new AI video tools and features become available. If you have questions, need support, want to test new beta features and nodes, or just want to share your work, you can join my growing Discord community. I'
+
+[16:47] [scene:talk]
+VISUAL:
+AUDIO: 'hope to see you there. Until then, happy video making. with my'
+
+[17:01] [scene:talk]
+VISUAL:
+AUDIO: '&gt;&gt; [music] &gt;&gt; I made a crown out of torn up sheets. A paper throne for my bare cold feet.'
+
+[17:16] [scene:talk]
+VISUAL:
+AUDIO: 'Mirror, mirror, under the bed. Why do you smile when I lose my head? Round and'
+
+[17:29] [scene:talk]
+VISUAL:
+AUDIO: 'round, I\'m losing [music] the sound of who I was before they tied me down. Bang, [music] bang, heart like a drum. Tell me, tell me'
+
+[17:43] [scene:talk]
+VISUAL:
+AUDIO: 'what have I become? I\'m the queen of the cracks in the porcelain moon. A broken little song in the padded room.'
+
+[17:56] [scene:talk]
+VISUAL:
+AUDIO: 'Round and round, let the sirens blow. I\'m falling in love with my doom. &gt;&gt; [music]'
+
+[18:09] [scene:talk]
+VISUAL:
+AUDIO: '&gt;&gt; White walls, but when the lights go low, I\'m la la la, &gt;&gt; [music] &gt;&gt; but the room says no.'

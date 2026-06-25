@@ -1,0 +1,1983 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Loop Engineering, Claude Code /goal, and Agent Routines
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=uLaDjhTkJKM
+upload_date: 20260619
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'So today I\'m going to talk about loop engineering which is the buzzword right now. And in this tutorial we\'re going to build your first autonomous agent using the concepts of loop engineering and using specific tools such as claude code using claude code the goal command and'
+
+[00:14] [scene:talk]
+VISUAL:
+AUDIO: 'routines. And this tutorial is really for AI builders who have heard a lot about autonomous agents but you don\'t have hands-on experience yet building your first one. So in the first part of this talk I\'m going to talk about what'
+
+[00:27] [scene:talk]
+VISUAL:
+AUDIO: 'is loop engineering like literally let\'s just define it and understand the key concepts behind it and then let\'s go ahead and build our first autonomous agents using these cloud code tools such as /goal and routines and by the way you'
+
+[00:39] [scene:talk]
+VISUAL:
+AUDIO: 'have full permission to repurpose all of my education. So today\'s newsletter is literally thousands of dollars worth of training. Uh I know this cuz I see a lot of AI content. Most of it\'s very'
+
+[00:51] [scene:talk]
+VISUAL:
+AUDIO: 'shallow. Everything today is like from realworld practical experience supporting thousands of customers with my product. And honestly, many of you will fall off on this training, okay?'
+
+[01:03] [scene:talk]
+VISUAL:
+AUDIO: 'Um, you\'re going to need to go to this tutorial and follow through after, but it\'s 100,000% worth it. But yeah, [laughter]'
+
+[01:16] [scene:talk]
+VISUAL:
+AUDIO: 'my husband just walked in. Wait, what? He just walked into my room and stood in the corner [laughter] like what? Okay. So, I\'m just going to I\'m just saying that because I know this is going'
+
+[01:28] [scene:talk]
+VISUAL:
+AUDIO: 'to be a lot today. So, it\'s okay if like you fall off somewhere. That\'s why I made a companion newsletter and I will send this out immediately after. And I just want to reiterate, you have full permission to repurpose all of this'
+
+[01:40] [scene:talk]
+VISUAL:
+AUDIO: 'education content. Okay. So, yeah. So, here\'s the agenda. So today we\'re going to talk about what loop engineering actually means and then we\'re going to implement it for real using a cloud code goal command. I\'ll teach you exactly how'
+
+[01:53] [scene:talk]
+VISUAL:
+AUDIO: 'to write the perfect /goal prompt and how to make sure it doesn\'t blow up everything on your computer. And then we\'re going to build our first autonomous agent by combining the concepts from loop engineering into a cloud code routine. You do not need any'
+
+[02:06] [scene:talk]
+VISUAL:
+AUDIO: 'technical background for this. You don\'t need to know even though we\'re using cla code you do not need to know how to code. Um, however, the only prerequisite here is setting up cloud code. So, if'
+
+[02:18] [scene:talk]
+VISUAL:
+AUDIO: 'you haven\'t done that, click on this link or go to my YouTube and search cloud code tutorial for beginners so that you can set it up. Okay. Okay. So, first let\'s just talk about what loop engineering means uh like what like what'
+
+[02:31] [scene:talk]
+VISUAL:
+AUDIO: 'what problem is it solving? So, the typical way people do things is they prompt AI. It could be chat. It could be cloud. They type they read the answer from AI and they type again. They read'
+
+[02:44] [scene:talk]
+VISUAL:
+AUDIO: 'the answer from AI you type again. So in that case you are actually part of the loop. The loop is you and AI. You are the one checking AI\'s work. You\'re deciding what the next step should be'
+
+[02:56] [scene:talk]
+VISUAL:
+AUDIO: 'and then you\'re telling AI. So you are the loop. Loop engineering all it really means is taking you out of that loop and building a little system that does the prompting for you. meaning it checks the'
+
+[03:09] [scene:talk]
+VISUAL:
+AUDIO: 'AI\'s work and then it decides what the next step should be. And when I say it, I mean another AI agent. Okay, so loop engineering is really about building a system that prompts your AI on a'
+
+[03:22] [scene:talk]
+VISUAL:
+AUDIO: 'schedule and against a goal. Okay, you need to have a goal. Otherwise, the AI doesn\'t know if it should stop. But once you build a system like this, the beauty is you don\'t have to type every single'
+
+[03:34] [scene:talk]
+VISUAL:
+AUDIO: 'prompt yourself. You don\'t have to review every single output yourself. So all we mean by a loop is like do a step, check the result. Did we accomplish the goal? If not, here\'s what you should do'
+
+[03:47] [scene:talk]
+VISUAL:
+AUDIO: 'next. If we did accomplish the goal, then we can stop. Okay, so there there have been different ways to do this. Like for example, I often will append this to the end of a complex prompt.'
+
+[03:59] [scene:talk]
+VISUAL:
+AUDIO: 'Don\'t stop until dot dot dot. But now with cloud code goals and routines, there are more formalized ways that you can do this. Okay. So, uh, so here, yeah, I\'ll talk about the loop has six'
+
+[04:12] [scene:talk]
+VISUAL:
+AUDIO: 'parts. Okay. Here I have pretty visuals now. Okay. [gasps] Okay. So, just to put, and by the way, this was all AI generated visuals. So, super cool. Um, here I\'ll play it for people who didn\'t see it the'
+
+[04:25] [scene:talk]
+VISUAL:
+AUDIO: 'first time. This is all AI edited. So, this is AI generated as well. So again like the way mo 99.99% of people who are using AI right now you are in the loop. Okay you and AI are'
+
+[04:39] [scene:talk]
+VISUAL:
+AUDIO: 'talking back and forth. You say fix this bug chat GPT says okay I fixed it. Then then you go take a look. You review the work and you\'re like oh no this still doesn\'t work. Here\'s why. Then chat\'s'
+
+[04:52] [scene:talk]
+VISUAL:
+AUDIO: 'like oh okay you\'re right. Let me take a look again. Right? Like that is the loop. It\'s just you and the AI are in the loop together. So loop engineering, we\'re trying to remove you from this'
+
+[05:04] [scene:talk]
+VISUAL:
+AUDIO: 'loop and replace you with another AI agent. So now we\'re going to have two AI agents. One doing the work and the other one doing what you would have done, which is review the work and then decide what the next step should be, what the'
+
+[05:18] [scene:talk]
+VISUAL:
+AUDIO: 'next prompt should be. No, the concept of loop engineering that is being hyped right now, it\'s really the same thing people have been doing or at least advanced people have been doing. So when you type a prompt like don\'t stop until'
+
+[05:31] [scene:talk]
+VISUAL:
+AUDIO: 'this condition is met, that is loop engineering essentially. Now like the tooling has improved so that this is now much better. Okay, so we\'re going to go through each of these one by one. So the'
+
+[05:43] [scene:talk]
+VISUAL:
+AUDIO: 'very first I I should back up. There\'s six key concepts in what people are calling loop engineering today. So the first one is automations. Let me just go to the right visual.'
+
+[05:56] [scene:talk]
+VISUAL:
+AUDIO: 'Okay, here. So all we mean by automations is like there\'s some kind of schedule and then your AI agent runs and it completes certain tasks and it\'s running by'
+
+[06:08] [scene:talk]
+VISUAL:
+AUDIO: 'itself. So instead of you sitting there every time and telling AI here\'s what you should do, the loop is running on its own. It\'s running by itself on a schedule or you can trigger it with an'
+
+[06:22] [scene:talk]
+VISUAL:
+AUDIO: 'external event. That\'s automation. Okay. The second part of a loop is let me go forward here. Okay. Here the second part of the loop'
+
+[06:34] [scene:talk]
+VISUAL:
+AUDIO: 'is called work trees. And this the concept here is when you have many different AI agents and they\'re all working on the same project, they can easily conflict. So what you want to do is give each agent its own lane. You can'
+
+[06:47] [scene:talk]
+VISUAL:
+AUDIO: 'think of it as like lanes on a highway, which uh AI made this visual I really liked like lanes on a highway. Okay, if you have like six agents all working on the same project changing the same'
+
+[06:59] [scene:talk]
+VISUAL:
+AUDIO: 'files, it\'s very likely to end up in a complete mess. like this agent\'s going to change this thing, but this other agent was working on the same thing and now they\'re confused. Um, this third agent was reading and analyzing the'
+
+[07:12] [scene:talk]
+VISUAL:
+AUDIO: 'thing and then it changed because of some other agent editing it. What you want is difference uh what they call work trees for each agent. Now, just a caveat, you don\'t actually have to'
+
+[07:24] [scene:talk]
+VISUAL:
+AUDIO: 'implement this yourself. It\'s now part of cloud code and tooling. Okay, but conceptually this is a really important concept because like once you\'re orchestrating multiple agents, you want each one to have its own lane, its own'
+
+[07:37] [scene:talk]
+VISUAL:
+AUDIO: 'work tree so it can safely make changes without disrupting the work of other agents simultaneously. Okay. Uh now concept number three behind loop engineering is skills. Many of you are'
+
+[07:50] [scene:talk]
+VISUAL:
+AUDIO: 'probably familiar with skills, okay? But for those who aren\'t, it\'s you can think of them as a playbook. you write the way like let\'s say you reply to customer support tickets a certain way. You want a playbook that the AI agent can follow'
+
+[08:04] [scene:talk]
+VISUAL:
+AUDIO: 'so it can consistently reply to customer support tickets the exact same way that you would. So a skill MD file just formalizes whatever your playbook is. So for example, how you want to name'
+
+[08:18] [scene:talk]
+VISUAL:
+AUDIO: 'things, the conventions you want the AI agent to follow, the mistakes that it should never make, any constraints or guard rails. You would include all of this in your skill MD file or your'
+
+[08:30] [scene:talk]
+VISUAL:
+AUDIO: 'playbook. Okay, so you teach AI once and it will follow this playbook skill every single time. Okay, key concept number four in loop engineering. Let me fast'
+
+[08:42] [scene:talk]
+VISUAL:
+AUDIO: 'forward here. Key concept number four is connectors. Uh you can think of this as AI being able to use the tools that you use every single day such as Gmail, Slack, Intercom, etc. So here is a good'
+
+[08:55] [scene:talk]
+VISUAL:
+AUDIO: 'visual. Okay. So instead of AI just yapping back and forth like here\'s the fix that you should implement, connectors allow your agents to go implement the fix for you.'
+
+[09:09] [scene:talk]
+VISUAL:
+AUDIO: 'like it\'ll fetch your codebase, find the bug, try to fix it, add helpful comments, and check it back into your codebase versus AI that\'s just yapping and telling you what to do. Okay, so'
+
+[09:22] [scene:talk]
+VISUAL:
+AUDIO: 'when you connect your AI agent to connectors, it can basically use all of the tools that you use. could be Gmail, could be your issue tracker, uh Jira, GitHub, linear, could be your'
+
+[09:35] [scene:talk]
+VISUAL:
+AUDIO: 'communication systems like Slack, could be your CRM like Salesforce, HubSpot, content creation tools like Canva, Higsfield, Lotato, etc. Whatever tools you use, now your AI agents can use'
+
+[09:47] [scene:talk]
+VISUAL:
+AUDIO: 'them, too. This is already a really huge unlock. So, like personally, I just try to get people to this step, [laughter] you know? Like if you can get to this step, you\'re already ahead of 99% of people using AI. Like I\'m a very happy'
+
+[10:00] [scene:talk]
+VISUAL:
+AUDIO: 'teacher. Um, [laughter] but the what we\'re going to talk about today is like be beyond uh this. I\'m just kind of reiterating what are the key concepts in loop engineering. And from by the way, for many of you who'
+
+[10:13] [scene:talk]
+VISUAL:
+AUDIO: 'have been using AI for a long time, who have joined my live streams for a long time, you should already be familiar with most of these concepts. Um, and that\'s kind of what I\'m trying to emphasize like loop engineering cons as a term is brand new, but as a concept'
+
+[10:26] [scene:talk]
+VISUAL:
+AUDIO: 'like we we were all doing different pieces of it. And it\'s kind of blown up on Twitter because now we have a term that we can all rally around and say, "Oh yeah, this is what I\'ve been doing.'
+
+[10:39] [scene:talk]
+VISUAL:
+AUDIO: 'This is how I\'ve been thinking about building my agents." Okay, so [snorts] blah blah blah. Oh yeah, that was a good visual. Okay, so concept number five in loop engineering is sub agents. This one'
+
+[10:51] [scene:talk]
+VISUAL:
+AUDIO: 'is really important. Um, so the easiest way to think about it is you have two agents. The one who\'s actually doing the work, the maker, and then a second agent, the checker. And the reason why'
+
+[11:03] [scene:talk]
+VISUAL:
+AUDIO: 'you want to have two separate agents is because the first agent is just biased and will lie to you. You know, when you\'re like, "Fix this bug." And then your AI is like, "Yeah, it\'s done. Everything works great." but it actually'
+
+[11:16] [scene:talk]
+VISUAL:
+AUDIO: 'just deleted all of your tests. Um, [laughter] yeah, that you don\'t want the agent doing the work to be the one checking the work because it will often tell you that it\'s done even though it\'s not'
+
+[11:28] [scene:talk]
+VISUAL:
+AUDIO: 'done. So, the key concept here is we\'re just separating the tasks. One agent will do all of the work and the second agent will independently review it. If the checker says, "Hey, this isn\'t good'
+
+[11:41] [scene:talk]
+VISUAL:
+AUDIO: 'enough or this isn\'t ready yet." It\'s going to tell the maker, "Here\'s why, and here\'s what I think you should do next." Right? This is very intuitive if you just think about it as like two'
+
+[11:53] [scene:talk]
+VISUAL:
+AUDIO: 'people interacting. One person making stuff, the other person reviewing the work. Like a writer and an editor. I think I have a visual for that actually. Oh, yeah. Nice. So yeah, like a so a writer is writing and an editor is like'
+
+[12:07] [scene:talk]
+VISUAL:
+AUDIO: 'a second set of eyes and they are paid to be brutally honest. Okay. And it\'s this like interaction back and forth that leads to amazing writing. It\'s that collaboration between the the creative'
+
+[12:20] [scene:talk]
+VISUAL:
+AUDIO: 'person who\'s doing all of this writing, but also the editor who\'s taking a fresh look at it and giving really critical feedback like is it done? Is it ready? Is it high quality? So a lot of people don\'t do this. they will use the same AI'
+
+[12:32] [scene:talk]
+VISUAL:
+AUDIO: 'to review the work done and that\'s why you get a lot of issues like it said it was done but it really wasn\'t it was super broken but why did it lie to me um because it\'s reviewing its own work okay'
+
+[12:45] [scene:talk]
+VISUAL:
+AUDIO: 'so that\'s concept number okay we\'re blasting through these okay six so the final concept in loop engineering is memory and you can think of this as like a shared notebook okay so that your AI'
+
+[12:58] [scene:talk]
+VISUAL:
+AUDIO: 'agents on each run has context on what\'s been done, what else needs to be done, what should I do next. Now, practically when you hook up cloud code to your'
+
+[13:10] [scene:talk]
+VISUAL:
+AUDIO: 'GitHub repo or your GitHub project, that serves as a sort of memory because like within that project, uh, for example, in my social media posting project, um, my agent tracks like all of the posts it\'s'
+
+[13:24] [scene:talk]
+VISUAL:
+AUDIO: 'made. Like it has a little log file that tracks that. Uh so practically here you don\'t have to do anything if you\'ve already hooked up claude to your GitHub repo. But the reason this is important'
+
+[13:36] [scene:talk]
+VISUAL:
+AUDIO: 'is without some kind of shared notebook across all of your agents, every run would start from zero. Like it really wouldn\'t know what the previous agent has already accomplished, what blockers'
+
+[13:50] [scene:talk]
+VISUAL:
+AUDIO: 'they\'re running into, and what it should do next. So memory is an important part of loop engineering. But practically you can achieve this just by connecting your cloud code project to a GitHub repo so'
+
+[14:02] [scene:talk]
+VISUAL:
+AUDIO: 'that your agents can write to that project their status updates what they\'ve done, what else they\'re stuck on, and what they should do next. Okay. Oh yeah, it\'s like a whiteboard. Okay.'
+
+[14:14] [scene:talk]
+VISUAL:
+AUDIO: 'Oh, this is a good one. Okay, cool. Um, and by the way, for those who joined late, this what I\'m showing on the screen is a YouTube video I\'m going to publish later. Um, and it was fully edited by Claude and Hyperframes, which is a new free open source repo. And it\'s'
+
+[14:29] [scene:talk]
+VISUAL:
+AUDIO: 'pretty cool. Like, it\'s very cute and everything. Um, all I did, I just filmed myself talking and then it edited it and added all of these visuals and interactive graphics. They\'re not moving right now because I just I don\'t I don\'t'
+
+[14:41] [scene:talk]
+VISUAL:
+AUDIO: 'want too much motion so I can explain stuff. But all of these graphics are like animated and stuff here. I can show this. Okay. And then [snorts] Oh, that\'s the whiteboard.'
+
+[14:53] [scene:talk]
+VISUAL:
+AUDIO: 'It even cut out my face here. Oh yeah, here I was just showing the animations.'
+
+[15:05] [scene:talk]
+VISUAL:
+AUDIO: 'Okay, cool. Okay, so yeah, let me just summarize. So, so in summary, loop engineering is all about removing you, the human from the loop so that an AI agent has a goal.'
+
+[15:17] [scene:talk]
+VISUAL:
+AUDIO: 'It knows what to do. It tries to accomplish the goal. It reflects on its own work or a separate agent, a checker reviews its work and then it decides like if the goal has not been met,'
+
+[15:31] [scene:talk]
+VISUAL:
+AUDIO: 'here\'s what I should do next. That is what Boris, the founder of Claude Code, means when he says he doesn\'t prompt Claude anymore. His whole job is designing these loops because instead of'
+
+[15:43] [scene:talk]
+VISUAL:
+AUDIO: 'like I ask Claude do this, I review the work and then I tell it what to do next. Instead of the instead of you being the one doing that, you can have AI taking your role role doing that. Reviewing the'
+
+[15:56] [scene:talk]
+VISUAL:
+AUDIO: 'work and then prompting what should the next step be. So here\'s the whole loop that we\'re going to build by the way. [laughter] So uh basically have some kind of trigger like a schedule when your agent'
+
+[16:09] [scene:talk]
+VISUAL:
+AUDIO: 'runs. It will have a shared notebook or memory which is typically your GitHub project. Um if you have multiple agents working simultaneously each one will have its own work tree, its own lane so it doesn\'t collide with all the other'
+
+[16:22] [scene:talk]
+VISUAL:
+AUDIO: 'agents. You\'ll have one agent that is predominantly doing the work, the maker. another agent usually faster and smaller such as a cheaper model like Haiku checking and reviewing the work'
+
+[16:35] [scene:talk]
+VISUAL:
+AUDIO: 'independently. If the goal has not been met, the checker says, "Hey, go back do this instead." Like it\'ll give feedback to the maker in terms of what steps should be taken next. That\'s what people mean when they say, "Let AI prompt'
+
+[16:49] [scene:talk]
+VISUAL:
+AUDIO: 'itself." The checker is actually providing feedback and in a in in context for what the next prompt should be for the maker agent who\'s responsible for doing the work and then when it\'s'
+
+[17:02] [scene:talk]
+VISUAL:
+AUDIO: 'when the work is done you can open a PR for example you can email it to yourself you can send a slack message to yourself exam though okay cool so I think that\'s it that I want to talk about here'
+
+[17:14] [scene:talk]
+VISUAL:
+AUDIO: 'uh yeah next turn yeah okay Cool. Okay. Do we have any questions on that? That was a cool video. Yeah.'
+
+[17:26] [scene:talk]
+VISUAL:
+AUDIO: 'Uh, okay. If you guys have any questions on that, let me know. Just drop it in the chats. [sighs]'
+
+[17:38] [scene:talk]
+VISUAL:
+AUDIO: 'Are you actually using loops like this for Blotato features? Yes. So, that\'s what my new AI agent is. Um, so I dropped a new AI agent in Blotato that uses BA like literally exactly this'
+
+[17:50] [scene:talk]
+VISUAL:
+AUDIO: 'loop. Um, and it does not use any bloated agent frameworks or anything like that. Um, it\'s really just built from scratch without any agent frameworks.'
+
+[18:03] [scene:talk]
+VISUAL:
+AUDIO: 'Um, can I use codeex to loop cloud code? You can, but I\'ll show you today. You can also do it entirely within cloud code. Uh, could we do a quick summary? Okay. [laughter] Oh, here I put the'
+
+[18:18] [scene:talk]
+VISUAL:
+AUDIO: 'summary here. I\'m gonna send out this um this thing immediately after. Okay. So, here were the six parts we talked about. Number one is oops, sorry. Number one is automation. So, some kind of trigger or'
+
+[18:30] [scene:talk]
+VISUAL:
+AUDIO: 'timer that starts the loop on its own so that you don\'t have to be the one typing to start the work. Okay, we\'re going to cover that in the last section, cloud code routines. Um, second concept number'
+
+[18:42] [scene:talk]
+VISUAL:
+AUDIO: 'two is separating the work areas. So, two AI agents do not collide with each other. Practically speaking, you normally don\'t have to set this up manually and most people won\'t even have this need to be honest with you. Like,'
+
+[18:56] [scene:talk]
+VISUAL:
+AUDIO: 'you\'ll just have one AI agent at a time working on your project. Um, it\'s it\'s a lot to manage like multiple work streams. So, I would consider that like very advanced. But concept number three,'
+
+[19:08] [scene:talk]
+VISUAL:
+AUDIO: 'skills. So having your loop access uh like repeatable playbooks for the different tasks you should do. Many of you are familiar probably with skills and connectors already. So the the concept here is just that your loop has'
+
+[19:21] [scene:talk]
+VISUAL:
+AUDIO: 'access to skills as well as connectors. Connectors are uh allow your agent to use the tools that you use. So Gmail, Slack, uh HubSpot, whatever you use, it can plug in and sub agents. The concept'
+
+[19:33] [scene:talk]
+VISUAL:
+AUDIO: 'here is one agent to do the work and a difference agent to independently check the work. So that your main agent is not grading its own homework. And then the last concept is memory. So that could be'
+
+[19:45] [scene:talk]
+VISUAL:
+AUDIO: 'a notes file that lives outside of the chat. Uh it\'s often times a GitHub project with with uh textbased markdown files within the project where your agents can log information etc. Um, a'
+
+[19:57] [scene:talk]
+VISUAL:
+AUDIO: 'lot of people now like to do uh a lot of markdown in Obsidian and use that as their like second brain memory. Um, it\'s uh yeah, but okay. So that I\'ll just stop there and summarize instead of'
+
+[20:10] [scene:talk]
+VISUAL:
+AUDIO: 'rambling. Okay. [laughter] So, okay. So, those were the six parts of loop engineering. And if most of those look familiar to you, um, they that\'s good. They should, right? Loop engineering as a term is not a new'
+
+[20:23] [scene:talk]
+VISUAL:
+AUDIO: 'concept in the sense that like people have been doing this, but it\'s blown up on Twitter recently because like someone really put a name around it and helped to kind of like organize a lot of the'
+
+[20:36] [scene:talk]
+VISUAL:
+AUDIO: 'thinking that has been done around this. So, uh, if you\'re you\'re probably already doing some of these. For example, if you have a cloud co-work, uh, schedule that checks your Gmail'
+
+[20:48] [scene:talk]
+VISUAL:
+AUDIO: 'every morning and surfaces emails that are urgent to you and labels or archives the rest. That is considered loop engineering. Um, it may not have all of the parts, okay, but conceptually you\'ve'
+
+[21:01] [scene:talk]
+VISUAL:
+AUDIO: 'gotten a lot of things there already. Okay, so that those were the key concepts. Yeah, I will caveat this. Like it sounds simple. Um, but actually the hardest'
+
+[21:14] [scene:talk]
+VISUAL:
+AUDIO: 'part is defining the checker. Like let\'s let\'s take a social media post for example. How do you define what a good post is? Like it\'s it seems like your'
+
+[21:26] [scene:talk]
+VISUAL:
+AUDIO: 'task is like write a viral LinkedIn post. Okay, [laughter] but like how does the checker def define what a great viral post is? And so, um, as we\'ll walk through the examples'
+
+[21:39] [scene:talk]
+VISUAL:
+AUDIO: 'today, eventually you\'ll notice that actually defining what good and done looks like is the hardest part of creating the loop. Often times people already know the task they want done, right? Like clean this up or write this'
+
+[21:53] [scene:talk]
+VISUAL:
+AUDIO: 'thing or plan this out. But it\'s it\'s hard to define what good looks like, what done looks like. Um, but that\'s okay. That means you\'re doing it right. So, okay. [laughter] Okay. Okay, so now we\'re going to dive'
+
+[22:06] [scene:talk]
+VISUAL:
+AUDIO: 'into the actual practical uh part of this tutorial. So, make sure you have Cloud Code open. Uh let me actually open it now on the right side. Oops. That\'s okay. I\'m just trying to'
+
+[22:20] [scene:talk]
+VISUAL:
+AUDIO: 'get the font size right like so you guys can read the font. Can you guys still kind of see the font the stuff on the right side? Hopefully.'
+
+[22:33] [scene:talk]
+VISUAL:
+AUDIO: 'And I know it\'s really tough on vertical streaming platforms. Um I am on horizontal streaming platforms as well if you find it really hard to read. Uh you can use cursor and other tools but'
+
+[22:45] [scene:talk]
+VISUAL:
+AUDIO: 'they won\'t have slash commands like slashgo. I think I honestly I haven\'t used cursor for real in like a year. So [laughter] um and then I\'m not sure about like routines either. Um before cloud code'
+
+[22:58] [scene:talk]
+VISUAL:
+AUDIO: 'routines I just used GitHub actions, right? So that like that\'s another option if you\'re GitHub based. Okay. Okay, cool. Um, can you guys see my screen?'
+
+[23:11] [scene:talk]
+VISUAL:
+AUDIO: 'Um, no, it\'s it\'s actually the opposite. The checker is the small fast model. So the default checker in cloud code is haiku. You can change it so it uses a'
+
+[23:23] [scene:talk]
+VISUAL:
+AUDIO: 'different model, but typically you want your primary worker to be a more advanced model and then your checker to be a smaller, faster model. Okay. Uh okay, cool. So yeah, let\'s get started.'
+
+[23:36] [scene:talk]
+VISUAL:
+AUDIO: 'So the very first thing we\'re going to do is just think about a task you repeat every week. So when do you start the task? Like literally fill this out. Starts when. Is it a certain time of'
+
+[23:49] [scene:talk]
+VISUAL:
+AUDIO: 'day? Is it when an email arrives? And then define what done looks like. So for example, in the morning at 8 am, I want to go through all my emails and label them accordingly or archive them and and'
+
+[24:04] [scene:talk]
+VISUAL:
+AUDIO: 'uh let\'s say surface the three most urgent ones to my attention by DMing me on Slack, something like that. And then here\'s the check how the AI proves it\'s done. That would mean like every email'
+
+[24:17] [scene:talk]
+VISUAL:
+AUDIO: 'it has been labeled or archived. Okay? So, think about this for one task that you repeat every single week. Um, and by the way, like I recommend business'
+
+[24:29] [scene:talk]
+VISUAL:
+AUDIO: 'owners in particular do this once a week. So, this is an aside. This should not be in the final video, but like I have a new habit I have a habit tracker app that I always use when I develop new'
+
+[24:41] [scene:talk]
+VISUAL:
+AUDIO: 'habits. And like one of them that I\'ve used now for a while is always to automate, delegate or subtract something I\'m repeating every single week, right? So if there\'s something I\'m doing every'
+
+[24:53] [scene:talk]
+VISUAL:
+AUDIO: 'single week, I either want to automate it with the help of AI, delegate it to someone else, or subtract it from my life, just stop doing it altogether. Um, if you do not have that practice in place on a weekly basis, you\'ll often'
+
+[25:05] [scene:talk]
+VISUAL:
+AUDIO: 'end up like just drowned in lots of random tasks. Um [laughter] so but so any that was an aside but um okay so I\'m just giving people time to think about this one sentence they repeat uh or this'
+
+[25:17] [scene:talk]
+VISUAL:
+AUDIO: 'one task they repeat every week. Okay. Now what we\'re going to do is use the cloud code/goal command and make sure you have cloud code set up in the terminal. Okay. So I\'m just scrolling down here to where the prompt will be.'
+
+[25:30] [scene:talk]
+VISUAL:
+AUDIO: 'Um and it\'s similar to the concepts we talked about before. So you give claude your goal like what is the goal condition? it keep it will keep working on its own until the goal is completed. So how does that work? So for those of'
+
+[25:43] [scene:talk]
+VISUAL:
+AUDIO: 'you who are technical and curious how this actually works basically slashgoal is a wrapper around the stop post hook notification. So you know post hook notifications like uh when the prompt'
+
+[25:56] [scene:talk]
+VISUAL:
+AUDIO: 'when the you type in a prompt cloud code runs that\'s called the end of a turn. Okay, at the end of a turn, that\'s when your post hook stop notifications happen. For example, I have a post hook'
+
+[26:09] [scene:talk]
+VISUAL:
+AUDIO: 'stop notification. When cloud code is finished running, it emits a mooing sound. [laughter] So, if you\'ve been on my live stream where you heard like lots of mooing, that was like cloud code running and it was done. [laughter]'
+
+[26:22] [scene:talk]
+VISUAL:
+AUDIO: 'So what what they do at SLGO is uh on that stop post hook notification they have another AI model uh the default is haik coup it serves as a small fast'
+
+[26:34] [scene:talk]
+VISUAL:
+AUDIO: 'model to check whether the goal condition is met and decide like should we keep going or should we stop because the goal condition has been met. So that was a technical explanation that you can also cut out of the YouTube video. But'
+
+[26:46] [scene:talk]
+VISUAL:
+AUDIO: 'for those of you curious how /go goal actually works, it\'s like it\'s actually a wrapper around the stop post hook notification and it runs that a small prompt at the end of each cloud code'
+
+[26:58] [scene:talk]
+VISUAL:
+AUDIO: 'turn to check if the goal has been met. Okay, so here\'s how you type it. So let\'s just do a simple example. So how you type it is really simple. So you can just type / goal. Okay, and it should'
+
+[27:10] [scene:talk]
+VISUAL:
+AUDIO: 'turn blue like this assuming you have cloud code in the terminal and it\'s updated. Make sure it\'s up to date. Okay. And then you can see here it\'s trying to help you with documentation like what is the condition that you want'
+
+[27:22] [scene:talk]
+VISUAL:
+AUDIO: 'to keep you want AI to keep going until this condition has been met. So here\'s a simple example we\'re going to do. Sort every file in my downloads folder into subfolders by type. Keep going until no'
+
+[27:34] [scene:talk]
+VISUAL:
+AUDIO: 'files are left. Do not delete anything. And stop after 30 turns. I\'m just going to pull up my downloads folder somewhere. Where did it go? Where is my Oh, no. That\'s not my downloads folder.'
+
+[27:48] [scene:talk]
+VISUAL:
+AUDIO: 'Oh, here it is. Okay. Okay. So, so let\'s do let\'s just paste this. Uh, you can take a screenshot of this. So, let me just put it here so everybody can take a'
+
+[28:00] [scene:talk]
+VISUAL:
+AUDIO: 'screenshot. Actually, I\'ll type it into the chat. Uh, that\'s too long to type into Tik Tok chat. Okay. Yeah. No, sorry, Tik Tok. I\'ll type it'
+
+[28:16] [scene:talk]
+VISUAL:
+AUDIO: 'into the YouTube chat. Sorry. Sorry, Tik Tok. I\'ll type it into the Instagram chat as well. Uh, okay. That Okay, cool. So, I typed it into the YouTube chats and the Tik'
+
+[28:30] [scene:talk]
+VISUAL:
+AUDIO: 'Tok chats or not the Tik Tok chat, the Instagram chat. Uh, sorry, now I forgot what I was saying. Okay, cool. So here, just trying to I need to make it like readable.'
+
+[28:42] [scene:talk]
+VISUAL:
+AUDIO: 'Okay, so here\'s my downloads folder. I\'ll put it down here. It\'s It\'s kind of messy. Now, let\'s just run it and see what it does. Hang on. Let me move this here. Okay,'
+
+[28:57] [scene:talk]
+VISUAL:
+AUDIO: 'so Oh, I forgot I actually already have a cleaner skill, but [laughter] um you won\'t have a cleaner skill. So when you run this, you know, you\'re not going to'
+
+[29:09] [scene:talk]
+VISUAL:
+AUDIO: 'see like the goal matches my cleaner skill. Um, but yeah, so now it\'s found 17 files. Um, it counted how many are in each category. Now it\'s creating the folders and moved everything turn by turn. Okay. And pretty much done. Found'
+
+[29:23] [scene:talk]
+VISUAL:
+AUDIO: '17. Let me create the folders and move everything. All files moved. Zero remaining at the top level. Now it\'s going to verify its work. Verifying the counts. Done. Your downloads folder sorted. No files left at the top level.'
+
+[29:36] [scene:talk]
+VISUAL:
+AUDIO: 'Nothing deleted. Boop boop. Okay. And then you could see goal achieved. Okay. So, this one was a very simple example because um I\'ve gotten feedback that my examples are too complicated. [laughter]'
+
+[29:48] [scene:talk]
+VISUAL:
+AUDIO: 'So, I\'m trying to stick to simple examples. Okay. So, it was it was actually completed very quickly, you know. However, I have run goals and and loops like this where it\'s running for'
+
+[30:00] [scene:talk]
+VISUAL:
+AUDIO: 'five hours continuously. Okay. Um, so don\'t don\'t let the how fast this happened fool you. Um, you can set a quite an ambitious goal and let it keep running for hours on end. Okay, but here'
+
+[30:12] [scene:talk]
+VISUAL:
+AUDIO: 'it was just a really simple example and now you can see my downloads folder has those other folders organized and everything was organized here. Videos, other images, etc. Okay. And so let\'s think about like con just conceptually'
+
+[30:27] [scene:talk]
+VISUAL:
+AUDIO: 'what happened here. So here are the things. Here is how like that prompt was struct structured. So Claude was moving each file at a time, checking what\'s left and moves on to the next file and repeats. It stopped on its own when the'
+
+[30:40] [scene:talk]
+VISUAL:
+AUDIO: 'entire downloads folder was sorted. And there were three things that made this like a good goal prompt. So let me scroll back up to it. Okay, so we have a clear end state, right? Like keep going'
+
+[30:54] [scene:talk]
+VISUAL:
+AUDIO: 'until no files are left. Like that\'s a clear end state goal. It had a check it can run right counts the loose files still in the folder and a guard rail. Do not delete anything and stop after 30'
+
+[31:08] [scene:talk]
+VISUAL:
+AUDIO: 'turns. Loose. I don\'t like this word loose. Okay, I\'m just deleting this from my cool. Okay, so here\'s our goal. Sort everything. Keep going until blank. This'
+
+[31:21] [scene:talk]
+VISUAL:
+AUDIO: 'is the end condition. So when you type this um the small fast model which is default haiku is going to check that no files are left like that\'s one of the'
+
+[31:34] [scene:talk]
+VISUAL:
+AUDIO: 'goal conditions that it must check and then these are constraints like or guardrails don\'t delete anything and stop after 30 turns. Um because with a malformed goal prompt it could like keep'
+
+[31:46] [scene:talk]
+VISUAL:
+AUDIO: 'going for hours and hours unintentionally. Um, and so it\'s nice to put some kind of guardrail like stop after 100 turns just so you don\'t blow through all of your tokens for the month'
+
+[31:58] [scene:talk]
+VISUAL:
+AUDIO: 'or for the week. Um, okay, cool. So, that was a really simple example of a goal. Um, now I\'m going to walk through some intermediate examples, although I don\'t actually have any of these'
+
+[32:10] [scene:talk]
+VISUAL:
+AUDIO: 'receipts, but I\'ll just talk through them. Okay, so here\'s one. So here are five intermediate level examples. You don\'t have to run them right now, but I\'m just giving you ideas of what else you can'
+
+[32:23] [scene:talk]
+VISUAL:
+AUDIO: 'do. So again, um standardizing a lot of messy files until every name matches a specific format. For example, I have a ton of invoices and receipts. Okay? So'
+
+[32:35] [scene:talk]
+VISUAL:
+AUDIO: 'you can rename them all in this particular format in date order and keep going until no file has its original name. do not delete or move anything and stop after 25 turns. So this is one'
+
+[32:47] [scene:talk]
+VISUAL:
+AUDIO: 'example the end state here like what is the goal condition that our checker agent can verify. We have zero files left with the old style name. Okay. Now practical example number two'
+
+[33:00] [scene:talk]
+VISUAL:
+AUDIO: 'categorizing a spreadsheet until no row is missing a label. Okay. So for example let\'s say you have a big spreadsheet and you\'re trying to label every row in the spreadsheet. So the goal is fill in the category column for every row in'
+
+[33:13] [scene:talk]
+VISUAL:
+AUDIO: 'expenses.csv. Here are the categories. Food, travel, bills, shopping. Keep going until no row is blank. Do not change other columns. And stop after 30 turns. Right? Okay. So'
+
+[33:25] [scene:talk]
+VISUAL:
+AUDIO: 'this is the goal. This is the end state. Keep going until no row is blank. And here are our constraints or guardrails. Don\'t change other columns. And stop after 30 turns. Notice here like we\'re'
+
+[33:37] [scene:talk]
+VISUAL:
+AUDIO: 'not typing massive multi-paragraph prompts. Okay, that\'s that\'s kind of what people mean when they say like prompt engineering is dead. It\'s not it\'s not really dead. It\'s just it\'s'
+
+[33:50] [scene:talk]
+VISUAL:
+AUDIO: 'just this is the next evolution of prompting. It\'s like how do we define this loop so that an agent loop can like verify its own work, check what else needs to be done, prompt itself to'
+
+[34:02] [scene:talk]
+VISUAL:
+AUDIO: 'figure out how to complete the work, and then check again if the work should be done. So the end state there was making sure there\'s no rows missing a label. Zero blank cells in the category column. Here\'s practical example number three.'
+
+[34:14] [scene:talk]
+VISUAL:
+AUDIO: 'Working through a stack of documents until none are left. This pattern is called empty the queue. Um, I\'ll talk about this in more detail when I share some cloud code routines I have for customer support. Like processing every'
+
+[34:27] [scene:talk]
+VISUAL:
+AUDIO: 'open ticket until none are left or processing every email or processing every unread email until none are left. That\'s like the empty the queue pattern. Um, okay. So here / goal write a'
+
+[34:40] [scene:talk]
+VISUAL:
+AUDIO: 'fiveline summary of every PDF in my reports folder. Keep going until every PDF has a summary. do not edit the PDFs and stop after 40 turns. Okay, so again, we have a clear goal. We have a clear'
+
+[34:54] [scene:talk]
+VISUAL:
+AUDIO: 'end condition and we have our guardrails. The end state is every PDF must have a matching summary. Practical example number four, cleaning up a bunch of social media captions until they fit all of your brand voice rules. Uh, for'
+
+[35:07] [scene:talk]
+VISUAL:
+AUDIO: 'example, rewrite every caption in this file so that it\'s meets this character limit and has no hashtags. Keep going until all of them are done. Don\'t touch any other file and stop after all of'
+
+[35:20] [scene:talk]
+VISUAL:
+AUDIO: 'these turns. The end state is zero captions over 150 characters or containing a hashtag. And then this one is turning a list of roof ideas into hooks until the list is done. Turn each'
+
+[35:32] [scene:talk]
+VISUAL:
+AUDIO: 'of these ideas into hooks. Keep going. Don\'t change other files and stop after 30 turns. All 20 of these can be rewritten uh as hooks less than 10 words. This is the end condition. Okay,'
+
+[35:45] [scene:talk]
+VISUAL:
+AUDIO: 'so here\'s the cheat sheet number two. So this is just generally the framework to think about when writing your goal prompt slashgoal what done looks like checked by how like how do you prove it?'
+
+[35:58] [scene:talk]
+VISUAL:
+AUDIO: 'Is it a count? Is it that all of your tests pass? Is it that you\'re you have zero bugs in this area and stop after x number of turns? Okay. So I know that'
+
+[36:10] [scene:talk]
+VISUAL:
+AUDIO: 'these are to me to me they\'re simpler. Okay. But again, I got a lot of feedback saying I need to have simpler examples. Um, but th this is the foundation for you writing way more complex autonomous'
+
+[36:24] [scene:talk]
+VISUAL:
+AUDIO: 'agents. Um, it\'s it\'s this framework. It\'s this cheat sheets of of prompting. It\'s it\'s it\'s like not even about prompting. It\'s like how you are defining the task. Like what does the'
+
+[36:37] [scene:talk]
+VISUAL:
+AUDIO: 'end condition look like? How do you verify it? How do you prove that we\'ve met it? and some kind of guard rail stop after x number of turns. Okay, so practice that like try it with some of these examples. You can tweak them so it'
+
+[36:50] [scene:talk]
+VISUAL:
+AUDIO: 'makes sense for your use case or industry. But like really get in the hang of thinking in this way. You want to think in terms of loops where there is a verification step in the task'
+
+[37:02] [scene:talk]
+VISUAL:
+AUDIO: 'itself because a lot of people actually don\'t ever add a verification step. Um, it\'s something that I teach, right? Like don\'t stop until. But having observed thousands of people prompting, I can'
+
+[37:15] [scene:talk]
+VISUAL:
+AUDIO: 'tell you that the average prompt I see is like four words long. So, [laughter] um, if this is basic to you, that\'s a good thing. Um, don\'t worry, we\'ll get into the advanced stuff. So, [laughter]'
+
+[37:27] [scene:talk]
+VISUAL:
+AUDIO: 'okay. So, yeah, hopefully everybody took a screenshot of this. So, like keep it as simple as possible because you\'re you\'re actually retraining how you\'re prompting. Okay? So, like I don\'t care how simple it looks to you, just try it'
+
+[37:41] [scene:talk]
+VISUAL:
+AUDIO: 'in this framework. Keep trying it in this framework. Obviously, if you\'re pro, you\'re going to create a skill that\'s going to help you write this prompt properly. Um, but yeah, just keep doing it in this framework so that you'
+
+[37:53] [scene:talk]
+VISUAL:
+AUDIO: 'train your mind to prompt in this way. Okay. So now we\'re going to build our first autonomous agent with a cloud code routine. So slashgoal is great. It runs like while you sit there. Um but a cloud'
+
+[38:07] [scene:talk]
+VISUAL:
+AUDIO: 'code routine basically adds that timer. It adds the automation aspect that I talked about in the first concept of loop engineering so that the loop can run without you. Remember that the whole'
+
+[38:19] [scene:talk]
+VISUAL:
+AUDIO: 'goal of loop engineering is to remove you the human from the loop. It\'s about like how do we set up a system so that it can just keep looping until a complex goal is achieved. So a cloud code'
+
+[38:33] [scene:talk]
+VISUAL:
+AUDIO: 'routine is really awesome. If you come from an automation background like you\'ve used naden or make.com or zapier um it\'s I wouldn\'t say it\'s a total replacement for them um because it\'s a little it\'s a little less deterministic'
+
+[38:47] [scene:talk]
+VISUAL:
+AUDIO: 'than those workflow platforms but it\'s it\'s a super awesome thing to have in your toolkit. So, a cloud code routine is basically just a saved AI loop that runs by itself on a schedule. Um, specifically in the cloud if you\'re'
+
+[39:02] [scene:talk]
+VISUAL:
+AUDIO: 'using a cloud code routine even when your laptop is closed. Okay? So, you don\'t need your computer on all the time to run a cloud code routine. It\'s actually running in the cloud somewhere. Um, it sets up a fresh environment,'
+
+[39:14] [scene:talk]
+VISUAL:
+AUDIO: 'pulls your GitHub project, and then runs uh the skills. It can use MCP connectors. It can make API calls but it runs in that isolated environment. Um quick aside, so if you are advanced and'
+
+[39:26] [scene:talk]
+VISUAL:
+AUDIO: 'you are and you like the concept of cloud code routines but you wish you could run it locally, um just check out launchd tell cloud to set up a launchd uh schedule for your tasks and that way'
+
+[39:39] [scene:talk]
+VISUAL:
+AUDIO: 'you bet that way your uh routine on your computer runs and has access to all of your local files and setup. So if you don\'t want to run this in the cloud. Okay. Okay. [snorts] So, to set this up,'
+
+[39:51] [scene:talk]
+VISUAL:
+AUDIO: 'we\'re going to go to cloud.ai/codeines. Okay. So, that\'s over here. So, let me just type the link in the chat. cloud.ai/codeines. Okay.'
+
+[40:07] [scene:talk]
+VISUAL:
+AUDIO: 'Claude. Okay. Okay. So, yours will probably look totally empty. Um, I have a few here that we\'re going to walk through as examples. Okay. Oh, yeah. We\'re going to do this one. Daily email'
+
+[40:20] [scene:talk]
+VISUAL:
+AUDIO: 'cleanup. Okay. [laughter] [gasps] Uh we\'ll do this simple example. So, but let me go to the edit. So, go ahead and click like new routine up here. Your your screen is going to look like this. I\'m going to pull up uh one I'
+
+[40:32] [scene:talk]
+VISUAL:
+AUDIO: 'already have and you\'re going to copy it and we\'re going to talk through what it does. Okay. So, click new routine and then you should have a form that looks like this. Uh again you can think of a routine as a loop that is running on its'
+
+[40:45] [scene:talk]
+VISUAL:
+AUDIO: 'own in the cloud. You just set up a trigger which could be uh a daily or weekly schedule. It could be when a GitHub web hook fires or it could be uh you can trigger it yourself sending a'
+
+[40:58] [scene:talk]
+VISUAL:
+AUDIO: 'post request. We\'re going to keep it really simple and create a daily email cleanup agent that will read your unread emails and post the three most important ones to Slack. In my case, I\'m just going to DM myself. one [snorts] line'
+
+[41:11] [scene:talk]
+VISUAL:
+AUDIO: 'each. And here\'s the guardrail. Do not reply to anything. Okay. So, I\'m going to paste these instructions uh in the chats. Oops. Okay. You won\'t have Sabrina obviously'
+
+[41:25] [scene:talk]
+VISUAL:
+AUDIO: 'in your Slack, [laughter] so you can just change that. Uh, okay. Cool. Okay. So, that\'s the this is the name of the routine. These are the instructions.'
+
+[41:37] [scene:talk]
+VISUAL:
+AUDIO: 'This is a very simple one. and we\'re going to read all of your unread emails, figure out the three most important ones, and send a Slack message to myself and do not reply with anything. This is the constraint or guardrail. This is where you can select a project, but you'
+
+[41:50] [scene:talk]
+VISUAL:
+AUDIO: 'don\'t have to. So, in this particular case, I don\'t actually need it tied to any particular project. It\'s just reading my emails. This is where you select the model. Okay, so Opus 4.8, etc. [snorts] And this is the trigger.'
+
+[42:03] [scene:talk]
+VISUAL:
+AUDIO: 'When do you want this loop to run? Okay, in this case, we\'re going to say run daily at 9:00 a.m. So, just click schedule and then run daily at 9:00 a.m. You can edit this as well. Okay. Oops. Okay. And then connectors here is'
+
+[42:17] [scene:talk]
+VISUAL:
+AUDIO: 'what this loop will have access to. So, remember, one of the key concepts of loop engineering is connectors, the ability for your AI agent to use the tools you use. For this example, we\'re'
+
+[42:30] [scene:talk]
+VISUAL:
+AUDIO: 'just going to use Gmail and Slack. To add connectors, you can click add connector here. And we will cover how to add tools that don\'t have uh these nice connectors and stuff like that. We\'ll'
+
+[42:42] [scene:talk]
+VISUAL:
+AUDIO: 'cover that later. Okay. There are additional options here. We\'re not really going to cover behavior, notifications, permissions. Okay. So, just make sure yours looks exactly like this. So, name of the routine, simple instructions, daily at 9:00 a.m., and'
+
+[42:57] [scene:talk]
+VISUAL:
+AUDIO: 'then these two connectors. And then go ahead and click save. Okay. If I make a skill, can that be triggered'
+
+[43:09] [scene:talk]
+VISUAL:
+AUDIO: 'from a routine? Yes. So, we were we were going to cover that. This is just the simple example. [laughter] Um, yeah. So, just make I\'m just leaving this up here so people can make sure it looks like this. Okay. So, uh well,'
+
+[43:21] [scene:talk]
+VISUAL:
+AUDIO: 'click save. So, then you\'ll have it here. This is where you\'ll see um all of the routines you have running. So I obviously just created this one, right? You can test it by clicking run now. So'
+
+[43:33] [scene:talk]
+VISUAL:
+AUDIO: 'go ahead and click run now in the top right corner and it will say workflow run started. Okay, you can actually click this to expand it and see what it\'s doing. U I\'m going to close this cuz it\'s going to reveal a lot about my'
+
+[43:46] [scene:talk]
+VISUAL:
+AUDIO: 'email inbox. But um in a second we should get a summary in my Slack with my top three most urgent emails. Okay, I\'m just going to check here if there\'s anything else I should cover.'
+
+[43:58] [scene:talk]
+VISUAL:
+AUDIO: 'Oh, intro. Okay, we\'ll get to that next. [sighs and gasps] Um, yeah, if you have questions and stuff, put this would be a good time to post it in uh YouTube or Tik Tok. [sighs]'
+
+[44:16] [scene:talk]
+VISUAL:
+AUDIO: 'Uh, okay. This I don\'t know how long I do have a lot of unread messages in my email. [laughter] &gt;&gt; [gasps] &gt;&gt; Okay, searching for Gmail and Slack. Now'
+
+[44:28] [scene:talk]
+VISUAL:
+AUDIO: 'it\'s fetching a bunch of tools. Now I have the emails. Now it\'s going to assess the most important emails. Like you can see its entire thought process here. And by the way, you can continue the conversation.'
+
+[44:41] [scene:talk]
+VISUAL:
+AUDIO: 'So let\'s say it did something. Maybe you want more information. You can come here in routines, open up the chat, and continue talking to it. Like you can ask questions here. You can have it run additional things etc. Okay.'
+
+[44:53] [scene:talk]
+VISUAL:
+AUDIO: 'So if your connector is not listed um you will need to go back to the actual'
+
+[45:07] [scene:talk]
+VISUAL:
+AUDIO: 'cloud.ai interface. So go to cloud.ai. If so if you go to customize connectors and then this is where you can add your connector. So click the plus. Uh usually'
+
+[45:19] [scene:talk]
+VISUAL:
+AUDIO: 'for most apps they have an official connector. So Gmail here. Okay. And and then once you add it, it\'ll look like this. Um a lot of people ask me about permissions. So this is also where you can manage the permissions of all of'
+
+[45:31] [scene:talk]
+VISUAL:
+AUDIO: 'your connectors. So always allow needs approval or blocked. If you\'re a beginner, I recommend keeping it at always allow for read only things. Meaning like it can read your content, but it needs approval if it\'s going to'
+
+[45:44] [scene:talk]
+VISUAL:
+AUDIO: 'write, edit, or delete anything. Okay. So, that\'s a pretty good configuration, especially if you\'re a beginner. Okay, let\'s go back to our routines. Let\'s see if that finished running.'
+
+[45:57] [scene:talk]
+VISUAL:
+AUDIO: 'Okay, so that one finished running. So, you can see check mark here today at 12:44 p.m. So, let\'s go to my Slack and see if it DM\'d me. Yes. So, okay. So, here are my top three unread'
+
+[46:10] [scene:talk]
+VISUAL:
+AUDIO: 'emails. You can see the time stamp is literally right now. Someone sends a long book excerpt. Okay. Um, which plans for blot? Uh, showcase at some event. Okay. Interesting. So, these are my top'
+
+[46:25] [scene:talk]
+VISUAL:
+AUDIO: 'three most urgent emails. It was sent to my Slack. Okay. And again, you can open the conversation here. You can continue the conversation if you want to update anything. And you can update the the routine itself. So, once you create it,'
+
+[46:38] [scene:talk]
+VISUAL:
+AUDIO: 'it\'s kind of going to look like this. Click this pencil button in the top right corner if you want to go ahead and update it again. Okay, that was the simple example. [laughter] Um, I\'m just going to talk through'
+
+[46:50] [scene:talk]
+VISUAL:
+AUDIO: 'intermediate examples and then I\'m going to show you an advanced example which is like my own routine. Okay, so here are some intermediate level examples. Let\'s say you do have like thousands of unread emails. It can completely sort your'
+
+[47:03] [scene:talk]
+VISUAL:
+AUDIO: 'inbox, label every single email, and archive the ones you don\'t want. Okay, so you can set that up as a routine running on a daily or a weekly basis. Um, honestly it it this one\'s really'
+
+[47:15] [scene:talk]
+VISUAL:
+AUDIO: 'awesome. Um, so uh just just to help label emails even like label receipts, label filter these out, archive these emails. So uh if you have a monthly report, you can create a cloud code'
+
+[47:29] [scene:talk]
+VISUAL:
+AUDIO: 'routine that every single month pulls data from certain systems. Let\'s say your CRM uh and your email marketing system and it\'ll write the first draft of your report and send it to you in Slack. Okay, so that\'s another idea of'
+
+[47:42] [scene:talk]
+VISUAL:
+AUDIO: 'an intermediate level example. If you have a lot of news you\'re trying to keep up with, you could say, "Every Monday, read the updates on this topic and hand me a short brief so I stop doom scrolling and but I stay up to date on'
+
+[47:54] [scene:talk]
+VISUAL:
+AUDIO: 'the news that I care about." You can have another cloud code routine that does this. So, what I would recommend is picking one of these or a variation that you resonate with so you can make your first routine and make sure that it\'s'
+
+[48:06] [scene:talk]
+VISUAL:
+AUDIO: 'running autonomously every day or every week. Okay. So now let\'s walk through a real example because I know people have questions like well how do you integrate skills? What about other APIs etc. So that will all be answered here. So um'
+
+[48:19] [scene:talk]
+VISUAL:
+AUDIO: 'let me just pull it up. So now I\'m going to show you a real example of a cloud code uh loop including the main agent that does the work and the checker agent that independently reviews the work. So'
+
+[48:31] [scene:talk]
+VISUAL:
+AUDIO: 'it\'s going to be these two. I wish I could move them next to each other, but um [laughter] so this one day every day runs at 8 a.m. and cleans up support tickets and also surfaces any issues and gives product'
+
+[48:43] [scene:talk]
+VISUAL:
+AUDIO: 'roadmap recommendations. This is the checker. So it will review all of the closed tickets that were closed by this agent and confirm they should have been closed because I don\'t want to close'
+
+[48:55] [scene:talk]
+VISUAL:
+AUDIO: 'support tickets that should have been escalated to a human. Okay, so let me open this one up. Click in the PL. Okay, cool. So, here\'s what this looks like. So, it\'s actually it\'s actually not that'
+
+[49:07] [scene:talk]
+VISUAL:
+AUDIO: 'much longer, but it utilizes different things. So, here I have a skill already in this GitHub project. By the way, this is where you can add your GitHub projects. For me, help.bloat.com is where I host my support documentation'
+
+[49:21] [scene:talk]
+VISUAL:
+AUDIO: 'and it also has my skills related to customer support. Okay, so run the cleanup ticket skill on all open customer support tickets using the intercom API, which I\'ll talk about as'
+
+[49:33] [scene:talk]
+VISUAL:
+AUDIO: 'well. Provide a summary in Slack # support channel. And when referencing conversations, always provide the full link so I can easily click and open it. Do not delete tickets. Here are'
+
+[49:45] [scene:talk]
+VISUAL:
+AUDIO: 'constraints and guardrails. And do not stop until you\'ve processed all currently open tickets. This actually isn\'t necessary because this is already the goal condition, but just want it\'s like wanted to just make it extra clear'
+
+[49:57] [scene:talk]
+VISUAL:
+AUDIO: 'here. Um here\'s the trigger. This runs daily at 8 a.m. And then here are my connectors intercom and Slack. Okay, in this routine I also actually have um an API key. So what you can do is you can'
+
+[50:10] [scene:talk]
+VISUAL:
+AUDIO: 'create uh a separate environment that stores like your uh environment variables. So the default environment for me does not have any environment variables and then my support'
+
+[50:23] [scene:talk]
+VISUAL:
+AUDIO: 'environment contains my API key for intercom and the reason for that is uh using the intercom API I have access to a lot more things than using the intercom MCP. For example the intercom'
+
+[50:35] [scene:talk]
+VISUAL:
+AUDIO: 'MCP does not allow me to close open tickets but the intercom API does. So, for those of you who are feeling limited by connectors or you want to integrate'
+
+[50:47] [scene:talk]
+VISUAL:
+AUDIO: 'an API that doesn\'t have a connector, uh for example, I\'m I don\'t think Perplexity has a connector to Claude since they\'re competitors. Maybe now they do. Um but you can you can just create uh a new environment like click'
+
+[51:01] [scene:talk]
+VISUAL:
+AUDIO: 'add environment and then you can put your environment variables here. So let\'s say this is our research environment and we want to put our perplexity API uh token here equals and then put the'
+
+[51:14] [scene:talk]
+VISUAL:
+AUDIO: 'token here. So this is what it would look like. Okay. So any tool that does not have uh an MCP that feels that fulfills your needs you can just integrate the API into the routine just'
+
+[51:27] [scene:talk]
+VISUAL:
+AUDIO: 'like this. Just create a new cloud environments, call it whatever its purpose is, and then put your environment variables, your API keys and tokens right here. Okay. Um, so I have one for support. Um, and'
+
+[51:40] [scene:talk]
+VISUAL:
+AUDIO: 'then that\'s it. So it will run daily at 8 a.m. It will analyze all of my open customer support tickets. It will automatically close the ones that no longer need help or need to be'
+
+[51:52] [scene:talk]
+VISUAL:
+AUDIO: 'escalated. It will also look for um any urgent issues like outages, bugs that are urgent that I need to fix. And it\'s all tied to this cleanup ticket skill. Okay, so there\'s actually a lot in this'
+
+[52:04] [scene:talk]
+VISUAL:
+AUDIO: 'skill that I\'m not showing. Uh but that\'s the whole point. Like you can create these skills in your GitHub project and then your AI agent loop just can use these skills uh in the process. Okay. Okay, cool. So um okay let me'
+
+[52:18] [scene:talk]
+VISUAL:
+AUDIO: 'close this. What else? So this is the this is the maker agent the primary one doing the work classifying tickets analyzing them and then I have the'
+
+[52:30] [scene:talk]
+VISUAL:
+AUDIO: 'checker agent here. So this will run about 2 hours after the other one. And its job is to independently verify all of the support tickets that were automatically closed today. Confirm that'
+
+[52:42] [scene:talk]
+VISUAL:
+AUDIO: 'each ticket should remain closed. If the support responses received by a customer do not clearly solve their problem, reopen the ticket. So again in loop engineering the concept here called it'
+
+[52:54] [scene:talk]
+VISUAL:
+AUDIO: 'sub agents. One a primary agent to do the work and another agent to verify the uh quality and accuracy of the work. So this is the checker agent that um helps verify it. So it\'s set up similarly,'
+
+[53:06] [scene:talk]
+VISUAL:
+AUDIO: 'right? So, uh, the only difference really is it runs 2 hours after the first one runs cuz the first one takes a while to actually process all of those tickets. Uh, and then you can see examples of it in Slack. So, if I go to'
+
+[53:18] [scene:talk]
+VISUAL:
+AUDIO: 'support, okay, so here\'s the ticket cleanup run. Okay, just a lot of tickets. Okay. And'
+
+[53:31] [scene:talk]
+VISUAL:
+AUDIO: 'then let me open this. So this is the cleanup checker and it was running. So okay. So here I\'m just pulling up a summary.'
+
+[53:46] [scene:talk]
+VISUAL:
+AUDIO: 'Okay. Yeah. So here in the first run today at 10 a.m. that I triggered manually. The full audit was complete. 151 tech tickets were currently closed. Uh or 151 tickets were correctly closed. One ticket needed reopening. Okay. So'
+
+[53:59] [scene:talk]
+VISUAL:
+AUDIO: 'this is an example again of the checker verifying the work and it found that one ticket needed reopening. Okay. So that is a more advanced and realistic'
+
+[54:11] [scene:talk]
+VISUAL:
+AUDIO: 'implementation of an autonomous agent. So I\'m just scrolling here. Yeah. And then I mean I covered this in the blog post but the next level is to integrate any a API uh with your routine which I talked about a little bit here, right?'
+
+[54:26] [scene:talk]
+VISUAL:
+AUDIO: 'Like if you want to edit this, click this cloud and this is the environment. Click add environment and this is where you can put all of your API keys for any tool you want your cloud code routine to access. Okay. And then yeah just some'
+
+[54:38] [scene:talk]
+VISUAL:
+AUDIO: 'tips here like if you are brand new to all of this just start readon like instead of having it reply and close tickets just have it summarize your emails like label your emails. And'
+
+[54:50] [scene:talk]
+VISUAL:
+AUDIO: 'that\'s why I started with that as a simple example. Like I know it\'s a for people in AI who\'ve been doing this a while, it\'s like a really simple example. However, again, I\'ve gotten feedback that my examples are too complicated. I should start with simpler examples. So that that\'s a nice one'
+
+[55:03] [scene:talk]
+VISUAL:
+AUDIO: 'because it\'s just reading your emails. It\'s not replying to your emails. Um it\'s just reading them, labeling them, and surfacing urgent emails. Um and make sure you set your constraints and guard rails. You know, do not reply to email or do not delete anything. In my case,'
+
+[55:16] [scene:talk]
+VISUAL:
+AUDIO: 'do not uh do not delete any support tickets. Um and then routines use the same plan as your normal claude and there\'s a daily limit in settings. So just be mindful of that. And that\'s'
+
+[55:28] [scene:talk]
+VISUAL:
+AUDIO: 'another reason why we have a guardrail like you know stop after x iterations. So here\'s the cheat sheet number three. Uh so ship one tiny routine this week. Think about when should it run? What is'
+
+[55:40] [scene:talk]
+VISUAL:
+AUDIO: 'the trigger? What should it do? Fill that in here. What are the tools it needs? Connectors and API make you can make a list here. And what'
+
+[55:52] [scene:talk]
+VISUAL:
+AUDIO: 'is the limit that you want it to have? Like don\'t reply to emails or don\'t delete something. Okay. So, um like think about this cheat sheet and fill it out and this will help you create the cloud code routine. By the way, Claude'
+
+[56:04] [scene:talk]
+VISUAL:
+AUDIO: 'can create the routine for you. If you like literally copy paste this into cloud code and be like create a cloud code routine and you fill out these blanks, it will create it um mostly for you. I think you will need to go in here'
+
+[56:17] [scene:talk]
+VISUAL:
+AUDIO: 'and still create your environment variables and stuff, but okay. So yeah, start readon, let it summarize stuff for a few days before you let it write anything, edit anything, or delete anything. But definitely use this'
+
+[56:30] [scene:talk]
+VISUAL:
+AUDIO: 'template to again reorients how you\'ve been prompting so that now your your prompting is all about creating these loops. Okay. So just to recap everything we\'ve talked about. So we talked about loop engineering is a shift from typing'
+
+[56:43] [scene:talk]
+VISUAL:
+AUDIO: 'prompts to designing this loop. Slashgoal and routines are things you can use to make loop engineering a reality much more easily in 2026. So slashgoal and then you type the goal you'
+
+[56:56] [scene:talk]
+VISUAL:
+AUDIO: 'want it to keep going until it hits that goal and then there\'s going to be a second verifier agent that checks whether the condition is met. Uh and then a routine it\'s like a timer right and that can be connected to your skills'
+
+[57:09] [scene:talk]
+VISUAL:
+AUDIO: 'your connectors your API keys your notebook which is your GitHub repo. um it\'s connected to all of those things which are all key concepts in loop engineering so that it can run the loop in the cloud without you and that will'
+
+[57:22] [scene:talk]
+VISUAL:
+AUDIO: 'be your first fully autonomous agent that where you are removed from the loop. Now the hard part like I I really try to emphasize this like the the hard part is um is defining what done is like what is good what is good enough what is'
+
+[57:38] [scene:talk]
+VISUAL:
+AUDIO: 'done uh that\'s why like my personal formula whenever I think about how am I using AI effectively the amount of AI leverage I personally get is always a function of like my skill and my'
+
+[57:50] [scene:talk]
+VISUAL:
+AUDIO: 'clarity. This is like the formula I I personally think about all of the time. By clarity, I mean my ability to define what it is I want it to do and what done looks like. What does good look like?'
+
+[58:03] [scene:talk]
+VISUAL:
+AUDIO: 'And skill is like my ability to review the AI agents work so that I can further improve the loop. Um, so a lot of people like this simple formula because it\'s cool, easy to understand. Um, but this'
+
+[58:16] [scene:talk]
+VISUAL:
+AUDIO: 'really is how I think about AI. like if I have no skill in something um you know AI can help me build up some initial skill fast but I\'m just not going to get the same amount of leverage as someone'
+
+[58:28] [scene:talk]
+VISUAL:
+AUDIO: 'who is already very skilled in the thing. This is why like senior developers are like so much more productive using AI tools than a junior developer. Um cuz you have the ability'
+
+[58:40] [scene:talk]
+VISUAL:
+AUDIO: 'to review the work fig identify clearly like what is wrong and how the loop should be improved. Like maybe you didn\'t clearly define what good looks like or what done looks like. Maybe your'
+
+[58:54] [scene:talk]
+VISUAL:
+AUDIO: 'uh end condition was make sure all the tests pass but your tests were garbage, right? Like you have to go improve the tests and that requires skill to be able to like recognize that and do it. So, this is really my personal formula'
+
+[59:08] [scene:talk]
+VISUAL:
+AUDIO: 'whenever I think about how do I use AI to maximize my leverage? Where do I have skill? Where do I have clarity? Like to to be able to define what it is I want and what good and done looks like. Okay. Um, so yeah, that\'s pretty much it. So'
+
+[59:22] [scene:talk]
+VISUAL:
+AUDIO: 'hopefully that was helpful. I guess I\'ll just do another recap here with all the lines. Where\'s my loop? Okay, man. This video is so cool. who\'s made'
+
+[59:34] [scene:talk]
+VISUAL:
+AUDIO: 'with AI. Um, I\'m looking for the graphic with a circle. Yay. Okay, cool. [laughter] So, here we are. Um, okay, cool. So, yeah. So, okay, let me So, so in the'
+
+[59:48] [scene:talk]
+VISUAL:
+AUDIO: 'beginning, we talked about like what are the key concepts of loop engineering because like that\'s the latest buzzword. The reality is people have been doing loop engineering. We just didn\'t have like a collective name we all agreed on.'
+
+[60:00] [scene:talk]
+VISUAL:
+AUDIO: 'Um, for many of you who have been following my content, you should be familiar with at least half of these, right? So, concept number one in loop engineering, automation, like running it on a trigger or when something happens,'
+
+[60:13] [scene:talk]
+VISUAL:
+AUDIO: 'do this. That way, you\'re not the one sitting there prompting it to happen. It\'s just happening without you starting the loop. Um, number two is work trees, which means let\'s say agents are working'
+
+[60:26] [scene:talk]
+VISUAL:
+AUDIO: 'on the same codebase. You want each one to have its own safe space so it can experiment without colliding with all of your other agents. Um, get work trees. Um, practically speaking, like most people don\'t have to do anything to set'
+
+[60:39] [scene:talk]
+VISUAL:
+AUDIO: 'this up and practically speaking, most people won\'t really need this unless you\'re really having a lot of agents u modifying like the same exact things. Um, number three is skills. So many of you are familiar with this. Um, it\'s'
+
+[60:52] [scene:talk]
+VISUAL:
+AUDIO: 'basically uh a playbook that your agents can follow to do a task the same way every time. And so you don\'t have to give it that context and instruction every single time it does a task. And number four, connectors. Uh, just like'
+
+[61:05] [scene:talk]
+VISUAL:
+AUDIO: 'we saw connecting it to Gmail, connecting it to your support desk, connecting it to your CRM, connecting it to your content creation tools, connecting it to Plot, for example, to publish to social media. Connectors are'
+
+[61:17] [scene:talk]
+VISUAL:
+AUDIO: 'what give your AI agents the ability to use useful productivity tools, the ones you use every single day. Number five, sub agents. The key concept here for loop engineering is you want one agent to do the primary work. It\'s usually the'
+
+[61:30] [scene:talk]
+VISUAL:
+AUDIO: 'smarter, bigger model. So let\'s say opus sonnet 4.8 or opus 4.8 And then you have another agent that\'s typically the smaller faster model like haiku reviewing the work independently'
+
+[61:43] [scene:talk]
+VISUAL:
+AUDIO: 'like has this goal condition been met? Yes or no? Haiku is going to check that. If the answer is no, okay, the primary agent has to go and keep trying until it completes the goal. And the last concept'
+
+[61:56] [scene:talk]
+VISUAL:
+AUDIO: 'for loop engineering is memory. So it\'s like a shared notebook for every agent run to have the same context of what\'s been done, what\'s been tried, what are we struggling with, what needs to be'
+
+[62:09] [scene:talk]
+VISUAL:
+AUDIO: 'done next. Practically speaking, if you have a GitHub project already hooked up to your cloud, that is going to serve as the memory as the scratch pad. Okay, so those were all six concepts for loop engineering. And then we also talked'
+
+[62:22] [scene:talk]
+VISUAL:
+AUDIO: 'about how to use cloud code/goal to make your first loop and also how to use cloud code routines to make your loops autonomous running without you. Um that\'s it. Yeah. Oh man, my voice is'
+
+[62:35] [scene:talk]
+VISUAL:
+AUDIO: 'gone. But okay, if you have [laughter] any question I\'m going to stop recording now. Uh but if you have Oh wait, OBS is on my other screen. Okay, I\'m going to stop recording otherwise the file is'
+
+[62:47] [scene:talk]
+VISUAL:
+AUDIO: 'going to be really large. But yeah, if you have any questions, just drop them in the chat. Um, I\'m checking both YouTube and Tik Tok chat right now and I just have to go stop the recording. Okay, sweet. Oh. Oh. Oh. Okay. So yeah,'
+
+[63:16] [scene:talk]
+VISUAL:
+AUDIO: 'drop your questions in the chat while and let\'s just like compile the questions. I need to order sushi real quick because I\'m really hungry. But [laughter]'
+
+[63:28] [scene:talk]
+VISUAL:
+AUDIO: 'I\'m also on a diet. Okay. So, okay. But yeah, you can drop your questions in the chat and I\'ll check in a second. Oh, wait. Let me ask if I need to ask if'
+
+[63:41] [scene:talk]
+VISUAL:
+AUDIO: 'my friend wants sushi, too. Who you want sushi? Okay. Uh where is the template? I am'
+
+[63:53] [scene:talk]
+VISUAL:
+AUDIO: 'going to drop that later today. Just make sure you\'re subscribed to my newsletter which is my link in bio. Uh yeah, the cheat sheet will definitely help. Um'
+
+[64:06] [scene:talk]
+VISUAL:
+AUDIO: 'just built a playbook. [sighs] What about uh what\'s the difference between doing this and in co-work? Um, I think co-work'
+
+[64:18] [scene:talk]
+VISUAL:
+AUDIO: 'doesn\'t have the /goal command yet. So, as far as I know, that\'s just in cloud code, but you can you can definitely do pieces of it in co-work, right? So, cloud co-work has the schedule thing that is uh similar to cloud code'
+
+[64:31] [scene:talk]
+VISUAL:
+AUDIO: 'routines. So, you can schedule recurring tasks and stuff. Uh, what is the best way to start from the'
+
+[64:45] [scene:talk]
+VISUAL:
+AUDIO: 'beginning to autopost with claude through Canva? What is the best video? Oh, um, see I think I have a I have a Canva video somewhere.'
+
+[64:57] [scene:talk]
+VISUAL:
+AUDIO: 'Yeah, probably this one. Okay, I\'ll drop this in the chat. So, [sighs]'
+
+[65:12] [scene:talk]
+VISUAL:
+AUDIO: 'um, this live stream will it will probably take a week for the editors to edit it, unfortunately. So, uh, is there any AI that is actually free? Yes, open source models are free.'
+
+[65:24] [scene:talk]
+VISUAL:
+AUDIO: 'Um, you can try setting it one up with like LM Studio is one kind of app. Okay.'
+
+[65:36] [scene:talk]
+VISUAL:
+AUDIO: 'Can you stop a goal in the middle of the execution? Yes. Just type slashgoal clear. Okay. Like this. And um also if you type /goal while it\'s running, it will give'
+
+[65:50] [scene:talk]
+VISUAL:
+AUDIO: 'you a status update. Like it\'ll say here\'s what I\'ve tried and here\'s what we\'re trying to do, etc., etc. So you can actually type /goal while it\'s running. Okay. My friend\'s not replying to me about sushi.'
+
+[66:03] [scene:talk]
+VISUAL:
+AUDIO: 'Um, should I just order her sushi just in case? Okay. Yeah, I guess that\'s that\'s what I should do. Okay. [laughter]'
+
+[66:15] [scene:talk]
+VISUAL:
+AUDIO: '[gasps] Okay. Oh, yeah. I need to get my eel unagi. Yes. [snorts] Okay. Oh, I\'m so hungry. I stayed up till 1 last night cuz this'
+
+[66:29] [scene:talk]
+VISUAL:
+AUDIO: 'um hyperframes was so fun editing this video. Okay, cool. [snorts] What was the skill you used for the presentation? Um, I\'m not sure what you mean actually. Um,'
+
+[66:42] [scene:talk]
+VISUAL:
+AUDIO: 'so all of the prompts will be here in this newsletter, which I will send out literally like today after this live stream. I just want to check it one more time. Am I charging 10K for this? No, it\'s it\'s actually free, but it\'s worth'
+
+[66:57] [scene:talk]
+VISUAL:
+AUDIO: '10K. So, I put 10K in the Tik Tok title, which totally free will create animations at least 3 minutes long. Check out Hyperframes, Remotion, and um LTX.'
+
+[67:10] [scene:talk]
+VISUAL:
+AUDIO: 'Um, oh, hang on. Where is the questions? Uh, say, if you have questions, now is the time to drop them. I have 20 minutes left. Oh.'
+
+[67:24] [scene:talk]
+VISUAL:
+AUDIO: 'I\'m a video editor. Uh oh, yeah, that\'s okay. I have too many video editors now. [laughter]'
+
+[67:36] [scene:talk]
+VISUAL:
+AUDIO: '[sighs] Why do I do Tik Tok instead of consulting for companies that will pay you loads of money? Um, that\'s a good question. Honestly, it\'s not like that'
+
+[67:50] [scene:talk]
+VISUAL:
+AUDIO: 'fun. Like I\'ve been at a big company and honestly all of the productivity gains and improvements that you deliver don\'t trickle down to employees. Like they really go to the shareholders and the'
+
+[68:03] [scene:talk]
+VISUAL:
+AUDIO: 'people at the top. So I am more interested in like just democratizing this knowledge on Tik Tok for like normal people so that you can make your own money cuz I really don\'t believe it will trickle down to you. Even if I'
+
+[68:17] [scene:talk]
+VISUAL:
+AUDIO: 'like, yeah, I can teach a company, it will save them or make them billions of dollars, but like that\'s not going to help you the employee. [laughter] So, [gasps] if you think so, u well, that\'s unfortunate for you. Um, but yeah. Yeah. I mean, I also Yeah. I I don\'t know. A'
+
+[68:32] [scene:talk]
+VISUAL:
+AUDIO: 'lot of people ask me if I want to do AI consulting, but it\'s first of all, I\'m very introverted. I don\'t like interacting with people. So like, yeah, [laughter] I\'d rather just sit here in my shitty corner.'
+
+[68:45] [scene:talk]
+VISUAL:
+AUDIO: '[gasps] So, um, how many people do you think will use these loops? I think it\'s it\'s really not common mainstream knowledge at the moment. like e even before a'
+
+[68:58] [scene:talk]
+VISUAL:
+AUDIO: 'cloud code goal and routines like you know I frequently tried to prompt don\'t stop until this but it\'s it\'s not perfect either because it\'s using the same agent to do the grading which as we as we see you know it it um it just lies'
+
+[69:11] [scene:talk]
+VISUAL:
+AUDIO: 'and hallucinates that it did a good job. [laughter and gasps] Um so not many people are like really using loops in this way. Like 99.999% of people I see, I swear it\'s just they'
+
+[69:24] [scene:talk]
+VISUAL:
+AUDIO: 'type a prompt, chat answers, they read the answer, then they think about what they should prompt next, they type the prompt, they wait for chat to finish again, they read the answer, then they'
+
+[69:36] [scene:talk]
+VISUAL:
+AUDIO: 'think, "Oh, what should I type next?" Like, this is the way 99.999% of people use AI today. Um, one like for sure if you don\'t think that you probably exist in a bubble and like'
+
+[69:49] [scene:talk]
+VISUAL:
+AUDIO: 'should go talk to like real people. Um, but yeah, real people that\'s how they are prompting today. Very few people are really setting up loops like this that are run running autonomously almost all of the time. Um, and it\'s not that it\'s'
+
+[70:02] [scene:talk]
+VISUAL:
+AUDIO: 'like autonomous forever. Like you you do have to be very involved in reviewing the output and improving the loop. So even for my like customer support agent, I\'m very involved in like figuring out, oh, it got this wrong, it got this'
+
+[70:15] [scene:talk]
+VISUAL:
+AUDIO: 'wrong, or like I just changed the product and some parts of my help docs or earlier YouTube videos are now out of date. You know, it\'s like um in a business context like it\'s a very dynamic problem. Like I\'m always'
+
+[70:28] [scene:talk]
+VISUAL:
+AUDIO: 'improving systems, ripping about ripping out things that no longer are working, replacing them with a more efficient way of doing things. Like it\'s changing all of the time. Uh'
+
+[70:41] [scene:talk]
+VISUAL:
+AUDIO: 'um okay. So, do you have a way to use AI for content generation? Yeah, that\'s what I was showing earlier in this thing. Hang on, where did the video go? Um, so yeah,'
+
+[70:55] [scene:talk]
+VISUAL:
+AUDIO: 'that video I was showing was like 100% edited with Remotion. So, draft I\'m working on storyboarding it as well. Um,'
+
+[71:08] [scene:talk]
+VISUAL:
+AUDIO: 'so like by storyboarding I mean So basically like I\'m getting a lot of YouTube Wait, can you guys still see my screen? Yeah. Okay. So basically by storyboarding I mean I\'m getting a lot of feedback that I should spend more'
+
+[71:20] [scene:talk]
+VISUAL:
+AUDIO: 'time in pre-production like scripting my videos etc. so that they\'re clearer. And so I\'ve actually been experimenting with using this free AI tool. By free I mean like it\'s 100% free. the only cost is'
+
+[71:33] [scene:talk]
+VISUAL:
+AUDIO: 'like claude to call it, but you can use an open source model instead of claude. Um, and so I\'m experimenting with a pipeline that um storyboards a video and then I film my talking head. So that way'
+
+[71:47] [scene:talk]
+VISUAL:
+AUDIO: 'I can like see like do my words are my words landing and is the visual like helping to clarify what I\'m saying? So this is an example storyboard actually. So I fed it the same script but I didn\'t'
+
+[72:00] [scene:talk]
+VISUAL:
+AUDIO: 'give it my video. So here it\'s actually just storyboarding like what each scene should be. Like here this is going to be my talking head. Okay. And then this other scene is going to be this visual. And then it actually uses um text to'
+
+[72:13] [scene:talk]
+VISUAL:
+AUDIO: 'speech in hyperframes. So there\'s actually voice. So I can hear the the AI voice, not my voice, but I can hear the AI voice with the visual and then make a judgment like is this landing? Is this'
+
+[72:27] [scene:talk]
+VISUAL:
+AUDIO: 'the simplest way I could explain things, etc. Um, and so this has been really interesting actually to experiment with. Again, everything you\'re seeing on the screen is 100% free and AI generated.'
+
+[72:39] [scene:talk]
+VISUAL:
+AUDIO: 'Um, and you can hook it up to an open-source model, so you don\'t even have to pay for Claude tokens, right? So, so yeah, this has been a very helpful exercise for me because I\'m not'
+
+[72:51] [scene:talk]
+VISUAL:
+AUDIO: 'a visual person. Like I I enjoy writing, so I actually don\'t mind spending more time like writing and prep. Um, but it\'s very hard for me to translate like what I\'m saying into visuals that actually clarify the point. That\'s why like I'
+
+[73:05] [scene:talk]
+VISUAL:
+AUDIO: 'usually just have lots of text open on my screen because that\'s that\'s how I process information. Like I literally don\'t watch YouTube videos. I would rather read help docs than watch YouTube videos. Um, I don\'t like you that\'s just how I learn. Um, and so it\'s something I'
+
+[73:19] [scene:talk]
+VISUAL:
+AUDIO: 'struggle with for YouTube. like how do I convey some of these complex concepts in visuals that are easier for visual people to follow, right? That\'s why they\'re watching YouTube videos. Yeah, I know a lot of people are the opposite. A'
+
+[73:32] [scene:talk]
+VISUAL:
+AUDIO: 'lot of people get overwhelmed when they see a lot of text. Like I am so weird. Like I read every single legal document ever in my first startup. Like I read it multiple times. Um like and I enjoyed'
+
+[73:44] [scene:talk]
+VISUAL:
+AUDIO: 'it. Like that\'s weird. Like I know that\'s weird. Like I\'m super into reading and writing and I\'m completely not visual at all. Like if if like an editor is like, "Oh, can you give me'
+
+[73:56] [scene:talk]
+VISUAL:
+AUDIO: 'feedback on this video?" And I\'m like, "Well, I don\'t really know what to say. Like I guess I like this part. I got bored at this part. Like I don\'t have much more feedback [laughter] beyond that." Um, so this working on this has'
+
+[74:08] [scene:talk]
+VISUAL:
+AUDIO: 'just like helped me personally like bridge that gap between like what am I saying in my script and is the visual helping to clarify what I\'m saying? And I just started this like last night. I'
+
+[74:21] [scene:talk]
+VISUAL:
+AUDIO: 'was up until like 1:00 a.m. working on this uh I\'m calling it my storyboarding pipeline storyboard skill, right? So, it\'s it it takes a script and then it creates like the visuals that are going'
+
+[74:33] [scene:talk]
+VISUAL:
+AUDIO: 'to be with the script and then I\'m going to go back and tweak the script if I\'m like this wording isn\'t landing with the visual or this visual isn\'t landing with the wording. I need to change one of them or both of them. Uh yeah, this is just called hyperframe. So, it\'s super'
+
+[74:46] [scene:talk]
+VISUAL:
+AUDIO: 'easy to set up. So if you just tell Claude set up hyperframes and create a 2minut horizontal YouTube video just about loop engineering whatever like just put that one sentence in and in 10'
+
+[75:00] [scene:talk]
+VISUAL:
+AUDIO: 'minutes cloud code will be done and you will have a whatever two minute YouTube video about loop engineering. So yeah just do that. Uh, okay. Best'
+
+[75:13] [scene:talk]
+VISUAL:
+AUDIO: 'full pipeline. Um, is PC or Mac better? Um, honestly, if you\'re non-technical, I generally recommend Mac. If you\'re really technical and you like playing around'
+
+[75:26] [scene:talk]
+VISUAL:
+AUDIO: 'with open source models, especially you will probably get a PC with Linux, right? Like some kind of Abuntu flavor. Yeah, this is hyperframe. So for a while I use reotion and I have a shorts editing pipeline in reotion but'
+
+[75:38] [scene:talk]
+VISUAL:
+AUDIO: 'I was playing around with hyperframes last night. So the difference is hyperframes is HTML based and uh reotion is not. I believe it\'s react based. So you can you can extend reotion like very'
+
+[75:50] [scene:talk]
+VISUAL:
+AUDIO: 'significantly like you can you can have uh reotion make 3D stuff with 3JS and stuff. Um you can have it make like cool math visualizations with NM. um you like you can extend it s really significantly'
+
+[76:04] [scene:talk]
+VISUAL:
+AUDIO: 'whereas hyperframes you can\'t extend it that significantly but it is easier to use out of the box. So if I had to make a comparison it would be like hyperframes is Apple or iPhone and Remotion is Android Google. Okay. So'
+
+[76:19] [scene:talk]
+VISUAL:
+AUDIO: 'choose choose your own adventure there. [laughter] But yeah that\'s based on my um testing so far. Um it\'s really fun though. It\'s It\'s teaching me a lot about like maybe'
+
+[76:32] [scene:talk]
+VISUAL:
+AUDIO: 'I should have more visuals in YouTube videos to like clarify complex concepts or not. I don\'t know. Like I\'m just I\'m trying all this out. You know, [laughter]'
+
+[76:44] [scene:talk]
+VISUAL:
+AUDIO: 'in my ideal world, I would just stand at a whiteboard and just like talk all day about AI, but you know, it\'s helpful sometimes when there\'s like actual visuals that are not like my handdrawn chicken scribble. So, [snorts]'
+
+[76:56] [scene:talk]
+VISUAL:
+AUDIO: 'um, how can I become your YouTube editor? Honestly, I have too many YouTube editors and I\'m slowing down on video production cuz um well, basically I\'m just getting advice that I should spend a lot more time scripting and'
+
+[77:08] [scene:talk]
+VISUAL:
+AUDIO: 'pre-production. So, for the next month, that\'s what I\'m going to try. Yeah. So, like honestly, if you just want it to like look really good like this with as minimal work as possible, use hyperframes. If you um are like if you really want full control, you\'re'
+
+[77:23] [scene:talk]
+VISUAL:
+AUDIO: 'going to have your own design system for your video pipeline, you want to extend it with other tools like 3JS for 3D visualization, then invest in Remotion, far more extensible. Okay, but I\'m guessing most people have an iPhone for'
+
+[77:37] [scene:talk]
+VISUAL:
+AUDIO: 'a reason [laughter] cuz it\'s like we don\'t need all that. We just need to make a decent video. Okay. [laughter] [gasps] Um so we love my handdrawn info. The thing is like even when I vibe board, so'
+
+[77:49] [scene:talk]
+VISUAL:
+AUDIO: 'if you have been to several live streams, even when I vibe board, it\'s like I just I just write text. I\'m I like I\'m literally so not a visual person that when I whiteboard, I just write text, you know? [laughter]'
+
+[78:03] [scene:talk]
+VISUAL:
+AUDIO: 'So, um, but it\'s been fun. It\'s like it feels like a stretch goal like, oh, I have to really figure out what like what is the best visual that will convey this point, you know? like that\'s it\'s hard'
+
+[78:16] [scene:talk]
+VISUAL:
+AUDIO: 'for me but it\'s use I think it\'s useful to learn that skill so that\'s why I\'m investing in practicing that u and AI is helping me with it like again this storyboard was completely generated by AI with a voice over so I can like'
+
+[78:29] [scene:talk]
+VISUAL:
+AUDIO: 'literally hear like oh that doesn\'t quite land or the visual is has the wrong timing like the visual should be later a little bit um or it\'s kind of confusing here like why am I saying'
+
+[78:41] [scene:talk]
+VISUAL:
+AUDIO: 'these things but the but uh the text says these these things like you know there needs to be like coherency like coherence in the thing. So um okay'
+
+[78:54] [scene:talk]
+VISUAL:
+AUDIO: 'yeah a lot of people switch to Android for the camera cuz it does have a better camera but then they\'re like screw it I [laughter] miss Apple like everything just works in Apple. [snorts] So'
+
+[79:08] [scene:talk]
+VISUAL:
+AUDIO: 'um I am doing an in-person meetup in the school. We literally have an in-person meetup next week. So, if you\'re not in the school group already, like I\'ll post the link here in YouTube, but it\'s literally the best free community you'
+
+[79:20] [scene:talk]
+VISUAL:
+AUDIO: 'will ever join. I promise. And if that is ever not true, I hope somebody yells at me. [sighs and gasps] Um, how has full stream marketing operations gone with this for SEO, social media? Yeah. So, like how my'
+
+[79:33] [scene:talk]
+VISUAL:
+AUDIO: 'agents Okay, so how my agents actually look on a day-to-day basis is I have like a terminal open with three to four agents, each one working on a goal. So, um like I\'ll I\'ll have it be running'
+
+[79:46] [scene:talk]
+VISUAL:
+AUDIO: 'throughout the day, then I\'ll remote control so I can just like walk around the house and do other stuff. So, it\'s like literally just running working on the goal. When it\'s ready for me to check something, I check on my phone to see what\'s being done. If it needs a lot'
+
+[79:59] [scene:talk]
+VISUAL:
+AUDIO: 'of feedback, then I\'ll go to my computer and be like, "Okay, this we need to fix this, fix this, like this." How I set up the goal uh had incomplete information. But I I literally have a go to market engineer, a contents engineer, a YouTube'
+
+[80:12] [scene:talk]
+VISUAL:
+AUDIO: 'engineer, and then a support engineer pretty much working daily with with their own respective goals. Um so in terms of fullstream marketing, I mean, it\'s still early, right? Like you know,'
+
+[80:24] [scene:talk]
+VISUAL:
+AUDIO: 'SLG goal is brand new, cloud code routines are brand new. It\'s still early, but it\'s it\'s it\'s just like to to me I see uh like a massive productivity gain. Like while I was making this thing, I had another agent'
+
+[80:37] [scene:talk]
+VISUAL:
+AUDIO: 'write my whole newsletter with the instructions and we went back and forth like how do we simplify this further? How do we let\'s make the examples even simpler and build up to like more complex examples like you know it it'
+
+[80:50] [scene:talk]
+VISUAL:
+AUDIO: 'still takes feedback to do it well uh in terms of having multiple streams for marketing but it\'s it\'s like incredible how much tedious stuff it can automate. Um, and I\'m just I\'m really there to'
+
+[81:04] [scene:talk]
+VISUAL:
+AUDIO: 'provide like the highle this is our strategy. This is where we want to get to and provide feedback along the way like okay you were I clearly didn\'t specify enough information here and I needed to go back and add context so'
+
+[81:16] [scene:talk]
+VISUAL:
+AUDIO: 'that the AI agent loop has enough information to know when the job is complete. So um it\'s not mill it\'s not millions of'
+
+[81:28] [scene:talk]
+VISUAL:
+AUDIO: 'dollars. Um, I don\'t know what that meant. The It\'s not millions of dollars. Not even close. It\'s both. [sighs] She runs Blot. I was her admin. Who\'s I\'m'
+
+[81:41] [scene:talk]
+VISUAL:
+AUDIO: 'confused. Who is my admin? Um, okay. Well, okay. Hela set up an in-person two days class helping each person set it'
+
+[81:53] [scene:talk]
+VISUAL:
+AUDIO: 'all up. Well, that was the point of today. You guys are supposed to follow along today to set it up. [laughter] So um what\'s a voice llinter? You mean like for if you have an AI voice'
+
+[82:08] [scene:talk]
+VISUAL:
+AUDIO: 'u is it possible to productize and package something to sell to SMB? Yeah, of course. Um that\'s literally what my product is. But [laughter]'
+
+[82:23] [scene:talk]
+VISUAL:
+AUDIO: '[gasps] so um I analyze frame by frame my stock footage and edit uh well ffmpeg is very limited for editing. Like ffmpeg is a good utility library and it\'s it\'s what'
+
+[82:36] [scene:talk]
+VISUAL:
+AUDIO: 'a lot of these tools use by the way. They use ffmpeg. Um but you can actually tell claude like uh analyze the video. You can also plug it into Gemini to'
+
+[82:48] [scene:talk]
+VISUAL:
+AUDIO: 'analyze the video. Um, or you can tell it like take a screenshot at each 3 second interval in the video to analyze what\'s happening in the video. You know, it\'s hard to see it going on to Oh,'
+
+[83:01] [scene:talk]
+VISUAL:
+AUDIO: 'yeah. I\'m not really sharing anything right now. So, [laughter] we\'re just wrapping up the call until my sushi arrives. Oh, yeah. It\'s arriving in 15 minutes. Okay. Uh'
+
+[83:16] [scene:talk]
+VISUAL:
+AUDIO: 'um so to Rachel, [sighs and gasps] um I have a video dropping soon that\'s like 12 ways to make money with AI and it\'s it\'s I really just try to consolidate like multiple different'
+
+[83:29] [scene:talk]
+VISUAL:
+AUDIO: 'revenue streams and which ones are scalable versus faster income. Um I think it\'s going to drop this week. I hope so. Um but I would look out for that video and I will probably send a'
+
+[83:41] [scene:talk]
+VISUAL:
+AUDIO: 'newsletter along with it. But like that video is the one where I really try to break down like here\'s what you can do etc. Okay, I think I am going to just send this newsletter now.'
+
+[83:53] [scene:talk]
+VISUAL:
+AUDIO: 'Uh I mean I don\'t I feel like these intermediate level examples are a little easier as well, but that\'s fine. Okay, I\'m just reviewing this GitHub.'
+
+[84:07] [scene:talk]
+VISUAL:
+AUDIO: 'here any tool. Uh, okay. I think this is ready to send.'
+
+[84:21] [scene:talk]
+VISUAL:
+AUDIO: 'Okay. So, yeah, if you are looking for the companion Oh, I should have put a P. If you\'re looking for the uh companion newsletter that has all the prompts and everything, I\'m just I\'m sending it out right now. So, should be in your inbox'
+
+[84:33] [scene:talk]
+VISUAL:
+AUDIO: 'in a bit. So, just look out for that. Um, someone is spamming to become my YouTube editor. Don\'t. Okay, that\'s kind of annoying. Um, to sign up for my newsletter, just'
+
+[84:47] [scene:talk]
+VISUAL:
+AUDIO: 'go to the link in my bio. So, I just go to sabrina.dev. It\'s not that I don\'t want to hire new YouTube editors, it\'s just I already have YouTube editors. So, you would have'
+
+[85:00] [scene:talk]
+VISUAL:
+AUDIO: 'to be like significantly better than my current YouTube editors whom I enjoy working with. You know what I mean? like I I don\'t um besides like I\'m really trying to focus a lot more on pre-production for the next couple of months and just like see how that goes.'
+
+[85:14] [scene:talk]
+VISUAL:
+AUDIO: 'So, okay. Um [sighs] so, what are you analyzing each frame for? I guess can you also analyze a photograph, a technical drawing from an'
+
+[85:26] [scene:talk]
+VISUAL:
+AUDIO: 'architect? Yeah, you definitely can. So, um just just drop it into cloud. It will analyze it. Uh well my school community is for women so who are building an AI and you do need a valid LinkedIn'
+
+[85:40] [scene:talk]
+VISUAL:
+AUDIO: 'profile. This is how we confirm your identity. Okay. So um you can apply to join. It\'s free. It has 4,500 women in there. We have educational trainings and workshops almost every single day of the'
+
+[85:52] [scene:talk]
+VISUAL:
+AUDIO: 'month. And then we have an in-person retreat ne literally next week uh in Salt Lake where I\'m going to take everybody hiking. though. Um, any tips on social media listening skills for agents? How do you write your scripts?'
+
+[86:06] [scene:talk]
+VISUAL:
+AUDIO: 'Yeah, so for that I use Apify and then just tell it to like so Apify find the top 10 videos on this topic. You can put in keywords or hashtags from the past'
+
+[86:19] [scene:talk]
+VISUAL:
+AUDIO: 'month with the highest number of views and the lowest number of followers. So I have an air table tracking this. I call it like momentum score because like sometimes a creator will just like have a lot of momentum on their on their'
+
+[86:33] [scene:talk]
+VISUAL:
+AUDIO: 'growth and I want to see like their entire profile. So um that\'s what I do. So Apify I\'ll just type it in Tik Tok. Apify find top five videos on this topic or hashtag in past 30 days. And you can'
+
+[86:46] [scene:talk]
+VISUAL:
+AUDIO: 'have that autonomously running, right? Like every single week, have that running and then it will just email you or send you a Slack message with who those creators are and what those videos are?'
+
+[86:59] [scene:talk]
+VISUAL:
+AUDIO: 'Okay. Any obsolete MacBooks you\'d recommend to run locally or to do all of this you'
+
+[87:11] [scene:talk]
+VISUAL:
+AUDIO: 'taught us today? Um, yeah, like lit anything you can afford, honestly. Um, there was nothing I showed today that was locally intensive because the cloud code routines run in the cloud. Um,'
+
+[87:23] [scene:talk]
+VISUAL:
+AUDIO: 'unless you\'re doing like launch d to run. Uh, oh wait, hang on. My dog groomer. Yes. Is texting me. Yes. Okay. Uh, yeah. I mean, you can run routines locally'
+
+[87:37] [scene:talk]
+VISUAL:
+AUDIO: 'using like LaunchD if you\'re on Mac, but I didn\'t cover any of that today. So, nothing I showed today is like crazy computationally expensive. So, you can definitely you just buy a used MacBook. Um, in fact, when I buy a MacBook, I'
+
+[87:50] [scene:talk]
+VISUAL:
+AUDIO: 'usually just buy refurbished because like I have so many already. Like, it\'s fine. It does not need to be brand new. Yeah. Like I used my 2016 MacBook until like 2022.'
+
+[88:02] [scene:talk]
+VISUAL:
+AUDIO: 'So, [laughter] yeah. you know, it\'s it\'s generally not like a like you\'re probably not running into a hardware issue unless you\'re doing what I\'m doing, which is like OBS for agents running in the background'
+
+[88:16] [scene:talk]
+VISUAL:
+AUDIO: 'streaming on five platforms. [laughter] So, uh, okay. [sighs]'
+
+[88:28] [scene:talk]
+VISUAL:
+AUDIO: 'Yeah, I mean, this is the women\'s community. Um, I do plan to start like an open community, not just for women at some point. It\'s just the problem is spam. Um, I found that in the at least in the women\'s community, like so many'
+
+[88:41] [scene:talk]
+VISUAL:
+AUDIO: 'women are are helpful in cleaning up like spam and promotions and stuff. And so it\'s it\'s been a like a tremendous crowdsourced effort to keep it high quality. And um, I just worry about that [laughter] with a with a open community'
+
+[88:55] [scene:talk]
+VISUAL:
+AUDIO: 'that anyone can join. You know what I Cuz like even for our community, we have screening questions. You have to have a valid LinkedIn profile. That\'s how we ensure like people are real and like not just like deep faking somebody else. Um'
+
+[89:07] [scene:talk]
+VISUAL:
+AUDIO: 'where are the details on Salt Lake? Just they\'re they\'re in the school community. Just you can ask you can create a new post in the school community because it\'s literally happening next week June 25th to 28th.'
+
+[89:19] [scene:talk]
+VISUAL:
+AUDIO: 'Okay. Uh um I personally prefer Pro if you\'re choosing between MacBook Air versus Pro,'
+
+[89:31] [scene:talk]
+VISUAL:
+AUDIO: 'but it\'s like whatever you can afford right now, you know? Like I I I think Air is a little too weak, especially cuz I do video stuff, right? Um so if you can get pro, then get a pro. Get a used'
+
+[89:44] [scene:talk]
+VISUAL:
+AUDIO: 'pro. Um, [sighs] what do you do when your agents are running overnight and are well over 30% in their context window? Um, so if you'
+
+[89:59] [scene:talk]
+VISUAL:
+AUDIO: 'just don\'t want them to burn through everything, that\'s where you can set guard rails like stop after x number of turns and uh you can say stop after x number of turns and produce a summary of'
+
+[90:11] [scene:talk]
+VISUAL:
+AUDIO: 'what you\'ve done, right? That way it just doesn\'t burn through your context window if you need the context window for the morning for your actual work. Um, are you backing up skills or anything to a hard drive? All of my'
+
+[90:23] [scene:talk]
+VISUAL:
+AUDIO: 'skills are backed up to GitHub, right? So like every project I work on has a has a GitHub repo. So like coming from a technical background, it\'s like if you if you have, you know, different code'
+
+[90:36] [scene:talk]
+VISUAL:
+AUDIO: 'bases, you would have a different GitHub project. So I do the same. So like I have one for blot marketing, one for my content empire. I actually made a new one just for YouTube because I\'m experimenting so much with like long'
+
+[90:49] [scene:talk]
+VISUAL:
+AUDIO: 'form editing and it\'s pretty different from short form editing. So I have a new project for that. Um I have another one that\'s just my website and SEO. So blow.com and it has like uh the blogs and stuff there. And then I have other'
+
+[91:03] [scene:talk]
+VISUAL:
+AUDIO: 'projects obviously for technical things. um playgrounds, my potato app, my help docs. So I have separate GitHub projects for each like area of my company and then each of those GitHub projects is'
+
+[91:18] [scene:talk]
+VISUAL:
+AUDIO: 'synced to GitHub on the cloud. Each GitHub project has the cloud skills in it. So I back up the cloud skills in the cloud. Um, so that way I can just like change the cloud skill. If I end up not'
+
+[91:31] [scene:talk]
+VISUAL:
+AUDIO: 'liking it or want to change it back, I can I can easily do that or I can see what it was before and compare it. So, not spamming, but really want to know how you think consultants should approach cold outreach. Uh, well, always'
+
+[91:44] [scene:talk]
+VISUAL:
+AUDIO: 'with value first. Um, actually there\'s a really good story of uh a woman in our AI community who just shared that she basically like cold DM\'d somebody on LinkedIn and um ran a security check on'
+
+[91:57] [scene:talk]
+VISUAL:
+AUDIO: 'their website and found some critical stuff like important stuff, sent it to the person who was cold and that person was like, "Oh, like we need you as a'
+
+[92:09] [scene:talk]
+VISUAL:
+AUDIO: 'consult like we need you to train our team on AI literacy and do these this other stuff." That is cold outreach, but it\'s like leading with a lot of value. Like it wasn\'t just like I DM\'d you, buy this. [laughter]'
+
+[92:24] [scene:talk]
+VISUAL:
+AUDIO: '[gasps] It was like, you know, she just DM\'d like, "Hey, I see we\'re like in the same industry or whatever." She said, and then she happened to run the person\'s website through a security scanner, found a bunch of vulnerabilities, shared it with them,'
+
+[92:36] [scene:talk]
+VISUAL:
+AUDIO: 'and they were super positive in their response. Um, that\'s an example of like cold outreach that leads with a ton of value. Um, if you So, I blocked the guy who\'s a video editor, but if you were a video editor trying to cold DM me, the'
+
+[92:49] [scene:talk]
+VISUAL:
+AUDIO: 'way not to do it is to spam my lives with zero value. I would be really more impressed if you edited this live in real time. Like, you you recorded 10 minutes of this live and'
+
+[93:02] [scene:talk]
+VISUAL:
+AUDIO: 'sent it to me as a link in the chat right now. Like, that would be impressive. And I\'d be like, "Oh, that\'s kind of cool. You just like did that live right now." Um, like that would be interesting. That would be leading with'
+
+[93:14] [scene:talk]
+VISUAL:
+AUDIO: 'value. Um, even if I say no, at least I have like a good impression of you. I can refer you to other people because you actually took the initiative to do that. Lazy DM, lazy cold outreach is literally like this, like you hop on my'
+
+[93:26] [scene:talk]
+VISUAL:
+AUDIO: 'live and you just spam 30,000 times like the same message that adds zero value, you know? So, um, just don\'t do that. [laughter] Uh so she actually vibecoded uh her own'
+
+[93:40] [scene:talk]
+VISUAL:
+AUDIO: 'tool to run these security checks. So she ran this uh prospects website through her own tool and then and then DM them the results. Yeah. I mean I you\'d be surprised. I'
+
+[93:53] [scene:talk]
+VISUAL:
+AUDIO: 'read most cold DMs on certain platforms. Like my Instagram and Facebook are insane because of my DM automations. So I don\'t read those. Tik Tok I don\'t read because it\'s just a really messy inbox'
+
+[94:06] [scene:talk]
+VISUAL:
+AUDIO: 'and I get a billion. But LinkedIn I don\'t have that many followers on LinkedIn so I still read the DMs there. Um I still read my email inbox, you know. So people cold outreach me all the time. It just it\'s just like lead with'
+
+[94:18] [scene:talk]
+VISUAL:
+AUDIO: 'something valuable like what like you know. So um I currently use many chat but I want to replace it. So, I\'m actually building like many chat but with MCP API so that'
+
+[94:30] [scene:talk]
+VISUAL:
+AUDIO: 'I can just have Claude create my ManyHat automations. Um, and that will actually be part of Blot hopefully by the end of next month. [snorts] Yeah, there\'s definitely a lot of'
+
+[94:43] [scene:talk]
+VISUAL:
+AUDIO: 'scammers, guys. So, you know, just you like you literally cannot pay me um unless you sign up for my very cheap, low ticket product, which by the way, you can automatically get a refund for'
+
+[94:56] [scene:talk]
+VISUAL:
+AUDIO: 'if you don\'t like it. Just hit the support bot, click refund, you [laughter] know, like don\'t pay me any other way. There\'s just don\'t send me investor money. Don\'t send me crypto. Like, what just I need to make more announcements about that because people'
+
+[95:09] [scene:talk]
+VISUAL:
+AUDIO: 'always fall for it. Um, is it worth it considering older models? Uh, oh yeah, if you\'re going to be running your own models, sure. Yeah, you would want I mean to be honest, if'
+
+[95:21] [scene:talk]
+VISUAL:
+AUDIO: 'you\'re going to be running your own models, get like a Mac Studio. That\'s what I have. Um, especially for video related stuff. And then I do want to experiment a lot more with open source. So, if you can afford it, that\'s what I would recommend. But'
+
+[95:34] [scene:talk]
+VISUAL:
+AUDIO: 'uh someone wrote to me as you yesterday on Facebook to join your group. Yeah, there\'s a lot of scammers on Facebook video. I continue to'
+
+[95:46] [scene:talk]
+VISUAL:
+AUDIO: 'Okay. Um Oh, hang on. My my sushi is almost here. Uh if you I just put the link in the chat. So, it\'s school.com. I\'ll just go there since I\'m sharing my'
+
+[96:00] [scene:talk]
+VISUAL:
+AUDIO: 'screen. Actually, I\'m not signed in here. I forgot. So So here it is. Looks like this. I should probably change this logo soon. [laughter] Put put like, I don\'t know, a picture of me or a picture'
+
+[96:13] [scene:talk]
+VISUAL:
+AUDIO: 'of us there or something. Um, but yeah, that\'s a link. I just dropped it in Tik Tok. You\'re teaching Claude, but do you favor other services or think I\'m superior? Um, I generally prefer to just go deep'
+
+[96:25] [scene:talk]
+VISUAL:
+AUDIO: 'on one ecosystem so that I\'m productive in it. So I personally have been using cloud code for well over a year. Like I personally publicly announced I was permanently leaving cursor in favor of'
+
+[96:37] [scene:talk]
+VISUAL:
+AUDIO: 'cloud code in February last year. And by the way people I got push back on that. People were like no way no way no way it\'ll be permanent. Um you know it probably won\'t be permanent. There will'
+
+[96:50] [scene:talk]
+VISUAL:
+AUDIO: 'be some other tool that comes out that\'s better. But like as of 2026, I find the it\'s it\'s the ecosystem and integrations of cloud code that uh make it just my tool of choice. It\'s like a Swiss army'
+
+[97:02] [scene:talk]
+VISUAL:
+AUDIO: 'knife for anything I might want to do. Like certainly I use specialized tools for other things, right? Like for my support stack, I use intercom as like the front-end support widget also for my'
+
+[97:14] [scene:talk]
+VISUAL:
+AUDIO: 'email marketing. And then I have local open- source NAN literally hosted in the closet over here that runs my entire AI support bot for like $1 a month, right? Like that like that\'s that\'s just how'
+
+[97:27] [scene:talk]
+VISUAL:
+AUDIO: 'it\'s set up. But like Claude is my kind of my Swiss Army knife. Like whatever I might want to try first, I\'ll probably try it in Claude first. Um where it sucks is anything visual related. Like I know they just dropped artifact support'
+
+[97:41] [scene:talk]
+VISUAL:
+AUDIO: 'in Cloud Code, but it\'s still like really basic. So if you\'re doing a lot of image and video generation, for example, in Cloud Code, it\'s like hard to visualize. If you\'re stitching a bunch of video clips together, you have'
+
+[97:54] [scene:talk]
+VISUAL:
+AUDIO: 'to like open it every single time and it\'s like kind of annoying. Um, and only recently did Higsfield come out with an MCP. Um, you can use replicate and fouli APIs as well, plug them into cloud code to generate stuff, and then cloud can'
+
+[98:06] [scene:talk]
+VISUAL:
+AUDIO: 'use ffmpeg to stitch everything together. But it\'s still like not an amazing experience. So anything like visual that that requires a lot of visual review is still not a great experience in Claude. So okay.'
+
+[98:19] [scene:talk]
+VISUAL:
+AUDIO: '[snorts] Um yeah, unfortunately that particular group is just for women. So because I don\'t know like the spam problem is really tough. I don\'t want to'
+
+[98:31] [scene:talk]
+VISUAL:
+AUDIO: 'start a a community open it up to everyone and just like lots of spammers join. If you actually look at most free school communities, it\'s just like total spam. Like it\'s like it\'s like it\'s'
+
+[98:43] [scene:talk]
+VISUAL:
+AUDIO: 'really just an email list at this point, you know? [laughter and gasps] Like no one\'s actually going into the school and like engaging cuz it\'s just way too much spam. So um if you do not have enough space to'
+
+[99:01] [scene:talk]
+VISUAL:
+AUDIO: 'run things locally, what cloud do you recommend for agents? So um in the third part of this tutorial we w we talked about um cloud code routines over here. So that\'s over here like okay I\'m not'
+
+[99:14] [scene:talk]
+VISUAL:
+AUDIO: 'going to rehash it. Oh I was wondering what the poll was so far. Good. So this this is a poll by the way at the bottom of my newsletter. So I\'m starting to add these to see like is'
+
+[99:26] [scene:talk]
+VISUAL:
+AUDIO: 'this too hard to follow? So that\'s interesting. 21% this is interesting but not useful. So it would be nice to know like why but you know Substack sucks. So [laughter] like Substack has like zero automation'
+
+[99:39] [scene:talk]
+VISUAL:
+AUDIO: 'or like workflow features which so uh compared to Beehive or Convert Kit if you\'re coming from that. So um okay I think my sushi is okay few more minutes then I\'ll hop off. Um let\'s see. I\'ll go'
+
+[99:52] [scene:talk]
+VISUAL:
+AUDIO: 'back to YouTube. Yeah the newsletter is already sent so it should be in your inbox. So, make sure you check the spam folder in case it\'s landing there. Um, I I\'ll drop the'
+
+[100:04] [scene:talk]
+VISUAL:
+AUDIO: 'link as well in the chat. Yeah. Can So, Canva significantly improved their MCP connection with Claude. So, I dropped some new tutorials on it. There are tips and tricks to make'
+
+[100:17] [scene:talk]
+VISUAL:
+AUDIO: 'it better. Like, for example, if you\'re using a Canva template, I have Claude first look at the template to check how many words should fit into each like text block. cuz if you don\'t do that'
+
+[100:30] [scene:talk]
+VISUAL:
+AUDIO: 'then like Claude will just put too much text or too little text and it ruins the aesthetic of the template. So like that\'s one little hack to like make it look better. So I think the Canva MCP is actually quite usable today, but you'
+
+[100:44] [scene:talk]
+VISUAL:
+AUDIO: 'have to kind of like set it up in that way. And so I do have like two or three Canva tutorials on my YouTube just walking through like tips and tricks to get the Canva MCP set up properly. Um'
+
+[100:56] [scene:talk]
+VISUAL:
+AUDIO: 'because a lot of people will try the Canva MCP and they\'ll be like make this and then they\'ll it will suck. Like for sure it\'ll suck. So the real way to use it is to use Canva templates and have Claude populate information into those'
+
+[101:08] [scene:talk]
+VISUAL:
+AUDIO: 'templates. Uh then it\'s going to look way better. Like way way way better. So okay. Uh oh yeah, let me I posted the'
+
+[101:20] [scene:talk]
+VISUAL:
+AUDIO: 'newsletter link here. I pasted it in Substack Tik Tok and I\'ll paste it in Instagram as well. &gt;&gt; [sighs] &gt;&gt; Um, how do you um I personally don\'t use any CRM systems anymore just because'
+
+[101:35] [scene:talk]
+VISUAL:
+AUDIO: 'it\'s I have a low ticket SAS product, right? So, I initially set up GHL for Blot, but it was like really unnecessary. Also, Intercom has basic email marketing features. So, I can technically send email campaigns. I can'
+
+[101:49] [scene:talk]
+VISUAL:
+AUDIO: 'set up goals hooked up to Stripe to see like, oh, in this email campaign, 50 people converted into paying customers, right? So, it has like just enough email marketing tied to revenue that I don\'t'
+
+[102:02] [scene:talk]
+VISUAL:
+AUDIO: 'feel I need to set up a separate system like Salesforce, GHL, or Mailchimp. Um, for my newsletter, I\'m just using Substack uh because it\'s free. It\'s like a newsletter plus social network combined. So, that\'s what I use. But um'
+
+[102:16] [scene:talk]
+VISUAL:
+AUDIO: 'uh okay, if you\'re not getting So, it takes a while to send it through email because I have like 230,000 people on my email list, but I just dropped the link here on Instagram as well. I will drop'
+
+[102:28] [scene:talk]
+VISUAL:
+AUDIO: 'it again on YouTube and I will drop it again in um Tik Tok. Yeah. Can you offer me scholarship under your AI school? Well, the good news is all my AI education is free. So, you don\'t need'
+
+[102:41] [scene:talk]
+VISUAL:
+AUDIO: 'a scholarship. You could just watch my YouTube videos. &gt;&gt; [gasps] &gt;&gt; Yeah, I mean I would like to start a community that is not that is open for everyone eventually. It\'s just it\'s the'
+
+[102:53] [scene:talk]
+VISUAL:
+AUDIO: 'the problem is spam. Like it just it gets so full of spam so fast. Um even in my current skull community like people always try to promote their stuff in like sneaky ways, you know? [laughter]'
+
+[103:05] [scene:talk]
+VISUAL:
+AUDIO: 'So um I have to like set my foot down and be the bad person. But I I don\'t mind doing that to to protect something worth protecting, you know. Um for the brain, notion, obsidian,'
+
+[103:17] [scene:talk]
+VISUAL:
+AUDIO: 'Google sheet or just database honestly GitHub get like you can your brain is GitHub. So in the cloud code routine when you set it up you connect it to your GitHub repo and that can serve as your brain. It can store all of your'
+
+[103:30] [scene:talk]
+VISUAL:
+AUDIO: 'markdown files uh pictures even etc. Can I hire you? Um I am not for hire but I certainly know a lot of AI consultants. If you really need hands-on support just send me an uh email. I'
+
+[103:43] [scene:talk]
+VISUAL:
+AUDIO: 'guess or honestly reply to my newsletter with like what your project scope is and what your budget and that\'s like the easiest way I can refer you to somebody. I don\'t make money off of the referrals.'
+
+[103:55] [scene:talk]
+VISUAL:
+AUDIO: 'So I only refer somebody if like I genuinely feel they are a good fit. I could be the spam police. That\'s funny. Yeah. I mean we we have a lot we have like 30 admins as our spam police, you know, and there\'s still spam. Like'
+
+[104:09] [scene:talk]
+VISUAL:
+AUDIO: 'people still sneak in stuff. [laughter] So, [gasps] um, yeah, I was paying 400 a month for Beehive and I wasn\'t using most of the features. Um, I also generally do like that Substack has a social platform'
+
+[104:22] [scene:talk]
+VISUAL:
+AUDIO: 'component. Like, it currently Substack\'s pretty fun. Like, it feels like a less toxic version of Twitter. There\'s a lot of really good, smart people on there, especially a lot of free AI content and education on there that\'s like middle'
+
+[104:35] [scene:talk]
+VISUAL:
+AUDIO: 'medium quality in my opinion. So, that\'s good. Um definitely way higher quality than like Tik Tok or Instagram. So um I highly recommend Substack. Uh so yeah. Okay, cool. Um well, yeah. So my'
+
+[104:49] [scene:talk]
+VISUAL:
+AUDIO: 'sushi arrived. So thanks everybody for joining. Um check your inbox or check this link. I\'ll post again if you haven\'t received the email yet. Um and highly recommend going through this. Um when you really change your framework'
+
+[105:03] [scene:talk]
+VISUAL:
+AUDIO: 'into like running loops, it is such a huge productivity unlock like you really can be doing multiple not crazy technical things but multiple minor'
+
+[105:15] [scene:talk]
+VISUAL:
+AUDIO: 'things at the same time by like constructing a clear goal, giving it the way to verify its work and then letting it do its thing, letting it cook as I like to say. So um but yeah, thanks everybody for joining. highly recommend'
+
+[105:28] [scene:talk]
+VISUAL:
+AUDIO: 'following through the newsletter and I put it at the top. You have full permission to repurpose all of my content. This training in particular, I know is worth thousands and thousands and thousands of dollars. So, I really hope you just try to go through it. Um'
+
+[105:41] [scene:talk]
+VISUAL:
+AUDIO: 'cuz it\'s it\'s a it\'s a next level unlock for those of you who are especially if you\'re already familiar with skills, you\'re already familiar with connectors and it\'s just it\'s it\'s about like changing your thinking of how you tie this all together. Um okay, but thanks'
+
+[105:54] [scene:talk]
+VISUAL:
+AUDIO: 'everybody for joining. though. Okay, I\'m going to end the stream now. End video.'

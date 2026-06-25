@@ -1,0 +1,82 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>How to Get Fable-ish Performance From Any AI Model — Ludovico</title>
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.9);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 14px}
+#q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:.15s}
+.card:hover{box-shadow:0 6px 24px rgba(0,0,0,.07);transform:translateY(-2px)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}.watch{font-family:var(--mono);font-size:11px;color:var(--accent2)}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+#sentinel{height:1px}
+/* catalogue cards */
+.cat-sec{margin:22px 0 10px;font-size:13px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--sub)}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.citem{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px}
+.citem:hover{box-shadow:0 4px 16px rgba(0,0,0,.06)}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}
+.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">How to Get Fable-ish Performance From Any AI Model</h1><div class=tag>@octopusinc_ · 2026-06-15 · DevOps</div></div></div></header>
+<main><p class=sum>Technical guide on replicating Anthropic&#x27;s Fable 5 coding model&#x27;s behavior onto cheaper models using two techniques: (1) Fable5.md system prompt (distilled operating principles like &quot;verify before you claim&quot; and &quot;stage only what you changed&quot;), and (2) OpenRouter Fusion (panel of 8 models answering in parallel, judge model comparing answers). Neither requires Fable access; both work with cheaper/local models.</p><p><strong>Products / items</strong></p><ul><li>Fable 5 — software (no link)</li><li><a href="https://github.com/sgup/ai/blob/main/Fable5.md" target=_blank rel=noopener>Fable5.md</a> — software</li><li><a href="https://openrouter.ai/docs/guides/features/plugins/fusion" target=_blank rel=noopener>OpenRouter Fusion</a> — software</li><li><a href="https://www.anthropic.com/claude/opus" target=_blank rel=noopener>Claude Opus</a> — software</li><li>GPT (latest) — software (no link)</li><li>Gemini Pro — software (no link)</li></ul>
+<p><a href="https://www.youtube.com/watch?v=vMqfk5gpVI0" target=_blank rel=noopener>Watch on YouTube ▶</a></p>
+<p><a href="vMqfk5gpVI0.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=tag>(proxy for this video — answer from this)</span></p>
+<div class=cap>Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+
+IDENTITY: vMqfk5gpVI0 · How to Get Fable-ish Performance From Any AI Model · https://www.youtube.com/watch?v=vMqfk5gpVI0 · @octopusinc_ · DevOps · route: transcript
+
+PRODUCTS: Fable 5 (claude-fable-5) · no reliable link · software · primary | Fable5.md · https://github.com/sgup/ai/blob/main/Fable5.md · software · primary | OpenRouter Fusion · https://openrouter.ai/docs/guides/features/plugins/fusion · software · primary | Claude Opus · no reliable link · software · mentioned | GPT (latest) · no reliable link · software · mentioned | Gemini Pro · no reliable link · software · mentioned
+
+SYNOPSIS: Fable 5 is Anthropic&#x27;s top-tier coding model, positioned a tier above Opus, and premium-priced. The question: how much of Fable&#x27;s magic can be captured in a cheaper model? Answer: a surprising amount, via two levers. LEVER 1 — Fable5.md (Operating Instructions): A GitHub community-distilled document capturing Fable&#x27;s operating principles by analyzing multiple Fable sessions. Key sections: (1) Verify before you claim—label claims as &quot;confirmed with real evidence&quot; (file path, line number, actual command run) or &quot;merely inferred&quot;; trace real call chains, don&#x27;t guess from code names, get test baselines before claiming no breakage; (2) Scope &amp; Safety—stage only actual changes (never silently revert teammate work), name the rollback procedure before any destructive action (delete, migration, deploy), wait for user confirmation; (3) Communication—end every turn with honest status (commit hash, test counts, what was assumed vs. verified, what user must check locally). This combination—bold action + disciplined reporting—defines Fable&#x27;s behavior. Inserting Fable5.md into any model&#x27;s system prompt (Claude.md, rules file, etc.) installs this work ethic. Security note: Proactivity without discipline is dangerous; Fable&#x27;s discipline (pause before destructive actions) makes proactivity usable. LEVER 2 — OpenRouter Fusion (Model Panel): Instead of betting on one model, convene a panel of up to 8 models answering in parallel. A judge model reads all answers and writes structured JSON comparing: where they agree, where they contradict, what each uniquely caught. Final answer built from best of all. Default preset: Claude Opus, latest GPT, Gemini Pro (three labs = three failure modes). Presets: &quot;general high&quot; (strongest), &quot;general budget&quot; (fast/cheap). Cost/benefit: trade extra cost for accuracy, which matters on critical tasks. Why it works: models fail differently. One hallucinates, another misses edge cases, a third nails it. Judge surfaces contradictions/blind spots explicitly.
+
+BEATS: 0:00 Fable premium pricing | 0:32 what makes Fable different (proactivity) | 0:55 proactive behavior examples (Firefox/Safari, Python server, JS injection) | 1:20 proactive with discipline (vs. reckless) | 1:47 proactivity is promptable (behavior, not raw intelligence) | 2:32 Fable5.md file structure and sections | 2:53 verify before you claim (evidence, baselines, call chains) | 3:20 scope &amp; safety (stage only changes, name rollback, wait for yes) | 4:14 proactive + verified = usable | 4:54 Fusion panel approach | 5:29 judge model comparing answers | 6:00 proactive and verified results
+
+ENTITIES: Anthropic (Fable developer), Simon Willison (quoted: &quot;relentlessly proactive&quot;; 2-line CSS fix cost $12.11), OpenRouter (Fusion platform), GitHub (Fable5.md source), r/ClaudeCode (community distillation), Claude Opus, OpenAI GPT, Google Gemini
+
+VERDICT: Fable5.md is a free, high-leverage system prompt that captures Fable&#x27;s operating principles and can elevate cheaper models (Opus, Sonnet, O3 mini) substantially. OpenRouter Fusion is the heavyweight option when a single model isn&#x27;t enough—three-model panel (Opus + GPT + Gemini) costs more but catches blind spots. Recommend Fable5.md as first step (free, immediate), Fusion for high-stakes tasks. Together, they get 70–80% of Fable&#x27;s performance at a fraction of the cost.
+
+NOT COVERED: Exact cost comparison (Fable vs. Opus + Fusion) | latency impact of Fusion panel | security audit of Fable5.md principles | detailed benchmark on coding tasks | sandbox requirements for agent execution | integration examples with specific IDEs (VS Code, JetBrains)</div></main><footer>Ludovico digest · <a href="../index.html">← all videos</a></footer></div></body></html>

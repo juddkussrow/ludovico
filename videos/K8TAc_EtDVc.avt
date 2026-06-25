@@ -1,0 +1,123 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: You Don't Need React Portals For Modals Anymore (react-call)
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=K8TAc_EtDVc
+upload_date: 20260614
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'React just got a super interesting new tool that completely changes how we think about rendering interactive UI elements like modals, dialogues, or confirmation boxes. It\'s called React Call. [music] If you\'ve ever built a'
+
+[00:12] [scene:talk]
+VISUAL:
+AUDIO: 'complex multi-step form wizard, a confirmation modal, or an item picker in React, you already know that managing open states, passing success callbacks, and handling promises can turn your code'
+
+[00:24] [scene:talk]
+VISUAL:
+AUDIO: 'into an absolute spaghetti mess. But, React Call is designed to solve this issue. So, in today\'s video, we\'re going to take a look at React Call, see how it works, and look at some of the code examples. It\'s going to be a lot of fun,'
+
+[00:37] [scene:talk]
+VISUAL:
+AUDIO: 'so let\'s dive into it. So, what exactly is React Call? Well, it is a tiny lightweight utility that allows you to call React components like'
+
+[00:49] [scene:talk]
+VISUAL:
+AUDIO: 'asynchronous functions. Think about the native browser window.confirm API. When you call it, your code literally pauses, waits for the user to click okay or cancel, and returns a boolean value'
+
+[01:02] [scene:talk]
+VISUAL:
+AUDIO: 'right in line. It keeps your business logic entirely local to the caller, and React Call brings that exact same intuitive mental model directly into the modern React world. Instead of creating'
+
+[01:14] [scene:talk]
+VISUAL:
+AUDIO: 'a separate state variable like is model open, passing down an on close or an on submit prop, and setting up complex context providers or portals, you can simply await the component\'s response.'
+
+[01:27] [scene:talk]
+VISUAL:
+AUDIO: 'Under the hood, it abstracts away the promise management, handles type requests and responses out of the box, and fully supports hot module replacement, so your development workflow stays fast. And it brings three'
+
+[01:40] [scene:talk]
+VISUAL:
+AUDIO: 'concepts to the table: root and stack, upsert, and mutation flow. So, the first major concept is root and stack. With React Call, the callable component you create isn\'t a function, it actually'
+
+[01:53] [scene:talk]
+VISUAL:
+AUDIO: 'acts as its own mounting point in your application tree. You place the component as a root tag anywhere visible like in your app file or a high-level layout file and it sits there as a listener. When you trigger multiple'
+
+[02:05] [scene:talk]
+VISUAL:
+AUDIO: 'calls, React Call manages them using an internal stack and it handles rendering every active instance automatically. And it also handles clean exit animations when they close and keeps the instances isolated so they don\'t step on each'
+
+[02:19] [scene:talk]
+VISUAL:
+AUDIO: 'other\'s toes. Next up is upsert which is an absolute lifesaver for singleton UI patterns. Normally, if you call a component multiple times, it pushes a new instance onto the stack. But what if'
+
+[02:31] [scene:talk]
+VISUAL:
+AUDIO: 'you\'re building a global notification toast or a loading overlay or a progress indicator where you only ever want one instance on the screen at a time? Well, instead of executing call, you can'
+
+[02:45] [scene:talk]
+VISUAL:
+AUDIO: 'execute upsert and if an instance is already active, it smoothly updates the existing component with your new data on the fly rather than spawning a duplicate. And finally, we have mutation flow. So this library includes a'
+
+[02:57] [scene:talk]
+VISUAL:
+AUDIO: 'built-in use mutation flow hook specifically designed to tie your callable UI directly to async actions. If you have a confirmation modal that triggers a heavy back-end API request on submit, the hook manages the pending'
+
+[03:11] [scene:talk]
+VISUAL:
+AUDIO: 'state for you out of the box. It ensures the model stays open and shows a loading spinner while the async function runs and only officially ends the call once the promise successfully resolves. So it'
+
+[03:23] [scene:talk]
+VISUAL:
+AUDIO: 'bridges your UI state and your data mutations beautifully. So now let\'s look at some practical examples in their website because I think they\'re super self-explanatory and I think they also show how little code you actually need'
+
+[03:37] [scene:talk]
+VISUAL:
+AUDIO: 'to write to get something going. So for example, in the confirm dialog, we just need to create a callable over here &gt;&gt; component as a higher order component'
+
+[03:50] [scene:talk]
+VISUAL:
+AUDIO: 'with this create callable hook. And then we can pass the call and functions for our buttons on click. And that\'s everything we need for the callable object. And at the root, we'
+
+[04:03] [scene:talk]
+VISUAL:
+AUDIO: 'just need to import the component itself. And for the delete button, since our confirm component is wrapped with the create callable higher order function, we can simply invoke it asynchronously'
+
+[04:16] [scene:talk]
+VISUAL:
+AUDIO: 'on this handle click function. So, very neat, very tidy, not a lot of boilerplate, and you don\'t have to use any context providers or state variables or Redux or Zustand. And if you want to'
+
+[04:30] [scene:talk]
+VISUAL:
+AUDIO: 'dive deeper how many use cases there are, you can check out the example section. Each example also provides a code snippet. Some of these are even highly complex, like for example, the'
+
+[04:42] [scene:talk]
+VISUAL:
+AUDIO: 'ones that deal with asynchronous actions running in the background. So, you can check out all of these cool examples. I think it\'s super cool and super lightweight. Well done.'
+
+[04:54] [scene:talk]
+VISUAL:
+AUDIO: 'So, there you have it, folks. That is React Call in a nutshell. While you can certainly code up a basic custom promise wrapper or a single modal yourself, I think this library handles all the'
+
+[05:06] [scene:talk]
+VISUAL:
+AUDIO: 'tricky edge cases beautifully, like handling multiple active instances in a stack or updating singletons by upsert and syncing UI states with heavy backend mutations. So, I think it\'s a super nice'
+
+[05:18] [scene:talk]
+VISUAL:
+AUDIO: 'lightweight utility to keep in your front-end toolkit for a cleaner, more readable React architecture. What do you think about React Call? Do you like this pattern? Will you use it in your projects? Let us know in the comment'
+
+[05:30] [scene:talk]
+VISUAL:
+AUDIO: 'section down below. And folks, if you like these types of technical breakdowns, please let me know by smashing that like button underneath the video. And also, don\'t forget to subscribe to our channel. This has been Andras from Better Stack, and I will see'
+
+[05:43] [scene:talk]
+VISUAL:
+AUDIO: 'you in the next videos. &gt;&gt; [music]'

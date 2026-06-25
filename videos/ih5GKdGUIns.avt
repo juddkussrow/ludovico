@@ -1,0 +1,215 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: RAG Was Blind This Whole Time — Berkeley’s PixelRAG Gives Your AI Eyes
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=ih5GKdGUIns
+upload_date: 20260622
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'Your AI has been reading documents with its eyes closed. Look at this table. Clean rows, clean columns. The answer sitting right there. But the moment a normal rag system touches it, this happens.'
+
+[00:12] [scene:talk]
+VISUAL:
+AUDIO: 'It gets shredded into a flat string of text. The columns lose their alignment. The chart next to it? Gone. Text parsers can\'t see pixels.'
+
+[00:24] [scene:talk]
+VISUAL:
+AUDIO: 'That neat side-by-side comparison collapses into one long run-on sentence. The structure that made the page readable is destroyed before your AI ever gets to see it. And this isn\'t a'
+
+[00:36] [scene:talk]
+VISUAL:
+AUDIO: 'rare bug. It\'s how almost every retrieval system on Earth works today. But a team out of Berkeley just published a fix. And once you see it, you can\'t unsee it. They gave rag eyes. Let me show you'
+
+[00:50] [scene:talk]
+VISUAL:
+AUDIO: 'exactly how it works and three ways you can use it today. To understand the fix, you have to see the leak. So, here is how classic rag works,'
+
+[01:02] [scene:talk]
+VISUAL:
+AUDIO: 'step-by-step. Step one, take a web page. Step two, parse the HTML down to plain text. Step three, chop that text into chunks. Step four, turn each chunk into a vector, a'
+
+[01:16] [scene:talk]
+VISUAL:
+AUDIO: 'list of numbers, and store it. Then when you ask a question, you search those vectors for the closest match. Now look closely at step two. The page becomes text, which means'
+
+[01:29] [scene:talk]
+VISUAL:
+AUDIO: 'everything visual, the tables, the charts, the layouts, the infographics, the most information-dense parts of any document, is already dead before step three even starts.'
+
+[01:43] [scene:talk]
+VISUAL:
+AUDIO: 'Your search engine never had a chance. Because the most valuable information was thrown in the trash at the front door. So, the Berkeley team asked a beautifully simple question.'
+
+[01:55] [scene:talk]
+VISUAL:
+AUDIO: 'What if we never pass the page to text at all? What if we just take a picture of it? That is Pixel Rag. Instead of shredding the page, it screenshots it. It slices'
+
+[02:07] [scene:talk]
+VISUAL:
+AUDIO: 'that screenshot into tiles. And then, this is the key move. It embeds the pixels. It searches your documents by how they look,'
+
+[02:20] [scene:talk]
+VISUAL:
+AUDIO: 'not just by the text they contain. The table stays a table. The chart stays a chart. The layout, the colors, the spatial relationships that carry half the meaning,'
+
+[02:33] [scene:talk]
+VISUAL:
+AUDIO: 'all of it survives all the way into search. Same page, but now nothing gets thrown away. Now, how do you actually search a'
+
+[02:45] [scene:talk]
+VISUAL:
+AUDIO: 'picture? This is the clever part. Pixel Rag uses a vision language model called Gwen-3 VL embedding that the team fine-tuned specifically on screenshots.'
+
+[02:59] [scene:talk]
+VISUAL:
+AUDIO: 'Here is what that means in plain English. A normal text embedding turns words into coordinates in a giant space. So, things with similar meaning sit close together.'
+
+[03:12] [scene:talk]
+VISUAL:
+AUDIO: 'Pixel Rag does the exact same thing, but for pictures of pages. A screenshot of a revenue table and your typed question, "What was revenue in 1995?"'
+
+[03:24] [scene:talk]
+VISUAL:
+AUDIO: 'land right next to each other in that space, even though one is an image and one is text. So, when you ask a question, it doesn\'t match keywords.'
+
+[03:37] [scene:talk]
+VISUAL:
+AUDIO: 'It matches what the answer looks like. That is retrieval that can finally see. End-to-end, Pixel Rag is five clean stages.'
+
+[03:49] [scene:talk]
+VISUAL:
+AUDIO: 'One, render. A tool called Pixel Shot drives a real Chromium browser to screenshot any webpage or PDF. Two, chunk.'
+
+[04:01] [scene:talk]
+VISUAL:
+AUDIO: 'The screenshot gets sliced into tiles. Three, embed. Each tile passes through that fine-tuned vision model and becomes a vector. Four,'
+
+[04:13] [scene:talk]
+VISUAL:
+AUDIO: 'build index. All those vectors go into a vector index called FAISS, the same battle-tested library that powers huge text search systems. And five, serve.'
+
+[04:26] [scene:talk]
+VISUAL:
+AUDIO: 'A simple API takes your question and returns the matching tiles. Render, chunk, embed, index, serve. That is the entire machine and every single piece of it is open source.'
+
+[04:40] [scene:talk]
+VISUAL:
+AUDIO: 'Slick idea. But, does it actually beat text? Yes. And the gap grows exactly where you would expect. On simple QA, a standard factual'
+
+[04:52] [scene:talk]
+VISUAL:
+AUDIO: 'benchmark, Pixel Rag hits 78.8% accuracy versus 71.6 for the strongest text parser.'
+
+[05:04] [scene:talk]
+VISUAL:
+AUDIO: 'But, watch what happens on questions that depend on tables. 48.8% versus 42.5. The harder the visual structure, the'
+
+[05:17] [scene:talk]
+VISUAL:
+AUDIO: 'bigger the Pixel Rag\'s lead. And there is a second win that most people miss. Cost. Because the model reasons over one compact image instead of a giant wall of'
+
+[05:29] [scene:talk]
+VISUAL:
+AUDIO: 'scraped text, agent queries can use several times fewer tokens. More accurate and cheaper on exactly the queries that used to break.'
+
+[05:41] [scene:talk]
+VISUAL:
+AUDIO: 'And this is not a weekend hackathon project. Pixel Rag comes out of Berkeley\'s Sky Lab, advised by Matei Zaharia, the co-creator of Apache Spark, along with Joseph Gonzalez and Sewon'
+
+[05:55] [scene:talk]
+VISUAL:
+AUDIO: 'Min. It is fully open source, Apache licensed, with a published research paper behind it. This is the same lineage that produced a huge chunk of the infrastructure the modern AI stack already runs on.'
+
+[06:09] [scene:talk]
+VISUAL:
+AUDIO: 'So, when this lab ships a brand new way to do retrieval, it is worth paying attention. Now, let\'s get you actually using it. Three ways, easiest first. Tier one,'
+
+[06:22] [scene:talk]
+VISUAL:
+AUDIO: 'do nothing. The team hosts a live index of 8.28 million Wikipedia pages. Free, no key, no setup at all. One command and you are searching'
+
+[06:35] [scene:talk]
+VISUAL:
+AUDIO: 'Wikipedia by how its pages actually look. You send a question to their hosted endpoint and it hands you back the matching page tiles, the real rendered pixels,'
+
+[06:47] [scene:talk]
+VISUAL:
+AUDIO: 'not a text dump. This is the perfect way to test whether visual retrieval even helps your use case before you build a single thing yourself.'
+
+[06:59] [scene:talk]
+VISUAL:
+AUDIO: 'Zero commitment, zero cost. Just go feel the difference. Tier two, and this is the one most of you are going to love. PixelRag ships as a Claude code plugin called PixelBrowse.'
+
+[07:13] [scene:talk]
+VISUAL:
+AUDIO: 'Install it and Claude can screenshot any page and actually see it. Charts, tables, dashboards, the way a human does, instead of choking on scraped text.'
+
+[07:26] [scene:talk]
+VISUAL:
+AUDIO: 'It\'s three commands. Add the marketplace, install PixelBrowse, then just say {slash} screenshot and paste a link.'
+
+[07:38] [scene:talk]
+VISUAL:
+AUDIO: 'From that moment, your agent reads the web with its eyes open. Ask it to pull numbers out of a chart. Compare two pricing tables. Read a dashboard.'
+
+[07:50] [scene:talk]
+VISUAL:
+AUDIO: 'Things that used to quietly fail. That alone is worth installing tonight. Tier three. Point it at your own documents. This is where it really earns its keep.'
+
+[08:03] [scene:talk]
+VISUAL:
+AUDIO: 'Financial reports, scientific papers, spreadsheets, slide decks, anything that is heavy on tables and charts. You drop your files into a small config'
+
+[08:15] [scene:talk]
+VISUAL:
+AUDIO: 'file, run pixel rack index build, then pixel rack serve. And now, you have a private visual search engine over your own documents, running on your own machine,'
+
+[08:27] [scene:talk]
+VISUAL:
+AUDIO: 'where the answers come from what each page actually looks like, not a mangled text version of it. If you are drowning in dense documents, this is the unlock you have been waiting for.'
+
+[08:40] [scene:talk]
+VISUAL:
+AUDIO: 'Now, let me be straight with you, because that is the whole point of this channel. This is not free magic. Vision embeddings are heavier than text. So, building the index costs more'
+
+[08:52] [scene:talk]
+VISUAL:
+AUDIO: 'compute, and retrieval is a little slower. On plain prose, an article that is just paragraphs with no real visual structure, the gains are small. You might not need'
+
+[09:04] [scene:talk]
+VISUAL:
+AUDIO: 'it there. And the full pre-built Wikipedia index is a big download if you want to self-host it. So, here is the simple rule. Use pixel rack wherever the way a page looks carries'
+
+[09:17] [scene:talk]
+VISUAL:
+AUDIO: 'the meaning. That is exactly where text rack has always been blind, and exactly where this thing is untouchable. So, here is the one idea to carry with'
+
+[09:29] [scene:talk]
+VISUAL:
+AUDIO: 'you. Text-based rack throws away everything visual before your AI ever gets a vote. Pixel rag gives it eyes. Render the page,'
+
+[09:41] [scene:talk]
+VISUAL:
+AUDIO: 'embed the pixels, and search by how it looks. If this rewired how you think about retrieval, I built you a free visual rag playbook. Every command from this video,'
+
+[09:55] [scene:talk]
+VISUAL:
+AUDIO: 'plus a one-page decision chart for when to use visual versus text retrieval. To get it, just comment the word pixel and I will send it straight to you.'
+
+[10:07] [scene:talk]
+VISUAL:
+AUDIO: 'Now, a quick, honest ask. Most of you watching haven\'t subscribed yet. On YouTube, it is free, and it tells the algorithm to push this to more builders.'
+
+[10:19] [scene:talk]
+VISUAL:
+AUDIO: 'On Facebook, hit follow, and the supporter membership is what keeps these breakdowns coming. And on Instagram, I drop the bite-sized version of every one of these. If you want to go deeper, my complete'
+
+[10:32] [scene:talk]
+VISUAL:
+AUDIO: 'Claude code guide is linked down in the description. Rag was blind this whole time. Now, you can finally see the fix. Go build with it.'

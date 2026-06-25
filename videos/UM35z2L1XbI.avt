@@ -1,0 +1,291 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: ComfyUI Wan 2.1 With Any Trajectory Instruction Motion Control For AI Video
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=UM35z2L1XbI
+upload_date: 20250603
+transcript_source: captions
+route: text
+
+---
+
+[00:01] [scene:talk]
+VISUAL:
+AUDIO: 'Hello everyone. This is the year for AI video with rapid development one 2.1 as the foundation model and on top of it we have seen more and more add-on features released. Imagine turning a single image into a dynamic realistic video with just'
+
+[00:14] [scene:talk]
+VISUAL:
+AUDIO: 'a few simple steps. That\'s exactly what the any trajectory instruction or ATI project from bite dance research makes possible. ATI is a groundbreaking AI framework that lets you control motion'
+
+[00:28] [scene:talk]
+VISUAL:
+AUDIO: 'in video generation. By drawing trajectories on a single image, you can dictate how objects move, adjust camera angles like panning or zooming, or even fine-tune specific details like making a character\'s arm wave. The result, a'
+
+[00:42] [scene:talk]
+VISUAL:
+AUDIO: 'seamless, highquality video that brings your vision to life. Using ATI is simple. Start with an image. draw paths to guide the motion of objects or the camera and let the AI do the rest. You'
+
+[00:55] [scene:talk]
+VISUAL:
+AUDIO: 'can access ATI through its hugging face repository, where you\'ll find the code base, pre-trained models, or even a demo to try it out. All you need is a bit of creativity and some basic tech knowhow.'
+
+[01:07] [scene:talk]
+VISUAL:
+AUDIO: 'Why use ATI? It saves time and money by turning a single image into professionalgrade videos. It\'s versatile, letting you control everything from big camera moves to tiny details. Plus, it\'s perfect for scaling'
+
+[01:21] [scene:talk]
+VISUAL:
+AUDIO: 'up content creation. Whether you\'re making ads, animations, or educational visuals, from filmmakers crafting dynamic scenes to game developers animating cutscenes, marketers can create eye-catching ads, educators can'
+
+[01:34] [scene:talk]
+VISUAL:
+AUDIO: 'visualize complex concepts and content creators can produce stunning videos for social media all from one image. Ready to bring your ideas to life? We are going to try this in Comfy UI implement'
+
+[01:46] [scene:talk]
+VISUAL:
+AUDIO: 'in a practical way. First, let\'s look at the ATI GitHub repo. As you can see, there\'s some Python code utility tools in their GitHub repositories. You can see that there are modules for one 2.1 to run this and there\'s a few supporting'
+
+[01:59] [scene:talk]
+VISUAL:
+AUDIO: 'files for the ATI image to video using the one 2.114b480p resolution model weight. Now, as this goes, we have the bite dance research ATI hugging face repo. On this'
+
+[02:12] [scene:talk]
+VISUAL:
+AUDIO: 'page, you can see that there are pre-training models already here. Through this, we\'ve seen that bite dance research has been really active recently with the Juan 2.1 and the fandom that we'
+
+[02:24] [scene:talk]
+VISUAL:
+AUDIO: 'talked about last week has been updated as well. All of these are based on Juan 2.1 as the base model, creating stuff on top of that with some add-on features for AI video generation. Now, in the one'
+
+[02:36] [scene:talk]
+VISUAL:
+AUDIO: 'vidos wrapper notes, there\'s a packaged ATI model safe tensor file that you can try out in the when videos comfy UI hugging face repo. When you click into the files and versions, scroll down a'
+
+[02:49] [scene:talk]
+VISUAL:
+AUDIO: 'little bit to the middle section of the page where you can see the one 2.1 I2 VAT14B. Now, basically, this is running with two variants here, the FP16 and the FP8 formats. With the FP8, you\'ve got'
+
+[03:04] [scene:talk]
+VISUAL:
+AUDIO: 'two formats which you can specifically choose depending on what\'s compatible with your system. For me today, I\'ll be trying out the FP8E4 of these models. The packaged one is about a 17 GB file'
+
+[03:17] [scene:talk]
+VISUAL:
+AUDIO: 'storage. So, check that out. Download this into your Comfy UI models folder. So once you save that into your Comfy UI models folder, like for example in here in my Comfy UI files folder, you save'
+
+[03:31] [scene:talk]
+VISUAL:
+AUDIO: 'that into the diffusion models subfolder. I created a one 2.1 subfolder to manage all of this. I\'ve downloaded this I2VAT I14B model right here. So once'
+
+[03:43] [scene:talk]
+VISUAL:
+AUDIO: 'you\'ve done that, finish up and then go back to the Comfy UI for updates. Before that, I want to mention the cost V for fast video generation Laura models. We have the 14B Laura model for the 14B'
+
+[03:57] [scene:talk]
+VISUAL:
+AUDIO: 'Laura model V2. That means this is a newer version of the cost V models. We\'ve got the label of V2. When you want to download this one, you can check that out. Obviously, this is going to be a'
+
+[04:09] [scene:talk]
+VISUAL:
+AUDIO: 'little bit more improved compared to the first version that we tried out last week. You know how fast AI moves, development and updates happen weekly. Right now, just last week, we tested the'
+
+[04:21] [scene:talk]
+VISUAL:
+AUDIO: 'new launch, the new release of Cost V, and now we\'ve already got version two. And lastly, remember to update your Comfy UI1 video wrapper. A lot of people always come and ask me why their custom'
+
+[04:34] [scene:talk]
+VISUAL:
+AUDIO: 'nodes aren\'t working or something\'s missing, etc. It\'s because when we have new model features added in the video wrapper, you need to update that basically in order to use those new features. So just like that, you see'
+
+[04:47] [scene:talk]
+VISUAL:
+AUDIO: 'it\'s only been an hour ago since there was another new update for the when videos wrapper. So do that more frequently if you discover something new for the video wrapper to run or in general the Comfy UI native node itself also needs frequent updates to try out'
+
+[05:01] [scene:talk]
+VISUAL:
+AUDIO: 'new features. So once you\'ve updated Comfy UI and the video wrapper custom nodes, you can load the one 2.1 I2 VAT models in here. We\'re loading in the model loader now. Pay attention here as'
+
+[05:13] [scene:talk]
+VISUAL:
+AUDIO: 'we\'re using offloading to make it faster. And the block swap here is set to 10. Basically, this overall view, let\'s zoom it out. Looks like a spaghetti chunk of custom nodes'
+
+[05:25] [scene:talk]
+VISUAL:
+AUDIO: 'connecting together like a busy city. This is coming from the one video rapper examples folder. You can go to the Comfy UI custom nodes here or on the GitHub project page that I\'m currently showing you, go to the examples folder. Scroll'
+
+[05:38] [scene:talk]
+VISUAL:
+AUDIO: 'down to check out the ATI testing, the W video ATI testing file. That\'s what we\'re going to talk about today. When you download the latest video wrapper or custom nodes, you also have that locally'
+
+[05:50] [scene:talk]
+VISUAL:
+AUDIO: 'in your Comfy UI folder. So, you drag that file and put that on top of the Comfy UI. Basically, you will load this workflow diagram and this chunk of spaghetti runs all over the place like chaos here. But don\'t worry, this is not'
+
+[06:03] [scene:talk]
+VISUAL:
+AUDIO: 'hard to understand once you get started. First, you\'ll look at the model loader part. You\'ll obviously need the model loader of the ATI repackaged model compiled with one 2.1 to v. So, these save tensor files are dedicated to'
+
+[06:18] [scene:talk]
+VISUAL:
+AUDIO: 'running the ATI. It\'s going to play around with the trajectory of your image. Previously in my main channel, I talked about video X and I remember there was a fine-tuned model for clock videos X like seven months ago. We'
+
+[06:30] [scene:talk]
+VISUAL:
+AUDIO: 'talked about trajectory control for image to video. Today we have similar things in Juan 2.1, but after all the testing I found out, of course, we\'ve got better quality in one 2.1. The'
+
+[06:43] [scene:talk]
+VISUAL:
+AUDIO: 'motion following this time isn\'t talking about prompt adherence. When we talk about trajectory, we talk about how to control each part of the motions from direction point A to B. One 2.1 ATI does'
+
+[06:56] [scene:talk]
+VISUAL:
+AUDIO: 'obviously better than Cog Video X, so there\'s no need to compare with the old models like that. Some images I\'ve tested for trajectory control, for example, like this one. This image I\'ve'
+
+[07:08] [scene:talk]
+VISUAL:
+AUDIO: 'tried in a lot of other AI video motion control features in Cog video X as well as in Cling AI motion control too. I tried this. I tried to have the Spartan soldiers and their opponents clash. So'
+
+[07:21] [scene:talk]
+VISUAL:
+AUDIO: 'the Spartan soldiers holding a blade and thrusting through the throat of the opponent. Another second seed number. Second try of this. It\'s also working. So either one. As you can see, these are two videos that I generated with'
+
+[07:33] [scene:talk]
+VISUAL:
+AUDIO: 'different seed numbers and both are working with these motions. In Cling AI before, maybe it didn\'t work because of censored content or something too violent, but then it just didn\'t work in there either. And in cog video X,'
+
+[07:46] [scene:talk]
+VISUAL:
+AUDIO: 'nothing moved on the hand. So compared with that when video 2.1 and also using ATI this time, it can do something that I really want to control on the image scenes transforming into video motion.'
+
+[07:58] [scene:talk]
+VISUAL:
+AUDIO: 'So in this way, we\'re going to try that out today. And this messy spaghetti thing, don\'t worry about that because I\'ve also reformed that into a beautiful nice way to understand. And here, this is basically the same workflow of this'
+
+[08:12] [scene:talk]
+VISUAL:
+AUDIO: 'workflow example. Moving on to here. First, the model loader. The same thing in here. And we have the text prompts image encoder for your Juan videos imagetovideo encoding because what we\'re using today is one 2.1'
+
+[08:25] [scene:talk]
+VISUAL:
+AUDIO: 'I2V on top of the imagetovideo base model. The bite dance people added the ATI features for true trajectory into this model. So basically this compiled save tensor file is the outcome of this'
+
+[08:39] [scene:talk]
+VISUAL:
+AUDIO: 'package using the trajectory ATI. Therefore, after we input the image for encoding, we send it to the image to video encoder and connect the VAE start image clip embedding, etc. into one'
+
+[08:52] [scene:talk]
+VISUAL:
+AUDIO: 'sampling for this group. So, the one video sampler is going to take the job and start doing its thing. One thing we have to pay attention to is that when we connect the model data, you see between'
+
+[09:04] [scene:talk]
+VISUAL:
+AUDIO: 'the model loader and the sampler right here, we\'ve got another connection in between. This is the one video\'s ATI tracks where it\'s going to track the trajectory from your input. We\'ll be drawing some lines on the image and then'
+
+[09:17] [scene:talk]
+VISUAL:
+AUDIO: 'telling the AI what to do, how far your directions are going to go and which directions they\'re going to follow with your image. Any objects in your image that you want to track. This is going to be a bunch of string text passing'
+
+[09:30] [scene:talk]
+VISUAL:
+AUDIO: 'numbers and all the formatted numbers in sequence into this track. So, moving down to how this is going to be set up. And one more thing when we do the output of that you can do the ATI tracks visualizations where it\'s also showing'
+
+[09:42] [scene:talk]
+VISUAL:
+AUDIO: 'the motion controls drawing lines from your input. You can disable this bypass it and you\'ll only have the video combined from the generated video in here. Let\'s check it out. How can we do'
+
+[09:55] [scene:talk]
+VISUAL:
+AUDIO: 'that? First, as you can see, I have this example where the Spartan soldiers are trying to thrust the knife, the blade into the opponent\'s throat. And how that\'s going to work is first of'
+
+[10:08] [scene:talk]
+VISUAL:
+AUDIO: 'all we have the spline editor by default in this workflow. The workflow has three spline editors as well in the example workflow. So I\'ve just kept all these custom nodes unchanged. I\'ve just made them more beautiful and easier to read.'
+
+[10:21] [scene:talk]
+VISUAL:
+AUDIO: 'So we\'ve got three lines of motion control here. Basically one I\'m using for the blade and this right hand for the blade to thrust in. So the motions are not going to be really dramatic like this where the blade steps through the'
+
+[10:34] [scene:talk]
+VISUAL:
+AUDIO: 'sand and goes inside the ground. No, we\'re going to bring it back here. Just let the front arm which is holding this blade move a little bit. Let the blade thrust through this part of the organ.'
+
+[10:46] [scene:talk]
+VISUAL:
+AUDIO: 'And then the second motion I want to do is here where the chest of the opponent is going to pop up a little bit, not too much. So it\'s going to give me the reaction after this happens. And then the chest will have some reaction to the'
+
+[10:58] [scene:talk]
+VISUAL:
+AUDIO: 'pain. And then we\'ve got the final one here where I\'ve set the head to tilt up and go backward a little bit. My text prompts here are pretty simple. This is because in local AI we have uncensored enabled where some of the AI videos you'
+
+[11:11] [scene:talk]
+VISUAL:
+AUDIO: 'want to do a little bit of violence or something like that. You can do that in local AI as well. So here I\'ve just mentioned what I did for the actions and I just tell the AI what to do. So let\'s generate this one and see how that works'
+
+[11:24] [scene:talk]
+VISUAL:
+AUDIO: 'in the final result. This time I\'m not going to use the filter seed of the default setting numbers in the example workflow. Let\'s try out some random numbers and see how that works because I want to see if this trajectory has good'
+
+[11:37] [scene:talk]
+VISUAL:
+AUDIO: 'control in this AI model. Again, we\'re doing that this time. And I want to show the trajectory here where when we have some movement, you don\'t go all the way down to another side of the frame. You really have to'
+
+[11:50] [scene:talk]
+VISUAL:
+AUDIO: 'depend on how far the distance you want the trajectory to move. In this case, we just want the arm movement and the character wants to have some pressure pushed down. Therefore, we\'re creating this motion. Although, this time the'
+
+[12:03] [scene:talk]
+VISUAL:
+AUDIO: 'blade is not really well thrust into the throat compared with what I did in my last try of this generation where you see it\'s really going through toward what we want to do in the motion. But still it\'s able to have the similarity'
+
+[12:16] [scene:talk]
+VISUAL:
+AUDIO: 'of what we\'ve just tried with a lucky draw with different seed numbers and one of them you can have satisfied with the motions. That\'s how we can use this. But before we set up the video generation we have to do the settings. I\'ve set the'
+
+[12:30] [scene:talk]
+VISUAL:
+AUDIO: 'bypass here in order to disable the video sampling in this part. So when you load another image for example here I load another image. What we can do is once we disable the sampling first then we click one time for the running of the'
+
+[12:43] [scene:talk]
+VISUAL:
+AUDIO: 'generation and then you will load the spline editor with our new image for the motion settings for the trajectory. So in this way like here let\'s say the character is going to move forward. We want to bring it to have a faster'
+
+[12:56] [scene:talk]
+VISUAL:
+AUDIO: 'motion. So in order to do that we set the trajectory way longer length to another side of the image frame. And the second one maybe we\'ll say let\'s try something difficult for these AI models.'
+
+[13:08] [scene:talk]
+VISUAL:
+AUDIO: 'I want to give some challenge to one 2.1. Let\'s say the hat from this woman will fall off to another direction while she\'s running on this side. And then we have the last one which will be let\'s'
+
+[13:20] [scene:talk]
+VISUAL:
+AUDIO: 'say the arms are going to move forward as well. So once again we click the run button and you will see the second step is to preview our trajectory. Hopefully something follows what we want to do in'
+
+[13:32] [scene:talk]
+VISUAL:
+AUDIO: 'this setting. the woman running across the street, the hat fall off by the wind and we see these motions hopefully. And this one I have to show because although it is a fail, it\'s an epic'
+
+[13:45] [scene:talk]
+VISUAL:
+AUDIO: 'fail. And also try another time where I\'ve generated using another seed number, it\'s also happening like this. It\'s really obviously something unexpected when you have the trajectory like this. You want the arms running'
+
+[13:57] [scene:talk]
+VISUAL:
+AUDIO: 'with the motion going forward as well, but then the hat didn\'t fly off in the air. It just can\'t do that. Sometimes AI can\'t handle complex prompts for prompt adherence. Well, I have to try a few more times to see if this is able to do'
+
+[14:11] [scene:talk]
+VISUAL:
+AUDIO: 'that or not when I\'ve tried to do a few of these video generations. Let\'s see how that result goes. Okay, so this is an easier video for the AI to generate where I put the directions going forward, some hairs naturally going on'
+
+[14:24] [scene:talk]
+VISUAL:
+AUDIO: 'the opposite side. As you can see, it\'s able to do that. This is an easier way for the AI to do another try. But man, this one was so off from what I expected when I saw this one. Yeah. So, it\'s fun'
+
+[14:36] [scene:talk]
+VISUAL:
+AUDIO: 'to use sometimes when you have different unexpected results from AI that wouldn\'t happen in real life, but it happens when generated from AI like this. So, check this out. This is the ATI from Bite Dance, and I\'ll see you guys in the next'
+
+[14:50] [scene:talk]
+VISUAL:
+AUDIO: 'video. Have a nice day. See you.'

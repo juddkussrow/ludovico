@@ -1,0 +1,167 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: HeyGen quietly shipped HyperFrames...
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=SKxLauv_gCk
+upload_date: 20260420
+transcript_source: captions
+route: text
+
+---
+
+[00:01] [scene:talk]
+VISUAL:
+AUDIO: 'Okay, here\'s a weird one. Hey Jen, just open sourced a video editor that doesn\'t have a timeline, doesn\'t have a UI, and isn\'t really meant for humans. The project is called Hyperframes, and the pitch is literally one sentence long. Write HTML, render video, built'
+
+[00:14] [scene:talk]
+VISUAL:
+AUDIO: 'for agents. That\'s it. You write a web page with a few extra data attributes. The thing opens it in headless Chrome, seeks one frame at a time, and pipes the output straight into FFmpeg. What you get at the end is a'
+
+[00:27] [scene:talk]
+VISUAL:
+AUDIO: 'deterministic MP4 that your coding agent could have produced on its own. No timeline scrubber, no drag and drop, no proprietary DSL. The whole framework is designed around the assumption that'
+
+[00:40] [scene:talk]
+VISUAL:
+AUDIO: 'the person or the thing building the video already knows HTML. And the numbers are pretty loud already. 7,700 stars, 590 forks, version 0.4.10 shipped this morning, and it\'s Apache'
+
+[00:56] [scene:talk]
+VISUAL:
+AUDIO: '2.0 licensed. For a repo that\'s barely 6 weeks old, that is absolutely not quiet. They\'ve cut 10 releases in the last 4 days alone, and the maintainers are HeyGen staff engineers, not weekend'
+
+[01:08] [scene:talk]
+VISUAL:
+AUDIO: 'warriors. So, let me actually walk you through the repo and show you what\'s in it. Right at the top of the readme, you\'ve got the HeyGen logo, the Apache license badge, a Node 22 or later requirement,'
+
+[01:20] [scene:talk]
+VISUAL:
+AUDIO: 'and then the tagline in giant type, write HTML, render video, built for agents. Right below that is a demo GIF that basically tells the entire story in 3 seconds.'
+
+[01:32] [scene:talk]
+VISUAL:
+AUDIO: 'You\'ve got HTML code on the left side, and the rendered video on the right side. The install is a single NPX command that scaffolds a project, drops you into a preview server with live reload, and renders to MP4 on the same'
+
+[01:44] [scene:talk]
+VISUAL:
+AUDIO: 'command line. Scroll down a bit further, and you hit the actual composition example, which is just a div with a data composition ID, a few child elements with data start and data duration timing attributes, and a'
+
+[01:57] [scene:talk]
+VISUAL:
+AUDIO: 'script tag at the bottom that wires up a GSAP timeline. That\'s the whole programming model. Keep scrolling, and you land on the catalog section, where they claim 50-plus ready-to-use blocks covering'
+
+[02:09] [scene:talk]
+VISUAL:
+AUDIO: 'social overlays, shader transitions, data charts, and cinematic effects. At the bottom, there\'s a packages table that breaks the monorepo down into seven separate NPM packages, each doing one specific thing.'
+
+[02:22] [scene:talk]
+VISUAL:
+AUDIO: 'Okay, so the obvious question is, why does this exist when Remotion already ships and FFmpeg has been around forever? Here\'s the actual answer. Remotion is a React framework, and React'
+
+[02:34] [scene:talk]
+VISUAL:
+AUDIO: 'compositions are kind of a nightmare for an agent to reason about because the scene graph is hidden inside component state and hooks. FFmpeg is deterministic, but requires you to specify every filter and every'
+
+[02:46] [scene:talk]
+VISUAL:
+AUDIO: 'overlay in a giant command line string. Hyperframes sits in a different spot entirely. It treats HTML as the source of truth, which is exactly the format every frontier model already writes'
+
+[02:58] [scene:talk]
+VISUAL:
+AUDIO: 'fluently. Your agent can iterate on a video the same way it iterates on a web page by editing attributes and reloading the preview. Let me go through what actually ships inside the framework. First is the'
+
+[03:10] [scene:talk]
+VISUAL:
+AUDIO: 'composition format itself. Every video is a single HTML file with a root div that carries the composition ID, width, and height. Child elements get timing attributes, data start for when they appear, data'
+
+[03:23] [scene:talk]
+VISUAL:
+AUDIO: 'duration for how long they stay, and data track index for layering. That\'s the whole schema. Second, [snorts] there\'s a built-in GSAP adapter, so you can author animation timelines using the'
+
+[03:35] [scene:talk]
+VISUAL:
+AUDIO: 'most battle-tested web animation library on Earth, and they render deterministically to video. Third is the preview server. You run NPX hyperframes preview, and you get hot reload in your browser, which'
+
+[03:47] [scene:talk]
+VISUAL:
+AUDIO: 'means you can eyeball your composition while you edit it before you ever commit to the slow render. Fourth is the render command itself, which runs headless Chrome, seeks each frame using the begin frame API, and'
+
+[03:59] [scene:talk]
+VISUAL:
+AUDIO: 'hands the pixel data to FFmpeg. Every render is bit-for-bit identical given the same input, which is exactly what you want in a CI pipeline. Then there\'s the agent layer, which is'
+
+[04:11] [scene:talk]
+VISUAL:
+AUDIO: 'where the project actually earns its tagline. Hyperframes ships five skills through the Vercel Labs Skills Registry. You run NPX skills at heygen.com/hyperframes, and your coding agent, whether that\'s'
+
+[04:25] [scene:talk]
+VISUAL:
+AUDIO: 'Claude Code, Cursor, Codex, or Gemini CLI, suddenly knows how to write correct compositions, how to animate with GSAP, how to use the CLI, and even how to turn an arbitrary website into a video.'
+
+[04:37] [scene:talk]
+VISUAL:
+AUDIO: 'That last one is kind of the killer because it means you can point an agent at a blog post or a landing page and get back a finished video without touching a timeline. There\'s also a catalog of 50-plus'
+
+[04:49] [scene:talk]
+VISUAL:
+AUDIO: 'drop-in blocks, things like Instagram follow overlays, shader transitions, and animated data charts. You install them one at a time with NPX hyperframes add, the same way you pull components from a UI library.'
+
+[05:02] [scene:talk]
+VISUAL:
+AUDIO: 'Under the hood, the monorepo breaks down into seven packages, and it\'s worth knowing what each one does because they\'re published separately, and you can pick and choose. Core is the engine. It owns the types, the parsers, the linter, the frame adapter contract, and'
+
+[05:15] [scene:talk]
+VISUAL:
+AUDIO: 'the runtime. Engine is the capture layer, the thing that drives Puppeteer and pulls rendered pixels out of Chrome frame by frame. Producer is the full pipeline, capture plus encode plus audio mixing glued'
+
+[05:27] [scene:talk]
+VISUAL:
+AUDIO: 'together. Studio is the browser-based composition editor if you actually do want a UI. And player is an embeddable web component, so you can preview Hyperframes compositions inside any web page.'
+
+[05:41] [scene:talk]
+VISUAL:
+AUDIO: 'Getting started is genuinely a two-command process. If you\'ve got a recent Node installed, bootstrap a project with NPX hyperframes in it, change into the folder, run the preview server, or kick off a render. That\'s it. Version 0.4.10 landed this morning, and'
+
+[05:56] [scene:talk]
+VISUAL:
+AUDIO: 'if you scroll the commit log, you can see the team is absolutely sprinting. The last 4 days alone shipped 10 separate releases. They added Windows support in CI. They fixed a cross-platform build bug the'
+
+[06:09] [scene:talk]
+VISUAL:
+AUDIO: 'Windows runner surfaced. They shipped a snapshot feature that injects real video frames so previews match the final render. And they cleaned up a whole batch of skill file path bugs that were tripping up the agent integrations.'
+
+[06:22] [scene:talk]
+VISUAL:
+AUDIO: 'This is not a hobby project. The top committer, JR Russo 120, has 180 contributions. Miguel, a HeyGen engineer, has 111. The next name down has 56. These are paid engineers'
+
+[06:35] [scene:talk]
+VISUAL:
+AUDIO: 'shipping on a weekday cadence. So, who should actually care about this? If you build automated content pipelines like programmatic SEO videos or per customer personalized clips, this is basically tailor-made for you.'
+
+[06:48] [scene:talk]
+VISUAL:
+AUDIO: 'If you run a coding agent and want it to produce video as another output format, this is the first framework that treats your agent as the primary user, not a human editor. If you\'re a developer who hates React'
+
+[07:00] [scene:talk]
+VISUAL:
+AUDIO: 'video frameworks because the component life cycle does not match how you think about time, pure HTML with GSAP is going to feel way more natural. And if you just want a reproducible build step for marketing videos,'
+
+[07:13] [scene:talk]
+VISUAL:
+AUDIO: 'deterministic rendering means your CI can produce the exact same MP4 on every branch. Okay, let\'s be real about what\'s not great here yet. It\'s version 0.4, which means the API is probably going to shift'
+
+[07:25] [scene:talk]
+VISUAL:
+AUDIO: 'under you. The catalog has 50 blocks, but the ecosystem of third-party components is basically zero. And rendering through headless Chrome is never going to match a native compositor on performance, so long-form video at 4K'
+
+[07:37] [scene:talk]
+VISUAL:
+AUDIO: 'is not really the use case. But for everything that\'s rough, the project is absolutely real. Apache 2.0 licensed, 7,700 stars in 6 weeks, paid engineers at HeyGen shipping'
+
+[07:50] [scene:talk]
+VISUAL:
+AUDIO: 'multiple releases a day, and the skill system that plugs cleanly into every major coding agent. If you\'re building anything that generates video in 2026 and you\'re not at least reading the quick start, you\'re missing a pretty significant shift in'
+
+[08:03] [scene:talk]
+VISUAL:
+AUDIO: 'how the stack is going to work. Links are in the description. Thanks for watching. I\'ll catch you tomorrow.'

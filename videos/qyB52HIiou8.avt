@@ -1,0 +1,2707 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Archon + Jira: Drag a Ticket, Get a Pull Request (Live Build)
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=qyB52HIiou8
+upload_date: 20260524
+transcript_source: captions
+route: text
+
+---
+
+[00:02] [scene:talk]
+VISUAL:
+AUDIO: 'Today we are integrating Archon with Jira. The promise here is that we get to send a ticket into Jira and then we end with a poll request. And so this is something that I\'ve been meaning to do'
+
+[00:14] [scene:talk]
+VISUAL:
+AUDIO: 'for quite a while now. Actually, I\'ve been using Jira more and more the past couple of months here, especially as I\'ve been doing more enterprise level trainings for adopting AI coding assistants like Claude Code. And uh so'
+
+[00:26] [scene:talk]
+VISUAL:
+AUDIO: 'I\'ve been wanting to build it into Archon because it\'s such a crucial part of the development life cycle for I would say like 80% of organizations and individuals right now. So there was a'
+
+[00:39] [scene:talk]
+VISUAL:
+AUDIO: 'Stack Overflow survey that I uh took a look at within the last couple of months. I actually wish I had it up for the stream here, but it\'s pretty crazy. Like, as far as development tools go, Jira, as well as Confluence within, you'
+
+[00:52] [scene:talk]
+VISUAL:
+AUDIO: 'know, like the Atlassian suite is like pretty much as popular as anything else out there, like GitHub and all the other big ones that like literally everybody is using like it feels like everyone is'
+
+[01:04] [scene:talk]
+VISUAL:
+AUDIO: 'using Jira. And so, we have this sort of like board and backlog. It\'s like a canban board, right? So, like I can take things and drag things along. What I want to do with Archon is make it so'
+
+[01:16] [scene:talk]
+VISUAL:
+AUDIO: 'that within every single individual ticket that we have in Jira Epics, we can have a separate conversation with a coding agent. So essentially, we have an agent per ticket. And as we plan for it and build it and validate it, we get'
+
+[01:30] [scene:talk]
+VISUAL:
+AUDIO: 'that same agent with Archon workflows helping us along the way and being able to even do things completely end to end. And so Archon, there already are a lot of platforms that we have integrated'
+
+[01:43] [scene:talk]
+VISUAL:
+AUDIO: 'with the tool. We call them our adapters. It\'s the way it\'s to talk to Archon. So if you go to the readme here and you scroll down, uh we list out all the ones that we support. So we have a'
+
+[01:55] [scene:talk]
+VISUAL:
+AUDIO: 'web interface and I can pop that up right here. I\'ve shown this a lot in the last live streams that I\'ve done. So the web interface is kind of like the out of the box way, the custom way to you know kick off and view the logs for archon'
+
+[02:09] [scene:talk]
+VISUAL:
+AUDIO: 'workflows. And then we have the CLI. This is what we\'re using with cloud code or your second brain whatever to invoke things right in the command line. So you can essentially dispatch your work to'
+
+[02:21] [scene:talk]
+VISUAL:
+AUDIO: 'archon workflows with the CLI. And then we also support Telegram, Slack, GitHub and Discord. And so like in Slack for example, we can have many different conversations going at the same time.'
+
+[02:33] [scene:talk]
+VISUAL:
+AUDIO: 'Each thread in Slack gets a dedicated conversation with Archon and you can invoke any workflows just like you would in the web UI and the CLI. And so now I want to add Jira and Jira I\'m going to'
+
+[02:46] [scene:talk]
+VISUAL:
+AUDIO: 'call it a community adapter. So another thing that we\'ve been building in Archon is the support for uh two different kinds of adapters. We have the official maintainer supported ones. These are the'
+
+[03:00] [scene:talk]
+VISUAL:
+AUDIO: 'ones that we are going to take responsibility as the maintainers to keep up to date and working. And then we also have a set of community adapters. These are the ones that people have contributed that we don\'t want to'
+
+[03:13] [scene:talk]
+VISUAL:
+AUDIO: 'necessarily maintain but we do want to allow people to you know add more and you know potentially support it themselves. So if we look at the community folder right here for the adapters in archon, we have gy and'
+
+[03:27] [scene:talk]
+VISUAL:
+AUDIO: 'gitlab as alternatives to github for our forge adapters. That\'s like the source control adapters. And then uh discord is I guess yeah discord we kind of built it as an example of a community adapter,'
+
+[03:40] [scene:talk]
+VISUAL:
+AUDIO: 'but really it\'s something that we as the maintainers actually built. But as far as the these two right here, they were built by people in the community, not us as the maintainers. And so we\'re going to add another Jira adapter right here. And I mean, yes, I\'m building it as a'
+
+[03:56] [scene:talk]
+VISUAL:
+AUDIO: 'maintainer, but also I just want to do this as a community one because I\'m not necessarily going to be maintaining it going forward. Uh potentially we\'ll we\'ll see how it goes today. So I am really just like exploring this for the first time with you guys. I\'ve never'
+
+[04:08] [scene:talk]
+VISUAL:
+AUDIO: 'tried building Jira into Archon before. Uh so I\'m not exactly sure how it\'s going to work to like have every ticket mapped to an Archon conversation. I assume it\'ll be like Slack threads. We\'ll see. But I think this is going to be really cool because like I said,'
+
+[04:20] [scene:talk]
+VISUAL:
+AUDIO: 'everyone is using Jira and just being able to like have an agent that\'s like dedicated to each ticket helping you along the way, I think is going to be extremely powerful. So I am excited to get into this here. So going over to my'
+
+[04:33] [scene:talk]
+VISUAL:
+AUDIO: 'second brain here, I have the live stream plan pulled up. So this is the conversation that we\'re going to be working in to kick off the archon workflow to actually build the Jira'
+
+[04:46] [scene:talk]
+VISUAL:
+AUDIO: 'adapter. So we\'re doing Archon and Jira. Your backlog now ships itself. So yeah, you know, Archon can already work in these platforms. Now we\'re going to build the Jira adapter. So a ticket'
+
+[04:58] [scene:talk]
+VISUAL:
+AUDIO: 'comes in, Archon can pick it up, fix the bug, open a poll request on GitHub. So I mean there\'s kind of like two different ways that we can work with Jira. It\'s either like, you know, in the ticket we have a conversation or Archon can just'
+
+[05:11] [scene:talk]
+VISUAL:
+AUDIO: 'like pick it up and handle it automatically. I\'m actually more interested in the former. Like I want to be able to like click into this and when I put a comment in here, then it would reply directly in the ticket. That\'s'
+
+[05:24] [scene:talk]
+VISUAL:
+AUDIO: 'more what I\'m looking for. And so I\'m going to start by uh creating a GitHub issue in the archon repo. That is going to be our initial context going into'
+
+[05:36] [scene:talk]
+VISUAL:
+AUDIO: 'this build. And the cool thing about building any kind of adapter in Archon is we can use the existing adapters already in the codebase as an example. So it\'s really easy to oneshot these'
+
+[05:48] [scene:talk]
+VISUAL:
+AUDIO: 'adapters. I\'m hoping that we can oneshot this Jira adapter even though it\'s not quite the same as all the other adapters we have here. It\'s not a source control like GitHub, so it\'s not a forge. Um, but I still think that like there\'s'
+
+[06:02] [scene:talk]
+VISUAL:
+AUDIO: 'going to be a lot of similarities to that with like Slack and GitHub. And so we can lean on that and load that context in as we actually build it here. So that\'s the plan for today. But I\'m going to go over to the chat for a little bit before I uh just get right'
+
+[06:14] [scene:talk]
+VISUAL:
+AUDIO: 'into the building here. All right. Hey, Eric. Good to see you here. Live stream is perfect for enterprise teams. Yeah, that\'s that\'s honestly the goal is I want to like explore Jira more and integrate things'
+
+[06:26] [scene:talk]
+VISUAL:
+AUDIO: 'like Archon with Jira because I am very interested in bringing you know a lot of my training to more enterprise level teams. I\'ve been starting to do that more recently. So that\'s why I\'ve'
+
+[06:38] [scene:talk]
+VISUAL:
+AUDIO: 'already been doing stuff in Jira and it just makes sense to then integrate the big open source projects I\'m working on with the tool as well. And uh probably in Confluence I\'ll want to integrate at another point as well. Uh though I\'m not really sure if that\''
+
+[06:51] [scene:talk]
+VISUAL:
+AUDIO: 'really be an adapter versus more like a context source, but anyway, that\'s that\'s for a different time. So, all right. Uh cool. So, as far as getting started here, I\'m going to be just creating a GitHub issue. So, I\'m going'
+
+[07:04] [scene:talk]
+VISUAL:
+AUDIO: 'to use my speech to text tool here. I uh love using Aqua Voice. And I will say, all right, let\'s go ahead and create a GitHub issue in the Archon codebase. And so what I\'m interested in doing is being'
+
+[07:18] [scene:talk]
+VISUAL:
+AUDIO: 'able to talk to Archon within individual tickets just like we are able to have many conversations in parallel in Slack through the different threads. So it\'s not necessarily a ticket comes in Ajira'
+
+[07:30] [scene:talk]
+VISUAL:
+AUDIO: 'and Archon picks it up automatically. It\'s more like within the ticket itself. We can conversate with Archon to run workflows to handle the ticket and automatically move it around just using the um the Jira skill. Right? So it\'s'
+
+[07:43] [scene:talk]
+VISUAL:
+AUDIO: 'like Jira the adapter we\'re building right now is the conversation point not handling it end to end that would just be within like the workflows itself that we build. So I want you to uh take a'
+
+[07:55] [scene:talk]
+VISUAL:
+AUDIO: 'look in the archon codebase right now to understand how the GitHub and Slack adapters currently work just so you have full context to then create the GitHub issue. I want you to be pretty'
+
+[08:08] [scene:talk]
+VISUAL:
+AUDIO: 'comprehensive here. All right because this GitHub issue is going to be the starting point for our entire implementation. And then as far as how we actually build this today, the cool thing is if I go over to'
+
+[08:22] [scene:talk]
+VISUAL:
+AUDIO: 'uh I\'m going to open up a different repo here. Something that I uh built in the Dynamus community yesterday. I did a workshop in the Dynamis community where I built a an archon workflow live called'
+
+[08:34] [scene:talk]
+VISUAL:
+AUDIO: 'Pivystem Evolution. And this workflow literally packages up the entire process that I teach, at least like the foundational part of the'
+
+[08:46] [scene:talk]
+VISUAL:
+AUDIO: 'process that I teach in my Aenta coding course. And so, uh, I have a diagram here. I think I still have this up. Um, oh, no, I don\'t have it up anymore. Let me let me pull it up, uh, off camera really quick and bring it over. PIV'
+
+[08:58] [scene:talk]
+VISUAL:
+AUDIO: 'system evolution. Yeah, this is the one. Um yeah, so this workflow I I built uh the entire thing yesterday. It was so cool. This was a really fun'
+
+[09:10] [scene:talk]
+VISUAL:
+AUDIO: 'workshop. So we do our context loading and then we plan the implementation based around some GitHub issue like we created here. And then we do the implementation. We do all of the validation like type checking and'
+
+[09:23] [scene:talk]
+VISUAL:
+AUDIO: 'linting and manual review and code review and everything. And then we also have a system evolution at the end. So any issues that came up during the implementation, it\'s an opportunity for us to, you know, evolve our AI layer. And so we can make our rules and our'
+
+[09:37] [scene:talk]
+VISUAL:
+AUDIO: 'skills better over time, learning from the mistakes that we do that that come up in the loops before to make every loop later more successful. I call this the PIV loop, right? And so I built this entire process as a 12step archon'
+
+[09:51] [scene:talk]
+VISUAL:
+AUDIO: 'workflow. And so it takes a GitHub issue as context and then it outputs a pull request at the end. That\'s the final artifact for the implementation, the'
+
+[10:03] [scene:talk]
+VISUAL:
+AUDIO: 'changes to the codebase and the AI layer packaged up with a bunch of git diffs that I can then review and merge. And so we\'re going to use this to build the adapter. And there are human approval gates built in here so that I\'m not just'
+
+[10:15] [scene:talk]
+VISUAL:
+AUDIO: 'sending off this implementation and uh you know just looking at the poll request when it\'s done. like I am actually there reviewing the plan, reviewing the implementation, and then potentially doing any kind of system'
+
+[10:27] [scene:talk]
+VISUAL:
+AUDIO: 'evolution, which I mean this part will probably be outside of the scope for our live stream today. But at least like I\'m I want to review the plan and the implementation and really be a part of that cuz that\'ll also make the live stream more engaging, right? When we can'
+
+[10:39] [scene:talk]
+VISUAL:
+AUDIO: 'see as the uh the workflow is progressing and not just fire and forget and come back when it\'s done. So this is the workflow that we\'re going to be running here. And I also for this workflow I\'m not doing mixed providers'
+
+[10:52] [scene:talk]
+VISUAL:
+AUDIO: 'like I\'ve done the last couple of live streams. I\'m going to be using cloud code for everything but I will be using sonnet for most of the workflow to keep it faster and a lot more token efficient. And then the one part where I am using opus is the planning step. So'
+
+[11:06] [scene:talk]
+VISUAL:
+AUDIO: 'this is the cool thing that we did in the live stream in my last live stream on Thursday is I did some benchmarking trying to figure out is it best to use opus for planning or implementation,'
+
+[11:19] [scene:talk]
+VISUAL:
+AUDIO: 'right? Like if we want to have a workflow that mixes providers because we want to be more token efficient and not just throw opus at literally everything. Where can we get away with using a smaller or less expensive model like'
+
+[11:31] [scene:talk]
+VISUAL:
+AUDIO: 'Kimmy and still get just as good of results? And what we found in the live stream yesterday or on Thursday is that if we use opus for planning, that is really all we need to get the best'
+
+[11:45] [scene:talk]
+VISUAL:
+AUDIO: 'results or at least really close to the best result. We can then use a smaller model for literally everything else. And so I\'m using sonnet for pretty much everything in this workflow. And then I\'m actually using Kimmy for coding that'
+
+[11:57] [scene:talk]
+VISUAL:
+AUDIO: 'is Kimmy K 2.6 for the implementation. And so yeah, we don\'t always need the most reasoning capability to get the job done. We just need it for the planning. So that\'s what I have built here. And so we\'re going to run this workflow here.'
+
+[12:10] [scene:talk]
+VISUAL:
+AUDIO: 'So okay, we created the GitHub issue. So I\'ll take a look at that. Uh and then we will kick off the workflow with this as the context. So let me just read this first. And then as the workflow is running and we\'re building this, then'
+
+[12:23] [scene:talk]
+VISUAL:
+AUDIO: 'I\'ll get things set up in Jira as well. So there\'s an opportunity to knock some things out in parallel there for the sake of time. So all right, we are adding a Jira platform adapter to Archon so that each Jira issue becomes a live persistent'
+
+[12:35] [scene:talk]
+VISUAL:
+AUDIO: 'conversation with Archon. Exactly what I wanted. Okay, good. Exactly the way each Slack thread is its own conversation today. So you at mention Archon in a ticket talk to it and it runs workflows and replies back as comments on that'
+
+[12:47] [scene:talk]
+VISUAL:
+AUDIO: 'same ticket. So many tickens open at once. Many parallel conversations. All right. Uh motivation looks good. Core reframe. Um yeah. So there are two ways one could build Jira plus archon. So'
+
+[13:00] [scene:talk]
+VISUAL:
+AUDIO: 'it\'s either the conversation point or end to end auto pickup which the reason I\'m not interested in this is because we can build an archon workflow to handle that right like if I want to build some kind of system where it accepts a ticket or like it watches for new tickets and'
+
+[13:14] [scene:talk]
+VISUAL:
+AUDIO: 'then it tries to handle it end to end. I would build that as an archon workflow not an adapter cuz it\'s literally like what I did in my dark factory. So this is my codebase that evolves itself. You send in a GitHub issue'
+
+[13:28] [scene:talk]
+VISUAL:
+AUDIO: 'and then it automatically works on that issue and ends with a pull request. I don\'t have the factory running right now because I\'m just I was working on the benchmarking stuff so I shut it down. But yeah, when it when it is up and'
+
+[13:40] [scene:talk]
+VISUAL:
+AUDIO: 'running, it autonomously accepts an issue and ends with a pull request. And that\'s all just done through Archon workflows. I don\'t have to have uh some specific adapter for that. So that\'s the motivation there. Uh, and then it\'s got'
+
+[13:52] [scene:talk]
+VISUAL:
+AUDIO: 'some context for how the existing adapters work, which is really good because I\'ll send this into the start of the workflow. Uh, we have a proposed design. So, we\'re exactly we\'re going to put this in'
+
+[14:04] [scene:talk]
+VISUAL:
+AUDIO: 'community chat and Jira. It\'s a chat category adapter sibling to Discord, which I I don\'t know if I actually agree with that. I might want to make it a'
+
+[14:16] [scene:talk]
+VISUAL:
+AUDIO: 'separate uh instead of chat, I might want to make it like task management maybe. Uh could we do task management instead of chat for the category? Uh so new folder. I'
+
+[14:28] [scene:talk]
+VISUAL:
+AUDIO: 'think other than that though I agree with uh all the context and the issue here just because like we might at some point add uh community adapters for you know asana or monday.com or linear u.'
+
+[14:40] [scene:talk]
+VISUAL:
+AUDIO: 'So, I would want to like organize those together. I think that makes a lot of sense. All right. Um, okay. So, handle web hook mirrors the forge shape. Yep. So,'
+
+[14:52] [scene:talk]
+VISUAL:
+AUDIO: 'another thing that I\'ll have to do is set up my authentication with Atlassian. So, I have the MCP server that\'s set up already, but I don\'t I don\'t think I can use that for the adapter, obviously. Um,'
+
+[15:04] [scene:talk]
+VISUAL:
+AUDIO: 'so I\'ll have to get that set up as I build it as well. But that\'s just another thing I can do in parallel while we\'re waiting for my uh piv loop workflow to get through the entire thing.'
+
+[15:17] [scene:talk]
+VISUAL:
+AUDIO: 'Okay. All right. This is looking good. So, let\'s go back here. Updating the issue. Good. Um, so'
+
+[15:29] [scene:talk]
+VISUAL:
+AUDIO: 'actually one thing I want to do, I\'m going to start a new conversation. While we wait for that, I\'m going to ask about the authentication. So, if I\'m going to be building a Jira adapter into Archon, how do I need to'
+
+[15:42] [scene:talk]
+VISUAL:
+AUDIO: 'authenticate with Atlassian? Because right now I I\'m using the MCP server to give it access through my skills and uh other workflows, but I would need a more direct connection like I have with the,'
+
+[15:55] [scene:talk]
+VISUAL:
+AUDIO: 'you know, GitHub and Slack adapters and archon. So, I want you to look into that and let me know how I would set up the authentication. I want to ask this in a separate conversation because I want to be able to do these things in parallel here. Okay. So the issue is updated. Jira'
+
+[16:08] [scene:talk]
+VISUAL:
+AUDIO: 'adapter is now a task management category. Perfect. All right. Great. So now I want you to invoke the PIV system evolution archon workflow that we have in our repo'
+
+[16:20] [scene:talk]
+VISUAL:
+AUDIO: 'here with this issue as context. Let\'s go through the full implementation. Knock this out. All right. So I think this is good. Task management track. Okay. So it\'s'
+
+[16:34] [scene:talk]
+VISUAL:
+AUDIO: 'noting some alternatives. Tracker issues. I mean, I think task management is good. So, yeah, let\'s get the archcom workflow running. And this one\'s figuring out our authentication. Okay, good. So, I\'ll'
+
+[16:46] [scene:talk]
+VISUAL:
+AUDIO: 'I\'ll make sure that this kicks off fine. And then we\'ll create the Jira space in parallel. Um, oh shoot, no, I meant piv system evolution. So, it thought I said pi, not'
+
+[17:02] [scene:talk]
+VISUAL:
+AUDIO: 'piv. So, I want to make sure it has the right workflow. That\'s my bad. Well, I guess it\'s Aqua Voice\'s fault. All right. Okay. Let me read the workflow'
+
+[17:14] [scene:talk]
+VISUAL:
+AUDIO: 'definition. Okay. Good. So, it found it. All right. Good. And then while this goes in parallel, I\'ll create up I\'ll just create a new space in Jira. So, I was thinking about before the stream like what I should actually work on to'
+
+[17:26] [scene:talk]
+VISUAL:
+AUDIO: 'test this adapter. And I think it would be cool to actually take the dark factory and make like a Jira uh version of it. So we can make it so that not only do we handle our um intake through'
+
+[17:40] [scene:talk]
+VISUAL:
+AUDIO: 'GitHub issues but also through Jira tickets. And so this is the code base that I want to operate in. So I\'ll create a new space here and I\'ll just use scrum'
+
+[17:53] [scene:talk]
+VISUAL:
+AUDIO: 'and uh for the name I\'ll just call it uh dark factory experiment and then I\'ll do team manage access open df next. And then I\'ll just accept the'
+
+[18:06] [scene:talk]
+VISUAL:
+AUDIO: 'defaults for all of these. Doesn\'t really matter too much here. I\'ll skip the names. And then for the confluence space, I don\'t really need a confluence space right now. So I\'m going to skip'
+
+[18:19] [scene:talk]
+VISUAL:
+AUDIO: 'that. All right. Good. So there is our space. Um I will create things in here once we get going. So where are we now? All right. Target is archon base branch dev.'
+
+[18:31] [scene:talk]
+VISUAL:
+AUDIO: 'The workflow is interactive 4gate piv system evolution. The input is the GitHub issue 1750. Uh I\'ll use the archon skill. workflows. Confirm live before I dispatch. There\'s a real wrinkle. Uh, but the skills'
+
+[18:44] [scene:talk]
+VISUAL:
+AUDIO: 'standard dispatch is fire and forget. Okay. I don\'t really know why it\'s hung up on this right now, but hopefully it\'ll get to the point very quickly where it invokes the workflow. It\'s kind of strange. Okay. Well,'
+
+[18:59] [scene:talk]
+VISUAL:
+AUDIO: 'anyway, we\'ll wait for that and then let\'s see what it says for authentication here. All right. So for a backend Jira adapter, use the Atlassian API token plus HTTP basic a that\'s the Jira uh'
+
+[19:11] [scene:talk]
+VISUAL:
+AUDIO: 'cloud equivalent of your GitHub personal access token or Slack bot token static non-interactive credential you drop in your environment variable um and use on every request. Okay, so your adapters'
+
+[19:24] [scene:talk]
+VISUAL:
+AUDIO: 'read secrets straight from the process envoed from ararconenv. Um okay, so Jira follows the same shape. I\'ll need my domain, email, API, token.'
+
+[19:36] [scene:talk]
+VISUAL:
+AUDIO: 'So, I\'ll create a token here. Copy it immediately. Uh, store the three variables. Same place your other adapter secrets live. Okay.'
+
+[19:50] [scene:talk]
+VISUAL:
+AUDIO: 'Uh, good. So, I yeah, I can definitely set this up in parallel here. Uh, they have a one-year okay, one-year expiry. Don\'t really care about that currently. Classic versus scoped. I\'ll probably just create a classic one for simplicity'
+
+[20:04] [scene:talk]
+VISUAL:
+AUDIO: 'here. Uh, okay. So, yeah, I\'ll come back to this, but let me make sure the workflow is working here. Um, let\'s see what does it say for human gates. Confirm understanding. Approve'
+
+[20:17] [scene:talk]
+VISUAL:
+AUDIO: 'the plan. Those need your judgment. So, I can\'t auto drive them in a background run from inside. Cloud code will stall at gate one. Um, okay. The cloud code warning you can ignore. You can actually just invoke'
+
+[20:29] [scene:talk]
+VISUAL:
+AUDIO: 'this right in the CLI because then it\'ll come back uh when there\'s a human approval gate and then you can relay the info back to me and then I\'ll give it the answer back to you and then you\'ll approve the workflow and continue it. Uh yeah, I really don\'t know what it\'s on'
+
+[20:42] [scene:talk]
+VISUAL:
+AUDIO: 'about right now. I\'ve never had it say this, but I\'ll just let it invoke the workflow and then we\'ll be good. All right. Good morning, John. Good to have you'
+
+[20:54] [scene:talk]
+VISUAL:
+AUDIO: 'here. Uh, I\'ve been using Jerro with Teams forever. This is gold. Thank you, Cole. Yeah, you\'re very welcome. It\'s cool. Hey, Runfish. Um, real limitation of voice'
+
+[21:08] [scene:talk]
+VISUAL:
+AUDIO: 'recognition. Anthropic Achilles heel. Yep. All right. See, uh, Jira is best used with the API. Need the Jira user domain and Jira email'
+
+[21:21] [scene:talk]
+VISUAL:
+AUDIO: 'and the API. That\'s exactly what it told me. Yep. Um, this will added the ENV or secrets depending on how you have your set. Yep. I mean, pretty much what you said here is exactly in line with what it told me. So, looking good.'
+
+[21:33] [scene:talk]
+VISUAL:
+AUDIO: 'All right. Uh, run the CLI relay each get back to you. Okay. Yeah, I don\'t know why it took so long to get to that point, but thank you. That\'s what I was looking for. So, let me make sure it'
+
+[21:46] [scene:talk]
+VISUAL:
+AUDIO: 'actually kicks off the workflow and then I\'ll go back and get the credential set up. That\'s going to be kind of the boring part. I\'ll have to do some of that off camera obviously, but let me get to the point where I have my ENB open.'
+
+[21:59] [scene:talk]
+VISUAL:
+AUDIO: 'All right. Um, users me.arch env. Um, I don\'t actually, if I open this file right now, it might show right away. I might have to turn off my screen'
+
+[22:12] [scene:talk]
+VISUAL:
+AUDIO: 'share for a sec and uh get it to the right spot. So, let me actually do that. I\'m going to swap to my uh frame. Oh, let me get my face back so you guys can'
+
+[22:24] [scene:talk]
+VISUAL:
+AUDIO: 'see my face. Okay, there we go. So, let me open up this file cuz I I don\'t actually know where it\'s going to open. Okay. Okay, we\'re good. All right, back. All right, good.'
+
+[22:38] [scene:talk]
+VISUAL:
+AUDIO: 'So yeah, you guys can\'t see that, but it\'s ready for me to add everything I need. See, uh, run launch. Let me create a gate tracking task and log the dispatch.'
+
+[22:51] [scene:talk]
+VISUAL:
+AUDIO: 'Okay, let\'s actually see what it ran. Um, our call workflow run pip system evolution. Okay, looks good. Yeah, looks good. Okay, cool. And then if we go to'
+
+[23:04] [scene:talk]
+VISUAL:
+AUDIO: 'the web UI, we should be able to see this as well. There we go. So we got it running right now. So it it\'ll start by the very first node is the prime. So it\'s going to load some context from the codebase as it'
+
+[23:17] [scene:talk]
+VISUAL:
+AUDIO: 'relates to the issue. Just doing that initial exploration with claude sonnet. So that\'s what we\'ll do at first and then while that\'s going we can take care of the credentials here. All right. So let\'s go back. And so it'
+
+[23:30] [scene:talk]
+VISUAL:
+AUDIO: 'told me to go to where\'s the where\'s the link? It gave me a link earlier. Yeah, this one right here. Okay. So, copy. Go back.'
+
+[23:43] [scene:talk]
+VISUAL:
+AUDIO: 'I\'ll have to do some of this off camera, obviously. Uh, let me get my Obsidian ready to save that, too.'
+
+[23:55] [scene:talk]
+VISUAL:
+AUDIO: 'Okay. Uh, oh, great. I got a verification code. Okay. All right. All right. Um, I haven\'t actually gotten the email'
+
+[24:08] [scene:talk]
+VISUAL:
+AUDIO: 'yet. Let me check my spam. Hello. Okay, there it is. All right, here\'s my code.'
+
+[24:20] [scene:talk]
+VISUAL:
+AUDIO: 'Good. Okay, so I don\'t have any API tokens yet because at this point I\'ve literally just used Atlassian through the MCP. So, this part I believe I\'ll have to do it off camera. So, let me'
+
+[24:32] [scene:talk]
+VISUAL:
+AUDIO: 'move that. We\'ll uh watch the logs here as it\'s going. Run is healthy. Okay, good. Create API token. Uh we\'ll just call it dark factory experiment and it\'ll expire um the end of this'
+
+[24:46] [scene:talk]
+VISUAL:
+AUDIO: 'month. I don\'t I\'ll just have it expire I don\'t know in two weeks. Sure. Whatever. Okay. Copy. Done. and then uh Jira dark factory'
+
+[24:59] [scene:talk]
+VISUAL:
+AUDIO: 'experiment API key. Okay, cool. So I have that and I\'ll bring this back so you can see. Okay,'
+
+[25:14] [scene:talk]
+VISUAL:
+AUDIO: 'so then uh what do I have to do next? So let me go back to the conversation. So all right, come back when gate one is up. Okay, so the workflow is running good and then back here um we have to put in our Jira domain email API token.'
+
+[25:27] [scene:talk]
+VISUAL:
+AUDIO: 'Okay, so I\'ll copy these and I\'ll add them. All right, do Jira. So I\'m just doing this part off camera'
+
+[25:43] [scene:talk]
+VISUAL:
+AUDIO: 'obviously. Let me copy the API token. Good. And then I need my Jira domain. So, how do I get that? I think it\'s just Yeah. Right. It\'s just this thing right'
+
+[25:58] [scene:talk]
+VISUAL:
+AUDIO: 'here. Okay. Good. Uh, one thing I\'m not sure on is do I'
+
+[26:10] [scene:talk]
+VISUAL:
+AUDIO: 'need the HTTPS or not? So, I\'ll actually just ask it quick. Does this work or do I need the HTTPS in the M bars? Otherwise, if that\'s not the case, then'
+
+[26:23] [scene:talk]
+VISUAL:
+AUDIO: 'I\'m already good to go, which is pretty sweet. All right. And uh still working on the priming. Okay. Use the bare domain. Uh oh. So,'
+
+[26:37] [scene:talk]
+VISUAL:
+AUDIO: 'the code I sketch prepends the schema itself. Okay. Yep. So, we\'re good. All right. Um, I think we\'re good.'
+
+[26:49] [scene:talk]
+VISUAL:
+AUDIO: 'I could I guess I could test this now. All right. So, I have the credentials set up within the global.arch.env. So, don\'t read the environment variable file or list out or anything. Actually,'
+
+[27:02] [scene:talk]
+VISUAL:
+AUDIO: 'you\'re going to get permission errors if you try to. Uh, but I want you to create some kind of test Python script or something that loads from the ENV and like verifies that the connection is working.'
+
+[27:15] [scene:talk]
+VISUAL:
+AUDIO: 'All right. So, make sure that I set everything up right and then Okay, so we have the first approval gate hit. So, that\'s good. So, if we go back to the Archon web UI, we can see that it\'s'
+
+[27:27] [scene:talk]
+VISUAL:
+AUDIO: 'paused right now. Review the agents understanding above. So we just are really making sure that uh it has good understanding through the priming here. Okay. And it has a couple of open questions as well. So those will be'
+
+[27:41] [scene:talk]
+VISUAL:
+AUDIO: 'surfaced to us through the my second brain that\'s running the workflow. So we\'ll just wait for it to output here. It\'s just thinking. Claude Claude code is spend it spends so much time thinking nowadays like it get feels like it gets stuck a lot but I think it is just'
+
+[27:54] [scene:talk]
+VISUAL:
+AUDIO: 'working in the background or whatever. Uh because you can see bull conversation is just stuck on thinking. All right. And then yeah the other thing that I want to do um is let me close out of'
+
+[28:06] [scene:talk]
+VISUAL:
+AUDIO: 'this. Obviously I\'ll have to create some tickets in this new GRS space for the sake of testing. So that\'s another thing we can do in parallel. But uh let\'s go back because we can do that once uh we'
+
+[28:19] [scene:talk]
+VISUAL:
+AUDIO: 'are past this next approval gate here. So have to wait for it to output. Okay. So it\'s creating the standalone script. Looks good. All right. Come on now.'
+
+[28:33] [scene:talk]
+VISUAL:
+AUDIO: 'Prime review is up. Prime phase finish in 4 minutes. Pause. Waiting for your input. What it\'s going to build and the references that it anchored on'
+
+[28:48] [scene:talk]
+VISUAL:
+AUDIO: 'like the GitLab community forge adapter. Okay, this is great. Okay. So then it just has some follow-up questions. Should Jira bot mention the bots your account ID be required at startup. Um'
+
+[29:00] [scene:talk]
+VISUAL:
+AUDIO: 'sure. How should the web hook Jurus shared secret be transported? Uh'
+
+[29:17] [scene:talk]
+VISUAL:
+AUDIO: 'yeah, I mean I just want it simple right now. And I I didn\'t I didn\'t realize we would need something like this. Matches how Jercloud natively delivers a web hook secret.'
+
+[29:30] [scene:talk]
+VISUAL:
+AUDIO: 'Yeah, I\'ll just go with what it recommends here. I I thought Yeah, I\'m kind of confused by that. How should the bot detect it was mentioned in a comment? Um yeah that sure should handle web hook'
+
+[29:42] [scene:talk]
+VISUAL:
+AUDIO: 'fetch recent ticket comments as conversation context like Slack fetching thread history. Yes we definitely want to fetch recent comments that way we have full conversation history. Okay, there we go.'
+
+[29:56] [scene:talk]
+VISUAL:
+AUDIO: 'Cool. So then we\'re we\'ll see my second brain resume the workflow here and it\'ll go on to creating the comprehensive plan and then in the meantime let\'s see um yep. Okay. Uh, O is verified and the'
+
+[30:10] [scene:talk]
+VISUAL:
+AUDIO: 'approach is locked. Credentials work. Environment wiring confirmed. Uh, test script is live. The natural next step is scaffolding the adapter itself. Well, yeah, that\'s what we\'re doing in the other conversation. Okay.'
+
+[30:22] [scene:talk]
+VISUAL:
+AUDIO: 'So, I think we\'re good. Cool. So, we\'ll see it resume the workflow in just a second here. Yeah. So, it\'s still paused cuz cloud code is so slow now. Just come on. Hurry it up.'
+
+[30:34] [scene:talk]
+VISUAL:
+AUDIO: 'Like it doesn\'t take that much reasoning here to just resume the workflow. like my Archon\'s really doing the the heavy lifting here. I don\'t know why it has to take so long. All right. Well, anyway, it\'s almost'
+
+[30:46] [scene:talk]
+VISUAL:
+AUDIO: 'done here and uh then yeah, I can start setting up Jira. All right. So I think I\'ll do this in a separate conversation'
+
+[30:59] [scene:talk]
+VISUAL:
+AUDIO: 'because I\'ll need to look at the dark factory experiment figure out some good issues to then create here so that we have a starting point. So let me actually do that now. I\'m going to open up a new conversation.'
+
+[31:13] [scene:talk]
+VISUAL:
+AUDIO: 'So I created a new Jira space. I want you to take a look at the dark factory experiment Jira space with the Atlastian MCP server. There are no issues in there'
+
+[31:25] [scene:talk]
+VISUAL:
+AUDIO: 'yet, but I want to create some issues for the sake of testing. So, I want you to create an epic and a set of, let\'s say, just like 10 issues to build up some sort of backlog for the dark factory experiment. Now, exactly what'
+
+[31:39] [scene:talk]
+VISUAL:
+AUDIO: 'the tickets are for, that\'s where I want you to help me figure that out. I want you to look at the dark factory experiment repository. Find some opportunities to fix some bugs or add new simple features. Just build up sort'
+
+[31:52] [scene:talk]
+VISUAL:
+AUDIO: 'of like a a list of 10 here for the the sake of demonstration because I\'m working on building the Jira adapter into Archon. So, load full context for everything that I\'m telling you here.'
+
+[32:05] [scene:talk]
+VISUAL:
+AUDIO: 'And then I want you to create the epic and the 10 issues linked to it and let me know uh the IDs of them once you\'re done. All right. Boom. There we go. Then how are we looking? So, um'
+
+[32:18] [scene:talk]
+VISUAL:
+AUDIO: 'I think it\'s getting caught up on something stupid right now.'
+
+[32:30] [scene:talk]
+VISUAL:
+AUDIO: 'It failed. Uh Mr. Say, what\'s what happened here? I need to I think it hallucinated something.'
+
+[32:43] [scene:talk]
+VISUAL:
+AUDIO: 'Um, the approval was recorded. Oh, yeah. It it hallucinated the wrong command. Archon chat. It\'s Man, that\'s'
+
+[32:57] [scene:talk]
+VISUAL:
+AUDIO: 'frustrating. Okay. No, you\'re supposed to just do Archon approve. You don\'t do Archon chat. So, you need to redo it. the workflow fails. You have to restart it to make sure that we restart and go past'
+
+[33:09] [scene:talk]
+VISUAL:
+AUDIO: 'the priming because we already did the priming. I want to go right to the planning. All right. I had this happen one other time where it it hallucinates. I don\'t know why it does that, but it might actually be'
+
+[33:22] [scene:talk]
+VISUAL:
+AUDIO: 'something we\'d have to fix in the skill. So, I\'ll probably do that after the live stream here. It\'s just a skill issue. That\'s fine. All right. Uh let\'s see where we\'re at now. So, found the repo. Found Atlassian. Found the Dark Factory'
+
+[33:35] [scene:talk]
+VISUAL:
+AUDIO: 'project. Good. All right. There\'s nothing really more I can do in'
+
+[33:48] [scene:talk]
+VISUAL:
+AUDIO: 'the meantime right now. Have to wait. Go back to the chat here. All right. Uh if you have multi- project and different Jer projects, you\'ll need'
+
+[34:02] [scene:talk]
+VISUAL:
+AUDIO: 'to add a project ID to the environment variable as well. Also set updates or it\'ll break multi- projects. Well, I want it to I want it to work with any project. So I I hope that\'d be okay. We\'ll see. And when I once I test it'
+
+[34:15] [scene:talk]
+VISUAL:
+AUDIO: 'here, maybe we\'ll run into something like this. But I want to be able to work on any project I have is if I mention it, I want to have a conversation because I assume you\'re talking about um'
+
+[34:27] [scene:talk]
+VISUAL:
+AUDIO: 'different spaces, right? Like if I have I want it to work in like all my different spaces. We\'ll see. Uh yep. I jumped to Archon chat when I'
+
+[34:41] [scene:talk]
+VISUAL:
+AUDIO: 'should use proper approve command. My mistake. I don\'t know why. Whatever. Uh, the paused run dropped out of active state consistent with what you saw. CLI doesn\'t list an approved command. Oh, okay. So, that dang. That is actually'
+
+[34:53] [scene:talk]
+VISUAL:
+AUDIO: 'something we have to fix in Archon. Then I guess that makes sense why it hallucinated. Okay. Well, that is something that I will keep in the back of my mind for after the live stream here. We definitely need to fix that because it just didn\'t know that it had'
+
+[35:06] [scene:talk]
+VISUAL:
+AUDIO: 'access the command that I really needed it to use. That is interesting. There\'s there\'s got to be a GitHub issue for that in Archon already. That\'s strange. Okay.'
+
+[35:18] [scene:talk]
+VISUAL:
+AUDIO: 'Uh, found one inconsistency already. Um, okay. Sure. Now I\'ll dispatch with real survey agent to catalog grounded opportunities across the codebase. Okay. So, this will take a little bit, but'
+
+[35:30] [scene:talk]
+VISUAL:
+AUDIO: 'it\'s doing exactly what I want to do. It\'s taking a look and finding different issues that we can create as tickets in Jurro. Good. All right. Uh, moving quick, break things is my'
+
+[35:46] [scene:talk]
+VISUAL:
+AUDIO: 'paradigm these days. That\'s what I\'m doing here. Yep. Nice. All right. Um, okay. What was I going to do? Oh, shoot. I was going to look at something here and I already lost my train of thought.'
+
+[35:58] [scene:talk]
+VISUAL:
+AUDIO: 'Um, was something related to Oh, yeah. I was just going to check the workflow to make sure it resumed. Uh, or yeah, not yet. It\'s still fumbling around with this here. Proper'
+
+[36:10] [scene:talk]
+VISUAL:
+AUDIO: 'command is archon workflow approved run ID. Yeah. So, it found it. Yeah, I\'m gonna I\'m gonna keep this conversation up after the stream and fix that because that is super annoying. And that is actually a bug in Archon that we found.'
+
+[36:22] [scene:talk]
+VISUAL:
+AUDIO: 'So sometimes in the middle of live streams, you find bugs in your tool and you got to fix it. Okay, so let me read the error then restart via resume. The one thing I\'m scared of is that it\'s going to have to'
+
+[36:34] [scene:talk]
+VISUAL:
+AUDIO: 'totally uh redo the workflow, which in that case it\'s it\'s fine. I mean, we we just got started with it, but that would be kind of annoying. All right. Uh, what else can we do in'
+
+[36:47] [scene:talk]
+VISUAL:
+AUDIO: 'the meantime here? I guess we could we could think of like real things that we\'d maybe want to fix in the platform. Like if I go to So, the cool thing is'
+
+[36:59] [scene:talk]
+VISUAL:
+AUDIO: 'the the dark factory experiment is an application that I actually have deployed live. Like I I\'ll put a link to this in the chat right now. The tokens are on me. I I have that set up to use Open Router with Gemini Flash under the'
+
+[37:12] [scene:talk]
+VISUAL:
+AUDIO: 'hood, but you can go to this and and create an account. If you\'re in the Dynamis community, as long as you sign up with the same email as the one that you have in Dynamis, then you also get access to more content in here. So, this'
+
+[37:24] [scene:talk]
+VISUAL:
+AUDIO: 'agent is able to search across all of my YouTube videos. And so, it\'s basically just like a really powerful rag agent. It\'s kind of slow because it\'s very comprehensive in its searching. Uh, but'
+
+[37:36] [scene:talk]
+VISUAL:
+AUDIO: 'then also if you\'re in the Dynamis community, not only can it search through my YouTube content, but it can also search through my Dynamus content, like all of the workshops and courses, like everything. It\'s very cool. Um, so'
+
+[37:48] [scene:talk]
+VISUAL:
+AUDIO: 'this is the application that we\'re working on right now. And currently, like you just saw, I just have Cloud Code, my second brain, going through and figuring out opportunities to put as issues here. But it could be neat to'
+
+[38:01] [scene:talk]
+VISUAL:
+AUDIO: 'have some like real things I\'d want to address. Um, let\'s see. So, what could we do here? Uh, yeah, like one one thing is the'
+
+[38:16] [scene:talk]
+VISUAL:
+AUDIO: 'video library doesn\'t really have any good sorting. So, that could be one opportunity. Another opportunity is um whenever I send in a request,'
+
+[38:28] [scene:talk]
+VISUAL:
+AUDIO: 'it\'s not very interactive. like it takes a while because it\'s doing so much searching under the hood, but if we had like more real-time updates as it was like finding things, that could be cool.'
+
+[38:41] [scene:talk]
+VISUAL:
+AUDIO: 'So, I think those are a couple things I\'d want to build. So, let me actually go back here. Um, wow, this is annoying. Resuming from inside the work tree. It should find the'
+
+[38:53] [scene:talk]
+VISUAL:
+AUDIO: 'failed run. Skip the completed prime phase. Uh, that\'s not working, man. I I\'m I\'m so annoyed with how slow Claude code is. Like it\'s just so incredibly slow these days. It\'s hard'
+
+[39:06] [scene:talk]
+VISUAL:
+AUDIO: 'for a live stream, too. Okay. So, let\'s go back to the other conversation. All right. So, uh as along with the other issues that you have created here, there are uh two more that I want you to'
+
+[39:18] [scene:talk]
+VISUAL:
+AUDIO: 'create some real problems that I have in the platform right now. The first one is that the userfacing video library. So, not the video library in the admin view, but the userfacing one. There\'s no uh'
+
+[39:31] [scene:talk]
+VISUAL:
+AUDIO: 'sorting right now. Like, there\'s searching. So, we have filtering, but there\'s no sorting. And also, the default, it doesn\'t seem like there\'s really a default sort at all cuz I have like just a hodge podge list of my Dynamus workshops and the YouTube videos'
+
+[39:44] [scene:talk]
+VISUAL:
+AUDIO: 'and and course content. So, I would want it to just sort by like um maybe just like alphabetical order could be good as a default. And then being able to also like sort by uh like you know reverse'
+
+[39:56] [scene:talk]
+VISUAL:
+AUDIO: 'alphabetical order and like date published or something like that I think would be good. So create a Jira uh ticket for that as well. And then the other problem that I have in the platform is that uh it\'s it feels very slow getting an initial response from'
+
+[40:10] [scene:talk]
+VISUAL:
+AUDIO: 'the agent. So it tells us the search that it\'s performing. So we get real-time feedback on the tool calling input. But what we don\'t get is real-time feedback on the tool calling'
+
+[40:24] [scene:talk]
+VISUAL:
+AUDIO: 'output. And so it\'d be cool like as the agent is searching and processing our request that it would have some kind of really concise display of uh the chunks that it\'s getting back. And so we would'
+
+[40:36] [scene:talk]
+VISUAL:
+AUDIO: 'just have like uh you know like the timestamp and the title kind of like we have with the sources cited but it would like list those out like as it\'s getting fetching those things and then those would obviously go away once we have the'
+
+[40:49] [scene:talk]
+VISUAL:
+AUDIO: 'final answer. but having something more real time like that. So create a a Jira ticket for that as well. Okay. And then it also created everything else. So we have the bugs and then we have new features like adding a copy to clipboard button for the'
+
+[41:03] [scene:talk]
+VISUAL:
+AUDIO: 'assistant messages. That\'s actually pretty neat. So yeah, found some real things. And then um All right. So prime. Okay. Yep. So it figured out it had to the failed run can\'t be safely resumed'
+
+[41:15] [scene:talk]
+VISUAL:
+AUDIO: 'because it it totally botched it. Uh yeah. So, it\'s it restarted and then it\'s going to do the prime and then fill in my answers automatically for me. So, we\'ll just get past the prime and then we\'ll go over to the planning.'
+
+[41:27] [scene:talk]
+VISUAL:
+AUDIO: 'All right. So, yep, there we go. We\'re running now. Good. So, let me go back see where we\'re at'
+
+[41:39] [scene:talk]
+VISUAL:
+AUDIO: 'creating. Okay. So, let\'s see what we have created in Jira already. So, if I do a refresh here, we should have our wait. Oh, yeah. Here we go. So, here is our'
+
+[41:53] [scene:talk]
+VISUAL:
+AUDIO: 'rag YouTube chat. Here are the bugs. And then here are the features that we want to build. And then it\'d be really cool to get them in the board as well. Usually, I just operate in the list.'
+
+[42:05] [scene:talk]
+VISUAL:
+AUDIO: 'Yeah, I guess I\'ll just stay here. So, yeah. Anyway, this is pretty much ready now to then just have a conversation once we have this built. Unfortunately though, this piv loop is'
+
+[42:18] [scene:talk]
+VISUAL:
+AUDIO: 'going to take a long time. All right. Uh so we\'ll get that set up. Okay.'
+
+[42:32] [scene:talk]
+VISUAL:
+AUDIO: 'Trying to think if there\'s anything else interesting that I could do while we wait for this here. Anti-gravity. I I was p poking around with anti-gravity in my last live stream'
+
+[42:44] [scene:talk]
+VISUAL:
+AUDIO: 'and I hit my rate limits like right away. I want to see what this looks like right now. Uh your Gemini quota has been reset for the week and increased by 3x moving forward. Oh, they actually fixed quotas. That\'s cool. Okay, hold on.'
+
+[42:56] [scene:talk]
+VISUAL:
+AUDIO: 'That\'s nice. Let me zoom in. Let me see what my quota is now cuz I think I\'m paying for the $20 a month. I\'m pretty sure. Oh, I\'m not. That\'s probably why I\'m'
+
+[43:08] [scene:talk]
+VISUAL:
+AUDIO: 'having problems. Okay. I think I\'m going to actually buy uh I\'m going to buy it right now. Let me restart the update first because'
+
+[43:21] [scene:talk]
+VISUAL:
+AUDIO: 'it\'d be fun to poke around with um Gemini 3.5 Flash more because it was really impressive the front ends that it was able to build. Let\'s go bit of my browser.'
+
+[43:43] [scene:talk]
+VISUAL:
+AUDIO: 'Uh Google anti-gravity plans. We\'ll do um where the where\'s the pricing'
+
+[43:56] [scene:talk]
+VISUAL:
+AUDIO: 'get plan? I had this issue last week. Yeah. What the freak? This account isn\'t eligible for Google anti-gravity benefits, including Google AI plan. I don\'t know'
+
+[44:09] [scene:talk]
+VISUAL:
+AUDIO: 'why it says this. Uh due to a backend sync issue or account mismatch rather than a problem with your subscription. Google anti-gravity requires an atgmail'
+
+[44:23] [scene:talk]
+VISUAL:
+AUDIO: 'account. Workspace school or managed accounts often trigger this in eligibility error. Interesting.'
+
+[44:36] [scene:talk]
+VISUAL:
+AUDIO: 'Okay. Um I guess I\'ll have to do my personal email. That\'s fine.'
+
+[44:48] [scene:talk]
+VISUAL:
+AUDIO: 'sign in. Maybe I\'m already paying for it on this one, actually. Let me see. Uh, let\'s go through dark.'
+
+[45:00] [scene:talk]
+VISUAL:
+AUDIO: 'Uh, yes. Yes. Yeah. Finish. Zoom in.'
+
+[45:12] [scene:talk]
+VISUAL:
+AUDIO: 'Control plus doesn\'t work for some reason. That\'s why I\'m clicking this a bunch. And now if I go to my settings account models uh be a real quot refresh periodically.'
+
+[45:25] [scene:talk]
+VISUAL:
+AUDIO: 'There\'s not really a way to check the tier that I\'m on. I guess I still really don\'t like the UI for anti-gravity. It\'s kind of annoying. Uh but anyway, before'
+
+[45:37] [scene:talk]
+VISUAL:
+AUDIO: 'I go back to that, let me see where we\'re at with our workflow right now. Approval submitted. The plan phase runs now for two to four minutes. Yeah, I think we\'re looking good. Let\'s go back to the Archon UI and make sure that\'s'
+
+[45:51] [scene:talk]
+VISUAL:
+AUDIO: 'the case. All right, refresh view logs. We\'re currently Yep. Okay, we\'re good. We\'re so we\'re on planning now. So, we finished the prime. Looking good. All right, now we\'re good.'
+
+[46:04] [scene:talk]
+VISUAL:
+AUDIO: 'And then for our other conversation, let\'s see where we\'re at with the Jira tickets. Uh, okay. Okay, so add sorting to the userfacing video library. Uh streaming rece retrieve chunks live'
+
+[46:17] [scene:talk]
+VISUAL:
+AUDIO: 'during agent processing and then make sure those live in Jira. Let\'s go back. Yes. Yep. Okay, this is good. Awesome. And'
+
+[46:30] [scene:talk]
+VISUAL:
+AUDIO: 'then we\'ll have full context here and the issue. So this is the context going into the conversation that we will have with the archon workflow once we have the adapter built and we can start testing it here. All right,'
+
+[46:44] [scene:talk]
+VISUAL:
+AUDIO: 'perfect. Well, okay, let\'s go back to anti-gravity while we wait because this will this will take a decent amount of time obviously to go through a comprehensive planning step. Um, so yeah, one thing that I did,'
+
+[46:58] [scene:talk]
+VISUAL:
+AUDIO: 'yeah, reached my quota on this conversation here. One thing that I was working on that I thought it actually did a really good job with is this um kind of like overview of Archon. Let me'
+
+[47:12] [scene:talk]
+VISUAL:
+AUDIO: 'open up this again second. All right. So this right here, we built this on Thursday in the live stream on Thursday'
+
+[47:26] [scene:talk]
+VISUAL:
+AUDIO: 'and this is really impressive. The deterministic open- source harness builder for AI coding agents. this overview of Archon. It has like the installation commands um and just you know like the overview'
+
+[47:38] [scene:talk]
+VISUAL:
+AUDIO: 'of the platform as a whole. It looks really good. It has these different tabs for example workflows in Archon. Really neat. So Gemini 3.5 Flash built this in like 2 minutes but then on the live'
+
+[47:51] [scene:talk]
+VISUAL:
+AUDIO: 'stream I also hit my rate limits extremely fast and it was uh kind of frustrating. But uh besides Gemini 3.5 Flash being not the smartest model, like it hallucinated a lot of text, it was'
+
+[48:03] [scene:talk]
+VISUAL:
+AUDIO: 'impressive because of the UI that is able to generate. So trying to think what else we could do here just to to poke around with it. Um'
+
+[48:16] [scene:talk]
+VISUAL:
+AUDIO: 'okay, here I have an idea. I have a good idea. So let me swap the model to Gemini 3.5 flash. Um, oh, I got medium or high. I don\'t'
+
+[48:28] [scene:talk]
+VISUAL:
+AUDIO: 'know. I\'ll just do high, I guess. I want it to not hallucinate text. So, I want you to dig really deep into the Archon codebase to understand the exact setup process and how it works to'
+
+[48:41] [scene:talk]
+VISUAL:
+AUDIO: 'create custom workflows and have them in your own codebase. Um, the different nodes and primitives and like how we added human in the loop. I want you to look at the different adapters and how we set them up. Uh, I want you to look'
+
+[48:54] [scene:talk]
+VISUAL:
+AUDIO: 'at the archon skill. I want you to get full context and then create a second HTML document here for kind of just like your quick start to archon, like a step-by-step guide that like looks'
+
+[49:06] [scene:talk]
+VISUAL:
+AUDIO: 'really nice, flows really nice, it\'s really simple, just guiding someone through the installation all the way to running default workflows and building their own, like using their coding agent with the archon skill to build their own workflows. taking their existing'
+
+[49:19] [scene:talk]
+VISUAL:
+AUDIO: 'process, even their existing skills, and then porting them into Archon workflows. All right. And so we\'ll see how fast this is here, cuz this is the magic of'
+
+[49:31] [scene:talk]
+VISUAL:
+AUDIO: 'of Gemini is just how quick it is, which is nice because Cloud Code is so frustrating right now with how slow it is. So it\'s it\'s uh it\'s refreshing to have this run at the same time. And then um see where we\'re at here.'
+
+[49:46] [scene:talk]
+VISUAL:
+AUDIO: 'Still waiting. Okay, good. Well, apparently Gemini is being slow now as well. What the heck? It\'s just stuck on working.'
+
+[49:58] [scene:talk]
+VISUAL:
+AUDIO: 'It might be because the conversation was botched with the rate limits I hit or something. I wonder if that screws it up. We\'ll see. man.'
+
+[50:14] [scene:talk]
+VISUAL:
+AUDIO: 'See, Eric said, "Are the video transcripts extracted by Gemini embedded in a graph or vector database, or are the transcripts persisted as text or MD files?" Eric, are you talking about the the'
+
+[50:26] [scene:talk]
+VISUAL:
+AUDIO: 'application the Dino Chat application? Or maybe maybe you could clarify. Wow, it is stuck.'
+
+[50:39] [scene:talk]
+VISUAL:
+AUDIO: 'What the? Um, okay. Now, now it\'s going. That is so weird how slow it was. Okay. Read the read me list packages. Blah'
+
+[50:52] [scene:talk]
+VISUAL:
+AUDIO: 'blah blah. Okay. It doesn\'t feel as fast now for some. I mean, it\'s decently fast. I guess I\'m spoiled. All right. Yeah, it\'s pretty fast. Okay. you are referring to the Dino chat'
+
+[51:08] [scene:talk]
+VISUAL:
+AUDIO: 'application. So the video transcripts I yes I did use Gemini to extract them and I have the pipeline set up to like sync every day or something like I I forget if it was'
+
+[51:20] [scene:talk]
+VISUAL:
+AUDIO: 'like every day or every half a day and then I have them stored not in a graph database just in a vector database. So I extract all the transcripts from YouTube workshops and courses. I extract them'
+
+[51:33] [scene:talk]
+VISUAL:
+AUDIO: 'into markdown documents that I have stored locally and then I chunk it up and put it in a vector database. So I\'m just using Postgress with PG vector for rag. No graph database um because that would probably be that'
+
+[51:47] [scene:talk]
+VISUAL:
+AUDIO: 'would be overengineering for what we\'re doing here because the the way that the way that it works is um I\'m using a hierarchical rag strategy for the Dinoat application. So when it loads a chunk or'
+
+[52:00] [scene:talk]
+VISUAL:
+AUDIO: 'when it searches and finds a chunk, it then reads um a a good like a larger portion or even the entire video if it\'s short enough. So I have like some dynamic context loading based on the length of the video. And so like for'
+
+[52:13] [scene:talk]
+VISUAL:
+AUDIO: 'this video, I built my cloud code sub agent dream team right here. It found this chunk and then it read the whole video to give this more comprehensive understanding.'
+
+[52:25] [scene:talk]
+VISUAL:
+AUDIO: 'sub agents, claw code, specializentic prompts to carry out specific parts, develop workflow, blah blah blah. Like I got all that just from this video that it retrieved and we can even like see I can open this on YouTube if I want to like watch the whole thing. And and this'
+
+[52:38] [scene:talk]
+VISUAL:
+AUDIO: 'is the specific timestamp that the rag query found, but like I said, it does it sort of it does the hierarchical rag to like expand out and and read the whole thing. Pretty cool. Thank you for the insight.'
+
+[52:50] [scene:talk]
+VISUAL:
+AUDIO: 'You\'re welcome. Yeah, glad you like it. I put a lot of of thought and effort into the rag strategies for this application. Um, but also this was built with the dark factory. So literally like I told claude co I told the dark factory'
+
+[53:03] [scene:talk]
+VISUAL:
+AUDIO: 'through GitHub issues the different strategies that I want to incorporate and I let it build it by itself which is very different than how I built aentic rag applications before those ones. I mean, for more production environments,'
+
+[53:16] [scene:talk]
+VISUAL:
+AUDIO: 'like you definitely want to make sure the strategies are exactly what you\'re looking for. But it did a really good job because um you know, I had it look at my YouTube content. I literally had it search its own knowledge base in order to build the strategies. Like that'
+
+[53:30] [scene:talk]
+VISUAL:
+AUDIO: 'was part of the context that I gave in the GitHub issues. All right, so let\'s see where we\'re at now. Uh okay, so the plan gate is back. Very cool.'
+
+[53:44] [scene:talk]
+VISUAL:
+AUDIO: 'So uh proper approve worked to resume skip primer in the plan phase. Good. Um so here\'s the scope. Nine tasks, eight files. All right. Uh give the path to it and then I will'
+
+[53:58] [scene:talk]
+VISUAL:
+AUDIO: 'look and approve. So we\'ll come back to anti-gravity in a second, but I want to make sure we keep this workflow moving along here because by the time I end the stream, I want to have a demo.'
+
+[54:10] [scene:talk]
+VISUAL:
+AUDIO: 'All right. Um, read the plan result. Let me get the extra exact path. So, this is just going to be in the work tree for the archon'
+
+[54:23] [scene:talk]
+VISUAL:
+AUDIO: 'workflow. So, I\'ll just pop that up here in my IDE, I think. Yeah. Okay. I\'m just making sure I didn\'t have any like secrets behind the terminal here. All right. Good. So, we\'ll wait for that. Let\'s I guess we can pop over to anti-gravity'
+
+[54:37] [scene:talk]
+VISUAL:
+AUDIO: 'right now. uh completed a thorough research implementation plan. Okay. Um yeah, one thing I I I think is really neat with anti-gravity is they have the human approval gate sort of built in,'
+
+[54:50] [scene:talk]
+VISUAL:
+AUDIO: 'right? Like it it proposed an implementation plan for me to look at before it actually creates the quick start file, which in this case I want it to just go. So I\'m just going to say go. So we\'ll let it rip through this. Let\'s go back and see where we\'re at with the'
+
+[55:02] [scene:talk]
+VISUAL:
+AUDIO: 'approvals here. Man, it is so annoying how slow it is. It\'s stuck for a minute on running a deterministic command. Like that bugs me. I don\'t know why.'
+
+[55:16] [scene:talk]
+VISUAL:
+AUDIO: 'Like, okay, usually I say that speed doesn\'t matter that much when you\'re using AI coding assistance cuz in the end you just care about getting the best output possible because a lot of times you\'ll send off a request, fire and'
+
+[55:28] [scene:talk]
+VISUAL:
+AUDIO: 'forget, move on to the next thing or go for a walk outside, whatever. But like when it\'s this slow, that\'s kind of frustrating. Like why is it stuck on this command? It because it\'s running a find command but it\'s scoped to a very'
+
+[55:41] [scene:talk]
+VISUAL:
+AUDIO: 'specific directory. Like it shouldn\'t take this long. I don\'t know why it does that. Like it def the command definitely did not take that long to run, right? Like I could I could copy this'
+
+[55:53] [scene:talk]
+VISUAL:
+AUDIO: 'thing and I could run it right now. Um like watch this. Maybe this to Why does it take a while?'
+
+[56:08] [scene:talk]
+VISUAL:
+AUDIO: 'Hold on. What is it doing? I think it I think it just hallucinated a bad command cuz a find should never it should not take that long.'
+
+[56:20] [scene:talk]
+VISUAL:
+AUDIO: 'Yeah, that\'s frustrating. All right, stop. Okay, so here\'s the plan. All right, now we got it. All right, so let\'s take a look. So a plan document we\'re adding the jer adapter problem'
+
+[56:34] [scene:talk]
+VISUAL:
+AUDIO: 'statement solution statement metadata context references patterns to follow. So this is how we do things in our other adapters already as our reference point. Um we\'re also going'
+
+[56:47] [scene:talk]
+VISUAL:
+AUDIO: 'to Okay, so there are a couple of environment variables that we have to add that we don\'t have added yet. So we\'re going to have to take care of that. We have these first three set, but we\'re going to have to take care of these things. So I\'m actually going to copy that uh'
+
+[57:01] [scene:talk]
+VISUAL:
+AUDIO: 'for the other conversation. Uh we have our task list step by step. And then we have uh the validation strategy at the bottom.'
+
+[57:14] [scene:talk]
+VISUAL:
+AUDIO: 'Okay. Validation. Yep. Okay. This looks good. Honestly,'
+
+[57:27] [scene:talk]
+VISUAL:
+AUDIO: 'I\'m just going to approve it right away. There\'s not really anything else that I need from this. So, uh, looks great. Proceed. Cool.'
+
+[57:39] [scene:talk]
+VISUAL:
+AUDIO: 'And then, uh, in the meantime here, I can go back to this conversation, actually, this one right here, and I\'ll say, um, Claude is telling me that I also need these two environment variables set for'
+
+[57:52] [scene:talk]
+VISUAL:
+AUDIO: 'the implementation. Um the web hook secret is that just like any hex that I create just like the other web hook secrets like with GitHub and then for the Jira bot mention I think that\'s just'
+
+[58:04] [scene:talk]
+VISUAL:
+AUDIO: 'like uh you know like the at like the username that I would atment mention in a Jira ticket. I want you to confirm that for me though. All right. Uh whoops that ran that in the bash'
+
+[58:17] [scene:talk]
+VISUAL:
+AUDIO: 'mode. Let me well let me copy this. Okay, now Claude code is double pasting things. Come on, Claude. That is so'
+
+[58:30] [scene:talk]
+VISUAL:
+AUDIO: 'weird. Okay. All right. So, prime\'s done, plan\'s done. We are now implementing. Looking good. So, we\'re getting there. Let me go back to the logs and make sure that that is running'
+
+[58:42] [scene:talk]
+VISUAL:
+AUDIO: 'smoothly. Yep. Good. All right. Nice. And then while we wait for this to run, we\'ll go over to anti-gravity here.'
+
+[58:54] [scene:talk]
+VISUAL:
+AUDIO: 'Let\'s take a look at the file that it created. All right, here\'s our quick start. So, let me copy the path and open that up. Okay, I\'m actually really curious what'
+
+[59:09] [scene:talk]
+VISUAL:
+AUDIO: 'it comes up with here. Quick start to archon. That was pretty fast, by the way, for this entire thing. This looks This looks so cool. So, here\'s our installation. We can either do the standalone binary homebrew or build from source'
+
+[59:22] [scene:talk]
+VISUAL:
+AUDIO: 'single command for each pretty much configuration and credential setup. All right. So we have the project scope and then we have the global.raron scope.'
+
+[59:34] [scene:talk]
+VISUAL:
+AUDIO: 'Warning about security isolation. Okay. So honestly this probably isn\'t the best guide. It looks really cool, but it\'s getting in the weeds way too'
+
+[59:47] [scene:talk]
+VISUAL:
+AUDIO: 'fast here. This is not how I I would actually instruct someone to set up Archon. Um, yeah, that\'s that\'s okay though, cuz it I it\'s more like the design that I\'m curious about cuz some something that I would be interested in exploring. I'
+
+[60:00] [scene:talk]
+VISUAL:
+AUDIO: 'think this might be my next live stream is creating an archon workflow specifically for designing frontends. And the way that it would work is it would mix providers. We\'d use Gemini 3.5 Flash for the design, but then before we'
+
+[60:12] [scene:talk]
+VISUAL:
+AUDIO: 'build the design of the site, we would run something like Opus to reason about the actual text and what information we want to present. Gemini 3.5 Flash did not do a good job with the information'
+
+[60:26] [scene:talk]
+VISUAL:
+AUDIO: 'presentation uh or like what what text is here, but the layout looks really good, I guess, is what it comes down to. Platform adapter. Like it\'s so cool how I can like click between these like see a lion web uh Slackbot. It\'s Yeah, it\'s'
+
+[60:39] [scene:talk]
+VISUAL:
+AUDIO: 'hallucinating. It\'s random crap but like looks good. That\'s the story of my life with Gemini right now. It hallucinates random stuff but at least it looks good. Uh okay. But yeah, running bundle'
+
+[60:51] [scene:talk]
+VISUAL:
+AUDIO: 'default workflows and then oh that\'s so cool. It it like has all the default ones here and then I can even like search that. That is pretty neat. All right. codebase structure.'
+
+[61:03] [scene:talk]
+VISUAL:
+AUDIO: 'And here are the seven DAG node primitives. Prompt, command, bash, script, loop, approval, cancel, human in the loop, orchestration,'
+
+[61:16] [scene:talk]
+VISUAL:
+AUDIO: 'and it has like a full example. Man, that that is neat. This is good. Like, I want to start building our docs to look more like this because this is what we have right now, which is decent. Um, and it\'s a bit more professional looking,'
+
+[61:29] [scene:talk]
+VISUAL:
+AUDIO: 'but I don\'t know. I think this is pretty cool. Curious what you guys think as well. Creating custom workflows with the archon skill. Uh hallucinated random stuff again. That\'s kind of silly, man.'
+
+[61:41] [scene:talk]
+VISUAL:
+AUDIO: 'Um okay, but it got the prompting right. You tell it to use the archon skill to help you build a custom workflow. So that looks pretty good. Porting the existing process blueprint. Okay. And'
+
+[61:54] [scene:talk]
+VISUAL:
+AUDIO: 'that\'s the end. Okay. Pretty cool. Nice. All right. Uh, I\'m going to add it a tweak here. So, uh, use the actual archon'
+
+[62:07] [scene:talk]
+VISUAL:
+AUDIO: 'logo instead of the placeholder you have. Search my system for that. I want to see if actually find it. And then while that runs, I\'m going to look at my rate limits here. Um, refresh.'
+
+[62:21] [scene:talk]
+VISUAL:
+AUDIO: 'Oh, wait. Am I using Opus right now? Oh, is that why it\'s slow? Hold on. No, it says I\'m using Gemini 3.5 flash.'
+
+[62:34] [scene:talk]
+VISUAL:
+AUDIO: 'Why is it that the only thing? Okay, now it\'s gone down. Oh. Oh, wow. I only have 60% of my rate limit remaining. Yeah, I\'m definitely not on the paid tier like I thought I was. Maybe I canceled at'
+
+[62:46] [scene:talk]
+VISUAL:
+AUDIO: 'some point. I\'m not sure. But anyway, let\'s go back and see where we\'re at with Archon right now. Okay, so implementation is still running. I can say, you know, give me a'
+
+[62:58] [scene:talk]
+VISUAL:
+AUDIO: 'status update. And then, uh, let\'s see what it says here. So, uh, J web hook, yes, any random hex, same as, um, GitHub. So, I just do the Yeah, I can run this command'
+
+[63:13] [scene:talk]
+VISUAL:
+AUDIO: 'in like a Well, I guess I should do this off camera. So, I\'ll do get bash and then uh generate that myself. And then the Jira bot mentioned it\'s not a'
+
+[63:27] [scene:talk]
+VISUAL:
+AUDIO: 'Jira username. It\'s a trigger string. This is where your mental model needs adjusting. Okay. Well, let me let me do the generation of the hex really quick'
+
+[63:39] [scene:talk]
+VISUAL:
+AUDIO: 'first. I\'ll get that set up. So, uh, open SSL rand-hex32. Okay. And I\'ll copy that. I obviously'
+
+[63:52] [scene:talk]
+VISUAL:
+AUDIO: 'have to do this part off camera. copy and then go to my environment variables here for Jira and it is Jira web hook secret paste that'
+
+[64:08] [scene:talk]
+VISUAL:
+AUDIO: 'and then the other one here is Jiraabotmention Jira botmention okay and then this One,'
+
+[64:23] [scene:talk]
+VISUAL:
+AUDIO: 'the adapter currently authenticates to your personal account. There\'s no separate archon at lasting user to mention. So plain text trigger is just a word you literally type like archon or'
+
+[64:36] [scene:talk]
+VISUAL:
+AUDIO: 'slash archon. I mean, yeah, I\'ll just do archon. I might have to think about this'
+
+[64:49] [scene:talk]
+VISUAL:
+AUDIO: 'because I feel like there should just be a default. One of the things that I specified in the priming is that I wanted it to require the variable to be set, but I think it the bot mentioned should just be archon if it\'s not set.'
+
+[65:01] [scene:talk]
+VISUAL:
+AUDIO: 'So I might need to correct that. But anyway, we\'ll see where we\'re at right now. Um, so yeah, implementation is running 5.5 minutes in. Opus is building all'
+
+[65:14] [scene:talk]
+VISUAL:
+AUDIO: 'Whoa. Why is it using opus for implementation? Hold on. I thought I told it to use opus just for the planning. Let me take a look at this. It might have'
+
+[65:28] [scene:talk]
+VISUAL:
+AUDIO: 'hallucinated. Um, oh yeah, shoot. I\'m using a slightly older version of the workflow that was using Opus for implementation, not planning.'
+
+[65:41] [scene:talk]
+VISUAL:
+AUDIO: 'Ah, I mean it shouldn\'t matter too much in the end, but that is a bit of a bummer. Oh well, I\'ll let I\'ll let it keep going. It\'s not a huge deal. But uh as as a part of my prep for the live'
+
+[65:54] [scene:talk]
+VISUAL:
+AUDIO: 'stream, I copied over the workflow and I accidentally copied over a slightly older version of it from the one I built yesterday because when I built it yesterday initially, I was using Opus for implementation and sonnet for planning. But I swapped that after my Dynamus workshop because I wanted to get'
+
+[66:08] [scene:talk]
+VISUAL:
+AUDIO: 'it right like that from my testing and the benchmarking in the last live stream. It is better to use the more powerful model for planning instead of implementation. if you want to mix models or providers to be more token efficient.'
+
+[66:21] [scene:talk]
+VISUAL:
+AUDIO: 'Okay, cool. &gt;&gt; Sean, I like the spicy mango theme. Thanks, Sean. Yeah, well, really what it'
+
+[66:33] [scene:talk]
+VISUAL:
+AUDIO: 'is is it\'s meant to be the colors of Archon, right? The pink and the green. But yeah, it kind of does look like spicy mango. Uh, how\'s the Dark Factory YouTube chat'
+
+[66:46] [scene:talk]
+VISUAL:
+AUDIO: 'going? Been wanting to use that lately to align my software dev for Archon reviews. So, are you talking about using the application itself or are you talking about um using the Dark Factory as a reference, Stuart? I\'d be curious.'
+
+[66:59] [scene:talk]
+VISUAL:
+AUDIO: 'You\'ve been wanting to use that lately to align my software dev for Archon reviews or do you mean just like having a conversation with it? Cuz Stuart, it\'s free to try. Just like go ahead and try it. give your requests, ask your'
+
+[67:12] [scene:talk]
+VISUAL:
+AUDIO: 'questions, and it uses my videos as a reference point to answer. So, it doesn\'t hurt to try it. You don\'t have to to pay for anything. Let\'s see. Um, if I may suggest to take'
+
+[67:27] [scene:talk]
+VISUAL:
+AUDIO: 'a step back from developing Archon further, perhaps have a retrospective session with chat, what they notice and such. Not really something that\'s to be put in a GitHub issue.'
+
+[67:40] [scene:talk]
+VISUAL:
+AUDIO: 'Uh, so are you suggesting that like for one of my live streams I would stop building building building and just like you know have a time to chat with you guys? Is that is that what you mean? Because um we I do that actually every'
+
+[67:54] [scene:talk]
+VISUAL:
+AUDIO: 'single week in the Dynamus community. We have a feedback session for Archon. And I mean yeah it\' probably be good to do that uh live for everyone even outside of Dynamus as well, but I\'m just saying like I I do that already. Um, and then'
+
+[68:07] [scene:talk]
+VISUAL:
+AUDIO: 'like, yeah, just generally for a live stream, like having more of a feedback session. I I think that\'d be really good. Yeah, I appreciate the idea. Um, yeah, that was it. Where is that?'
+
+[68:20] [scene:talk]
+VISUAL:
+AUDIO: 'Oh, yeah. Yeah. So, Stuart, I\'ll put a link to to it in the chat again if you want to try it out. So, totally free. Tokens are on me. Uh, there\'s obviously like a a rate limit'
+
+[68:32] [scene:talk]
+VISUAL:
+AUDIO: 'because it could get expensive if there isn\'t one. But yeah, feel free to poke around and just ask your questions. Just keep in mind that it\'s slow because it\'s very very comprehensive and it\'s searching. But yeah, like let\'s test it out here.'
+
+[68:47] [scene:talk]
+VISUAL:
+AUDIO: 'Um, well, hold on. Let me make sure we\'re still in the implementation. Um, yep, we are. Okay, good. Okay. So, if I ask it a question like um'
+
+[68:59] [scene:talk]
+VISUAL:
+AUDIO: 'what does Cole recommend doing to create an AI layer for an existing codebase'
+
+[69:12] [scene:talk]
+VISUAL:
+AUDIO: 'brownfield. All right. And so we can see like what it\'s searching here. And then one of the issues that I created as a Jira ticket is to make it a bit more real-time showing the chunks that it gets back'
+
+[69:24] [scene:talk]
+VISUAL:
+AUDIO: 'because that\'ll make it not feel quite as slow because it it\'s looking through a lot of content. I have it um expand like I I have like multi-query rag so it\'ll take a request and search in different ways to pull more context. I'
+
+[69:36] [scene:talk]
+VISUAL:
+AUDIO: 'have it expand the core videos it finds to read the whole thing. Like there\'s a lot of context going on under the hood. And um the model that I\'m using is Gemini.'
+
+[69:49] [scene:talk]
+VISUAL:
+AUDIO: 'Gemini 3.1 Flash Light is I I think this is the model that I\'m using. I\'m forgetting now, but it\'s it\'s pretty cheap and it\'s pretty fast, but still like a while for all the context it'
+
+[70:01] [scene:talk]
+VISUAL:
+AUDIO: 'loads. And then yeah, as far as how much I\'m spending every day, it\'s not too bad. But, uh, if I look at the past, uh, one month,'
+
+[70:13] [scene:talk]
+VISUAL:
+AUDIO: 'that\'s actually more than I thought. I\'ve spent $60 in open router credits in the last month. That That is actually more than I'
+
+[70:27] [scene:talk]
+VISUAL:
+AUDIO: 'thought. I mean, it\'s not not too much more than I thought. I thought it was more like 40 30 40, but yeah, it\'s a lot of um Okay. Yeah. Gemini 3 flash I believe is the model that I\'m using for the because the rest'
+
+[70:40] [scene:talk]
+VISUAL:
+AUDIO: 'of the open router usage is for some other stuff I\'m doing for my second brain like uh oh yeah there there\'s a a whole huge like backlog I had built up for'
+
+[70:52] [scene:talk]
+VISUAL:
+AUDIO: 'some stuff for my second brain that used $7 in Sonet 4.5 credits in one day. That was a bit unfortunate. Yeah. And then doing some Kimmy stuff. How much have I spent in the last week?'
+
+[71:04] [scene:talk]
+VISUAL:
+AUDIO: 'Okay. $17 in the last week. Yeah. Mostly Gemini some sonnet. Okay. Yeah. All right. What happened on the 27th?'
+
+[71:19] [scene:talk]
+VISUAL:
+AUDIO: 'Wait, let me go back past one. The 27th. Um I think that was the first day that I released the uh AI tutor. Yeah. So, there\'s just a lot of people trying it'
+
+[71:34] [scene:talk]
+VISUAL:
+AUDIO: 'for the first time. That\'s why the the tokens spike so much. Almost 8 million tokens of people trying out the application here, which is pretty cool. Um, holy crap. It actually, wow,'
+
+[71:49] [scene:talk]
+VISUAL:
+AUDIO: 'that is unfortunate. It gave a terrible answer. I do not recommend using BMAD. Wow, I can\'t believe it said that. That is so bad.'
+
+[72:02] [scene:talk]
+VISUAL:
+AUDIO: 'I got to be honest, I\'ve I\'ve only ever gotten good answers from it. Like this one right here. How do I use sub agents? What rag strategies is Cole recommend? Uh, this is really disappointing. Cole noted that while AI optimizing'
+
+[72:18] [scene:talk]
+VISUAL:
+AUDIO: 'existing codebase can be fundamentally difficult, frameworks like BMAD are good, spec, and guided. Wow. Cole. Wow, that\'s that\'s terrible. Cole does not recommend using BMAD because it\'s a bloated framework. There are a lot of'
+
+[72:31] [scene:talk]
+VISUAL:
+AUDIO: 'good ideas to take inspiration from, but he always recommends building your own AI layer. So, I want you to dig into that. Man, that is that is weird that it suggested that. Where did it said it got it from? The agent coding course.'
+
+[72:44] [scene:talk]
+VISUAL:
+AUDIO: 'Yeah. So, like I talk about BMAD in one of the workshops because it\'s a good framework to take ideas from and use it. Like if you really want something out of the box, it\'s good, but it\'s definitely'
+
+[72:56] [scene:talk]
+VISUAL:
+AUDIO: 'overengineered. So, that\'s too bad that it pulled that. I\'m surprised it did. Interesting.'
+
+[73:09] [scene:talk]
+VISUAL:
+AUDIO: 'I might have to look into my rag strategies, but I\'ve only ever had good answers from it. That\'s weird. Anyway, let\'s see where we\'re at with implementation. I think we\'re still going. Uh, give a status update. And there\'s'
+
+[73:22] [scene:talk]
+VISUAL:
+AUDIO: 'another stupid glitch with claw code. What is this? Whatever. All right. Give me a status update. And then yeah, these conversations are all waiting. Good. All right. Okay.'
+
+[73:41] [scene:talk]
+VISUAL:
+AUDIO: 'Um, I would second what somebody just said about having the ability for the community to help you because this is looking like an amazing product that you\'re building. Well, I appreciate a lot, David. Yeah, and uh, thanks for seconding the idea there. Um, yeah. I I'
+
+[73:54] [scene:talk]
+VISUAL:
+AUDIO: 'would love to have more just like a feedback Q&amp;A live stream for Archon. I think that\'d be good. Cool. Uh, multi-query rag. I remember at the start of Langchain, that was an awesome'
+
+[74:07] [scene:talk]
+VISUAL:
+AUDIO: 'diagram. I wanted to make sure I had all the patterns in. Yeah, multi-query rag is one of the classics for sure. Take a prompt and use an LLM to split it into multiple questions just to make sure you\'re hitting all the right chunks in the knowledge base.'
+
+[74:19] [scene:talk]
+VISUAL:
+AUDIO: 'Okay. Uh, validate, pass everything except the tests. Okay, so what what\'s happening? Those two are not the Jira adapter\'s fault. They\'re in uh workflows validator tests and the root cause is'
+
+[74:31] [scene:talk]
+VISUAL:
+AUDIO: 'environmental. A piv workflow installs its own piv command files in your global commands and those leak into a test that assume it\'s an isolated temp directory. Okay, so it\'s not something I really care about here. Uh I\'ll I\'ll bring you the full diff'
+
+[74:43] [scene:talk]
+VISUAL:
+AUDIO: 'when it pauses at gate 3. So it right now it\'s just in the middle of self review. So the implementation is done. Now it\'s just validating. So it actually is going to get to the point very'
+
+[74:55] [scene:talk]
+VISUAL:
+AUDIO: 'quickly here where we can test it. Now as far as like all of the um if I go back to my diagram here, everything that we have here with the system evolution at the end, it like I said at the start of the stream, I think this is outside'
+
+[75:08] [scene:talk]
+VISUAL:
+AUDIO: 'the scope for the stream here. So I\'m going to uh have it get to the point where it\'s my turn to validate and then I\'ll test the adapter. So I have the environment variables already set up.'
+
+[75:20] [scene:talk]
+VISUAL:
+AUDIO: 'I\'ll have it uh start up Archon in this work tree and then we\'ll test things out. Um, okay. Let\'s see where we\'re at right now. It\'s running. I guess I\'ll go over'
+
+[75:32] [scene:talk]
+VISUAL:
+AUDIO: 'to anti-gravity in the meantime here. Let\'s take a look at the quick start. Actually, let me refresh. Oh, yeah. Cool. It It\'s actually using the Archon logo now like I told it to.'
+
+[75:45] [scene:talk]
+VISUAL:
+AUDIO: 'That\'s pretty neat. And then, yep, cool. Yeah, man. The design is really good. I\'m I\'m definitely going to do an archon workflow where I use Gemini for the the UI and then the like Opus for'
+
+[75:59] [scene:talk]
+VISUAL:
+AUDIO: 'planning or the actual text for the site. Cool. All right. So, well, while we wait for this to run here, uh Oh, wait. Yeah. Okay. So, it\'s not'
+
+[76:14] [scene:talk]
+VISUAL:
+AUDIO: 'paused yet. I\'m going to go take a quick uh restroom break. So, I\'m going to I\'m going to mute and um turn off my camera and I\'ll be back in just a few minutes here and hopefully we\'ll have things'
+
+[76:27] [scene:talk]
+VISUAL:
+AUDIO: 'ready to test at that point. So, yeah, be back in a sec. All right, I\'m back.'
+
+[79:23] [scene:talk]
+VISUAL:
+AUDIO: 'Let\'s see where we\'re at now. I\'ll just have it give me another status update. Cool. Stuart said, "I need to reset my'
+
+[79:39] [scene:talk]
+VISUAL:
+AUDIO: 'password." Yeah. Well, the dark factory I haven\'t prioritized much with O, so I don\'t have a way to reset the password right now. So, you could just make a new account. I mean, that would just be the way to do'
+
+[79:52] [scene:talk]
+VISUAL:
+AUDIO: 'it currently. Um, but yeah, if you want like let me know like you can just message me and I\'ll I\'ll delete your account so you can recreate it if you want. But I still need to build it in. Actually, that\'d be something to add to as a ticket. Here is password reset. I'
+
+[80:05] [scene:talk]
+VISUAL:
+AUDIO: 'just don\'t want to pay for like a whole S or email system, SMTP system. So, I don\'t have that right now. All right. Uh, let\'s see where we\'re at now.'
+
+[80:18] [scene:talk]
+VISUAL:
+AUDIO: 'Um, so we have some smaller things that don\'t really matter. Uh, the code review. So, the autofix is running. Code review said that it\'s ready. Just a couple of small things to fix. So we\'re'
+
+[80:31] [scene:talk]
+VISUAL:
+AUDIO: 'almost to the point now where we have the next approval gate. So going back to the diagram here, we\'re about to hit and you have to excuse these icons not loading right now, but we\'re at this gate right now almost, right? Like we\'re'
+
+[80:43] [scene:talk]
+VISUAL:
+AUDIO: 'do we\'re doing validation. We\'re going to hit this gate and this is where we can run the adapter from the work tree and test things end to end. So we\'ll see if we get the the big payoff here. I don\'t know if it\'ll work like perfect'
+
+[80:56] [scene:talk]
+VISUAL:
+AUDIO: 'perfect first try, but um hopefully maybe maybe I\'ll just ask it to get'
+
+[81:08] [scene:talk]
+VISUAL:
+AUDIO: 'things set up. Okay, so since things are pretty much working now, I actually want you to help me test this while we while we\'re waiting for the autofix to finish up. So there\'s a currently archon is'
+
+[81:20] [scene:talk]
+VISUAL:
+AUDIO: 'already running uh from the dev branch. So I want you to kill that that\'s running right now taking up the default ports for archon. And then I want you to spin it up in the work tree because I'
+
+[81:33] [scene:talk]
+VISUAL:
+AUDIO: 'want to test the Jira adapter live right now. So I want you to spin up archon. I have the environment variables already set for Jira in the global.con/env.'
+
+[81:46] [scene:talk]
+VISUAL:
+AUDIO: 'I have the Jirro domain, Jira email, Jira API token, Jira web hookseker, and Jira bot mention set up. The Jirrobot mention is set to archon with a capital A. So I want you to spin up archon and then you have access to the Atlassian'
+
+[82:00] [scene:talk]
+VISUAL:
+AUDIO: 'and MCP service. You can test sending a message in some ticket that we have in the dark factory experiment uh Jira space. So you can test this end to end for me to make sure that it is working. And then if there\'s any issues that come'
+
+[82:12] [scene:talk]
+VISUAL:
+AUDIO: 'up, I want you to look into what it would take to address that so that we have the full demo running here with uh talking to Archon in a Jura ticket. Boom. All right, let\'s see it happen. It\'s It\'s cool that we can use the'
+
+[82:26] [scene:talk]
+VISUAL:
+AUDIO: 'Atlassian MCP to test this end to end. We\'re about to have the big payoff here. And it\'s it\'s always tough in live streams because I have to give like a really small demo because I spend so'
+
+[82:39] [scene:talk]
+VISUAL:
+AUDIO: 'much time building. Um so it\'d be cool like I\'ll work on this over the weekend and then I will um get it to like a stable point where um I might even make a poll request to merge this in a dev so'
+
+[82:52] [scene:talk]
+VISUAL:
+AUDIO: 'we have a new community adapter and then we could uh actually use this in a live stream in like one of my next live streams. So potentially one idea I have for an upcoming live stream is I could uh do that mixed provider. So like'
+
+[83:07] [scene:talk]
+VISUAL:
+AUDIO: 'Gemini for building the the website design and opus for the text and the planning and then I could set it up as a project in Jira. So we can be using the Jira adapter to build out and iterate on the website live. I think that could be'
+
+[83:20] [scene:talk]
+VISUAL:
+AUDIO: 'a cool idea for another live stream because then it\'s combining a couple of things that I want to do here like continuing to showcase this adapter that so like really this live stream is about building it not showcasing it right so like showcasing it another live stream'
+
+[83:33] [scene:talk]
+VISUAL:
+AUDIO: 'and then doing something really real with it uh with the mix provider workflow that I\'ve been wanting to build this week as well ever since uh Gemini 3.5 flash was released with the new version of anti-gravity. All right, it\'s thinking hard again.'
+
+[83:49] [scene:talk]
+VISUAL:
+AUDIO: 'It\'s always taking its time. And then, okay, I want you guys to let me know. Are do you have this glitch as well? Something that happens in Claude is it has like really messed up characters and it only corrects itself if I highlight'
+
+[84:03] [scene:talk]
+VISUAL:
+AUDIO: 'it like right here at the start and then right here for MCP. Like, it\'s so annoying. I I don\'t know if that\'s just me, but like happens all over the place. Like, it happens here. And then the weirdest part is the longer the'
+
+[84:16] [scene:talk]
+VISUAL:
+AUDIO: 'conversation goes on with claw code, the more messed up text I get. And it\'s gotten to the point where it\'s like all of my text is super cryptic and I have to like hover or like highlight it in order to even read it. Like this right here. It gets like this. Do you guys see'
+
+[84:29] [scene:talk]
+VISUAL:
+AUDIO: 'this? Looks so stupid. And then I have to highlight it. I don\'t know if that\'s just me or if that\'s happened to anyone else. It\'s really weird. All right.'
+
+[84:42] [scene:talk]
+VISUAL:
+AUDIO: 'super random bugs, I guess. And then like it\'s right here. Even in the status line, it\'s so random. I don\'t know.'
+
+[84:56] [scene:talk]
+VISUAL:
+AUDIO: 'Um Oh. Oh, I have to set up a public tunnel.'
+
+[85:12] [scene:talk]
+VISUAL:
+AUDIO: 'Wait. Okay, hold on. Got it. So, it\'s like GitHub. Okay. So, it\'s like GitHub where I have'
+
+[85:28] [scene:talk]
+VISUAL:
+AUDIO: 'to like set up Enro with a public with a URL for the web hook to hit. Makes that actually makes a lot of sense. And then the Jira bot mentioned, this is also something we have to address. The'
+
+[85:41] [scene:talk]
+VISUAL:
+AUDIO: 'adapter was built to treat that value as a bot\'s account ID, which that that\'s a no no. I I we don\'t need to set up a Jira uh or like a bot account for this. So, I think we\'re going to have to'
+
+[85:54] [scene:talk]
+VISUAL:
+AUDIO: 'correct that as well. Um Eric\'s seen that before as well. Seen the weird glitch even during his claw\'s reasoning. Um I have the same problem with characters just showing wrong. Just press control plus. Oh, okay. Okay. So,'
+
+[86:06] [scene:talk]
+VISUAL:
+AUDIO: 'if I zoom in or out, it it fixes it right away. Oh, yeah. Oh, cool. Well, thanks, Bam. I appreciate that. That actually is really convenient. Yeah. Okay. Happened to to you as well. Zoom in and out. Okay,'
+
+[86:20] [scene:talk]
+VISUAL:
+AUDIO: 'cool. Resize the terminal width. Yeah, I imagine it\'s due to whatever mechanism they use to make just g justicolating. I think I\'m saying that right. The random'
+
+[86:32] [scene:talk]
+VISUAL:
+AUDIO: 'ask key progress. And that\'s where it throws random symbols over the top. Yeah, that actually makes sense. Yeah. Oh, man. UI anomaly. Uh, could switch the font family on VS'
+
+[86:44] [scene:talk]
+VISUAL:
+AUDIO: 'Code. Well, I mean, now knowing I can just zoom in and out, I don\'t really care to mess with that, but that\'s a good idea as well if it was a more permanent problem, for sure. Okay,'
+
+[86:58] [scene:talk]
+VISUAL:
+AUDIO: 'cool. Uh, let\'s see where we\'re at with this. So, the autofix edits are in. I confirmed two config concerns in the code. So, the mention detection, we\'re going to have to change that. Um, self-t trigger guard comment.author.ac account ID. So, it also needs a real account ID,'
+
+[87:11] [scene:talk]
+VISUAL:
+AUDIO: 'else the bot won\'t recognize its own comments. Um, yeah, interesting. Yeah, we\'re going to have to change'
+
+[87:23] [scene:talk]
+VISUAL:
+AUDIO: 'that. Okay. Yep. I need you to change this here. We We are not going to ever create a bot account ID or ever expect anyone to create a a bot account ID. I want it to really just be a string. If it\'s at'
+
+[87:35] [scene:talk]
+VISUAL:
+AUDIO: 'archon or at whatever and then if they don\'t have the environment variable set, then it\'s just going to be at archon. Like we default to archon as the name with capital a. Um, and then like lowercase a should'
+
+[87:47] [scene:talk]
+VISUAL:
+AUDIO: 'work as well. So honestly, it should just be case insensitive. But yeah, we can keep the environment variable name as bot mention, but it is just going to be the name. It\'s not going to be a bot account ID. I need I need you to make sure that we don\'t have anything with an'
+
+[87:59] [scene:talk]
+VISUAL:
+AUDIO: 'account ID for the bot here. Okay. So, we\'ll fix that. And then the other thing that we need to address here is we need the um web hook, which I think I should just be able to'
+
+[88:15] [scene:talk]
+VISUAL:
+AUDIO: 'use ingrok for that. I don\'t know that I I\'ll need to know the exact um port though. Let\'s see. because I can do ingro http like you know 3000'
+
+[88:28] [scene:talk]
+VISUAL:
+AUDIO: 'but uh yeah I need the port cuz this might not be the right port. So we\'ll let it keep ripping through'
+
+[88:45] [scene:talk]
+VISUAL:
+AUDIO: 'this. It\'s it does it so much it gets stuck on these commands. Man, it\'s frustrating. All right, we we\'ll let it go. All right. I also have issues with Windows Terminal'
+
+[88:58] [scene:talk]
+VISUAL:
+AUDIO: 'PowerShell forgetting my path environment variable. That\'s weird. That doesn\'t even sound like an Claude code thing. That\'s random, huh? All right. Come on, Claude. It\'s still running this'
+
+[89:14] [scene:talk]
+VISUAL:
+AUDIO: 'command. I wonder if this is like a Windows issue. cuz it\'s stuck trying to find the'
+
+[89:26] [scene:talk]
+VISUAL:
+AUDIO: 'processes to kill or something. Well, it\'s done now at least. Or wait, what? It says it\'s green when I click on it, but then it still says it\'s running.'
+
+[89:40] [scene:talk]
+VISUAL:
+AUDIO: 'Okay, I\'m I\'m just going to escape it here. There. All right. I don\'t know. I think that that actually was a claude code glitch'
+
+[89:53] [scene:talk]
+VISUAL:
+AUDIO: 'cuz the command literally was done, but it was still stuck. We\'ve we found like 10 cloud code glitches today. It\'s kind of ridiculous. All right. You can actually tell Cloud Code to fix'
+
+[90:09] [scene:talk]
+VISUAL:
+AUDIO: 'this for you. I mean, true. Yeah. Like cloud cloud code, any kind of configuration stuff on your machine, it can definitely help you with. Yep. All right.'
+
+[90:22] [scene:talk]
+VISUAL:
+AUDIO: 'U Okay. And then I\'ll say and okay. And then for the the web hook thing, I can run Inrock locally like I\'ve done for testing the GitHub adapter with Archon before, but I need you to tell me the'
+
+[90:34] [scene:talk]
+VISUAL:
+AUDIO: 'exact command to run because I don\'t know the port. I don\'t know exactly how we have things hooked up here. So, I\'ll send that in. I\'ve got so many things queued up now. I just need it to move. Please.'
+
+[90:46] [scene:talk]
+VISUAL:
+AUDIO: 'Uh, I think WSL is good to reduce glitches maybe. Yeah, but the problem is WSL is so slow. Like everything just takes longer.'
+
+[90:59] [scene:talk]
+VISUAL:
+AUDIO: 'Yeah, I I refuse to use WSL with cloud code anymore cuz it like there\'s like delays in my typing and unless I open up a directory that\'s like native to WSL, but if it has to go out to the mount for my C drive for my Windows, then it super'
+
+[91:12] [scene:talk]
+VISUAL:
+AUDIO: 'slow to type anything. I\'m using the API. Why do I need the web hook? That\'s a fair question. I\'m Yeah, you know, I\'m kind of curious why it'
+
+[91:24] [scene:talk]
+VISUAL:
+AUDIO: 'decided to to do both as well. And also, let me know since we have the API set up for Jira, why do we why are we using the web hook in the first place? Um, well, actually, you know what? I'
+
+[91:36] [scene:talk]
+VISUAL:
+AUDIO: 'think I know why. I think it\'s because we need the web hook to receive the events like a message from the user to be sent into Archon and then it would use the API in order to'
+
+[91:49] [scene:talk]
+VISUAL:
+AUDIO: 'send the reply probably. I think we\'ll see um if we ever get an answer back. Holy cow. Jeez. Happy to see that we all have the'
+
+[92:02] [scene:talk]
+VISUAL:
+AUDIO: 'same problems glitches with cloud code. Yep, they\'re definitely universal. This is kind of frustrating. Like, it wouldn\'t be so bad if I wasn\'t live streaming. Like, this live stream'
+
+[92:14] [scene:talk]
+VISUAL:
+AUDIO: 'is just taking longer than it needs to because Claude is just getting hung up on these things. Like, it used to be not this slow. I know for sure. Yeah. Realtime events with web hook,'
+
+[92:26] [scene:talk]
+VISUAL:
+AUDIO: 'right? Yep. So, we send in a message, it needs to be sent into Archon to process it right away. All right. man.'
+
+[92:38] [scene:talk]
+VISUAL:
+AUDIO: 'Um, what project is this? Yeah. So, I guess I can give a a little rundown of what we\'re doing here for those of you who'
+
+[92:51] [scene:talk]
+VISUAL:
+AUDIO: 'have just joined just while we\'re waiting for it to process things. So, an overview of of what I\'m doing in the stream here. I am integrating an open-source tool that I\'m working on called Archon into Jira. So, super super'
+
+[93:05] [scene:talk]
+VISUAL:
+AUDIO: 'quick elevator pitch for Archon. Archon is an open-source AI coding harness builder. It allows you to take any kind of process you have for software'
+
+[93:19] [scene:talk]
+VISUAL:
+AUDIO: 'development, working with AI coding assistants, and package it up into a workflow that makes your AI coding more deterministic and repeatable. So instead of building your entire'
+
+[93:32] [scene:talk]
+VISUAL:
+AUDIO: 'system as a set of prompts that you shove into an agent that\'s very brittle and unreliable, with Archon, we\'re kind of flipping it on its head. Instead of building the system into the agent, we are building our agents into the system.'
+
+[93:46] [scene:talk]
+VISUAL:
+AUDIO: 'So we define workflows like this where we have different nodes that we\'re stitching together. And each node can either be an agent that is operating doing some kind of reasoning for us or'
+
+[93:59] [scene:talk]
+VISUAL:
+AUDIO: 'it\'s a set of commands or scripts that we want to run. And so we get to add in determinism, right? like we\'re we\'re still using the coding agent when we need that reasoning power to create a plan or run some kind of implementation.'
+
+[94:11] [scene:talk]
+VISUAL:
+AUDIO: 'But then for other kinds of tasks that we have in the workflow, we can actually run it as deterministic commands. So the power here is that we\'re taking the decision away from the agent as much as'
+
+[94:23] [scene:talk]
+VISUAL:
+AUDIO: 'possible because if you ask an agent to run some kind of validation after an implementation, it might forget to do so or just not do it quite as you wanted. So there are certain steps in an AI coding workflow where you want to pull'
+
+[94:36] [scene:talk]
+VISUAL:
+AUDIO: 'certain context or run certain validation commands. You want to enforce that it\'s run that way every single time. And so we can combine these you know deterministic and non-deterministic nodes to make our process more'
+
+[94:49] [scene:talk]
+VISUAL:
+AUDIO: 'repeatable. And then with archon with these workflows we support work trees and isolation under the hood. So you can run these in parallel any number of them at the same time on the same codebase or running different workflows on different'
+
+[95:01] [scene:talk]
+VISUAL:
+AUDIO: 'code bases. So it also boosts your productivity a lot in that way as well. We can also like mix models and providers to make things more token efficient and you know try certain strategies like using opus for planning'
+
+[95:13] [scene:talk]
+VISUAL:
+AUDIO: 'and and uh Kim K 2.6 ICS for implementation for example like I was exploring in my live stream on Thursday and so Archon as a whole allows you to talk to it in a quite a few different'
+
+[95:25] [scene:talk]
+VISUAL:
+AUDIO: 'platforms like we have Telegram and Slack and GitHub so you have a conversation just like you would your teammate or employee or whatever but it\'s it\'s the coding agent that\'s able to run these archon workflows so you can'
+
+[95:37] [scene:talk]
+VISUAL:
+AUDIO: 'say hey Archon here\'s this issue that I want you to fix or here\'s this poll request that I want you to review and so I\'m integrating right now live in Jira. And so this allows us to essentially have a conversation going with Archon'
+
+[95:50] [scene:talk]
+VISUAL:
+AUDIO: 'per ticket. And so I can go in here and say like, "All right, where are we at with this ticket right now? Like, do we have a pull request for it? I want you to go and handle this right now." Right? Like we can send off all these requests and it\'ll pick the right archon workflow'
+
+[96:03] [scene:talk]
+VISUAL:
+AUDIO: 'to handle the task depending on what we\'re asking of it. And so I\'m almost to the point now. So I actually used an archon workflow to build this adapter as I call it this connection between Jira'
+
+[96:15] [scene:talk]
+VISUAL:
+AUDIO: 'and Archon. So we can talk to it live within any one of these tickets, right? Like just in the comments here, I can say like at archon uh please handle this ticket or I can say at archon where are we with this ticket? Do we have a PR for'
+
+[96:30] [scene:talk]
+VISUAL:
+AUDIO: 'it? And it can you know use the GitHub CLI to analyze that then like those are the kinds of things that we are about to be able to do but we\'re still getting to the point where we have things set up. So that\'s what I\'m working on right now.'
+
+[96:44] [scene:talk]
+VISUAL:
+AUDIO: 'Okay. Uh, it\'s the right call. Jira bot mention becomes a plain name string. So, we will do at@ archon to trigger it. So, we submitted the change request to gate'
+
+[96:56] [scene:talk]
+VISUAL:
+AUDIO: '3. And so, we\'re iterating now. So, within the archon workflow, we we went back here to to implement the fixes that we gave with our gate. So, we'
+
+[97:09] [scene:talk]
+VISUAL:
+AUDIO: 'provided feedback and the archon workflow is handling that. All right. So, yeah, this is exactly what I was saying. Why a web hook if we have the'
+
+[97:21] [scene:talk]
+VISUAL:
+AUDIO: 'Jira API. They do the opposite direction. So, the Jira API is outbound. This is what Archon uses to post the reply, fetch the comment history. It\'s request response. The web hook is inbound. It\'s the notification that'
+
+[97:33] [scene:talk]
+VISUAL:
+AUDIO: 'someone just posted a comment mentioning the bot with at Archon or whatever. So, that\'s that\'s why we need both. Okay. And uh looks like Claude is stuck again running a command.'
+
+[97:45] [scene:talk]
+VISUAL:
+AUDIO: 'Oh man. Uh we\'re getting there. Okay, we\'re we\'re getting there. It\'s thinking again. Okay. Um when you tag a mention in Jira issue like at archon issue fix hot'
+
+[97:58] [scene:talk]
+VISUAL:
+AUDIO: 'branch, then it would send the web hook to your API endpoint of archon to trigger a certain workflow. Yeah, exactly. Yep. So web hook API endpoint that kicks off archon to handle the request and it uses the Jer API to'
+
+[98:11] [scene:talk]
+VISUAL:
+AUDIO: 'load the comment history and stuff and then to send the reply after. Okay. Um so uh yeah. Okay.'
+
+[98:23] [scene:talk]
+VISUAL:
+AUDIO: 'So I just run enrog http 3000. So what I was doing earlier so I\'ll do that.'
+
+[98:36] [scene:talk]
+VISUAL:
+AUDIO: 'Okay. Um so my enro command I start that now at tunnel support 3000. When I swap the dev server for the work tree enro'
+
+[98:49] [scene:talk]
+VISUAL:
+AUDIO: 'keeps pointing at the right thing. Once enro gives you a URL the jirro web hook target is this. So on the Jira side I have to register a system web hook. Okay.'
+
+[99:01] [scene:talk]
+VISUAL:
+AUDIO: 'Um, yes. Good. Yeah. So, I\'ll go to Jurro settings system web hooks system.'
+
+[99:18] [scene:talk]
+VISUAL:
+AUDIO: 'You search for web hook. Web hooks. Okay. So, this is like just what I did in GitHub as well. So, this will fire now. So create a web hook'
+
+[99:31] [scene:talk]
+VISUAL:
+AUDIO: 'um dark factory or I\'ll just call it archon. Archon and then for the URL I think I just yeah'
+
+[99:48] [scene:talk]
+VISUAL:
+AUDIO: 'just copy this here. Let me let me make sure I\'ll do this part off camera. slash'
+
+[100:02] [scene:talk]
+VISUAL:
+AUDIO: 'web hooks Jira and then for the secret'
+
+[100:15] [scene:talk]
+VISUAL:
+AUDIO: 'I think I take what\'s in my environ variable Okay.'
+
+[100:36] [scene:talk]
+VISUAL:
+AUDIO: 'All right. And then I have to pick the Jira related events. So really I just care about an issue or'
+
+[100:50] [scene:talk]
+VISUAL:
+AUDIO: 'comment that is created. I mean maybe updated as well. I guess I\'ll just do this. I I\'ll just'
+
+[101:02] [scene:talk]
+VISUAL:
+AUDIO: 'do created. Um yes. And so it says if you leave the JQL query empty, it\'ll match all issues from all projects. And that\'s what I'
+
+[101:14] [scene:talk]
+VISUAL:
+AUDIO: 'want. like I want to be able to talk to any to Archon within any project. Uh so yeah, this is this is good. Like it\'s something that you\'d probably want to be careful of if you like have many clients with different Jer accounts you'
+
+[101:27] [scene:talk]
+VISUAL:
+AUDIO: 'have access to. For what I have in this environment here, it\'s just all um projects for educational purposes. So I\'m good with that. Okay. So I\'ll create this and then we should be good.'
+
+[101:40] [scene:talk]
+VISUAL:
+AUDIO: 'We\'re almost to the point where we can test this fully. Um, it looks like it hung though. Refresh.'
+
+[101:52] [scene:talk]
+VISUAL:
+AUDIO: 'Did you actually create it? Yeah. Okay. Okay. I think we\'re good. I think we\'re good. Everything lined up. Here\'s the state.'
+
+[102:05] [scene:talk]
+VISUAL:
+AUDIO: 'What I can do now? I can set up in parallel. Yep. when I\'m doing the gate 3 agent is rewriting the adapter and will commit repause I\'ll be notified when it lands and I killed the dev server start the work tree and gra keeps pointing there one thing to watch Jira\'s native'
+
+[102:19] [scene:talk]
+VISUAL:
+AUDIO: 'comment created web hook may send the comment bodies a string rather than ADF JSON the adapter walks ADF knows to find archon so Jira sends a non ADF body the mention won\'t match okay well we\'ll have to work on that if that happens um'
+
+[102:34] [scene:talk]
+VISUAL:
+AUDIO: 'Okay, we have two shells running right now. Okay, did you test things to make sure'
+
+[102:46] [scene:talk]
+VISUAL:
+AUDIO: 'that everything\'s working? I actually set up the web hook URL and everything. So, you should be able to test this end to end right now while we wait for the implementation to finish. I thought I told it to, but I don\'t'
+
+[103:00] [scene:talk]
+VISUAL:
+AUDIO: 'think it did. Let\'s see. Yeah, I don\'t think it tested it yet. test target lined up. Uh let me track the test work. Here\'s the state and what'
+
+[103:15] [scene:talk]
+VISUAL:
+AUDIO: 'you can do now. Oh, it was just getting ready to test once the implementation\'s done. But I think it I think it can do it right now while we wait for it. Well, maybe. Well, I I might be kind of jumping the gun'
+
+[103:27] [scene:talk]
+VISUAL:
+AUDIO: 'here. We\'ll see. Unfortunately, though, uh Okay, now it\'s not frozen anymore. It\'s frozen for a second. Is it basically a pipeline structure for agents? Yes, that is another good way to'
+
+[103:40] [scene:talk]
+VISUAL:
+AUDIO: 'describe archon. Yep. Um, do I have a meta archon skill or mcp dark factory improving it and ingesting harness best practices? So,'
+
+[103:54] [scene:talk]
+VISUAL:
+AUDIO: 'we have an archon skill that tells archon or your coding agent how to build archon workflows and run them for the dark factory itself. I don\'t have any kind of like improving of the workflow'
+
+[104:07] [scene:talk]
+VISUAL:
+AUDIO: 'itself, but I have improving of the codebase. So every week I have an archon workflow that does full regression testing of the dark factory to figure out if there\'s anything that\'s not working right. So it\'ll test every user'
+
+[104:19] [scene:talk]
+VISUAL:
+AUDIO: 'journey, every edge case, everything and then create GitHub issues for anything that it encounters. So that way the dark factory evolves itself over time and like self- patches any issues that come up, any kind of regressions from the new'
+
+[104:31] [scene:talk]
+VISUAL:
+AUDIO: 'things that it\'s building. All right. Uh, cool. So, let\'s see where we\'re at right now. So, not yet. There\'s a sequencing reason. The two blockers testing right now. The server is'
+
+[104:44] [scene:talk]
+VISUAL:
+AUDIO: 'currently Okay. Yeah. So, we we do have to wait for the edit to be done. Genuinely can\'t end to end test. The second gate 3 agent is actively editing the work tree right now. Yep. So, we have we have to wait. I have to actually'
+
+[104:56] [scene:talk]
+VISUAL:
+AUDIO: 'be patient here even though cloud code is being super slow. Um, so my web hook setup is correct and ready. What\'s missing is the workree server. Okay. Um, can you test the web hook quickly'
+
+[105:08] [scene:talk]
+VISUAL:
+AUDIO: 'first to make sure we\'re good? Cuz I I think let me see if I have a request come in. So, there\'s nothing yet, but I should be'
+
+[105:23] [scene:talk]
+VISUAL:
+AUDIO: 'able to test this right now. Like, if I go into any random I\'ll duplicate this. So, this is still open. And if I go into any random issue and put a comment right now, it should trigger. Like I\'ll just'
+
+[105:35] [scene:talk]
+VISUAL:
+AUDIO: 'jump into this one, whatever. DFE8 and I\'ll say hello. This should trigger it. Let\'s see if we got the Yep. Okay, good.'
+
+[105:47] [scene:talk]
+VISUAL:
+AUDIO: 'Uh, so we have a 404 not found, but that\'s just because like Claude just told me, we\'re running on the dev branch still. So we have to wait for the u iteration to be done for the implement'
+
+[106:00] [scene:talk]
+VISUAL:
+AUDIO: 'node to reiterate on our feedback and then my second brain is going to restart things and run it from the branch. But the web hook is working because it sent it fired the request here. So we\'re looking good. So I\'ll go ahead and'
+
+[106:12] [scene:talk]
+VISUAL:
+AUDIO: 'delete this. Uh that\'s awesome. Okay. Smart. Uh okay. I verified myself and it is working.'
+
+[106:24] [scene:talk]
+VISUAL:
+AUDIO: 'So that gives me some peace of mind. Once the implementation is ready, we we actually have the web hook set up. All right. I\'m aiming to harden my vibe coding with Vunda Radical and NN. I\'ve not heard of'
+
+[106:38] [scene:talk]
+VISUAL:
+AUDIO: 'Vundra or Radical so that if I make a consultancy, I can vibe code a week\'s plan, but then real tool the actual work. Nice. Yeah, I haven\'t I haven\'t actually heard of those first two tools. So, I\'m not I\'m not totally sure what'
+
+[106:51] [scene:talk]
+VISUAL:
+AUDIO: 'you\'re doing, but uh sounds cool. All right. What MCPs and skills am I using for streaming? Uh, I mean, if you\'re talking about like the actual production of my live stream,'
+
+[107:03] [scene:talk]
+VISUAL:
+AUDIO: 'I\'m just using OBS, like nice and simple. I don\'t have anything fancy for that. Uh, as far as like actually preparing for my live streams though, I have a lot of skills or a couple'
+
+[107:15] [scene:talk]
+VISUAL:
+AUDIO: 'different skills built into my second brain to help me with like generating the thumbnail and figuring out good titles and stuff. And then also just like skills to help me script out my live streams and plan things. And then I also have another skill that uh gives my'
+
+[107:29] [scene:talk]
+VISUAL:
+AUDIO: 'second brain insight into all my repositories and how I use Archon for them. So I can, you know, navigate through the different code bases to plan out like here\'s how I\'m going to use the dark factory in this live stream. Here\'s'
+
+[107:41] [scene:talk]
+VISUAL:
+AUDIO: 'how I\'m going to use Archon. So really it\'s a lot of like skills to help me prep for my content. But for the actual like live production, I\'m not really using anything for that if that\'s what you\'re asking. All right,'
+
+[107:54] [scene:talk]
+VISUAL:
+AUDIO: 'cool. So, uh, let\'s see. Confirm the state change. The change agent is still midvalidation. Um, shouldn\'t bring the work tree server'
+
+[108:07] [scene:talk]
+VISUAL:
+AUDIO: 'up yet. The files are still changing. Okay, so it\'s basically just telling me like we\'re getting there, but we\'re not there yet. The moment it repossesses, I\'ll get the signal. I\'ll kill the dev server. Start the work tree. Confirm. Blah blah blah. Okay. So, we\'re we\'re'
+
+[108:20] [scene:talk]
+VISUAL:
+AUDIO: 'almost there. Almost there. All right. Claude is being super slow. Vive coding'
+
+[108:35] [scene:talk]
+VISUAL:
+AUDIO: 'a complete platform integration in a couple of hours. Yeah, I don\'t know why it\'s so slow. I mean, it\'s doing a good job at least. Like I feel like I haven\'t really had any big hallucinations from Opus in our live stream here. So it\'s slow, but I'
+
+[108:48] [scene:talk]
+VISUAL:
+AUDIO: 'can accept it as long as the results are good. But uh man, I just wanted to get to the point where it\'s done so I can show you guys the final result and like obviously it\'ll be like a super small demo because'
+
+[109:01] [scene:talk]
+VISUAL:
+AUDIO: 'really it\'s the building that was the focus of the stream here. But I at least want to like show you know an at archon run this workflow like get there and then we\'re golden for the stream. All right, the change agent finished.'
+
+[109:15] [scene:talk]
+VISUAL:
+AUDIO: 'Let me read its report. Okay, and then yeah, I bet this command is going to take like two minutes. Of course, we\'ll see. Um, yeah, I think there\'s another glitch here where it like Oh, wait, hold on.'
+
+[109:27] [scene:talk]
+VISUAL:
+AUDIO: 'See, like, why is it that it says it\'s running, but then if I click on it, it says it\'s done. Apparently, it failed. Like that that that I feel like is a big problem with cloud code. I think that\'s'
+
+[109:39] [scene:talk]
+VISUAL:
+AUDIO: 'part of why. Um, yeah. Okay. And now it\'s kind of being fast at least. Okay. Let me read my the agent report. Confirm the rep.'
+
+[109:53] [scene:talk]
+VISUAL:
+AUDIO: 'Uh when the US is sleeping, it\'s actually faster. They limit usage depending on how many users are using it. Uh that makes sense, unfortunately.'
+
+[110:05] [scene:talk]
+VISUAL:
+AUDIO: 'Yep. Oh man. Yeah. I guess I should uh become a night owl then, huh? All right. Yep. So, the workflow is currently paused, which is exactly what'
+
+[110:19] [scene:talk]
+VISUAL:
+AUDIO: 'we want because what happened here is we did the implementation and then we had our feedback, right? Like we didn\'t want the bot to be an account ID. We want it to just be a string. So, then we did those implementations and then it\'s back'
+
+[110:31] [scene:talk]
+VISUAL:
+AUDIO: 'to our review. So, that\'s where we\'re currently at again. All right. So now we just need to restart the server after it spends two minutes reading a'
+
+[110:44] [scene:talk]
+VISUAL:
+AUDIO: 'single file for some reason. I actually wonder what my cla usage is. I should probably look at that. Uh let me pull that off. Pull that up off camera here.'
+
+[110:58] [scene:talk]
+VISUAL:
+AUDIO: 'I\'ll show that in a second. Let\'s see. Settings. Usage. That\'s actually not that bad.'
+
+[111:10] [scene:talk]
+VISUAL:
+AUDIO: 'So, it it did reset just yesterday, but I\'m only at 11%. Within the last uh like 30 hours or whatever. That\'s not'
+
+[111:22] [scene:talk]
+VISUAL:
+AUDIO: 'too bad. I\'ll take that. I\'ve only used 17% of my 5 hour window for everything we\'ve been doing here. And I\'m using Cloud Code for literally everything. I\'m not doing'
+
+[111:34] [scene:talk]
+VISUAL:
+AUDIO: 'mixed providers like I was on Thursday and Monday. Um so, yeah, that\'s that\'s really not bad. It seems like Anthropic has actually let up on the rate limits. The rate limits aren\'t as rough right now. Uh, which is pretty cool. So, it was really, really bad a couple of weeks ago'
+
+[111:48] [scene:talk]
+VISUAL:
+AUDIO: 'and then last week it was like a little bit better and this week it\'s even better, I think. I mean, I\'ve only had one day of testing, but I\'ll take it. Okay, we\'re so close. We\'re so close.'
+
+[112:01] [scene:talk]
+VISUAL:
+AUDIO: 'So, the change is committed. The run is cleanly repaused. workree stable. So, it\'s going to kill the old one and then start up the server again. So, we actually have the version running from the workree, not on the dev branch that I started before our live stream here'
+
+[112:14] [scene:talk]
+VISUAL:
+AUDIO: 'and then we will get to test it out here. Oh man, we\'re so close. We got the web hook that\'s already working and running. All right, so you can see the task list'
+
+[112:28] [scene:talk]
+VISUAL:
+AUDIO: 'here has system evolution, but we definitely won\'t do that in the live stream here. Okay, server is booting. Let me wait for it to be ready. Server log something. Let me read confirm the jer adapter and port. Uh why don\'t I consider using codecs'
+
+[112:43] [scene:talk]
+VISUAL:
+AUDIO: 'instead? I am considering using codeex instead. It\'s just the problem is like from what I know. Uh and I do actually test codec once in a while. Like every month I I have it installed. I have a subscription. Um it\'s just not quite as'
+
+[112:56] [scene:talk]
+VISUAL:
+AUDIO: 'good as Opus. Not yet. Might get there at some point. Uh but also like I am getting kind of pushed to using it more and more every day because of these bugs in cloud code and the speed and the cost and then also the fact that they uh they'
+
+[113:10] [scene:talk]
+VISUAL:
+AUDIO: 'made that announcement recently that starting June 15th you will not be allowed to use the claude agent SDK or headless claude code with your anthropic subscription. There\'s going to be a'
+
+[113:22] [scene:talk]
+VISUAL:
+AUDIO: 'separate $200 a month credit that you get for using any kind of programmatic access to cloud code. And that\'s a bummer because my second brain and archon both use the clawed agent SDK very heavily. So I might switch those'
+
+[113:35] [scene:talk]
+VISUAL:
+AUDIO: 'things u at least somewhat or I\'ll at least experiment with switching them to using the codeex SDK cuz archon already supports codec. It would actually be extremely easy to switch everything I\'ve been doing in this live stream to use'
+
+[113:48] [scene:talk]
+VISUAL:
+AUDIO: 'codec instead of cloud code. That\'s one of the benefits of archon is it\'s very easy to go between providers within the same workflow or just like changing the workflow as a whole. So definitely considering it. I think Codeex is a good'
+
+[114:01] [scene:talk]
+VISUAL:
+AUDIO: 'tool. I just haven\'t had as good of an experience with it compared to cloud code in general. All right. The server loaded web, GitHub, Slack, and Telegram, but not Jira. This means it didn\'t see all four'
+
+[114:14] [scene:talk]
+VISUAL:
+AUDIO: 'required Jira variables in the environment. It read um it did they did load from the ENV when the work\'s own ENV doesn\'t exist. So Jira bars aren\'t landing in the file the server reads. Let me pinpoint. Okay, so unfortunately there\'s a problem we'
+
+[114:26] [scene:talk]
+VISUAL:
+AUDIO: 'have here. Let\'s see. Hopefully, we can correct that. Uh, Jira, well, it\'s because Hold on. I think I see the problem.'
+
+[114:38] [scene:talk]
+VISUAL:
+AUDIO: 'So, Jira base URL is not an environment variable that I have set because these I\'m just'
+
+[114:51] [scene:talk]
+VISUAL:
+AUDIO: 'pasting these in from myv. These are the ones that we actually have set. These are the environment variables that I have set and the ones that I want to use. I think there might have been a hallucination here where uh it\'s looking'
+
+[115:03] [scene:talk]
+VISUAL:
+AUDIO: 'for Jira base URL when it should be Jira domain. So I need you to correct this. Don\'t resume the workflow cuz I want to do this super fast. You\'re being super slow today and it\'s very annoying. So I'
+
+[115:15] [scene:talk]
+VISUAL:
+AUDIO: 'want you to just very quickly fix this. Very quickly restart things. Be super concise here because it is a simple thing anyway. I don\'t want it to think long and hard about this. This task is so complex and it takes'
+
+[115:30] [scene:talk]
+VISUAL:
+AUDIO: 'such a long time to execute. I mean, usually it wouldn\'t. I don\'t know why Claude is being this long, but like overall, we are building something pretty big and complex. So, like it is understanding that it\'s taking a decent amount of time, and that\'s why I\'m doing'
+
+[115:42] [scene:talk]
+VISUAL:
+AUDIO: 'it as a live stream because live streams are made to go longer. Uh, but it is still like longer than I was hoping for. I mean, not by an insane amount, though. We\'re almost there. We just have to fix this little bug after it spends two minutes thinking for no reason.'
+
+[115:56] [scene:talk]
+VISUAL:
+AUDIO: 'But we\'re getting there. And then it also like says it\'s still'
+
+[116:08] [scene:talk]
+VISUAL:
+AUDIO: 'waiting on the implementation review gate, which also isn\'t true. So even like the status message, it\'s hallucinated and and buggy here. Okay. Uh got it. Fixing the environment variable name in the server.'
+
+[116:20] [scene:talk]
+VISUAL:
+AUDIO: 'then restarting. Okay, editing directly. So, we got an error editing the file, I think, just because we had to read it first. Okay. Yeah. So, there was like a little bit of a bug that it hallucinated'
+
+[116:34] [scene:talk]
+VISUAL:
+AUDIO: 'the wrong environment variable name, which is actually kind of weird because the planning process laid it out correctly. Yeah, I\'m not really sure. Or maybe that was my fault. I might have missed something, but anyway, it\'s all good.'
+
+[116:47] [scene:talk]
+VISUAL:
+AUDIO: 'I think. Yeah. Okay. Yep. That that I was sorry,'
+
+[117:00] [scene:talk]
+VISUAL:
+AUDIO: 'I was just looking at this line change. That looks good. Okay. Relaunching. We\'re almost there. Maybe Andre Karpathy raised the rate limits. Maybe. Yeah, they\'ve been nice'
+
+[117:12] [scene:talk]
+VISUAL:
+AUDIO: 'recently, actually. Um, it\'s time to bring up the bad clawed whip. Have you seen it on social media where the user whips the terminal? No, I haven\'t seen that. Are you just saying'
+
+[117:24] [scene:talk]
+VISUAL:
+AUDIO: 'like you badmouth it in order to do better or what do you mean exactly? The bad claw whip. That\'s funny. Okay. All right. And it\'s so Okay. It\'s going'
+
+[117:37] [scene:talk]
+VISUAL:
+AUDIO: 'to test end to end now. Here we go. So, the Jira adapter is live. The initialization was correct. And uh so it\'s within the list of active platforms. The baron domain normalization worked. Okay. So firing'
+
+[117:49] [scene:talk]
+VISUAL:
+AUDIO: 'the end test now. So it\'s going to use the Atlassian MCP server to post the comment on DFE7. So if we go over to DFE7. Let\'s take a look. Um all right. Let\'s go back to our list.'
+
+[118:03] [scene:talk]
+VISUAL:
+AUDIO: 'The moment of truth here, ladies and gentlemen. DF7. See if it posted it. Yep. So at Archon, what is this ticket asking for and what\'s the simplest fix? Keep it brief. Okay, good. This is like the perfect'
+
+[118:16] [scene:talk]
+VISUAL:
+AUDIO: 'little test here because I don\'t need to like go run a whole complex workflow or something. I just want to talk to Archon about the issue. Um, okay. Well, this isn\'t good though. Looks like we got a not found for web hooks. I might have'
+
+[118:28] [scene:talk]
+VISUAL:
+AUDIO: 'set up something incorrectly. So, let\'s see. Now watching the server logs for the web hook to arrive and replay reply to the post. I might have done something wrong'
+
+[118:41] [scene:talk]
+VISUAL:
+AUDIO: 'because yeah, if it says 404 not found, it might be that like it it might actually add web hooks Jira to it. So'
+
+[118:54] [scene:talk]
+VISUAL:
+AUDIO: 'I didn\'t spell anything wrong. Well, here I\'ll just give I\'ll just give it here. So'
+
+[119:06] [scene:talk]
+VISUAL:
+AUDIO: 'I got this error from Ingro. I think something\'s wrong with the path. You told me to do /webhook/jira, but maybe that\'s not quite what we actually have in the code. I want you to look into this. All right, we just have to wait. I\'m'
+
+[119:19] [scene:talk]
+VISUAL:
+AUDIO: 'going to there. I\'m just going to escape it. I\'m I\'m sick of these commands taking like 3 minutes to run. All right. Uh, it\'s an actual whip. Google BadClaude. Okay, I\'ll I\'ll check this out. I\'m I\'m curious. We got time while'
+
+[119:32] [scene:talk]
+VISUAL:
+AUDIO: 'we wait for it to correct this thing anyway. Um, okay. So bad claude. Okay. Yeah, I think this is it on X'
+
+[119:46] [scene:talk]
+VISUAL:
+AUDIO: 'here. A lightweight Electron app from GitHub. Runs your system train lets users click send a control C interrupt to sluggish cloud processes. That\'s exa that\'s'
+
+[119:58] [scene:talk]
+VISUAL:
+AUDIO: 'exactly what I have right now. It\'s sluggish. Complete with cartoonish whip animations. What? This is looks so funny. Faster. Wow. And we we\'ve got the the'
+
+[120:11] [scene:talk]
+VISUAL:
+AUDIO: 'racial slur for a for a bot. That This is funny. This is very memey, but it\'s funny. This is what I feel like right now. I\'m'
+
+[120:27] [scene:talk]
+VISUAL:
+AUDIO: 'keeping it together for the live stream, but under under the or uh yeah, under the hood, I\'m like, this is what I want to do right now to Claude because it is acting so slow. Yeah, that\'s funny. Well, thanks for'
+
+[120:42] [scene:talk]
+VISUAL:
+AUDIO: 'sharing that. Okay, let\'s see where we\'re at now. The 404 is a typo in the web hook URL,'
+
+[120:59] [scene:talk]
+VISUAL:
+AUDIO: 'not the code. Oh, no way. I put three O\'s at that is Oh my gosh, that\'s hilarious.'
+
+[121:12] [scene:talk]
+VISUAL:
+AUDIO: 'Uh, that is literally my bad. Okay. Edit. Save.'
+
+[121:26] [scene:talk]
+VISUAL:
+AUDIO: 'Okay, that is totally user error. Okay, I fixed it. Test again. Wow, that\'s funny. So, my earlier test comment hit the typo'
+
+[121:39] [scene:talk]
+VISUAL:
+AUDIO: 'path, so it\'s a 404. Oh, that\'s funny. Okay, refiring the test. Posting a fresh archon comment. So, I can delete the other one here.'
+
+[121:52] [scene:talk]
+VISUAL:
+AUDIO: 'Yeah, there we go. 200. Okay. All right. So, I think it is actually being handled properly now. So, we\'ll see if we get a'
+
+[122:04] [scene:talk]
+VISUAL:
+AUDIO: 'reply here in real time within the next uh minute or so. It shouldn\'t take too long to process this. Okay. So, that Okay, that actually finished quickly. Well, I don\'t know. See, look. I click on it and we have a'
+
+[122:16] [scene:talk]
+VISUAL:
+AUDIO: 'green dot. I click out of it and it says it\'s still running. Make up your mind, Claude. Path fixed work. The web hook now'
+
+[122:31] [scene:talk]
+VISUAL:
+AUDIO: 'reached the adapter, but it failed the next check. Uh, secret prefix means the secret query parameter arrived empty. Your web hook URL is missing or dropping the secret part. Um, okay. So I I think that\'s another'
+
+[122:45] [scene:talk]
+VISUAL:
+AUDIO: 'configuration issue on my end. So let me do that off camera. So secret is equal to so there\'s like a different way you can'
+
+[123:03] [scene:talk]
+VISUAL:
+AUDIO: 'set the secret in Jira. So I thought that I did it right but I think that it\'s just process it\'s not processed the same. So, uh, done test again and delete the other comments. Oh, actually, no,'
+
+[123:15] [scene:talk]
+VISUAL:
+AUDIO: 'I\'m not going to do that because it\'s just going to take time. So, I\'m going to delete these myself just so that we have a blank slate here. So, delete and delete'
+
+[123:27] [scene:talk]
+VISUAL:
+AUDIO: 'and then done test again. Okay, so web hook is set. I\'ll check this quick. Uh, okay. So comment is posting web hook. Yep. Okay, we got 200. Okay. Again.'
+
+[123:46] [scene:talk]
+VISUAL:
+AUDIO: 'Uh we\'ll see if it\'s working. Refresh. See if we got the comment. Okay. Yep. All right. Looking good.'
+
+[123:59] [scene:talk]
+VISUAL:
+AUDIO: 'Moment of truth here. I hopefully we finally have it now. We\'ll see. According to the news, Karpathy is looking to'
+
+[124:13] [scene:talk]
+VISUAL:
+AUDIO: 'utilize Enthropics Claw to help train the next generation of foundational models. Um, utilize. So, he\'s using Claw to train other models or is he just working on the next version to claude?'
+
+[124:25] [scene:talk]
+VISUAL:
+AUDIO: 'Um, can you please evaluate more on the topic of switching providers in Archon? I understand that that\'s not the theme of today\'s live stream, but you can please consider it. Um, yeah. Uh, one second cuz I want to see where'
+
+[124:41] [scene:talk]
+VISUAL:
+AUDIO: 'we\'re at with this right here. Let me read this. See what\'s Okay, so um, yeah. So, I would say like my live stream on Thursday would be a really good resource to check out. I wouldn\'t want to like expand too much on it right now. But the'
+
+[124:53] [scene:talk]
+VISUAL:
+AUDIO: 'problem we have with larger models right now, Claude Opus for example, it\'s so expensive and the rate limits are getting worse. It\'s like the writing\'s on the wall that like it\'s going to get to the point very quickly where you'
+
+[125:05] [scene:talk]
+VISUAL:
+AUDIO: 'can\'t just use the best model for everything. And so then what it comes down to is we have to figure out like where do we need the most reasoning in our larger workflow versus where can we get away with using cheaper and faster models, open source ones like you know'
+
+[125:18] [scene:talk]
+VISUAL:
+AUDIO: 'Quen or Kimmy or Miniax and still get almost as good of results or just as good of results. And so what Archon allows us to do is have a workflow where we can mix providers. So we can do a you'
+
+[125:31] [scene:talk]
+VISUAL:
+AUDIO: 'know our more comprehensive like planning implementing validation process but we\'re using you know Kimmy for plan or for implementation and validation and opus for our planning for example and that\'s something I was doing a lot of'
+
+[125:45] [scene:talk]
+VISUAL:
+AUDIO: 'testing on is that I wanted to see like is it best to use opus like the more powerful model for the planning or the implementation because in the end we don\'t want to use it for both if we want to really optimize for tokens and I found through my benchmarking on'
+
+[125:59] [scene:talk]
+VISUAL:
+AUDIO: 'Thursday that using Opus for planning, the more powerful model for planning actually does give way better results than using the more powerful model for implementation because creating that spec in the best way possible is what gives you the best results.'
+
+[126:12] [scene:talk]
+VISUAL:
+AUDIO: 'Okay, so let\'s see what happened. So no new server logs appeared for that comment. The web hook is still the earlier invalid web hook secret from the previous attempt. This means one of the two things from the latest comment. It'
+
+[126:24] [scene:talk]
+VISUAL:
+AUDIO: 'never reached the server. It reached the server with the valid secret, but the archon mentioned wasn\'t detected. Fastest way to tell them apart. Open enro expectctor. Look for the most recent request. Tell me is there a post Jira. Um'
+
+[126:37] [scene:talk]
+VISUAL:
+AUDIO: 'yes. So this is what I got. So 200 showing it\'s arriving fine. The issue is mentioned detection on the Jira payload. I\'ll add a quick log to capture the'
+
+[126:49] [scene:talk]
+VISUAL:
+AUDIO: 'exact body. Man, we\'re so close. We\'re so close. We\'re we\'ll get there. We\'ll get there. I\'m going to go until we got this here. Oh man. All right, I gotta check something off camera. I\'ve'
+
+[127:01] [scene:talk]
+VISUAL:
+AUDIO: 'been streaming for longer than I thought I would, but we\'re we\'re gonna get there. Oh, man. All right.'
+
+[127:13] [scene:talk]
+VISUAL:
+AUDIO: 'Okay, so it\'s arriving with a valid'
+
+[127:29] [scene:talk]
+VISUAL:
+AUDIO: 'secret but producing no web hook means the mention isn\'t being detected. So it actually it said that that was a risk. So uh yeah, I\'ll just have to resolve that.'
+
+[127:41] [scene:talk]
+VISUAL:
+AUDIO: 'Archon is primarily Typescript. Yes, it is indeed almost all Typescript.'
+
+[127:53] [scene:talk]
+VISUAL:
+AUDIO: '97.5% and then the other most common is Astro just for the docs page and then shell just for like the default bundle commands we have scripts.'
+
+[128:06] [scene:talk]
+VISUAL:
+AUDIO: 'Uh didn\'t know about good claude. Yeah, I I saw that for a sec when I was googling bad Claude. What is this? Don\'t listen to Bad'
+
+[128:18] [scene:talk]
+VISUAL:
+AUDIO: 'Claude, my son. You\'re an angel. You\'re perfect. You\'re doing your best. Oh, that is funny. Good. Cloud code works so hard for us.'
+
+[128:34] [scene:talk]
+VISUAL:
+AUDIO: 'This app lets you send encouragement with a magic wand, but with love instead of whips. That\'s funny. Click a tray icon. Summon your magic wand. Wave it around. A golden wand with a twinkling star follows your cursor, shedding'
+
+[128:46] [scene:talk]
+VISUAL:
+AUDIO: 'sparkles. That is funny. Oh, wow. Okay. Good. Claude, that\'s funny. Well, I am probably not really'
+
+[129:07] [scene:talk]
+VISUAL:
+AUDIO: 'interested in using either of those, but uh that\'s still that\'s still funny. All right. I would suggest you use cloud code desktop app so you don\'t have the'
+
+[129:19] [scene:talk]
+VISUAL:
+AUDIO: 'CLI issues. Would that really fix all these things? Like all the slowness because I feel like it just runs the same harness under the hood. I would be open to trying it, but I\'ve just gotten so incredibly used to using the CLI that'
+
+[129:32] [scene:talk]
+VISUAL:
+AUDIO: 'I I feel like it\'d be too much of a shock for me to try to move everything over. Like like it\'d be easier for me to go to codeex than it would to be go from the CLI to the cloud code desktop app. I don\'t know.'
+
+[129:46] [scene:talk]
+VISUAL:
+AUDIO: 'Uh Jirro\'s web hook sends comment.body is plain text not. Okay, so exactly what I thought the risk would be. So we just have to make some changes. Let me read the two methods and make'
+
+[129:58] [scene:talk]
+VISUAL:
+AUDIO: 'them string aware. Okay, so we\'re actually getting down to it. We\'re so close now because the authentication\'s working. The URL is working. Jira is it\'s an enabled adapter running with Archon right now. We just have this one'
+
+[130:10] [scene:talk]
+VISUAL:
+AUDIO: 'last thing of make it so it can process the message. All right, making both string aware. Uh, good. So all right, nice. make it\'s actually kind of quick right now. Is this implementation something you\'ll'
+
+[130:25] [scene:talk]
+VISUAL:
+AUDIO: 'look to release as a standalone package? Many groups would be interested in having an isolated and security group approval tool for a Jira integration. Uh I mean potentially for sure though I wanted to stay as an Archon adapter right now because if if even if you'
+
+[130:38] [scene:talk]
+VISUAL:
+AUDIO: 'wanted to use Archon just to chat in Jira, you can do it. Like Archon is actually very lightweight under the hood. So like yes, there\'s a lot of other adapters and plat and providers and things, but like you don\'t have to'
+
+[130:50] [scene:talk]
+VISUAL:
+AUDIO: 'enable any of those. When you set up Archon, you can make it so it\'s just bare bones. Get the CLI and then set up the Jira adapter and that\'s it. And so I I don\'t know if I\'d really need to like make it something separate. If you want just this, you can enable just this.'
+
+[131:03] [scene:talk]
+VISUAL:
+AUDIO: 'It\'s not like another tool where it comes with this like massive Electron app and it\'s like this super massive like multi- gigabyte install or anything like that. Okay, good. So, both fixes are in.'
+
+[131:17] [scene:talk]
+VISUAL:
+AUDIO: 'So, now we just have to wait for another super long command to run. Okay, so fire server up firing the test command. Let\'s see. Okay, so we got another call here and if we go back to the issue. Okay, so'
+
+[131:32] [scene:talk]
+VISUAL:
+AUDIO: 'watching for the full round trip mention detection archons reply. Let\'s bring back the browser. All right. Okay, quick test. In one or two'
+
+[131:46] [scene:talk]
+VISUAL:
+AUDIO: 'sentences, what\'s the simplest fix for this ticket? All right, cool. So, I\'m just going to delete these. We don\'t need these anymore. That won\'t trigger the web hook either. All right.'
+
+[131:59] [scene:talk]
+VISUAL:
+AUDIO: 'Please, please work now. The desktop is easy to use. You just don\'t have to move it over anything.'
+
+[132:11] [scene:talk]
+VISUAL:
+AUDIO: 'It\'s just a better UI. Okay. I mean, may maybe I could be sold on trying it. I just love the using the CLI so much. Like I just like the minimal approach cuz then it\'s also just right there in my IDE for me to look at things in'
+
+[132:23] [scene:talk]
+VISUAL:
+AUDIO: 'myself. I mean, I guess you have that in the UI as well, but yeah, I guess I\'m being too resistant. I would I would be down to try it. Okay. It\'s doing the stupid thing where'
+
+[132:37] [scene:talk]
+VISUAL:
+AUDIO: 'it\'s hanging again. So, so are you really saying that uh if I were to use the web UI or the desktop app, I wouldn\'t get these hangs on the bash commands. Okay, what is it actually doing here?'
+
+[132:50] [scene:talk]
+VISUAL:
+AUDIO: 'So, it\'s okay. So, I mean, I can understand why this command because it\'s just like doing a GP 120 times. So, I can I can understand why this'
+
+[133:02] [scene:talk]
+VISUAL:
+AUDIO: 'command would take a while. Like I do believe that is legitimately running. But the bigger problem is why did Claude decide to like this is such a dumb way to monitor something. That\'s so annoying'
+
+[133:15] [scene:talk]
+VISUAL:
+AUDIO: 'cuz like of course this is going to take Well, okay. I guess sleeping for a second each time. So it is going to take a couple of minutes. So I guess we\'re almost done. But it\'s just such a weird convoluted command just to like monitor'
+
+[133:27] [scene:talk]
+VISUAL:
+AUDIO: 'something because I thought Claude code had like monitor commands built in. Like there was some functionality they added recently and now now it\'s like it regressed from that. Uh but okay now now we\'re done. So it'
+
+[133:39] [scene:talk]
+VISUAL:
+AUDIO: 'took two minutes. It\'s thinking about it. Uh well you\'ll be able to read the text that the CLI messed up. Sure. Fair enough. Um'
+
+[133:52] [scene:talk]
+VISUAL:
+AUDIO: 'oh wait I think might actually be working now. Hold on. The problem is this is actually kind of'
+
+[134:08] [scene:talk]
+VISUAL:
+AUDIO: 'a loaded question. You know, what\'s the simplest fix for this ticket? Like it definitely has to do some exploration here. So, it makes sense that it hasn\'t replied quite yet. The watcher finished. Let me read the'
+
+[134:21] [scene:talk]
+VISUAL:
+AUDIO: 'results. Okay, we\'ll see. Uh undefined. Oh my gosh. Uh issue.fill label.join the web hooks issue fields include label same class of'
+
+[134:33] [scene:talk]
+VISUAL:
+AUDIO: 'issue the adapter assume a fuller payload that Jira sends. Let me make the issue context building defensive. Um okay restarting and refiring. We\'re getting'
+
+[134:49] [scene:talk]
+VISUAL:
+AUDIO: 'there. I appreciate it. It feels like it\'s actually working like kind of faster now which is good. But yeah, it definitely like one of the things and and again this is like something that would have probably been'
+
+[135:01] [scene:talk]
+VISUAL:
+AUDIO: 'um or probably wouldn\'t have happened if I wasn\'t in a live stream. If I spent more time planning and having it like read the Jira API documentation and really understanding the parameters, it would have run into this. Like the'
+
+[135:14] [scene:talk]
+VISUAL:
+AUDIO: 'lesson here is when you\'re working with an external service, you better make sure that it knows the parameters and how to read the context that it gets from the API calls like that. That\'s really the problem that we have here'
+
+[135:26] [scene:talk]
+VISUAL:
+AUDIO: 'and so I just didn\'t do enough planning up front. So it made some assumptions there which I mean that really is my fault. So if I were to go into the system evolution, which I won\'t do in'
+
+[135:38] [scene:talk]
+VISUAL:
+AUDIO: 'the live stream here, what I would do is I would tell it like as a part of your planning process, like I would I would, you know, build this into the plan command for my workflow. As a part of your planning process, whenever you\'re'
+
+[135:50] [scene:talk]
+VISUAL:
+AUDIO: 'working with any kind of external API or integration, you should search for through the documentation. Make sure you understand the parameters and the JSON body you get back and things like that because if it did more of that upfront,'
+
+[136:02] [scene:talk]
+VISUAL:
+AUDIO: 'then we wouldn\'t have had this problem. And if I had actually used Opus for planning, I also probably would have avoided this problem. But like I said earlier, I was using a bit of a stale version of the workflow. All right, but we\'ll get there. Uh, so'
+
+[136:18] [scene:talk]
+VISUAL:
+AUDIO: 'we we posted another comment here. Let me delete this one. So we just have to wait two minutes for it to track things. What\'s up? building and shipping on the'
+
+[136:34] [scene:talk]
+VISUAL:
+AUDIO: 'holiday weekend. Yeah. So, I probably I won\'t be just live streaming on Monday because it\'s the actual holiday, but I\'m I\'m still active this weekend doing a bunch of cool stuff with Archon. Um, I would recommend you have the'
+
+[136:48] [scene:talk]
+VISUAL:
+AUDIO: 'Carpathy Claw. MD. I use it. I have less issues with Claude. I didn\'t know he had a dedicated claw.md. That\'s interesting. Carpathy, you have a link. That\'d be cool. Karpathy claude'
+
+[137:00] [scene:talk]
+VISUAL:
+AUDIO: 'MD. Okay. Yeah. Simplicity first. Surgical'
+
+[137:14] [scene:talk]
+VISUAL:
+AUDIO: 'changes. Goal driven execution. Nice and simple. I mean, yeah, you could really plug this into any global rules that you have. That\'s good. That\'s cool. All right.'
+
+[137:27] [scene:talk]
+VISUAL:
+AUDIO: 'Funny old shelf looks forward to partying now. I love just cooking away on these long weekends. Nice. Uh, anyone else using GPT 5.5 more than Opus for coding? So, I mean, right now'
+
+[137:40] [scene:talk]
+VISUAL:
+AUDIO: 'I\'m still using Opus more, but I am interested in exploring codeex more for sure and using GPT 5.5. Yeah. All right. Where are we at now?'
+
+[137:52] [scene:talk]
+VISUAL:
+AUDIO: 'It\'s running a shell in the background. Okay. Yeah. Okay. How close are we now? What\'s the'
+
+[138:05] [scene:talk]
+VISUAL:
+AUDIO: 'issue this time, Claude? Man, see the cool thing is like if I wasn\'t doing this in a live stream, I would just let it figure this out'
+
+[138:18] [scene:talk]
+VISUAL:
+AUDIO: 'autonomously. Um, but no reply posted, no. the orchestrator may still be reasoning or may have stalled. Let me check. Okay, I think it\'s actually working now because it makes sense that this would take a little bit because it\'s kind of a loaded question, right? We\'re just asking how'
+
+[138:31] [scene:talk]
+VISUAL:
+AUDIO: 'would you handle this ticket. Um, so we\'re looking good. Um, the one thing is it might not have full context on the codebase itself. That could be a problem. We will see. I\'m not sure. Like the answer might not'
+
+[138:47] [scene:talk]
+VISUAL:
+AUDIO: 'be the best, but I just want to get to the point where we have an answer. Yeah, because it doesn\'t Well, it might'
+
+[139:00] [scene:talk]
+VISUAL:
+AUDIO: 'it might be able to figure that. Well, I\'m actually not sure. Yeah, because I think because the name of the GitHub project, it\'ll know the code base that we\'re asking about with this ticket. So, I think we\'ll be good, but we\'ll see. Reading the logs'
+
+[139:15] [scene:talk]
+VISUAL:
+AUDIO: 'probably still running. Big progress. Okay. The full pipeline works. Mention detected. Orchestrator generator reply. Try to post back but the outbound your API call failed. Issue does not exist.'
+
+[139:28] [scene:talk]
+VISUAL:
+AUDIO: 'Okay. To failed basic o the adapter aren\'t authenticating. Add quick startup a. Okay. Man, we\'re so close. We actually had the reply'
+
+[139:40] [scene:talk]
+VISUAL:
+AUDIO: 'generated. It\'s just the API didn\'t work. So, that might be on me. I guess I\'ll have to check to see Let me um Where do I even go for that'
+
+[139:52] [scene:talk]
+VISUAL:
+AUDIO: 'again? I\'m sorry. I\'m doing this off camera. Well, I guess I don\'t have to do it off camera. I just need to go to I\'m I\'m forgetting where I set up the'
+
+[140:04] [scene:talk]
+VISUAL:
+AUDIO: 'API key already. Um API. Where did I do that earlier? I got my API key. Was it generals? No.'
+
+[140:18] [scene:talk]
+VISUAL:
+AUDIO: 'Yeah, I\'m already forgetting. I\'ll have to ask it again. Um, the adapter itself now works end to end.'
+
+[140:30] [scene:talk]
+VISUAL:
+AUDIO: 'On my side, I have to do my Jira email, which is correct. uh current token.'
+
+[140:42] [scene:talk]
+VISUAL:
+AUDIO: 'Yeah, that\'s the thing is I already did this. I I don\'t know why it\'s saying it\'s invalid, but otherwise we\'re good. Like this is'
+
+[140:54] [scene:talk]
+VISUAL:
+AUDIO: 'the only thing. Um okay. Ah, it\'s doing that thing where it needs my verification code. Okay. Boom.'
+
+[141:07] [scene:talk]
+VISUAL:
+AUDIO: 'Okay, do this off camera. So, last access two hours ago. Oh, I might have pasted it in incorrectly'
+
+[141:20] [scene:talk]
+VISUAL:
+AUDIO: 'because it says that the API key wasn\'t accessed. Let\'s see. ends with 31.'
+
+[141:38] [scene:talk]
+VISUAL:
+AUDIO: 'No, I think that\'s right token.'
+
+[141:51] [scene:talk]
+VISUAL:
+AUDIO: 'Okay, so I checked and the API key is actually set correctly in the ENV. So, it\'s not being used correctly somehow. But it is Jira_API token. I know it\'s right. And I even tested the authentication.'
+
+[142:04] [scene:talk]
+VISUAL:
+AUDIO: 'Um, yeah, I guess I I\'ll I\'ll add a new key here. So, I want you to test that. I\'ll I\'ll generate a new key, but otherwise, you got to figure this out because it\'s something in the code. So, let me I\'ll create a new API token. I\'ll call it'
+
+[142:17] [scene:talk]
+VISUAL:
+AUDIO: 'archon. We\'ll have it expire in a couple weeks. Copy. Okay,'
+
+[142:33] [scene:talk]
+VISUAL:
+AUDIO: 'so I updated it. I\'ll update that in my notes here. Okay.'
+
+[142:49] [scene:talk]
+VISUAL:
+AUDIO: 'So, we\'ll we\'ll see where we\'re at now after this point. Bring this back and we can uh delete this comment. All right.'
+
+[143:01] [scene:talk]
+VISUAL:
+AUDIO: 'Let\'s see. Uh no way to check if what Archon is working on. Oh no, we have the web UI. So you you can you can track all your workflows and then also if you have your cloud code or second brain or codecs or'
+
+[143:15] [scene:talk]
+VISUAL:
+AUDIO: 'whatever like invoking the archon workflows then you can ask it to check the logs and it can give you a status update so you have full visibility through that or the web UI. Still using Opus for implementation'
+
+[143:27] [scene:talk]
+VISUAL:
+AUDIO: 'plans codeex for coding the core components. Gemini 3.5 flash for the UI. That is a good combination. I love that. Yeah, mixing providers for the win. 3.5 Flash is a fast powerhouse, but use'
+
+[143:40] [scene:talk]
+VISUAL:
+AUDIO: 'with caution as it likes to jump gates. Yeah, it doesn\'t have the best reasoning from what I\'ve seen for sure. Cool. All right.'
+
+[143:53] [scene:talk]
+VISUAL:
+AUDIO: 'Uh, just got done doing this by the way. You need a supervisor agent feedback the API key through your secret manager upon ticket. Wait, what? Supervisor agent feedback the API key through your secret manager.'
+
+[144:05] [scene:talk]
+VISUAL:
+AUDIO: 'Um, oh boy. The supervisor gives the Jira agent the key to provide the ticket. What do you mean by supervisor though? Like that\'s a primitive or'
+
+[144:17] [scene:talk]
+VISUAL:
+AUDIO: 'whatever that I\'ve never heard of. So I\'m very confused by that. Um, yeah, because it it I mean it\'s gonna it\'s gonna it\'s about to run in circles, you know. It\'s about to run in'
+
+[144:30] [scene:talk]
+VISUAL:
+AUDIO: 'circles. Oh, man. I I\'m not sure what you\'re referring to. Um cuz like Okay. Okay. So, the authentication in the authentication in Jira is not working right now uh within Archon itself. I'
+
+[144:43] [scene:talk]
+VISUAL:
+AUDIO: 'just did the implementation in a separate coding agent session. So, you you were able to verify things right now. But there\'s they\'re saying that we need'
+
+[144:56] [scene:talk]
+VISUAL:
+AUDIO: 'some kind of like supervisor that gives the Jira agent the key to provide to Jira. I don\'t know what they mean by that. So I want you to look into that and see if there\'s something I\'m missing here. Because right now the web hook is working. We have everything. The Archon Jira adapter is working, but it\'s not'
+
+[145:09] [scene:talk]
+VISUAL:
+AUDIO: 'able to post a reply back yet. Something\'s not working with the Jira API even though I know I have the right API key. Uh it\'s a it\'s a supervisor agent. Just asked Claude. Okay. Yeah. Well, I\'m'
+
+[145:22] [scene:talk]
+VISUAL:
+AUDIO: 'asking it now. So, we\'ll see. We will see. Okay. So, O works now. Returned. The cred shape is clean. Okay.'
+
+[145:35] [scene:talk]
+VISUAL:
+AUDIO: 'Your new key is being picked up correctly. The earlier 401 was the old key. Okay. So, may maybe it is working now. I maybe I pasted in something wrong. Or maybe you\'re right. So, it\'s good that I\'m asking this in parallel here. So, we\'ll give it some time to'
+
+[145:48] [scene:talk]
+VISUAL:
+AUDIO: 'think. So, we fired another comment. So, if I refresh, what did I Oh, goodness. Oh, yeah. It worked. It worked. There we'
+
+[146:02] [scene:talk]
+VISUAL:
+AUDIO: 'go. It It\'s posted as me. So, that\'s why I was confused for a second. In one or two sentences, what\'s the simplest fix? Split the URL on a hash and keep only the portion before it. There we go. It'
+
+[146:14] [scene:talk]
+VISUAL:
+AUDIO: 'finally worked. And something that might be good to do is like make it so I have a separate user or I have some kind of header that says like Archon\'s response, right? Like there\'s a couple different ways that I could go about this, but it'
+
+[146:26] [scene:talk]
+VISUAL:
+AUDIO: 'actually worked. So the initial like version zero of the Archon Jira adapter is done now. It gave a good recommendation based on my comment. If I do, I can like test this myself at'
+
+[146:38] [scene:talk]
+VISUAL:
+AUDIO: 'Archon. How are you doing, buddy? Send this in. should get a response pretty fast here. It it it replied within a minute for this one here. I'
+
+[146:50] [scene:talk]
+VISUAL:
+AUDIO: 'don\'t know if it\'s real time though. I might need to refresh to actually get the reply. I\'m not totally sure, but uh this is this is looking good. We finally got it. And uh yeah, let\'s see. So, it\'s still I guess I had even checked. So, my'
+
+[147:05] [scene:talk]
+VISUAL:
+AUDIO: 'my second brain here hasn\'t even caught up the fact that we have the the reply. Um all right, let\'s see. There we go. Doing great, Cole. Ready? Dig in wherever you are. Want me to kick off a'
+
+[147:18] [scene:talk]
+VISUAL:
+AUDIO: 'workflow to actually implement the fix or is there something else on your mind? Good. So, it has the context is working for the issue as well. Conversation history. Okay, we got it. We finally got it, man. Let\'s go. All right. Cool. So, yeah. Now, this is just local right now,'
+
+[147:33] [scene:talk]
+VISUAL:
+AUDIO: 'but I\'ll I\'ll get this community adapter pushed over the weekend. Um, would be cool to actually include this in the next release for Archon, but pretty cool. All right. Uh, jumped on the stream late to know'
+
+[147:46] [scene:talk]
+VISUAL:
+AUDIO: 'what you\'re doing with Jira, but I use the Atlassian MCP to interact with Jira and Confluence. Yeah, so I still use the Atlassian MCP. If I were to like handle a task end to end with Archon, but if I specifically want to chat with Archon'
+
+[147:59] [scene:talk]
+VISUAL:
+AUDIO: 'directly from a Jira ticket, I have to use the API and the web hook. So that\'s what I\'m doing, integrating it into Archon. Uh, thanks for the answer. Cloud code token costs are pretty expensive. Um,'
+
+[148:13] [scene:talk]
+VISUAL:
+AUDIO: 'does your company cover Oh, sorry. This was the the question for the other gentlemen, but yeah, appreciate you sharing about your tech stack and everything, but yeah. Okay, we are good. So, that I\'m going to go ahead and call'
+
+[148:26] [scene:talk]
+VISUAL:
+AUDIO: 'the stream there. Definitely a bit of a longer stream, but I was determined to get that to work and we finally did. Mostly just Claude being slow that led to things taking a while, but we persevered. And the other cool thing is'
+
+[148:38] [scene:talk]
+VISUAL:
+AUDIO: 'like if I wasn\'t here in a live stream, I could have just let it like iterate on this autonomously. Like it would have figured everything out by itself um with the Archon workflow for the PIV loop. So there you go guys. That\'s uh that\'s'
+
+[148:50] [scene:talk]
+VISUAL:
+AUDIO: 'everything that we\'ve got. We have the the adapter working. I\'ll get it published within the next week. So yeah, I\'ll go ahead and call the live stream here. Hope that was a good example of you for you guys going through a larger'
+
+[149:02] [scene:talk]
+VISUAL:
+AUDIO: 'archon workflow and building an Archon adapter. We built an entire adapter in this stream. So, appreciate all you guys watching. No live stream on Monday. I\'m actually going to change up my live stream schedule next week. So, stay tuned for that. But definitely want to'
+
+[149:15] [scene:talk]
+VISUAL:
+AUDIO: 'keep at least doing Saturday live streams because I I really enjoy these every weekend. So, thanks everyone for being here. Hope you guys have a great great weekend. For those of you in the US, a good long weekend as well. Otherwise, I\'ll see you guys around. So'
+
+[149:27] [scene:talk]
+VISUAL:
+AUDIO: 'take it easy.'

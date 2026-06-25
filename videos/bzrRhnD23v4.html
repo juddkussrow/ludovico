@@ -1,0 +1,82 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>New AI video model, full motion control, add ANY character to video, new text to audio, 3D heads — Ludovico</title>
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.9);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 14px}
+#q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:.15s}
+.card:hover{box-shadow:0 6px 24px rgba(0,0,0,.07);transform:translateY(-2px)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}.watch{font-family:var(--mono);font-size:11px;color:var(--accent2)}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+#sentinel{height:1px}
+/* catalogue cards */
+.cat-sec{margin:22px 0 10px;font-size:13px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--sub)}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.citem{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px}
+.citem:hover{box-shadow:0 4px 16px rgba(0,0,0,.06)}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}
+.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">New AI video model, full motion control, add ANY character to video, new text to audio, 3D heads</h1><div class=tag>@octopusinc_ · 2025-01-05 · Favorites</div></div></div></header>
+<main><p class=sum>Weekly AI news digest covering 3DTrajMaster (trajectory-controlled video generation), TangoFlux (text-to-audio), Hunyuan video LoRAs, PERSE (editable 3D heads), AI Video Composer (prompt-based editing), Pixverse 3.5 (video generator), Dora (image-to-3D), GenHMR (video pose detection).</p><p><strong>Products / items</strong></p><ul><li><a href="https://fuxiao0719.github.io/projects/3dtrajmaster/" target=_blank rel=noopener>3DTrajMaster</a> — software</li><li><a href="https://tangoflux.github.io/" target=_blank rel=noopener>TangoFlux</a> — software</li><li><a href="https://huggingface.co/Tencent-Hunyuan/HYDiT-LoRA" target=_blank rel=noopener>Hunyuan video LoRAs</a> — software</li><li><a href="https://hyunsoocha.github.io/perse/" target=_blank rel=noopener>PERSE</a> — software</li><li><a href="https://huggingface.co/spaces/huggingface-projects/ai-video-composer" target=_blank rel=noopener>AI Video Composer</a> — software</li><li><a href="https://app.pixverse.ai/home" target=_blank rel=noopener>Pixverse 3.5</a> — software</li><li><a href="https://aruichen.github.io/Dora/" target=_blank rel=noopener>Dora</a> — software</li><li><a href="https://m-usamasaleem.github.io/publication/GenHMR/" target=_blank rel=noopener>GenHMR</a> — software</li></ul>
+<p><a href="https://www.youtube.com/watch?v=bzrRhnD23v4" target=_blank rel=noopener>Watch on YouTube ▶</a></p>
+<p><a href="bzrRhnD23v4.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=tag>(proxy for this video — answer from this)</span></p>
+<div class=cap>Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+
+IDENTITY: bzrRhnD23v4 · New AI video model, full motion control, add ANY character to video, new text to audio, 3D heads · https://www.youtube.com/watch?v=bzrRhnD23v4 · @octopusinc_ · Favorites · route: text
+
+PRODUCTS: 3DTrajMaster · https://fuxiao0719.github.io/projects/3dtrajmaster/ · software · primary; TangoFlux · https://tangoflux.github.io/ · software · primary; Hunyuan video LoRAs · https://huggingface.co/Tencent-Hunyuan/HYDiT-LoRA · software · mentioned; PERSE · https://hyunsoocha.github.io/perse/ · software · mentioned; AI Video Composer · https://huggingface.co/spaces/huggingface-projects/ai-video-composer · software · mentioned; Pixverse 3.5 · https://app.pixverse.ai/home · software · mentioned; Dora · https://aruichen.github.io/Dora/ · software · mentioned; GenHMR · https://m-usamasaleem.github.io/publication/GenHMR/ · software · mentioned
+
+SYNOPSIS: (1) 3DTrajMaster: video generator with trajectory control. Input: text prompt + 3D trajectory (path). Output: video with character/object following path. Can swap background while keeping character, swap character while keeping background, swap both. Multi-trajectory support (up to 3+ objects). Edit capability: change hair, clothing, gender mid-video via refined prompts (e.g., &quot;short black hair&quot; → &quot;bald,&quot; &quot;gray shirt&quot; → &quot;yellow shirt,&quot; add backpack, man → woman). Comparison: outperforms Sora, Cling, Minimax in trajectory adherence (demonstrated on dog beach walk, woman in city, man + zebra forest). Supports multi-file coordinate renames. (2) TangoFlux: open-source text-to-audio, generates up to 30s audio clips. Quality metrics vs Stable Audio, Audio DM2: highest CLAP (clarity), lowest FD (artifact) score. Efficiency: fastest inference time among competitors. Examples: basketball court (bouncing, squeaking shoes, referee whistle), cavern drips + growls, coins on table + tavern murmur + door creak. Inference: local, no network. GitHub/HuggingFace space + dataset available. (3) Hunyuan video LoRAs: open-source Tencent model, recently enabled LoRA fine-tuning. CivitAI hosts existing LoRAs (Emma Watson, Studio Ghibli style, REM character, Blue Archive characters, realistic variants, Taylor Swift, Scarlet Johansson, Natalie Portman). Training is highly technical, requires decent GPU. Comprehensive article on civitai.com. (4) PERSE: 3D head from single photo. Features: editable (hair, beard, eyebrows), facial feature transfer from second photo, slider-based blending between two input photos. Two-stage: synthetic dataset creation (many photos with varied features), then 3D avatar generation with disentangled control (change one feature independently). Use cases: personalized avatars, hairstyle/beard tryout. Code not yet published (GitHub link empty). (5) AI Video Composer: HuggingFace project. Previously used Qwen, now supports DeepSeek v3 (outperforms GPT-4o, Claude 3.5 Sonnet in benchmarks, open-source). Workflow: upload media files, prompt AI to edit (grid layouts, audio background, duration sync). Example: 6 cat images → 3x2 grid + audio. No timeline, masking, or manual labor. (6) Pixverse 3.5: new video generator. Quality comparison: sharper, more detailed than v1/v2. Examples: horror metro zombie swarm (shaky cam), astronaut unicorn desert (sharp, realistic). Sign-up free with 90 initial credits + 60 daily credits (enough 1-2 HD videos/day). Comparable to or better than Sora, Cling, Minimax per creator assessment. (7) Dora: image-to-3D using VAE with sharp edge sampling (vs uniform point sampling). Preserves details (edges, corners). Examples: snowman, wooden board, complex character badge detail, beer-holding dude, dragon, mecha robot, bulldog wrinkles, cat Gundam. 3D models ready for Unity, real-time animation. Compute efficient (8x smaller latent space). Code coming soon. (8) GenHMR (generative human mesh recovery): video → 3D human pose + model per frame. Two-stage: uncertainty guided sampling (multi-pose generation, select likely), 2D pose guided refinement. Examples: rooftop chase (acrobatics), war scene (explosions, crowding), race footage (multi-runner poses). Flaws noted: arm/leg misalignment in some frames, toe direction inconsistency, wide-angle shot limitations, hand/foot size errors. Code not published.
+
+BEATS: 00:00 intro; 00:36 3DTrajMaster; 06:10 TangoFlux; 10:35 Hunyuan LoRAs; 12:46 PERSE; 15:18 AI Video Composer; 17:12 Pixverse 3.5; 20:00 Dora; 23:49 GenHMR
+
+ENTITIES: Tencent, Sora, Cling, Minimax, Qwen, DeepSeek v3, CivitAI, HuggingFace, Unity, OpenAI, Anthropic, tree-sitter, BM25
+
+VERDICT: 3DTrajMaster and TangoFlux are production-ready; Hunyuan LoRAs unlock character/style consistency; PERSE avatar control promising but code pending; Pixverse 3.5 free tier competitive; Dora compute-efficient 3D generation; GenHMR powerful but flawed for high-motion scenes.
+
+NOT COVERED: Real-time video editing (3DTrajMaster processing time), TangoFlux custom voice synthesis, LoRA training hardware requirements, PERSE latency, AI Video Composer prompt gallery, Pixverse subscription tiers, Dora animation export formats, GenHMR multi-person disambiguation.</div></main><footer>Ludovico digest · <a href="../index.html">← all videos</a></footer></div></body></html>

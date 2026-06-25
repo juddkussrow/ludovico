@@ -1,0 +1,179 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Rustdesk and Tailscale is a remote desktop access dream team
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=27apZcZrwks
+upload_date: 20250710
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'I\'ve played tech support for my family for years at this point, and an indispensable tool in my tool belt during that time has been TeamViewer. However, over time, it\'s gotten more and more aggressive about the pop-ups, asking, are you sure you\'re not running a business?'
+
+[00:12] [scene:talk]
+VISUAL:
+AUDIO: 'And OS-native tooling, such as Microsoft\'s remote desktop and Apple\'s screen-sharing VNC implementation, lack the user-friendliness of typing in a code and punching through firewalls to help your family out without configuring port forwarding and that kind of stuff.'
+
+[00:25] [scene:talk]
+VISUAL:
+AUDIO: 'And as a result of these network complexities and nag screens, some remote desktop alternatives have popped up over the years, such as AnyDesk and to some extent VNC2. But this is where today\'s video hero comes in, Rustdesk.'
+
+[00:40] [scene:talk]
+VISUAL:
+AUDIO: 'This isn\'t a new project by any means, but it is an open source and mostly free, as in cost, alternative to TeamViewer. Rustdesk purports to give you a reliable remote desktop experience with your own self-hosted'
+
+[00:52] [scene:talk]
+VISUAL:
+AUDIO: 'servers. Did someone say self-hosted servers? I\'m in. But this is the Tailscale channel after all, and we don\'t need someone else to punch through Nat for us.'
+
+[01:04] [scene:talk]
+VISUAL:
+AUDIO: 'That\'s literally what Tailscale does best. No relay servers here, for the most part at least, just direct connections and end-to-end encrypted wireguard tunnels behind the scenes. So in today\'s video, I will cover the basics of Rustdesk and how to set it up with Tailscale.'
+
+[01:18] [scene:talk]
+VISUAL:
+AUDIO: 'Now, in the description down below, I\'ve linked to a blog post by my colleague, Kevin Purdy, formerly of Ars Technica fame, no less. And he\'s gonna dive into some aspects'
+
+[01:30] [scene:talk]
+VISUAL:
+AUDIO: 'I didn\'t cover in the video today, such as the web front end and some other intricacies too. I\'ll leave a link to that post in the description down below. What other free and open source remote desktop technology lets you connect not only to Windows, as we have here,'
+
+[01:45] [scene:talk]
+VISUAL:
+AUDIO: 'but also to Mac, as we have here, but you can see this is the screen just over my shoulder right here, Or to Linux. And this is the magic of Rustdesk.'
+
+[01:58] [scene:talk]
+VISUAL:
+AUDIO: 'We can connect to all the big three operating systems from a single system. Yes, I know VNC\'s let us do this for years. But the magic of Rustdesk is it does a lot of the hard work for us. The client server stuff can be a little complicated to set up sometimes with VNC.'
+
+[02:12] [scene:talk]
+VISUAL:
+AUDIO: 'With Rustdesk, we\'ve got all sorts of fun stuff we can play with in the menus too. We can look at scaling. We can change the codex. We can change image quality. Copy and paste works.'
+
+[02:25] [scene:talk]
+VISUAL:
+AUDIO: 'You can look at the actual, you know, I\'m a frame rate nerd. I love looking at video bit rates and all that kind of stuff. And when you pair Rust Desk with Tailscale, you don\'t even have to worry about setting up your own self-hosted Rust Desk relay server either.'
+
+[02:37] [scene:talk]
+VISUAL:
+AUDIO: 'Because every node on your tail net, this assumes every node you want to connect to is a node on your tail net. But with Tailscale as the connection fabric between everything, everything can talk to everything else. You don\'t have to worry about setting up these relay servers that Rust Desk typically ask you to do.'
+
+[02:54] [scene:talk]
+VISUAL:
+AUDIO: 'It just works over tailscale. You enter your tailscale node IP address and you can connect to any Rust Desk server, no matter the operating system. Performance is pretty good too.'
+
+[03:09] [scene:talk]
+VISUAL:
+AUDIO: 'So let\'s just load up my favorite video game of all time, Factorio. Any day where I get to play Factorio at work is a good day in my book. I\'m going to set the adaptive scaling here and just give you an idea of what\'s going on with the performance. I\'ll make this full screen too.'
+
+[03:24] [scene:talk]
+VISUAL:
+AUDIO: 'Now this is all happening over my local network. This laptop is connected over Wi-Fi to an access point sat just out of shot just up there. So that\'s not going very far. And then this computer is connected via Ethernet into the rest of my network.'
+
+[03:36] [scene:talk]
+VISUAL:
+AUDIO: 'You can kind of see that the performance is pretty good. The codec\'s able to handle some pretty unpleasant, in terms of compression, the accumulators there with their lightning beams. It\'s pretty unpleasant to try and render that.'
+
+[03:50] [scene:talk]
+VISUAL:
+AUDIO: 'You can kind of see some pixelation and some smoothing, I guess, going on there. But we can go into the settings and set image quality as good image quality, and it does make a noticeable difference to the quality that\'s going on. You can see that the current target bit rate is 8 megabits a second,'
+
+[04:03] [scene:talk]
+VISUAL:
+AUDIO: 'and the codec is H.265. FPS is 30 FPS. It\'s good enough. I could absolutely make do with playing Factorio this way. There\'s a little bit of lag.'
+
+[04:16] [scene:talk]
+VISUAL:
+AUDIO: 'But honestly, for the things we\'re going to actually use Rust Desk for, which is probably not gaming, You want to use Apollo and Sunshine and Parsec for those kinds of things, probably. You can see that even when there\'s a lot going on on the screen, you could absolutely just watch a video.'
+
+[04:29] [scene:talk]
+VISUAL:
+AUDIO: 'And can you even tell right now that this is not your local system? That\'s just awesome. I am absolutely in love with Rust Desk at the minute. And then you can jump between, like I say, all the different operating systems'
+
+[04:41] [scene:talk]
+VISUAL:
+AUDIO: 'between the laptop behind me on the table. Again, that\'s just, it\'s just cool, isn\'t it? All right, so let\'s go into Scale Original. I want to bring up the Rust Desk Client'
+
+[04:53] [scene:talk]
+VISUAL:
+AUDIO: 'because there are a couple of things we\'ve got to tweak to make sure that our remote tail scale node, in my case, this laptop on the desk in front of me, can reach out over the tail net to connect to this node wherever it happens to be.'
+
+[05:06] [scene:talk]
+VISUAL:
+AUDIO: 'So it\'s not the most intuitive settings menu ever, but it\'s right here. If you go to the ID option and click on this three dot menu right here, you want to go to Security. Click on Unlock Security Settings.'
+
+[05:18] [scene:talk]
+VISUAL:
+AUDIO: 'and then scroll down just a little bit until it says use permanent password. So first of all, set yourself a permanent password, pretty straightforward. And then second of all, we\'re going to want to make sure that we check this box here. This is of critical importance.'
+
+[05:32] [scene:talk]
+VISUAL:
+AUDIO: 'Make sure you check the box that says enable direct IP access. What this will allow you to do is instead of in this box here, when you\'re connecting to a new host, instead of typing in your remote person\'s ID and password,'
+
+[05:44] [scene:talk]
+VISUAL:
+AUDIO: 'you simply type in the Tailnet IP address of the remote host. So let\'s see what kind of level of inception we can get to here. Let\'s see if I can bring up the Ubuntu host through Rustdesk, through Rustdesk to Ubuntu.'
+
+[06:00] [scene:talk]
+VISUAL:
+AUDIO: 'This is a bit silly, but let\'s try it. So under my network devices, you can see here that I\'ve got one called UbuTest, which is my Ubuntu test box. I\'m going to copy the Tailscale IP address. Note that unfortunately, the Rust Desk client doesn\'t respect magic DNS names.'
+
+[06:13] [scene:talk]
+VISUAL:
+AUDIO: 'Like if I put UbuTest in here, for example, that\'s the magic DNS name of this node on my tail net. It just says ID does not exist.'
+
+[06:25] [scene:talk]
+VISUAL:
+AUDIO: 'However, if you put an actual IP address into this box, everything works as we would expect. So let\'s do a little bit of Rust Desk inception. Here we go.'
+
+[06:37] [scene:talk]
+VISUAL:
+AUDIO: 'I\'ve got Rust Desk with inside Rust Desk. And I could go another level deep if I wanted to. But there you go. So you can see that using Rust Desk over TailScale, getting the IP address, I can just connect anywhere. So why is this a big deal? Why is Alex so excited about TailScale and Rust Desk coming together in a peanut butter and chocolate sandwich that\'s just of deliciousness?'
+
+[06:49] [scene:talk]
+VISUAL:
+AUDIO: 'Well, what happens when I take this laptop outside of this house? How would this laptop connect back to these nodes?'
+
+[07:03] [scene:talk]
+VISUAL:
+AUDIO: 'Well, I\'d either have to open supports in my firewall, which I probably don\'t want to do because this is remote control after all, which is quite a big security hole, or I\'d have to host some kind of a public relay server.'
+
+[07:15] [scene:talk]
+VISUAL:
+AUDIO: 'And this is what Rustdesk actually suggests you do. They suggest that you spin up a server on a VPS in the cloud somewhere. It doesn\'t use a lot of resources, but it\'s essentially there to act as this kind of in-between bouncer node, this kind of like relay node.'
+
+[07:31] [scene:talk]
+VISUAL:
+AUDIO: 'And all the traffic from node A, your laptop, to node B, traverses that relay node up in the cloud. So it\'s kind of hairpinning in and hairpinning out again. it\'s not it\'s not ideal but with tail scale nodes make direct connections to each other node so I could go to the coffee shop right now I can just pick up right where I left off so for example'
+
+[07:48] [scene:talk]
+VISUAL:
+AUDIO: 'here\'s here\'s the same laptop I was using five minutes ago at my house connected over 5g to the public internet and now this laptop is connected via tail scale to my tail net I can now connect to any of these nodes without any further configuration this is why I love tail scale so much it just'
+
+[08:04] [scene:talk]
+VISUAL:
+AUDIO: 'completely makes network topologies just disappear. And Rust Desk is a layer that runs on top of that overlay network that TailScale creates for you.'
+
+[08:19] [scene:talk]
+VISUAL:
+AUDIO: 'So I can basically now connect into my editing laptop as if I sat on my desk back at my house, connect into my gaming rig as if I sat at my desk back in my house from the coffee shop.'
+
+[08:31] [scene:talk]
+VISUAL:
+AUDIO: 'It\'s just awesome. And it makes my life so, so much easier to do it this way. So I don\'t think there\'s anything else TailScale specific to cover today. The real magic is that each of these nodes was just another node on my TailNet,'
+
+[08:43] [scene:talk]
+VISUAL:
+AUDIO: 'same as any other video that I make. All I did was I installed RustDesk on each of those nodes, set up an unattended password, and then also allowed direct IP access. And suddenly, I can access any of these nodes from anywhere else in the world'
+
+[08:57] [scene:talk]
+VISUAL:
+AUDIO: 'thanks to the magic of TailScale\'s Natraversal technology. So that\'s a very quick overview of RustDesk and TailScale and how it can make your life, your remote network life easier than ever. Thank you so much for watching.'
+
+[09:13] [scene:talk]
+VISUAL:
+AUDIO: 'Until next time, I\'ve been Alex from TailScale.'

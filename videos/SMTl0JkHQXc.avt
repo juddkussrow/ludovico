@@ -1,0 +1,255 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Create Custom AI Animation: Kimodo + SCAIL-2 Masterclass | The Ultimate Character Motion Hack
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=SMTl0JkHQXc
+upload_date: 20260617
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'First take a look at these videos Same character same set of movements: side view, top-down view low-angle view and also a perspective angle At first glance doesn’t it look a bit like the same 3D motion being captured from different camera positions and then turned into realistic character videos with AI?'
+
+[00:15] [scene:talk]
+VISUAL:
+AUDIO: 'But let me pour a little cold water on this first These results that look pretty decent are actually failed cases from our testing It’s not that they are unusable It’s that they did not complete the thing I really wanted to test'
+
+[00:27] [scene:talk]
+VISUAL:
+AUDIO: 'So what was I trying to test? Suppose I use Kimodo to generate a 3D human motion then change the camera angle in the 3D preview record that video'
+
+[00:39] [scene:talk]
+VISUAL:
+AUDIO: 'and feed it into SCAIL-2 Can SCAIL-2 learn not only how the character moves but also how the camera moves? The answer is subtle It can learn the motion but it cannot learn the camera position Sometimes'
+
+[00:53] [scene:talk]
+VISUAL:
+AUDIO: 'it even misunderstands camera changes as changes in the character’s movement So what we want to explore in this video is very simple: use Kimodo to generate motion and then use SCAIL-2 to generate the final video Let’s first look at these two tools'
+
+[01:07] [scene:talk]
+VISUAL:
+AUDIO: 'Neither of them is brand-new One is Kimodo, from NVIDIA The other is SCAIL-2 which we already covered in the previous episode So what is Kimodo? It is an open-source motion generation model from NVIDIA'
+
+[01:19] [scene:talk]
+VISUAL:
+AUDIO: 'You can understand it as a text-to-3D-motion tool For example if you enter the sentence “a person walks forward and then waves hello ” Kimodo can generate a 3D human motion'
+
+[01:31] [scene:talk]
+VISUAL:
+AUDIO: 'The official project mentions that Kimodo is a kinematic motion diffusion model and its training data comes from a large amount of motion capture data You only need to remember one thing:'
+
+[01:43] [scene:talk]
+VISUAL:
+AUDIO: 'Kimodo is responsible for creating the motion and SCAIL-2 is responsible for applying that motion to a character When these two things are connected they form a very natural workflow We no longer need to find a real video of someone dancing first'
+
+[01:56] [scene:talk]
+VISUAL:
+AUDIO: 'We can generate a motion with text record that motion feed it into SCAIL-2 and let it present a full video Sounds perfect, right?'
+
+[02:08] [scene:talk]
+VISUAL:
+AUDIO: 'But once you actually run it you’ll find there are some traps in the middle Now let’s talk about setting up the environment All of these models are running inside ComfyUI In this episode we won’t go into the SCAIL-2 environment in detail because we already explained it very thoroughly in the previous video'
+
+[02:23] [scene:talk]
+VISUAL:
+AUDIO: 'Here, we’ll focus on Kimodo I use the ComfyUI-Kimodo extension You can install it through ComfyUI Manager or manually clone the repository into custom_nodes and restart ComfyUI The official page also mentions that the model will be automatically downloaded when you run the workflow'
+
+[02:38] [scene:talk]
+VISUAL:
+AUDIO: 'so the first run may take a little longer For easier demonstration I also built the workflow on RunningHub In the ComfyUI space'
+
+[02:51] [scene:talk]
+VISUAL:
+AUDIO: 'RunningHub is a really great online workflow platform because whenever new models or new extensions appear it usually follows up very quickly RunningHub also provides an online community platform for ComfyUI creators where you can find a lot of creative inspiration and practical workflows'
+
+[03:05] [scene:talk]
+VISUAL:
+AUDIO: 'Next let’s look at the Kimodo workflow At the front there is a model loading node Pay attention here: Kimodo has quite a few models Right now we are using the Kimodo-SOMA-RP-v1 version'
+
+[03:17] [scene:talk]
+VISUAL:
+AUDIO: 'Then comes prompt encoding Here you just enter the motion you want Of course the motion sequence can be designed to be relatively long After that is the sampler'
+
+[03:30] [scene:talk]
+VISUAL:
+AUDIO: 'There are some special settings here such as duration seed num_samples, and diffusion_steps From the names alone you can probably understand what they mean Here'
+
+[03:42] [scene:talk]
+VISUAL:
+AUDIO: 'I’m generating a five-second motion using one hundred sampling steps Further down there are several output nodes The first one is called Kimodo Preview This is a 2D preview node and it can export an image from a specific frame'
+
+[03:55] [scene:talk]
+VISUAL:
+AUDIO: 'The second one is Kimodo Save NPZ The third one is Kimodo Export BVH This is useful for animation motion data and later motion retargeting or rigging But if we want to feed the result into SCAIL-2'
+
+[04:09] [scene:talk]
+VISUAL:
+AUDIO: 'we are still missing one step because SCAIL-2 needs a video It cannot directly use NPZ and it cannot directly use BVH either So here'
+
+[04:22] [scene:talk]
+VISUAL:
+AUDIO: 'we use a node called Kimodo Preview 3D Pay attention: this is a preview node We can drag the mouse to change the viewing angle But there is a small awkward issue Since this is only a preview node it does not have a built-in function to save video'
+
+[04:34] [scene:talk]
+VISUAL:
+AUDIO: 'So my method here is very simple: I directly recorded the screen then adjusted the size in video editing software I adjusted it to sixteen by nine and recorded several versions:'
+
+[04:47] [scene:talk]
+VISUAL:
+AUDIO: 'front view, side view low-angle view, top-down view and perspective view These five videos are what we later use as the driving videos for SCAIL-2 Now let’s first clarify the goal of this test'
+
+[04:59] [scene:talk]
+VISUAL:
+AUDIO: 'The first question is whether SCAIL-2 can properly recognize this kind of video recorded from Kimodo Because this is not a natural video It has no real person no clothing'
+
+[05:11] [scene:talk]
+VISUAL:
+AUDIO: 'and no real background It only has a moving 3D human model The second key question is if it can recognize it how should we tune SCAIL-2’s pose_strength? This is the parameter optimization part'
+
+[05:23] [scene:talk]
+VISUAL:
+AUDIO: 'Kimodo’s motion can be relatively exaggerated If we set pose_strength too high the generated character may look very stiff But if we set it too low'
+
+[05:36] [scene:talk]
+VISUAL:
+AUDIO: 'the motion may be lost The third question is the one I care about the most These motion videos actually show different camera angles Can SCAIL-2 learn this camera angle and reproduce it correctly? This is the third question'
+
+[05:50] [scene:talk]
+VISUAL:
+AUDIO: 'and also the most important one Alright, let’s begin testing First let’s see whether SCAIL-2 can correctly recognize the motion Look at this driving video It shows the character we just generated walking forward and then waving Next'
+
+[06:04] [scene:talk]
+VISUAL:
+AUDIO: 'we directly feed it into SCAIL-2 We use non-replacement mode and then provide a character reference image Look at the result The overall movement is acceptable Although it does not reproduce every detail of the Kimodo motion one hundred percent the overall rhythm is correct'
+
+[06:19] [scene:talk]
+VISUAL:
+AUDIO: 'There is walking at the beginning and waving at the end This also proves something very important: the motion video recorded from Kimodo can be used as a driving source for SCAIL-2 And in this workflow'
+
+[06:33] [scene:talk]
+VISUAL:
+AUDIO: 'SAM3 can also recognize this special kind of 3D human image and generate the corresponding mask Look at this This is the mask video we generated It is not the kind of very natural mask you would get from a traditional real-person video but it is good enough for the workflow to continue running'
+
+[06:49] [scene:talk]
+VISUAL:
+AUDIO: 'So the first test passes Next let’s look at parameter optimization At the beginning, of course we set pose_strength to one point zero The reference image we used earlier has a slightly anime-style girl'
+
+[07:01] [scene:talk]
+VISUAL:
+AUDIO: 'so when the motion is exaggerated the result still looks acceptable But if we switch to a realistic and elegant female reference image the problem may appear'
+
+[07:13] [scene:talk]
+VISUAL:
+AUDIO: 'Look at this result The character does follow the motion but the movement is a bit too much The body is stretched too noticeably and the hand movement does not feel very natural It feels like the model is trying very hard to chase every movement from Kimodo'
+
+[07:25] [scene:talk]
+VISUAL:
+AUDIO: 'but the character itself cannot really handle it So we make an adjustment here In the WanSCAILToVideo node we reduce pose_strength from one point zero to zero point seven five and run it again'
+
+[07:40] [scene:talk]
+VISUAL:
+AUDIO: 'You’ll notice that the motion is still there The general structure of walking and waving is not lost But the overall character feels much more comfortable The body is not as stiff Especially for realistic portraits zero point seven five feels more like a usable balance point than one point zero'
+
+[07:53] [scene:talk]
+VISUAL:
+AUDIO: 'To test the overall usability I also switched to a second reference image and verified it again The result is similar Zero point seven five is more natural than one point zero'
+
+[08:05] [scene:talk]
+VISUAL:
+AUDIO: 'Some people may wonder: if we keep lowering it for example down to zero point five will the result be even better? We tested that as well Look at the result It is actually not as good as zero point seven five'
+
+[08:17] [scene:talk]
+VISUAL:
+AUDIO: 'When pose_strength becomes too low the model starts ignoring the command Some parts may look more stable but the presence of the motion becomes weaker You’ll feel that it is no longer completing the Kimodo motion'
+
+[08:29] [scene:talk]
+VISUAL:
+AUDIO: 'but the character is just casually moving on her own So after this round of testing I would recommend using zero point seven five as a starting point Next, let’s do the third test'
+
+[08:41] [scene:talk]
+VISUAL:
+AUDIO: 'Now that we have confirmed this method is workable and we have optimized the parameter let’s look at the camera angle issue In other words can this kind of viewpoint or camera change be reflected in the video generated by SCAIL-2? Just now'
+
+[08:57] [scene:talk]
+VISUAL:
+AUDIO: 'we tested the front view Now let’s look at the side view We rotate Kimodo’s 3D preview to the side and record a side-view driving video You can look at the result here Then we use the same SCAIL-2 process and check the final output The character basically maintains a side-view feeling'
+
+[09:12] [scene:talk]
+VISUAL:
+AUDIO: 'and the motion also follows But I would not treat this as the final conclusion because side view itself is a fairly common character pose Even if SCAIL-2 does not truly understand the camera position'
+
+[09:24] [scene:talk]
+VISUAL:
+AUDIO: 'it can still generate something that looks like a side view based on the reference image prompt, and motion outline So the side-view test can only show that it has a chance to maintain the general direction It still cannot prove that it truly understands the camera angle'
+
+[09:41] [scene:talk]
+VISUAL:
+AUDIO: 'Next let’s test top-down view and low-angle view We’ll start with the low-angle view When recording this motion video we look upward from below'
+
+[09:53] [scene:talk]
+VISUAL:
+AUDIO: 'In theory if SCAIL-2 could fully inherit the viewpoint of the driving video the generated video should also have an obvious low-camera feeling But the generated result is ambiguous It has a little bit of that upward-looking feeling'
+
+[10:06] [scene:talk]
+VISUAL:
+AUDIO: 'but it is not especially strong It feels more like the model learned the motion and then regenerated it from a more conventional camera position Now let’s verify it again with the top-down view The problem is similar'
+
+[10:20] [scene:talk]
+VISUAL:
+AUDIO: 'In the Kimodo motion video the camera is indeed looking down from above But the generated result does not clearly become a top-down angle It still tends to return to a normal character-view angle that the model is more familiar with At this point'
+
+[10:36] [scene:talk]
+VISUAL:
+AUDIO: 'the conclusion is already starting to appear: SCAIL-2 seems very sensitive to motion but it is not that sensitive to camera-position changes produced by this kind of 3D preview Now let’s do the final test'
+
+[10:48] [scene:talk]
+VISUAL:
+AUDIO: 'I call this the perspective-angle test This motion video is not from a fixed angle It contains several obvious camera changes in the middle If SCAIL-2 could really understand camera motion then the generated video should also show angle changes'
+
+[11:02] [scene:talk]
+VISUAL:
+AUDIO: 'For example, toward the end the original motion video has already rotated to something close to a back-facing view The generated character should gradually reveal the back as well But in practice'
+
+[11:16] [scene:talk]
+VISUAL:
+AUDIO: 'the character does not truly turn into a back view An even clearer example is the waving part In the Kimodo motion video the character waves with the right hand at the end But when SCAIL-2 generates the result because it does not correctly inherit the viewpoint relationship'
+
+[11:29] [scene:talk]
+VISUAL:
+AUDIO: 'it looks like the hand on the other side is moving This phenomenon is very important It shows that SCAIL-2 is not fully reproducing the camera in 3D space It is more like watching a 2D driving video'
+
+[11:44] [scene:talk]
+VISUAL:
+AUDIO: 'and then translating the movement trend inside it onto the reference character So the conclusion of this test is very clear Kimodo plus SCAIL-2 can be used for motion-driven generation but you should not expect it to reproduce the camera changes inside Kimodo'
+
+[11:58] [scene:talk]
+VISUAL:
+AUDIO: 'Especially for top-down angles low-angle views action perspective and similar viewpoints those are not currently its strengths At this point'
+
+[12:10] [scene:talk]
+VISUAL:
+AUDIO: 'some people may feel that if the camera position cannot be reproduced then maybe this method is useless I think it is actually the opposite It is very valuable Its value is not in 3D camera control Its value is that you can quickly generate motion using text'
+
+[12:23] [scene:talk]
+VISUAL:
+AUDIO: 'such as walking jumping, and waving This is very important for video generation because what we usually lack is not a good-looking image What we lack is a usable driving video with a clear rhythm and clean movement'
+
+[12:35] [scene:talk]
+VISUAL:
+AUDIO: 'Finally, let’s summarize First Kimodo can use text to generate relatively complex continuous motion Second Kimodo’s 3D Preview inside ComfyUI is very useful but it cannot directly save video'
+
+[12:50] [scene:talk]
+VISUAL:
+AUDIO: 'so we need to screen record it and do some processing Third the motion video recorded from Kimodo can drive SCAIL-2 Fourth parameter optimization matters We also ran several tests'
+
+[13:02] [scene:talk]
+VISUAL:
+AUDIO: 'and the key point is still this: you can use Kimodo motion to drive SCAIL-2 but don’t oversimplify the camera-angle part Alright, that’s all for today So what are you waiting for?'
+
+[13:14] [scene:talk]
+VISUAL:
+AUDIO: 'Go try it yourself Follow me and become someone who truly understands AI'

@@ -1,0 +1,303 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: The 13-Person Startup That Might Kill RAG (SubQ)
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=s8ohN_SOrnA
+upload_date: 20260619
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'Imagine handing an AI your entire code base. Every single file. Then your full contract archive. A whole legal case. An entire book. All at once. No chunking, no vector database, no'
+
+[00:15] [scene:talk]
+VISUAL:
+AUDIO: 'retrieval pipeline. And it reads all of it perfectly. For a fraction of what that costs today. A 13-person startup in Miami says they'
+
+[00:27] [scene:talk]
+VISUAL:
+AUDIO: 'just built that. They call the model sub-q and the claim underneath it is enormous. At 1 million tokens, they say it needs 64 times less compute than normal'
+
+[00:40] [scene:talk]
+VISUAL:
+AUDIO: 'attention. And runs 56 times faster than the industry standard. If that is real, a huge chunk of the AI tooling world,'
+
+[00:53] [scene:talk]
+VISUAL:
+AUDIO: 'the chunking, the embeddings, the RAG pipelines everyone has been building, suddenly becomes optional. So, is this the first real breakthrough since the transformer?'
+
+[01:07] [scene:talk]
+VISUAL:
+AUDIO: 'Or is it, as one researcher put it, AI Theranos? I read their entire technical report, so you do not have to. Here is what is actually real.'
+
+[01:19] [scene:talk]
+VISUAL:
+AUDIO: 'To get why this matters, you need to understand the wall that every AI hits. Inside a transformer, every word, every token, looks at every other token to figure out'
+
+[01:33] [scene:talk]
+VISUAL:
+AUDIO: 'what matters. That is called attention. And here is the problem. If you double the amount of text, you do not double the work. You quadruple it.'
+
+[01:46] [scene:talk]
+VISUAL:
+AUDIO: '10 tokens is 100 comparisons. 1,000 tokens is a million. At 1 million tokens, it is a trillion pairs for a single layer.'
+
+[01:58] [scene:talk]
+VISUAL:
+AUDIO: 'Engineers call this quadratic scaling, order n squared, and it is the single biggest reason long context is so slow and so expensive.'
+
+[02:11] [scene:talk]
+VISUAL:
+AUDIO: 'Your AI does not forget because it is dumb. It forgets because remembering everything the honest way costs a fortune. This wall is the reason we built an'
+
+[02:24] [scene:talk]
+VISUAL:
+AUDIO: 'entire industry just to get around it. That industry is RAG, retrieval augmented generation. The logic is simple.'
+
+[02:36] [scene:talk]
+VISUAL:
+AUDIO: 'If the model cannot afford to read everything, then do not make it. Chop the document into chunks. Turn each chunk into a vector. Store them in a database.'
+
+[02:49] [scene:talk]
+VISUAL:
+AUDIO: 'And when a question comes in, retrieve only the few chunks that look relevant and show the model just those. It works.'
+
+[03:01] [scene:talk]
+VISUAL:
+AUDIO: 'It is everywhere. But, it is a workaround, a clever way of hiding most of your data from the model because showing all of it was too expensive. And it comes at a cost.'
+
+[03:14] [scene:talk]
+VISUAL:
+AUDIO: 'The moment you chop a document into pieces, you shred the connections inside it. The definition on page two, the exception on page 40, the model never sees them together.'
+
+[03:26] [scene:talk]
+VISUAL:
+AUDIO: 'RAG is not the goal. It is scaffolding we built around the wall. So, what happens if someone removes the wall? That is exactly the bet a startup called Subquadratic is making.'
+
+[03:40] [scene:talk]
+VISUAL:
+AUDIO: 'They came out of stealth in May of 2026 with $29 million in seed funding and a team of around 11 PhD researchers from Meta, Google, Oxford, and ByteDance.'
+
+[03:55] [scene:talk]
+VISUAL:
+AUDIO: 'And their pitch was not subtle. Here is how they introduced it to the world. &gt;&gt; Today, we\'re announcing a major architectural breakthrough, the world\'s'
+
+[04:07] [scene:talk]
+VISUAL:
+AUDIO: 'first fully sub-quadratic LLM. Sub Q has a 12 million token context window and frontier-level intelligence. It outperforms Opus 4.7 on long context at less than 5% of the cost. &gt;&gt; A fully sub-quadratic language model.'
+
+[04:20] [scene:talk]
+VISUAL:
+AUDIO: 'The entire company is named after the idea. Beating that quadratic wall. So, how do they actually claim to do it? The answer is an architecture they call'
+
+[04:33] [scene:talk]
+VISUAL:
+AUDIO: 'SSA, sub-quadratic sparse attention. Start with the key insight. In that giant grid of every token comparing itself to every other token,'
+
+[04:45] [scene:talk]
+VISUAL:
+AUDIO: 'the vast majority of those comparisons are useless. A word usually only depends on a handful of other words, not all million of them. So, instead of computing the entire'
+
+[04:59] [scene:talk]
+VISUAL:
+AUDIO: 'grid, SSA learns which comparisons actually matter and computes only those. And this is the important part. It picks them based on what the tokens'
+
+[05:11] [scene:talk]
+VISUAL:
+AUDIO: 'say, their content, not just where they sit. At 12 million tokens, their model attends to roughly 1/10 of 1% of all the possible pairs.'
+
+[05:24] [scene:talk]
+VISUAL:
+AUDIO: 'That is about a thousand times fewer. The selecting, the retrieving, and the attending are each designed to grow in a straight line instead of a'
+
+[05:36] [scene:talk]
+VISUAL:
+AUDIO: 'curve. That is the difference between a model that chokes at a million tokens and one that strolls right through it. &gt;&gt; architectural breakthrough. [music] It is the first model built on a fully'
+
+[05:48] [scene:talk]
+VISUAL:
+AUDIO: 'sub-quadratic sparse attention architecture. LLMs today waste [music] compute by processing every possible relationship between words, but only a small fraction of these matter. SubQ finds and focuses [music] only on those'
+
+[06:00] [scene:talk]
+VISUAL:
+AUDIO: 'relationships, meaning compute is used where it matters most. &gt;&gt; Now, if you know this space, you are already thinking, did not flash attention fix this years ago?'
+
+[06:12] [scene:talk]
+VISUAL:
+AUDIO: 'No. And this is the part almost everyone gets wrong. Flash attention made attention use far less memory, brilliantly. But, it still computes every single'
+
+[06:24] [scene:talk]
+VISUAL:
+AUDIO: 'pair. The compute is still quadratic. It made the wall easier to live with. It did not remove it. Other approaches tried to remove it and'
+
+[06:36] [scene:talk]
+VISUAL:
+AUDIO: 'paid a price. Linear attention and Mamba squash the whole past into a fixed-size memory. Fast, but they are bad at recalling an'
+
+[06:48] [scene:talk]
+VISUAL:
+AUDIO: 'exact detail from far back. Sliding window models only look at nearby tokens by position. So, they miss the thing buried on page 400.'
+
+[07:01] [scene:talk]
+VISUAL:
+AUDIO: 'Even DeepSeek, which uses a similar learn-what-matters idea, has a catch. The part that does the choosing is itself a full quadratic model.'
+
+[07:14] [scene:talk]
+VISUAL:
+AUDIO: 'So, past about 50,000 tokens, its own selector becomes the bottleneck. SubQ\'s claim is that their selector stays cheap all the way up.'
+
+[07:27] [scene:talk]
+VISUAL:
+AUDIO: 'If that is true, it is not a small tweak. It is a different scaling law. So, what do the receipts say? On their efficiency benchmark, at 1'
+
+[07:40] [scene:talk]
+VISUAL:
+AUDIO: 'million tokens, a single attention layer ran in under a second. 966 milliseconds versus 54 seconds for flash attention two.'
+
+[07:55] [scene:talk]
+VISUAL:
+AUDIO: 'That is the 56 times number. On compute, 64 and 1/2 times less than standard attention at the same length. On retrieval,'
+
+[08:07] [scene:talk]
+VISUAL:
+AUDIO: 'the test of actually finding a fact buried in a haystack, they scored 99 out of 100 on a benchmark called Ruler. And a near-perfect score finding single'
+
+[08:20] [scene:talk]
+VISUAL:
+AUDIO: 'needles inside 1 to even 12 million tokens of text. And on raw intelligence, 85.4 on GPQA Diamond, a graduate-level science exam'
+
+[08:33] [scene:talk]
+VISUAL:
+AUDIO: 'where actual domain PhDs score around 65. To be fair, that is just under frontier models like Sonnet and GPT Mini. But it beats the human experts in a'
+
+[08:46] [scene:talk]
+VISUAL:
+AUDIO: 'model built for length, not just IQ. Put it all together and you can see why people lost their minds. If a model can hold your entire code base in its head'
+
+[08:59] [scene:talk]
+VISUAL:
+AUDIO: 'and recall any line perfectly, you do not need to chunk it, embed it, and pray the retriever grabs the right file. You just give it the whole thing. Subquadratic is already building on'
+
+[09:13] [scene:talk]
+VISUAL:
+AUDIO: 'this. Sub Q code, a coding agent that loads an entire repository into one context. And Sub Q search, long context research at chatbot speed.'
+
+[09:25] [scene:talk]
+VISUAL:
+AUDIO: 'Their own framing is careful and worth repeating. For a bounded artifact, one big code base, one contract set,'
+
+[09:37] [scene:talk]
+VISUAL:
+AUDIO: 'one pile of filings, RAG becomes optional, not dead. If your data is bigger than any context window, or it changes by the minute, retrieval still wins.'
+
+[09:50] [scene:talk]
+VISUAL:
+AUDIO: 'But for a huge number of real workflows, the scaffolding we have been bolting on for 2 years just falls away. Now the part the hype videos skip. This is where you should get skeptical,'
+
+[10:03] [scene:talk]
+VISUAL:
+AUDIO: 'because I did. First, SubQ is not a brand new model trained from scratch. Their own report admits they took an existing open weight model,'
+
+[10:15] [scene:talk]
+VISUAL:
+AUDIO: 'one with a 260,000 token context, and replaced its attention with SSA. So when a well-known AI engineer said, "It is almost surely a sparse attention'
+
+[10:29] [scene:talk]
+VISUAL:
+AUDIO: 'fine-tune of something like Gemini or DeepSeek," the report basically confirms the spirit of that. Second, the benchmarks are all vendor reported.'
+
+[10:41] [scene:talk]
+VISUAL:
+AUDIO: 'They were checked by a paid third-party firm, but no independent lab has reproduced them. One researcher called them very interesting cherry-picked benchmarks, and another summed the whole thing up'
+
+[10:54] [scene:talk]
+VISUAL:
+AUDIO: 'perfectly. This is either the biggest breakthrough since the Transformer, or it is AI Theranos. We genuinely do not know yet. And there is more.'
+
+[11:07] [scene:talk]
+VISUAL:
+AUDIO: 'That headline 12 million token number, the model was trained at 1 million with a little at two. 6 and 12 million are extrapolation tests,'
+
+[11:20] [scene:talk]
+VISUAL:
+AUDIO: 'not the product you would get today, which ships at 1 million. There are no public weights, no public pricing, and no self-serve access. It is a private beta'
+
+[11:33] [scene:talk]
+VISUAL:
+AUDIO: 'with a handful of design partners. They will not even explain how the selection mechanism actually works. They call it out of scope. And history is not kind here.'
+
+[11:46] [scene:talk]
+VISUAL:
+AUDIO: 'Sub-quadratic models have over-promised for years. Mamba, linear attention, and their cousins all struggled with exactly this kind of recall. MiniMax built an efficient model,'
+
+[12:00] [scene:talk]
+VISUAL:
+AUDIO: 'then reverted their very next flagship back to full attention because the shortcuts hurt its reasoning. Matching frontier quality while staying sub-quadratic is the hard'
+
+[12:13] [scene:talk]
+VISUAL:
+AUDIO: 'part. And it is not yet proven at scale. So, where does that leave us? Honestly, somewhere more interesting than either the hype or the hate.'
+
+[12:25] [scene:talk]
+VISUAL:
+AUDIO: 'Credit where it is due. This is a serious, well-funded team that published an unusually candid technical report'
+
+[12:37] [scene:talk]
+VISUAL:
+AUDIO: 'and made a specific, falsifiable claim. A genuine scaling law advantage in learnable sparse attention, not just a one-time speedup. That is real and it is checkable in'
+
+[12:50] [scene:talk]
+VISUAL:
+AUDIO: 'principle. But, it is a retrofit onto an existing model. It is in private beta. The secret sauce is hidden and nobody outside the company has'
+
+[13:04] [scene:talk]
+VISUAL:
+AUDIO: 'reproduced it. So, treat every number as a promising vendor claim, not an established fact. Not Theranos. Not the second coming.'
+
+[13:16] [scene:talk]
+VISUAL:
+AUDIO: 'A strong early signal worth watching very closely. And And is the thing. Even if SubQ specifically does not win, the direction is unmistakable.'
+
+[13:30] [scene:talk]
+VISUAL:
+AUDIO: 'DeepSeek has already shipped sparse attention into a production model. Google, MiniMax, and MoonShot are all chasing sub-quadratic'
+
+[13:43] [scene:talk]
+VISUAL:
+AUDIO: 'long context. The quadratic wall is coming down across the board. And that changes how you should build right now.'
+
+[13:55] [scene:talk]
+VISUAL:
+AUDIO: 'Stop over-engineering retrieval for data that already fits inside a context window. Design your prompts and your agents to reason over whole artifacts, not shredded chunks.'
+
+[14:09] [scene:talk]
+VISUAL:
+AUDIO: 'And learn the difference between my data is bounded, where long context wins, and my data is huge and live, where RAG still rules.'
+
+[14:22] [scene:talk]
+VISUAL:
+AUDIO: 'Get that one call right, and you will build things that feel impossible to teams still chunking everything out of pure reflex. I put all of it, the long context'
+
+[14:34] [scene:talk]
+VISUAL:
+AUDIO: 'decision framework, when to actually drop RAG, the verified benchmarks, and the exact prompts to reason over whole code bases and documents'
+
+[14:48] [scene:talk]
+VISUAL:
+AUDIO: 'into a free one-page playbook. Just comment the word unchunk, and I will send it straight to you, or grab it at the link below. If this finally made that wall make'
+
+[15:01] [scene:talk]
+VISUAL:
+AUDIO: 'sense, subscribe. I am on YouTube, Facebook, and Instagram, all under Hyperautomation Labs, breaking down what is actually real in AI,'
+
+[15:15] [scene:talk]
+VISUAL:
+AUDIO: 'so you do not have to read the technical reports yourself. And if you want to go deeper, my paid guides are linked down below. The quadratic wall stood for years. It might be about to fall.'
+
+[15:29] [scene:talk]
+VISUAL:
+AUDIO: 'Stick around and you will see it first.'

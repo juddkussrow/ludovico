@@ -1,0 +1,1035 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: x402 technical deep dive session
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=lSdHKTmLArY
+upload_date: 20251210
+transcript_source: captions
+route: text
+
+---
+
+[00:03] [scene:talk]
+VISUAL:
+AUDIO: 'And need to check YouTube too. We\'re live here. Yes, I think we are. Okay.'
+
+[00:16] [scene:talk]
+VISUAL:
+AUDIO: 'Okay. Okay. Okay. Okay. I think we\'re here. This is working. Did we get some people in? Let me let me share.'
+
+[00:28] [scene:talk]
+VISUAL:
+AUDIO: 'Oh yeah, we\'re live now. Can I share this? Okay.'
+
+[00:53] [scene:talk]
+VISUAL:
+AUDIO: '[snorts] It\'s hard without the Okay, we got some people in the chat, too. Nice. So, I\'m gonna look at try want to try to look at the chats, but uh'
+
+[01:05] [scene:talk]
+VISUAL:
+AUDIO: 'mainly because I wanted to start. Do you see a screen in the screen right now? No. No. Wait. Yeah, we\'re good. Okay. So,'
+
+[01:17] [scene:talk]
+VISUAL:
+AUDIO: 'for people in the chat right now, this is like I need the energy back to me. Um, can you give me from 1 to 10? Post in'
+
+[01:31] [scene:talk]
+VISUAL:
+AUDIO: 'the chat or answer in the reply to the to the tweet. Um, scale 1 to 10, how do you rate yourself in your X42'
+
+[01:44] [scene:talk]
+VISUAL:
+AUDIO: 'expertise? One being like, I almost never heard of it and then 10 being like, I\'m like an expert at it. Can I give some signal?'
+
+[01:56] [scene:talk]
+VISUAL:
+AUDIO: 'Who am I talking to? You guys experts? You guys uh new? Do you need uh This is why I got this over here. Um,'
+
+[02:10] [scene:talk]
+VISUAL:
+AUDIO: 'do you need uh Oh, yeah. And we got a chat here, too. Okay, great. So, I get I get some I I got some I got a zero. I got a three. I got a 67, of course. [laughter]'
+
+[02:24] [scene:talk]
+VISUAL:
+AUDIO: 'Got a eight. Okay, so we got a medium. We got a bit of everything. Good. So, I\'m going to go like fairly quickly on the kind of bit the basics here, but um I want to spend most of the time in'
+
+[02:40] [scene:talk]
+VISUAL:
+AUDIO: 'showing a few different use cases and then diving in into how I built those use cases and um trying to give you uh signals on how you can build it'
+
+[02:54] [scene:talk]
+VISUAL:
+AUDIO: 'yourself. So, first thing is like why do you even need X42? It\'s good to know what the problem is so you choose the right tool for the right solution. So the big problem with'
+
+[03:06] [scene:talk]
+VISUAL:
+AUDIO: 'payments on the internet right now is that even though we did a lot of layering to make it feel pretty fast and pretty seamless, it actually goes'
+
+[03:19] [scene:talk]
+VISUAL:
+AUDIO: 'through like insanely old systems that take forever to settle to move the money around. Sometimes it gets paused. There\'s a lot of middleman. There\'s a'
+
+[03:32] [scene:talk]
+VISUAL:
+AUDIO: 'lot of fees. Uh and there\'s a lot of trust required. I was just talking to someone earlier um from the hackathon, hackathon participant. I was saying um they accept this like $1 donation for'
+
+[03:45] [scene:talk]
+VISUAL:
+AUDIO: 'their mini game that they did and it\'s through PayPal. And like PayPal, you would think like, you know, pretty modern and stuff, all good, but they actually take a 56 cent fee on $1.'
+
+[03:57] [scene:talk]
+VISUAL:
+AUDIO: 'So the donation they get is actually 44 cents instead of a dollar. That\'s insane. Um, and so it\'s impossible to do microp payments on the internet because'
+
+[04:12] [scene:talk]
+VISUAL:
+AUDIO: 'of it. Because of this archic system. This is where it shows the most because the archic system is not good to move small amounts of money. And then we live in a world where agents are starting to'
+
+[04:24] [scene:talk]
+VISUAL:
+AUDIO: 'become a major player in the internet. There\'s a wave of them coming. They they can do all sort of things and they cannot use this archaic system. It\'s not it\'s not for them. They need a internet'
+
+[04:37] [scene:talk]
+VISUAL:
+AUDIO: 'native payment system. And so this is where X42 shines in my opinion. I summarize it as it\'s a universal language for internet payments.'
+
+[04:49] [scene:talk]
+VISUAL:
+AUDIO: 'It\'s a language that everybody understands that you can talk through simple HTTP and both parties can now agree on an exchange. I pay you this'
+
+[05:03] [scene:talk]
+VISUAL:
+AUDIO: 'amount, you give me this product. And there is no trust. There\'s no preset of accounts or credit cards somewhere uh prior to this exchange. There\'s no keys'
+
+[05:16] [scene:talk]
+VISUAL:
+AUDIO: 'required and it\'s instant payments. Immediately the payment is settled as soon as I give you the result and it\'s super super low fees. So it\'s great for'
+
+[05:28] [scene:talk]
+VISUAL:
+AUDIO: 'humans and it\'s great for agents. And so this is why it got so much excitement in the community and uh we think it\'s like going to be a big part of the internet'
+
+[05:40] [scene:talk]
+VISUAL:
+AUDIO: 'uh in the coming years. So real quick how it works. This is like the simplified view on it on the consumer side. The payer does a request an HTTP request to your service. The'
+
+[05:54] [scene:talk]
+VISUAL:
+AUDIO: 'service says hey this service costs money. So it returns a 402 response. This is where the whole X42 comes from is the 402 HTTP error code. The consumer'
+
+[06:06] [scene:talk]
+VISUAL:
+AUDIO: 'now understands this and reads the payment requirements and signs an authorization'
+
+[06:18] [scene:talk]
+VISUAL:
+AUDIO: 'for you to withdraw that amount from their wallet effectively and sends that back to your API. Then the API just needs to take that authorization'
+
+[06:31] [scene:talk]
+VISUAL:
+AUDIO: 'put it on chain and that can be done by the API itself or it can be done through a facilitator. We\'ll talk about that. And the facilitator helps you actually finalize the payment. So consume that'
+
+[06:45] [scene:talk]
+VISUAL:
+AUDIO: 'authorization and then gives you back the hey this payment is done. It\'s all settled which then you can return the product back to the user. That\'s the basic flow. If you understand this, you understand most of X42. And this is why'
+
+[06:58] [scene:talk]
+VISUAL:
+AUDIO: 'um I think it got so much adoption because it\'s so simple. It\'s a very simple flow. So once you understand this, now let\'s go into something a bit'
+
+[07:12] [scene:talk]
+VISUAL:
+AUDIO: 'more interesting. Let\'s go into some demos to show you like the real applications of this and how I built some apps that uh use this thing. Um, if you are on the hackathon'
+
+[07:27] [scene:talk]
+VISUAL:
+AUDIO: 'uh sites, there is a resource page that I put together here that has uh a lot of really useful things um like links to'
+
+[07:39] [scene:talk]
+VISUAL:
+AUDIO: 'docs and etc. Mainly like I show you how to set up the server side in that little diagram, how to do the client side. There\'s some doc links there. You should'
+
+[07:51] [scene:talk]
+VISUAL:
+AUDIO: 'really look into that. And by the way, the way I got here is the hackathon um X well it\'s on the XRO2 hackathon site and then build the resources and'
+
+[08:03] [scene:talk]
+VISUAL:
+AUDIO: 'then web and you\'ll find all this and then there\'s a few open source apps um that we built that kind of showcase a little bit the power of this and um you also get uh for all the hackathon'
+
+[08:18] [scene:talk]
+VISUAL:
+AUDIO: 'participants uh two months free of the whole thirdway platform using this uh coupon code here. So definitely use that and um you can also book a mentor'
+
+[08:30] [scene:talk]
+VISUAL:
+AUDIO: 'essential with me oneonone. I already had two today um with this calendar link. I\'m available all week to help you architect your app and answer any questions, help you with your product'
+
+[08:43] [scene:talk]
+VISUAL:
+AUDIO: 'thinking. So I want to show you this first app that we built. It\'s called x42. Uh, so it\'s right here is this app up here. Let me zoom in a bit. Um, and'
+
+[08:57] [scene:talk]
+VISUAL:
+AUDIO: 'it\'s uh kind like that old school uh Facebook wall application. You know how like in Facebook you can post on other people\'s walls? Um, here\'s the same thing, but I can post to any ENS uh'
+
+[09:12] [scene:talk]
+VISUAL:
+AUDIO: 'any address\'s wall. So like I can go to Vitalix like I go to Vitalik\'s page and this is basically his wall and people can post uh things to it and um I use X42 here'
+
+[09:25] [scene:talk]
+VISUAL:
+AUDIO: 'for all of the payment mechanism around this app. If you think about this app is like basically there\'s a little'
+
+[09:38] [scene:talk]
+VISUAL:
+AUDIO: 'database. I I use Superbase for that to host like all the comments and the likes and everything. very classic web two things, right? Um, but and then there\'s a front end for it and I used X42 here'
+
+[09:50] [scene:talk]
+VISUAL:
+AUDIO: 'to give the twist of this page, which is that posting costs chat tokens. And the more popular the page, the more'
+
+[10:04] [scene:talk]
+VISUAL:
+AUDIO: 'tokens it costs. So here you can see to post on Vitalik\'s page you need it cost 31 chat tokens post my page 24 hilarious that some people posted on the zero'
+
+[10:19] [scene:talk]
+VISUAL:
+AUDIO: 'address um and then kind of we show it different ways as the latest post etc right but the key thing I use X42 for here is to facilitate that uh in order to post in order to write to my database'
+
+[10:34] [scene:talk]
+VISUAL:
+AUDIO: 'you need to pay in this currency. Note one thing that if you\'ve if you\'re familiar with X42, you\'ve seen that'
+
+[10:46] [scene:talk]
+VISUAL:
+AUDIO: 'almost everything is USDC based. So all the payments are done in USDC, but it actually doesn\'t have to be that way. You can use any token you want and any'
+
+[10:58] [scene:talk]
+VISUAL:
+AUDIO: 'chain you want. This actually happens on the arbitrum chain. And I decided to do the same X42 flow that I show here except the payment is in my own token'
+
+[11:11] [scene:talk]
+VISUAL:
+AUDIO: 'that I created. And that is something that I think is unexploited right now and that um helps you create a little bit of an app economy around your app. So'
+
+[11:24] [scene:talk]
+VISUAL:
+AUDIO: 'here I created my own token and you can do that from the thb dashboard or any other platform there. Uh I actually didn\'t make it tradable. I didn\'t want'
+
+[11:36] [scene:talk]
+VISUAL:
+AUDIO: 'it to make it tradable. I wanted to be a inapp token thing and I use X42 to facilitate the payment. And so just to show you real quick how it works. So'
+
+[11:48] [scene:talk]
+VISUAL:
+AUDIO: 'here I can say like hi Vitalik. And when I post here, I\'m connected with my with my MetaMask so that you can you can see kind of what\'s happening. When I'
+
+[12:00] [scene:talk]
+VISUAL:
+AUDIO: 'post for 35 chat tokens here, my MetaMask actually prompts me for an approval for chat tokens. And when I confirm,'
+
+[12:13] [scene:talk]
+VISUAL:
+AUDIO: 'it\'s going to call my backends uh with the proof of payment, this authorization of of withdrawal. My backend then uses a facilitator to do'
+
+[12:25] [scene:talk]
+VISUAL:
+AUDIO: 'that transaction. And as soon as it\'s settled, soon as it\'s confirmed, I write to my database and I update the front end. And this all happened in like a matter of I don\'t know, two seconds or'
+
+[12:38] [scene:talk]
+VISUAL:
+AUDIO: 'something. And just like that, the payment was done. My balance was withdrawn. And it took like two lines of code to do that. I\'ll show you real quick how to do it. Um, so this is gating any database,'
+
+[12:50] [scene:talk]
+VISUAL:
+AUDIO: 'right, with a payment with any token you want. So hopefully it gives you some ideas already like you can create this like economy here where it\'s a a currency'
+
+[13:03] [scene:talk]
+VISUAL:
+AUDIO: 'that I control. And by the way, I also set the price for this currency. So the way you buy chat tokens also uses X42 in this app. And so you can say say I want'
+
+[13:18] [scene:talk]
+VISUAL:
+AUDIO: 'to buy like 50 or 10. I can pick the network because again X42 is multi-chain. You can do it on any chain you want. &gt;&gt; [snorts]'
+
+[13:30] [scene:talk]
+VISUAL:
+AUDIO: '&gt;&gt; And so let\'s say I want to buy uh 10 chat tokens on arbitrum and it cost me 1 cent to buy 10 chat tokens because I set the price in my API to say'
+
+[13:42] [scene:talk]
+VISUAL:
+AUDIO: 'that hey when you when you request um this amount it will cost this amount times uh.1 cent and so this is the total amount. So let\'s say I want to buy for 1'
+
+[13:56] [scene:talk]
+VISUAL:
+AUDIO: 'cent. I want to buy 10 chat tokens. Here it\'s going to do another X42 flow here. So in this case it\'s on arbitum with a USDC this time. And so it\'s a'
+
+[14:08] [scene:talk]
+VISUAL:
+AUDIO: 'transfer with authorization. And so you can see already with XO2 there there was already like two patterns here, two type of signatures. And we\'ll show you how how to do that. Um so I just confirm'
+
+[14:21] [scene:talk]
+VISUAL:
+AUDIO: 'again here I don\'t spend any gas. This is also the beautiful thing. So this is on arbitum, right? I don\'t need ETH on arbitum to use this app.'
+
+[14:33] [scene:talk]
+VISUAL:
+AUDIO: 'The one of the beauties of X42 is that uh if you build apps with it, the wallets on the front end, the user wallet doesn\'t need any gas money. It'
+
+[14:45] [scene:talk]
+VISUAL:
+AUDIO: 'doesn\'t needs ETH or whatever it is on the on the chain because all they do is sign an authorization. It\'s completely gas lit, completely free. So I sign the authorization'
+
+[14:58] [scene:talk]
+VISUAL:
+AUDIO: 'and here what it\'s going to do is it\'s going to call my back end once the settle the payment is settled in USDC my backend will mint 10 chat tokens to your wallet and then refresh the balance'
+
+[15:14] [scene:talk]
+VISUAL:
+AUDIO: 'and this is another way how I gated my API call with a payment in USDC cost me 1 cent'
+
+[15:26] [scene:talk]
+VISUAL:
+AUDIO: 'But then behind the API, I actually did an onchain action using a server wallet that is authorized to mint these tokens. And so you can see now how I created a'
+
+[15:38] [scene:talk]
+VISUAL:
+AUDIO: 'micro economy with this app. I let you buy into my currency at a fixed price using X42. I control the supply. I control the'
+
+[15:52] [scene:talk]
+VISUAL:
+AUDIO: 'price. It\'s not there\'s no market volatility in this scenario though you could make it tradable if you wanted to but I find it really interesting that here I control the price so if I wanted next week to do a discount I want to say'
+
+[16:05] [scene:talk]
+VISUAL:
+AUDIO: 'hey chat tokens are 50% cheaper for the week I can do that it\'s my economy I\'m in control and so this is how you inject supply in this economy and then people'
+
+[16:17] [scene:talk]
+VISUAL:
+AUDIO: 'can use the currency to use the app And when I use the app here, when I pay 36 tokens to post on Vitalik\'s post uh wall, those tokens actually go to'
+
+[16:32] [scene:talk]
+VISUAL:
+AUDIO: 'Vitalic. So they actually go from user to user as well. And that\'s another thing you can do with X42. Traditionally on the internet, like all the payments are user to business, one'
+
+[16:44] [scene:talk]
+VISUAL:
+AUDIO: 'direction, and there\'s no more movement there. But with X42, you can actually make a user to user payments. So in this case, it\'s from me to Vitalix wallet. I'
+
+[16:58] [scene:talk]
+VISUAL:
+AUDIO: 'just sent the 36 chat tokens to post on it. And because it\'s programmatic money, you can take a fee'
+
+[17:10] [scene:talk]
+VISUAL:
+AUDIO: 'on those transactions. And I\'ll show you how to do that as well. Um, so that\'s that was one uh of the demos. Um, and I can show you also like what it looks like on the other side on'
+
+[17:26] [scene:talk]
+VISUAL:
+AUDIO: 'the on the um the web dashboard side because I think it\'s kind of interesting. So this is the project I created for this app on the web, right? And on the web it every time you create'
+
+[17:39] [scene:talk]
+VISUAL:
+AUDIO: 'a a wallet a project it gives you a server wallet. So I already had a server wallet here and this is what actually was used to do all the X42 facilitation'
+
+[17:53] [scene:talk]
+VISUAL:
+AUDIO: 'uh under the hood here which means unlike other facilitators that you seen out there the web facilitator uses your own server wallet to do all the'
+
+[18:07] [scene:talk]
+VISUAL:
+AUDIO: 'transactions. So you can see a lot of stats on the the project here and all that. But uh you can also see like how much money I\'ve made of this demo. Uh so this is an arbitrum one. I can also see'
+
+[18:20] [scene:talk]
+VISUAL:
+AUDIO: 'like how much did we sell on on base. Uh so need to remove that. Uh we made 100 bucks on on base here and I can withdraw this. I can like swap it. I can reinvest'
+
+[18:33] [scene:talk]
+VISUAL:
+AUDIO: 'it. So this is kind of like my my command center here. And because again it\'s my own server wallet that did those transactions, I can see them in real time right here. So you see this these'
+
+[18:45] [scene:talk]
+VISUAL:
+AUDIO: 'transactions here 6 minutes ago, four minutes ago. Those were uh the actual payments that happened. So this was um the'
+
+[18:59] [scene:talk]
+VISUAL:
+AUDIO: 'this was actually the minting of the chat tokens because that\'s also using my server wallet and this was the payment right here. This was the USDC payments on arbitrum'
+
+[19:12] [scene:talk]
+VISUAL:
+AUDIO: 'and so I can see everything. I have a really good view. And then we also um show like the X42 specific stats. So you can see like which API is bringing'
+
+[19:24] [scene:talk]
+VISUAL:
+AUDIO: 'money, how much payments you\'re getting, which chains are they getting paid on, who\'s buying, etc. So you get a lot of visibility and all of that was like really really easy to set up it.'
+
+[19:37] [scene:talk]
+VISUAL:
+AUDIO: 'Basically, let me uh go quickly back to this now and show you kind of what the code was for that cuz that was to for me the big like wow moment is that I was'
+
+[19:50] [scene:talk]
+VISUAL:
+AUDIO: 'able to set up this whole mini economy in basically like one line of code in my back end and then uh one line of code in the front end to do the the signing part'
+
+[20:03] [scene:talk]
+VISUAL:
+AUDIO: 'and all that. on the backend side. This is where we kind of get in in the details a little bit. Um any backend function that you have, any backend call, a get a post, anything'
+
+[20:18] [scene:talk]
+VISUAL:
+AUDIO: 'that will write to your database or do anything uh there you could um drop this function anywhere in your flow before doing the actual like'
+
+[20:31] [scene:talk]
+VISUAL:
+AUDIO: 'paid work the thing and that handles all the payment that basically handles all your monetization. This is basically your stripe right here. And all you have to give it is'
+
+[20:45] [scene:talk]
+VISUAL:
+AUDIO: 'this header X payments. This is the payment data that I pass here. That\'s the key thing. And this is how like the front end will'
+
+[20:57] [scene:talk]
+VISUAL:
+AUDIO: 'send the authorization um via this header. You set the network, you set the price. You can set it in this notation here like 10 10 cents and'
+
+[21:10] [scene:talk]
+VISUAL:
+AUDIO: 'this will automatically use USDC by default or you can pass your own token. This is what I did for the for the chat um token. Pass your facilitator some config'
+
+[21:24] [scene:talk]
+VISUAL:
+AUDIO: 'and then if the result of that is 200 all good the payment went through you already have your money in your wallet. You\'re you\'re good to respond with whatever. This is the killer thing in my'
+
+[21:36] [scene:talk]
+VISUAL:
+AUDIO: 'opinion is that once this function returns, you\'re you\'re paid. The money is here. You you got it. So you can reward the the user, give them what they need,'
+
+[21:50] [scene:talk]
+VISUAL:
+AUDIO: 'write to their database. Like that\'s the killer thing in my opinion. And then there is some configuration you can do. um because uh accepting a payment and waiting for confirmation can take like'
+
+[22:04] [scene:talk]
+VISUAL:
+AUDIO: 'couple seconds. Maybe you cannot afford to wait a couple seconds. So there is some uh configuration you can pass to the facilitator to say actually I I\'m okay just simulating the payments and'
+
+[22:17] [scene:talk]
+VISUAL:
+AUDIO: 'just taking the payment asynchronously. So make sure that the payment will go through and then return from this function. So I can just respond quicker and the payment will happen in the'
+
+[22:30] [scene:talk]
+VISUAL:
+AUDIO: 'background. You can also do that and I\'ll show you also how we do that for AI. Um and so basically that\'s the minimal setup on the back end. That\'s all you need to do. There\'s one function settle'
+
+[22:43] [scene:talk]
+VISUAL:
+AUDIO: 'payment and you\'re done. And so if uh on the X42 chat thing here uh there is the link to GitHub. So the the link is X42. All the links by the way are in this um'
+
+[22:58] [scene:talk]
+VISUAL:
+AUDIO: 'this um resource page. So all the all the apps I\'m going to show all the docs, all of this is here. So make sure to to get that. And it\'s all open'
+
+[23:10] [scene:talk]
+VISUAL:
+AUDIO: 'source. So it\'s all here. Um, you can see exactly how I did it, how I did the the chat uh token payment, how I set it up. It\'s all here for you to like reference and have.'
+
+[23:23] [scene:talk]
+VISUAL:
+AUDIO: 'Um, so before I show you kind of the the the front end side of this, um, there\'s another little app that I did.'
+
+[23:36] [scene:talk]
+VISUAL:
+AUDIO: 'Let me refresh here. Um, which is kind of similar. Uh, it\'s a little different. This one I did it in like one hour. I created a little backend endpoint that uses AI to like extract the sentiment of'
+
+[23:50] [scene:talk]
+VISUAL:
+AUDIO: 'whatever you type here and then give you the best reaction gif for it. Um, and this one it\'s also uh paid in USDC and I'
+
+[24:04] [scene:talk]
+VISUAL:
+AUDIO: 'use the our React hook for it. So, let\'s say I\'m doing like uh I\'m saying um how many people on the stream right now? Can I see that?'
+
+[24:17] [scene:talk]
+VISUAL:
+AUDIO: 'I can\'t see that, but I\'m just going to say there\'s like 200 people on my stream. Question like exclamation mark. And here, same thing. So,'
+
+[24:29] [scene:talk]
+VISUAL:
+AUDIO: 'the the client side here does a lot of work. So, I I\'ll show you what the client side um code is. uh in a second, but basically it\'s a little react hook that calls my API and'
+
+[24:41] [scene:talk]
+VISUAL:
+AUDIO: 'then it handles everything here. I actually chose to do it on Monad. Uh it\'s again transfer authorization USDC and then that is my backend responding like hey you need a payment you need to'
+
+[24:55] [scene:talk]
+VISUAL:
+AUDIO: 'give me that X payment header and once I confirm the client crafts that header sends it back up and then it does the computation the the AI inference and then I actually pull those gifts from uh'
+
+[25:08] [scene:talk]
+VISUAL:
+AUDIO: 'gy right now. So like these are the and I I kind of give it like different give me an emotional one, a literal one. [laughter]'
+
+[25:20] [scene:talk]
+VISUAL:
+AUDIO: 'This one is really good. Um a sarcastic one, right? And then I I literally this this was built in like I don\'t know a few minutes with AI and one'
+
+[25:33] [scene:talk]
+VISUAL:
+AUDIO: 'hook on the front end handles everything and then my back end one that that settle payment at the front and then the logic and so on the front end which I want to show you because it\'s there\'s a'
+
+[25:47] [scene:talk]
+VISUAL:
+AUDIO: 'two-part to this right the you put it on your back end to process the payment but then you need the front end or the agent which we\'ll look at it in a again to actually know how to pay. Right? So, how did I do this front end? I used uh this'
+
+[26:00] [scene:talk]
+VISUAL:
+AUDIO: 'thing and I\'ll go to the other one. I\'m doing a bit out of order. Um I used this this hook use fetch with payments and this hook is actually magical because'
+
+[26:15] [scene:talk]
+VISUAL:
+AUDIO: 'you don\'t need anything. [laughter] Give it a client. So you get your client ID from your projects. Uh you do need to wrap your app in a thick provider'
+
+[26:29] [scene:talk]
+VISUAL:
+AUDIO: 'because that\'s the React thing. There\'s no params. Just drop the web provider around your app. Wrap it. Done. And then one hook right here. This one thing. And it handles the wallet connection. If you don\'t have a wallet connected, it will'
+
+[26:43] [scene:talk]
+VISUAL:
+AUDIO: 'prompt you to connect either an external wallet or to create a wallet based on an email or Google sign in or anything you want. If you the wallet doesn\'t have the funds on the uh network and the amount'
+
+[26:56] [scene:talk]
+VISUAL:
+AUDIO: 'that you\'re asking in your back end, it will also prompt to fund it and it we have like really nice like widgets for that. You can swap from another token.'
+
+[27:08] [scene:talk]
+VISUAL:
+AUDIO: 'So that means that you can pay like my demo was on monads, right? Um I could have paid that in ETH on base. It doesn\'t matter. I I would just like fund'
+
+[27:20] [scene:talk]
+VISUAL:
+AUDIO: 'I would just basically swap to monad USDC and then do a authorization and it it all it handles that all for you and then it also handles payment errors uh it shows you little UIs for retries'
+
+[27:34] [scene:talk]
+VISUAL:
+AUDIO: 'etc etc it parses in different formats and then that\'s it you call fetch with payment your API done that\'s all you have to do on the front end it\'s actually phenomenal how much we\'ve'
+
+[27:47] [scene:talk]
+VISUAL:
+AUDIO: 'abstracted crypto So how much we extracted the the complexity uh of doing that. Uh so for your hackathon highly recommend you check out this hook'
+
+[27:59] [scene:talk]
+VISUAL:
+AUDIO: 'because it just does a lot for you. Um and then once you know your wallet is connected you can look at the other hooks uh from the web react or the other functions from the from the SDK to maybe you want to show the balance or maybe'
+
+[28:13] [scene:talk]
+VISUAL:
+AUDIO: 'you want to show their their ENS avatar etc. So look at how how it\'s done. And same thing for this app right here. Um so it\'s linked in the resources and there\'s a'
+
+[28:26] [scene:talk]
+VISUAL:
+AUDIO: 'I didn\'t link the repo here but it is linked here. So the repo here shows you everything how it\'s done. Um and basically similar idea. There\'s a settle'
+
+[28:38] [scene:talk]
+VISUAL:
+AUDIO: 'payment on the back end and then use fetch with payment on the front end. And that\'s all you need. So that was kind of like the simple approach or things and I\'m going'
+
+[28:51] [scene:talk]
+VISUAL:
+AUDIO: 'to check the the chat also. If you have any questions like drop it in. I see Mick in there. GMGM Mick. Um and yeah any questions you have just drop it in. I I\'ll answer. But now I want to go'
+
+[29:04] [scene:talk]
+VISUAL:
+AUDIO: 'to a slightly more advanced use case for X42. So, so far the demos I\'ve showed you, X42 chat and the G generator, it\'s been kind'
+
+[29:17] [scene:talk]
+VISUAL:
+AUDIO: 'of one API call, one fixed price, and then I get a result, and then we\'re happy. Everything\'s good. But what happens if your API'
+
+[29:30] [scene:talk]
+VISUAL:
+AUDIO: 'has um a lot of var variables to it and the the cost might change a lot. So with the the settle payment that I showed here, you can'
+
+[29:46] [scene:talk]
+VISUAL:
+AUDIO: 'actually get away with a lot because here for example my request might have different tiers or the same way I did for X42 chat here. Here I actually pass the amount that I want to buy to the'
+
+[29:59] [scene:talk]
+VISUAL:
+AUDIO: 'request, right? Which means the request gets here. They know how much it\'s going to cost before doing anything. So my settle payment can be a dynamic price'
+
+[30:11] [scene:talk]
+VISUAL:
+AUDIO: 'based on what the request comes in. So you can do a little bit of dynamicness to it that way if you know the price in advance uh when the when the user calls'
+
+[30:23] [scene:talk]
+VISUAL:
+AUDIO: 'it. But what if you don\'t know the price in advance which is the case for almost all AI like inference calls right every time you call an AI like you call open open'
+
+[30:37] [scene:talk]
+VISUAL:
+AUDIO: 'AI or cloud it\'s actually going to cost you based on the number of tokens that you use on the AI and so that\'s a bit of a problem that'
+
+[30:49] [scene:talk]
+VISUAL:
+AUDIO: 'that\'s something that\'s not easy to do with this exact payment scheme because well you don\'t know how much tokens the AI is going to produce. You don\'t know how much it\'s going to cost you behind the scenes. So you don\'t know how much'
+
+[31:01] [scene:talk]
+VISUAL:
+AUDIO: 'to charge the user. So this is where we introduced a new scheme that we call up to. So up to is a way for you to say I want to'
+
+[31:14] [scene:talk]
+VISUAL:
+AUDIO: 'charge up to this amount and then I\'m going to do my work. I\'m going to see how much it cost me and then I\'m going to charge the user for the amount and it'
+
+[31:26] [scene:talk]
+VISUAL:
+AUDIO: 'should be under that that max amount that was authorized. So this is uh let me go through the demo first. I I do like demos first. That\'s how I do thing.'
+
+[31:38] [scene:talk]
+VISUAL:
+AUDIO: 'I like visual things. So this is the pay per token AI chat demo also open source on GitHub. And so here I\'m connected with my wallet. It\'s on arbitrum. And uh just to show you kind'
+
+[31:50] [scene:talk]
+VISUAL:
+AUDIO: 'of what it what it does here is so I can say like uh let\'s see what GBD4.5 knows here. What\'s X42?'
+
+[32:03] [scene:talk]
+VISUAL:
+AUDIO: 'And you know you could change your models here. And this is the just classic like AI app. And so here I actually used the uh Versel AI SDK, but I I plugged in our wrap fetch with'
+
+[32:18] [scene:talk]
+VISUAL:
+AUDIO: 'payments on the front end and I plugged in uh what our up to scheme uh flow on the back end before doing the before and'
+
+[32:31] [scene:talk]
+VISUAL:
+AUDIO: 'after doing the inference. I\'m going to show you how it works. So here it actually asks me to approve uh this is 10 cents right? So it asked me'
+
+[32:43] [scene:talk]
+VISUAL:
+AUDIO: 'to approve 10 cents. So notice how this is not a transfer with authorization. This is actually a spending cap request. This is an approval a permit.'
+
+[32:55] [scene:talk]
+VISUAL:
+AUDIO: 'And uh so this is something like the I think only the thb facilitator has right now. And so this lets me say, hey, I\'m actually going to preapprove 10 cents'
+
+[33:07] [scene:talk]
+VISUAL:
+AUDIO: 'and then I\'m going to do the inference, calculate how many tokens I\'ve used, and then charge you only for what you used. So if I confirm here,'
+
+[33:20] [scene:talk]
+VISUAL:
+AUDIO: 'AI is going to do its thing, [laughter] which is hilarious that it doesn\'t know what X42 is. That shows you there\'s a lot of potential still here. But you can see that um this was the inferent cost'
+
+[33:34] [scene:talk]
+VISUAL:
+AUDIO: 'that it cost me and this is how much it charged me. It actually charged me way less than 10 cents, right? Charged me like a fraction. And again, all of this you can look in the dashboard. If I look'
+
+[33:48] [scene:talk]
+VISUAL:
+AUDIO: 'at my server wallet here, uh it\'s a different project. So let me this is the inference demo. So again, another wallet um that was created here and I can see this'
+
+[34:03] [scene:talk]
+VISUAL:
+AUDIO: 'transaction that just happened here 39 seconds ago is this AI inference and you can see it transferred exactly uh so 194 units of USDC'
+
+[34:15] [scene:talk]
+VISUAL:
+AUDIO: 'which is this amount. Right? This was also very simple to set up, but it does add a one more step, especially on the backend side. So, let'
+
+[34:30] [scene:talk]
+VISUAL:
+AUDIO: 'me show you how that works with this slide right here. So, the up to scheme, you want to authorize once for a max amount and then you want to debit only what\'s used. So,'
+
+[34:47] [scene:talk]
+VISUAL:
+AUDIO: 'in order to make sure that the user actually paid or can pay. You want to call this verify payments function'
+
+[34:59] [scene:talk]
+VISUAL:
+AUDIO: 'which doesn\'t execute the payment. It just verifies that the user has the amount in his wallet, has signed the authorization with the right amount,'
+
+[35:12] [scene:talk]
+VISUAL:
+AUDIO: 'that the authorization is still valid, that it does a simulation of the payment. It does a lot of things there to ensure that the payment is going to go through. So here the only thing I changed is this'
+
+[35:24] [scene:talk]
+VISUAL:
+AUDIO: 'scheme up to and by default is the exact scheme. So you have to opt into this. I still put I put my network I put my price but now'
+
+[35:36] [scene:talk]
+VISUAL:
+AUDIO: 'the price is the up to amount. So it\'s the maximum amount not the uh exact amount. Right? And I just verify this payment first, make sure'
+
+[35:50] [scene:talk]
+VISUAL:
+AUDIO: 'everything is good. If it\'s not good, then I uh return the 402 response and make the client like, hey, you need to provide the payments. If the verification is'
+
+[36:02] [scene:talk]
+VISUAL:
+AUDIO: 'okay, that means the user signed an authorization to withdraw as as much as this amount. And so I can now do my expensive work because I do have the authorization now'
+
+[36:16] [scene:talk]
+VISUAL:
+AUDIO: 'to to take the payment. So then I can do my expensive work, maybe an AI model, maybe it\'s other things um that requires a little bit of a that has a bit of a dynamic price'
+
+[36:28] [scene:talk]
+VISUAL:
+AUDIO: 'behind it. And then here I just calculate, okay, I got I use this this amount of tokens. This is going to be my price per token. And then I can just settle the payment'
+
+[36:40] [scene:talk]
+VISUAL:
+AUDIO: 'uh with the new price and the same authorization. So the user signs once and then I can actually settle uh an amount that\'s less than that. And a little bit of alpha'
+
+[36:54] [scene:talk]
+VISUAL:
+AUDIO: 'here as well. Well, I just made this work this week where you can take an authorization, a permit authorization for a max amount and then you can settle'
+
+[37:08] [scene:talk]
+VISUAL:
+AUDIO: 'multiple times as long as you\'re under that max amount. So, let\'s say I I approve uh $1. I can keep chatting with this AI until I I consume my dollar. So'
+
+[37:24] [scene:talk]
+VISUAL:
+AUDIO: 'I could call it like you know I pay one cent per message let\'s say like 100 times until I get my my dollar'
+
+[37:36] [scene:talk]
+VISUAL:
+AUDIO: 'completely consumed. And so it\'s one signature for the user for the authorization of payment and then you can keep debiting that amount. Um and so that works with this. You just verify'
+
+[37:48] [scene:talk]
+VISUAL:
+AUDIO: 'the payment once and then you can settle the payment multiple times as long as you\'re under the max amount that was authorized. with only one signature. And so this is again like the the'
+
+[38:02] [scene:talk]
+VISUAL:
+AUDIO: 'this demo right here. And it\'s very very useful for any sort of AI app where you don\'t want to pay this giant giant bill'
+
+[38:16] [scene:talk]
+VISUAL:
+AUDIO: 'to uh OpenAI or load or whatever. um where what you charge up front is like a fixed cost that it\'s just a weird'
+
+[38:29] [scene:talk]
+VISUAL:
+AUDIO: 'economic, right? Like you say you charge something up front, but then your your cost might go through the roof because one user uses a lot of the AI feature. And so with this that lets you actually'
+
+[38:43] [scene:talk]
+VISUAL:
+AUDIO: 'put the cost of the user uh on a per token basis and you can put a little markup on it and suddenly you\'re like always positive like your AI app or your chat app um'
+
+[38:56] [scene:talk]
+VISUAL:
+AUDIO: 'you make money on every token inferred that way. So I think it\'s quite good and highly recommend you you check it out.'
+
+[39:08] [scene:talk]
+VISUAL:
+AUDIO: 'Um, this is using the up to scheme. So, um, there\'s [sighs] one more thing I want to show you guys'
+
+[39:20] [scene:talk]
+VISUAL:
+AUDIO: 'and I want to I\'m checking the chat as well. Make sure everything\'s good. Feel free to to drop questions by the way. I will I will answer uh anything I can here. Um, so all of these that I showed'
+
+[39:33] [scene:talk]
+VISUAL:
+AUDIO: 'you uses the web facilitator. um which you know you can check the docs on how to set up it uses your own backend wallet just as I showed you. Um'
+
+[39:46] [scene:talk]
+VISUAL:
+AUDIO: 'and one thing that\'s important is that our facilitator is truly multi-chain. It ex I think we\'re at 170 plus chains supported. So go wild on the chains'
+
+[40:00] [scene:talk]
+VISUAL:
+AUDIO: 'there. like there\'s a lot of appetite and opportunity to do things outside of the kind of main chains. Um, Monet just came out. There\'s a lot'
+
+[40:13] [scene:talk]
+VISUAL:
+AUDIO: 'of uh people that want to just interact with the network there. There\'s a lot of stuff to do. Uh, Hyperlquid is really hype right now. Um, there\'s uh Tempo just came out. There\'s also like the'
+
+[40:29] [scene:talk]
+VISUAL:
+AUDIO: 'circle test net arc like this explore around with the chains because they each have their pros and cons and they have like capabilities there. So go multi-chain. It also accepts Solana by'
+
+[40:43] [scene:talk]
+VISUAL:
+AUDIO: 'the way if you want to go on Solana. Although I think for this hackathon we won\'t like to see we want to see EVM apps. And um the other thing is that it accepts'
+
+[40:55] [scene:talk]
+VISUAL:
+AUDIO: 'any token. So you don\'t have to go pure USDC though I it makes sense why USDC is attractive for this type of things. It\'s predictable. It\'s dollars etc. But think about'
+
+[41:09] [scene:talk]
+VISUAL:
+AUDIO: 'maybe there\'s something creative to do here if you have your own token or if there\'s a popular token out there to use that as the payment to get something offchain.'
+
+[41:22] [scene:talk]
+VISUAL:
+AUDIO: 'Um because that creates an interesting loop there an interesting like economy. So take the the chat tokens as an example. I think it was a great little showcase how we can do'
+
+[41:35] [scene:talk]
+VISUAL:
+AUDIO: 'uh x42 functionality using uh a completely custom token here in this case and'
+
+[41:47] [scene:talk]
+VISUAL:
+AUDIO: 'um so I want to make sure you keep your mind open. Xor 2 is not only uh one chain is not only USDC right you can go wide and I think we need that to create the real creatives applications out'
+
+[42:00] [scene:talk]
+VISUAL:
+AUDIO: 'there so we got 15 minutes left one last thing I want to show you guys is um we said that X42 is great for agents'
+
+[42:13] [scene:talk]
+VISUAL:
+AUDIO: 'so far the applications I showed you was actually humans you calling your endpoints and using your apps. So, humans paying for your endpoints.'
+
+[42:27] [scene:talk]
+VISUAL:
+AUDIO: 'The thing that\'s amazing with X42 is that agents can do the same thing that we did in the apps here programmatically. And the agents are'
+
+[42:41] [scene:talk]
+VISUAL:
+AUDIO: 'really good at it because it\'s just HTTP. So you can build an agent that hits those backend endpoints and pays for them'
+
+[42:53] [scene:talk]
+VISUAL:
+AUDIO: 'really really easily. So instead of building a front end that where users click and do the payments, you could build an agent that automatically autonomously goes and pays for your'
+
+[43:06] [scene:talk]
+VISUAL:
+AUDIO: 'endpoints that way. And I think that that brings another level of creativity. Stuff that\'s like a little untapped right now, like the autonomous agents. Um things that'
+
+[43:19] [scene:talk]
+VISUAL:
+AUDIO: 'trigger automatically go research, go pay for stuff. I I think there\'s something really really nent there that we\'re going to see more and more of. So,'
+
+[43:31] [scene:talk]
+VISUAL:
+AUDIO: 'in order to create an agent that can pay for um X4 to backend APIs, you need really two things. At a'
+
+[43:44] [scene:talk]
+VISUAL:
+AUDIO: 'minimum, you need to give your agent a wallet. Your wallet, your agent needs a wallet with funds so they can pay for the thing. That\'s just the basics. And the easiest way to give a wallet in my'
+
+[44:02] [scene:talk]
+VISUAL:
+AUDIO: 'opinion is you know you you could go if you\'re building your your own agent um you I would personally use the the web API the web API uh as I shown you when you'
+
+[44:16] [scene:talk]
+VISUAL:
+AUDIO: 'create a project you immediately get a wallet there\'s a server wallet there you can create more of those those server wallets are perfect for to give your agents'
+
+[44:28] [scene:talk]
+VISUAL:
+AUDIO: 'Um, and because they\'re they can be accessed programmatically. And with the THO API, you just need a secret key for your project. That\'s what encrypts the communication to access the'
+
+[44:40] [scene:talk]
+VISUAL:
+AUDIO: 'the server wallet. And so with that secret key in the API, you can build a lot already because that secret key basically is the access to to a wallet. So you can start doing transactions,'
+
+[44:53] [scene:talk]
+VISUAL:
+AUDIO: 'transfers, airdrops, pay for things, etc. Um, the other way to do it is just using the MCP. So MCP is a way to give an extra capability to your agents. It\'s'
+
+[45:07] [scene:talk]
+VISUAL:
+AUDIO: 'like a standardized way to do that. And um, the throwway API has an MCP that you can customize quite well. So you can see here I just um access the the web API MCP pass my secret key so it'
+
+[45:24] [scene:talk]
+VISUAL:
+AUDIO: 'has access to my project wallet server wallet and then I define what tools I want to give it. So by default I give it all the tools which you can see the list in our docs. There\'s a lot of tools'
+
+[45:37] [scene:talk]
+VISUAL:
+AUDIO: 'available things like you know uh fetch blockchain data you can do contract calls you can do like swaps you can do all sort of stuff there. So you can pick and choose the tools you want to give'
+
+[45:51] [scene:talk]
+VISUAL:
+AUDIO: 'it. Um but for X42 in particular here I gave it fetch with payments which is a tool that we expose that gives your agent the ability to call an HTTP'
+
+[46:05] [scene:talk]
+VISUAL:
+AUDIO: 'endpoint and when it receives the 402 response do the signature the authorization it needs send it back. Basically the same thing that happens in'
+
+[46:17] [scene:talk]
+VISUAL:
+AUDIO: 'like the React hook or the TypeScript SDK, but this happens on the agent side. It uses a HTTP API. And'
+
+[46:29] [scene:talk]
+VISUAL:
+AUDIO: 'so as I say, everything it comes with the wallet already because thanks to your secret key, you immediately have access to your to your project wallet. You can also create other wallets and just tell it use this wallet instead.'
+
+[46:41] [scene:talk]
+VISUAL:
+AUDIO: 'And then there\'s one more thing which is uh this list payable services tool which actually taps into all the X42 enabled endpoints out there so that your agent'
+
+[46:55] [scene:talk]
+VISUAL:
+AUDIO: 'can search for them. And so this unlocks something interesting and I have a little demo that I can show perhaps. Um so this is in uh claude. So in cloud'
+
+[47:07] [scene:talk]
+VISUAL:
+AUDIO: 'I added the MCP that\'s a web MCP to cloud with this configuration right here and'
+
+[47:20] [scene:talk]
+VISUAL:
+AUDIO: 'uh there is some APIs out there like one of them is a Google maps API that\'s X42 enabled that I use a lot because I found that it gives me like way more'
+
+[47:34] [scene:talk]
+VISUAL:
+AUDIO: 'interesting results than JD GPT and all that. So this is kind of the interaction that happened. I said like uh get the Google map rating for this restaurant and the first thing he did is search for'
+
+[47:46] [scene:talk]
+VISUAL:
+AUDIO: 'APIs. So he said, "Hey, is there an API that has Google Maps rating?" And he responded, "Yep, I have the Google place Google Maps places API. This is how much it cost, etc., etc." And then he used it'
+
+[47:58] [scene:talk]
+VISUAL:
+AUDIO: 'fetch with payment. So he hit the API with like the inputs that it required, which is defined again in the definition of the API and then it it summarized the'
+
+[48:10] [scene:talk]
+VISUAL:
+AUDIO: 'result for me. So it did the whole this whole thing autonomously. It looked for the API. It paid for it and it gave me the the whole result here. And so this'
+
+[48:24] [scene:talk]
+VISUAL:
+AUDIO: 'is the this is the way you can build agents that get access to these payable resources that you built. Um, and I think I probably say like what\'s my'
+
+[48:36] [scene:talk]
+VISUAL:
+AUDIO: 'remaining balance? Let\'s see if this works. This is an old conversation too that I pulled up but and so same thing like just to show you that now my claude has a wallet'
+
+[48:50] [scene:talk]
+VISUAL:
+AUDIO: 'and it understands this and it knows how much I have left and it even tell me like hey this is how much it cost me to um pay the API that I'
+
+[49:03] [scene:talk]
+VISUAL:
+AUDIO: 'called and has been deducted. So that\'s where I think X42 just like will explode is that it\'s not only usable by humans,'
+
+[49:17] [scene:talk]
+VISUAL:
+AUDIO: 'which it is and you can build really cool apps with it, but agents can use it just as easily. All the agents need is a wallet, some'
+
+[49:30] [scene:talk]
+VISUAL:
+AUDIO: 'funds in it, and that\'s it. It can now hit all those payable endpoints which augments everything that the agents can do right now. Right now agents are'
+
+[49:42] [scene:talk]
+VISUAL:
+AUDIO: 'limited to the tools they have. The tools they have is like public web search which is amazing by the way. You can get a lot done with that. But there\'s so much more things that are behind pay walls on the'
+
+[49:57] [scene:talk]
+VISUAL:
+AUDIO: 'internet that your agent cannot access right now. So, this is your opportunity, and I\'m going to leave it at that, to make something, [clears throat] make an'
+
+[50:11] [scene:talk]
+VISUAL:
+AUDIO: 'make a service that agents can hit that makes you the first like business to agents service, you know, like we we call the'
+
+[50:26] [scene:talk]
+VISUAL:
+AUDIO: 'like B2B, B2C See, now we can build B2A, business to agents. You can build a business that all agents can start'
+
+[50:39] [scene:talk]
+VISUAL:
+AUDIO: 'hitting. And so, imagine the possibilities there because once agents start being more autonomous and they start invading the internet like they\'ve already been doing,'
+
+[50:52] [scene:talk]
+VISUAL:
+AUDIO: 'that is a brand new customer base for your service. Like imagine I\'m going to give you a stupid example, but like you know how on the on the internet there\'s like these uh GIF converters for example'
+
+[51:05] [scene:talk]
+VISUAL:
+AUDIO: 'or like image uh compression sites, you know, and they had they full of ads and all of that and it\'s like you this I can make a little API that takes your MP4'
+
+[51:18] [scene:talk]
+VISUAL:
+AUDIO: 'whatever and makes a gift out of it, right? and I\'m going to charge you maybe dynamic uh depending on the length of the video. I put that API out there and I put X42 uh enabled and I register it'
+
+[51:31] [scene:talk]
+VISUAL:
+AUDIO: 'on the public network of X42 endpoints. Now any agent, any chbt, any claude, any other agent, Grock, whatever. Oh, they'
+
+[51:46] [scene:talk]
+VISUAL:
+AUDIO: 'need my my user asked me to convert this thing to GIF. I can\'t do that myself. Let me go see if someone can do it. Find your API, pay for it, get the job done back.'
+
+[52:01] [scene:talk]
+VISUAL:
+AUDIO: 'That\'s where we\'re going. And so this hackathon I think is like we\'re we\'re early days but we\'re gonna start seeing some of these applications and I think it\'s going to happen way quicker'
+
+[52:16] [scene:talk]
+VISUAL:
+AUDIO: 'than we think. Agents are crazy crazy good now. If you tried like Opus 4.5 it\'s incredible what you can do. You can leave it for days. You can you can give'
+
+[52:29] [scene:talk]
+VISUAL:
+AUDIO: 'it a goal and leave it for days. It will it will keep working for you, do things, but the problem is like it needs these tools. It needs to access stuff. It needs to be able to pay to to to buy'
+
+[52:41] [scene:talk]
+VISUAL:
+AUDIO: 'stuff that\'s valuable. Now, this is your opportunity. Build stuff that\'s valuable for agents and agents are going to pay you because people want to get work done'
+
+[52:53] [scene:talk]
+VISUAL:
+AUDIO: 'and they\'re going to give money to their agents and their agents are going to find any resource possible. So then we\'re going into the world where every payable capability or service will have'
+
+[53:07] [scene:talk]
+VISUAL:
+AUDIO: 'a reputation, maybe a rating, and there\'s going to be competing in price and like the agent will choose the best rated. We\'re going to this world. It\'s going to happen. Now,'
+
+[53:19] [scene:talk]
+VISUAL:
+AUDIO: 'we\'re early days. If you\'re here today, you\'re early. You\'re you\'re in the right place to capture this new wave. Now, let\'s make something great and open up'
+
+[53:31] [scene:talk]
+VISUAL:
+AUDIO: 'the imagination of the world of what can be done. And it all starts with this internet native payments. If you equip your service with this internet native payments, you\'re opening'
+
+[53:46] [scene:talk]
+VISUAL:
+AUDIO: 'it up to aentic commerce and that that wave of agentic commerce is coming. So, get creative. The more brains on this thing, the more cool ideas we\'re going'
+
+[53:59] [scene:talk]
+VISUAL:
+AUDIO: 'to see. And uh I can\'t wait to see what you all build. I\'m so excited. So, I\'m going to finish here. We\'re almost at time. Again, reminder that you got some amazing resources here. So, on the'
+
+[54:13] [scene:talk]
+VISUAL:
+AUDIO: 'X42 hackathon website, on the builder resources, look for the web. Um I I compiled a lot of things here. I\'m going to try to um keep updating this too um'
+
+[54:25] [scene:talk]
+VISUAL:
+AUDIO: 'with the docs, with the repos, with the different open source apps you can get inspired from. Don\'t forget to use your two months free coupon as well.'
+
+[54:39] [scene:talk]
+VISUAL:
+AUDIO: 'And um I\'m going to be available all week to talk to you guys oneon-one. Just book uh time with me this week. use it. Um, and I can help you out. I can help'
+
+[54:53] [scene:talk]
+VISUAL:
+AUDIO: 'you think through things. I can give you ideas. Um, use that. That\'s my time for free. I\'m not even putting X42 in front of it, guys. Let\'s get [laughter]'
+
+[55:06] [scene:talk]
+VISUAL:
+AUDIO: 'So, there you go. That\'s it. And the link to this recording will be in here, too, if you want to rewatch it. So, with that, thank you everybody uh that\'s been'
+
+[55:19] [scene:talk]
+VISUAL:
+AUDIO: 'listening and um again, can\'t wait to see what you build, guys. Peace. Let\'s build the future of the internet. Let\'s go. All right.'
+
+[55:37] [scene:talk]
+VISUAL:
+AUDIO: 'Stop this. Not sure if I can close the'
+
+[55:53] [scene:talk]
+VISUAL:
+AUDIO: 'the stream myself. I think one to do it. All right. Thank you. Thank you.'
+
+[56:15] [scene:talk]
+VISUAL:
+AUDIO: 'Extra time. Okay. Cuz my thing is delayed quite a bit. Okay. Cool. &gt;&gt; [snorts]'
+
+[56:29] [scene:talk]
+VISUAL:
+AUDIO: '&gt;&gt; Peace everybody. Let\'s go.'

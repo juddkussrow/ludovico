@@ -1,0 +1,183 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: NATS: Free Open Source Messaging System for Distributed Apps
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=2HFOFEVICyo
+upload_date: 20260403
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'Are you looking for a free open-source [music] alternative to RabbitMQ or Kafka that\'s simpler to run and faster out of the box? Let\'s discover NATS, a lightweight, high-performance messaging system built for modern distributed'
+
+[00:12] [scene:talk]
+VISUAL:
+AUDIO: 'applications. It handles pub/sub, request-reply, and persistent streaming all through a single binary with sub-millisecond latency and supports clients in Go, Rust, Python, JavaScript,'
+
+[00:24] [scene:talk]
+VISUAL:
+AUDIO: 'Java, and many more languages. To [music] start using NATS, you can self-deploy it by following the documentation\'s installation guide or use a platform like ours, Elastio, [music]'
+
+[00:36] [scene:talk]
+VISUAL:
+AUDIO: 'to deploy it seamlessly on your server or the cloud provider of your choice. We handle [music] the installation, backups, updates, and ongoing maintenance for you. To start using NATS on our platform, head to elas.io [music] and click on login. Deploy my first'
+
+[00:49] [scene:talk]
+VISUAL:
+AUDIO: 'service. Search for NATS and select. Choose between the different cloud providers, regions, and service plans based on your needs, and then next. On the final screen, you can adjust more'
+
+[01:03] [scene:talk]
+VISUAL:
+AUDIO: 'advanced settings, choose if you are using a cluster or not, and select one of the different level of support we provide. The first one is free and included by default. Once you\'re all set, hit the create service button. You'
+
+[01:16] [scene:talk]
+VISUAL:
+AUDIO: 'will receive this email when the installation is finished. Let\'s follow the get password link. We arrive on Elastio administration dashboard for our NATS server. Let\'s copy the password,'
+
+[01:28] [scene:talk]
+VISUAL:
+AUDIO: 'the user will be root, and to access our server, let\'s follow this link. Let\'s type root, paste at the password, and we are on our server. We can see it is up'
+
+[01:40] [scene:talk]
+VISUAL:
+AUDIO: 'and uh running with this a very raw UI, just showing us the different features and to check the state for each. So, if you open it, you have a JSON showing you'
+
+[01:52] [scene:talk]
+VISUAL:
+AUDIO: 'the current state. Before trying any feature, let\'s have a look at what NATS is. Think of NATS as a messaging system. So, here you have an example of how it'
+
+[02:04] [scene:talk]
+VISUAL:
+AUDIO: 'works. You have services that publish messages about a subject, and you have different subscribers that will receive them. The NATS server in between is what we installed, and the publishers and the'
+
+[02:18] [scene:talk]
+VISUAL:
+AUDIO: 'subscribers are your services that will be using the NATS CLI to communicate with your server. It can be your backends, your frontends, either hosted on your server or cloud servers, cloud'
+
+[02:31] [scene:talk]
+VISUAL:
+AUDIO: 'functions, and the clients are available in tons of language. So, no worries if it is compatible or not unless you\'re doing something very specific. Once you'
+
+[02:43] [scene:talk]
+VISUAL:
+AUDIO: 'have installed the CLI on one of your project, they all leverage the different NATS commands at your disposal for communication. Let\'s try creating a simple Node.js project. In the mail that'
+
+[02:56] [scene:talk]
+VISUAL:
+AUDIO: 'you received notifying you that your instance is ready, if you scroll a bit, you often have instruction based on the software. Here we provide two different example. One is to try pub/sub, and the'
+
+[03:08] [scene:talk]
+VISUAL:
+AUDIO: 'second is to try the request and reply between different clients. First, let\'s set up a Node.js project. I will create a folder named demo-nats and open it. Now, we need to install the'
+
+[03:22] [scene:talk]
+VISUAL:
+AUDIO: 'NATS package. Use whatever package manager you like. I will use bun. It\'s installed, and we need to create a file with the following code. We will'
+
+[03:34] [scene:talk]
+VISUAL:
+AUDIO: 'edit after uh in VS Code. All right, new file index.js. We can paste it, and here we can see that it\'s'
+
+[03:46] [scene:talk]
+VISUAL:
+AUDIO: 'either using uh the environment variable that you should define on a real project, but it falls back on root and your password. So, here we need to replace it with the actual password.'
+
+[03:59] [scene:talk]
+VISUAL:
+AUDIO: 'This is the one that you find here. Paste it. Of course, here it\'s public because I will uh delete the instance after recording, but be sure to use environment variables and to keep them'
+
+[04:12] [scene:talk]
+VISUAL:
+AUDIO: 'private. Let\'s quickly have a look at the code. So, it imports functions from NATS. It tries to connect to the server. Then it define a subject, and the code have both the subscriber and the publisher. I'
+
+[04:27] [scene:talk]
+VISUAL:
+AUDIO: 'think we\'ll separate it after. So, you have a subscription to this subject demo.hello, and you have a client that will write message to it. Let\'s simply run it. Node'
+
+[04:40] [scene:talk]
+VISUAL:
+AUDIO: 'index.js. What do we can see? Here it\'s connected. It published to it, and the server received it. But it\'s not ideal uh to visualize it like this.'
+
+[04:54] [scene:talk]
+VISUAL:
+AUDIO: 'So, what we will do is separate it. I will create a new file sub.js, the one that is listening, so I won\'t publish from here.'
+
+[05:07] [scene:talk]
+VISUAL:
+AUDIO: 'And a pub.js. And this one, it won\'t subscribe, it will only write to it. And what we can do is use set interval to write every second every half of a second. Uh okay,'
+
+[05:22] [scene:talk]
+VISUAL:
+AUDIO: 'and to identify the client, let\'s say const random ID. It will assign uh a number from and we can add uh the random ID'
+
+[05:35] [scene:talk]
+VISUAL:
+AUDIO: 'here. Okay. So, if I didn\'t do a mistake, we can run the subscriber sub.js. Okay, it\'s connected.'
+
+[05:48] [scene:talk]
+VISUAL:
+AUDIO: 'And then we will run uh the clients that will send messages here in pub. So, node pub.js. Connected. It\'s publishing every time. We can\'t see the number. Oh, because'
+
+[06:02] [scene:talk]
+VISUAL:
+AUDIO: 'it\'s not a console log. So, instead, let\'s send it like this. Let\'s try it again. So, I didn\'t need to stop this one. Just'
+
+[06:14] [scene:talk]
+VISUAL:
+AUDIO: 'rerun this one. Okay, now we have the ID. And [snorts] if I run uh different ones, node pub.js, we\'ll have tons of clients. So, again, it can be different services,'
+
+[06:27] [scene:talk]
+VISUAL:
+AUDIO: 'different backends, cloud function. Now I have three different services located anywhere in the world, even if here it\'s on my laptop, and you can see'
+
+[06:39] [scene:talk]
+VISUAL:
+AUDIO: 'one subscriber receive messages from all the different uh publishers. This is it for a very simple, basic communication, but this is uh unilateral, so only a'
+
+[06:51] [scene:talk]
+VISUAL:
+AUDIO: 'publisher and the subscriber receive something. But what we can do is to use RPC and to have the server send us a reply. So, here the code is slightly the same. The'
+
+[07:04] [scene:talk]
+VISUAL:
+AUDIO: 'subscriber will need to respond, so we\'ll only take these parts and change what the subscriber do. So, here it\'s subscribe to svc.add,'
+
+[07:16] [scene:talk]
+VISUAL:
+AUDIO: 'so the subject is also ignored. And what it does is it takes in the data from the message, A and B, and it respond with the sum of the two'
+
+[07:29] [scene:talk]
+VISUAL:
+AUDIO: 'digits. Now, let\'s copy the code for the client. Let\'s replace our publisher, and what we will do is'
+
+[07:41] [scene:talk]
+VISUAL:
+AUDIO: 'we can only do it once. Okay, we\'ll keep it simple this time. You got the idea of multiple clients. We\'ll only send one message. So, here let\'s stop the server sub.js.'
+
+[07:54] [scene:talk]
+VISUAL:
+AUDIO: 'So, here it\'s connected, and it\'s uh listening to events. And if I run the server again, it got the reply from the server. The sum is five because we sent two and three.'
+
+[08:08] [scene:talk]
+VISUAL:
+AUDIO: 'If we send two and 10, we can try it again, and you can see that the sum is 12. Our server is properly doing its logic based on the payload. Currently, it\'s only two server'
+
+[08:21] [scene:talk]
+VISUAL:
+AUDIO: 'communicating together, but you could add other client before getting the response. You could call another service to get a response if ever you have complex use cases. Of course, it\'s very'
+
+[08:34] [scene:talk]
+VISUAL:
+AUDIO: 'simple examples, and I only covered the basic features. Feel free to dive into the documentation for features that I didn\'t cover in this video. For example, JetStream that allow message storing and'
+
+[08:48] [scene:talk]
+VISUAL:
+AUDIO: 'replays. Thank you for watching. [music] We hope you enjoyed discovering NATS with us. Please hit the like button to help our channel be more visible to other open-source lovers. [music] Don\'t forget to subscribe to not miss'
+
+[09:01] [scene:talk]
+VISUAL:
+AUDIO: 'our next platform overviews. If you want to continue your open-source journey, watch this video available [music] here.'

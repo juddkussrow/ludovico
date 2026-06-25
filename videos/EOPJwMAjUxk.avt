@@ -1,0 +1,291 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: I Fed an AI My Real Codebase... Then Asked One Question
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=EOPJwMAjUxk
+upload_date: 20260313
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'I\'m about to share something I\'m not allowed to share, but sometimes it\'s easier to ask for forgiveness than for permission. However, you might see the screen blurred out in some parts if there\'s some sensitive data. This is an actual project that my team and I have been building for many years. It currently consists of almost 307,000'
+
+[00:12] [scene:talk]
+VISUAL:
+AUDIO: 'lines of code across 1,600 source files. It\'s basically an NX mono repo with three native script applications that are sharing some code, but that\'s not the point of the video. The point is that I have a real code base and real'
+
+[00:24] [scene:talk]
+VISUAL:
+AUDIO: 'use case here, and I thought this would be a perfect way to test some local models that claim to have very large context windows. A 1 million token context window? Are you serious? Locally? So, I found a'
+
+[00:37] [scene:talk]
+VISUAL:
+AUDIO: 'couple. Nvidia has one called NeMo tron 3 nano 30B. It\'s a 30 billion parameter model, so it\'s not huge. This BF16 version, which is the full unquantized version, is 63 GB. Easy, right?'
+
+[00:49] [scene:talk]
+VISUAL:
+AUDIO: 'Right? No, that\'s not how it works if you want to use 1 million token context window. So, just to try things out for kicks and giggles, I popped open LM Studio,'
+
+[01:02] [scene:talk]
+VISUAL:
+AUDIO: 'downloaded two versions of this, the 4-bit quant and the 8-bit quant, and then I tried to load NeMo tron, and wait a minute, 262,000 tokens? But wait a minute, this model'
+
+[01:14] [scene:talk]
+VISUAL:
+AUDIO: 'with over a million downloads, a pretty popular model, claims that it can take a maximum input size of 1 million tokens. And here we are stuck with 262,000. Well, let\'s be reasonable here, Alex.'
+
+[01:27] [scene:talk]
+VISUAL:
+AUDIO: 'You\'re not going to be putting in a million token prompt, are you? Yes. Yes, I am. Well, close. That\'s why I wanted to use a real project. Let\'s put the model aside for a second. We\'ll come back to that, and I\'ll show you how to make it so that you can actually use 1'
+
+[01:39] [scene:talk]
+VISUAL:
+AUDIO: 'million token context window. But getting back to this project with 306,000 lines of code, that\'s going to be way more than a million tokens. Each line of code is going to have a few tokens in it, so do the math. And even though this is a'
+
+[01:52] [scene:talk]
+VISUAL:
+AUDIO: 'private repository, I\'m ashamed to say that we might have some security issues here where we have some keys that are not supposed to be in the code base committed to the repository. I want to clean them out. How do I find them? A'
+
+[02:05] [scene:talk]
+VISUAL:
+AUDIO: 'good starting point would be to run this through an LLM that has a huge context window. Next problem, how do I get a prompt with all the code submitted to the LLM? By the way, this has to be a local model because this is private code. I do not want this code going to a'
+
+[02:18] [scene:talk]
+VISUAL:
+AUDIO: 'chat GPT or a Gemini or a Claude, even though chat GPT only has 128,000 token window and Claude has 260, I think. I think. Gemini claims to have 1 million,'
+
+[02:30] [scene:talk]
+VISUAL:
+AUDIO: 'but that\'s not the point. I want to have this local and private. Repo prompt to the rescue. I\'ve shown this tool before. I even made separate videos on the channel about this tool and how to use it for members of the channel. Really cool tool that nothing else, in my'
+
+[02:43] [scene:talk]
+VISUAL:
+AUDIO: 'opinion, comes close to reproducing this kind of functionality for software developers. I loaded up my project into this tool and you can basically select different folders to build up not only the map of the code, this is called the'
+
+[02:56] [scene:talk]
+VISUAL:
+AUDIO: 'code map, but also if you want to, you can add the contents of the code. And I should say that this is not a sponsored video by Repo prompt. I just happened to use this tool and like it. Well, recently, a new feature has been added'
+
+[03:09] [scene:talk]
+VISUAL:
+AUDIO: 'to this tool called context builder. And you can talk to an LLM to build up the prompt. It\'s pretty cool. So, you can say, "I want to select only the code files that are relevant to the project."'
+
+[03:22] [scene:talk]
+VISUAL:
+AUDIO: 'And I can run that and it will select only what\'s needed. If I select absolutely everything, it\'ll be like 11 million tokens. I already tried this. It\'s crazy. But I want only the code files and I want to exclude things like'
+
+[03:36] [scene:talk]
+VISUAL:
+AUDIO: 'assets and images. These are mobile apps, so there\'s a ton of that garbage around. And after a little conversation with the context builder, it ends up selecting what I needed. I already did this before I made the video and we ended up with 831,000'
+
+[03:49] [scene:talk]
+VISUAL:
+AUDIO: 'tokens. So, not exactly a million, but pretty pretty damn close. It\'s a lot. Then you have this area for instructions on what you want to do. Most of this was filled out for me by the context'
+
+[04:02] [scene:talk]
+VISUAL:
+AUDIO: 'builder, like the information about the apps, things like that. Now, you could hook up Repo Prompt directly to an LLM, either local or it works with ChatGPT, it works with Claude, and you can submit this directly from here. But, I\'m just'
+
+[04:15] [scene:talk]
+VISUAL:
+AUDIO: 'going to copy and paste the prompt itself so that I have it. And I also added this task, find any keys or codes that should be private in this code base. Report the file names that contain them. Wow, look at that spelling. What'
+
+[04:27] [scene:talk]
+VISUAL:
+AUDIO: 'am I French? French would be like a containier or something like this. Never mind. What am I talking about? I don\'t speak French. Get out of here. And then the exact line with the context for each. I also have a couple of rules.'
+
+[04:40] [scene:talk]
+VISUAL:
+AUDIO: 'Do not guess the line numbers because I\'m not giving any. The code base doesn\'t have line numbers. Editors usually add the line numbers when they\'re displaying things. So, it\'s not a part of the code base. So, don\'t guess them. Only report an item if you quote'
+
+[04:52] [scene:talk]
+VISUAL:
+AUDIO: 'it verbatim. Never output the full secret value because I don\'t want that going around, you know, and redact it. I want it to be redacted in this format. But, I still want you to quote the surrounding line so that I see the context of where that problem is. When I'
+
+[05:05] [scene:talk]
+VISUAL:
+AUDIO: 'copy this prompt, I created a prompt.text file, which is just temporary, and pasted it in here. This is what that prompt looks like. This prompt is insane, okay? So, we\'re going from line 1 to 109,000'
+
+[05:17] [scene:talk]
+VISUAL:
+AUDIO: 'lines. So, this prompt is 109,000 lines long. Part of the prompt is the actual instructions, like down here. This is the task, and this is part of the user instructions. The rest of it is the code'
+
+[05:30] [scene:talk]
+VISUAL:
+AUDIO: 'map and the actual code from the whole repository. It\'s huge. So, these days I\'m always flipping between models. GPT for research, Claude for coding, Nano Banana for image generation, VEO Kling'
+
+[05:42] [scene:talk]
+VISUAL:
+AUDIO: 'and Runway for video, six tabs, six bills, and counting. Enter Chat LLM Teams. One dashboard houses every top LLM and route LLM picks the right one. GPT Mini for ultra-fast answers, Claude'
+
+[05:55] [scene:talk]
+VISUAL:
+AUDIO: 'Sonnet for coding, Gemini Pro for massive context. They recently added Gemini 3 and GPT 5.1 the moment they dropped. Create professional presentations with graphs, charts, and deep research detailed content. Need'
+
+[06:07] [scene:talk]
+VISUAL:
+AUDIO: 'human-sounding copy? Humanize rewrites text to defeat AI detectors. Need visuals? Pick frontier or open-source models. Nano Banana, Midjourney, Flux for images, Magnific for upscaling, plus'
+
+[06:19] [scene:talk]
+VISUAL:
+AUDIO: 'VEO WAN and Sora for video. All built in. You also get Abacus AI Deep Agent to pretty much do anything. Build full-stack apps, websites, reports with just text prompts, and deploy them on the spot. They have Abacus AI Desktop,'
+
+[06:33] [scene:talk]
+VISUAL:
+AUDIO: 'which is the brand new coding editor and assistant that lets you vibe code and build production-ready apps. And the kicker? It\'s just $10 a month, less than one premium model. Head over to chat.llm.abacus.ai'
+
+[06:45] [scene:talk]
+VISUAL:
+AUDIO: 'or click the link below to level up with Chat LLM Teams. All right, now you know how I ended up with a real codebase that\'s almost a million tokens. Close. How do we submit it in LLM Studio? Well, here\'s Nematron 3 Nano 4-bit, and we\'re'
+
+[06:58] [scene:talk]
+VISUAL:
+AUDIO: 'stuck. We can\'t go past 262,000. What\'s up with that? Even though this model promises more than that. The reason they did that is so that people don\'t get freaked out. Not really. It\'s more so that you don\'t run out of space. And'
+
+[07:10] [scene:talk]
+VISUAL:
+AUDIO: 'once you see how much memory a million token context window takes up, you\'re going to run the other way. So, obviously, this is not going to be enough. If I load this model and I put in that prompt, it\'s going to choke. What I\'m going to do instead is go over'
+
+[07:23] [scene:talk]
+VISUAL:
+AUDIO: 'here to Nematron 3 Nano and right click, reveal in finder, reveal in finder, and this is basically the model. Each model has all these files that it comes with. If you go back to the actual Hugging Face page, files and versions, you\'ll'
+
+[07:35] [scene:talk]
+VISUAL:
+AUDIO: 'see similar structure here as well, even though this is a different quantization of it, but they all have this config.json file. And if you go down here, you\'ll see Oh, look at that. Max position embeddings, 262,144. Why such a weird number, Alex? Well,'
+
+[07:51] [scene:talk]
+VISUAL:
+AUDIO: 'because this is a power of two. I don\'t think it has to be, but it works better that way due to the memory chunking and yeah, buffer sizes and all that. There\'s a deep technical explanation for it. But now that we know, what do we do about'
+
+[08:04] [scene:talk]
+VISUAL:
+AUDIO: 'it? Back here in config.json, I\'m going to open this up in an editor and I\'m going to go and change that number. So, to get a million token context window, that\'s the number, 1,048,576, which is also a perfect square. Let\'s go'
+
+[08:18] [scene:talk]
+VISUAL:
+AUDIO: 'back to LM Studio, find our Nimo-tron model, and look, max model supports up to 1 million tokens now. Boom, we got it all. Load that model up, and at first, of course, nothing scary happens. Even with the full model loaded on this 128'
+
+[08:31] [scene:talk]
+VISUAL:
+AUDIO: 'GB MacBook Pro, we\'re still okay. Are we okay? The loading, we\'re at 71 GB used. Okay, 72 GB. Copy this prompt, go back here, and paste it. And there\'s our huge'
+
+[08:44] [scene:talk]
+VISUAL:
+AUDIO: 'prompt going over to LM Studio. Boom. And the prompt processing begins. Remember when we talked about prompt processing? That\'s the side of inference right before token generation happens. And usually, when we say hi to our model'
+
+[08:57] [scene:talk]
+VISUAL:
+AUDIO: 'and write a story, it happens pretty quick because the prompt is really short. But if the prompt is really long, prompt processing, that\'s the compute stage, it\'s going to take a long time. Now, token generation might be pretty'
+
+[09:10] [scene:talk]
+VISUAL:
+AUDIO: 'fast on these MacBooks and Mac Studios, especially with the new M5 Macs that are coming out. By the way, stay tuned for that. But prompt processing is not super fast. And check out the memory going up.'
+
+[09:22] [scene:talk]
+VISUAL:
+AUDIO: 'Not only that, listen to this. Oh, yeah. This MacBook is angry at me. If you want to get a MacBook angry, you give it a huge prompt.'
+
+[09:35] [scene:talk]
+VISUAL:
+AUDIO: 'So, we\'re up to 95 GB of usage here, and I\'m going to stop it. And the reason I\'m going to do that is because I know what happens next cuz I already tried this, and I didn\'t try it on my 128 GB MacBook Pro. I tried it on my Mac Studio with'
+
+[09:49] [scene:talk]
+VISUAL:
+AUDIO: '512 GB, and that revealed a little bit of a limit to what we can do with these systems here. See, prompt processing is such a demanding task with longer'
+
+[10:01] [scene:talk]
+VISUAL:
+AUDIO: 'prompts that it took forever. Well, it didn\'t take forever. It took a long time, more than 30 minutes. And look at that memory being used on that Mac Studio. Out of 512, 465 GB were used. And I\'m wondering, that\'s That\'s not'
+
+[10:15] [scene:talk]
+VISUAL:
+AUDIO: 'bad. We\'re still under, right? Well, the reason we were under is because the amount of VRAM allocated on that Mac Studio is 464 GB out of 512. So, we came up to the limit essentially and stopped,'
+
+[10:27] [scene:talk]
+VISUAL:
+AUDIO: 'and that\'s why it took so long. Finally, it finished, and immediately the memory went down, but I got a pretty disappointing result after all that. 37 minutes later, and all it could tell me'
+
+[10:40] [scene:talk]
+VISUAL:
+AUDIO: 'was that there no secrets, no passwords, no API keys, nothing was found. I know for a fact that that\'s wrong. So, this model with that quantization, this is the 8-bit version that I ran by the way'
+
+[10:53] [scene:talk]
+VISUAL:
+AUDIO: 'on the Mac Studio. It was not up to the task. And by the way, I did try the 4-bit version of Nimatron and 8-bit version of Nimatron. Not great for really long contexts like this one. This is what happens. So, I'
+
+[11:05] [scene:talk]
+VISUAL:
+AUDIO: 'increased the maximum amount of VRAM to 490 GB, and I have a separate video showing how to do that on Apple Silicon. I\'ll link to it down below. And even though the memory used went up to that limit, it did not help at all. The amount of time it took was exactly the'
+
+[11:17] [scene:talk]
+VISUAL:
+AUDIO: 'same, and the result I got was weird. It looked nice, but it was a summary of the mono repo structure, which was somewhat right, but it didn\'t even attempt to do the task that I assigned it, which is find secrets and codes and API keys. And'
+
+[11:29] [scene:talk]
+VISUAL:
+AUDIO: 'what the hell are Alex apps? Alex apps use all service to manage authentication flow. That\'s just hallucinations right there. Now, they\'re benchmark designed specifically for needle in a haystack type of things where you have a long'
+
+[11:43] [scene:talk]
+VISUAL:
+AUDIO: 'prompt and you hide something in the prompt and you ask it to find it. That\'s basically the test. It\'s similar to what we\'re doing, not exactly. And Nvidia has a benchmark called ruler for this. It compares certain models, not all of'
+
+[11:55] [scene:talk]
+VISUAL:
+AUDIO: 'them, impossible to do that cuz there\'s so many. But gives you some ideas of what\'s out there like Mistral, Llama, Qwen. Some of those have 1 million token context like Qwen 2.5. Remember last year when Llama 4 Scout came out? It\'s'
+
+[12:09] [scene:talk]
+VISUAL:
+AUDIO: 'pretty decently sized model, 217 GB. So obviously we would need to use some kind of quantization of that if you were going to run it on a Mac Studio, but I can also run the full thing. I\'ll show you how I did that in a minute. You know'
+
+[12:22] [scene:talk]
+VISUAL:
+AUDIO: 'what\'s cool about this one is that it has a context length of 10 million. So that was the next one to try. And boy did that take a while. But you know what? It actually got the results for me. With the 1 million token context window, not even 10 million, it found'
+
+[12:35] [scene:talk]
+VISUAL:
+AUDIO: 'some stuff. Notice that this took over an hour and a half and at 7.3 tokens per second. So not the fastest thing in the world, but it actually worked. So there had to be a way. Luckily my friends at Cerebras Scale, also not sponsoring this'
+
+[12:47] [scene:talk]
+VISUAL:
+AUDIO: 'video, but they let me use a very expensive machine. So thank you. I got access to a cluster of B200 which are Nvidia\'s data center GPUs. So I can run this experiment there. Sorry, my'
+
+[12:59] [scene:talk]
+VISUAL:
+AUDIO: 'bad. This is the B300 cluster. And I\'m running Llama 4 Scout. This is the full BF16. Of course I\'m using vLLM on this. That\'s what you run in that kind of environment for high throughput.'
+
+[13:12] [scene:talk]
+VISUAL:
+AUDIO: 'How high? Let me just show you NVTop here. Check this out. There\'s eight B300 GPUs in this computer. Each one is 1,100 W and each one has 268 GB of VRAM. So, now'
+
+[13:26] [scene:talk]
+VISUAL:
+AUDIO: 'that I\'m loading this model up with the million token context window, it\'s taking up about 250 GB per GPU. That\'s over 2 TB of VRAM. VLM also tends to grab as much VRAM as possible to save'
+
+[13:40] [scene:talk]
+VISUAL:
+AUDIO: 'for that KV cache, cuz we\'re not even running a prompt yet. Let\'s do that. I\'m going to paste in this command. Basically, it\'s a curl command to this model, but it\'s wrapped inside a JQ command so that we can further'
+
+[13:53] [scene:talk]
+VISUAL:
+AUDIO: 'manipulate the result. And basically, I just want to redact and obfuscate any kind of keys that it finds. Ready, set, go. Oops. Ready, set, go. And there it goes. The'
+
+[14:07] [scene:talk]
+VISUAL:
+AUDIO: 'server hit HTTP 200. I want you to take a look at this. Average prompt throughput, that\'s the prompt processing phase, the initial phase, is 77,000 tokens per second. And look at that, it'
+
+[14:19] [scene:talk]
+VISUAL:
+AUDIO: 'found 21 instances of issues. Uh just in case, I\'m going to have the editor redact all this, blur this out, cuz I don\'t want to get in trouble with my client. So, the choice of model'
+
+[14:31] [scene:talk]
+VISUAL:
+AUDIO: 'matters a lot, and for speed purposes, hardware matters a lot, but we already knew that. Now, I got to go fix these security issues. Thanks for watching the video. Hope you enjoyed it. Give it a thumbs up if you did, and of course,'
+
+[14:43] [scene:talk]
+VISUAL:
+AUDIO: 'stick around. We\'re going to do more fun stuff like this all the time on this channel. Subscribe. You might also enjoy this video right here next. See you next time.'

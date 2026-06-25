@@ -1,0 +1,279 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Bernini AI Video Editing Model In ComfyUI - Which Is Actually Works Better?
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=G4GMJBQZiVQ
+upload_date: 20260614
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'Okay, this is the new AI video editing model from ByteDance called Bernini. And this one is really interesting because it\'s a unified model for video editing. What that means is you can take an existing video and change pretty much every frame, swap objects, change'
+
+[00:13] [scene:talk]
+VISUAL:
+AUDIO: 'styles, add new elements all in one model. No need for separate tools for each task. So, I\'ve been testing out Bernini R, which is the latest release from ByteDance. The R stands for the renderer component, and it\'s'
+
+[00:26] [scene:talk]
+VISUAL:
+AUDIO: 'specifically built for video editing tasks. Now, here\'s the thing. This model is actually based on the WALT 2.2 architecture, which means it uses two separate transformer models for high noise and low noise denoising. But'
+
+[00:39] [scene:talk]
+VISUAL:
+AUDIO: 'unlike WALT 2.2 text to video, Bernini uses something called SA3D Rope, that\'s segment-aware 3D rotary position embeddings for handling temporal information and multi-object editing'
+
+[00:52] [scene:talk]
+VISUAL:
+AUDIO: 'across frames. If you\'ve been following along, you might remember from my last video on Scale 2, that one also uses Rope for video editing. But Scale 2 is more focused on character and object pose transfer. Bernini, on the other'
+
+[01:05] [scene:talk]
+VISUAL:
+AUDIO: 'hand, it handles a lot more tasks, video-to-video editing, reference-guided editing, content insertion, reference-to-video generation, all in one unified model. Now, based on ByteDance\'s own'
+
+[01:18] [scene:talk]
+VISUAL:
+AUDIO: 'benchmarks, this model has been ranking really well on video editing tasks, understanding editing instructions, object movement consistency, and overall quality. So, it\'s worth taking seriously.'
+
+[01:31] [scene:talk]
+VISUAL:
+AUDIO: 'One of the most popular use cases is instruction-based video editing. You just describe what you want changed in text, and the model re-renders the video. Or you can use reference images for'
+
+[01:43] [scene:talk]
+VISUAL:
+AUDIO: 'style transfer, object transfer, material swaps. There\'s also content insertion, where you take an image or a video and composite it into an existing scene. For example, here\'s a case where we have a poster on a wall and a'
+
+[01:56] [scene:talk]
+VISUAL:
+AUDIO: 'reference image. You feed both in and the model replaces the poster content with whatever\'s in that reference image. And this works with video references, too, not just images. So, say you have a brand animation video,'
+
+[02:09] [scene:talk]
+VISUAL:
+AUDIO: 'you can map it onto a TV screen in a shopping mall scene and the output looks like the animation is actually playing on that screen in the footage. Then there\'s the reference to video workflow. This is where things get'
+
+[02:21] [scene:talk]
+VISUAL:
+AUDIO: 'really flexible. You can supply multiple reference images, different characters, different backgrounds, different objects, and the model generates a new video combining them all. You just describe which object is which with some'
+
+[02:34] [scene:talk]
+VISUAL:
+AUDIO: 'keywords and the AI identifies them and places them correctly in the scene. And if you have multiple angles of one subject like a building or a sculpture, you can feed those in sequence and the'
+
+[02:46] [scene:talk]
+VISUAL:
+AUDIO: 'model can create an orbiting camera shot around it. That\'s actually pretty cool. So, in this video, I\'m going to run several examples with Bernini, some practical editing tasks, and do a'
+
+[02:58] [scene:talk]
+VISUAL:
+AUDIO: 'side-by-side comparison with Scale Two, which we covered in the previous video. Same tasks, same inputs, so we can see how these two frameworks stack up against each other. All right, let\'s get into the setup.'
+
+[03:11] [scene:talk]
+VISUAL:
+AUDIO: 'ComfyUI has already added support for Bernini. If you head over to the official ComfyUI Hugging Face page, you\'ll find the Bernini-R repo. There are diffusion model weights in'
+
+[03:23] [scene:talk]
+VISUAL:
+AUDIO: 'different precisions, FP16, FP8, and MXFP8. There\'s also a 1.3 billion model based on the 1.2.1 architecture, which is basically a lighter-weight fine-tuned'
+
+[03:37] [scene:talk]
+VISUAL:
+AUDIO: 'version. For the full model, you\'ll want to download the high noise and low noise transformer weights separately based on your preferred precision. I\'ve tested both FP8 and FP16 and honestly, the video quality is pretty'
+
+[03:51] [scene:talk]
+VISUAL:
+AUDIO: 'similar. So, either one works. Go with FP8 if you\'re tighter on VRAM. Now, here\'s my workflow. As you can see, the connections follow the standard 12.2 pattern. You\'ve got the high noise and'
+
+[04:04] [scene:talk]
+VISUAL:
+AUDIO: 'low noise model branches. Where it gets a little more advanced is the noise loading section. I have two pads here, one without Laura models and one with. The Laura is mainly used for the sampling step scheduler in this case,'
+
+[04:16] [scene:talk]
+VISUAL:
+AUDIO: 'the light X2V Laura. Then we have the VAE and text encoder, which are the same ones used for the 12.214B model. So, the 1 VAE and the T5XXL text encoder. Three main components and'
+
+[04:30] [scene:talk]
+VISUAL:
+AUDIO: 'you\'re good to go. I\'ve also set up multiple reference image inputs and a reference video input here. There\'s a bypass toggle for the reference video. So, if you only need image references, you can turn that off'
+
+[04:42] [scene:talk]
+VISUAL:
+AUDIO: 'and the workflow automatically switches to the image only parameter set. Otherwise, with the reference video enabled, it pulls the width, height, FPS, and frame count from the source'
+
+[04:54] [scene:talk]
+VISUAL:
+AUDIO: 'video. Once those are loaded, you connect them to the input parameter nodes. You\'ll notice the Bernini conditioning nodes. These are native nodes in ComfyUI now, so make sure you update your ComfyUI to get them. If you don\'t see'
+
+[05:07] [scene:talk]
+VISUAL:
+AUDIO: 'them, that means your ComfyUI version is outdated and those Python scripts haven\'t been downloaded yet. On the right side here, all these get and set nodes are handling the input parameters for the sampling groups, and'
+
+[05:20] [scene:talk]
+VISUAL:
+AUDIO: 'I\'ve separated the text prompts into their own dedicated section above. This yellow block of nodes comes from the example workflows in the ComfyUI GitHub repo for Bernini. You can check'
+
+[05:32] [scene:talk]
+VISUAL:
+AUDIO: 'those out if you need them, but I\'ve kept them here in this demo workflow so you can reference what kind of system prompts each task type needs. The thing is, there are a lot of system prompts and memorizing all of them is not'
+
+[05:44] [scene:talk]
+VISUAL:
+AUDIO: 'practical. So, I created a custom task system prompt selector. It\'s a drop down where you choose your task type like multiple video to video editing or reference to video or whatever and it automatically outputs the correct system'
+
+[05:58] [scene:talk]
+VISUAL:
+AUDIO: 'prompt for the text encoder. So, instead of copy-pasting system prompts every time and stacking them with your positive prompts, you just select the task type and it combines everything for you. Your input text'
+
+[06:10] [scene:talk]
+VISUAL:
+AUDIO: 'prompt can then focus purely on describing what you want to edit the motion, the specific changes, whatever. First example, I\'m using a stock footage video of a woman with some hand motions. The model preserves the motion from the'
+
+[06:24] [scene:talk]
+VISUAL:
+AUDIO: 'source video, but I\'ve noticed that with unified models like this, sometimes they add extra motion that wasn\'t in the original. It\'s hit or miss, honestly. Sometimes it follows the source motion'
+
+[06:36] [scene:talk]
+VISUAL:
+AUDIO: 'exactly. Sometimes it doesn\'t. You can try different text prompts to steer it and I\'ve had some results that preserve the motion really well. Here\'s a better example. Same workflow, different footage. Look at this, the'
+
+[06:49] [scene:talk]
+VISUAL:
+AUDIO: 'character\'s face, the body pose, the hair movements, everything\'s preserved. The only thing I changed was the clothing. In the source video, she\'s wearing a long-sleeve sweater and in the output,'
+
+[07:01] [scene:talk]
+VISUAL:
+AUDIO: 'she\'s got a white shirt instead. And notice how her hair, the way it falls over the replaced shirt area, is still rendered naturally on top. The color grading stays consistent, too. Here\'s'
+
+[07:13] [scene:talk]
+VISUAL:
+AUDIO: 'how I did it. Reference video goes in. Reference image of the shirt goes in this time. Let\'s use a red shirt instead. For the text prompts, I selected the'
+
+[07:25] [scene:talk]
+VISUAL:
+AUDIO: 'RV2V task type, which loads the preset system prompt. Then I just described what I wanted. Replace the woman\'s outer shirt with the shirt from the reference image. Keep the undershirt unchanged.'
+
+[07:37] [scene:talk]
+VISUAL:
+AUDIO: 'Preserve all original body pose, camera movement, and elements from the reference video. And here\'s the output side by side. Both videos preserve the same motions the way she\'s doing her hair, the hand'
+
+[07:50] [scene:talk]
+VISUAL:
+AUDIO: 'movements, everything. The hair strands in front are preserved and they don\'t interfere with the swapped clothing at all. The red shirt follows a similar shape to the original sweater, but it picks up the details from the reference image,'
+
+[08:03] [scene:talk]
+VISUAL:
+AUDIO: 'the button placement. It plans out what the output should look like semantically before the actual rendering begins. Now, this isn\'t a reasoning model per se, but it can analyze and understand visual content well enough to guide the'
+
+[08:16] [scene:talk]
+VISUAL:
+AUDIO: 'generation process. That\'s why they call it the unified multi-model approach. The architecture is actually really clever. It leverages the 1 2.2 dual transformer structure. The high noise model handles'
+
+[08:28] [scene:talk]
+VISUAL:
+AUDIO: 'the coarse layout and composition, while the low noise model fills in the fine details and textures. The switch happens at 87.5% of the total time steps. So, the high noise expert does the heavy'
+
+[08:41] [scene:talk]
+VISUAL:
+AUDIO: 'lifting on structure, then it hands off to the low noise expert for the polish. One more thing I want to show, the reference to video mode. This is where you don\'t even need a source video. You can bypass the reference video input'
+
+[08:53] [scene:talk]
+VISUAL:
+AUDIO: 'entirely and the workflow switches to using your manually set parameters. Then you load multiple reference images, let\'s say four, and generate a video from scratch using those as visual references. I picked four images at'
+
+[09:06] [scene:talk]
+VISUAL:
+AUDIO: 'random from my ComfyUI output folder. Two characters, a desert landscape, and some zombies in a forest. Completely random mix, but let\'s see what happens. So, I disconnected the video reference'
+
+[09:20] [scene:talk]
+VISUAL:
+AUDIO: 'and connected all four images into the Bernini conditioning nodes reference image list, enabled all the get and set parameters, and wrote a detailed text prompt. I actually formatted it similar to how SVD 2.0 works using a timeline'
+
+[09:33] [scene:talk]
+VISUAL:
+AUDIO: 'based approach with specific visual and camera motion descriptions for each shot. Now, Bernini\'s default is 81 frames, same as Juan 2.2. But, you don\'t have to follow that exactly. I pushed it to 121'
+
+[09:47] [scene:talk]
+VISUAL:
+AUDIO: 'frames here, since I had more motion described in the prompt, and it worked fine if you\'ve got the VRAM for it. All right, here\'s the result. Some of the reference images were followed, some weren\'t. The male character stayed'
+
+[10:00] [scene:talk]
+VISUAL:
+AUDIO: 'pretty close to the reference, the short hair, the outfit, the accessories. The desert as the background location worked well, too. The female character, I had to emphasize her more in the prompt descriptions to get her to look'
+
+[10:12] [scene:talk]
+VISUAL:
+AUDIO: 'right, and even then, it was inconsistent. The zombies were the weakest part. Some frames show actual zombie-like figures, others just show people wearing masks. It\'s still hit or miss when you\'re'
+
+[10:25] [scene:talk]
+VISUAL:
+AUDIO: 'feeding more than two reference images into this model. On the plus side, I was able to create multiple shots within a single 7-second clip. Overall for this test, the female character, who had short hair'
+
+[10:37] [scene:talk]
+VISUAL:
+AUDIO: 'in the reference, the model sometimes couldn\'t identify her as female, which is a known limitation with these models. The zombies, not great. The desert background, no problem.'
+
+[10:49] [scene:talk]
+VISUAL:
+AUDIO: 'That\'s easy for most reference-to-video models. So, the takeaway with reference-to-video on Bernini, it works well with one or two references, but starts degrading when you go beyond that. Now, let\'s get into what I think is the'
+
+[11:02] [scene:talk]
+VISUAL:
+AUDIO: 'most practical and versatile use case, character swap using video-to-video with reference images. This is the RV2V mode, reference-guided video editing, and we\'re going to compare it directly with'
+
+[11:15] [scene:talk]
+VISUAL:
+AUDIO: 'Scale 2. Here, I\'m using a reference video with two characters and a reference image with two different characters. I want to swap both characters while keeping the original motions and scene. And here\'s Bernini\'s output.'
+
+[11:29] [scene:talk]
+VISUAL:
+AUDIO: 'Look at this, the motions are preserved from the source video. Both new characters move exactly the same way. And the style consistency is pretty impressive. Check out this masked ninja character.'
+
+[11:41] [scene:talk]
+VISUAL:
+AUDIO: 'There\'s a yellow pattern on the outfit that carries through to different angles and different body positions in the output video. With the old ControlNet video-to-video approach, you\'d never get that level of detail transfer across'
+
+[11:54] [scene:talk]
+VISUAL:
+AUDIO: 'different poses. One thing it did miss, this character lost the mask in a few frames. So, it\'s not perfect, but overall, I\'d say about 80% style consistency transfer, which is really'
+
+[12:06] [scene:talk]
+VISUAL:
+AUDIO: 'good for a single model approach with no ControlNet at all. You just connect the source video and reference images. And here\'s another interesting thing, the reference images have a 3D'
+
+[12:18] [scene:talk]
+VISUAL:
+AUDIO: 'cartoonish art style, but the output video is more photorealistic. The model was able to take the stylistic elements from the 3D reference and adapt them into a realistic visual style in the'
+
+[12:30] [scene:talk]
+VISUAL:
+AUDIO: 'output. Now, let\'s bring the same inputs into Scale 2. I\'ve already loaded the workflow in ComfyUI. This is the same one we used in the previous video. One key difference, Scale 2 only supports one reference'
+
+[12:44] [scene:talk]
+VISUAL:
+AUDIO: 'image for character input, so we can only swap one of the two characters with the reference. Same text prompts, same concept character swap. Let\'s see how it compares. Here\'s Scale 2\'s output. The kick'
+
+[12:57] [scene:talk]
+VISUAL:
+AUDIO: 'motions and body movements are similar to the source video. For the first 5 seconds, which is the actual video length, the motions match up well. After that, the model starts generating'
+
+[13:09] [scene:talk]
+VISUAL:
+AUDIO: 'extra content beyond the original clip length, those extra punches and movements you see at the end. Looking at the character references, I\'d say Scale 2 is actually stronger on the image fidelity side. The blonde'
+
+[13:22] [scene:talk]
+VISUAL:
+AUDIO: 'character especially looks closer to the reference image. The outfits are more faithful to what\'s shown in the reference. So, here\'s my quick comparison between the two. Bernini R handles multiple reference images at once. You can swap'
+
+[13:36] [scene:talk]
+VISUAL:
+AUDIO: 'two characters simultaneously. Scale 2 only takes one. Bernini\'s style transfer across different poses is better. Those fine details like patterns and accessories carry through more consistently. But, Scale 2 gives you'
+
+[13:48] [scene:talk]
+VISUAL:
+AUDIO: 'tighter character fidelity to the reference image. It looks more like the actual person or character you\'re referencing. So, let me know what you think about this model in the comments. Thanks for watching, and I\'ll see you in the next'
+
+[14:00] [scene:talk]
+VISUAL:
+AUDIO: 'one.'

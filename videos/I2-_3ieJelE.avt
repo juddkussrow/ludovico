@@ -1,0 +1,251 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Diffusion Gemma: Google's First Open Diffusion Model
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=I2-_3ieJelE
+upload_date: 20260611
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'Diffusion Gemma, Google is releasing the first open weight diffusion model today. And this is going to be a very significant one. It\'s a mixture of expert with 26 billion parameters, which has 4 billion active'
+
+[00:12] [scene:talk]
+VISUAL:
+AUDIO: 'parameters. Under Apache 2.0. Now, Google has been releasing open weight Gemma models for quite a while starting in February 2024. And over the last couple of years we'
+
+[00:26] [scene:talk]
+VISUAL:
+AUDIO: 'have seen significant improvements in the model capabilities. Gemma 4 are best in the class. They also release multi-token predictions, but all of them so far has been based on'
+
+[00:38] [scene:talk]
+VISUAL:
+AUDIO: 'auto-regressive architecture. This diffusion Gemma is the model from Google. Now, Google has previously released or announced experimental diffusion Gemini model. For some reason'
+
+[00:50] [scene:talk]
+VISUAL:
+AUDIO: 'they took it down, but this is available under Apache 2.0, which means you can run it on your own machine, which is going to be pretty incredible. Now, before showing you how exactly does'
+
+[01:02] [scene:talk]
+VISUAL:
+AUDIO: 'it work, we need to talk about how this is different from auto-regressive models. So, auto-regressive models basically produces one token at a time. That means for every token it has to look at all of the tokens that it has previously'
+
+[01:16] [scene:talk]
+VISUAL:
+AUDIO: 'processed. So, if you\'re processing 400 tokens, it is going to take 400 passes. And the second problem is it cannot go back and fix something once a token is generated,'
+
+[01:28] [scene:talk]
+VISUAL:
+AUDIO: 'that\'s it. There is no way to go back in time and fix that token. Now, diffusion really flips it on its head. So, instead of generating all tokens sequentially, diffusion generates'
+
+[01:41] [scene:talk]
+VISUAL:
+AUDIO: 'tokens in fixed window size. Think about how image generation works. Image and video generation are basically diffusion-based processes where all of the tokens are generated in parallel.'
+
+[01:54] [scene:talk]
+VISUAL:
+AUDIO: 'And from every pass to the next pass, the model tries to correct its previous mistakes. Now, here is [clears throat] a real recording of this diffusion process from a diffusion demo on my machine.'
+
+[02:07] [scene:talk]
+VISUAL:
+AUDIO: 'The model is running on a laptop and these are the actual guesses that it generates and as you can see during the process it kind of goes back and fix the errors'
+
+[02:19] [scene:talk]
+VISUAL:
+AUDIO: 'as it\'s generating the next step. So, notice how the whole answer exists immediately as a rough draft and then it\'s sharpened everywhere all at once. Now, in this case it took about 24'
+
+[02:31] [scene:talk]
+VISUAL:
+AUDIO: 'different steps, but everything is being generated entirely simultaneously. The beauty of this process is that if some of the tokens in the earlier'
+
+[02:44] [scene:talk]
+VISUAL:
+AUDIO: 'generations were wrong or not correct, it can just go back in time and fix it. Okay, so before showing you some tests, I want to show you what happens inside one of these steps. There are four different things. The first one is'
+
+[02:57] [scene:talk]
+VISUAL:
+AUDIO: 'the whole canvas goes to the network together in a single pass. This is the patch size where it uses 256 token patches. Two is for every position, the model scores its own uncertainty, literally'
+
+[03:10] [scene:talk]
+VISUAL:
+AUDIO: 'the entropy of its prediction at that specific spot. Three, the position it\'s most sure about gets accepted and locked, but only up to a budget. So, it cannot overcommit to a'
+
+[03:23] [scene:talk]
+VISUAL:
+AUDIO: 'bad step. And four is everything else is thrown back into noise to be reconstructed next time. Now, here\'s that as a picture. The'
+
+[03:35] [scene:talk]
+VISUAL:
+AUDIO: 'outline bars are the few that made it under the entropy budget this step. The tall red ones stay in play. Now, there are two refinements that makes it practical. So, the temperature cools'
+
+[03:48] [scene:talk]
+VISUAL:
+AUDIO: 'from 0.8 to 0.4. This is basically early exploration but late commitment. And when the canvas stops changing, it just stops. In'
+
+[04:00] [scene:talk]
+VISUAL:
+AUDIO: 'practice, that\'s around 20 steps, not the 48 steps that is allowed here. The generation is block by block in this case, and each one of the block is at'
+
+[04:12] [scene:talk]
+VISUAL:
+AUDIO: '256 tokens. For longer answers, we simply chain them. So, basically a block or a finished canvas gets committed. It\'s essentially frozen like an ordinary context.'
+
+[04:26] [scene:talk]
+VISUAL:
+AUDIO: 'Then the next 256 positions are denoised right after them, which is conditional on everything committed so far. And there is always more noise waiting. If the answer needs a third block, so the honest description is it\'s basically'
+
+[04:40] [scene:talk]
+VISUAL:
+AUDIO: 'a hybrid diffusion inside each block, autoregressive across blocks. Okay. So, a quick look at the network itself because the speed'
+
+[04:52] [scene:talk]
+VISUAL:
+AUDIO: 'story depends on the network. So, the feed-forward layers are split into 128 experts, which produces this arithmetic, which you have 25'
+
+[05:06] [scene:talk]
+VISUAL:
+AUDIO: 'billion parameters in total, but under 4 billion doing work for any given token. Now, each token gets routed to just eight of them plus one expert that'
+
+[05:18] [scene:talk]
+VISUAL:
+AUDIO: 'everyone shares. Now, around that core, it\'s 30 layers sliding windows attention with periodic global layers. So, you have a context up to 256,000 tokens and a small vision encoder that'
+
+[05:32] [scene:talk]
+VISUAL:
+AUDIO: 'is just kind of riding along. Okay. Now, let\'s talk about what exactly do you need to run this? So, this basically entirely depends on the precision you pick. The original weights are BF16.'
+
+[05:45] [scene:talk]
+VISUAL:
+AUDIO: 'So, you need 52 GB. You can\'t really run it on a local machine. You will need to run it on an A100 or H100. Now, if you quantize it'
+
+[05:58] [scene:talk]
+VISUAL:
+AUDIO: 'into FP8, that basically cuts it down to 27 GB. For this, you still need something like A6000 or at least 40 GB of VRAM.'
+
+[06:13] [scene:talk]
+VISUAL:
+AUDIO: 'Now, if you further quantize into NVFP4, then we are looking around 18 GB. You can run it on potentially RTX 4090 or 1590. Now, if you use something like the GGUF'
+
+[06:26] [scene:talk]
+VISUAL:
+AUDIO: 'quantization, you\'re going to get somewhere between 17 to 27 GB. Now, in my case, I am running this on 96 GB of VRAM in my M2 Max. Although I\'m using the 4-bit'
+
+[06:41] [scene:talk]
+VISUAL:
+AUDIO: 'quantization, I was getting 21 to 23 tokens per second end to end, which is pretty acceptable. Now, there\'s a day one support from Transformers, vLLM, MLX, llama.cpp,'
+
+[06:53] [scene:talk]
+VISUAL:
+AUDIO: 'and everything that you would expect, right? Google has been working really closely with these other companies to ensure that there\'s support on release. The main claim to claim is that this is'
+
+[07:05] [scene:talk]
+VISUAL:
+AUDIO: 'going to be extremely fast compared to auto-regressive models. Uh so, you could do a direct comparison between a similarly sized auto-regressive model. In fact, Google released the 26 billion parameter model'
+
+[07:17] [scene:talk]
+VISUAL:
+AUDIO: 'a few days ago. So, diffusion gives you about 1,100 tokens per second on an H100. The diffusion Gemma gives you about 700 tokens per second. If you run'
+
+[07:29] [scene:talk]
+VISUAL:
+AUDIO: 'the auto-regressive 26 billion parameter model with multi-token prediction, you\'re going to be getting around 300 tokens per second. So, this is a substantial increase speed or because of'
+
+[07:43] [scene:talk]
+VISUAL:
+AUDIO: 'the parallel decoding. However, it also suffers a little bit when it comes to performance. So, if you directly compare it with the 130M'
+
+[07:55] [scene:talk]
+VISUAL:
+AUDIO: 'in auto-regressive fashion, it does lack behind on almost all the benchmarks. Now, so you need to make a trade-off between the speed and the accuracy that you want to get if you are choosing this'
+
+[08:07] [scene:talk]
+VISUAL:
+AUDIO: 'diffusion Gemma or the normal Gemma 4. Okay, if you want to serve this model, you have three different options. You can use the transformer, which has now support for this model. Also, I would'
+
+[08:19] [scene:talk]
+VISUAL:
+AUDIO: 'highly recommend to serve it on vLLM if you have a lot of customers and you want to have batch processing. vLLM is probably one of the best serving inference platform right now. And for'
+
+[08:33] [scene:talk]
+VISUAL:
+AUDIO: 'local deployment, you can use llama.cpp. I am using it on my local machine. I\'m going to show you a quick demo of how this works in my local setup. Okay, before showing you some of my own tests'
+
+[08:48] [scene:talk]
+VISUAL:
+AUDIO: 'and how to run this, I want to show you some practical examples of this parallel generation. So, this is an example of the model trying to solve Sudoku. Now, if you try to use the auto-regressive'
+
+[09:02] [scene:talk]
+VISUAL:
+AUDIO: 'model, which is going to try to generate these one at a time, they\'re going to often fail because the smaller models will not be able to track what it has done so far. Since it can\'t see the whole grid, it\'s going to have trouble'
+
+[09:14] [scene:talk]
+VISUAL:
+AUDIO: 'even modifying the previous positions. However, you can fine-tune a diffusion model which will be able to accurately complete the Sudoku grid for you. And'
+
+[09:26] [scene:talk]
+VISUAL:
+AUDIO: 'the reason is that in this case, since it\'s parallel generation, it can go back in time and fix things that it did incorrectly in the start. So, this is an example fine-tune done by On start. Let'
+
+[09:41] [scene:talk]
+VISUAL:
+AUDIO: 'me know if you are interested in fine-tuning diffusion models or diffusion chema for your own application. I\'ll probably create a follow-up video on this. Okay, so now let me show you a few'
+
+[09:53] [scene:talk]
+VISUAL:
+AUDIO: 'examples. This is a custom UI that I created using Fable 5, which is an awesome model. And it actually shows you the whole diffusion process. So, this is currently running on'
+
+[10:07] [scene:talk]
+VISUAL:
+AUDIO: 'M2 Max 96 GB of VRAM with Apple silicon. And you can see on this machine I\'m getting somewhere between 8 to 12 tokens per second. This is a 4-bit quantization version. This is'
+
+[10:20] [scene:talk]
+VISUAL:
+AUDIO: 'custom porting to MLX. The official porting was not out yet, so there are going to be definitely some bugs that Fable 5 have created. Now, to show you a'
+
+[10:32] [scene:talk]
+VISUAL:
+AUDIO: 'more concrete examples, I provided this prompt where I just wanted to create a website with the first 25 legendary Pokémon, right? For the sake of time, I already ran this. This is basically the'
+
+[10:44] [scene:talk]
+VISUAL:
+AUDIO: 'diffusion process that you see. It\'s generating tokens 256 blocks or patches at a time, right? This is kind of a fast-forward version of it.'
+
+[10:57] [scene:talk]
+VISUAL:
+AUDIO: 'The actual generation is a little slower on my machine, but still I get around 13 tokens per second for this generation, which is pretty decent given that it\'s a three or four almost three generation'
+
+[11:11] [scene:talk]
+VISUAL:
+AUDIO: 'older machine now. If you\'re running this locally, keep in mind the VRAM requirement is going to grow with the length of the context window that you have. So, for longer context window,'
+
+[11:24] [scene:talk]
+VISUAL:
+AUDIO: 'you will be needing more VRAM. And also, this is an expander experimental diffusion model. Don\'t expect it to be state-of-the-art on any coding'
+
+[11:36] [scene:talk]
+VISUAL:
+AUDIO: 'benchmarks or don\'t expect some amazing results out of it, but it\'s still great to see that these diffusion models works for something like code generation. Okay, so here\'s the generated code.'
+
+[11:49] [scene:talk]
+VISUAL:
+AUDIO: 'We\'re going to paste it in here, and we\'ll try to render it. Okay, so seems like the images are missing. It has more details in here. But, the overall output is exactly what you'
+
+[12:01] [scene:talk]
+VISUAL:
+AUDIO: 'would expect from a small 26 billion model. Essentially, it\'s a only 4 billion active parameter model. So, nothing groundbreaking, but still it generated'
+
+[12:14] [scene:talk]
+VISUAL:
+AUDIO: 'a usable website. I think the links are not just working. It might be either it that doesn\'t have access to those links in its training data or it\'s just the quantization that I\'m'
+
+[12:27] [scene:talk]
+VISUAL:
+AUDIO: 'using. Anyways, I do check it out. Experiment with diffusion Gemma. I think there going to be some interesting releases based on this. Anyways, I hope you found this video useful. Thanks for watching,'
+
+[12:39] [scene:talk]
+VISUAL:
+AUDIO: 'and as always, see you in the next one.'

@@ -1,0 +1,443 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: We Built a FREE AI Render Engine for CG & Facial Animation (ComfyUI + Blender)
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=7J7hi-Hxpac
+upload_date: 20260619
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'You can now render entire CG movies locally on your own computer. We\'ve built a pipeline that lets you export sequences from pretty much any 3D tool, guide the style using reference images, and render out the whole thing, and pretty fast. The AI brings the shots to life adding textures, lighting, and'
+
+[00:13] [scene:talk]
+VISUAL:
+AUDIO: 'effects like water splashes or fire. But the coolest part is that you can even [music] add lip sync and facial animation. Just give it an audio file, mark the regions where the AI is allowed to take over, and it will bring your performances to life.'
+
+[00:26] [scene:talk]
+VISUAL:
+AUDIO: '&gt;&gt; Hey, just wanted to let you know that this workflow is so much fun. [music] &gt;&gt; Oh, and this works with any style. Anime, realistic, claymation, you name it. To really show you what you can do with it, we created a full short film using this technique, which you can'
+
+[00:39] [scene:talk]
+VISUAL:
+AUDIO: 'watch at the end of this video. So, let me show you how we built this workflow, how you can run it locally on your own computer, and then walk you through some of the more challenging [music] shots that we created. &gt;&gt; Right this way. &gt;&gt; But before we get into it, quick thanks'
+
+[00:51] [scene:talk]
+VISUAL:
+AUDIO: 'to this video\'s sponsor, NVIDIA. They reached out to us to show you a bunch of their amazing AI workflows for controllable video generation. And the best part is they\'re all completely free to use. Learn more about how I integrated them into my pipeline later in this video, and thanks again to'
+
+[01:04] [scene:talk]
+VISUAL:
+AUDIO: 'NVIDIA for making this video possible, and also sending me this brand new GeForce RTX 5090 to test it on. This made things so much faster. You might remember my last video on AI rendering. Here, I used a special version of the 1 video model that lets you anchor the'
+
+[01:17] [scene:talk]
+VISUAL:
+AUDIO: 'style using reference images, and drive the animation using render passes extracted straight from the 3D program. The problem with 1 is that while it looks really cool, it\'s pretty heavy on your computer and not exactly fast. You'
+
+[01:29] [scene:talk]
+VISUAL:
+AUDIO: 'could actually say it\'s pretty slow. But then NVIDIA reached out and showed me their free video generation guide. It\'s a fully local pipeline built in three parts that you can mix and match. One Blender add-on that generates a bunch of 3D assets straight from a simple text'
+
+[01:41] [scene:talk]
+VISUAL:
+AUDIO: 'prompt, a second that lets you use AI to render start and end frames based on your 3D geometry straight inside of Blender, and a ComfyUI template that renders the video between those frames with the LTX 2.3 video model, and then'
+
+[01:54] [scene:talk]
+VISUAL:
+AUDIO: 'upscales everything to 4K resolution. That second part, the keyframe generator, is basically Flex wired as a render engine straight inside of Blender. You rough out your scene in the viewport, even just with the gray boxes, and it turns the layout into a depth map'
+
+[02:08] [scene:talk]
+VISUAL:
+AUDIO: 'that guides the Flex image model so your composition and camera are locked while the prompt drives to the look. And this is exactly the type of control that I\'m always excited about. And I actually use this workflow a lot in the early stages to generate concept art of our location,'
+
+[02:22] [scene:talk]
+VISUAL:
+AUDIO: 'the hotel. So, after having so much fun with it, I wanted to see if I could rework my own AI rendering workflow using LTX 2.3 and integrate some parts of this pipeline into my workflow. Now, LTX is not just a video model that\'s'
+
+[02:34] [scene:talk]
+VISUAL:
+AUDIO: 'pretty fast. It\'s also an audio model generating audio and video simultaneously. And that way you can make your characters talk with just a simple prompt. But you can also inject existing audio and the model will then try to generate a video that fits that'
+
+[02:47] [scene:talk]
+VISUAL:
+AUDIO: 'audio file. &gt;&gt; We need to run. NO! [screaming] &gt;&gt; Inspired by that, I recently built a workflow including a custom node that adds lip sync to existing clips. And that gave me an idea. What if I used the'
+
+[03:00] [scene:talk]
+VISUAL:
+AUDIO: 'same trick while rendering a 3D sequence? Hand it the 3D layout, a prompt, and the audio, and get back a finished animated lip sync render in one go. &gt;&gt; I\'ve added lip sync support to LTX 2.3'
+
+[03:12] [scene:talk]
+VISUAL:
+AUDIO: 'using a video and audio input file. &gt;&gt; Like in the last video on AI rendering, we first need to create the control passes from the 3D scene. The first one is a depth pass, just a black and white video where white pixels are close to'
+
+[03:25] [scene:talk]
+VISUAL:
+AUDIO: 'the camera and black pixels are further away. The second one is an outline pass. This one tells the AI where the edges of your geometry are in your scene and lets it fill out everything in between. You can use either one or you can combine'
+
+[03:37] [scene:talk]
+VISUAL:
+AUDIO: 'the two for maximum precision. That way, the model knows the structure from the outlines and understands the 3D geometry from the depth pass. So, then I tried also adding audio to the mix, but that didn\'t work.'
+
+[03:49] [scene:talk]
+VISUAL:
+AUDIO: '&gt;&gt; Hey, just wanted to let you know that I can talk now. Yay! &gt;&gt; Because the audio is fighting with the control passes. The AI model can\'t generate a moving mouth if the control passes tell us, "Hey, there is nothing moving there, right?" But, the fix is'
+
+[04:01] [scene:talk]
+VISUAL:
+AUDIO: 'pretty easy. You can just create a black and white mask. Whites tells the model to follow the control guides precisely, and in the black areas, it\'s free to generate new detail. So, if you put the black area over the mouth, it can add lip sync.'
+
+[04:14] [scene:talk]
+VISUAL:
+AUDIO: '&gt;&gt; Hey, just wanted to let you know that I can talk now. Yay! &gt;&gt; If you put it over the full face, it can add full facial animation. &gt;&gt; Hey, just wanted to let you know that I can talk now. Yay! &gt;&gt; With a proof of concept working, I'
+
+[04:29] [scene:talk]
+VISUAL:
+AUDIO: 'started working on the actual film. And I wanted to mimic a real production as closely as I could. So, I began with hand-drawn concept art, turned those sketches into a finished designs using Flux to client, and then painted back'
+
+[04:42] [scene:talk]
+VISUAL:
+AUDIO: 'over them again by hand to give them more personality and some fun little details. I then planned out the whole film as a hand-drawn storyboard. So, now it was time to build the'
+
+[04:55] [scene:talk]
+VISUAL:
+AUDIO: 'environments. And for that, I used another free tool from the NVIDIA guide. Their 3D object generation blueprint, a Blender add-on that generates a whole set of assets from a simple prompt. You just describe a scene, something'
+
+[05:08] [scene:talk]
+VISUAL:
+AUDIO: 'simple like a cozy rustic motel room, and the Llama 3.1 language model brainstorms a whole list of objects that might belong in it. NVIDIA\'s Zana model then generates a quick preview of each object, and you just regenerate, keep,'
+
+[05:20] [scene:talk]
+VISUAL:
+AUDIO: 'or throw out whatever you want. Once you\'re happy with the selection of assets, Microsoft Trailers turns the previews you picked into actual 3D models with geometry, textures, and materials. But, you don\'t really need to worry about all these technicalities.'
+
+[05:33] [scene:talk]
+VISUAL:
+AUDIO: 'You just install it, type in your prompt, and a few moments later you have a full catalog of assets ready to use in Blender. And it was honestly so much fun creating the scenes like this. We just laid out the basic rooms and dressed them with the generated assets and ended'
+
+[05:46] [scene:talk]
+VISUAL:
+AUDIO: 'up with these amazing scenes. A cozy bar, a motel tucked into a national park, a natural hot spring just to name a few. It felt a bit like walking into a prop house, grabbing the objects that we'
+
+[05:58] [scene:talk]
+VISUAL:
+AUDIO: 'liked and dressing the scenes with them. By the way, you can find all the links to these tools in the description. Now I needed to bring all my characters into 3D and I tried a few different generators and settled on Trellis for'
+
+[06:11] [scene:talk]
+VISUAL:
+AUDIO: 'ComfyUI because I wanted this whole pipeline to stay free. Of course, you could swap in a paid tool or model the characters yourself for better quality. To improve my results with Trellis, I generated the head separately and just stuck it on top of the body for this'
+
+[06:25] [scene:talk]
+VISUAL:
+AUDIO: 'character. These models come out wildly unoptimized, so before rigging I bring down the vertex count with the decimate modifier and then in edit mode I select everything and click merge by distance. That gives me a lighter, cleaner mesh to'
+
+[06:37] [scene:talk]
+VISUAL:
+AUDIO: 'rig. Though, clean is a bit of a stretch here. It\'s not clean at all, but it still works because the rig doesn\'t need to be perfect as it\'s just a guide for the later steps. To rig it, I used Blender\'s built-in Rigify add-on, which'
+
+[06:50] [scene:talk]
+VISUAL:
+AUDIO: 'lets you just place a few bones and then it auto builds the full rig with proper proportions. Proper pro pro pro pro proper proportions. I did some manual weight painting to fix some of the broken areas, added a backpack to our'
+
+[07:02] [scene:talk]
+VISUAL:
+AUDIO: 'protagonist\'s rig since she carries it through several scenes, and built in manual eyeballs so I could test how well the eye movement carries through to the render. But that part is completely'
+
+[07:14] [scene:talk]
+VISUAL:
+AUDIO: 'optional. You could also use one of the online auto rigging tools, for example, to create your rig. Once I generated, rigged, and tested all of our character rigs, I booked a voice actor for our lead and imported everything into'
+
+[07:26] [scene:talk]
+VISUAL:
+AUDIO: 'Blender. Animation was honestly the most fun part and it\'s really why I built this workflow in the first place. I\'m not the biggest fan of generating entire movies just from prompts alone and accepting whatever comes back. And'
+
+[07:38] [scene:talk]
+VISUAL:
+AUDIO: 'that\'s why I love these open-source local models so much. You can build your own pipelines where you can choose exactly how much control you hand over to the model and how much you keep for yourself. With the animation finished,'
+
+[07:50] [scene:talk]
+VISUAL:
+AUDIO: 'we can move over to rendering. Let\'s say we want to render this scene right here. We first need to create the outline pass and the depth pass. Let\'s start with the outline pass. For this, we have a few options. We could use the freestyle tool'
+
+[08:02] [scene:talk]
+VISUAL:
+AUDIO: 'that you can find in Blender right here. And we used this in the last video, but this time I actually want to go the lazy route. So for this, I just switch the render engine to workbench and go to render mode. And I like to activate'
+
+[08:16] [scene:talk]
+VISUAL:
+AUDIO: 'outline and um cavity, I think. Something like this. And now we actually going to render this out and then extract the outlines later in ComfyUI. So you can just go to output, select a'
+
+[08:28] [scene:talk]
+VISUAL:
+AUDIO: 'path, and I\'m just going straight to video. I don\'t save out an image sequence. I just select video and color black and white because we don\'t need color. Next, let\'s prepare the depth pass. For this, go to view layer and'
+
+[08:41] [scene:talk]
+VISUAL:
+AUDIO: 'activate depth. Now, render out an image and then go to compositing, click new, and you can see the render layers now have this depth output right here. Let\'s'
+
+[08:54] [scene:talk]
+VISUAL:
+AUDIO: 'connect that to the viewer node. It\'s completely white, but all the values are inside there. We just need to make them visible. The first thing you need to know is that they are inverted. So first, let\'s add an invert color node. Now you could add a normalized node in'
+
+[09:08] [scene:talk]
+VISUAL:
+AUDIO: 'between, and this will put all the values between zero and one. So white is now close, and black is further away, exactly what we want. And if you want, you can actually separate the foreground out more by adding this RGB curve node'
+
+[09:20] [scene:talk]
+VISUAL:
+AUDIO: 'right here and just like doing something like this, so we can focus on the foreground. The background is not that important. So now you could either create a file output node, save out all'
+
+[09:32] [scene:talk]
+VISUAL:
+AUDIO: 'these images, or if you\'re really lazy, you could just connect this to the group output again, go to output, give this sequence a different name, and render everything again. Now, we could already'
+
+[09:45] [scene:talk]
+VISUAL:
+AUDIO: 'use these passes to render out the sequence with the AI renderer. The problem is that we only have the prompt to control the look of the scene, so it will probably change from scene to scene. So, now we need to lock in the'
+
+[09:57] [scene:talk]
+VISUAL:
+AUDIO: 'style using some reference images. You can use any reference-based AI image generator, but I\'m also giving you my free Flux 9B image generation workflow, which is the one that I used for all of the shots. The workflow runs inside of'
+
+[10:09] [scene:talk]
+VISUAL:
+AUDIO: 'ComfyUI, a free node-based interface for AI models. And conveniently, NVIDIA works directly with a team of ComfyUI to optimize it for RTX cards. And that collaboration alone has boosted performance by up to 40%. If you\'ve'
+
+[10:22] [scene:talk]
+VISUAL:
+AUDIO: 'never installed ComfyUI, we have a free step-by-step guide walking you through the process in the description. Once you have it running, you always set up the workflows in the same way. You just drag and drop in the JSON file into the ComfyUI interface. Now, you need to'
+
+[10:35] [scene:talk]
+VISUAL:
+AUDIO: 'install a few missing custom nodes. So, for this, go to the manager, click install missing custom nodes, select all of them, wait for it to install, and restart ComfyUI.'
+
+[10:47] [scene:talk]
+VISUAL:
+AUDIO: 'Now, you actually need to download the models used in this workflow. And we always put a little note to the left of the workflow with all the links to the models that you need. And it also tells you where you need to put these models'
+
+[10:59] [scene:talk]
+VISUAL:
+AUDIO: 'in your ComfyUI folder structure. And I want to try to get away with only one reference image. For this, I\'m going to look for a frame where both characters are in view. So, now, I\'m going to click render image,'
+
+[11:11] [scene:talk]
+VISUAL:
+AUDIO: 'and I\'m going to save out that depth pass. Then, I come back to compositing, connect this one right here, click render image again, and I\'m also going to save out this one right here. Now, back in my Flux 2 client 9B image'
+
+[11:25] [scene:talk]
+VISUAL:
+AUDIO: 'generation workflow, you import your rendering here, and your depth map here. Oh, and by the way, the rendering doesn\'t need to be clay shaded. It can be any type of rendering because the Canny node right'
+
+[11:37] [scene:talk]
+VISUAL:
+AUDIO: 'here that will extract the outlines, that can deal with any type of information. With that imported, I also add the reference image for the characters. This workflow can take up to four references and they can be anything, characters, objects, or'
+
+[11:49] [scene:talk]
+VISUAL:
+AUDIO: 'environments. Pro tip, if that\'s not enough for you, you can also put even more references onto one single image like this. Now you can use a prompt to reference all these objects in this image. Speaking of prompts, right here'
+
+[12:02] [scene:talk]
+VISUAL:
+AUDIO: 'you put in your prompt and you just describe in detail which objects and characters you want in which region. This is an iterative process, don\'t expect it to work with the first image.'
+
+[12:14] [scene:talk]
+VISUAL:
+AUDIO: 'I usually needed around three tries. Start simple and build up your prompt from there. Also, make sure to try out a bunch of different seeds. Sometimes you\'re just unlucky with a seed and a different one will just give you the'
+
+[12:26] [scene:talk]
+VISUAL:
+AUDIO: 'perfect image. So with our final style style frame, we can now move over to the AI rendering workflow. Drag and drop the workflow file into the ComfyUI interface and install the missing custom nodes. We\'re going to work from left to right,'
+
+[12:39] [scene:talk]
+VISUAL:
+AUDIO: 'so let\'s quickly zoom in on this node right here. It lists all of the models you need to download for this workflow and shows you where to put them in your ComfyUI folder structure. Since I could run this on the'
+
+[12:52] [scene:talk]
+VISUAL:
+AUDIO: 'powerful RTX 5090, I used the full depth FP8 model together with a distilled LoRA that speeds things up a lot. And speaking of fast, if you have a 50 series card, you can also use the NVFP4'
+
+[13:04] [scene:talk]
+VISUAL:
+AUDIO: 'version of the model. NVFP4 is Nvidia\'s 4-bit format that runs on 50 series fifth gen tensor cores, so the model takes up far less VRAM and runs even faster, around three times quicker than'
+
+[13:17] [scene:talk]
+VISUAL:
+AUDIO: 'full precision with very little quality loss. If you have an older card or you don\'t have a lot of VRAM, you can also use the GGUF versions of the models. You can check out all the different configurations in the node in the'
+
+[13:30] [scene:talk]
+VISUAL:
+AUDIO: 'workflow or in our free Patreon post. Once all the models are loaded, you can set the resolution here. And this one works well, but if you have more time, you could bump it up to full HD or even 2K. Just remember the resolution needs'
+
+[13:43] [scene:talk]
+VISUAL:
+AUDIO: 'to be divisible by 64 or it will give you an error. Below that, you can set the frame load cap, how many frames you want to load, and I\'m just matching it to the length of my video sequence, but you could also go lower if you just want'
+
+[13:56] [scene:talk]
+VISUAL:
+AUDIO: 'to test things, for example. To the right, you can load in your reference images, and you can load up to three and place them anywhere in your sequence. Since I created a middle frame, I\'ll put it there. Next, I loaded in my control'
+
+[14:09] [scene:talk]
+VISUAL:
+AUDIO: 'passes. Depth first, then the outline pass, and finally the mouth mask. You don\'t have to use a mouth mask, especially if you don\'t want to add lip sync, you don\'t need that. But in my case, I wanted to add lip sync, so I'
+
+[14:22] [scene:talk]
+VISUAL:
+AUDIO: 'created this by just importing the layout rendering into After Effects and roughly animating this mask over the mouth. Of course, you could set up something that automatically renders a mask straight from Blender, for example, but like creating something rough like'
+
+[14:36] [scene:talk]
+VISUAL:
+AUDIO: 'this usually works really well. So, import it here, and now it\'s time to add the voice over. Make sure it\'s just dialogue with no music, and it\'s at least the same length as your video. Because if it\'s shorter, sometimes the'
+
+[14:49] [scene:talk]
+VISUAL:
+AUDIO: 'model will actually generate like new gibberish language after that. Oh, then there\'s this switch here where you can activate or deactivate the mouth mask. Of course, in my case, I want to use it, so I activate it. Now, you can click the'
+
+[15:01] [scene:talk]
+VISUAL:
+AUDIO: 'play button here on this preview node and see the final control pass. It merges your depth pass with the Canny outlines extracted from your layout video into a single control video, and this is what will guide the movement in'
+
+[15:13] [scene:talk]
+VISUAL:
+AUDIO: 'your shot. You can adjust the extracted Canny outlines here if needed. Now, it\'s time to move to the heart of the workflow, the sampling group. If you go inside, you can see the full wiring, but generally you don\'t need to worry about any of it. Just go back and let\'s zoom'
+
+[15:26] [scene:talk]
+VISUAL:
+AUDIO: 'in on these settings right here. First, you have the seed, the random noise the workflow uses to generate. If you have a shot you like, but it\'s not quite perfect, you can change the seed, run the workflow again, and you\'ll get a'
+
+[15:39] [scene:talk]
+VISUAL:
+AUDIO: 'slightly different version. And sometimes that fixes mistakes. Next, you can activate or deactivate the driving video. If you deactivate it, the workflow only interpolates between your images, which is also cool, but not what we want in this case. What you can do'
+
+[15:53] [scene:talk]
+VISUAL:
+AUDIO: 'though is lower the driving video\'s strength. The lower you go, the freer LTX is to generate, and the more important your prompt becomes. For simple animation like this, this can really add some interesting detail, but'
+
+[16:05] [scene:talk]
+VISUAL:
+AUDIO: 'for more complex stuff, it usually breaks the animation if you go too low. After that, you can set whether you want to use the guiding frames. For example, take the start frame. If you want to use it, click true, and set how strongly it should influence the video. Now, for the'
+
+[16:19] [scene:talk]
+VISUAL:
+AUDIO: 'placement, right now it\'s set to one to use it as the first frame, but you could also put in a different frame number right here. But for this shot, I didn\'t really generate a start frame, I used the middle frame, so I put it in the middle. So, I click true on the middle'
+
+[16:32] [scene:talk]
+VISUAL:
+AUDIO: 'frame, place it in the exact frame I originally created it from, and set the strength to 0.75. Finally, down here you can set whether to use lip sync, and yeah, I do, so I activate it. Now, it\'s time to write the'
+
+[16:46] [scene:talk]
+VISUAL:
+AUDIO: 'prompt, and the driving video and the reference images are doing a lot of the heavy lifting, but you should still describe what happens in your shot in detail. I like to describe the events that happen in the shot in order, and'
+
+[17:00] [scene:talk]
+VISUAL:
+AUDIO: 'then focus on details like, for example, the expressions. So, that\'s everything you need to set up. Now, I can click queue prompt, and on a 5090, this whole process of rendering it just takes under 2 minutes for this shot. I usually test'
+
+[17:13] [scene:talk]
+VISUAL:
+AUDIO: 'my workflows on a 4070 and a 4090 and it runs just fine without even needing to use the GG F versions of the models. But this is where the Nvidia GeForce RTX 5090 really earns its keep. One shot 330 frames renders in about a minute 50.'
+
+[17:27] [scene:talk]
+VISUAL:
+AUDIO: 'That comes down to the card\'s 32 GB of VRAM and FP4 acceleration. And what honestly amazed me the most was that I could continue editing the movie while other shots were rendering in ComfyUI in'
+
+[17:40] [scene:talk]
+VISUAL:
+AUDIO: 'the background. The other trick that RTX cards can do is upscaling. Nvidia\'s RTX video super resolution brings it to ComfyUI through a dedicated node. It scales your output up to 4K in just a couple of seconds, sharpening edges and'
+
+[17:53] [scene:talk]
+VISUAL:
+AUDIO: 'cleaning up compression as it goes. Seriously, look at this. I just load in the clip, click Q prompt and it\'s 4K. It\'s completely free and it runs on any'
+
+[18:05] [scene:talk]
+VISUAL:
+AUDIO: 'RTX cards, not just the 50 series. And before editing, I ran every single shot through it. Then I edited all these 4K clips in DaVinci Resolve, added the voiceover and sound effects, did some light color correction and added a few'
+
+[18:18] [scene:talk]
+VISUAL:
+AUDIO: 'effects to make it feel a bit more analog and match the vibe of the movie that I was going for. Before I show you the final movie, let\'s look at some more challenging shots from the movie and let me show you how I created them. And for'
+
+[18:30] [scene:talk]
+VISUAL:
+AUDIO: 'advanced Patreon supporters, as always, you can grab the example files we made for the short film so you can pull everything apart and test it on your own machine. So after testing this workflow for a while, I grew pretty confident that I could push the animation even'
+
+[18:43] [scene:talk]
+VISUAL:
+AUDIO: 'further than I originally planned. Look at this scene for example. Here the bear enters the scene and then the camera moves to a completely different location, another character shows up and then the bear also switches side for a'
+
+[18:56] [scene:talk]
+VISUAL:
+AUDIO: 'second there. And all this is happening simultaneously while the character is also talking. And to make this work, I started really simple. I tried using one control frame, one guide frame and this'
+
+[19:08] [scene:talk]
+VISUAL:
+AUDIO: 'fell apart pretty quickly. So, I added a second controller frame here in the beginning. Now, large part of the sequence actually worked, but there was a massive challenge right here when the character had to change the side. But'
+
+[19:21] [scene:talk]
+VISUAL:
+AUDIO: 'this I think I prompted for this for like half an hour to make this frame work. I was kind of worried that the lipsync wouldn\'t work at all because of this intense movement, but at especially in the beginning of the shot, it worked'
+
+[19:33] [scene:talk]
+VISUAL:
+AUDIO: 'really well. So, with this shot I had some challenges when she is standing up. Like even though the control net was pretty precise, I had a lot of variations where she wasn\'t using the right hand. And this was just a prompting issue. I just needed to say in'
+
+[19:45] [scene:talk]
+VISUAL:
+AUDIO: 'the prompt, she is reaching for the table for the desk with her left hand, and then it worked. Another thing to note in this shot is like the newspaper. The guiding frame is from around here. So, the model had to like'
+
+[19:58] [scene:talk]
+VISUAL:
+AUDIO: 'interpolate all the information on the newspaper. And right now that\'s of course complete gibberish. But what we could do is like we could extract this frame and then go into Photoshop, for example, and add like a correct'
+
+[20:10] [scene:talk]
+VISUAL:
+AUDIO: 'newspaper on top of this, and load that in as an additional start frame. This shot just took a few iterations to get right with the movement of the bear, but I\'m really happy with it, and I love how it adds these little effects. Like, for'
+
+[20:24] [scene:talk]
+VISUAL:
+AUDIO: 'example, the steam coming from the fish. Like, this is something that\'s really, really cool. Or or for example, like effects like water splashing here when she reaches for the the glass. To my surprise, this shot was actually a'
+
+[20:37] [scene:talk]
+VISUAL:
+AUDIO: 'massive challenge because we start in one area of the image, and we end in another area of the image. Now, I was able to very easily generate the start frame and the end frame in the'
+
+[20:51] [scene:talk]
+VISUAL:
+AUDIO: 'same style. That worked pretty well. The problem was that minor details shifted, and that meant that RTX got confused on how to actually merge these together. It did an okay job, but you can see all'
+
+[21:04] [scene:talk]
+VISUAL:
+AUDIO: 'this noise that\'s happening here, all this warping. That looks really ugly. So, what I did instead is I fixed this manually. So, in Photoshop, I loaded the start frame, and then I took the end frame and merged them together. I did'
+
+[21:18] [scene:talk]
+VISUAL:
+AUDIO: 'the same thing for the end frame, and that way the movement is now way more consistent, though still not perfect. And another challenge with the shot is that the lip sync works really well if your character is close to the camera,'
+
+[21:32] [scene:talk]
+VISUAL:
+AUDIO: 'but it starts to fall apart when your character is further away. Another important pro tip is to activate previews in ComfyUI. Often, you can already see if your shot is working as intended or not from the first step on.'
+
+[21:44] [scene:talk]
+VISUAL:
+AUDIO: 'So, if it doesn\'t look correct, you can just stop the generation, fix it, and run it again, and that saved me so much time. Okay, I think that\'s all I have to say. Uh so, without further ado, here is the final short film, Bare Minimum.'
+
+[21:57] [scene:talk]
+VISUAL:
+AUDIO: '&gt;&gt; You\'re in 12.'
+
+[22:10] [scene:talk]
+VISUAL:
+AUDIO: 'Breakfast whenever. &gt;&gt; Right this way. Same old the face 24 hours. Floors open till you fall asleep. Gin'
+
+[22:22] [scene:talk]
+VISUAL:
+AUDIO: 'and tonic, seven sunrise, and the knob on the beach. Honey filled tub on every floor. Personal hot springs all that. Sorry, it\'s a small one.'
+
+[22:34] [scene:talk]
+VISUAL:
+AUDIO: 'That\'s a club size, but good for a quick nap. You\'re not hibernating, are you? &gt;&gt; Free parking. &gt;&gt; Huge thanks to NVIDIA for making this'
+
+[22:47] [scene:talk]
+VISUAL:
+AUDIO: 'video possible. If you want to check out their controllable video generation guide, the link is in the description, and it\'s a great place to start with controllable video generation. See you next time.'

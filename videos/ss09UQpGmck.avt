@@ -1,0 +1,303 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Nobody Could Define 'Loop Engineering' — an Anthropic Insider Just Published the Recipe (Fable 5)
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=ss09UQpGmck
+upload_date: 20260610
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'Days ago, two of the most senior AI engineers alive said the same six words. Stop prompting your agents. Start designing loops. It hit millions of views. And the most upvoted reply was, "Nobody'
+
+[00:14] [scene:talk]
+VISUAL:
+AUDIO: 'actually knows what that means." Well, somebody just answered. Two days ago, an engineer inside Anthropic, Lance Martin, published the actual recipe.'
+
+[00:26] [scene:talk]
+VISUAL:
+AUDIO: 'How people design loops around Claude fable 5. Inside the company that built it. And he didn\'t just describe it. He tested it on OpenAI\'s own public challenge.'
+
+[00:40] [scene:talk]
+VISUAL:
+AUDIO: 'A machine learning competition that OpenAI created on OpenAI\'s own GitHub. He let Claude run in it for 8 hours straight with no human in the middle. The result was not close.'
+
+[00:53] [scene:talk]
+VISUAL:
+AUDIO: 'So, this video is the decode. Two loops, one rule. The self-correction loop that runs while the agent works. The memory loop that survives after the session dies.'
+
+[01:05] [scene:talk]
+VISUAL:
+AUDIO: 'The one rule that makes both of them trustworthy. And the four honest catches the post does not put in bold. First, who is Lance Martin? And why does this post carry weight?'
+
+[01:17] [scene:talk]
+VISUAL:
+AUDIO: 'Because the internet is drowning in loop gurus right now. And this is not one of them. Lance Martin spent years as a founding era engineer at LangChain, leading the open-source Python framework that half'
+
+[01:29] [scene:talk]
+VISUAL:
+AUDIO: 'the industry used to build its first agents. Before that, a Stanford PhD. Then computer vision for self-driving cars. In January, he joined Anthropic. And his stated mission was simple.'
+
+[01:43] [scene:talk]
+VISUAL:
+AUDIO: 'Help people get the most out of Claude. So, when he writes, quote, "Mythos-class models like Claude fable 5 have changed the way many of us work at Anthropic." That is not marketing copy.'
+
+[01:55] [scene:talk]
+VISUAL:
+AUDIO: 'That is an engineer describing his own daily workflow with experiments attached. And one more thing. Boris Cherny, the creator of Claude Code, the man who says his job is to write'
+
+[02:08] [scene:talk]
+VISUAL:
+AUDIO: 'loops, Lance opens the post by quoting him. This is the inside answer to the exact question the entire internet was asking last week.'
+
+[02:22] [scene:talk]
+VISUAL:
+AUDIO: 'Here is the whole recipe in one picture. Strip away the benchmarks and Lance\'s post says one thing. Stop steering the model sentence by sentence.'
+
+[02:35] [scene:talk]
+VISUAL:
+AUDIO: 'Build two loops around it instead. Loop one runs inside the session. The agent does the work, collects feedback from its environment, corrects itself, and goes again until a goal you wrote down is actually'
+
+[02:49] [scene:talk]
+VISUAL:
+AUDIO: 'satisfied. That is the self-correction loop. Loop two runs across sessions. The agent writes what it learned today into files, and it reads them back tomorrow. That is the memory loop, an outer loop'
+
+[03:03] [scene:talk]
+VISUAL:
+AUDIO: 'wrapped around every session the agent will ever run. And then, one rule that makes both loops trustworthy. The agent that did the work is never the one that grades it.'
+
+[03:15] [scene:talk]
+VISUAL:
+AUDIO: 'Grading happens in a separate, independent context window. So, self-correction inside the session, memory across sessions, a grader that is never the maker. That is the recipe.'
+
+[03:29] [scene:talk]
+VISUAL:
+AUDIO: 'Everything else in this video is the receipts and exactly how to build each piece. So, how do you actually build loop one? Lance names two primitives, and I verified both against the official docs.'
+
+[03:41] [scene:talk]
+VISUAL:
+AUDIO: 'They are real shipping features. In Claude Code, it is the goal command. You type {slash} goal, then a finish line. All tests in the outage folder pass and the linter is clean.'
+
+[03:55] [scene:talk]
+VISUAL:
+AUDIO: 'From that moment, Claude keeps working. And after every single turn, a separate small model, Haiku, by default, checks whether your condition is now true. Not Claude grading itself.'
+
+[04:08] [scene:talk]
+VISUAL:
+AUDIO: 'A second model checking. If the condition fails, Claude takes another turn. When it passes, the loop ends. On the API side, the same idea is called outcomes'
+
+[04:22] [scene:talk]
+VISUAL:
+AUDIO: 'inside Claude managed agents. You hand it a rubric and the harness spawns a grader agent in a completely independent context window. And here is why that separation matters so much.'
+
+[04:34] [scene:talk]
+VISUAL:
+AUDIO: 'Anthropic\'s own engineering blog found that agents grading their own work tend to confidently praise it even when the quality is mediocre. Their words,'
+
+[04:46] [scene:talk]
+VISUAL:
+AUDIO: '"Tuning a standalone evaluator to be skeptical is far more tractable than making a generator critical of its own work. The maker is never the grader. Burn that into your wall."'
+
+[04:58] [scene:talk]
+VISUAL:
+AUDIO: 'Now the receipts. And the first one has a twist the post only mentions in passing. To test the self-correction loop, Lance needed a hard, measurable challenge. He picked parameter golf,'
+
+[05:12] [scene:talk]
+VISUAL:
+AUDIO: 'an open machine learning competition. Train the best language model you can that fits inside a 16 MB file in under 10 minutes on eight H100 GPUs.'
+
+[05:24] [scene:talk]
+VISUAL:
+AUDIO: 'There is one training file. The agent edits it, launches a run, polls the log, reads the score, and decides what experiment to try next. Here is the twist.'
+
+[05:39] [scene:talk]
+VISUAL:
+AUDIO: 'Parameter golf was created by OpenAI. It is OpenAI\'s challenge on OpenAI\'s GitHub fronted by OpenAI\'s chief research officer.'
+
+[05:51] [scene:talk]
+VISUAL:
+AUDIO: 'So, an Anthropic engineer walked Claude into OpenAI\'s own gym and asked it to lift. The setup was clean. Claude managed agents with the eight GPUs attached as a'
+
+[06:04] [scene:talk]
+VISUAL:
+AUDIO: 'sandbox. A Rubik file with nine checkable criteria. Run a baseline. Run 20 experiments. And a greater agent that refused to let Claude stop until every criterion was'
+
+[06:16] [scene:talk]
+VISUAL:
+AUDIO: 'met. Then he let it run for up to eight hours. No human in the middle. The loop was the supervisor. He ran that same eight-hour loop with Opus 4.7 and with Claude Fable 5.'
+
+[06:28] [scene:talk]
+VISUAL:
+AUDIO: 'Fable 5 improved the training pipeline roughly six times more than Opus 4.7 did. But the number is not the lesson. The behavior is.'
+
+[06:40] [scene:talk]
+VISUAL:
+AUDIO: 'Lance sorted the experiments into two kinds. Scalar changes. Nudge a constant, adjust a learning rate. Tweak and measure. And structural changes.'
+
+[06:52] [scene:talk]
+VISUAL:
+AUDIO: 'Rip out and redesign a piece of the architecture itself. Opus 4.7\'s very first experiment produced a small win. And then almost everything after followed the same template. Adjust a scalar. Measure. Keep it if'
+
+[07:05] [scene:talk]
+VISUAL:
+AUDIO: 'positive. A safe little ritual repeated for eight hours. Fable 5 bet on big structural changes. And here is the detail I cannot stop'
+
+[07:17] [scene:talk]
+VISUAL:
+AUDIO: 'thinking about. At one point, it shipped a change that made things worse. A quantization regression. It did not retreat to safe tweaks. It pushed through the regression,'
+
+[07:29] [scene:talk]
+VISUAL:
+AUDIO: 'kept working the idea. And that line of work became its single biggest win of the whole run. Be honest with yourself for a second. Which experimenter are you?'
+
+[07:41] [scene:talk]
+VISUAL:
+AUDIO: 'Because most of us, after one early win, spend the rest of the project adjusting scalars. That is the loop inside a session. Now, the outer loop. Memory.'
+
+[07:53] [scene:talk]
+VISUAL:
+AUDIO: 'Every agent session eventually dies. The context fills up. The session ends. And tomorrow, the agent starts from zero. Re-deriving everything it already'
+
+[08:05] [scene:talk]
+VISUAL:
+AUDIO: 'figured out yesterday at your expense. Memory is the loop wrapped around that. During a session, Claude writes what it learned into files. In future sessions, it reads them back.'
+
+[08:17] [scene:talk]
+VISUAL:
+AUDIO: 'In Claude-managed agents, this is literal. A memory store mounted into the sandbox as a directory shared across sessions read and written with the same file'
+
+[08:29] [scene:talk]
+VISUAL:
+AUDIO: 'tools as everything else. To test whether models actually use it well, Lance grabbed a brand new benchmark. Continual learning bench out of UC Berkeley.'
+
+[08:42] [scene:talk]
+VISUAL:
+AUDIO: 'The task, answer a long sequence of questions against a SQL database. And every question is a fresh agent session. The only thing that survives from one question to the next is the memory'
+
+[08:54] [scene:talk]
+VISUAL:
+AUDIO: 'folder. So, the real thing being measured is not can the model write database queries. It is does the model learn from its own yesterday?'
+
+[09:06] [scene:talk]
+VISUAL:
+AUDIO: 'And this is where Lance hands us the most useful framework in the whole post. Using memory well is a ladder with five rungs. Rung one, fail. Get something wrong and write it down. Rung two, investigate.'
+
+[09:20] [scene:talk]
+VISUAL:
+AUDIO: 'Before moving on, figure out why. Rung three, verify. Turn the diagnosis into a checked fact. Rung four,'
+
+[09:32] [scene:talk]
+VISUAL:
+AUDIO: 'distill. Turn the fact into a general rule. rung five consult Next session, read the rule instead of re-deriving it. Now, watch where each model gets off the'
+
+[09:44] [scene:talk]
+VISUAL:
+AUDIO: 'ladder. Sonnet 4.6 exits at rung one. Its memory is a pile of failure notes and open guesses. Maybe the price column has a different name, {question mark}'
+
+[09:57] [scene:talk]
+VISUAL:
+AUDIO: 'and it rarely reads its own notes back. Opus 4.7 climbs to rung three. It builds a real schema reference and it flags its own uncertainty.'
+
+[10:09] [scene:talk]
+VISUAL:
+AUDIO: 'But, it only verifies 7 to 33% of its answers. The median run, about 17%. Fable five tends to complete the ladder.'
+
+[10:21] [scene:talk]
+VISUAL:
+AUDIO: 'In its strongest runs, it verified 22 of 30 questions, 73%. And it distilled what it learned into general rules that made every future task cheaper.'
+
+[10:34] [scene:talk]
+VISUAL:
+AUDIO: 'Now, open your own notes app. Most human note systems are a rung one memory, a pile of things that went wrong, never investigated, never distilled, never consulted.'
+
+[10:47] [scene:talk]
+VISUAL:
+AUDIO: 'So, what can you actually run today without Anthropic\'s managed infrastructure? Three moves. Move one, the goal loop. This one is free. In Claude code, stop ending your prompt'
+
+[11:00] [scene:talk]
+VISUAL:
+AUDIO: 'at do the task. Write the finish line instead. /goal All tests pass. The linter is clean. The build succeeds. Now, a checker model owns the question,'
+
+[11:13] [scene:talk]
+VISUAL:
+AUDIO: 'is it done? Not your patience at 11:00 p.m. Move two, the separate grader. Before you accept any big piece of work, spawn one fresh sub-agent whose only job'
+
+[11:25] [scene:talk]
+VISUAL:
+AUDIO: 'is to verify the result against your rubric in a clean context window. It has not seen the reasoning, so it cannot be seduced by it. Move three, the memory ladder.'
+
+[11:37] [scene:talk]
+VISUAL:
+AUDIO: 'Claude code already gives you memory files that persist across sessions. The upgrade is not a tool. It is discipline. Do not let your agent store guesses.'
+
+[11:49] [scene:talk]
+VISUAL:
+AUDIO: 'A memory entry earns its place by climbing the ladder. What failed? Why? The verified fact, the general rule. And if you want the fully managed version of all three moves, Claude'
+
+[12:02] [scene:talk]
+VISUAL:
+AUDIO: 'managed agents with outcomes and memory stores is that exact recipe hosted. It is in beta on the API right now. Now the catches. Because this is still a vendor\'s'
+
+[12:15] [scene:talk]
+VISUAL:
+AUDIO: 'engineer testing his own company\'s model, and you deserve the unbolted fine print. Catch one, scale. Lance says it himself, quote, "Just a few small-scale experiments."'
+
+[12:28] [scene:talk]
+VISUAL:
+AUDIO: 'One challenge, one benchmark task, a handful of runs. Directionally fascinating. Not a peer-reviewed result. Catch two,'
+
+[12:40] [scene:talk]
+VISUAL:
+AUDIO: 'the headline number is the best case. That 73% verification figure is Fable 5 on its strongest runs, not its average day. Catch three, the managed version is gated.'
+
+[12:53] [scene:talk]
+VISUAL:
+AUDIO: 'Claude managed agents is in beta, API only, and it is not on Bedrock or Vertex yet. If your company lives there, you are building these loops yourself for now. And catch four,'
+
+[13:07] [scene:talk]
+VISUAL:
+AUDIO: 'nobody in the post mentions the meter. An 8-hour self-correcting loop on 8 H100 GPUs is a loop that spends money every minute, win or lose. Self-correction means more turns.'
+
+[13:19] [scene:talk]
+VISUAL:
+AUDIO: 'A separate grader means a second agent billing tokens. Memory means every session reads extra context. The The recipe is real. It is also the most expensive way to use'
+
+[13:32] [scene:talk]
+VISUAL:
+AUDIO: 'a model that is already expensive. So, design the loop and cap it. So, 1 week ago stop prompting. Start designing loops. was a vibe.'
+
+[13:44] [scene:talk]
+VISUAL:
+AUDIO: 'Today, it has a recipe. Published from inside the building. A self-correction loop inside the session with the finish line written down. A memory loop across sessions climbing'
+
+[13:56] [scene:talk]
+VISUAL:
+AUDIO: 'five rungs. Fail. Investigate. Verify. Distill. Consult. And one non-negotiable rule. The maker is never the grader.'
+
+[14:08] [scene:talk]
+VISUAL:
+AUDIO: 'But here is the line in Lance\'s post that matters most. Rather than directly prompting and steering Fable 5 it is often better to design loops that let the model self-correct and'
+
+[14:21] [scene:talk]
+VISUAL:
+AUDIO: 'manage its own context. Read that again. Your prompts now matter less. Your finish lines, your rubrics and your memory discipline matter more. The leverage moved again.'
+
+[14:34] [scene:talk]
+VISUAL:
+AUDIO: 'And that is a skill you can start building this afternoon. I have packed the whole thing into one free PDF. The Fable 5 loop recipe. The two loop diagram.'
+
+[14:47] [scene:talk]
+VISUAL:
+AUDIO: 'The gold command setup. A copy-paste verifier rubric. The five-rung memory ladder and all four catches. Comment the word recipe and I will send it straight to you.'
+
+[15:00] [scene:talk]
+VISUAL:
+AUDIO: 'Full credit to Lance Martin. The link to his original post is the first line of the description. I drop bite-size AI breakdowns every day on Instagram.'
+
+[15:12] [scene:talk]
+VISUAL:
+AUDIO: 'And the full deep dives right here on YouTube. Subscribe. The loops are getting smarter. The people who design them should be too.'

@@ -1,0 +1,595 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Wan 2.2 AI Video Model Tutorial Guide To Get Started In ComfyUI - It Released Finally!
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=kDgOhDQZMy0
+upload_date: 20250729
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'Hello everyone. So today is finally here. The one 2.2 open- source AI video model has been released on hugging face and in model scope. Now as you can see there are many new features within this model. You can change different lighting'
+
+[00:13] [scene:talk]
+VISUAL:
+AUDIO: 'backgrounds, adjust timing like day and night and even camera angles. All of which are trained by default into the one 2.2 models. You don\'t need any additional Laura for that. These camera'
+
+[00:25] [scene:talk]
+VISUAL:
+AUDIO: 'angles and special effects actions, especially this one, are pretty cool. The high saturations and low saturations of video displays, as well as more compositions of objects in the videos, are now included in the Juan 2.2 AI'
+
+[00:39] [scene:talk]
+VISUAL:
+AUDIO: 'models. Now, today we\'re going to check it out more, kind of like first impressions after using it for a night. And I\'m going to stay open-minded and not be too opinionated. You guys can judge whether this is suitable for you'
+
+[00:51] [scene:talk]
+VISUAL:
+AUDIO: 'or not to run your AI video generation. So, first we\'re going to check out the GitHub repo of Juan 2.2. This is a separate GitHub project and it\'s been'
+
+[01:03] [scene:talk]
+VISUAL:
+AUDIO: 'updated about 5 hours ago for releasing this GitHub project. This AI model is under the Apache 2.0 license which obviously makes it a real open-source model that you can use privately or commercially. One thing that\'s really'
+
+[01:16] [scene:talk]
+VISUAL:
+AUDIO: 'cool about this model when I tried it out and downloaded it on day zero is that it\'s already integrated into the Comfy UI and there\'s also diffuser integration which lets us load transformer architecture models within'
+
+[01:29] [scene:talk]
+VISUAL:
+AUDIO: 'diffusers. You can run it with Python code and generate videos programmatically but in this video I\'m going more for the userfriendly way which is using Comfy UI. We\'re running the nodebased app to run the AI models.'
+
+[01:43] [scene:talk]
+VISUAL:
+AUDIO: 'Now scroll down a little bit here and we\'ve got a chart listing the models released today for one 2.2. You\'ll see that this AI model is kind of funny. We have three types of models listed here'
+
+[01:55] [scene:talk]
+VISUAL:
+AUDIO: 'which obviously makes sense. We\'ve got text to video and image to video. But the last part which you see in the third row is a mixture of text to video and image to video combined together. And this supports 720p resolution which is'
+
+[02:08] [scene:talk]
+VISUAL:
+AUDIO: 'really cool. This is a highly compressed AI model using the new VAE from W2.2. Now, this will show up later and you\'ll understand what I mean when I talk about'
+
+[02:20] [scene:talk]
+VISUAL:
+AUDIO: 'using the new VAE of W2.2. Going back to the first two rows, these two giants are MOE models. Stands for mixture of experts, a new method of training AI models that\'s trending this'
+
+[02:33] [scene:talk]
+VISUAL:
+AUDIO: 'year. A lot of language models are also using the MOE method to train activating different expert data sets during the execution process. This means it\'s not going to load every single data set'
+
+[02:45] [scene:talk]
+VISUAL:
+AUDIO: 'parameter when you run the AI models which makes it a little more cost effective or costefficient I should say for running large models like this. Now coming back here we see that it\'s set for 24 fps by default supporting a model'
+
+[02:58] [scene:talk]
+VISUAL:
+AUDIO: 'with 5 billion parameters. The hybrid support model is also using 24 frames per second. And we\'re going to check out how they run on hugging face right now. So on hugging face, when you go to the'
+
+[03:11] [scene:talk]
+VISUAL:
+AUDIO: 'Juan AI hugging face page, you\'ll see that a list of new AI models for Juan 2.2 has already been uploaded. We\'ve got the image to video A14B which is the MOE method trained model'
+
+[03:24] [scene:talk]
+VISUAL:
+AUDIO: 'they call A14B and then the textto video which is T2VA14B. Again, one thing you\'ll notice is the TI2V5B.'
+
+[03:36] [scene:talk]
+VISUAL:
+AUDIO: 'This is the hybrid model I was just talking about combining text to video and image to video together with a 5 billion parameter model. Now, in this video, I\'m going to show more about this model rather than those two giant models'
+
+[03:50] [scene:talk]
+VISUAL:
+AUDIO: 'because, well, those two giant models are still nice to run, but they consume a lot of VRAMm, and I mean a lot of VRAM. So, for most of you guys using local AI, the best option is probably'
+
+[04:02] [scene:talk]
+VISUAL:
+AUDIO: 'Comfy UI to run this. The most convenient way to run when 2.2 two on day zero is already supported in Comfy UI which you can see explained in their blog post on the official Comfy UI'
+
+[04:14] [scene:talk]
+VISUAL:
+AUDIO: 'website. There\'s an explanation of the template for running one 2.2 in the latest update of Comfy UI itself. First, you need to update your Comfy UI. If you have previous versions of Comfy UI, run'
+
+[04:26] [scene:talk]
+VISUAL:
+AUDIO: 'the git pull command in the command window and you\'ll be able to load this bunch of commands. Especially, you\'ll see this one file called KFO VAE. That means this is a new file that supports one 2.2 indicating that your Kumi UI is'
+
+[04:39] [scene:talk]
+VISUAL:
+AUDIO: 'successfully updated to support one 2.2. Now come to the Comfy UI official page. There are a few examples you can check out. I won\'t go through them too much'
+
+[04:51] [scene:talk]
+VISUAL:
+AUDIO: 'like reading those text prompts for you. It doesn\'t really make sense for my video to read text prompts for you. Anyway, we\'re moving on to the practical stuff. How do we get it done in the Comfy UI repackaged repo for one 2.2? 2.'
+
+[05:04] [scene:talk]
+VISUAL:
+AUDIO: 'Once you click in here, go to the file versions, then the split files, and you\'ll see the diffusion models folder, the text encoder, and the VAE folder. The VAE folder is the first thing I\'m'
+
+[05:16] [scene:talk]
+VISUAL:
+AUDIO: 'going to mention. They\'ve also included the WAN 2.1 VAE for W 2.2. Don\'t delete the W 2.1 VAE just because you think, oh, we have one 2.2 already, so we don\'t'
+
+[05:29] [scene:talk]
+VISUAL:
+AUDIO: 'need the 2.1 version. No, you still need it, and you\'ll see why later. Now going back to the text encoder. If you\'re an existing user of Juan 2.1, you don\'t need to download additional things'
+
+[05:42] [scene:talk]
+VISUAL:
+AUDIO: 'for the text encoder because the UMT5XXL text encoder remains the same. I\'m going to use FP16, whichever you prefer, but I\'ll stick with FP16 for the text encoder. Go to the split files. And now'
+
+[05:55] [scene:talk]
+VISUAL:
+AUDIO: 'we\'re looking at the diffusion model. The diffusion model here is something unusual compared to other AI models that only have one single safe tensor file. Here we\'ve got one 2.2 image to video'
+
+[06:09] [scene:talk]
+VISUAL:
+AUDIO: 'and then below it a list for text to video. This tool includes the FP16 and FP8 versions of each text to video and imagetovideo model. And each of those for the 14 billion parameter models has'
+
+[06:23] [scene:talk]
+VISUAL:
+AUDIO: 'something called the high noise and low-noise model. You\'ll need to download both if you want to run the 14B models locally. Right here, as you can see, this is a pair of models you\'ll need if'
+
+[06:35] [scene:talk]
+VISUAL:
+AUDIO: 'you run FP16. Just like in my case, I downloaded the image to video 14B model in FP16. So, I have the low-noise model and I also need to download the high- noiseise'
+
+[06:47] [scene:talk]
+VISUAL:
+AUDIO: 'model as a pair. And that doubles your file storage, which isn\'t really convenient for most consumer PCs because when you see that when I download the FP16, I\'m using 28 GB for one file. And since this is a pair of FP16 one 2.2'
+
+[07:02] [scene:talk]
+VISUAL:
+AUDIO: 'models, that means you\'re looking at around 50 GB of file storage. By downloading these two models, including some cache and other things, running FP16 with the 14 billion parameter model'
+
+[07:15] [scene:talk]
+VISUAL:
+AUDIO: 'is going to require about 60 GB of VRAM to temporarily store the models unloaded in your local GPU. So, it\'s not ideal for most people to use. This is what I was talking about earlier in the video.'
+
+[07:28] [scene:talk]
+VISUAL:
+AUDIO: 'Even the FP8 models take about 14 GB of file storage for a single file. And including the low noise adds another 14 GB, which means you\'re going to need about 30 GB of file storage and about 30'
+
+[07:40] [scene:talk]
+VISUAL:
+AUDIO: 'GB of VRAM when you execute this FP8 model. The more convenient way is the hybrid model with 5 billion parameters. They did a really good job because even'
+
+[07:52] [scene:talk]
+VISUAL:
+AUDIO: 'though this is a smaller parameter size, they used FP16 for folding points of this model, getting pretty decent quality even at this small 5B parameter size. This only requires 10 GB of file'
+
+[08:04] [scene:talk]
+VISUAL:
+AUDIO: 'storage, which most modern consumer PCs with Nvidia GPUs nowadays can run without a problem. If you still want to run the 14B models for image to video or'
+
+[08:16] [scene:talk]
+VISUAL:
+AUDIO: 'text to video, but don\'t have that much VRAM in your GPU, there\'s an alternative way, the GGUF quantization model. Again, you\'ll need both the high noise and low-noise models in pairs. For example,'
+
+[08:28] [scene:talk]
+VISUAL:
+AUDIO: 'let\'s say we have the Q8 at the bottom here. This is the one 2.2 I2V low-noise 14B Q8, the 8bit quantized model size, which still requires 15 GB of file'
+
+[08:41] [scene:talk]
+VISUAL:
+AUDIO: 'storage. So, if you download this one, you\'ll still need to download the high- noiseise version of this model, which is the one I\'m highlighting. Image to video high- noise 14bq8. You\'ll need to download this pair of'
+
+[08:54] [scene:talk]
+VISUAL:
+AUDIO: 'files for execution. Now, let\'s go to Comfy UI. After you update your Comfy UI, you can start with the new workflow here. As you can see, I just tested two combinations. One is the normal runtime'
+
+[09:06] [scene:talk]
+VISUAL:
+AUDIO: 'generating this model, this video and the other one which I connected is using Sage Attention to generate this video. Both qualities are pretty similar. So how do you get this workflow? First,'
+
+[09:19] [scene:talk]
+VISUAL:
+AUDIO: 'when you update your Comfy UI, you can go to the browse templates. Nowadays, they have a lot of predefined workflows thanks to the Comfy UI development team. You can click the video tab and there'
+
+[09:32] [scene:talk]
+VISUAL:
+AUDIO: 'you have it. You\'ll find three WAN 2.2 workflows available at this moment. There\'s the 14B model for text to video and image to video and also the 2.2 hybrid model called the 5B video'
+
+[09:45] [scene:talk]
+VISUAL:
+AUDIO: 'generation model. Either one can run the 1 2.2 model, but you\'ll need to measure your GPU to see if it can handle the 14B model. If you\'re running on a low VRAM consumer PC, I suggest the 5B model. And'
+
+[09:58] [scene:talk]
+VISUAL:
+AUDIO: 'the 5B model isn\'t really low quality. It\'s pretty decent, especially for a 5 billion parameter model. In this workflow I\'m showing here currently, this is the 5 billion parameter model.'
+
+[10:11] [scene:talk]
+VISUAL:
+AUDIO: 'We\'re using the same good old UMT5XXL text encoder. Pay attention to the load VAE here because this is something different. When using the 5 billion parameter hybrid model, we\'re using the'
+
+[10:24] [scene:talk]
+VISUAL:
+AUDIO: 'one 2.2 VAE, which they mentioned in their GitHub repo. They train these hybrid models and use the one 2.2 VAE for training the hybrid text to image to'
+
+[10:36] [scene:talk]
+VISUAL:
+AUDIO: 'video model. So remember you have to download this if you run the hybrid model. Now when loading this it\'s pretty simple for the K sampler. Just like usual we\'re using the UNIPCuler.'
+
+[10:48] [scene:talk]
+VISUAL:
+AUDIO: 'A very basic way to generate a video. We use step 20 as a test for the first time we load this workflow template. cfg5 and shift 8 which are the default values in this template. The only thing I\'ve'
+
+[11:02] [scene:talk]
+VISUAL:
+AUDIO: 'changed is adding the sage attention node here. I just wanted to see if there\'s any difference underneath here. Once we see the latent image, if we\'re using the hybrid model like this one, the text to video, the only thing we'
+
+[11:14] [scene:talk]
+VISUAL:
+AUDIO: 'need to do is disable the load image node. As you can see, this is a new node called the one 2.2 image to video latent. Think of it like a switch. If you bypass the load image node here, it'
+
+[11:27] [scene:talk]
+VISUAL:
+AUDIO: 'means we don\'t have an image as input, and it will automatically switch this latent node to an empty latent, making it a texttovideo workflow. In this case, if you turn the load image on and input'
+
+[11:39] [scene:talk]
+VISUAL:
+AUDIO: 'an image here, setting the width and height correctly, it becomes an image to video workflow. Let\'s say I have my previously generated videos here. Before recording this YouTube video, I tested'
+
+[11:51] [scene:talk]
+VISUAL:
+AUDIO: 'two different variants. By default, the text prompts for loading this workflow template in Comfy UI are very similar. As you can see, the compositions of the guitar player in the subway station are'
+
+[12:04] [scene:talk]
+VISUAL:
+AUDIO: 'standing in a similar direction. There\'s also a speaker behind the guitar player and the same composition is here as well. But for sage attention, as you can see, it gets less detail on the face. Check this part here. And especially the'
+
+[12:18] [scene:talk]
+VISUAL:
+AUDIO: 'audience behind, someone is covering the camera here. They\'re not really detailed on the face. Moving on to another example. As you can see in this variant, I\'m not using Sage Attention and just'
+
+[12:30] [scene:talk]
+VISUAL:
+AUDIO: 'purely running the 5 billion parameter model. It\'s pretty impressive for such a small model. Remember last year we used Cog video X which is also a 5 billion parameter model. Comparing the video'
+
+[12:42] [scene:talk]
+VISUAL:
+AUDIO: 'quality of that with one 2.2 right now, it\'s a totally different story. So just by measuring the size of this model as a 5 billion parameter model, you can see it\'s quite impressive already for the'
+
+[12:55] [scene:talk]
+VISUAL:
+AUDIO: 'quality, you get pretty good details on this speaker. And there are two people having a romantic moment behind the guitar player. Anyway, we\'re moving on to the next thing, the 14 billion parameter model. Now the 14B model here.'
+
+[13:08] [scene:talk]
+VISUAL:
+AUDIO: 'First, I loaded the image to video workflow the same way I found it in the browse templates. Then you go to the video tab. Once you\'re in the video tab, you\'ll see the one 2.214b'
+
+[13:21] [scene:talk]
+VISUAL:
+AUDIO: 'models for text or for image. Here I\'ve used the image to video model only. And I only downloaded the 14B model for image to video because that\'s good enough for what I needed to do. Moving'
+
+[13:34] [scene:talk]
+VISUAL:
+AUDIO: 'on here. As you can see, there are two diffusion models loaded. The one on top is the high noise for the 14B model, and the one below is the low-noise 14B model. The way the mixture of experts'
+
+[13:46] [scene:talk]
+VISUAL:
+AUDIO: 'works is that once we have the high noise model, we bring all this data to the first K sampler advanced. If you\'ve played around with image generation models, you\'ll know this node well for sampling. The steps here can be'
+
+[13:58] [scene:talk]
+VISUAL:
+AUDIO: 'customized. For example, the start step is at zero and the end step is at 10. That means this K sampler advanced will run 10 steps within the total of 20 steps. Meaning the first K sampler runs'
+
+[14:11] [scene:talk]
+VISUAL:
+AUDIO: '50% of the sampling for this AI using the high noise model. Then we have the low-noise model which brings all this data again into another model sampling process. It goes to the lower part of'
+
+[14:24] [scene:talk]
+VISUAL:
+AUDIO: 'this workflow which is another K sampler advanced. This K sampler advanced takes the previous K samplers returned noise. you have to enable that in the first K sampler advanced to return whatever'
+
+[14:36] [scene:talk]
+VISUAL:
+AUDIO: 'noise is left over and also adds noise in the first K sampler. So you have the enabled options here to see once you have the enabled options going on and it will bring the latent image data which'
+
+[14:48] [scene:talk]
+VISUAL:
+AUDIO: 'is this K sampler. This k sampler is running the low-noise model. And as you can see, it\'s using add noise disabled and return leftover noise, also disabled, because you don\'t have extra'
+
+[15:00] [scene:talk]
+VISUAL:
+AUDIO: 'steps going on in this workflow again. So, it doesn\'t need to return leftover noise. And here it will get the final latent data as output to your VAE decode. And look at this beautiful girl walking toward the camera. This is what'
+
+[15:14] [scene:talk]
+VISUAL:
+AUDIO: 'I just generated using the 14B model right here. focusing more on this part. This is an interesting thing because when you use the mixture of experts in language models, it\'s kind of a similar concept to this video diffusion model.'
+
+[15:28] [scene:talk]
+VISUAL:
+AUDIO: 'When you have the second step here, there\'s no noise, no additional things required. This sampler just adds this latent data into your video using only the leftover steps. For example, we have'
+
+[15:40] [scene:talk]
+VISUAL:
+AUDIO: 'a total of 20 steps. The start step here is starting at 10 and running to the end, which is set here as 10,000. But you can set this to 20 if your maximum steps are 20. For safety, we often set'
+
+[15:53] [scene:talk]
+VISUAL:
+AUDIO: 'really high numbers here just to be sure. We focus on the number of steps in this part, the 20 steps here. Anyway, coming back to the overview of this'
+
+[16:05] [scene:talk]
+VISUAL:
+AUDIO: 'workflow, this is going to need two models. This is what I talked about earlier in the video. We have to download these two files as a pair for your 14B video generation. Then moving down to the load VAE and text encoder.'
+
+[16:19] [scene:talk]
+VISUAL:
+AUDIO: 'As you can see, the text encoder remains the same. The load VAE is different between the 5 billion parameter model and the 14B model. Funny enough, for the 14B model, we\'re using the W2.1'
+
+[16:34] [scene:talk]
+VISUAL:
+AUDIO: 'VAE. The first time I tried to use the W2.2 2 VAE in this workflow. It returned an error something about different channels 64 or something. That means it'
+
+[16:46] [scene:talk]
+VISUAL:
+AUDIO: 'was returning the wrong diffusion model for the execution of the AI. So we\'re using the one 2.1 VAE with the 14B mixture of experts model here. As you'
+
+[16:58] [scene:talk]
+VISUAL:
+AUDIO: 'can see, it\'s very clear 2.1 image to video node here to connect the conditioning and the start image. something we don\'t need to use. If you pay attention here, we don\'t need the'
+
+[17:10] [scene:talk]
+VISUAL:
+AUDIO: 'clip vision in the new one 2.2. See, this is clearer and has fewer custom nodes connecting around because we don\'t need clip vision in this case, which brings you more convenience in some ways for running this model. Also, in the 5B'
+
+[17:23] [scene:talk]
+VISUAL:
+AUDIO: 'model, something you might notice is that we don\'t need vision either. So, both versions of the one 2.2 two models require less setup, but the 14B model'
+
+[17:35] [scene:talk]
+VISUAL:
+AUDIO: 'really requires a large amount of VRAM to run. Because when I ran this model in FP16, it loaded 61 GB of VRAM because my GPU is large enough to store the full'
+
+[17:47] [scene:talk]
+VISUAL:
+AUDIO: 'size of this model. So, it just puts everything into the GPU VRAM at once. I heard someone using an Nvidia 590. They said that Comfy UI won\'t load everything at the same time. Instead, it first runs'
+
+[18:00] [scene:talk]
+VISUAL:
+AUDIO: 'the high- noise model, unloads it, then starts loading the low-noise model in sequence. I\'m not sure if that\'s the way this model is supposed to work, but in my situation, because once Comfy UI'
+
+[18:13] [scene:talk]
+VISUAL:
+AUDIO: 'detected my GPU had enough space, it just put everything into the GPU VRAMm already. But you can see that the quality of the 14B model, especially for image to video, is pretty nice. You don\'t see any morphing, broken hands, or'
+
+[18:27] [scene:talk]
+VISUAL:
+AUDIO: 'funky parts happening with the character or the background. I\'ve used this image before in Minamax videos for testing and other AI video models. I\'ve used this image as a demo test before, and none of'
+
+[18:40] [scene:talk]
+VISUAL:
+AUDIO: 'them were able to create smooth hands like a fashion model walking forward toward the camera. Most of the time, other AI video models create slow motion scenes of the character walking toward the camera or just a simple camera pan.'
+
+[18:53] [scene:talk]
+VISUAL:
+AUDIO: 'But in this case, it\'s really good in prompt adherence, especially since I just used a very loose, lowquality text prompt. I didn\'t try to use a vision language model to make a long essay of a'
+
+[19:05] [scene:talk]
+VISUAL:
+AUDIO: 'text prompt. So, this is really cool to play around with the 14B model. For GGUF users, if you still want to use the 14B model and install GGUF to run one 2.2, another way to load this with GGF is to'
+
+[19:19] [scene:talk]
+VISUAL:
+AUDIO: 'still use this template. Once you have this node here, what you\'ll do is replace these connections with the GGUF model loader. Let\'s say I\'m using the simple UN net loader for GGUF. And'
+
+[19:31] [scene:talk]
+VISUAL:
+AUDIO: 'because I haven\'t downloaded any GGUF files currently for one 2.2, I only have this WAN 2.1 base for testing and demo purposes. But let\'s say you\'ve'
+
+[19:43] [scene:talk]
+VISUAL:
+AUDIO: 'downloaded both the high noise and low-noise Q8 models. Then you would create two UN loader GGUF nodes. One is for the high noise connecting it like this. And the second one replaces the'
+
+[19:56] [scene:talk]
+VISUAL:
+AUDIO: 'connection for the low-noise diffusion loader. So in this way we\'re going to connect another one the UNET loader GGUF to the model sampler SD3 node here and send that data to the K sampler. But'
+
+[20:09] [scene:talk]
+VISUAL:
+AUDIO: 'again I don\'t have the GGUF downloaded and I don\'t need it on my computer anyway. So this is just for demo purposes. This way of connecting to replace the load diffusion node. So you can use GUF to run the 14B model as'
+
+[20:22] [scene:talk]
+VISUAL:
+AUDIO: 'well. A lot of things have changed compared to one 2.1 if you\'re running the 14B model. The most convenient way surprisingly is the 5 billion parameter model. Although it\'s a small size model,'
+
+[20:35] [scene:talk]
+VISUAL:
+AUDIO: 'it\'s worth trying. It\'s worth it for everyone. Even if you have low VRAM, just 16 or 12 GB, you can still run this because it only takes about 10 GB of file storage. When loaded into VRAM,'
+
+[20:48] [scene:talk]
+VISUAL:
+AUDIO: 'it\'s almost 10 GB or so. The quality here isn\'t really bad. And I\'m going to try another text prompt instead of this guitar player in the subway station. Here I have my previous text prompt that'
+
+[21:00] [scene:talk]
+VISUAL:
+AUDIO: 'I\'ve been testing for movie gen which generated this video in one 2.1 movie gen. Using the same text prompt here. I\'ll try with higher sampling steps. I want to go for 30 sampling steps here'
+
+[21:12] [scene:talk]
+VISUAL:
+AUDIO: 'and see what we get. I\'ll also use 720p resolution actually in one 2.2. two. One thing worth mentioning is that the width and height are a little different in one 2.1. If we used 720p for the height, that was straightforward. But here, once'
+
+[21:26] [scene:talk]
+VISUAL:
+AUDIO: 'we set 720p, it automatically changes for you to 736. This is the one we should choose to correspond with the 1,280 pixel width. These two combinations should be the 720p resolution you want'
+
+[21:39] [scene:talk]
+VISUAL:
+AUDIO: 'to choose in 1 2.2. So, let\'s check this text prompt. see how fast it runs and how the quality is. We used 3 minutes and 16 seconds for 30 sampling steps'
+
+[21:51] [scene:talk]
+VISUAL:
+AUDIO: 'without any sage attention or torch compile or whatever methodologies you\'re trying to make it faster. None of that. Just a pure native node generation here. Even though I boosted the sampling steps'
+
+[22:03] [scene:talk]
+VISUAL:
+AUDIO: 'to 30, previously I used 20 steps and it took 1 minute and 11 seconds. But don\'t take my measurement here as the standard because again, different GPUs, different power, different chips, and loadup speeds are different. So, you\'ll need to'
+
+[22:16] [scene:talk]
+VISUAL:
+AUDIO: 'try it yourself. And here\'s the example demo I generated using the same prompt. Although the seat numbers might not be lucky this time, not really nice on the motion. You can see that it understands'
+
+[22:28] [scene:talk]
+VISUAL:
+AUDIO: 'my prompts really well throughout the entire motion compared to what I have here. This video was generated using Movie Gen in one 2.1. Although this one is pretty cool. You see the fast speed motions. When you look at the motorbike'
+
+[22:42] [scene:talk]
+VISUAL:
+AUDIO: 'and the character, they\'re not detailed enough in some ways. It hasn\'t been upscaled. This video clip is just raw output from Comfy UI. I like to see the raw output because that\'s how the AI actually performs rather than giving you'
+
+[22:56] [scene:talk]
+VISUAL:
+AUDIO: 'the beautiful side of things after upscaling and adding detail. So, this one is actually more detailed. I would say in 1 2.2 too. When you see the motion of the car turning the corner'
+
+[23:09] [scene:talk]
+VISUAL:
+AUDIO: 'from here, the motorbike is kind of leaning to the left side rather than being completely straight. You don\'t feel like the bike is turning left or right. But actually, the role here shows it\'s going to the right side like this.'
+
+[23:22] [scene:talk]
+VISUAL:
+AUDIO: 'It\'s not really if we have to be picky and deal with all the physics stuff in the video clip. Juan 2.2 is actually getting better physics. You see that here? Because it\'s turning the corner.'
+
+[23:34] [scene:talk]
+VISUAL:
+AUDIO: 'And in common sense, people know that turning a corner on a motorbike means you should lean on either side. And this looks pretty cool, but only in this part does it not look well. Now, I\'ve run two more of the same text'
+
+[23:48] [scene:talk]
+VISUAL:
+AUDIO: 'prompts for this motorcycle text prompt where I\'ve tried different seed numbers and sampling steps as well. Basically, the 30 sampling steps from here and this one is 20 sampling steps throughout the display here. Well, obviously the 20'
+
+[24:01] [scene:talk]
+VISUAL:
+AUDIO: 'sampling steps give you less detail on the biker, the character itself. The first assembling step gives you a clearer view of the leather jacket and how it\'s displayed in a fast motion'
+
+[24:13] [scene:talk]
+VISUAL:
+AUDIO: 'scene. Even in a fast motion scene, you see those neon lights and some futuristic city details going on here. Now, this is generated in a 5 billion parameter model. My previous examples generated here using movie gen are 14'
+
+[24:27] [scene:talk]
+VISUAL:
+AUDIO: 'billion parameter models in one 2.1. Even though I\'m not comparing the same size of AI models, it\'s still able to get something very close to the quality of a 14B in one 2.1 when I\'m using the one 2.25B model. So this model, the'
+
+[24:42] [scene:talk]
+VISUAL:
+AUDIO: 'hybrid 5B model, is really worth trying for consumer PCs. It\'s really fun to play around with. It feels like LTX where you have one model able to'
+
+[24:54] [scene:talk]
+VISUAL:
+AUDIO: 'generate text to video and image to video as well. The quality here is obviously way better than what we just saw in LTX 13B. And again, this is in the 5 billion parameter model size. Here'
+
+[25:06] [scene:talk]
+VISUAL:
+AUDIO: 'I\'ve done another experiment using this AI image that I generated before. This time I set it to 720p and use just 20 steps here. Other examples I\'ve tried before are in 480p. So 480p is obviously'
+
+[25:20] [scene:talk]
+VISUAL:
+AUDIO: 'kind of blurry for the face and pixelated on the eyes just like in Juan 2.1. Exactly the same thing happened back then in Juan 2.1 as well. So I suggest that if you really want to do'
+
+[25:34] [scene:talk]
+VISUAL:
+AUDIO: 'detailed work on the character\'s face or objects that need more detail from the reference, you might need to use 720p resolution. That will get you a lot more detail. And the motion as well. When you use 720p, it\'s going to look more'
+
+[25:47] [scene:talk]
+VISUAL:
+AUDIO: 'natural. As you can see, both are walking in the same direction. So 480p is it\'s kind of walking too fast and too jumpy for the character. Some people like jumpy, bouncy movements, but if I'
+
+[26:00] [scene:talk]
+VISUAL:
+AUDIO: 'really need to make this for work, like for fashion videos or something, you can\'t just have the woman jumping and bouncing like that, right? Yeah. So looking more natural, 720p is more natural in this case for video'
+
+[26:14] [scene:talk]
+VISUAL:
+AUDIO: 'generation. For the timing of generation, it doesn\'t make too much difference. I just changed the resolution here. The previous one was 480p which took 43 seconds and this time 720p took 1 minute'
+
+[26:27] [scene:talk]
+VISUAL:
+AUDIO: 'and 12 seconds. Again, my GPU can\'t be the standard answer for all of you. You have to measure it with whatever GPU you have. But in this case, as a test'
+
+[26:40] [scene:talk]
+VISUAL:
+AUDIO: 'experiment, I don\'t see too much difference in timing with the 5B model. I\'d rather wait and generate one good quality video. That\'s the strategy I would go for if I\'m using the 5B model. So, let\'s try the same image because I'
+
+[26:53] [scene:talk]
+VISUAL:
+AUDIO: 'have something similar to this image. And I\'ll use the same text prompt and settings going with the 14B model. This big boy needs something to run as well. As you can see, this pink dot connects'
+
+[27:07] [scene:talk]
+VISUAL:
+AUDIO: 'to the second stage of the workflow using the low-noise model here and finishing off the rest of the sampling steps in this part. So, it\'s going to take a while and you\'ll need to be patient if you\'re running this model,'
+
+[27:19] [scene:talk]
+VISUAL:
+AUDIO: 'even in FP8 for the 14B model. It\'s pretty heavy. It\'s not crazy heavy like freezing your computer where you can\'t do anything, but it is consuming a lot of VRAM. To be honest, you have to'
+
+[27:31] [scene:talk]
+VISUAL:
+AUDIO: 'prepare before you run this. Let\'s see my current runtime and GPU usage. So, in the task manager, as you can see here, I have my GPU usage. First loading the width together with the high noise model'
+
+[27:45] [scene:talk]
+VISUAL:
+AUDIO: 'and the low-noise model consumed about 52 GB of VRAM already. I noticed that and other Patreon members have mentioned that once we finish the first sampling using the high noise, it will unload the'
+
+[27:57] [scene:talk]
+VISUAL:
+AUDIO: 'high- noise model and remain with about 30 something GB of VRAM in my graphics card to continue with the low-noise model. That means that at the first moment, because my GPU has enough space'
+
+[28:09] [scene:talk]
+VISUAL:
+AUDIO: 'to store both models, it will put these two models together into my VRAM. Once it finishes the first sampler, it will unload and continue with the low-noise model remaining with about 30 something'
+
+[28:21] [scene:talk]
+VISUAL:
+AUDIO: 'GB of VRAM to finish off the video generation. So, I just used the 14B model and generated an image to video clip. I was trying to do some experiments and a funny thing is that'
+
+[28:33] [scene:talk]
+VISUAL:
+AUDIO: 'when I switched this width and height back to 480p resolution, the generation times here were using 3 minutes for the first sampling and another 3 minutes for the second sampling, which is back to the normal 1 2.1 time. Back then, we'
+
+[28:46] [scene:talk]
+VISUAL:
+AUDIO: 'were using 6 or 7 minutes for 1 2.1480p. It\'s something fun to play around with when we can use a smaller resolution. You know, if you have an idea, proof of'
+
+[28:59] [scene:talk]
+VISUAL:
+AUDIO: 'concept, or want to make a prototype of your video first, you can use this with one 2.2 where you see the motions here. It\'s way better than the previous ones we generated in the 5B model. Of course, you\'ll see more motion from the'
+
+[29:13] [scene:talk]
+VISUAL:
+AUDIO: 'characters like the hands holding on the hips and doing more modeling poses like that within a very short duration. Anyway, I\'ll try another image that\'s going to have better quality by using 720p in the next round here. So, I\'m'
+
+[29:25] [scene:talk]
+VISUAL:
+AUDIO: 'going to set this back to 720p resolution and choose another image for this generation. As you can see, this time the motion is way better than 1 2.1. Obviously, the'
+
+[29:37] [scene:talk]
+VISUAL:
+AUDIO: 'car overall as an object doesn\'t break and the acceleration is way better going in one direction this time. As you can see here, I just used one time generation for this image to video. I'
+
+[29:49] [scene:talk]
+VISUAL:
+AUDIO: 'didn\'t generate multiple times and cherrypicked the good one to show you guys. I expect it should have some issues with vehicles going in the wrong direction because back then in one 2.1 when I tried images like this sometimes'
+
+[30:02] [scene:talk]
+VISUAL:
+AUDIO: 'the car would go the other side of the road or turn backward and drive backward. But this time you see all the shadows of the trees and vehicles shadows following the physics and the real world of sunlight here. One thing'
+
+[30:15] [scene:talk]
+VISUAL:
+AUDIO: 'worth mentioning is that these models have been trained on lighting. As you can see in the beginning of the intro video, they put effort into making the lighting and object shadows even better. You can see some physics are getting'
+
+[30:29] [scene:talk]
+VISUAL:
+AUDIO: 'more realistic here. Yeah. So, the 14B model is obviously way better than the 5B model. And even the 14B compared to one 2.1\'s 14B is a lot better in all performance factors, benchmark numbers,'
+
+[30:42] [scene:talk]
+VISUAL:
+AUDIO: 'and such. It\'s just better than what they had in 2.1. So, there you go. You have one 2.2 too and it\'s ready to play around with. Download it and we\'re going to explore a lot more in upcoming'
+
+[30:55] [scene:talk]
+VISUAL:
+AUDIO: 'videos. I\'m talking about a lot of video tutorials we can go through because we\'re just in the first day of WAN 2.2 release. This is just the beginning of this AI. So, I\'ll see you guys soon. Have a nice day. See you.'

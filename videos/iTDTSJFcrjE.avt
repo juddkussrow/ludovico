@@ -1,0 +1,91 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: 4x Cost Reduction in TTS Inference | Smallest AI x Tenstorrent
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=iTDTSJFcrjE
+upload_date: 20260508
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'Today I have a very big news for you all. We are making Lightning V2 free for anyone who uses Tensor and chips. It is 4x cheaper than Nvidia chips, 4x more efficient, so you get a state-of-the-art TTS model free to use if you are using'
+
+[00:12] [scene:talk]
+VISUAL:
+AUDIO: 'Tensor and chips. And we are the first ones to do it in the world. &gt;&gt; TTS inference has always existed in the Nvidia, but every squeeze and every bit was not squeezed out of these models. We'
+
+[00:25] [scene:talk]
+VISUAL:
+AUDIO: 'were the first ones to achieve the block float eight and low-fi computational fidelity and stuff. In the TTS, most of the layers have a sensitivity to the perturbations. Every small inch of perturbations will lead to a'
+
+[00:37] [scene:talk]
+VISUAL:
+AUDIO: 'significantly bad output. So, having to reduce the precision to this level and still have the same output quality is the first thing that we attempted, first ones to attempt for, and that\'s what we have achieved today.'
+
+[00:50] [scene:talk]
+VISUAL:
+AUDIO: '&gt;&gt; In speech, there are just so many nuances that human brain is so picky about it that it can tell whether it\'s a bad speech, good speech, is robotic,'
+
+[01:02] [scene:talk]
+VISUAL:
+AUDIO: 'there is noise, etc. All of that. It\'s just very adapt to it. &gt;&gt; LLM, you have a set boundaries, and TTS is not a set boundary. It is a continuous waveform. Even a slightest error in the precision, your model goes'
+
+[01:14] [scene:talk]
+VISUAL:
+AUDIO: 'for a toss. &gt;&gt; I think the precision at which the LLMs versus speech models have to operate is the fundamental thing, right? In LLMs, you have to optimize for a token, and that token can be like a word, etc.'
+
+[01:26] [scene:talk]
+VISUAL:
+AUDIO: 'Here, you have to optimize for 16,000 samples to get a 1 second of audio, 0.5 seconds of audio, right? And even if some samples there are wrong or some some things there are wrong, or you can audibly tell that this is not a human'
+
+[01:38] [scene:talk]
+VISUAL:
+AUDIO: 'audio. And that is the precision you have to add, and that\'s what makes it it makes it like probably 16,000 times harder as compared to an LLM if you have to put it in numbers. &gt;&gt; So, when we when we were starting to'
+
+[01:52] [scene:talk]
+VISUAL:
+AUDIO: 'develop our second version of uh series, which was called lightning V2. I think we realized that the way training chips were defined at that point of time, I think they were not meant for speech'
+
+[02:05] [scene:talk]
+VISUAL:
+AUDIO: 'inference at all. This chip has &gt;&gt; a bigger SRAM, and there is no concept of cache and things like that. In L1, you can program it. It\'s not like there\'s a cache and it it just vanishes.'
+
+[02:17] [scene:talk]
+VISUAL:
+AUDIO: 'You have the ability to program it, and you can program it efficiently. One thing. And the second thing is a core can talk to its neighboring core. And that\'s not the case in a well-known chips like Nvidia. So, to give you an'
+
+[02:29] [scene:talk]
+VISUAL:
+AUDIO: 'understanding, a neighboring chip, if they want to talk to each other on Nvidia, it takes between 500 to 800 cycles because it goes through DRAM. Here, they can talk between three to 48 cycles, depending on how far they are'
+
+[02:41] [scene:talk]
+VISUAL:
+AUDIO: 'located. &gt;&gt; I think till now people were approaching quantizations like I\'ll just quantize everything to block 48 and 8 or like 4-bit'
+
+[02:54] [scene:talk]
+VISUAL:
+AUDIO: '&gt;&gt; 2-bit. What we realized is for speech, some layers in the model are much much more important than others. &gt;&gt; There are multiple ways you can reduce the precision and can make the model efficient and stuff. So, one way of reducing the precision is'
+
+[03:06] [scene:talk]
+VISUAL:
+AUDIO: 'people, you know, reduce from 16-bit precision to 8-bit, 4-bit, and so on. So, that\'s one thing that we have obviously done from BFP 16 to block float 8. And the second way is how efficiently like you compute them. So,'
+
+[03:18] [scene:talk]
+VISUAL:
+AUDIO: 'so the multiplier is designed to take two cycles for the BFP 8. But there is an option to reduce to one cycle, but that compromises your precision. So, we have done the reduction to BFP 8. On top of'
+
+[03:31] [scene:talk]
+VISUAL:
+AUDIO: 'that, we are executing it in one cycle, compromising the precision further, but still making the audio look same without deviating a single bit. 95% of the model run on low-fi. 80% of the model runs'
+
+[03:46] [scene:talk]
+VISUAL:
+AUDIO: 'with BFP 8. &gt;&gt; So, we were probably the first one to combine both of the techniques together and do a quantization where some layers are like a bit higher precision, some are in lower, some have some different'
+
+[03:58] [scene:talk]
+VISUAL:
+AUDIO: 'techniques, and then package it together in a new accelerator chip. I think that\'s what was also tricky, fun, and I think that\'s what makes it hard to do it for speech models.'

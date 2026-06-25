@@ -1,0 +1,219 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Bonsai Image: The World's First 1-bit Image Generator — Running Locally
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=nROptLxb_uE
+upload_date: 20260527
+transcript_source: captions
+route: text
+
+---
+
+[00:01] [scene:talk]
+VISUAL:
+AUDIO: 'A bonsai tree is a full-sized tree. Same DNA, same structure, same capability. Just grown in a way that takes up almost no space. That is exactly what Prism ML has done with image generation. They'
+
+[00:15] [scene:talk]
+VISUAL:
+AUDIO: 'took Flux, one of the best open-source image generation models available today, and they asked a simple but radical question. What if, instead of storing every weight in the model as a precise'
+
+[00:28] [scene:talk]
+VISUAL:
+AUDIO: 'floating-point number, you just stored -1, 0, or +1? Three choices. That is it. They called it Bonsai Image 4 Billion, and today we are'
+
+[00:40] [scene:talk]
+VISUAL:
+AUDIO: 'running it locally. This is Fahad Mirza, and I welcome you to the channel. You can see that we have been covering these bonsai models for quite some time now, and they have been evolving pretty'
+
+[00:52] [scene:talk]
+VISUAL:
+AUDIO: 'nicely. And now they have afforded into this image modality. So, I\'m quite curious to see what sort of images they generate. If you go to their GitHub repo, they have shared some of the samples and some'
+
+[01:05] [scene:talk]
+VISUAL:
+AUDIO: 'of the commands which I\'m going to test out. So, let\'s get right into it. And as a bonus, I\'m going to also unpack what exactly is meant by all of these terminologies like two-bit, one-bit,'
+
+[01:17] [scene:talk]
+VISUAL:
+AUDIO: 'ternary, binary, and how they are different from the actual full-precision models. I\'m going to use this Ubuntu system. So, let me quickly install uh my virtual environment, and then we will go from'
+
+[01:31] [scene:talk]
+VISUAL:
+AUDIO: 'there. And now let me get clone the repo, and I will drop the link to it in video\'s description. And now let me run the setup, which installs all the prerequisites,'
+
+[01:43] [scene:talk]
+VISUAL:
+AUDIO: 'everything. While that happens, let me take you to this diagram where we try to understand how exactly this model is different. Remember what I said about the three values, -1, 0, and +1? Look at the'
+
+[01:56] [scene:talk]
+VISUAL:
+AUDIO: 'middle panel here. Those four cells are four weights from the transformer. Each one is just a direction, positive or negative or zero. Now look at that small box underneath'
+
+[02:11] [scene:talk]
+VISUAL:
+AUDIO: 'them that says FP16 scale. Now, for every 128 weights, there is one full precision number that gives the whole group its magnitude.'
+
+[02:23] [scene:talk]
+VISUAL:
+AUDIO: 'That is the whole trick. You\'re not throwing away the scale of the model. You are just forcing every individual weight to pick a side. And that single decision takes you from'
+
+[02:36] [scene:talk]
+VISUAL:
+AUDIO: 'around 7.7 GB down to just 1.21 GB. Look at those size bars at the bottom of the diagram. The purple bar is full flux. The teal bar is ternary bonsai. That is how much'
+
+[02:50] [scene:talk]
+VISUAL:
+AUDIO: 'smaller it is. So, setup should be done by now. Let\'s go back. Almost there, I guess. So, I will just wait for it to finish. It is just checking some of the system packages.'
+
+[03:03] [scene:talk]
+VISUAL:
+AUDIO: 'Meanwhile, please follow me on X if you\'re looking for AI updates. And if you want to help out the channel, please become a member. And the same script also downloads the'
+
+[03:19] [scene:talk]
+VISUAL:
+AUDIO: 'models. And meanwhile, everything is installed. Let\'s now serve our studio. And by the way, I\'m running it on GPU'
+
+[03:31] [scene:talk]
+VISUAL:
+AUDIO: 'from Vast Compute, but you know what? This will even run on CPU or in Web GPU in your browser. And you can run it on Windows, Apple, or Linux, wherever you like. Same commands.'
+
+[03:44] [scene:talk]
+VISUAL:
+AUDIO: 'And of course, on the Windows one, you would need to use a PowerShell, but that\'s all present in their GitHub repo, which they have shared here. And the model is now being served on our'
+
+[03:57] [scene:talk]
+VISUAL:
+AUDIO: 'local system. Just out of fun, let\'s check our CPU consumption. So, it is consuming this much CPU at the moment. Not that much. Memory is also quite'
+
+[04:09] [scene:talk]
+VISUAL:
+AUDIO: 'good. Let me show you the VRAM consumption because I have this Nvidia RTX. Just Just consuming um over 4 gig of VRAM, which is fine. Okay, so that is good. Now, there are'
+
+[04:23] [scene:talk]
+VISUAL:
+AUDIO: 'two ways of running it. One is you can simply use their generate script, or you could, I believe, also use this front end, where you can see it is running on our local host at port 3000, and you can just describe to'
+
+[04:36] [scene:talk]
+VISUAL:
+AUDIO: 'whatever you want to generate. Ternary model is selected. You can also go with binary. I would highly suggest you start with ternary um because the quality is slightly better.'
+
+[04:49] [scene:talk]
+VISUAL:
+AUDIO: 'You can go with different resolutions here. And I will start with maybe this 1024 by 1024. And just for completion, if you want to run your shell script or generate'
+
+[05:01] [scene:talk]
+VISUAL:
+AUDIO: 'script, just run this from the scripts, send a request, and your prompt with image size, and it should generate that image. But, I\'m just going to go and describe it here.'
+
+[05:13] [scene:talk]
+VISUAL:
+AUDIO: 'And then you can just click generate, and then it is going to generate. You can also go with a batch of four, but I\'m just going to go with the single one. It is generating at the moment. Let\'s see how long does it take. I think'
+
+[05:26] [scene:talk]
+VISUAL:
+AUDIO: 'this is where it is going to render it, and this is your session history. Let\'s wait for it. And this is the resultant image. Remarkable depth of field in natural'
+
+[05:39] [scene:talk]
+VISUAL:
+AUDIO: 'light handling for a sub-2 bit model. I think that is really remarkable. You can see that this bark texture, root flare, and background bouquet on those'
+
+[05:51] [scene:talk]
+VISUAL:
+AUDIO: 'ceramic vessel are doing the things that have no business coming out of this transformer. Really, really amazing, amazing stuff. Really happy about this result. Look at the depth of it.'
+
+[06:05] [scene:talk]
+VISUAL:
+AUDIO: 'Can\'t really help myself but to appreciate that depth. Anyway, let\'s do another one. So, this is just about a Georgian monastery carved into a cliff face. Monks laundry hanging between the'
+
+[06:17] [scene:talk]
+VISUAL:
+AUDIO: 'windows. Wow, look at the speed because the model is fully loaded. Oh my goodness. Look at this cliffhanger. This is the laundry of the monks. This is a Georgian monastery. And they also have put in some of the'
+
+[06:30] [scene:talk]
+VISUAL:
+AUDIO: 'misty mountains there. I\'ll just go up and just look at this prompt again. You see morning mist, snow on the peaks above, laundry hanging between the windows. Look, we can nitpick all we'
+
+[06:43] [scene:talk]
+VISUAL:
+AUDIO: 'want, but the thing is that the realism is still there. And you need to keep in perspective the size of the model and the speed here. This is really, really good.'
+
+[06:57] [scene:talk]
+VISUAL:
+AUDIO: 'Even look at this cloud. There is a sunlight coming through. It\'s so beautiful and there is also sheen of that sun, early morning sun. I think this is really good.'
+
+[07:09] [scene:talk]
+VISUAL:
+AUDIO: 'Okay, let\'s do another one. In this one, I\'m asking it for an innuit elder holding a cracked smartphone. And look at this image. There is so much'
+
+[07:22] [scene:talk]
+VISUAL:
+AUDIO: 'to unpack here. Again, I would say remarkable depth. The model understood the prompt at a narrative level, not just a visual one. And if you look at that cracked screen'
+
+[07:34] [scene:talk]
+VISUAL:
+AUDIO: 'showing a glacier where a real glacier used to be, this is so good. Held by this weathered hands against a barren tundra landscape, you know, behind the scene. I think it is sort of a storytelling'
+
+[07:47] [scene:talk]
+VISUAL:
+AUDIO: 'inside a single frame. And this model has pulled it off. Really good stuff. Let\'s do another one. Um so, street food cart in Goma, which is, I believe, capital of DR Congo and'
+
+[07:59] [scene:talk]
+VISUAL:
+AUDIO: 'my heart goes out to the people in DR Congo and Uganda uh as they are battling that Ebola virus. And let\'s see what model does here in this African'
+
+[08:12] [scene:talk]
+VISUAL:
+AUDIO: 'uh landscape. And this is the image it has generated of the cart. The cart comes out fine, of course. The letters are not really there yet in terms of prompt following. It has tried its'
+
+[08:25] [scene:talk]
+VISUAL:
+AUDIO: 'as much as it could, but other than that, I think if you just ignore those letters, the rest of it is not bad at all. Next up, let\'s go to Vietnam and I\'m asking it to do a neon sign reading no'
+
+[08:38] [scene:talk]
+VISUAL:
+AUDIO: 'signal flickering above an abandoned internet cafe in Hanoi. Rain streaking the window, one computer still glowing. There you go. So, it has tried its best'
+
+[08:50] [scene:talk]
+VISUAL:
+AUDIO: 'on text, but other than that, you can see that it has followed the prompt. Neon signals are there. Internet cafe is there. Computer is glowing. And this internet cafe is not uh in working order as you can already see.'
+
+[09:04] [scene:talk]
+VISUAL:
+AUDIO: 'So, just by looking at the image, you know the whole story. Next up, let\'s do this intricate one where there is a tiny library inside a living baobab tree, a warm lantern'
+
+[09:17] [scene:talk]
+VISUAL:
+AUDIO: 'light, and all those books are stacked together. Mhm. It is okay. Not as good as I would hope, but I think it has tried its best.'
+
+[09:29] [scene:talk]
+VISUAL:
+AUDIO: 'But it could be better. Okay, so maybe model is getting tired now. Anyway, let\'s do this. A Pakistani truck covered in floral hand-painted'
+
+[09:41] [scene:talk]
+VISUAL:
+AUDIO: 'decorations driving through a salt flat at golden hour. There you go. Uh I\'m not sure about this truck art. I'
+
+[09:53] [scene:talk]
+VISUAL:
+AUDIO: 'think it this could be better. It is far from reality. I think they\'re a bit bit different, but other than that, the reflection is good. The salt flat land is also okay.'
+
+[10:06] [scene:talk]
+VISUAL:
+AUDIO: 'Okay, not bad. And finally, let\'s do this Dominican hair salon in New York at 181 181st Street at midnight. Three women still inside under'
+
+[10:19] [scene:talk]
+VISUAL:
+AUDIO: 'fluorescent light. There you go. This one is amazing. This one is quite good. And it is outside. Could be better, but I think the whole vibe is quite good.'
+
+[10:31] [scene:talk]
+VISUAL:
+AUDIO: 'So, look. The model is very impressive. This is a 1.21 GB model. Every single image you just saw came out of something smaller than a typical MP3 album. That is what'
+
+[10:44] [scene:talk]
+VISUAL:
+AUDIO: 'happens when you stop asking how much precision a model needs and start asking how little it can survive on. I think Prism ML has just done well. Try it out. Let me know how you go. Again,'
+
+[10:56] [scene:talk]
+VISUAL:
+AUDIO: 'if you want to help out, please become a member of the channel. Thank you for all the support.'

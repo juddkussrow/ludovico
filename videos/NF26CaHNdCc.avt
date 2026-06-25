@@ -1,0 +1,167 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: This New Model Just Beat Wan‑Animate (First‑Frame Perfect)
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=NF26CaHNdCc
+upload_date: 20251127
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'All right, so you\'ve probably heard of Wan Animate by now. You drop in a single image, give it a driving video, and it makes your character copy that motion. It\'s powerful, but it also has some annoying issues. Identity drift, weird framing, backgrounds that just sit there, and faces that slowly stop'
+
+[00:13] [scene:talk]
+VISUAL:
+AUDIO: 'looking like your original image. Steady Dancer is basically the next evolution in this space. It\'s a new human image animation model built on top of the one video backbone, but redesigned around something they call first frame'
+
+[00:26] [scene:talk]
+VISUAL:
+AUDIO: 'preservation, which means it tries to keep your very first frames look locked in for the entire clip. On benchmarks like Real East Dance Val, it hits the best FVD score in the whole table while staying very competitive or better on'
+
+[00:39] [scene:talk]
+VISUAL:
+AUDIO: 'subject consistency, background consistency, flicker, and overall visual quality compared to models like Wan Animate, Mimic Motion, HyperMotion, and Uni Animate Dit, which is a big deal because FVD is the metric people'
+
+[00:52] [scene:talk]
+VISUAL:
+AUDIO: 'actually care about for does this look like real video. To really see what that means, look at their sideby-side comparisons. In one example, there\'s a reference image in the top left, a dance driving video next to it, and on the top'
+
+[01:05] [scene:talk]
+VISUAL:
+AUDIO: 'right, you see Steady Dancer\'s result. The character follows the motion perfectly, the face stays locked, the framing feels natural, and nothing looks broken. Below that, they run the exact same image and driving video through'
+
+[01:17] [scene:talk]
+VISUAL:
+AUDIO: 'Human Vid, Hypermotion, Mimic Motion, and Wan Animate. Human Vid and Hyperotion basically fall apart with low-quality textures and warped bodies, while Mimic Motion and Wan Animate do much better, but still show clear'
+
+[01:30] [scene:talk]
+VISUAL:
+AUDIO: 'artifacts and inconsistencies once you compare frame by frame. In another example, Wan Animate pushes the character way back in the frame, so she looks tiny compared to the original composition, while Mimic Motion keeps the framing, but actually changes the'
+
+[01:43] [scene:talk]
+VISUAL:
+AUDIO: 'face, so you\'re no longer animating the person you started with. Steady Dancer, on the other hand, keeps both the framing and the original identity intact. When you go through the rest of their demos, you start to see the pattern. They show a simple image on the'
+
+[01:55] [scene:talk]
+VISUAL:
+AUDIO: 'left, driving video in the middle, output on the right setup. And in the Steady Dancer output, the face is rock solid from start to end. The motion is almost one:one with the driving clip. And even the camera movement feels natural instead of being artificially'
+
+[02:08] [scene:talk]
+VISUAL:
+AUDIO: 'zoomed or cropped. One animate by comparison tends to only animate the character while leaving the background static, where a steady dancer can bring the whole scene to life, including subtle background motion, which just makes everything feel more like a real'
+
+[02:20] [scene:talk]
+VISUAL:
+AUDIO: 'shot. They also test it with a Chinese movie character image driven by a male dancer in the street. And the animated output keeps the movie character\'s identity while copying the dance cleanly with no obvious glitches or weird body distortions. Another nice stress test.'
+
+[02:33] [scene:talk]
+VISUAL:
+AUDIO: 'The reference is a slightly side angled female face, but the driving video is a full front-facing dance. Steady Dancer still matches the motion properly and keeps the face shape and identity nearly identical to the reference, which is'
+
+[02:46] [scene:talk]
+VISUAL:
+AUDIO: 'exactly where a lot of other models start to break. They even show a case where the driving video is a full body dance, but the reference image is a half-body shot. Steady Dancer just animates the visible upper body from that same framing, doesn\'t zoom out, and'
+
+[02:58] [scene:talk]
+VISUAL:
+AUDIO: 'still nails facial similarity. On top of that, it handles cartoon characters almost as well as real people. Give it a cartoon portrait and a human dance video, and the cartoon version follows the motion with surprisingly clean limbs'
+
+[03:10] [scene:talk]
+VISUAL:
+AUDIO: 'and stable identity instead of melting into abstract shapes. One of the most brutal tests is when the character turns their head away and then back toward the camera. Most methods either change the face or drift toward a new identity'
+
+[03:22] [scene:talk]
+VISUAL:
+AUDIO: 'after the turn, but here the face before and after stays essentially the same as the first frame, which really highlights that first frame preservation design actually works in practice. It also does something that a lot of these models'
+
+[03:34] [scene:talk]
+VISUAL:
+AUDIO: 'completely fail at. Human object interactions driven just by pose or skeleton cues. The authors introduce a benchmark called Xance where they intentionally pair mismatched reference images and driving videos, different body types, anime characters, half-body'
+
+[03:47] [scene:talk]
+VISUAL:
+AUDIO: 'crops, plus motion blur and occlusions to stress test things like spatial misalignment and start gap transitions. And that\'s where competing models usually fall apart. In their examples, Steady Dancer can take a skeleton video'
+
+[04:00] [scene:talk]
+VISUAL:
+AUDIO: 'of someone sweeping and a static image of a man holding a broom, and the output shows him sweeping while leaves realistically fly away, which means the model is inferring object motion from just the human pose. They repeat that'
+
+[04:12] [scene:talk]
+VISUAL:
+AUDIO: 'with a man shoveling snow, a footballer interacting with a ball, and a guy working battle ropes on the beach. And Steady Dancer not only controls the human body accurately, but also generates plausible object motion and deformation, while other methods either'
+
+[04:25] [scene:talk]
+VISUAL:
+AUDIO: 'freeze the objects or break them into nonsense shapes. They even show that you can drive things using a stick figure skeleton video instead of a real person. And as long as the pose is reasonable, the output looks like a natural video'
+
+[04:37] [scene:talk]
+VISUAL:
+AUDIO: 'where your reference character is performing that action. All of this makes it feel a lot more usable for real creative workflows, not just cherrypicked dance clips. So, how is this thing actually doing all of that under the hood? At its core, Steady'
+
+[04:49] [scene:talk]
+VISUAL:
+AUDIO: 'Dancer is built on top of Juan 2.1\'s imagetovideo foundation model. That\'s a 14 billion parameter diffusion transformer that already knows how to generate video from a starting frame. But the team made one critical design'
+
+[05:02] [scene:talk]
+VISUAL:
+AUDIO: 'change. They switched it from the old reference to video approach to a true imagetovideo setup that locks in your first frame and refuses to change it. Here\'s why that matters. Most existing'
+
+[05:14] [scene:talk]
+VISUAL:
+AUDIO: 'animation models, including the original one, animate, use what\'s called a reference to video paradigm, which basically means they try to bind your character\'s appearance onto whatever motion you give them. That sounds fine in theory, but in practice, it\'s really'
+
+[05:28] [scene:talk]
+VISUAL:
+AUDIO: 'loose. If your reference image and your driving pose don\'t match up perfectly in terms of body proportions, camera angle, or starting position, the model just does its best guess, and you end up with identity drift, weird face changes, and those jarring jumps at the start of the'
+
+[05:41] [scene:talk]
+VISUAL:
+AUDIO: 'video. Steady Dancer flips that logic. It treats your reference frame as sacred, generates the entire video starting from that exact frame, and forces every subsequent frame to stay visually consistent with it, which is'
+
+[05:54] [scene:talk]
+VISUAL:
+AUDIO: 'way stricter, but gives you that rock solid identity preservation. The problem with being that strict is it makes motion control really hard because now the pose has to adapt to the image instead of the image bending to fit the'
+
+[06:06] [scene:talk]
+VISUAL:
+AUDIO: 'pose. To solve that, the team added what they call a condition reconciliation mechanism, which is just a fancy way of saying they keep the appearance signal and the motion signal separated instead of mashing them together. They use channel-wise separation so the model can'
+
+[06:19] [scene:talk]
+VISUAL:
+AUDIO: 'see both clearly. Inject the pose conditioning in a lightweight way using low refined tuning so they don\'t accidentally destroy the pre-trained video generation quality. And then they augment the input by feeding in extra copies of the first frames image and the'
+
+[06:32] [scene:talk]
+VISUAL:
+AUDIO: 'first frames pose, plus richer semantic context. All of which helps the model stay anchored to that starting appearance. On top of that, they built a set of pose modulation modules to handle the fact that real world images and'
+
+[06:45] [scene:talk]
+VISUAL:
+AUDIO: 'driving videos almost never align perfectly. There\'s a spatial structure adaptive refiner that reshapes the pose features to better match your character\'s actual body proportions. A temporal motion coherence module that smooths out jittery or noisy pose'
+
+[06:58] [scene:talk]
+VISUAL:
+AUDIO: 'sequences over time so you don\'t get flickering artifacts. and a lightweight attention alignment unit that constantly checks frame by frame to make sure the pose and the appearance are still lining up correctly. All three of these work together to bridge the gap between'
+
+[07:10] [scene:talk]
+VISUAL:
+AUDIO: 'here\'s my image and here\'s the motion I want, especially when those two things don\'t naturally fit. The whole thing is trained on a relatively small high-quality data set of about 7,300 short dance clips totaling around 10'
+
+[07:23] [scene:talk]
+VISUAL:
+AUDIO: 'hours of footage. And the training runs for roughly 14 a.5 thousand steps on eight H800 GPUs, which is way lighter than competing models that need 50,000 to 200,000 steps and way bigger data sets. From a practical standpoint, the'
+
+[07:37] [scene:talk]
+VISUAL:
+AUDIO: 'code and model weights are already up on GitHub, so you can actually run this yourself. Just expect to need at least 24 gigs of VRAM to load the model and ideally a 32 gig card like a 4090 if you want smooth, high resolution'
+
+[07:49] [scene:talk]
+VISUAL:
+AUDIO: 'generations. Quantized or distilled versions will probably show up later that run on less memory, but they\'ll trade off a bit of quality for speed. If you want to try Steady Dancer yourself, I put all the important links down in the description. If you found this'
+
+[08:02] [scene:talk]
+VISUAL:
+AUDIO: 'breakdown helpful, make sure to drop a like, leave a comment telling me what you want to see animated next, and subscribe so you don\'t miss the upcoming releases and updates. Peace.'

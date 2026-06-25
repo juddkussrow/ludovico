@@ -1,0 +1,139 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Single Image to 3D Camera Move | Gaussian Splat + Qwen Fix
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=kzqpV905jN4
+upload_date: 20260303
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'Hey guys, Matt here. Today, I want to show you how to move within a 2D image and generate a image from a new camera perspective. And we\'re going to be using something called Gaussian splats. And if you don\'t know what those are, it doesn\'t matter. This is a pretty straightforward process, and I\'ll show'
+
+[00:13] [scene:talk]
+VISUAL:
+AUDIO: 'you the limitations and just talk about a few quirks of how this works. There\'s a Quinet model that\'s been trained on Gaussian splats that\'ll help fill in the blanks and correct the distortions. It\'s really cool.'
+
+[00:25] [scene:talk]
+VISUAL:
+AUDIO: 'Um, I\'m going to quickly also show you how to install the viewer cuz I made some changes to the original repository. So, I want to show you how to load those. And uh let\'s get started. One thing\'s for certain whenever you'
+
+[00:38] [scene:talk]
+VISUAL:
+AUDIO: 'load comfy in someone else\'s workflows, you\'re going to have these red out nodes. And typically, the easiest way to solve that is to go to the manager and say install missing custom nodes. And in this case, we have the sharp While'
+
+[00:52] [scene:talk]
+VISUAL:
+AUDIO: 'that\'s happening, I can tell you that we\'re still going to be missing one of the nodes, and that\'s the one that I\'ve edited in in a repository on GitHub. So, to access that and to fix this red node, you follow the instructions up here. And'
+
+[01:06] [scene:talk]
+VISUAL:
+AUDIO: 'so, I have a copy of this repository with my own edits to it. And to install that, you come up here, and this is the same way with any repository on GitHub. You copy this. We\'re going to bring over our custom'
+
+[01:19] [scene:talk]
+VISUAL:
+AUDIO: 'nodes folder in Windows, and I type in command. And that\'ll open right directly where I need it to go a command DOS window. And now, I\'m going to type in get'
+
+[01:31] [scene:talk]
+VISUAL:
+AUDIO: 'clone. Now, make sure you have Git for Windows installed. It\'s kind of a little app. You should have that already. And now, we have our repository installed into custom nodes. So, when something\'s missing, it either'
+
+[01:43] [scene:talk]
+VISUAL:
+AUDIO: 'didn\'t load correctly in when you boot up of comfy or it\'s just simply missing the directory altogether. The other way to do that would be to go to my website, scroll to the bottom, and I\'ll have a'
+
+[01:55] [scene:talk]
+VISUAL:
+AUDIO: 'new comfy workflow here, and you just simply click it. You can open up these workflows, and they come with the uh the directory. If there\'s a directory in there, copy that to your custom nodes, okay? So, that\'s the easiest way to get'
+
+[02:07] [scene:talk]
+VISUAL:
+AUDIO: 'this going, and now you simply restart. And we\'ve done the two methods. We\'ve used the manager to install the missing nodes, and we used our Git clone to copy the repository from GitHub. Those are'
+
+[02:19] [scene:talk]
+VISUAL:
+AUDIO: 'the standard ways to fix your nodes. Okay, so now I\'m installing two node dependencies, and it\'s going to go through and it\'ll take a little moment to to install. All right, now that you have all your'
+
+[02:32] [scene:talk]
+VISUAL:
+AUDIO: 'nodes cleared, you have to download the Laura model, and it\'s in Chinese, so uh you might want to rename this when you download it using this name here. Okay, and then refresh, and you\'ll have your Laura models. But before we get to'
+
+[02:45] [scene:talk]
+VISUAL:
+AUDIO: 'that, we\'ll go over the sampler. Now, the reason I wanted to make a video is that this thing just has a few odd little quirks, and I wanted to just show you uh the best practice. I would bypass'
+
+[02:57] [scene:talk]
+VISUAL:
+AUDIO: 'the sampler for Quinn right now while you generate the splat. And we\'re going to do control enter once this is loaded. You may have to download a uh model'
+
+[03:10] [scene:talk]
+VISUAL:
+AUDIO: 'automatically. This creates a 63 meg file in your output directory. You can see it\'s a projection of the image. Um it doesn\'t have a wrap around to create the other side. We\'ll be able to combine'
+
+[03:22] [scene:talk]
+VISUAL:
+AUDIO: 'multiple images together, and you can really interact with a space um with reflections, and um there\'s ways to change the lighting environment. So, if you\'re interested in this technology, it\'s definitely something I think it\'s'
+
+[03:34] [scene:talk]
+VISUAL:
+AUDIO: 'going to be really big this year. Um anyways, you can move around the camera, and the whole point of this would be to generate a fresh view by hitting'
+
+[03:47] [scene:talk]
+VISUAL:
+AUDIO: 'set camera. That locks it in, and now you have generated again. And it often pause it it often gets stuck right here. So, sometimes you have to make sure you generate until the image is loaded and previewed here. That gets transferred here as a Gaussian'
+
+[04:01] [scene:talk]
+VISUAL:
+AUDIO: 'image, which is what we we see plus our original. Now, it\'s just an RGB image, um but we\'re calling it the Gaussian image. And now there\'s instructions what to do with this. I\'m going to unlock un-bypass this, control enter, and load'
+
+[04:14] [scene:talk]
+VISUAL:
+AUDIO: 'our sampler. And the instructions ask it to convert and fix this image with the use of the Laura to using this image as a reference. Now, if you stray too far away from this'
+
+[04:28] [scene:talk]
+VISUAL:
+AUDIO: 'and the reference image, it\'ll break. One thing and you could do is that you could just have a small portion that it looks at. Sometimes it\'s provided too much information. So, if you were'
+
+[04:40] [scene:talk]
+VISUAL:
+AUDIO: 'zooming in on a specific detail, you might want to create a little separate image of that so that it\'s not looking at the whole image. And I was using my mask automatic masking thing for that, but I I didn\'t want to go into that'
+
+[04:52] [scene:talk]
+VISUAL:
+AUDIO: 'right now. So, here you can see it does a really amazing job at filling in these blanks. Now, it moved the guy around. This actually does happen with the people. Um kind of like what I was saying is that there\'s so much'
+
+[05:04] [scene:talk]
+VISUAL:
+AUDIO: 'information here that and and there\'s this is has to require so much inference that I think that it does get a little bit scrambled. But, it does a did a great job on the sign of my fictional restaurant here.'
+
+[05:17] [scene:talk]
+VISUAL:
+AUDIO: 'And we\'ll try another view. Let\'s say So, now we have set camera. And that\'s good. So, now the view\'s there, and it should just pipe all the way'
+
+[05:29] [scene:talk]
+VISUAL:
+AUDIO: 'through to our uh sampler. Yeah, so that that\'s that\'s pretty wild. I mean, it\'s not exact, but um yeah, it works really well. So, let\'s do'
+
+[05:41] [scene:talk]
+VISUAL:
+AUDIO: 'another example. Loaded a new image, generate the Gaussian. And what is going to happen is that once this is through, it\'ll it\'ll go it\'ll see this is why you want to pause it. It\'s going to start generating unnecessary image because you have to have this pass through in'
+
+[05:54] [scene:talk]
+VISUAL:
+AUDIO: 'preview here before you can use the sampler. So, I\'m going to zoom in on the chopping. Rotate the camera like this here. So,'
+
+[06:08] [scene:talk]
+VISUAL:
+AUDIO: 'now we\'re going to control enter. Oh, no, I have to hit set camera. Okay, now I\'ll now I\'ll remove this bypass. Okay, there we go. And then you go, you can see that it it inferred that all of that was in a'
+
+[06:21] [scene:talk]
+VISUAL:
+AUDIO: 'kitchen without having a prompt that was in a kitchen. Reads all of that that data and then fills it in. So, there you have it. I hope you enjoyed that. It\'s the Quinn Gaussian splat Laura camera edit. Not'
+
+[06:33] [scene:talk]
+VISUAL:
+AUDIO: 'sure what to call it, but you\'ll see the link for the workflows down below and I\'ll post everything on my LinkedIn and in the description below. Okay, thanks guys for watching. Bye.'

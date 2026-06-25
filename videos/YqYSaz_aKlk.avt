@@ -1,0 +1,179 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: SCAIL-2 GGUF | LOW VRAM Workflow
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=YqYSaz_aKlk
+upload_date: 20260614
+transcript_source: captions
+route: text
+
+---
+
+[00:01] [scene:talk]
+VISUAL:
+AUDIO: '[music] &gt;&gt; All right, YouTube. What is good? It\'s your boy Rebel back with another video. And today we are taking a look at Scale 2. Scale 2 is an open-source model for end-to-end controlled character'
+
+[00:15] [scene:talk]
+VISUAL:
+AUDIO: 'animation. It animates a reference character with a driving video and also supports character replacement and multi-character scenarios without relying on intermediate pose representations. Prior approaches to'
+
+[00:27] [scene:talk]
+VISUAL:
+AUDIO: 'character animation depend heavily on intermediate representations such as skeleton maps or in-painting masks. These intermediates are ambiguous under complex motion, restricting driving'
+
+[00:39] [scene:talk]
+VISUAL:
+AUDIO: 'sources to human movements, and limiting the reach of replacement and multi-character animation. Scale 2 removes this dependence by achieving end-to-end driving using several off-the-shelf models including Scale'
+
+[00:52] [scene:talk]
+VISUAL:
+AUDIO: 'Preview, One-Animate, and Mocha. 60K motion pairs were synthesized and trained through a unified motion transfer interface with a dedicated mask channeling and rope design. The reverse driving training recipe with the'
+
+[01:05] [scene:talk]
+VISUAL:
+AUDIO: 'unification lets the model learn capabilities beyond its teacher models, yielding emergent abilities such as cross-identity character replacement, animal driving scenarios, and zero-shot support for motion control intermediates'
+
+[01:19] [scene:talk]
+VISUAL:
+AUDIO: 'like SAM 3D body mesh rendering. Now, if you look over here on the right, you will see the model tree for quantizations. And if you click this one model, it will bring you to the list of models that will usually be here, but'
+
+[01:33] [scene:talk]
+VISUAL:
+AUDIO: 'there is only one set of models, which are mine, and these are the Scale 2 guffs. I will have this repo linked in the description, so you don\'t have to do all that extra movement. So, I just quantized these guffs today and tested'
+
+[01:45] [scene:talk]
+VISUAL:
+AUDIO: 'them. They all work properly. In the repo files, you have three variations, a Q4, a Q6, and a Q8. There is also a workflow available in here. In the repos readme card, it has a list of all of the'
+
+[02:00] [scene:talk]
+VISUAL:
+AUDIO: 'required files you will need to download to run the workflow. So, here we have a text encoder, which is the UMT double XL FP8 model. We have the light XTV rank 64'
+
+[02:12] [scene:talk]
+VISUAL:
+AUDIO: 'I2V step distilled Laura. We have the SAM 3.1 multiplex model. All of these, by the way, have their folder directory listed, but moving on, we have the clip'
+
+[02:25] [scene:talk]
+VISUAL:
+AUDIO: 'vision H file. We have the One 2.1 VAE, and we have an optional scale 2 DPO Laura. Now, this is just from the comfy team. They brought the model into comfy,'
+
+[02:38] [scene:talk]
+VISUAL:
+AUDIO: 'so this was a Laura that exists inside their repo. I just thought I would add it to mine. Again, your folder directory is right here if you need to see the structure. So, after you download all of the required files and your quant of choice, you can grab the workflow and'
+
+[02:52] [scene:talk]
+VISUAL:
+AUDIO: 'throw it into comfy, and it will look something like this. So, starting on the left here, we have our load image node and a text prompt node. This is your reference image, and this is your'
+
+[03:04] [scene:talk]
+VISUAL:
+AUDIO: 'description for the reference image. So, whatever character you are trying to pull from the reference image, you need to explicitly describe in this prompt box. So, for my example, I have an image of an alien standing next to a man, and'
+
+[03:18] [scene:talk]
+VISUAL:
+AUDIO: 'I prompted the blue alien on the right so that it knows to grab the alien from the image. Now, over here, we have two simple int nodes that are running to the height and width of the One scale to'
+
+[03:31] [scene:talk]
+VISUAL:
+AUDIO: 'video node. Now, this is just going to determine the size of your output video, so your final result, what you want your height and width to be for that video. And you need to ensure that you try and'
+
+[03:43] [scene:talk]
+VISUAL:
+AUDIO: 'match it to your reference video as much as possible. What you can do instead of running the full resolution if your video is, you know, 2K or higher in resolution, you can actually just string'
+
+[03:57] [scene:talk]
+VISUAL:
+AUDIO: 'these int nodes into the height and width of the resize node. This is strung into the actual video node to resize your video down smaller, and this will just take your dimensions from the int'
+
+[04:10] [scene:talk]
+VISUAL:
+AUDIO: 'nodes and resize the entire video so that it will feed the same resolution into the one scale to video node. And you will not only save VRAM, but you will have a faster gen time'
+
+[04:23] [scene:talk]
+VISUAL:
+AUDIO: 'incorporating more frames if you need to for lower VRAM users. But moving on, we have our load checkpoint holding the SAM 3.1 multiplex checkpoint, and this is going to help track and generate your'
+
+[04:37] [scene:talk]
+VISUAL:
+AUDIO: 'mask for the conditioning to transfer your reference subject to the video. Moving to the right, we have a closed replacement node Boolean. Um you can just leave this closed right here, and'
+
+[04:50] [scene:talk]
+VISUAL:
+AUDIO: 'we have our usual setup for all of your model loading. So you have your UNet hosting My Guff. You have the Laura node hosting the Light XTV distilled Laura. We have the load clip hosting the FP8'
+
+[05:03] [scene:talk]
+VISUAL:
+AUDIO: 'safe tensors text encoder on the one architecture. We have our load clip vision node hosting the clip vision H. We have our load VAE hosting the one 2.1 VAE. And then we have our clip vision'
+
+[05:17] [scene:talk]
+VISUAL:
+AUDIO: 'and code output node um not cropping. We have our two text prompt nodes. In the positive, you\'re going to want to do something similar to Bernini where you describe the subject and then describe'
+
+[05:30] [scene:talk]
+VISUAL:
+AUDIO: 'the action and the environment. Um I left my negative blank. It didn\'t really matter. Underneath the text prompt nodes, we have two video tracking nodes. One is tracking the data for the video,'
+
+[05:42] [scene:talk]
+VISUAL:
+AUDIO: 'and the other\'s tracking the data for the masked reference image input. They are color coordinated, so the red references the video, and the blue references the image. Underneath that,'
+
+[05:55] [scene:talk]
+VISUAL:
+AUDIO: 'we have a create scale to colored mask. This is just going to create the mask for the input. And then underneath that, I have a Kiko purge VRAM node. Um this is just going to purge the VRAM after'
+
+[06:08] [scene:talk]
+VISUAL:
+AUDIO: 'you make your mask, so it\'s not holding anything on your card. Um you will need Kiko tools custom node set to run this. I also have another one up here for after the one scale to video pass. Right here is a one chunk feed forward. What'
+
+[06:22] [scene:talk]
+VISUAL:
+AUDIO: 'this does is it feeds the model in chunks so that you don\'t burn your VRAM trying to load the model if it\'s too big. Um I have it set to four. It originally was set to two, but I was'
+
+[06:34] [scene:talk]
+VISUAL:
+AUDIO: 'still getting UOM, so I would keep it at four if you can. Now, here we have our one scale to video node. So, you have your width, your height, your total frame count, which is, you know, how many frames you want the video to be.'
+
+[06:46] [scene:talk]
+VISUAL:
+AUDIO: 'You have your batch size, your pose strength from start to end, and then you have your frame offset. One tends to have this issue with lighting at the beginning and end of generations where it kind of blows out the lighting and'
+
+[06:59] [scene:talk]
+VISUAL:
+AUDIO: 'kind of oversaturates for a split second, maybe five frames max. And then it, you know, regulates itself and fixes it. But this right here helps solve that issue entirely, so you can remove the bad frames from the video and rerun'
+
+[07:12] [scene:talk]
+VISUAL:
+AUDIO: 'on the same seed. Underneath that, we have a preview image, which just shows the preview of your colored mask as a still frame. Moving over here, we have the K sampler select, the basic scheduler running into your custom'
+
+[07:26] [scene:talk]
+VISUAL:
+AUDIO: 'sampler node, and you have your model sampling, which just runs after your model. And then we have our VAE decode running into our masked video combine, which is not saving the output, and our'
+
+[07:38] [scene:talk]
+VISUAL:
+AUDIO: 'final result, which is saving our output, and that would be the entire workflow broken down and accounted for. So, with that being said, I do have an example to showcase today, but I unfortunately cannot play with audio'
+
+[07:51] [scene:talk]
+VISUAL:
+AUDIO: 'because, again, I will get copywritten. Now, as you can see, all of the details'
+
+[08:04] [scene:talk]
+VISUAL:
+AUDIO: 'remain intact, and, you know, fidelity is very crisp, and this is only a 480p generation. I did not even run this at 720, so. If you pay attention to the first few frames, there is a little bit'
+
+[08:17] [scene:talk]
+VISUAL:
+AUDIO: 'of blowout, but it does correct itself. It\'s very hard to tell because it\'s so short, but there are a few oversaturated and overbrightened frames at the beginning. That being said, I would consider this almost a 10 out of 10 generation. But, all right, guys, that\'s'
+
+[08:30] [scene:talk]
+VISUAL:
+AUDIO: 'all I\'m going to have for you today. Just wanted to get this guff to you guys and let you run this model because I have not seen anyone Quantus, and I know that this is going to be a heavily utilized model for people, and being'
+
+[08:43] [scene:talk]
+VISUAL:
+AUDIO: 'able to do this on lower VRAM requirements is awesome, so. But, if you enjoyed what you saw today, please consider subscribing to the channel and leaving me a comment on the video to let me know how I did. You can also like the video. It genuinely helps the channel'
+
+[08:56] [scene:talk]
+VISUAL:
+AUDIO: 'tremendously. So, go ahead and download this guff, get the workflow running, and enjoy Scale2. All right, guys, thank you. Have a nice day. Bye.'

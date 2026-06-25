@@ -1,0 +1,783 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Build a Full Stack Tiktok Media Feed using Next.js, ImageKit
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=dYHckQK377k
+upload_date: unknown
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'If you want to build a modern SaaS, a feeder [music] platform, a TikTok clone in Next.js 16, you\'re going to hit a wall immediately. I see developers constantly trying to build media apps by simply throwing 50 megabytes MP4 files and massive PNGs into a S3 bucket and'
+
+[00:14] [scene:talk]
+VISUAL:
+AUDIO: 'serving them directly to the user. It\'s a terrible idea. The Apple crawl, your Lighthouse score will tank, and your mobile users will sit right there watching a loading spinner. Today, we are going to build and deploy a'
+
+[00:26] [scene:talk]
+VISUAL:
+AUDIO: 'production-ready media feed. I\'m going to whiteboard to you exactly how big that like Netflix handles streaming video, and then we\'re going to write the code. We\'re going to plan first [music] and then code, just like senior engineers would. And a huge shout-out to'
+
+[00:38] [scene:talk]
+VISUAL:
+AUDIO: 'ImageKit for sponsoring this specific build. So, let\'s get into it. So, now here\'s the problem. If a user on a bad 4G network asks a server for a video, and you\'re going to send a raw MP4 file,'
+
+[00:50] [scene:talk]
+VISUAL:
+AUDIO: 'they\'re going to choke. Netflix and TikTok uses HLS adaptive bitrate streaming. The video quality dynamically shifts based on the user\'s internet. That\'s exactly what the ImageKit'
+
+[01:03] [scene:talk]
+VISUAL:
+AUDIO: 'important does in Next.js as well. Depending on the size and your device, it serves a different quality image. That\'s exactly what this one does, too. Do this yourself, you need to build complex FFmpeg transporting servers. We are not going'
+
+[01:16] [scene:talk]
+VISUAL:
+AUDIO: 'to do that. We are going to use an API from our sponsor, ImageKit. They are a complete media processing API. They handle all of this at the edge. You don\'t even need to move the database. They have a AI-powered dam, but you can'
+
+[01:28] [scene:talk]
+VISUAL:
+AUDIO: 'plug ImageKit directly into your existing AWS S3 bucket. If you look at the API, you want to resize an image, add a URL parameter, but it gets crazier. They also do AI smart cropping, dynamic watermarks, and most'
+
+[01:42] [scene:talk]
+VISUAL:
+AUDIO: 'importantly, they convert your videos into HLS streams instantly, which is incredible. We are going to use this Next.js SDK to build our feed today. I\'ll be doing all all this in their'
+
+[01:54] [scene:talk]
+VISUAL:
+AUDIO: 'forever free plan, so you can click the custom link in my description below to get started to grab your free account so you could start writing code together. So, let\'s go over the architecture a little bit of the app you\'re building. First of all, let\'s take a look at what'
+
+[02:07] [scene:talk]
+VISUAL:
+AUDIO: 'the problem is. As a user opens up their app on their phone and they have 4G signals with they have a 4G signal with two bars, your Next.js server is going to ask S3 for a video. Let\'s say you\'re rendering a'
+
+[02:21] [scene:talk]
+VISUAL:
+AUDIO: 'bunch of videos here. It\'s a raw file. S3 hands back the full raw file, which could be like a 1 GB file or more. Next.js then pipes it to the phone and the phone is then going to try to'
+
+[02:33] [scene:talk]
+VISUAL:
+AUDIO: 'download all 1 gig before it can play smoothly. It is definitely going to choke. This is not a hosting problem. We just cannot beat physics. If a user has 2 MBps second'
+
+[02:47] [scene:talk]
+VISUAL:
+AUDIO: 'and your file needs eight, they are it is going to buffer. Period. So, how do platforms like Netflix or TikTok do it? They don\'t just send it in one file. They use something called as HLS,'
+
+[03:01] [scene:talk]
+VISUAL:
+AUDIO: 'which is an adapt which is adaptive bitrate streaming. Here\'s how it actually works. So, the source code video gets chopped into two second chunks and it gets chopped at four different quality levels. You can think'
+
+[03:13] [scene:talk]
+VISUAL:
+AUDIO: 'of it like 1080p quality, 720p, 480p, and 240p. These three different These four quality vid'
+
+[03:25] [scene:talk]
+VISUAL:
+AUDIO: 'quality levels are for the same video. So, you get four versions. Then a manifest file as well gets sent, which is going to be then a manifest file, a M3U8 file, will also get sent'
+
+[03:39] [scene:talk]
+VISUAL:
+AUDIO: 'that lists every chunk that lives there. The player is then going to read the manifest file, start at a medium quality, maybe at 720p, and it\'s going to measure your bandwidth'
+
+[03:52] [scene:talk]
+VISUAL:
+AUDIO: 'in real time. If your signal drops, it\'s going to ask for a 480p file. Signal comes back, it asks for a 1080p. So, this way you never see a spinner and the quality just shifts. That feedback loop right there, that\'s'
+
+[04:05] [scene:talk]
+VISUAL:
+AUDIO: 'the whole game. So, how do you do all of this yourself? Like this chunking that I talked about, measuring the user\'s network speed, their bandwidth, if the signal drops, swapping it with a better quality file. Well,'
+
+[04:18] [scene:talk]
+VISUAL:
+AUDIO: 'typically you would have to run a FFmpeg transcoding server. You write the encoding pipelines and you have to manage storage for all four versions of every video. You push the chunks to a CDN. But here\'s the thing,'
+
+[04:31] [scene:talk]
+VISUAL:
+AUDIO: 'we don\'t want to do any of that because we I have an amazing service that is also the sponsor of today\'s video that we are going to use called ImageKit. We\'re going to use their API to give us everything we need and build a'
+
+[04:44] [scene:talk]
+VISUAL:
+AUDIO: 'production-ready application similar to what TikTok or Netflix or or any of these websites do. So, what exactly is ImageKit? ImageKit is an image and video API that helps optimize, transform, manage, and deliver media assets so'
+
+[04:58] [scene:talk]
+VISUAL:
+AUDIO: 'developers can ship faster, market marketers can iterate freely, and your users can enjoy flawlessly visual experiences everywhere. And truly after my experience too, I I think they\'re'
+
+[05:11] [scene:talk]
+VISUAL:
+AUDIO: 'definitely up to something. They truly transform images and videos for the web. It also comes with an AI-powered DAM and can also work with your own cloud storage such as Amazon S3, Azure, GCP, web servers, and more. ImageKit can'
+
+[05:27] [scene:talk]
+VISUAL:
+AUDIO: 'automatically compress and convert not only videos but also images to a suitable format for every device. They can truly transform and adapt media assets. It offers more than 50+'
+
+[05:39] [scene:talk]
+VISUAL:
+AUDIO: 'URL-based transformations for your videos and images from simple resizing and cropping to more advanced features like AI-based crop and watermarking or HLS or DASH'
+
+[05:52] [scene:talk]
+VISUAL:
+AUDIO: 'streaming. All you need to do is append specific parameters in your URL. If you want to resize this image, then you can append this parameter. The transformation parameter to the asset'
+
+[06:05] [scene:talk]
+VISUAL:
+AUDIO: 'URL will do the rest of the job for you. And as you can see, this is the original image and this becomes the resized image and it they\'re going to take care of all that for you. On top of that, they also offer a variety of different SDKs'
+
+[06:17] [scene:talk]
+VISUAL:
+AUDIO: 'depending on the framework that you\'re using. We will use Next.js on their generous forever free plan. So, if we go to their pricing, they have a forever free plan that\'s great for us as'
+
+[06:30] [scene:talk]
+VISUAL:
+AUDIO: 'we build with them as well. So, you don\'t have to pay a single dollar out of your pocket until you are ready to scale up and you need these you need these capabilities. But, their forever free plan is amazing.'
+
+[06:44] [scene:talk]
+VISUAL:
+AUDIO: 'I\'ll show you and we\'ll get started by building with this and using their forever free plan as well. But, to use the specific SDK, we could simply just go to the Next.js ImageKit SDK, install'
+
+[06:56] [scene:talk]
+VISUAL:
+AUDIO: 'it and get started. Again, I\'m going to walk you through everything step by step. Now, going back to the production way, there are three things that matter. One, your S3 stays put. You don\'t migrate'
+
+[07:08] [scene:talk]
+VISUAL:
+AUDIO: 'anything. You point ImageKit at your existing bucket and you\'re done. Two, ImageKit does the transcoding and transforming. So, you\'re just going to upload a video and ImageKit generates'
+
+[07:21] [scene:talk]
+VISUAL:
+AUDIO: 'the HLS ladder, for example. It writes the manifest file like I told you about, which has all these different URLs for different videos and it\'s going to push'
+
+[07:33] [scene:talk]
+VISUAL:
+AUDIO: 'those chunks to its global CDN on the edge. You and you can you\'re going to consume all of this with one react component, with just one component. You can just simply drop this'
+
+[07:46] [scene:talk]
+VISUAL:
+AUDIO: 'component into your next JS app, point it at the manifest URL, and it\'s going to stream adapt adaptively on any device, on any network. And that\'s the real architecture when it comes to'
+
+[07:58] [scene:talk]
+VISUAL:
+AUDIO: 'building apps like Netflix or TikTok and so on. If you ever were to think, "I\'m going to download 1 GB or more if you\'re downloading a giant movie, like 10 GB of file on a user\'s device without even'
+
+[08:13] [scene:talk]
+VISUAL:
+AUDIO: 'checking what their network speed or bandwidth looks like, honestly, that\'s that\'s terrible. That\'s really bad. So, this solution is how you build a production-ready media feed as well.'
+
+[08:26] [scene:talk]
+VISUAL:
+AUDIO: 'Let me show you what we\'re going to build, and then we can slowly start adding code as well. So, we are going to build a app that\'s similar to TikTok. It\'s It looks very similar. I will be providing you a bunch of'
+
+[08:38] [scene:talk]
+VISUAL:
+AUDIO: 'components, so we can focus on more production-ready aspects, and focus more on how you could optimize the performance of our media feed. So, for instance, as we scroll down, all these videos are essentially getting rendered.'
+
+[08:51] [scene:talk]
+VISUAL:
+AUDIO: 'And each of these videos are sending us a URL, a manifest file, and depending on my bandwidth and network, we are going to essentially serve that as well. We are going to build a variety of features'
+
+[09:03] [scene:talk]
+VISUAL:
+AUDIO: 'such as image cropping, watermark overlays, how to do all of that in the most performance-optimized way possible. So, without further ado, let\'s dive in. So, first of all, if you have not'
+
+[09:16] [scene:talk]
+VISUAL:
+AUDIO: 'already, make sure to check out the GitHub repo linked in the comments in the description below. That repo has everything you need to get started. When you clone that repo, you are going to'
+
+[09:28] [scene:talk]
+VISUAL:
+AUDIO: 'see something like this one. First of all, I want you to fork that repo, so that you make your own copy and then clone that specific copy, which will have these changes exactly. So, now as'
+
+[09:40] [scene:talk]
+VISUAL:
+AUDIO: 'you can see, we are rendering the video just like over here right now. So, now this is what happens, for instance. In this specific application, let\'s go to the browser network tab and as we do,'
+
+[09:53] [scene:talk]
+VISUAL:
+AUDIO: 'let\'s filter by all and you are going to see that all the MP4 videos are essentially a one get called, they get downloaded and you can see how massive'
+
+[10:05] [scene:talk]
+VISUAL:
+AUDIO: 'these videos are as well. So, if I filter by MP4, you\'re going to see all these videos essentially getting downloaded, you know, just as one file. It doesn\'t'
+
+[10:17] [scene:talk]
+VISUAL:
+AUDIO: 'matter if the user has bad network on our side. So, let\'s say let\'s go to slow 4G and I\'m going to refresh the page. You can already see the black overlay here. You don\'t want your users to experience'
+
+[10:29] [scene:talk]
+VISUAL:
+AUDIO: 'something like this, right? Like, check this out. It took like a second for the videos to get rendered. But, I have a high-speed internet. I am on Wi-Fi. I\'m at home. You also have to think about'
+
+[10:41] [scene:talk]
+VISUAL:
+AUDIO: 'users that have a mobile device. They don\'t have the best network and so on, too. For example, if you\'re on TikTok or even like Instagram Reels or YouTube Shorts, they\'re not necessarily going to have Wi-Fi all the time. Sometimes, a'
+
+[10:54] [scene:talk]
+VISUAL:
+AUDIO: 'lot of the times they\'re out and about and that\'s when you also need to care about it as well. So, now the first step for us to do is to fix this and for that, we let\'s just go ahead, do ImageKit and start integrating it so'
+
+[11:06] [scene:talk]
+VISUAL:
+AUDIO: 'that we know exactly what we need to do. So, first off, let\'s just go to get started and go for their forever free plan. For low-traffic websites and apps, side projects, or just testing with all the'
+
+[11:19] [scene:talk]
+VISUAL:
+AUDIO: 'essential features, you get this and that\'s incredible. That\'s honestly insane for the in terms of their forever free plan. I have not seen a plan as generous as this one before.'
+
+[11:31] [scene:talk]
+VISUAL:
+AUDIO: 'But anyway, let\'s just click on get started and this is where you could sign in with Google or whatever or you could just simply enter your email and sign up there. I\'m just going to go ahead and'
+
+[11:43] [scene:talk]
+VISUAL:
+AUDIO: 'log in because I already have an account. I just signed in and this way they give give you like this checklist so that you could literally follow this step-by-step. Upload the file, set up and verify your URL endpoint and so on.'
+
+[11:57] [scene:talk]
+VISUAL:
+AUDIO: 'So, if we go here and go to the URL endpoint section, you could just simply go ahead and create a new endpoint and this becomes your new endpoint for instance. I can just say Ankita'
+
+[12:10] [scene:talk]
+VISUAL:
+AUDIO: 'or my last name, first name, whatever you want to call it, you could use that as an identifier. Then the description would be TikTok feed or let\'s just call this video feed for instance.'
+
+[12:24] [scene:talk]
+VISUAL:
+AUDIO: 'And then that\'s it. That\'s all you need to do here. Save and you could simply use this specific endpoint here as well if you like or you could just use the default endpoint as well if one doesn\'t already exist. If you don\'t have an'
+
+[12:38] [scene:talk]
+VISUAL:
+AUDIO: 'endpoint like this one, you could just go ahead and create one over here. All you simply need to do is enter your identifier over here, default URL endpoint and then press save. Once you do, you will have an endpoint like this'
+
+[12:50] [scene:talk]
+VISUAL:
+AUDIO: 'one. This could be whatever identifier you want as well. So, if you want that, you could totally use that too. Anyway, we need an URL endpoint so we could start pointing it over there. Now, if we go back to getting started,'
+
+[13:05] [scene:talk]
+VISUAL:
+AUDIO: 'we could simply just go to their quick start guide and then follow along our Next.js setup. They essentially use a bunch of the components that they already provide out of the out of the'
+
+[13:17] [scene:talk]
+VISUAL:
+AUDIO: 'box so you could simply use it. Then we could also just transform and stream images and videos because ImageKit offers 50-plus URL-based transformation, so what\'s cool is that you could like add specific'
+
+[13:31] [scene:talk]
+VISUAL:
+AUDIO: 'transformation in the URL, and then it will automatically just do the job for you. So, for instance, if you want to resize the image, and to resize this image to 300 pixel, you just need to add TRW300'
+
+[13:43] [scene:talk]
+VISUAL:
+AUDIO: 'and H300 as well. Same transformation can also be passed as a query parameter to as well. So, again, all this is great. Just wanted to show you some things that we could do'
+
+[13:55] [scene:talk]
+VISUAL:
+AUDIO: 'here. Once we are ready to go, we could mark this checklist as complete, and then go live. And this way you can already see my usage and track accordingly as well. Anyway, we can hide this checklist for'
+
+[14:09] [scene:talk]
+VISUAL:
+AUDIO: 'now because I\'m going to show you everything step by step. So, as I refresh the page, watch what happens. This is black screen. Black So, black frame before the video loads. So, the profile page has no preview grid'
+
+[14:21] [scene:talk]
+VISUAL:
+AUDIO: 'whatsoever. So, if you were to generate a thumbnail for this, normally you would have to use a tool called as FFmpeg, which is an amazing tool.'
+
+[14:35] [scene:talk]
+VISUAL:
+AUDIO: 'However, its API is really complicated, I must say. I\'ve tried to use this tool before. I\'m not saying that it\'s impossible, but it is very complex. It\'s a really powerful tool.'
+
+[14:47] [scene:talk]
+VISUAL:
+AUDIO: 'So, let\'s just So, let\'s just solve this issue right now. So, for it For that, now that we have an ImageKit account, let\'s just head over to the Next.js SDK. Copy this and install it locally. You could use npm or yarn, whatever you'
+
+[15:00] [scene:talk]
+VISUAL:
+AUDIO: 'want. As we do that, let\'s stop the server. And I don\'t want to copy both, but just copy this one. ImageKit/next. This is a package we need to get'
+
+[15:13] [scene:talk]
+VISUAL:
+AUDIO: 'ImageKit in our system. Perfect. Now that we did that, let\'s restart our server again, right? And let me quickly walk you through the'
+
+[15:25] [scene:talk]
+VISUAL:
+AUDIO: 'code base as well, so that you know exactly what\'s going on. So, let\'s go here and So, let\'s go here and install So, let\'s go here and install ImageKit, which is add imagekit/next.'
+
+[15:37] [scene:talk]
+VISUAL:
+AUDIO: 'There we go. And now that we have done that, let\'s just restart the server. And now let\'s go ahead and add ImageKit using the SDK. So, first of all, as you can see, we need to use the image'
+
+[15:50] [scene:talk]
+VISUAL:
+AUDIO: 'component or the video component that are literally drop-in replacements for Next.js itself, that is essentially wraps the HTML video element from the browser and the image component from'
+
+[16:02] [scene:talk]
+VISUAL:
+AUDIO: 'Next.js. The automatically these components handle the URL generation and transformation logic, which makes it really easier easy for us to integrate it in our app, which is great. But also, you could use a'
+
+[16:15] [scene:talk]
+VISUAL:
+AUDIO: 'ImageKit provider as well, so you could set the URL endpoint that we got initially. Also, you could set the URL endpoint, for instance, that we got over here,'
+
+[16:28] [scene:talk]
+VISUAL:
+AUDIO: 'that we set it up over here, and we could also do the same by adding it here, too. This allows us to avoid repeating these values in every component. So, what we could instead also do is wrap this ImageKit provider throughout our'
+
+[16:41] [scene:talk]
+VISUAL:
+AUDIO: 'application, so we don\'t have to keep passing in the URL endpoint as well. Now, with ImageKit, you could do a lot. For example, you could handle responsive images, lazy loading images, lazy loading videos, as well.'
+
+[16:55] [scene:talk]
+VISUAL:
+AUDIO: 'Background removal using AI, you could add overlays, and all sorts of stuff that we\'re going to do in this specific tutorial. All right. So, now that we have this, let me quickly walk you through the code base.'
+
+[17:08] [scene:talk]
+VISUAL:
+AUDIO: 'All right. In terms of the code base, let us just start off with base.tsx. Base.tsx is the root page. It is where everything begins. So, this the a component called as video feed. And this specific video feed renders a video'
+
+[17:20] [scene:talk]
+VISUAL:
+AUDIO: 'card. Now, as you can see the video card that you see on the home page, which is Let\'s refresh it one more time. Right here is in fact this specific video card component itself.'
+
+[17:32] [scene:talk]
+VISUAL:
+AUDIO: 'Now, you can see this is an image kit URL endpoint that I have already set up. But, this is where you would want to replace it with your specific endpoint. You don\'t want to do use mine over here.'
+
+[17:45] [scene:talk]
+VISUAL:
+AUDIO: 'And then the video path that we will talk about, too. The next thing we need to do is if you see the video feed and what we pass as sample videos, we need a bunch of sample videos that we want to display on the'
+
+[17:59] [scene:talk]
+VISUAL:
+AUDIO: 'screen. So, I have a few sample videos that I have already uploaded. So, what we can do is together, let\'s go to ImageKit. And here, go to the media library. And as you can see, these are all the'
+
+[18:13] [scene:talk]
+VISUAL:
+AUDIO: 'different sample videos. They come with us one sample video, but you could upload whatever small videos you have on your phone. Think of it as your TikTok feed and upload whatever video you want. Once you do that, you have to come back'
+
+[18:25] [scene:talk]
+VISUAL:
+AUDIO: 'here and just update it. Again, um we are hard coding a bunch of the stuff that is likes, comments, shares, and bookmarks, so you can do that. But, just simply but just simply replace the video path with whatever path we have here.'
+
+[18:39] [scene:talk]
+VISUAL:
+AUDIO: 'So, I could just copy the URL, for example, and you can see this becomes the video path itself that you could replace it over here. Things'
+
+[18:51] [scene:talk]
+VISUAL:
+AUDIO: 'like that. All righty. So, now that we have this, you can also tweak the name of the display. As you know, I have a dog, his name is Kobe, and that\'s what I\'m using. So, all right, going back to the page,'
+
+[19:04] [scene:talk]
+VISUAL:
+AUDIO: 'replacing sample videos, and then going back to the video feed component, which essentially has video card. And this specific video card is a simple video element, a raw MP4. There is no poster.'
+
+[19:18] [scene:talk]
+VISUAL:
+AUDIO: 'There are these play pause icons here. There are some gradient overlays. And there is some creator info at the bottom. And all the way at the bottom we have the action bar as well, which shows'
+
+[19:30] [scene:talk]
+VISUAL:
+AUDIO: 'likes, comments, shares, and bookmark. Again, this component is pretty straightforward. What we are going to focus on is like whenever we are rendering an image or a video. Because if you think about it, too, like our vet'
+
+[19:42] [scene:talk]
+VISUAL:
+AUDIO: 'is failing these. And these are the biggest assets that could really impact their performance. So, if you look if you can fix that, then why not? So, let\'s do that now. So, to wrap the image kit provider, let\'s just go to layout.'
+
+[19:55] [scene:talk]
+VISUAL:
+AUDIO: 'And then next, let\'s just wrap it up in a provider. So, we could just create a providers component and let\'s that in.'
+
+[20:07] [scene:talk]
+VISUAL:
+AUDIO: 'It does not exist. So, let\'s just go to component, and let\'s create a new folder called providers. And over here, let\'s just create a image kit provider.tsx. And just'
+
+[20:20] [scene:talk]
+VISUAL:
+AUDIO: 'create the component, and we need to import image kit provider. But for that, we need to install it. So, I believe we have installed it. But image kit provider comes from image kit from the'
+
+[20:33] [scene:talk]
+VISUAL:
+AUDIO: 'image kit. So, let\'s just go here and paste it. There we go. Image kit provider. And this is also called that, so let\'s just call this providers, for example. And let\'s also rename let\'s also rename'
+
+[20:45] [scene:talk]
+VISUAL:
+AUDIO: 'this to be providers. And remove the image. And the fact that it comes from here, we don\'t have to worry about it. There we go. So, now let\'s import it'
+
+[20:58] [scene:talk]
+VISUAL:
+AUDIO: 'from providers. So, now our entire application will have exactly that, an image kit provider. And now we need a URL endpoint, which is going to be our ImageKit endpoint over here. And this is'
+
+[21:12] [scene:talk]
+VISUAL:
+AUDIO: 'going to be the exact endpoint that we set up in URL endpoints in ImageKit. So, copy it from there. Remember that. All right. Now, let\'s just test out that the indication works as expected.'
+
+[21:25] [scene:talk]
+VISUAL:
+AUDIO: 'You can see our avatar here. You know, it\'s cool, right? It\'s amazing. However, we need a better avatar here to begin with. Like, it needs to be cropped and'
+
+[21:37] [scene:talk]
+VISUAL:
+AUDIO: 'centered, and we don\'t want to use anything else, any other cropping tools for that. A user might upload whatever image they want, and we need to be able to crop it accurately. So, for that, we\'re going to'
+
+[21:49] [scene:talk]
+VISUAL:
+AUDIO: 'use the image component from ImageKit to do so. And let me show you how. And if we go back here, created info is where we have the image, for example. And here, let\'s just create a image'
+
+[22:02] [scene:talk]
+VISUAL:
+AUDIO: 'component, or import it from imagekit/next. Now, remember, since we already have a provider earlier with the image you are ImageKit URL'
+
+[22:14] [scene:talk]
+VISUAL:
+AUDIO: 'endpoint, we don\'t need to pass in a URL endpoint again. We could just pass in the avatar path here. And then, we need another property called as transformation with 40, height 40, focus'
+
+[22:27] [scene:talk]
+VISUAL:
+AUDIO: 'will be face face. And now, if we go back here, look at that. Now, that image has a focus of face, which is so cool. So, ImageKit is working as expected,'
+
+[22:40] [scene:talk]
+VISUAL:
+AUDIO: 'which is amazing. Now, if we head to profile, this has the same issue here, with a profile being like that. So, let\'s go to profile header, same idea. Import it with image from ImageKit.'
+
+[22:53] [scene:talk]
+VISUAL:
+AUDIO: 'Remove the endpoint, and now let\'s add a transformation of width 96, height 96, and focus as face. Boom, there we go. As simple as that. A simple change and it'
+
+[23:06] [scene:talk]
+VISUAL:
+AUDIO: 'is working as expected. And the beauty of this component is also that since it wraps the Next.js image component and adds additional capabilities, it\'s a lot more powerful as well. Now, on the profile page, especially in TikTok, we'
+
+[23:19] [scene:talk]
+VISUAL:
+AUDIO: 'don\'t have the videos playing. We essentially have like a thumbnail, like basically a snapshot of the video that we want to show, the first couple seconds, or whatever we select on the'
+
+[23:31] [scene:talk]
+VISUAL:
+AUDIO: 'profile page. So, in this case, we have like a blank screen because we don\'t have anything. We haven\'t built anything yet. So, we need to build a thumbnail again, and we could do that from'
+
+[23:44] [scene:talk]
+VISUAL:
+AUDIO: 'ImageKit URL itself. So, if we go to the docs, and look for thumbnail, you could easily create a video thumbnail by using IK thumbnail, which will automatically'
+
+[23:58] [scene:talk]
+VISUAL:
+AUDIO: 'get the first frame from the video. After the video resource URL. So, we could easily just prepend IK-thumbnail and do so. So, if we were to go back to our ImageKit, copy this URL,'
+
+[24:11] [scene:talk]
+VISUAL:
+AUDIO: 'and go here. As you can see, this is the MP4 file. Just like they said, if we copy this one and add that towards the end of appended,'
+
+[24:24] [scene:talk]
+VISUAL:
+AUDIO: 'this is the first frame in the video. Not super glamorous, my face, but this is the first frame. And this is exactly what will be shown on my feed. That\'s what we want. So, going back here,'
+
+[24:37] [scene:talk]
+VISUAL:
+AUDIO: 'that\'s what we\'ll implement. This is the placeholder video grid that we have, so that\'s what we need to change. So, let\'s replace this whole thing and create a new component called as profile grid, and pass in sample videos just'
+
+[24:51] [scene:talk]
+VISUAL:
+AUDIO: 'like that. Let\'s create a brand new component here. Call this profile grid.tsx, which will have a simple component. Let\'s pass the video, for example,'
+
+[25:03] [scene:talk]
+VISUAL:
+AUDIO: 'something like this. And here we can simply just add a class name of grid, grid calls three, gap 0.5, and loop to them. We don\'t need to do any of this.'
+
+[25:15] [scene:talk]
+VISUAL:
+AUDIO: 'Let\'s just simply do something simple. And add a div around it with aspect ratio of 16 and close it. Now, we just need a key or I guess you already have a'
+
+[25:28] [scene:talk]
+VISUAL:
+AUDIO: 'key on top. So, we don\'t need an additional div here. We could just add the div inside. Remove this wrapper div. And like Tailwind says, we don\'t need a box bracket, either. Now, source is simply going to be video.videoPath.'
+
+[25:42] [scene:talk]
+VISUAL:
+AUDIO: 'But remember I said that it\'s in fact going to have a IK thing that I told you about. Just do this. We don\'t need the video URL. All'
+
+[25:54] [scene:talk]
+VISUAL:
+AUDIO: 'we need is video path /IK- thumbnail.jpg. And we just need a transformation. And this is where we can get really'
+
+[26:06] [scene:talk]
+VISUAL:
+AUDIO: 'creative. We could simply say start offset is going to be video.thumbnailTime. And then width will be 200, height will be'
+
+[26:19] [scene:talk]
+VISUAL:
+AUDIO: '356, for example. And now let\'s import it from image kit, for instance. And fix this. Now, once we do, let\'s also show the view count here, too. Whatever we had here earlier, let\'s add'
+
+[26:32] [scene:talk]
+VISUAL:
+AUDIO: 'that in here. Let\'s just add 10K for now, over here. Perfect. All righty. So, now if we go back to profile grid, it\'s not important. So,'
+
+[26:44] [scene:talk]
+VISUAL:
+AUDIO: 'let\'s just go and import it. There we go. Go back here. It\'s saying that IK It\'s saying that it is missing a width property. It\'s correct. So, if we go back here quickly, go here and add width'
+
+[26:56] [scene:talk]
+VISUAL:
+AUDIO: 'of 200, height of 356. And there we go. It\'s displaying everything in a small thumbnail, but the thumbnails are working. So, we can definitely fix that for sure. So, if we go back here, we'
+
+[27:08] [scene:talk]
+VISUAL:
+AUDIO: 'don\'t need this. There we go. It\'s working as expected. We just added a grid inside a grid. That\'s it. Now, like I mentioned, if we go back to the home page,'
+
+[27:20] [scene:talk]
+VISUAL:
+AUDIO: 'we have this raw MP4 which is one quality level. Fast Wi-Fi users face no bandwidth, but slow connections buffer endlessly. So, we need to build our own HLS pipeline for this. However, we have'
+
+[27:32] [scene:talk]
+VISUAL:
+AUDIO: 'ImageKit to help with that. Since we have to store four different quality variants of the same video, we have to generate our own manifest. So, to solve for this, what we need to do is use the'
+
+[27:44] [scene:talk]
+VISUAL:
+AUDIO: 'adaptive bitrate streaming from ImageKit. We could simply use this specific video player, or also we could pass in parameters to the URL as well to do so.'
+
+[27:56] [scene:talk]
+VISUAL:
+AUDIO: 'We just need to pass in IK master with M3U8 or and then pass in the transformations that we\'re looking for. That is, what are the'
+
+[28:08] [scene:talk]
+VISUAL:
+AUDIO: 'different streaming resolutions that we need. Again, I\'m going to show you all of this. There are two options. You could definitely use the video player SDK as well, or you could go manual with custom parameters. Then, you want to then'
+
+[28:20] [scene:talk]
+VISUAL:
+AUDIO: 'construct manifest URLs directly. So, let\'s construct it manually here. So, if we close all of this right now, let\'s go to page and video feed and video card.'
+
+[28:32] [scene:talk]
+VISUAL:
+AUDIO: 'This is where we would be implementing. First of all, we need a package called as hls.js. So, over here we can say get HSL URL'
+
+[28:44] [scene:talk]
+VISUAL:
+AUDIO: 'equals video path to be whatever video path we want. Now, we just need to build the source so we can return build source from ImageKit.'
+
+[28:56] [scene:talk]
+VISUAL:
+AUDIO: 'And here we need to pass in the URL endpoint that we have. Then source will be video path, but over here we need to add again a parameter. Remember how we added a thumbnail initially? We just'
+
+[29:10] [scene:talk]
+VISUAL:
+AUDIO: 'need to pass in a IK master.m3u8. This is exactly what I showed you earlier. And also pass in the transformation that we\'re looking for as well. So, that'
+
+[29:22] [scene:talk]
+VISUAL:
+AUDIO: 'would include different streaming resolutions as well. So, we are going to need 240. Again, whatever streaming resolutions you are looking for, ImageKit is going to pass that. So, we can meet all of these'
+
+[29:35] [scene:talk]
+VISUAL:
+AUDIO: 'things as well. All right. Now, in the player itself, let\'s just do HLS SRC equal get the URL. And then add that add the specific code'
+
+[29:48] [scene:talk]
+VISUAL:
+AUDIO: 'here. Now, for this we need to import HLS.js and also need to create a ref for that as well. So, over here we could say const HLS ref equals'
+
+[30:02] [scene:talk]
+VISUAL:
+AUDIO: 'that. That\'s it. And at the bottom, we could just remove this source property altogether. So, now again, let\'s restart the server. Let\'s go here. Go to the'
+
+[30:15] [scene:talk]
+VISUAL:
+AUDIO: 'network tab. Let\'s first go back to no throttling for now and let\'s refresh the page. And then here we are going to look for the property that we just set with UA.'
+
+[30:27] [scene:talk]
+VISUAL:
+AUDIO: 'And now you can easily see that this is a manifest file and literally the video for Amazon or the sample video has different variants. So, like literally you can copy this URL, and here and you'
+
+[30:39] [scene:talk]
+VISUAL:
+AUDIO: 'can see a different version being added. And this is the manifest file that I told you about here as well. That it will create this HLS bitrate ladder, which is this manifest file, and'
+
+[30:51] [scene:talk]
+VISUAL:
+AUDIO: 'depending on your device, your bandwidth, it\'s automatically going to serve that to you, for instance. So, these are all the different files at different like resolutions that we'
+
+[31:03] [scene:talk]
+VISUAL:
+AUDIO: 'specified as well. And we didn\'t need to do any of this. You know, all we needed to do was pass in the source parameters, and that\'s it. And it automatically took care of that for us, which is insane.'
+
+[31:16] [scene:talk]
+VISUAL:
+AUDIO: 'So, now, remember that black sort of overlay, like some flashback? Let\'s just go to the slow 3G, and I\'m going to refresh the page here. So, now, since I\'m on a slow 3G network, let me just'
+
+[31:29] [scene:talk]
+VISUAL:
+AUDIO: 'move this to the side, and let\'s refresh the page here on a slow 4G network. And now you can see as I once it loads, it automatically has loaded in a lower resolution device because I\'m on a slow'
+
+[31:41] [scene:talk]
+VISUAL:
+AUDIO: '4G network here. So, that\'s what I mean. And it has automatically taken care of a lot for us, so we don\'t have to worry about it. And this is honestly really powerful, and a lot of these video'
+
+[31:54] [scene:talk]
+VISUAL:
+AUDIO: 'streaming sites definitely use that. So, I will recommend checking it out. So far, we have created video thumbnails. We have added adaptive bitrate streaming. But we could also add like overlays on top of video. We could'
+
+[32:07] [scene:talk]
+VISUAL:
+AUDIO: 'resize and crop the videos. We could do audio transformations, trim videos, and so on. There\'s a lot that we could do with ImageKit. All right. So, now, like I said, videos and thumbnails need'
+
+[32:20] [scene:talk]
+VISUAL:
+AUDIO: 'different aspect ratios for different UI contexts. For example, in Instagram, we have a square grid versus on TikTok, we have a portrait.'
+
+[32:32] [scene:talk]
+VISUAL:
+AUDIO: 'Sometimes we need a landscape preview. All these need different aspect ratios. We cannot keep uploading and re-uploading different sort of aspect ratio videos every time. We need a really easy way to resize and crop'
+
+[32:44] [scene:talk]
+VISUAL:
+AUDIO: 'videos by passing in just a few parameters. And normally, if you were to do this, you would pre-generate multiple crops or do it server-side. But, that\'s not feasible and scalable. So, the'
+
+[32:56] [scene:talk]
+VISUAL:
+AUDIO: 'solution is to use URL parameters control crop mode on the fly. And with AI coming in the picture, why even worry about doing it manually? We could use the focus mode, which is the'
+
+[33:10] [scene:talk]
+VISUAL:
+AUDIO: 'automatic smart crop in ImageKit that AI picks the most interesting regions or smart crop. You could also use maintain ratio crop strategy, which center crops'
+
+[33:25] [scene:talk]
+VISUAL:
+AUDIO: 'to exact dimensions. And then, you could also add a padding resize as well to add padding instead of cutting content. You could just use padding'
+
+[33:37] [scene:talk]
+VISUAL:
+AUDIO: 'resize as well over here, too. So, all this would give us a really cool video. So, if we go here and go to the discover page, there\'s nothing right now. These are a bunch of transformation grids that'
+
+[33:50] [scene:talk]
+VISUAL:
+AUDIO: 'I\'ve left empty. This way I can show you all the different transformations we can do with ImageKit. Let\'s also go back into throttling and close this network tab because we don\'t need it. And now, let\'s go ahead and try it out. So, first'
+
+[34:03] [scene:talk]
+VISUAL:
+AUDIO: 'of all, let\'s close all of this, go to the discover page where we want this to be there. And And here, let\'s just create video path equal let\'s just do sample videos zero'
+
+[34:15] [scene:talk]
+VISUAL:
+AUDIO: 'or let\'s just do one. And let\'s import sample videos that we have. And then, we can pass that video path accordingly. Now, we have the discover'
+
+[34:27] [scene:talk]
+VISUAL:
+AUDIO: 'grid here. Well, we can just move this video back in the discovered grid itself. All righty. Let\'s import sample videos. And here, instead of 1 2 3 4, let\'s just replace this with'
+
+[34:41] [scene:talk]
+VISUAL:
+AUDIO: 'transformations, which don\'t exist right now, but let\'s just map to it. This is going to be transform, red index.'
+
+[34:53] [scene:talk]
+VISUAL:
+AUDIO: 'And let\'s add a div. Let\'s add a wrapping div here, too. All righty. So, transformations don\'t exist right now. Let\'s just create a transformations array, for example, and'
+
+[35:06] [scene:talk]
+VISUAL:
+AUDIO: 'then go from there. And we don\'t need any of this, so let\'s remove it. All right. Inside that, we just need a image component from'
+
+[35:18] [scene:talk]
+VISUAL:
+AUDIO: 'image hit next, and then add a source to be transform. And then we need to pass in a get source property, which we will do very soon. Let\'s also'
+
+[35:30] [scene:talk]
+VISUAL:
+AUDIO: 'add a all tag, which will be transform.label. And before we write any code further, let\'s just also add that here. So, let me show you what we are talking about'
+
+[35:43] [scene:talk]
+VISUAL:
+AUDIO: 'here. So, there you\'ll have a label. Let\'s just call it OG. And then we will have a another property here. Let\'s just do the AI thing that I was telling you about, a'
+
+[35:55] [scene:talk]
+VISUAL:
+AUDIO: 'smart crop. So, let\'s just add some description here, which is going to be PR equals W400, which will be width and height of the'
+
+[36:07] [scene:talk]
+VISUAL:
+AUDIO: 'image. And then you have your pass in a full auto, which is what gives us the smart crop. Let\'s get source video path, the video path, and then here we could pass in the video path, except'
+
+[36:21] [scene:talk]
+VISUAL:
+AUDIO: 'it will be thumbnail. Not JPG. Now, let\'s just pass in get transformation and focus on the auto, height 400, width 400, and start offset'
+
+[36:33] [scene:talk]
+VISUAL:
+AUDIO: 'two. Perfect. We don\'t even need video path it. There we go. All right. So, now that we have this, we have the transformations on adding it here. So, we have all tag and then we'
+
+[36:46] [scene:talk]
+VISUAL:
+AUDIO: 'just need a transformation to be transform.getTransformation, this function that we\'re going to call here. All right. And then, let\'s also give it a class name to be W full object cover. There we go. Save it. Perfect.'
+
+[37:00] [scene:talk]
+VISUAL:
+AUDIO: 'So, now if I go back here, refresh the page. So, now let\'s also give it a width of 400, a height of 500 here, too. If we take a look, it\'s not giving us an image'
+
+[37:13] [scene:talk]
+VISUAL:
+AUDIO: 'here because focus auto only works on image transformations, not on video. So, if we head back to our app, it works now. So, now if we go back here, we go to video transformations, we can also'
+
+[37:25] [scene:talk]
+VISUAL:
+AUDIO: 'add like some overlays on top of the video. For example, if you want to add like images over video, like for example, a branding or if you want to we can do that as well. So, if we can get back, let\'s just change this to one.'
+
+[37:37] [scene:talk]
+VISUAL:
+AUDIO: 'Let\'s create a more fun one, this video. And then I can just add next year\'s course start date on top as an overlay. So, if we go back here, all we need is this one. DR is in the following syntax.'
+
+[37:49] [scene:talk]
+VISUAL:
+AUDIO: 'So, as you can see here, this hello has been added with these parameters, DR. So, now let\'s get another one. Let\'s call this'
+
+[38:01] [scene:talk]
+VISUAL:
+AUDIO: 'overlay and let\'s just change this to DR. And then, instead of adding it as a description here, we just need to add a raw alt text I hello, whatever. Here, I\'m just going to say'
+
+[38:16] [scene:talk]
+VISUAL:
+AUDIO: 'next year\'s course start date. See, you can back. Let\'s see if we refresh the page. And There we go. It\'s gray bank. There we go. So, it\'s sort of fitting in. When you get the idea, you could'
+
+[38:28] [scene:talk]
+VISUAL:
+AUDIO: 'also just simply add X here as well and set the transformation. The other thing I also wanted to show was resizing and recropping. Because like I said, Instagram had a square crop. TikTok has more of a portrait one. So, we could'
+
+[38:43] [scene:talk]
+VISUAL:
+AUDIO: 'just go to resize and crop and add that to it. The original is this one. We could set W 300 to make it that way or IW div 2 to make it this size, like half of the original and so on, too. So, we'
+
+[38:56] [scene:talk]
+VISUAL:
+AUDIO: 'could do a lot here. So, let\'s try a squared crop just like how they have it in Instagram. So, let\'s just do a squared crop here, not overlay. And here we can just say DRW 400.'
+
+[39:10] [scene:talk]
+VISUAL:
+AUDIO: 'Let\'s just do each 400. See maintain ratio, for example.'
+
+[39:23] [scene:talk]
+VISUAL:
+AUDIO: 'Remove all of this. Remove this raw line as well. And then set Let\'s start the offset at two. 400 400 and let just say crop to be'
+
+[39:35] [scene:talk]
+VISUAL:
+AUDIO: 'maintain ratio. If we head back and refresh the page, you can sort of see that it\'s smaller. Let\'s make it 200. If I refresh the page, there we go. So, this is how you could also just'
+
+[39:48] [scene:talk]
+VISUAL:
+AUDIO: 'resize and crop it. You can do a lot of things here. Make your videos and images exactly how you want it to be. It will also show like trim videos as well and so on, too. So, there\'s a lot we could'
+
+[40:00] [scene:talk]
+VISUAL:
+AUDIO: 'do with the API. The honestly, the world is your oyster. As developers, our job is to pick the right tools to build the best experience for the user. So, stop trying to build complex image pipelines and video'
+
+[40:13] [scene:talk]
+VISUAL:
+AUDIO: 'transcoders on your own net share Offload the heavy lifting as much as possible. Again, massive thanks to ImageKit for sponsoring this build. Seriously, the free tier is incredibly generous, so go use it in your next'
+
+[40:26] [scene:talk]
+VISUAL:
+AUDIO: 'project. Link is in the description below. And the source code for this entire clone is in the description as well. Now, I know this build is slightly different than a lot of the other builds that I\'m trying to teach. However, I'
+
+[40:39] [scene:talk]
+VISUAL:
+AUDIO: 'think this is exactly the content that will differentiate you the world of AI and help you stand out as well. As next steps, if you are interested, then definitely check out this video on the dangerous flaw that every AI agent has.'
+
+[40:52] [scene:talk]
+VISUAL:
+AUDIO: 'You will learn a lot, and it\'s a really good continuity after this specific build. As usual, subscribe to my channel, and I\'ll see you all in the next one. Bye for now.'

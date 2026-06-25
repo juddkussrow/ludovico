@@ -1,0 +1,455 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: The Claude Code Workflow a $4B Unicorn Copied From Me
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=AG68VC_mOGY
+upload_date: 20251128
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'Hello. So, today I\'m going to go through my AI assisted development workflow. So, this was actually adopted by a engineering team at a $4 billion unicorn on a VAPI replacement project I was doing last month. And I didn\'t actually know anyone was using it until they asked me to present'
+
+[00:13] [scene:talk]
+VISUAL:
+AUDIO: 'it division-wide. So, if you\'ve tried AI coding tools for anything serious, you\'ll have noticed that they don\'t really deliver out of the box. They hallucinate, lack context, and they produce generic code.'
+
+[00:25] [scene:talk]
+VISUAL:
+AUDIO: 'So, if you\'re using them for simple stuff like auto-complete, scaffolding, stuff like that, you might be wondering what you\'re missing when people claim they have like 10 times productivity on this stuff. And don\'t know about 10x productivity, but'
+
+[00:38] [scene:talk]
+VISUAL:
+AUDIO: 'the missing piece is really the workflow that you build around them, which is where you teach it your own development processes. And that\'s what we\'re going to go through today. So, I must say that I\'ve never personally used Claude Code without any of these context management'
+
+[00:51] [scene:talk]
+VISUAL:
+AUDIO: 'systems built in, cuz I carried over knowledge from using Cursor, then Wind Surf, then Cursor again. I tried some of the builder platforms like Lovable, Bolton, V naught, and those are okay, but when Claude Code'
+
+[01:04] [scene:talk]
+VISUAL:
+AUDIO: 'came out, I realized that their advantage is that they have a development process built in, plus domain-specific knowledge. And I found I realized with Claude Code, what you'
+
+[01:16] [scene:talk]
+VISUAL:
+AUDIO: 'can do is you can just basically build that yourself and tailor it specifically for your project. And that\'s what I bootstrap at the beginning of every project. So, for more background on this, like when I started this project, the first thing I did with all as with all'
+
+[01:29] [scene:talk]
+VISUAL:
+AUDIO: 'projects is start building my custom commands and sub-agents that I\'ll be using on the project. And I committed this to version control, and as I was producing code with this, I was also'
+
+[01:41] [scene:talk]
+VISUAL:
+AUDIO: 'committing the documents for each task to version control, so people could use it and follow along. I didn\'t actually know if anyone was using it until like a couple of weeks later in one of the stand-up sessions, they mentioned it, yes, actually'
+
+[01:54] [scene:talk]
+VISUAL:
+AUDIO: 'everyone is using it, and they wanted me to present it as I said, division-wide. So, this video is essentially going to be that presentation. So, I\'m hoping this is going to be useful for anyone getting started with'
+
+[02:06] [scene:talk]
+VISUAL:
+AUDIO: 'AI assisted development tools like Cursor and Claude Code, or if you\'ve tried them and you\'ve been underwhelmed with the results that you\'ve been getting. There\'s a couple of principles underlying how I get good results from LLMs in general for both voice AI and AI'
+
+[02:19] [scene:talk]
+VISUAL:
+AUDIO: 'assisted development, and I\'m going to explain what those are, and specifically how they apply to AI assisted development in this particular video. So, today as we go through this, what'
+
+[02:32] [scene:talk]
+VISUAL:
+AUDIO: 'I\'m going to do is I\'m going to add a feature to a Pipe Cat starter template I\'m planning to open source. We\'re going to be adding a JSON-based assistant configuration that will configure the assistant behavior and the pipeline'
+
+[02:45] [scene:talk]
+VISUAL:
+AUDIO: 'configuration. And we\'re also going to test out Claude\'s new Opus 4.5 model to do this. If you\'re building production voice AI systems, you\'re going to have to read a lot of documentation and also a lot of'
+
+[02:58] [scene:talk]
+VISUAL:
+AUDIO: 'code before you get started. Pipe Cat, VAPI, Twilio, you\'ll have to figure out how to accomplish the task, and then you\'ll have to explain it to the assistant so that it does a good job. So, what I\'ve done is I\'ve built'
+
+[03:11] [scene:talk]
+VISUAL:
+AUDIO: 'specialized sub-agents that can handle doing the deep research, research the code base, and um they\'ll come back with recommendations on how to um approach a solution. Now, it\'s obviously works better if you yourself understand'
+
+[03:24] [scene:talk]
+VISUAL:
+AUDIO: 'exactly how things work, and you can point to different parts of documentation and code base to get it started. So, yeah, that\'s what we\'re going to do. I\'m going to kick off a task, and then'
+
+[03:36] [scene:talk]
+VISUAL:
+AUDIO: 'I\'ll explain what happened. Okay, so let\'s get this party started. It all begins with the plan task custom command. Okay, so I want to add a configurability'
+
+[03:53] [scene:talk]
+VISUAL:
+AUDIO: 'layer here to this project. We\'re going to build a JSON configuration for the assistant and the pipeline setup. So, I want there to be two main nodes, one for'
+
+[04:05] [scene:talk]
+VISUAL:
+AUDIO: 'the assistant behavior, such as the system prompt, first message, last message, and the assistant name, and there\'ll be another node for the technical pipeline configuration, which'
+
+[04:18] [scene:talk]
+VISUAL:
+AUDIO: 'sets up the services contained in that pipeline. For the VAPI expert sub-agent, I want you to focus on researching VAPI\'s transient assistant configuration implementation,'
+
+[04:30] [scene:talk]
+VISUAL:
+AUDIO: 'and for the Pipe Cat expert sub-agent, I want you to basically focus on what services are supported by Pipe Cat, because they don\'t have a built-in JSON configuration for this.'
+
+[04:43] [scene:talk]
+VISUAL:
+AUDIO: 'And that\'s what we\'re building on top of. The VAPI\'s um implementation should just be used to inform our strategy, and we should be customizing this for Pipe Cat\'s'
+
+[04:55] [scene:talk]
+VISUAL:
+AUDIO: 'idiomatic pipeline configuration methodology. Um at a minimum, for the STT, I want to support Deepgram\'s Nova 3 model and Flux model,'
+
+[05:09] [scene:talk]
+VISUAL:
+AUDIO: 'um Gladia\'s models, and OpenAI\'s Whisper model. For the LLM, I want to support the OpenAI family, and also Google\'s Gemini 2.5 Flash at a minimum.'
+
+[05:21] [scene:talk]
+VISUAL:
+AUDIO: 'And for the TTS, I want to support Rhyme, 11 Labs, and Cartesia. I\'m also going to need you to create test cases, so example assistant configs I can use to test this at the end.'
+
+[05:33] [scene:talk]
+VISUAL:
+AUDIO: 'And I for now want to be able to pass these assistant configuration to the application as a command-line parameter. We\'ll just be passing a reference to the'
+
+[05:45] [scene:talk]
+VISUAL:
+AUDIO: 'file. When it comes to storing API keys, those will be in the environment um file config, the .env file. Um but the rest of the configuration will be assistant-specific, and that can go in'
+
+[05:59] [scene:talk]
+VISUAL:
+AUDIO: 'the main configuration we\'re building. Okay, so I\'ll kick this off. You\'ll notice that I\'m being vague on how to implement things, but specific about what context each expert needs. Um I like to see basically what the AI'
+
+[06:13] [scene:talk]
+VISUAL:
+AUDIO: 'comes up with, and then correct it, and then in doing this correction, I find that I naturally sort of explain what I where I want to get to with this project, and that gives it just a better understanding of the goals'
+
+[06:25] [scene:talk]
+VISUAL:
+AUDIO: 'of the project. And notice that the the sub-agents aren\'t implementation sub-agents. They are research sub-agents. The idea is they\'re providing their recommendations to the main orchestrating agent, which is then'
+
+[06:39] [scene:talk]
+VISUAL:
+AUDIO: 'going to do the implementation. And we use the sub-agents really to um allow the system to have more context, cuz each sub-agent gets its own context, and there\'s no need to burn tokens in the main orchestrating agent, because you\'ll'
+
+[06:52] [scene:talk]
+VISUAL:
+AUDIO: 'just be provided a summary back from the research agents. Okay, so that\'s good, about 10 minutes, and let\'s have a look what it did. The first thing it does is come up with a name for the task, and then the next thing it does is that it'
+
+[07:05] [scene:talk]
+VISUAL:
+AUDIO: 'uses the VAPI expert sub-agent and the Pipe Cat expert sub-agent to figure out how we can solve this prob- problem based on my directions. So, the way the um'
+
+[07:17] [scene:talk]
+VISUAL:
+AUDIO: 'VAPI expert works is I\'ve basically given it access to VAPI\'s documentation locally, um cuz they have a public GitHub repo with their documentation all there.'
+
+[07:30] [scene:talk]
+VISUAL:
+AUDIO: 'Um so, I clone that locally, and I give it access to that. I also inform it where the online documentation is, and also the Swagger documentation, which is the Open API documentation, so it can it is instructed to research all these'
+
+[07:45] [scene:talk]
+VISUAL:
+AUDIO: 'things and figure out um how the problem that I\'ve specified is solved in VAPI. Uh the Pipe Cat expert, similarly, this has access to the local um Pipe Cat repo, which I\'ve cloned,'
+
+[07:58] [scene:talk]
+VISUAL:
+AUDIO: 'and I just symbolically link all these external dependencies in a directory called _refs, and I just explain to the experts where they can access all this and what they are to do'
+
+[08:10] [scene:talk]
+VISUAL:
+AUDIO: 'with this, which is obviously just figure out how to solve my problem using all this information. And yeah, that then these experts provide back detailed summaries to the main orchestrating agent, and then the'
+
+[08:23] [scene:talk]
+VISUAL:
+AUDIO: 'main agent produces a series of documents I can use to review the plan. So, let\'s go through the files that it\'s made. Firstly, we\'ll start with the implementation notes. So, this initially is where actually the'
+
+[08:37] [scene:talk]
+VISUAL:
+AUDIO: 'full analysis provided by each of the sub-agents is shown in full, so you can review it and make sure it um comports with your understanding, and also you can like research it'
+
+[08:50] [scene:talk]
+VISUAL:
+AUDIO: 'yourself based on what it\'s come up with here. And one of the key things about this is that the Pipe Cat sub-agent is instructed to identify what the idiomatic way of solving things using'
+
+[09:03] [scene:talk]
+VISUAL:
+AUDIO: 'Pipe Cat\'s framework is, and that\'s something that the plan task command is also instructed to do. And that\'s important, cuz I\'m generally trying to be a chameleon whenever I\'m building on top of'
+
+[09:15] [scene:talk]
+VISUAL:
+AUDIO: 'frameworks, so I\'m extending the existing patterns that are used by that framework, and only taking liberties once you get to a level of abstraction where that sort of thing makes sense. And that means that anyone coming into'
+
+[09:27] [scene:talk]
+VISUAL:
+AUDIO: 'the project to work on it doesn\'t have to learn anything new, basically, when I\'m when they\'re um working with my code. And in particular with this starter template, of course, I don\'t want people to have in to be learning Pipe Cat and also how I\'m'
+
+[09:39] [scene:talk]
+VISUAL:
+AUDIO: 'doing things in this. The next document, then, is the plan, which contains the overall approach to solving the problem, and this you can review and make sure it\'s sensible,'
+
+[09:51] [scene:talk]
+VISUAL:
+AUDIO: 'and request any modifications you need if you disagree with anything. Then we have the decisions file. And this is where the assistant communicates any decisions'
+
+[10:05] [scene:talk]
+VISUAL:
+AUDIO: 'that it\'s made and also has listed any pending decisions that it needs your input on to proceed. So, you can review those and like give your decision on there and see'
+
+[10:18] [scene:talk]
+VISUAL:
+AUDIO: 'if the decisions it\'s made autonomously are sensible and if it needs any direction there, too. And last but not least is a status file which basically communicates the current progress in the task'
+
+[10:32] [scene:talk]
+VISUAL:
+AUDIO: 'implementation. As you go through implementing a task, there are going to be changes you\'ll need to make to the first version that Claude puts together.'
+
+[10:45] [scene:talk]
+VISUAL:
+AUDIO: 'And as you\'re doing so, the implementation notes get updated with what\'s changed and the lessons that have been learned along the way. And there is actually a task context'
+
+[10:57] [scene:talk]
+VISUAL:
+AUDIO: 'tracker assistant which is used to automatically keep these documents updated once Claude has gone through an implementation cycle. So, keeping the'
+
+[11:10] [scene:talk]
+VISUAL:
+AUDIO: 'documents in sync as you\'re iterating on a task implementation is important both for the current task and also because there can be lessons learned that are worth capturing in a standalone document for future task implementations. So,'
+
+[11:23] [scene:talk]
+VISUAL:
+AUDIO: 'I\'ve always got a root docs folder that\'s separate and has separate subfolders in there like pipe cat for example to capture any specific lessons I\'ve learned'
+
+[11:35] [scene:talk]
+VISUAL:
+AUDIO: 'while implementing a particular task. And these task specific documents can be used to build that. And I think of this as a way of adding project specific memory. So, all memory is really advanced'
+
+[11:48] [scene:talk]
+VISUAL:
+AUDIO: 'context management systems. Real memory systems have sophisticated storage and retrieval, optimized processes for getting the right memories into the context at the right time. So, I\'ve just basically built a dollar store version'
+
+[12:01] [scene:talk]
+VISUAL:
+AUDIO: 'of this for AI assisted development and it works pretty well. And obviously the key is that the expert sub agents are prompted to check the particular folder that contains the'
+
+[12:13] [scene:talk]
+VISUAL:
+AUDIO: 'learnings for the specific framework or system that they are expert in and deciding whether to use those in the specific task. So, let\'s go through some of the other'
+
+[12:26] [scene:talk]
+VISUAL:
+AUDIO: 'commands I\'ve got here. So, root cause analysis, this is basically a collaborative debugging procedure. So, essentially I will identify an issue that I\'m having with the code. The idea is the'
+
+[12:40] [scene:talk]
+VISUAL:
+AUDIO: 'assistant\'s going to investigate, come up with a hypothesis on what it thinks the root cause of this issue is. It\'s going to add debug logging to the project to establish for sure whether or'
+
+[12:52] [scene:talk]
+VISUAL:
+AUDIO: 'not its hypothesis is correct or incorrect and then it\'s going to start the server. And then it hands back to me to reproduce the issue. So, I\'ll interact with the voice AI and reproduce'
+
+[13:05] [scene:talk]
+VISUAL:
+AUDIO: 'the issue. And then I\'ll hand back to the assistant and it\'s going to check logs and determine whether or not its hypothesis was correct. If it is, it\'s going to reset the code base using Git'
+
+[13:17] [scene:talk]
+VISUAL:
+AUDIO: 'and add a fix. And then it hands back to me to do the testing. And I\'ll check whether or not it\'s correct. And that\'s an actual fix. And if it is, we'
+
+[13:30] [scene:talk]
+VISUAL:
+AUDIO: 'that we can commit it. And if it\'s not, we continue iterating until we find out the real problem. So, root cause analysis varies project to project. I\'ve got a Next.js project where instead of having it running the'
+
+[13:43] [scene:talk]
+VISUAL:
+AUDIO: 'back end server for example, you\'ll have it um run the front end and then also give it access to Puppeteer MCP so that it can launch a specific instance I have got'
+
+[13:57] [scene:talk]
+VISUAL:
+AUDIO: 'installed of Chrome which is Chrome developer edition which is just used for um Claude code when it\'s doing its investigation and this lets it actually have a look at the HTML and the Claude'
+
+[14:09] [scene:talk]
+VISUAL:
+AUDIO: 'the um Chrome dev tools to see whether or not it\'s solved the issue or not basically. So, these are just ways of getting creating a feedback loop for this root cause'
+
+[14:21] [scene:talk]
+VISUAL:
+AUDIO: 'analysis thing so you have to do less of the analysis essentially. So, create pull request is another one I used quite a lot. So, this doesn\'t actually create the pull request. What it does is it makes a'
+
+[14:34] [scene:talk]
+VISUAL:
+AUDIO: 'document in the docs folder for me with all the information I need to create the pull request. So, it actually tells you the differences between the branch you\'re currently on and the one you want'
+
+[14:47] [scene:talk]
+VISUAL:
+AUDIO: 'to merge into which it takes as an argument, the branch you want to merge into that is. And it also tells me what commands to run in GitHub just to remind me um with the GitHub CLI how I can create a pull'
+
+[14:59] [scene:talk]
+VISUAL:
+AUDIO: 'request with the uh description and suggested header it gives there. So, then actually to create the custom commands, I actually have a create command'
+
+[15:11] [scene:talk]
+VISUAL:
+AUDIO: 'um custom command. And what this does is it has access to Claude\'s documentation which explains how to create a custom command as a web'
+
+[15:23] [scene:talk]
+VISUAL:
+AUDIO: 'page which explains the best practices. And then it also has access to the existing custom commands which it should use as examples to understand what sort of structure I create my custom commands in.'
+
+[15:37] [scene:talk]
+VISUAL:
+AUDIO: 'And also when I\'m bootstrapping, sometimes I just have an examples folder which I\'ll instruct it to look at for inspiration. But I have to say a lot of these I find are portable and in particular the create command and create sub agent custom commands are what I'
+
+[15:49] [scene:talk]
+VISUAL:
+AUDIO: 'always use to bootstrap any project. So, create sub agent works very similar to create command. There\'s online documentation on Anthropic'
+
+[16:01] [scene:talk]
+VISUAL:
+AUDIO: 'saying the best practices when creating sub agents. And then there\'s the existing sub agents in here which has access to and again as I mentioned sometimes I provide examples when I\'m bootstrapping. So, I do also in this'
+
+[16:13] [scene:talk]
+VISUAL:
+AUDIO: 'project have a prompt engineering expert sub agent which I use to help me draft my prompts. And this has the accumulated knowledge of like 18 months or so doing'
+
+[16:25] [scene:talk]
+VISUAL:
+AUDIO: 'this kind of work. Um where I basically apply the same principles that I\'m trying to communicate in this video with respect to context management and task decomposition to get good results.'
+
+[16:37] [scene:talk]
+VISUAL:
+AUDIO: '[clears throat] But in this case, it\'s in the context of actual voice agents in real time which is slightly different. And actually that\'s going to be the subject of my next video hopefully where'
+
+[16:49] [scene:talk]
+VISUAL:
+AUDIO: 'I describe how to split up very complex prompts into sub nodes in order to provide the most specific context to the assistant for the'
+
+[17:02] [scene:talk]
+VISUAL:
+AUDIO: 'specific stage in a core flow. Um reduce the tokens that are used overall so that you increase the reliability and reduce latency and cost. So, now for the fun'
+
+[17:16] [scene:talk]
+VISUAL:
+AUDIO: 'part, I\'m actually going to go through the planning documents and get this feature implemented. So far, so good. See, this is good. It\'s found there\'s different services for'
+
+[17:30] [scene:talk]
+VISUAL:
+AUDIO: 'flux and for just deep gram standard in pipe cat. It\'s actually identified the best three models or so open AI. That\'s cool. This looks good. Looks good.'
+
+[17:42] [scene:talk]
+VISUAL:
+AUDIO: 'Yep, this looks pretty much what I had in mind. Okay, so this needs correction. It\'s not fall back to current behavior. It should just break. Okay, so then implement no decisions. Okay, provider discrimination is correct. Yep. Okay, so'
+
+[17:55] [scene:talk]
+VISUAL:
+AUDIO: 'there\'s some stuff I need to correct in the decisions document. Okay, so I\'m just going through the plan and pending decisions.'
+
+[18:07] [scene:talk]
+VISUAL:
+AUDIO: 'So, for the provider specific parameters, I actually want strict schema per provider. So, you\'ll be making multiple config classes. For the default behavior without the'
+
+[18:19] [scene:talk]
+VISUAL:
+AUDIO: 'config, I don\'t want any fall back. I want it to break if there is no config provided cuz that\'s what\'s going to trigger everything to go off essentially. The assistant config is necessary. For the config file'
+
+[18:31] [scene:talk]
+VISUAL:
+AUDIO: 'extension, I only want to allow JSON. We\'re not supporting YAML. There\'s going to be one schema configuration supported. Um validation strictness, um strict with clear error error messages.'
+
+[18:44] [scene:talk]
+VISUAL:
+AUDIO: 'But the error messages should only be visible in logs when you\'re returning errors via the API, um those should just be general messages cuz for security we don\'t want to be'
+
+[18:56] [scene:talk]
+VISUAL:
+AUDIO: 'revealing um internal operations or anything like that. Hot reload support, no, we don\'t support that. Just a static config only. Restart required for changes. And for environment variables overrides,'
+
+[19:09] [scene:talk]
+VISUAL:
+AUDIO: 'this actually shouldn\'t be an issue. There should be a clear separation between what appears in the environment and what appears in the JSON config. The environment variable is just for system level config. So, this is going to be'
+
+[19:22] [scene:talk]
+VISUAL:
+AUDIO: 'where our API keys go. And everything else is going to be configured in the assistant config. So, if you could make those changes to the document so I could review them, I would appreciate that. Okay.'
+
+[19:34] [scene:talk]
+VISUAL:
+AUDIO: 'Okay, so it\'s completed that within 5'
+
+[19:46] [scene:talk]
+VISUAL:
+AUDIO: 'minutes. Just going to do a second pass over the documents, make sure everything\'s okay. Plan looks good, decisions. So, everything\'s looking good now, so I\'m just actually going to get it to'
+
+[19:58] [scene:talk]
+VISUAL:
+AUDIO: 'kick off the task. Planning documents now look good. Please go ahead and complete the implementation, UltraThink. Okay, so it\'s finished its initial implementation. I was reading the code'
+
+[20:10] [scene:talk]
+VISUAL:
+AUDIO: 'as it was producing it, and I spotted some things I\'ll need to fix later, but they\'re relatively minor, and I should be able to demonstrate the switching of the TTS, at least, by changing the assistant config. So,'
+
+[20:24] [scene:talk]
+VISUAL:
+AUDIO: 'we\'ll do that. For now, though, please add the root configs folder to get ignore, because I don\'t want to be saving the configs to source control, and then go ahead and commit the rest of'
+
+[20:37] [scene:talk]
+VISUAL:
+AUDIO: 'the progress. Okay, so that\'s done. We\'ll just do some testing now. Okay, so switching over to headphones temporarily, so you can hear the bot testing without an echo. So, I noticed the Deepgram Nova test is using'
+
+[20:50] [scene:talk]
+VISUAL:
+AUDIO: 'Cartesia, and the Rhyme test is using Flux, but it uses Rhyme for that. So, let\'s just test to see whether it says the right first message in the right'
+
+[21:02] [scene:talk]
+VISUAL:
+AUDIO: 'voice. So, let\'s run this. UV run Start with Deepgram.'
+
+[21:20] [scene:talk]
+VISUAL:
+AUDIO: 'Okay, so browser window Hello.'
+
+[21:37] [scene:talk]
+VISUAL:
+AUDIO: 'This is a test bot using Deepgram Nova. How can I help? Very good. So, now let\'s try with Rhyme. Hello, this is a test bot using Rhyme'
+
+[22:01] [scene:talk]
+VISUAL:
+AUDIO: 'TTS. How can I help? Great. So, the initial draft is complete. So, I\'ll obviously need to do more iteration on this, actually get it'
+
+[22:14] [scene:talk]
+VISUAL:
+AUDIO: 'um to production-ready. But, yeah, that should do for the demonstration. So, then, in summary, um in order to get good results with your'
+
+[22:26] [scene:talk]
+VISUAL:
+AUDIO: 'AI assistant tools, or just any AI tools with an LLM component in general, you need to provide the right context, context management. So, that gives it the best chance at providing good results. This is basically a system to'
+
+[22:40] [scene:talk]
+VISUAL:
+AUDIO: 'dynamically build that context per task, because dependencies, the source code actually often changes. Python gets often pro- releasing new versions. Um and this just basically keeps it all'
+
+[22:54] [scene:talk]
+VISUAL:
+AUDIO: 'up to date with current learnings and such. And then there\'s task decomposition, which is how complex of a task can I give the assistant at any one time. So, this is just the first iteration. We\'re loading from a file rather than'
+
+[23:08] [scene:talk]
+VISUAL:
+AUDIO: 'passing it via the API, and it\'s really just the most basic implementation to get started. So, hopefully that helps. Um if you found this useful, like, subscribe,'
+
+[23:20] [scene:talk]
+VISUAL:
+AUDIO: 'comment, all that good stuff. And this template I\'m getting ready to release open source, so, you know, follow along if you\'re interested in that. And also, the same principles, context management and task decomposition, I'
+
+[23:33] [scene:talk]
+VISUAL:
+AUDIO: 'will be making another video on that, specifically related to real-time voice interactions, um and basically splitting up very complex prompt prompts into multiple'
+
+[23:45] [scene:talk]
+VISUAL:
+AUDIO: 'nodes, and when you should do that, and best practices for that. So, cheerio for now.'

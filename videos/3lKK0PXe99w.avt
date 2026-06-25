@@ -1,0 +1,359 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Hunyuan Motion 1.0 - This Free And Open Source AI Creates 3D Animation In Seconds!
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=3lKK0PXe99w
+upload_date: 20260103
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'Hello everyone, we\'re going to check out a really cool model from Han Yuan, specifically one designed for 3D motion based on the Han Yuan 3D models. It\'s called Tencent Han Yuan Motion 1.0 and basically all you need is a short text'
+
+[00:12] [scene:talk]
+VISUAL:
+AUDIO: 'prompt. Just type that in and you can generate 3D figures performing specific motion. You can use it to create different animation scenes like the steady everyday movements of a character sitting down, running, or even jumping.'
+
+[00:24] [scene:talk]
+VISUAL:
+AUDIO: 'Or you can go more specialized with sports motion like shooting hoops, kicking a ball, or swinging a golf club like this. There are tons of motion baked into this AI model. It\'s a diffusion transformer model similar in'
+
+[00:38] [scene:talk]
+VISUAL:
+AUDIO: 'architecture to the Han Yuan 3D models, but this one is more focused on animating figures and their movement. Now, to make these figures look better and more like what we usually see on screen, we\'ll need to collaborate with'
+
+[00:50] [scene:talk]
+VISUAL:
+AUDIO: 'other AI models like image generators and AI video models. After generating the base motion, you can easily swap in your own character, say Spider-Man, once the 3D figure is rendered. You can also apply custom outfits or even turn your'
+
+[01:04] [scene:talk]
+VISUAL:
+AUDIO: 'figure into something like a zombie walking or a skeleton like this. There are so many possibilities with Han Yuan Motion 1.0. On Hugging Face, you\'ll see it was officially released on December 30th,'
+
+[01:16] [scene:talk]
+VISUAL:
+AUDIO: '2025. So, like just a few days ago. But honestly, with how fast things move in AI right now, it already feels like there\'s a ton going on. So, I\'m going to try this out today. If'
+
+[01:28] [scene:talk]
+VISUAL:
+AUDIO: 'you head over to the model\'s Hugging Face page and click into the files tab, you\'ll see two versions. Han Yuan Motion 1.0 LTE, which is the lightweight version, and the full Han Yuan Motion'
+
+[01:40] [scene:talk]
+VISUAL:
+AUDIO: '1.0 model. Surprisingly, even the full model isn\'t that big. It\'s only about 4 GB in file size. That means if you\'ve got a GPU with around 8 GB of VRAM, you should be'
+
+[01:52] [scene:talk]
+VISUAL:
+AUDIO: 'able to render these 3D motion without any issues. I already tried it myself. I downloaded the full model weights and ran their official Python code from the GitHub repository. Now, I\'ll be honest, that'
+
+[02:04] [scene:talk]
+VISUAL:
+AUDIO: 'setup can feel a little complex. You\'ve got to do a git clone, set up your environment, and run inference scripts in Python. Definitely not the simplest path. But there\'s an easier way. Especially if you\'re already using'
+
+[02:17] [scene:talk]
+VISUAL:
+AUDIO: 'ComfyUI. Right now, there\'s a custom ComfyUI node built specifically for Han Yuan Motion 1.0. We\'re going to install that, run it locally in ComfyUI, and test how well it creates 3D human motion'
+
+[02:29] [scene:talk]
+VISUAL:
+AUDIO: 'from simple text prompts. Once we\'ve got that motion data, the next step is to make the figures look even better by adding custom character outfits and background environments to build out full video scenes using that motion as a'
+
+[02:42] [scene:talk]
+VISUAL:
+AUDIO: 'base. And here\'s the best part. This ComfyUI custom node can export your motion in FBX file format, which works with tons of 3D animation software like Maya and Blender. It also supports NPZ'
+
+[02:54] [scene:talk]
+VISUAL:
+AUDIO: 'file formats, which are universal for 3D data interchange. Under the hood, the system uses a Qwen 3 text encoder, a model with 8 billion parameters. And thanks to a recent'
+
+[03:06] [scene:talk]
+VISUAL:
+AUDIO: 'update in the custom node, it now also supports GGUF quantization for that text encoder. That means the download and folder structure will be the same as what you\'d normally use in ComfyUI. Here\'s how you\'ll organize it. Inside'
+
+[03:19] [scene:talk]
+VISUAL:
+AUDIO: 'your ComfyUI models folder, create a new folder called Han Yuan Motion. Inside that, you\'ll place the two main folders. One for Motion 1.0 and the lit version, and another for the text encoder. As I'
+
+[03:33] [scene:talk]
+VISUAL:
+AUDIO: 'mentioned earlier, the VRAM requirements for Han Yuan Motion 1.0 are pretty low. The full model only needs about 8 GB of VRAM just to run the motion generation itself.'
+
+[03:46] [scene:talk]
+VISUAL:
+AUDIO: 'The lightweight version, just 4 GB. But you\'ll also need extra VRAM for the text encoder. The full Qwen 3\'s model, 8B parameters, uses about 16 GB of VRAM, but if you quantize it to 8-bit, that'
+
+[04:00] [scene:talk]
+VISUAL:
+AUDIO: 'drops to around 8 GB. And if you go with the lower GGUF Q4 quantization, it\'ll only use about 5 GB of VRAM. So, depending on your setup, just follow the file path I\'ll link in the description,'
+
+[04:12] [scene:talk]
+VISUAL:
+AUDIO: 'and you can choose the version that fits your hardware. For my setup, I used the Hugging Face command line tool to download everything first before even opening ComfyUI. Once I had the files, I just moved the two'
+
+[04:25] [scene:talk]
+VISUAL:
+AUDIO: 'key model files, the motion model and the text encoder, from the Python code\'s directory into my ComfyUI models folder. Specifically, I copied them into the CKPT subfolder within my custom Han Yuan'
+
+[04:37] [scene:talk]
+VISUAL:
+AUDIO: 'Motion directory. If you\'ve already downloaded the models, that\'s really all you need to do. I\'ve also included a text file with all the code and instructions, so you can follow along easily. The folder structure should look'
+
+[04:49] [scene:talk]
+VISUAL:
+AUDIO: 'like this. A Tencent folder containing both the Han Yuan Motion 1.0 and Han Yuan Motion 1.0 LTE folders. Now, for ComfyUI, these are the files'
+
+[05:02] [scene:talk]
+VISUAL:
+AUDIO: 'you\'ll download manually. The custom node will automatically download the text encoder, the clip ViT model, and the Qwen 3 model on its first run. So, you don\'t need to manually download those like you would with the raw Python'
+
+[05:15] [scene:talk]
+VISUAL:
+AUDIO: 'code. All right, let\'s install the custom node. First, open your terminal or command prompt in your ComfyUI directory. You\'ll need to stop ComfyUI if it\'s already running. Just press'
+
+[05:28] [scene:talk]
+VISUAL:
+AUDIO: 'control plus C. Then, navigate into CD custom_nodes Next, run a git clone with the repository URL for the Han Yuan Motion custom node. That\'ll download all the necessary files'
+
+[05:43] [scene:talk]
+VISUAL:
+AUDIO: 'right into your custom nodes folder. After that, go into the newly created ComfyUI Han Yuan Motion folder and run pip install {dash}r requirements.txt. This installs all the dependencies'
+
+[05:58] [scene:talk]
+VISUAL:
+AUDIO: 'needed for the node to generate 3D motion properly. So, now we\'ve done two things. Installed the custom node and already downloaded the motion model weights in the earlier step.'
+
+[06:11] [scene:talk]
+VISUAL:
+AUDIO: 'When you look inside your ComfyUI models folder, you should now see a folder called HiMotion. Inside that, follow the structure from the repo. Create a Tencent folder and under that, place both HiMotion 1.0 and HiMotion 1.0 Lite.'
+
+[06:23] [scene:talk]
+VISUAL:
+AUDIO: 'Once that\'s set, go back to your main ComfyUI directory in the terminal and restart it with python main.py. While it\'s loading, scroll through the'
+
+[06:35] [scene:talk]
+VISUAL:
+AUDIO: 'logs until you see the importing custom nodes section. If you see a message saying the Han Yuan Motion node loaded successfully, you\'re good to go. Now, switch over to your ComfyUI web interface and refresh the page. You can'
+
+[06:48] [scene:talk]
+VISUAL:
+AUDIO: 'delete the default workflow, then double-click anywhere on the canvas to bring up the search bar. Type HiMotion and you\'ll see the load model node appear. I\'m going to use the Han Yuan Motion 1.0 version without quantization.'
+
+[07:01] [scene:talk]
+VISUAL:
+AUDIO: 'Connect it to the motion generate node and you\'ll notice there\'s also a second output pipeline for motion data export, FBX. The final FBX file will be saved in your ComfyUI output folder.'
+
+[07:14] [scene:talk]
+VISUAL:
+AUDIO: 'There\'s also a HY Motion preview node you can connect to a video combine node if you want to see the motion as a video preview. Though it\'ll just show a skeleton-like figure demonstrating the movement.'
+
+[07:26] [scene:talk]
+VISUAL:
+AUDIO: 'I recommend running it once right away because the first time it\'ll automatically download the text encoder model in the background. You\'ll see the download start in your command prompt window. Once that\'s done, you can test it out.'
+
+[07:39] [scene:talk]
+VISUAL:
+AUDIO: 'You can also use the FBX export and connect it to ComfyUI\'s native preview 3D animation node. When you hover your mouse over it, you\'ll see the figure moving in real time. Now, here\'s what I'
+
+[07:51] [scene:talk]
+VISUAL:
+AUDIO: 'tried next. I took one of those exported FBX motion and used it with an image to pose workflow. Then, I loaded that motion into W A N 2.1 V A C E along with a reference image'
+
+[08:04] [scene:talk]
+VISUAL:
+AUDIO: 'I generated to create a final video like a fighter doing a sidekick right in front of the screen. Let\'s walk through each step so you can see how it all comes together.'
+
+[08:16] [scene:talk]
+VISUAL:
+AUDIO: 'All right. Let\'s have some fun with Han Yuan Motion 1.0. Here\'s the workflow I\'m using to generate motion. As you can see, I\'ve loaded the 1.0 model and the text prompt is super simple because'
+
+[08:28] [scene:talk]
+VISUAL:
+AUDIO: 'honestly, you don\'t need a super detailed description here. You\'re just describing the motion itself. For example, I used a person jumps over to another building. Once generated, the FBX file gets saved in your output'
+
+[08:41] [scene:talk]
+VISUAL:
+AUDIO: 'folder, specifically inside a subfolder called Han Yuan Motion_FBX. Just grab the latest file in there. That\'s the one you\'re working on. Now, look at the preview node. When I hover'
+
+[08:53] [scene:talk]
+VISUAL:
+AUDIO: 'my mouse over it, you can see the motion. The figure is running, climbing, and jumping action trying to leap between buildings. If you don\'t like the motion, no'
+
+[09:05] [scene:talk]
+VISUAL:
+AUDIO: 'problem. Just go back to the generate node, tweak the seed, change some variables, or adjust the text prompt and try again until you get the motion you want. For example, let\'s try a different seed number and generate again. Once it\'s'
+
+[09:18] [scene:talk]
+VISUAL:
+AUDIO: 'done, you might not see anything change visually in the node itself, but the preview images will update and the NPZ file, if you enable it, will be generated.'
+
+[09:30] [scene:talk]
+VISUAL:
+AUDIO: 'That said, you don\'t really need the NPZ file if you\'re using FBX. FBX is way easier to import into Blender or other 3D tools. I do like using the Han Yuan Motion preview node though because it lets me'
+
+[09:43] [scene:talk]
+VISUAL:
+AUDIO: 'export each frame as an image for review. Or even better, you can hook it up to a video combine node to see the whole motion as a smooth video. Since all the frames are sequential, it plays out like a little animation.'
+
+[09:56] [scene:talk]
+VISUAL:
+AUDIO: 'This time, the motion looks like the character is trying to vault over some obstacle on top of a building. Let\'s see how the 3D figure actually moves. Okay, this time it\'s clearer. He takes a big step, jumps, and climbs onto another'
+
+[10:10] [scene:talk]
+VISUAL:
+AUDIO: 'building\'s ledge. You can totally imagine a game character doing this. So, let\'s say we want to turn this into a game-style free runner scene, jumping over walls and climbing up structures.'
+
+[10:24] [scene:talk]
+VISUAL:
+AUDIO: 'I\'ll use Blender for this since it\'s free, open source, and perfect for importing FBX files. First, delete the default cube in Blender. You don\'t need it. Then, create a new collection for your imported motion.'
+
+[10:36] [scene:talk]
+VISUAL:
+AUDIO: 'Go to file, import FBX, and navigate to your ComfyUI output folder, specifically the Hanyu An Motion _FBX subfolder. Select the latest FBX file, the one you'
+
+[10:51] [scene:talk]
+VISUAL:
+AUDIO: 'just generated, and you\'ll see a preview of the motion. Hit play, and you\'ll notice the animation runs for about 150 frames. Once imported, move the new motion collection into your main collection,'
+
+[11:04] [scene:talk]
+VISUAL:
+AUDIO: 'collection one, and delete the extra empty collection that Blender creates by default. Also, adjust your lighting if needed. Now, let\'s set up the camera. Hold down middle mouse button or your navigation'
+
+[11:17] [scene:talk]
+VISUAL:
+AUDIO: 'shortcut to orbit around the scene. Position the camera for a wide shot. Just select the camera object, then use the transform panel to adjust its location and rotation until you\'ve got a good view.'
+
+[11:30] [scene:talk]
+VISUAL:
+AUDIO: 'In my case, I want to capture that big final leap clearly. Once you\'re happy with the framing, you don\'t need to worry about materials, textures, or backgrounds in Blender. We\'ll handle all that later with AI video models like Wan'
+
+[11:42] [scene:talk]
+VISUAL:
+AUDIO: '2.1, Vase, or Wan 2.2 Vase. For now, all we need is a clean MP4 render of the motion because we\'ll feed that video back into ComfyUI for the next stage.'
+
+[11:55] [scene:talk]
+VISUAL:
+AUDIO: 'Go to the output properties tab on the right. Set your resolution, choose an output folder. I like using the file browser to pick one directly, and change the media type to video. Under color management, you don\'t need'
+
+[12:08] [scene:talk]
+VISUAL:
+AUDIO: 'high-quality settings. Just make sure it\'s functional. And for the container, switch from MKV to MP4. Either works, but I prefer MP4. Then, go to the top menu, render greater'
+
+[12:22] [scene:talk]
+VISUAL:
+AUDIO: 'than render animation. Blender will now render every frame from the camera\'s perspective. Don\'t worry about polish. We just need the motion data. You can always trim unnecessary frames later in ComfyUI, which is actually easier.'
+
+[12:36] [scene:talk]
+VISUAL:
+AUDIO: 'Once the render finishes, you can close Blender. We won\'t need it again for this workflow. Now, onto the next step. I generated a few motion variations in Blender, then took the first frame of the MP4 to use'
+
+[12:48] [scene:talk]
+VISUAL:
+AUDIO: 'as a reference. Why just one frame? Because all we really need is the pose, not the whole video. I extracted the DW pose from that frame. You could use other pose estimators, but'
+
+[13:00] [scene:talk]
+VISUAL:
+AUDIO: 'DW pose works best here since there\'s no background and no face to detect, just a clean figure outline. You can load that reference image into ComfyUI in a few ways. From a URL, a local file path, or the ComfyUI input'
+
+[13:14] [scene:talk]
+VISUAL:
+AUDIO: 'folder using a load image node. I use an image switch node for convenience, so I can easily toggle between different references. Then, I ran that image through Qwen-VL to auto-generate a text'
+
+[13:26] [scene:talk]
+VISUAL:
+AUDIO: 'description of what\'s in the image. This is super helpful because I can copy that description and use parts of it in my final prompts later. For this demo, I disabled the Qwen Image'
+
+[13:38] [scene:talk]
+VISUAL:
+AUDIO: 'Edit model group at first, so I could just get the caption without running the full edit. Once I had the caption, I re-enabled the group and used it properly. I\'m using the latest Qwen Image Edit'
+
+[13:52] [scene:talk]
+VISUAL:
+AUDIO: '20511 model. In this setup, image one is my reference, and image two is the DW pose map. The text box lets me describe how I want the final image to look. In this case,'
+
+[14:05] [scene:talk]
+VISUAL:
+AUDIO: 'specifically, his look from an action scene. The motion is the same as before, climbing, jumping, scaling a ladder to another building. Remember, Hanyu An Motion 1.0 only gives us the motion. It\'s just the first step. The real magic'
+
+[14:20] [scene:talk]
+VISUAL:
+AUDIO: 'happens in the next stages, building the scene and generating the final video. So, step one, generate motion with text. Step two, create the visual scene. Step three, use AI video models to bring it'
+
+[14:33] [scene:talk]
+VISUAL:
+AUDIO: 'all together. And if you want to enhance realism, you can always run the output through another image to image model. A lot of people think the first generation is the final quality, but that\'s not true. You can and should refine it. For'
+
+[14:46] [scene:talk]
+VISUAL:
+AUDIO: 'example, you can apply your favorite LoRA for style, or use Z Image if you want to push the realism further. I\'ve done this before with a Santa Claus character, ran it through an image'
+
+[14:58] [scene:talk]
+VISUAL:
+AUDIO: 'enhancement group, and the results were way better. So, let\'s say I run this process. The output from Qwen Image Edit gets passed into an image generation model via VAE encode.'
+
+[15:10] [scene:talk]
+VISUAL:
+AUDIO: 'I keep the denoise value pretty low, like 0.25, so it doesn\'t drift too far from the original pose or composition. Sometimes the character\'s face might not look exactly like Keanu Reeves, but since'
+
+[15:22] [scene:talk]
+VISUAL:
+AUDIO: 'this is a wide shot, it\'s more about the silhouette and outfit. Once I\'m happy with an image, I save it and use it as the reference image for the final video generation. Now, for the last big step, video'
+
+[15:34] [scene:talk]
+VISUAL:
+AUDIO: 'generation. I\'m going with Wan 2.1 Vase, but Wan 2.2 Fun Vase works just as well. I\'ve tested both. Like with that Santa Claus dancer, and they handle 3D motion inputs really'
+
+[15:46] [scene:talk]
+VISUAL:
+AUDIO: 'nicely. In the workflow, I load the enhanced image I just created plus the original reference, which I keep in my local folder for easy access. I make sure the dimensions match, either by'
+
+[15:58] [scene:talk]
+VISUAL:
+AUDIO: 'using the same resolution as the motion video or adjusting the width height manually. The settings are pretty straightforward. Sampling steps, seed, width, height. FPS isn\'t critical here because this is a'
+
+[16:11] [scene:talk]
+VISUAL:
+AUDIO: 'video-to-video method. It\'s not locked to the model\'s default 16 FPS. And since our motion is only about 150 frames long, I usually generate 150 frames to match exactly.'
+
+[16:24] [scene:talk]
+VISUAL:
+AUDIO: 'Perfectly synced to the Hanyu An Motion. One quick note, if you\'re using GG UF models, make sure you\'ve got the right loader in ComfyUI. Though I won\'t dive deep into LoRA'
+
+[16:37] [scene:talk]
+VISUAL:
+AUDIO: 'selection here since I\'ve covered that in past videos. For control, I typically prefer Depth Anything V2, but in this case, since we\'re matching a very specific pose, DW pose works better. So, I bypass the Canny Edge node and plug DW pose'
+
+[16:50] [scene:talk]
+VISUAL:
+AUDIO: 'directly into the control video input. As for prompts, by default, the workflow uses MiniCPM V for auto-captioning since it\'s fast and was the latest VLM when Wan 2.1 dropped. But since this scene is'
+
+[17:03] [scene:talk]
+VISUAL:
+AUDIO: 'highly customized and not something generic like a TikTok dance, I actually get better results by bypassing the auto prompt and using the exact text I used in Qwen Image Edit. The easiest way,'
+
+[17:16] [scene:talk]
+VISUAL:
+AUDIO: 'just disconnect the image caption node and paste your custom prompt directly into the text box. That way, the CLIP text encoder gets your precise description, and the motion stays consistent.'
+
+[17:28] [scene:talk]
+VISUAL:
+AUDIO: 'Finally, always double-check your video length before generating. There\'s no need to go overboard. Just match the motion you need. In this case, it\'s that clean jump and climb sequence, and it works perfectly. And that\'s one solid'
+
+[17:40] [scene:talk]
+VISUAL:
+AUDIO: 'method for generating AI video from scratch. No need to rely on existing videos or footage from online. You design the motion, build the character, and render the final scene entirely on your own.'
+
+[17:53] [scene:talk]
+VISUAL:
+AUDIO: 'The other option I mentioned is Wan 2.2 Fun Vase. It works almost identically. Load your reference video and image, and go. The main difference is that my 2.2 Fun Vase workflow is more minimal and'
+
+[18:05] [scene:talk]
+VISUAL:
+AUDIO: 'compact since I didn\'t spend as much time refining it. But functionally, both get the job done. So, there you have it. How to use 3D motion generation to create custom AI video scenes from text prompts, all in'
+
+[18:17] [scene:talk]
+VISUAL:
+AUDIO: 'your local ComfyUI setup. That\'s it for this video. I\'ll see you in the next one. Have a nice day. See you.'

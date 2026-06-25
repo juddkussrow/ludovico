@@ -1,0 +1,247 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Ralph-loop 2.0? The real autonomous coder is coming...
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=rIs802-bXDY
+upload_date: 20260509
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'So openly I released this goal feature in Codex, which allows agent to continuously working for hours and hours on bigger and complex projects. And we already saw people getting pretty phenomenal results like one prompt to generate fully functional game to building and testing a iOS app by itself'
+
+[00:13] [scene:talk]
+VISUAL:
+AUDIO: 'for 6 hours. And key developers from Codex team also mentioned this is probably the most consequential thing they have shipped in Codex this year. And very quickly, Hermes agent also released this persist ghost feature,'
+
+[00:25] [scene:talk]
+VISUAL:
+AUDIO: 'which is similar type of feature that allow you to set standing goal for Hermes agent to work across turns until it is achieved. So how exactly does this goal feature works and what are the best practice of actually using this? So what'
+
+[00:37] [scene:talk]
+VISUAL:
+AUDIO: 'is problem this goal feature actually try to solve? So even though model has getting significantly better where it can consistently finish well scope tickets, but as we let it take it over more and more complex projects, you probably experience yourself that the'
+
+[00:49] [scene:talk]
+VISUAL:
+AUDIO: 'model can sometimes get lazy and declare the victory too early. For example, you might ask agent to just fix all the failing test in your repo. And most likely agent will do some work maybe for 10 or 15 minutes and then come back'
+
+[01:01] [scene:talk]
+VISUAL:
+AUDIO: 'saying it fixed all the issues, which most likely is not exhaustive. You need to prompt the agent say, "Hey, there\'s still XYZ are not done." And you need to keep doing this for some complex tasks. And there were a very popular project'
+
+[01:13] [scene:talk]
+VISUAL:
+AUDIO: 'earlier this year called rough loop, which is basically running your coding agent in for loop where every time when agent finish, it will write the output of his work in the file system and programmatically trigger the coding agent again. And very quickly it was'
+
+[01:26] [scene:talk]
+VISUAL:
+AUDIO: 'implemented in cloud code through a plugin as well. But fundamentally rough loop is a pretty simple or a kind of dumb programmatic loop. You just running the cloud through a specific prompt in while loop and define maximum'
+
+[01:38] [scene:talk]
+VISUAL:
+AUDIO: 'iterations. And this goal feature in Codex and Hermes is an intuition of this rough loop, where it is no longer doing a simple dumb programmatic loop. Instead it use large language model to decide and judge whether task has been satisfied. So when user send out a goal'
+
+[01:51] [scene:talk]
+VISUAL:
+AUDIO: 'command, it will trigger the agent to do things. And once finished, there will be one large language model call to decide where the goal has been satisfied. If yes, then finish the session. But if no, it will trigger the agent again with'
+
+[02:03] [scene:talk]
+VISUAL:
+AUDIO: 'some prompts. And this means instead agent prematurely claims the task has been done, it will have this large language model call identify and capture scenario and guide agent to continuously working until the goal actually'
+
+[02:15] [scene:talk]
+VISUAL:
+AUDIO: 'satisfied. Meanwhile, it also made it good to handle ambiguous tasks. So instead of a list of tasks that has well scoped out, it can handle things like just cut a Docker image size by 60% where you probably at beginning don\'t'
+
+[02:28] [scene:talk]
+VISUAL:
+AUDIO: 'know exactly how to do this. We can get agent to start exploring, trying out multiple different methods and approach, and it step-by-step adding the improvements. This is somewhat similar to the other very popular project earlier this year from Andrew Karpathy'
+
+[02:41] [scene:talk]
+VISUAL:
+AUDIO: 'like auto research where fundamentally it\'s also a for loop that getting agent continuously working and save the state result. So this goal feature is really good for this type of complex long-running coding work like code'
+
+[02:53] [scene:talk]
+VISUAL:
+AUDIO: 'migration, large refactories, as well as ambiguous goals like experiments where agent can keep making scoped progress. So compared with original rough loop, the stop condition instead being a programmatic manual limitations, it will'
+
+[03:06] [scene:talk]
+VISUAL:
+AUDIO: 'be using large language model to judge and decide where the goal is finished. And when new loop start, instead of feeding the identical prompt.md into the agent loop, this goal feature has this continuous prompt about goal context as well as the state. And the way it works,'
+
+[03:20] [scene:talk]
+VISUAL:
+AUDIO: 'as we mentioned before, is this loop that is running. And once finished, it will send to this large language model call with prompt here that define the definition of done, the output format, as well as a goal and response. And this large language model call can output'
+
+[03:33] [scene:talk]
+VISUAL:
+AUDIO: 'status as well as reasoning. If it judge the goal is not finished, then a message will be sent back to the agent. You will see a status like this, but in reality, the agent receive a message like continuing toward your standing goal that list out the goal file and a'
+
+[03:46] [scene:talk]
+VISUAL:
+AUDIO: 'special prompt to continuously working toward this goal, take the next concrete steps. If you believe the goal is completed, state it so explicitly and stop. And the Codex continues prompt is a little bit more sophisticated where it has things like do not accept proxy'
+
+[03:59] [scene:talk]
+VISUAL:
+AUDIO: 'signal as completion by themself. It only marks the goal achieved when the audit shows the objective has actually been achieved, no required work remain. Then use this update goal with the status complete. So Codex goal feature'
+
+[04:12] [scene:talk]
+VISUAL:
+AUDIO: 'actually ask agent to mark this goal as complete by itself versus Hermes agent would have special large language called judge result. And to activate this goal feature in Codex, you can do Codex features list. This will list out all'
+
+[04:25] [scene:talk]
+VISUAL:
+AUDIO: 'the experimental feature that Codex has and you\'ll see goals feature here. Each one labeled as stable or under development and whether it has been toggle on or not. And then you can just do Codex features enable goals. You'
+
+[04:37] [scene:talk]
+VISUAL:
+AUDIO: 'should see a success message here. Now if you run Codex and do {slash} goal, you should see this goal command and then you just type out the goal. I hear help me migrate my code base from JavaScript to TypeScript and making sure'
+
+[04:50] [scene:talk]
+VISUAL:
+AUDIO: 'all screens stay exactly same visually using Playwright interactive to verify the output. And once you sent, it will receive this goal active message and then agent will start working. And while it is working, you can always just run'
+
+[05:02] [scene:talk]
+VISUAL:
+AUDIO: 'this goal command again to check the status of the goal in term of how long it has been running, total amount of token has been used. You can also run goal pause or goal clear to stop the work anytime. Meanwhile, if you want to'
+
+[05:15] [scene:talk]
+VISUAL:
+AUDIO: 'let\'s say ask it some questions or branch out a conversation while it is working, you can also run this side command which will basically fork the conversation from this point. With this, I\'ve been using Codex to run some'
+
+[05:27] [scene:talk]
+VISUAL:
+AUDIO: 'migration work for 9 hours overnight and it\'s still going. But there are some grooves you should put in place to making sure the goal actually apply. So the common prompt will look something like this, like complete a certain objective without stopping until'
+
+[05:40] [scene:talk]
+VISUAL:
+AUDIO: 'verifiable end state. So a good goal prompt should be bigger than one prompt, but smaller than open-ended backlog. It should define what Codex should achieve, what it should not change, how it should validate progress, and when it should'
+
+[05:53] [scene:talk]
+VISUAL:
+AUDIO: 'stop. And the most important part is that Codex should know what done means before it starts. For example, if you ask it to do a migration task, the goal should looks like migrate this project from legacy stack to a new stack, and making sure all screens stay exactly'
+
+[06:07] [scene:talk]
+VISUAL:
+AUDIO: 'same visually, and using playwright interactive to verify the output. So, you can make scope to progress step by step. And if it\'s a purse type, then you should probably point it to a plan.md file or PRD file, creating tasks for'
+
+[06:19] [scene:talk]
+VISUAL:
+AUDIO: 'each milestone, and verify the output with playwright interactive. Even include reference screens as needed, so it can verify whether the game UI looks exactly same as design. And if you have evaluation set, you can even run it like a auto research loop. Give it a go,'
+
+[06:33] [scene:talk]
+VISUAL:
+AUDIO: 'optimize the prompts in the prompt file until the eval suite reach your target score. And after each change, run the eval command, inspect the failing cases, and keep the prompt at its minimum, and target it. Stop when the target is met.'
+
+[06:46] [scene:talk]
+VISUAL:
+AUDIO: 'So, what you see here is that you have to define very explicitly what does done and finished means, so Adrian will know when to stop. Cuz without defining that, what do you see is that Adrian will again just get lazy and decide, "Okay,'
+
+[06:58] [scene:talk]
+VISUAL:
+AUDIO: 'this task has been done." and finish out very quickly. And there are some similar learnings from Vincent, who is one of the maintainers for Open Claw. He has been running goal for 3 days on Open Claw across 13 rounds, gazillion tokens, and many, many PRs. One of the learning'
+
+[07:11] [scene:talk]
+VISUAL:
+AUDIO: 'he had is that you should spend time to align with agent early on. Most time, if you just simply pasting a prompt and ask it to do, it is likely give you garbage. So, instead, here have a conversation with agent about all the context, like'
+
+[07:24] [scene:talk]
+VISUAL:
+AUDIO: 'what this project is, what are the things he care about, what bad looks like for user, what he already tried and ruled out, and kind of box he keep missing. And ask the model to ask anything before he start. So, initial interview alignment conversation is very'
+
+[07:37] [scene:talk]
+VISUAL:
+AUDIO: 'critical here. Meanwhile, it will also try to quantify done as we mentioned before. So, you should not prompt it to something like keep going until everything is fixed. Once the definition of done is fuzzy like this, the model will either quit too early or spiral'
+
+[07:50] [scene:talk]
+VISUAL:
+AUDIO: 'into nonsense. You have to give it some quantifiable number. And here\'s a one example QA prompt that he has been using. It will define the past and has very clear stop conditions, which is once it found 20 discrete new issues.'
+
+[08:04] [scene:talk]
+VISUAL:
+AUDIO: 'And for each issue, produce repo, proposed fix, push fix to a branch as you go, and log the result to the dot run folder. Or this prompt he has been using for new projects, like we are building X reference implementation to'
+
+[08:16] [scene:talk]
+VISUAL:
+AUDIO: 'different repos, and also point out to a list of files including anti-patterns, logs, and design pattern you want it to follow, as well as what my user would expect. So, here you can see that even for new project, it\'s very important to'
+
+[08:29] [scene:talk]
+VISUAL:
+AUDIO: 'list out the expected criteria and behavior, rather than a loose goal that optimize or improve our app UX. So, having a good code prompt is quite critical to decide whether you get good results or not. And there\'s a one open'
+
+[08:41] [scene:talk]
+VISUAL:
+AUDIO: 'source project called Go Body, which is basically a tool that helps you construct a good prompt. The way it works is that you can run NPX Go Body, and then run CodeX. If you do dollar sign, it will list out all skills and'
+
+[08:53] [scene:talk]
+VISUAL:
+AUDIO: 'plugin. You can type in Go Prep. This will load up a workflow. To trigger CodeX, start interview with you and construct a good prompt folders. So, even though I give a pretty vague goal like build a rating type game using'
+
+[09:05] [scene:talk]
+VISUAL:
+AUDIO: 'Image Gen for image assets and beautiful graphics, verify it on desktop, and then Go Body will start creating some files. One of these goal.md file. This will turn your goal into a well-written md file that clearly describe the requests,'
+
+[09:18] [scene:talk]
+VISUAL:
+AUDIO: 'the constraints, the stop rules, and detail loop. It also has this state.yaml file that\'s listing out the tasks based on the goal. So, instead of running a Go plus your prompt, you can do {slash} go and point to this goal.md file. And then'
+
+[09:31] [scene:talk]
+VISUAL:
+AUDIO: 'CodeX will start working on the task, update state.yaml file to keep a record and reference to go to MD file on every single loop. With this in just one single prompt, agent is able to generate image assets for the game and stitch'
+
+[09:44] [scene:talk]
+VISUAL:
+AUDIO: 'together a fully functional game. So, this is a Codex and Hermes agent\'s goal feature. It is really good for those complex coding work that will require not just minutes but hours to complete. And we\'ll address some models default behavior where they will stop things'
+
+[09:57] [scene:talk]
+VISUAL:
+AUDIO: 'prematurely. However, this feature still has limitations based on our testing. For example, it\'s mainly designed for longer coding sessions that runs for hours. But, if there are things that you wanted to do for weeks or months, like'
+
+[10:09] [scene:talk]
+VISUAL:
+AUDIO: 'improve your SEO or GEO strategy, optimize return on ad spending, it didn\'t quite work, especially in scenarios that don\'t have immediate verifiable results or feedback. And my team has been experimenting with this concept called mission. The way this'
+
+[10:22] [scene:talk]
+VISUAL:
+AUDIO: 'mission works is actually quite straightforward. We\'ll basically capture those long-running goals or missions into a mission.md that clearly define the metrics to optimize, and it will trigger agent run where agent will try to form a hypothesis about a few'
+
+[10:34] [scene:talk]
+VISUAL:
+AUDIO: 'strategies you should try to complete the mission. Do one step and output its work as artifacts. And at the end of that, instead of just keep running a for loop, it will schedule next run. Could be in hours or days or even weeks,'
+
+[10:47] [scene:talk]
+VISUAL:
+AUDIO: 'depending on the situation. And every time when next run is triggered, the new session will receive the mission.md as well as the previous steps summary. So, you can always iterate and improve and learn from previous steps. And for those type of really long-running missions, we'
+
+[11:00] [scene:talk]
+VISUAL:
+AUDIO: 'also found it\'s quite useful to have those human in the loop experience. If agent realize want to try something really dramatic or realize a goal or mission is unclear or not verifiable, it can send message to human and change the'
+
+[11:13] [scene:talk]
+VISUAL:
+AUDIO: 'mission status. We\'ve been experimenting with long-running mission like grow Twitter follower to 10,000, let agent to iteratively take actions, run experiments. And at each step, it can output artifacts like a certain type of'
+
+[11:25] [scene:talk]
+VISUAL:
+AUDIO: 'post, as well as specific analysis report. And based on that form, certain hypotheses and schedule next action. It already delivered some quite interesting results. Like for Coolest own Twitter'
+
+[11:37] [scene:talk]
+VISUAL:
+AUDIO: 'account, initially made a first tweet like this, which got kind of average performance. But then based on the observation, it decided next tweet we should probably do a strat and use kind of founder voice. And next one immediately got pretty good performance.'
+
+[11:50] [scene:talk]
+VISUAL:
+AUDIO: 'And based on that observation, it decided to double down on this type of content and post the next one, which is not ex- explosive, but already the performance is much higher than the original baseline. And we found same type of setup can be used for like'
+
+[12:02] [scene:talk]
+VISUAL:
+AUDIO: 'optimizing ad campaign, SEO, and even product growth. We\'re currently in open close beta, so if you\'re interested, you can join the early access program. I have put the link in the description below for you to join. I hope you enjoyed this video. Thank you,'
+
+[12:14] [scene:talk]
+VISUAL:
+AUDIO: 'and I\'ll see you next time.'

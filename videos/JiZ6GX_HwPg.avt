@@ -1,0 +1,179 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: LTX 2.3 Character Motion Transfer | Video to Image Animation
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=JiZ6GX_HwPg
+upload_date: 20260612
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'I tried transferring motion from the character&nbsp; in a video to the character in the image.&nbsp; And it works. The motion is not completely accurate&nbsp;&nbsp; in this case because it’s not a human figure. But it should work on a human-like character.&nbsp;'
+
+[00:28] [scene:talk]
+VISUAL:
+AUDIO: 'These are the few extra&nbsp; frames that can be removed.&nbsp;&nbsp; Overall, it works, and the video generation time&nbsp; is also around 100 seconds for a 512-pixel video.&nbsp; Upscaling in the second stage takes 80&nbsp; seconds more for a 1080-pixel video.&nbsp;'
+
+[00:46] [scene:talk]
+VISUAL:
+AUDIO: 'The graphics card I am using&nbsp; is the 5060 TI, 16-gigabyte.&nbsp; In this case, the given image is&nbsp; shorter than the reference video,&nbsp;&nbsp;'
+
+[01:07] [scene:talk]
+VISUAL:
+AUDIO: 'which resulted in some creativity by LTX.&nbsp; Modifying the prompt can remove the woman’s hand. I cannot play the audio due&nbsp;&nbsp;'
+
+[01:19] [scene:talk]
+VISUAL:
+AUDIO: 'to copyright protection. The Audio and lip movements are not bad;&nbsp;&nbsp; you can check the results by&nbsp; visiting the link in the description.&nbsp; Let’s look at the workflow quickly.'
+
+[01:42] [scene:talk]
+VISUAL:
+AUDIO: 'So, this section of the workflow&nbsp; has the model and LoRA selected.&nbsp;&nbsp; The prompt is also typed here. There is also a prompt builder here;&nbsp;&nbsp; when activated, it will enhance&nbsp; the simple prompt given by us.&nbsp;'
+
+[01:55] [scene:talk]
+VISUAL:
+AUDIO: 'This section also contains&nbsp; the image we want in motion. In this section, these two&nbsp; nodes were just for testing.&nbsp; So, this section contains the&nbsp; reference video for the motion.&nbsp;'
+
+[02:09] [scene:talk]
+VISUAL:
+AUDIO: 'DW pose is extracted from the&nbsp; reference video, which is used further. This section is for the audio, and there&nbsp; are four types of audio we can choose to&nbsp;&nbsp; have in the final result. I will explain that ahead.'
+
+[02:23] [scene:talk]
+VISUAL:
+AUDIO: 'This section in the center&nbsp; creates the empty latent video&nbsp;&nbsp; based on the DW pose received from below. The empty latent video can be the size of&nbsp;&nbsp; the reference video or the character’s&nbsp; image. We will look at that ahead.&nbsp;'
+
+[02:36] [scene:talk]
+VISUAL:
+AUDIO: 'In the same section, we have the&nbsp; k-sampler processing the video.&nbsp; The output from the k-sampler goes to the&nbsp; second stage, which upscales the video.&nbsp; The upscaled video is then&nbsp; decoded into a pixel video for us.'
+
+[02:51] [scene:talk]
+VISUAL:
+AUDIO: 'Here I have written that this second stage&nbsp; gave a black screen on my 5060 TI, 16-Gigabyte.&nbsp; Use the above node group&nbsp; if you get a black screen.&nbsp;'
+
+[03:04] [scene:talk]
+VISUAL:
+AUDIO: 'The problem could be with my system&nbsp; itself, due to a driver issue.&nbsp; You can try processing a&nbsp; 15-second video to find out. So, instead of using this, I was using the&nbsp; nodes above, and this is the upscaled video.&nbsp;'
+
+[03:17] [scene:talk]
+VISUAL:
+AUDIO: 'The video output is a 1080-pixel video.&nbsp; I am not using this anymore,&nbsp; though this is better. The output from the first&nbsp; k-sampler is visible here.&nbsp;&nbsp;'
+
+[03:31] [scene:talk]
+VISUAL:
+AUDIO: 'A 512-pixel video. And the&nbsp; upscaled output is above. Now, if you want to avoid errors and do not wish&nbsp; to struggle like a beginner. Then you should watch&nbsp;&nbsp; the workflow explained in detail. The model used here is MX FP8;&nbsp;&nbsp;'
+
+[03:47] [scene:talk]
+VISUAL:
+AUDIO: 'this works better on a blackwell graphic-cards. I have added the link to all the models,&nbsp;&nbsp; and if you are running a 4-thousand-series or&nbsp; older card, then I suggest using this FP8 file.&nbsp;'
+
+[04:00] [scene:talk]
+VISUAL:
+AUDIO: 'The MX FP8 will work, but I have&nbsp; not tried it on an older card. This distilled LoRA has to be used if&nbsp; you are using the base model of LTX.&nbsp;'
+
+[04:12] [scene:talk]
+VISUAL:
+AUDIO: 'Next is an IC-LoRA. This Realis dance LoRA&nbsp;&nbsp; was uploaded by Kijai on Hugging Face. The LoRA link has been given above,&nbsp;&nbsp; and this is the file that uses the&nbsp; DW pose to transfer the motion.'
+
+[04:27] [scene:talk]
+VISUAL:
+AUDIO: 'Next is the prompt, which is&nbsp; connected to the prompt enhancer.&nbsp; Turn this switch to true, and&nbsp; the prompt enhancer should work.&nbsp; The output is visible here. And the&nbsp; same goes into the text encoder below.&nbsp;'
+
+[04:42] [scene:talk]
+VISUAL:
+AUDIO: 'The dual clip loader takes two files, and&nbsp; links to both files are given on the left.&nbsp; The image we want in motion is below, and it has&nbsp; been resized. The resolution you see here works,&nbsp;&nbsp; but there are some sizes that won’t&nbsp; work and will give an error like this.&nbsp;'
+
+[05:01] [scene:talk]
+VISUAL:
+AUDIO: 'The proportion is set to resize, so the image&nbsp; is resized by maintaining its aspect ratio.&nbsp; In case the character appears small&nbsp; in size due to a large background.&nbsp;&nbsp;'
+
+[05:13] [scene:talk]
+VISUAL:
+AUDIO: 'You should change this value to crop.&nbsp; The image will be preprocessed, so that&nbsp; it can be used more efficiently further. The video uploaded here is being resized to 512&nbsp; pixels; you can go even lower, like 448 or 416.&nbsp;'
+
+[05:26] [scene:talk]
+VISUAL:
+AUDIO: 'Then it goes to this DW pose estimator. Which is from a custom node group installed. The pose extracted is then brought back to the&nbsp; given size, which goes ahead in the workflow.&nbsp;'
+
+[05:43] [scene:talk]
+VISUAL:
+AUDIO: 'The pose extracted is visible here, but if&nbsp; you do not want to install this custom node,&nbsp;&nbsp; then there is a natively supported&nbsp; node below which does the same job.&nbsp;'
+
+[05:55] [scene:talk]
+VISUAL:
+AUDIO: 'This node will need a safetensor file,&nbsp; which can be found on Hugging Face.&nbsp; The link to the file is given on the&nbsp; left; get the file, make this connection.&nbsp;&nbsp; And you can delete this node if not using it. The DW pose preview will be visible here,&nbsp;&nbsp;'
+
+[06:11] [scene:talk]
+VISUAL:
+AUDIO: 'which is saved in a folder named trash&nbsp; inside Comfy UI’’s output folder.&nbsp; I have connected the node to show you the&nbsp; output, and it takes time. On the first run,&nbsp;&nbsp;'
+
+[06:24] [scene:talk]
+VISUAL:
+AUDIO: 'it took 150 seconds, but it should&nbsp; be faster on the second run.&nbsp; The difference between&nbsp; these two poses is not much.&nbsp; The pose extracted is then used,&nbsp; along with the empty latent video,&nbsp;&nbsp;'
+
+[06:39] [scene:talk]
+VISUAL:
+AUDIO: 'to create the video latent in the IC LoRA node.&nbsp; The resolution of the empty latent video&nbsp; is taken from the DW pose we saw below.&nbsp; But we can also use the image resolution&nbsp; to have the same aspect ratio.&nbsp;'
+
+[06:53] [scene:talk]
+VISUAL:
+AUDIO: 'This total count is the number&nbsp; of frames we got from the video.&nbsp;&nbsp; The same will be the length&nbsp; of the video in the result.&nbsp;'
+
+[07:05] [scene:talk]
+VISUAL:
+AUDIO: 'So, using the DW pose and the&nbsp; image, the video latent is prepared.&nbsp; Now, about this audio latent, which has&nbsp; a connection from the node group below.&nbsp;'
+
+[07:17] [scene:talk]
+VISUAL:
+AUDIO: 'And there are four nodes to get audio from. The first connection brings the audio from&nbsp; the reference video, which goes above.&nbsp; The second connection allows you to upload&nbsp; an audio file, which can also be a speech.&nbsp;'
+
+[07:32] [scene:talk]
+VISUAL:
+AUDIO: 'The lip sync will work, but remember the&nbsp; character will be restricted due to the DW pose.&nbsp; Make the connection, and&nbsp; the audio file will be used.&nbsp;'
+
+[07:45] [scene:talk]
+VISUAL:
+AUDIO: 'The third is the empty audio; in case the&nbsp; reference video you are using has no audio,&nbsp;&nbsp; then you have this connected.&nbsp; Otherwise, you will get an error.&nbsp; The fourth option here is about the&nbsp; empty latent audio; connecting this&nbsp;&nbsp;'
+
+[07:59] [scene:talk]
+VISUAL:
+AUDIO: 'will let the LTX model generate some audio. All this audio is connected to the trim node,&nbsp;&nbsp; or the FPS node, which should adjust&nbsp; the audio to match the video\'s length.&nbsp; When the video is generated&nbsp; from the first k-sampler,&nbsp;&nbsp;'
+
+[08:15] [scene:talk]
+VISUAL:
+AUDIO: 'it is supposed to be processed&nbsp; again in this second stage.&nbsp; And the final result should be visible here. But I am not using this second-stage workflow.&nbsp; I am using the one above. You can activate this and use it&nbsp;&nbsp;'
+
+[08:30] [scene:talk]
+VISUAL:
+AUDIO: 'if it does not give you any problems; make sure to&nbsp; bypass the above nodes if using the nodes below.&nbsp; There is a safetensor file used in both the&nbsp; second-stage workflows to upscale the video,&nbsp;&nbsp; and a link to the file will be added later. I have uploaded this image,&nbsp;&nbsp;'
+
+[08:44] [scene:talk]
+VISUAL:
+AUDIO: 'and I will crop it to get the character’s image. To check the output, I have bypassed all the nodes&nbsp;&nbsp; responsible for generating the video. And the image now looks fine. I will let the other things be the same,&nbsp; activate this node, and then run the workflow.&nbsp;'
+
+[09:01] [scene:talk]
+VISUAL:
+AUDIO: 'The video from the first stage was generated&nbsp; in 112 seconds, and this is the video.&nbsp; The result generated is good.&nbsp; These black frames can be removed,&nbsp;&nbsp;'
+
+[09:13] [scene:talk]
+VISUAL:
+AUDIO: 'but I will process the same in the second&nbsp; stage, and these frames will be fixed.&nbsp; Activate the second stage&nbsp; node and run the workflow.&nbsp; The process started from here, and the time&nbsp; taken for this 12-second video was 68 seconds.'
+
+[09:28] [scene:talk]
+VISUAL:
+AUDIO: 'The result generated was fine, and the audio&nbsp; matches the movements of the character.&nbsp; Similarly, you can use the&nbsp; aspect ratio of the image.&nbsp;'
+
+[09:42] [scene:talk]
+VISUAL:
+AUDIO: 'The cropped image, with an odd resolution, gave&nbsp; me an error. So I am changing the value to 384.&nbsp;&nbsp; And ran the workflow. The result was now generated.&nbsp;'
+
+[09:54] [scene:talk]
+VISUAL:
+AUDIO: 'Now activate the second stage&nbsp; to upscale the resolution.&nbsp; It took 95 seconds, and this is the result. The final result is around 800 pixels,&nbsp; because I had to decrease the image size.&nbsp;'
+
+[10:08] [scene:talk]
+VISUAL:
+AUDIO: 'But I could also have managed&nbsp; with the cropped image,&nbsp;&nbsp; using it again and resizing it to 512 pixels So, that was it in this video. I hope the video&nbsp; was informative. I wish you an excellent day.'

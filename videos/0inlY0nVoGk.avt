@@ -1,0 +1,163 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Someone open-sourced Stripe Billing (9.8k stars)
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=0inlY0nVoGk
+upload_date: 20260614
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'A lot of the companies charging you by the token for AI didn\'t build that billing themselves. They run it on one free open source repo. It\'s called Lago, an open source billing platform. Think of it as the plumbing most people never see, the piece that'
+
+[00:13] [scene:talk]
+VISUAL:
+AUDIO: 'meters how much each customer actually used and turns that into a real subscription invoice. The clever bit is that it\'s payment agnostic. It sits on top of Stripe or Adyen and owns the billing logic, so it never touches the'
+
+[00:26] [scene:talk]
+VISUAL:
+AUDIO: 'card itself. It\'s AGPL licensed and the founders aren\'t billing tourists. They ran revenue at the French banking startup Quanto and scaled it from nothing past a hundred million dollars,'
+
+[00:38] [scene:talk]
+VISUAL:
+AUDIO: 'then left to build the tool they wish they\'d had. Today, the logos running on it do the talking: PayPal, Mistral and Grok. Let me show you what\'s inside. Enjoying this so far? Subscribe to the'
+
+[00:50] [scene:talk]
+VISUAL:
+AUDIO: 'YouTube channel and grab the free daily newsletter at indiehacker.news. New deep dive every weekday. Here\'s the actual repo and it lays the whole thing out. Right at the top it'
+
+[01:03] [scene:talk]
+VISUAL:
+AUDIO: 'tells you what this is: open source metering and usage-based billing, which is really just a fancy way of saying if you can track it, you can bill for it. Just below is the trusted by row. And it\'s a who\'s who of companies that live'
+
+[01:17] [scene:talk]
+VISUAL:
+AUDIO: 'or die on getting usage billing right. Scroll into the feature list and the surface area comes into view. Everything from metering and invoicing through to entitlements and revenue analytics. Then you hit get started and here\'s the part'
+
+[01:31] [scene:talk]
+VISUAL:
+AUDIO: 'that matters. The whole thing is a git clone and a single docker compose up. Keep going and there are official client libraries for Node, Python, Ruby and Go. So whatever your back end speaks,'
+
+[01:44] [scene:talk]
+VISUAL:
+AUDIO: 'there\'s a clean way in. So where does Lago actually sit? The obvious comparison is Stripe Billing, the easiest way to start, but Stripe and Chargebee both take a cut of your revenue, a tax that grows every month as'
+
+[01:56] [scene:talk]
+VISUAL:
+AUDIO: 'you do. Then there\'s the managed crowd, Metronome and Orb, genuinely good at usage billing, but they\'re closed, and you\'re piping all your raw usage data out to someone else\'s cloud. Lago\'s'
+
+[02:09] [scene:talk]
+VISUAL:
+AUDIO: 'pitch is the third path. You self-host the whole engine, you pay for the servers and nothing else. No percentage of revenue, and your customers\' usage data never leaves your own'
+
+[02:21] [scene:talk]
+VISUAL:
+AUDIO: 'infrastructure. The trade is that you own the running of it, which we\'ll come back to. Quick gut check on whether this is real. About 9,800 stars and over 600 forks from teams running their own copy.'
+
+[02:34] [scene:talk]
+VISUAL:
+AUDIO: 'They\'ve raised roughly $22 million with Y Combinator and First Mark in the round. And because this is billing, where the total on the invoice has to match every cent a customer actually'
+
+[02:46] [scene:talk]
+VISUAL:
+AUDIO: 'spent, they went and got SOC 2 Type 2 certified. Let\'s get into what it actually does, starting with the engine room, metering. Every time a customer does something you'
+
+[02:58] [scene:talk]
+VISUAL:
+AUDIO: 'want to charge for, say an API call or 1,000 tokens generated, you fire an event at Lago, and it ingests and aggregates those in real time. That sounds simple until you\'re doing it'
+
+[03:10] [scene:talk]
+VISUAL:
+AUDIO: 'millions of times a minute without dropping a single billable event, which is the hard part Lago is built around. On top of that sits invoicing. Lago turns raw usage into real invoices, and'
+
+[03:23] [scene:talk]
+VISUAL:
+AUDIO: 'it handles the messy combinations, a flat subscription fee plus metered overage, prorations when someone upgrades mid-cycle, all of it. The detail I love is billing templates. They'
+
+[03:35] [scene:talk]
+VISUAL:
+AUDIO: 'ship ready-made setups that reproduce how Algolia, Segment, even OpenAI price their products. So you can copy a proven pricing model instead of inventing billing math from scratch.'
+
+[03:47] [scene:talk]
+VISUAL:
+AUDIO: 'Want to be featured? pitch your open-source repo at indiehacker.news/apply and get in front of thousands of builders. The second half is where it stops being just a meter.'
+
+[04:00] [scene:talk]
+VISUAL:
+AUDIO: 'Entitlements tie feature access straight to the plan, so when a customer is on the starter tier, the product itself knows to switch off the pro features with no separate flag system to keep in sync. Cash collection is the unglamorous'
+
+[04:13] [scene:talk]
+VISUAL:
+AUDIO: 'money recovery layer. When a card fails, it retries automatically and chases the payment with dunning emails. And if one provider keeps declining, it can fall back to another. Revenue analytics rolls'
+
+[04:26] [scene:talk]
+VISUAL:
+AUDIO: 'all of it up into live MRR and usage trends, so finance stops rebuilding the same spreadsheet every month. And then, there\'s the part that explains why this repo is suddenly everywhere.'
+
+[04:38] [scene:talk]
+VISUAL:
+AUDIO: 'Lago leaned hard into AI billing with a Lago AI layer and an MCP server, which means an AI agent can actually read and manage your billing in plain English. Under the hood, it\'s more interesting'
+
+[04:52] [scene:talk]
+VISUAL:
+AUDIO: 'than a single language, even though GitHub files it under Go. The core API is actually a Rails application, plain Ruby, an unfashionable but very sensible choice for something that has to be'
+
+[05:04] [scene:talk]
+VISUAL:
+AUDIO: 'correct more than it has to be fast. Almost everything heavy runs as a background job through Sidekiq on Redis, and a separate clock process fires the recurring billing runs because invoices'
+
+[05:16] [scene:talk]
+VISUAL:
+AUDIO: 'have to go out on schedule whether or not anyone is awake. Your core data lives in Postgres, but the firehose of raw usage events goes into ClickHouse, a columnar database built for counting'
+
+[05:29] [scene:talk]
+VISUAL:
+AUDIO: 'enormous numbers of things quickly. The front end is React, and there\'s a dedicated Go service whose only job is swallowing events at high volume. You run the whole stack with one Docker'
+
+[05:41] [scene:talk]
+VISUAL:
+AUDIO: 'Compose file. Running it yourself is close to a non-event. You clone the repo, generate one RSA key that Lago uses to sign things, and run Docker Compose up. A minute or two later, the dashboard is'
+
+[05:55] [scene:talk]
+VISUAL:
+AUDIO: 'sitting on localhost, and the API is live on port 3000. And from there, you grab your key out of the developer settings and start firing events at it. That\'s a usage billing stack nobody can'
+
+[06:07] [scene:talk]
+VISUAL:
+AUDIO: 'deprecate or price hike out from under you running on your own box. And this is where you can see where they\'re pointing the whole thing. The headline recent addition is the Lago agent SDK.'
+
+[06:20] [scene:talk]
+VISUAL:
+AUDIO: 'The pitch is you wrap your existing LLM client in a single line of code, and it meters token usage across 10 different dimensions with the billing overhead down in the single-digit milliseconds,'
+
+[06:32] [scene:talk]
+VISUAL:
+AUDIO: 'so it doesn\'t slow your responses. They also shipped a Stripe shared payment token built specifically so an AI agent can charge an invoice on your behalf and fall back to a saved card when it needs'
+
+[06:44] [scene:talk]
+VISUAL:
+AUDIO: 'to. There\'s invoice consolidation now, letting you decide per subscription whether to bundle charges or keep them separate. Put it together, and it\'s clear enough Lago is racing to become the billing layer for the agent economy,'
+
+[06:58] [scene:talk]
+VISUAL:
+AUDIO: 'where software buys from software. Now, the honest part. Running this yourself is not like running your own blog. It\'s mission-critical. And when a bill is wrong, that is somebody\'s payroll. So,'
+
+[07:10] [scene:talk]
+VISUAL:
+AUDIO: 'the weight of keeping it correct and online sits entirely with you. And like most open-source companies, the generous free core is really the top of a funnel. The managed cloud and the enterprise'
+
+[07:23] [scene:talk]
+VISUAL:
+AUDIO: 'tier are where the money is, so the gap between free and paid is the thing to keep an eye on. But if metering and billing is the actual heart of your business, and you\'d rather own that machinery than rent it forever, this is the most credible open'
+
+[07:36] [scene:talk]
+VISUAL:
+AUDIO: 'foundation going. The real tell is where they\'re sprinting. Software that builds other software, AI agents charging each other with no human in the loop. If that\'s where this is all headed,'
+
+[07:49] [scene:talk]
+VISUAL:
+AUDIO: 'owning the meter underneath it is a very interesting place to be standing. The repo is in the description with a fresh deep dive like this one every weekday.'

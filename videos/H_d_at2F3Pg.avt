@@ -1,0 +1,255 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: JoyAI-Echo GGUF | LOW VRAM Workflow
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=H_d_at2F3Pg
+upload_date: 20260613
+transcript_source: captions
+route: text
+
+---
+
+[00:01] [scene:talk]
+VISUAL:
+AUDIO: '[music] &gt;&gt; All right, YouTube. What is good? It\'s your boy Rebel back with another video. And today, we are taking a look at Joy AI Echo. Joy AI Echo or Echo long video'
+
+[00:13] [scene:talk]
+VISUAL:
+AUDIO: 'is a long-form multi-shot audio-video generation model. A cross-modal audio-visual memory bank preserves character appearance and voice'
+
+[00:25] [scene:talk]
+VISUAL:
+AUDIO: 'consistently across up to 5-minute videos. And a post-training pipeline combining memory-based reinforcement learning with distribution matching distillation or DMD delivers 7 and 1/2 times inference speed up without'
+
+[00:40] [scene:talk]
+VISUAL:
+AUDIO: 'sacrificing quality. Now, in human evaluation, Joy AI Echo decisively outperforms Happy Oyster on long-form generation and surpasses the short video specialist one 2.6 on human-centric'
+
+[00:52] [scene:talk]
+VISUAL:
+AUDIO: 'tasks. Some details on the model. This is developed by the Echo team at Joy Future Academy. It is a text-to-video with audio diffusion transformer. Um'
+
+[01:04] [scene:talk]
+VISUAL:
+AUDIO: 'this does not support image-to-video yet, but they say they will be releasing a model soon. It is built on the LTX video backbone, being LTX2, and it uses the Gemma text encoder family. There are'
+
+[01:17] [scene:talk]
+VISUAL:
+AUDIO: 'some guffs, and and these are actually my quants. Um nobody else has seemed to quant this model yet, but so in my repo, you will have all of the instructions and a little bit of information on the'
+
+[01:30] [scene:talk]
+VISUAL:
+AUDIO: 'guff files. In the usage section, there is a number one here. It says, "Install the comfy nodes." If you click this link, it will bring you to the custom'
+
+[01:42] [scene:talk]
+VISUAL:
+AUDIO: 'node repo on my GitHub. Um but inside the files, you have sizes ranging anywhere from Q2 to Q6. And in these variations, you have an RM model. This'
+
+[01:55] [scene:talk]
+VISUAL:
+AUDIO: 'is the Rebel Mix Precision guff. Um, there are two variations of this. It just uses a slightly different technique, similar to Unsloth\'s dynamic'
+
+[02:07] [scene:talk]
+VISUAL:
+AUDIO: 'quantization process. Essentially, what it is is keeping certain critical layers uncompressed while compressing the rest of the layers to save as much VRAM and space as possible while maintaining'
+
+[02:20] [scene:talk]
+VISUAL:
+AUDIO: 'quality precision. So, the RM variations are experimental and they are not perfect. Some outputs are good, some outputs are really bad. Um, it\'s a toss-up. That being said, if you are'
+
+[02:32] [scene:talk]
+VISUAL:
+AUDIO: 'going to go for a regular guff, you\'re going to want to choose a Q4 or a Q6. The Q2 really is just unmanageable and I don\'t suggest using it, but the Q4 and the Q6 will run just fine. And in the'
+
+[02:45] [scene:talk]
+VISUAL:
+AUDIO: 'text encoders, you have a Q5 and a Q8 guff. Um, this is just to help save VRAM. And then, underneath the encoders, we have the Joy AI Echo Audio VAE, the'
+
+[02:57] [scene:talk]
+VISUAL:
+AUDIO: 'embeddings processor, the video VAE, and the vocoder. Now, these are just necessary components that I pulled from the main model that need to be fed into'
+
+[03:09] [scene:talk]
+VISUAL:
+AUDIO: 'the pipeline, or else you won\'t get a clean generation as these are components that are normally in LTX. Your diffusion model will go in your U-Net folder. Your encoder will go in your text encoder'
+
+[03:23] [scene:talk]
+VISUAL:
+AUDIO: 'folder. Your VAEs will go in your VAE folder. Your embeddings processor will go in your text encoders folder. And the vocoder will go in the audio encoders folder. So, you will grab your guff of'
+
+[03:36] [scene:talk]
+VISUAL:
+AUDIO: 'choice for the diffusion model. You will grab the text encoder of choice, and you will grab the remaining files. And then, you will head to the GitHub repo by clicking this hyperlink right here at install Comfy Nodes. And then, this is'
+
+[03:50] [scene:talk]
+VISUAL:
+AUDIO: 'just the basic process that you would install any other custom node. You\'ll get clone the link, run the requirements, and inside the Gemma assets and configs folder, you have all of your necessary configs to run your'
+
+[04:04] [scene:talk]
+VISUAL:
+AUDIO: 'encoder and model. And then there\'s just a little bit of information on how the nodes work. Pretty self-explanatory once you read through it. Just make sure you read everything so you understand what'
+
+[04:16] [scene:talk]
+VISUAL:
+AUDIO: 'you\'re getting into. A quick reminder here, you are going to need the city 96 comfy UI guff custom nodes and you are going to need a CUDA GPU, at least 8 gigs of VRAM and 16 GB of RAM, the'
+
+[04:29] [scene:talk]
+VISUAL:
+AUDIO: 'minimum being about 24 GB of combined compute. The cool thing about these nodes is everything is done one piece at a time. I structured these nodes'
+
+[04:42] [scene:talk]
+VISUAL:
+AUDIO: 'specifically to handle the least amount of compute at a time as possible. So, the maximum that you are holding at any time is whatever size your singular model or part of the workflow you are'
+
+[04:55] [scene:talk]
+VISUAL:
+AUDIO: 'on. So, if you are running your model loading, it\'s only going to load the model, the weight of the model, and the size of the model. After it\'s done, it\'s going to completely flush your memory and your VRAM and it will move to the'
+
+[05:07] [scene:talk]
+VISUAL:
+AUDIO: 'next process and use the next model and it won\'t go back and it won\'t stack any of that compute on top of each other so that you keep all of your requirements to a minimum. And it has built-in tiled'
+
+[05:19] [scene:talk]
+VISUAL:
+AUDIO: 'decoding. It has sequential offloading and it also has an experimental negative scaling. It will kind of degrade the quality of the video. Now, the reason that this exists is because the original'
+
+[05:32] [scene:talk]
+VISUAL:
+AUDIO: 'model, the main full weight model, was trained on high quality videos for speech, but the subtitles were included in almost all of the training data. So,'
+
+[05:44] [scene:talk]
+VISUAL:
+AUDIO: 'you\'re going to inevitably have subtitles in your videos if you don\'t try to use the negative scale, but again, you will degrade your video slightly. So, you know, it\'s a toss-up and up to you whether or not you would'
+
+[05:56] [scene:talk]
+VISUAL:
+AUDIO: 'like to try to play around with that. But with that being said, after you install your custom nodes and download your models, you can grab this workflow or you can just head into comfy as this workflow technically is only three nodes'
+
+[06:09] [scene:talk]
+VISUAL:
+AUDIO: 'at its bare minimum. So, you don\'t really technically need the workflow if you don\'t want it, but there are some little extra bonuses in the custom workflow that will not only help you, but will brighten up your workflow a'
+
+[06:23] [scene:talk]
+VISUAL:
+AUDIO: 'little bit and we will look at those now. So, in this workflow, you have this setup. I know you\'re probably thinking what is all of this motion? What are all of these bright colors? These are a custom group of nodes that I have been'
+
+[06:37] [scene:talk]
+VISUAL:
+AUDIO: 'curating over the past couple days. So, at the top here, we have editable int nodes. Now, these are just simple editable nodes for your int values similar to these nodes. These are the'
+
+[06:51] [scene:talk]
+VISUAL:
+AUDIO: 'usual height and width nodes that I would have in a workflow. I just thought that, you know, workflows look a little bit dull and to have something that you can customize and kind of give you a'
+
+[07:03] [scene:talk]
+VISUAL:
+AUDIO: 'refreshing look to your workflow, some personalization, and, you know, even some possible creativity. I think that, you know, that is a plus for not only the community, but yourselves. Having a'
+
+[07:16] [scene:talk]
+VISUAL:
+AUDIO: 'dull workspace leads to dull outputs if you ask me. So, this is actually a separate node set from the rest of the animated nodes. Now, the animated nodes are a series of core nodes, and by core nodes, I mean all of the basic nodes'
+
+[07:31] [scene:talk]
+VISUAL:
+AUDIO: 'that you would run in a standard workflow, meaning your load diffusion, your load VAE, load clip, your, you know, clip text and codes, your K sampler, load image, save image. Everything that you would want to run in'
+
+[07:46] [scene:talk]
+VISUAL:
+AUDIO: 'a workflow exists animated now. And you have various themes and colors. So, if you want to change anything about these, you can change them and they are resizable. Up here, we have a special node called the matrix monitor. Now,'
+
+[08:00] [scene:talk]
+VISUAL:
+AUDIO: 'this will effectively showcase everything that is in your command prompt actively. So, your model loading, your encoding, your decoding, your step'
+
+[08:12] [scene:talk]
+VISUAL:
+AUDIO: 'count, everything will be listed as your command prompt lists it, but in a cleaner format and a little bit more digestible so you don\'t have all the extra code. This is a very helpful node and also pairs very well with the Joy AI'
+
+[08:24] [scene:talk]
+VISUAL:
+AUDIO: 'Echo workflow specifically as the command prompt runs a little bit differently and does not showcase step count, but this will tell you exactly what is going on in every stage of the'
+
+[08:37] [scene:talk]
+VISUAL:
+AUDIO: 'workflow. Um, and right over here we just have our positive and negative text and code nodes um, feeding into the main pipeline node. Now, in the main pipeline node, we have all of our hosted files,'
+
+[08:50] [scene:talk]
+VISUAL:
+AUDIO: 'meaning our diffusion model, our text encoder, the format for the encoder, the embeddings connector, both of your audio and video VAEs, and your vocoder. Now, we have your positive and negative'
+
+[09:05] [scene:talk]
+VISUAL:
+AUDIO: 'prompting code. If you don\'t want to use my custom nodes, you have your number of frames in the video, which is your total frame count. You have your video height, your video width, and your FPS, which is'
+
+[09:17] [scene:talk]
+VISUAL:
+AUDIO: 'your frames per second. Here we have our audio sampling rate. Now, you can just leave this alone as the workflow auto calls the correct sampling rate and you\'ll see it in the command prompt or the matrix monitor when you run the'
+
+[09:31] [scene:talk]
+VISUAL:
+AUDIO: 'workflow. It will actually show that. And then you have the option to encode on your CPU entirely, which is your RAM. You have sequential offloading, which I would leave on. This means that it is going to offload each model before'
+
+[09:44] [scene:talk]
+VISUAL:
+AUDIO: 'running the next one. You have your tiled decoding and then you have your tiled decode size. Just maintain multiples of 12 if you do increase it. So, 24, 36, 48, and so on. And then we'
+
+[09:57] [scene:talk]
+VISUAL:
+AUDIO: 'just have our create video and save video nodes. Here I have included the frame interpolation. Um if you would like to utilize this, you just need to download the FilmNet FP16. It should'
+
+[10:10] [scene:talk]
+VISUAL:
+AUDIO: 'show up on the right side here. If it doesn\'t, I will link the Comfy Org\'s Hugging Face page so that you can download the model yourself. It will go in the frame interpolation folder. And with that being said, that accounts for'
+
+[10:23] [scene:talk]
+VISUAL:
+AUDIO: 'the entire workflow. And I do have a few examples for you guys today, so we will be taking a look at those. So, for the first example, we have a woman saying, "Welcome to Joy AI Echo." &gt;&gt; Welcome to Joy AI Echo. Welcome to Joy'
+
+[10:36] [scene:talk]
+VISUAL:
+AUDIO: 'AI Echo. &gt;&gt; It got a little cut off cuz I didn\'t put the frame count on long enough, but here we have a close-up cinematic roll-up of the camera on a woman walking down the'
+
+[10:49] [scene:talk]
+VISUAL:
+AUDIO: 'street. Now, one thing you\'ll notice, which was a consistent issue with RTX 2, is that'
+
+[11:03] [scene:talk]
+VISUAL:
+AUDIO: 'if you do not prompt for a specific audio function, you are not going to get it and it will randomize an audio behind the video. While this isn\'t a problem because you can just prompt for audio'
+
+[11:15] [scene:talk]
+VISUAL:
+AUDIO: 'and it kind of negates this issue entirely, it is a little annoying when you run a basic prompt and get, you know, a basic output like this with some random generated audio. That being said, the video quality is not bad. I do like'
+
+[11:27] [scene:talk]
+VISUAL:
+AUDIO: 'the camera motion. Now, I\'m going to turn the volume down for this example because the car is a little loud. Now, you will notice some hallucination'
+
+[11:41] [scene:talk]
+VISUAL:
+AUDIO: 'going on with that like metal scrape effect going on. And here we have a watch with the insides exposed just ticking. Here we have a man stirring coffee in a'
+
+[11:59] [scene:talk]
+VISUAL:
+AUDIO: 'coffee shop. &gt;&gt; [music] &gt;&gt; Pretty standard. Here we have another'
+
+[12:17] [scene:talk]
+VISUAL:
+AUDIO: 'variation of this. And here we have just a simple woman walking down the street at sunset.'
+
+[12:29] [scene:talk]
+VISUAL:
+AUDIO: 'All right, guys. That\'s all I\'m going to have for you today. Just wanted to get this model set to you guys with this'
+
+[12:42] [scene:talk]
+VISUAL:
+AUDIO: 'node set because nobody has been taking the opportunity to attempt to quantize this for whatever reason. And I thought I would not only challenge myself to get this done, but also provide a probably well-utilized model if done correctly.'
+
+[12:56] [scene:talk]
+VISUAL:
+AUDIO: 'So, if you enjoyed what you saw today, please consider subscribing to the channel and leaving me a comment on the video to let me know how I did. You can also like the video. It genuinely helps the channel tremendously. So, go ahead and download these GIF files, get the'
+
+[13:09] [scene:talk]
+VISUAL:
+AUDIO: 'custom nodes running, and enjoy Joy AI ago. All right, guys. Have a good day. Have a nice day. Bye.'

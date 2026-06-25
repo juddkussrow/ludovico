@@ -1,0 +1,535 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Union VFX on production-ready Gaussian splat crowds
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=Ybln1zAQDVc
+upload_date: 20260601
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'Hi, welcome to the FX podcast. I\'m John Montgomery. In this episode, we\'re joined by David Schneider, VFX and technical supervisor at Union VFX, where they\'ve been doing some really interesting things with Gaussian splats. Mike and I actually met with David in person while we were at FMX in Germany'
+
+[00:13] [scene:talk]
+VISUAL:
+AUDIO: 'and found what they were working on to be really impressive. So, we\'re having him on the FX podcast to share with you all. Working in partnership with Clear Angle Studios, Union\'s developed a pipeline that captures performers as re-lightable'
+
+[00:25] [scene:talk]
+VISUAL:
+AUDIO: '4D splats, enabling large-scale crowds without traditional modeling, rigging, and animation workflow. David discusses with Mike how the team solved key challenges, including lighting, segmentation, compositing, and'
+
+[00:37] [scene:talk]
+VISUAL:
+AUDIO: 'scalability, all while exploring what this technology could mean not only for crowds, but for the future of digital digital doubles and virtual production workflows. It\'s for some really cool stuff, so'
+
+[00:50] [scene:talk]
+VISUAL:
+AUDIO: 'let\'s go ahead and get the conversation now. &gt;&gt; David, thanks so much for joining us. Really appreciate it. &gt;&gt; Nice speaking to you again, Mike. &gt;&gt; Yeah, we recently saw you in Germany at FMX. &gt;&gt; That\'s right. I was giving a talk on our'
+
+[01:03] [scene:talk]
+VISUAL:
+AUDIO: 'work on Black Mirror, but we also had the opportunity to talk about some new developments at Union. &gt;&gt; So, we\'re keen to actually talk about that today, though of course we\'ve talked about Black Mirror in the past and you know, I love that stuff. I'
+
+[01:15] [scene:talk]
+VISUAL:
+AUDIO: 'really like that stuff a lot, but [laughter] but what I was really enthusiastic to talk about is the work that you guys have been doing with splats. Do you want to like outline what you\'ve been doing and and why?'
+
+[01:27] [scene:talk]
+VISUAL:
+AUDIO: '&gt;&gt; Yeah, absolutely. So, we are currently in production on a major feature. It\'s being supervised on the client side by our co-founder and executive VFX supervisor, Adam Gascoine.'
+
+[01:40] [scene:talk]
+VISUAL:
+AUDIO: 'And as they were in prep for the project, Adam knew that there was going to be a fairly heavy crowd requirement for the project, and so he tasked a few of us in the office with looking into new technologies and'
+
+[01:52] [scene:talk]
+VISUAL:
+AUDIO: 'seeing how they could be applied to create more realistic crowds. So, a technology we\'ve always been interested in since it came on the scene is Gaussian Splatting, and Adam was particularly interested to know if there'
+
+[02:05] [scene:talk]
+VISUAL:
+AUDIO: 'was a way that we could use it to construct crowds. So, that\'s something that we\'ve been looking into for the better part of about a year now. &gt;&gt; So, when we\'re talking about doing a crowd, to be clear, you\'re not talking about'
+
+[02:18] [scene:talk]
+VISUAL:
+AUDIO: 'just running a drone up and down over a normally huge crowd. You\'re talking about basically crowd generation. &gt;&gt; That\'s right. We wanted to go from the'
+
+[02:30] [scene:talk]
+VISUAL:
+AUDIO: 'ground up. Normally, you would begin a CG crowd by building your models and then rigging them and then animating them and then you have your agents that you take a whole bunch of individuals and you use them to make a large crowd.'
+
+[02:43] [scene:talk]
+VISUAL:
+AUDIO: 'We wanted to see if it was possible to take captures of say one, two, or three individuals doing what they\'re uh say walking or dancing or just standing idle, seeing if we could then'
+
+[02:56] [scene:talk]
+VISUAL:
+AUDIO: 'take those captures and use them to form a crowd without going down the traditional route of modeling, rigging, and animating. &gt;&gt; Okay, so so most people probably know this, but just to make sure they\'re all'
+
+[03:09] [scene:talk]
+VISUAL:
+AUDIO: 'on the same page with everyone that\'s listening. So, we\'ve got basically like a point cloud when we do a Gaussian Splat in the sense it\'s a bunch of points, but we can think of them as having almost soft um well, splats really at each of the'
+
+[03:22] [scene:talk]
+VISUAL:
+AUDIO: 'points, so that the points going to connect up with each other. The trouble though is while it looks photo real and it really does look amazing and of course uh is incredibly um robust as you were'
+
+[03:34] [scene:talk]
+VISUAL:
+AUDIO: 'moving a camera around and stuff, it isn\'t polygonalized and it isn\'t like a temporally sort of coherent thing that a polygonalized model would be. So, I'
+
+[03:47] [scene:talk]
+VISUAL:
+AUDIO: 'guess that begs the question like how does that work? If you\'ve captured a few people, like what can you do with them? &gt;&gt; Yeah, so this really did form the basis'
+
+[04:00] [scene:talk]
+VISUAL:
+AUDIO: 'of the challenge that we knew we had to get around if we were going to make this work for our crowds. So, as you say, um there are well-known issues with Gaussian splats, particularly 4D Gaussian splats, the animated kind, where you don\'t have uh'
+
+[04:12] [scene:talk]
+VISUAL:
+AUDIO: 'temporal stability from frame to frame. Uh that can present itself as a bit of noise or a bit of jitter. Um you don\'t have things like uh consistent point counts, which can make it difficult to'
+
+[04:24] [scene:talk]
+VISUAL:
+AUDIO: 'do traditional workflows like UVing. So, we knew all of this getting into it. Um that\'s that\'s a very well-known limitation of the tech. But, we wanted to take a holistic view and see if throughout the VFX pipeline,'
+
+[04:37] [scene:talk]
+VISUAL:
+AUDIO: 'if there were ways to mitigate these issues using a mixture of well-known and tech that\'s new to the scene as well. So, fundamentally, Gaussian splatting is a'
+
+[04:49] [scene:talk]
+VISUAL:
+AUDIO: 'machine learning technology. So, we also looked at ways in which some other machine learning models could maybe help us. So, we came up with a variety of solutions. There are really good denoising solutions that are fairly'
+
+[05:02] [scene:talk]
+VISUAL:
+AUDIO: 'mature now, as well as some new ones that are on the market. And what we\'re doing really is a blend of CG and 2D techniques to mitigate these issues that we\'ve discussing. In addition to that, because you are'
+
+[05:14] [scene:talk]
+VISUAL:
+AUDIO: 'essentially capturing data with no information about what is actually contained in the capture, we\'re applying some new machine learning models that can do image segmentation. And what that allows us to do'
+
+[05:28] [scene:talk]
+VISUAL:
+AUDIO: 'is estimate where the various parts of the models are in the splat, so we can isolate things like clothing. We can say jacket, trousers, shirt, hair, skin.'
+
+[05:40] [scene:talk]
+VISUAL:
+AUDIO: 'We can get all of that from various angles and then project it back into the splats at which point those piece of information can be rendered out as cryptomattes, which then takes us back to a very'
+
+[05:53] [scene:talk]
+VISUAL:
+AUDIO: 'normal CG 2D workflow whereby our compositing team can take those mats and do color correction, color variation, and really treat these like standard CG assets.'
+
+[06:05] [scene:talk]
+VISUAL:
+AUDIO: '&gt;&gt; Okay, so [snorts] let\'s use the example, which I know isn\'t from your film, but I\'m just going to use it cuz I think it\'s conceptually helpful, of I want to do a football stadium. And a football stadium has crowds on, you know, north, south, east, and west. Of course, the'
+
+[06:19] [scene:talk]
+VISUAL:
+AUDIO: 'sun is coming from one angle. So, the crowd on one side of the stadium is being hit on the left-hand side of their face. The crowd on the other facing them, of course, is having the sun hitting their other side of the face. Um so, if you were to do cards,'
+
+[06:31] [scene:talk]
+VISUAL:
+AUDIO: 'which is an old-fashioned approach for crowds, of course, cards, I\'ve got those cards of people, then that doesn\'t work, right? Because they were filmed with the light hitting them all on one side, and'
+
+[06:44] [scene:talk]
+VISUAL:
+AUDIO: 'when I put them on the other side of the stadium, the light\'s wrong. How do you get around the problem then in splats that that doesn\'t happen in splats? In other words, I want my splats to look like they\'re sitting in the scene, which means they'
+
+[06:57] [scene:talk]
+VISUAL:
+AUDIO: 'depending on where they are in the stadium, they have to have, well, the right lighting. &gt;&gt; Absolutely, and that was one of the fundamental challenges that we knew if we couldn\'t overcome it, there was no'
+
+[07:09] [scene:talk]
+VISUAL:
+AUDIO: 'way we were going to be able to put this technology into production. So, it did take us a while, and in concert with Clear Angle, who we have a very close partnership with and who we have developed co-developed a training'
+
+[07:21] [scene:talk]
+VISUAL:
+AUDIO: 'pipeline with, &gt;&gt; [gasps] &gt;&gt; we have figured out exactly how to train these splats and how to process them in CG and 2D to enable true re-lighting. So, this is something that we have'
+
+[07:33] [scene:talk]
+VISUAL:
+AUDIO: 'proven within the studio. We\'ve proven it to our clients, and we\'ve demonstrated in some of the material that you\'re going to be showing. We do have the ability to put these splats captured in completely neutralizing conditions into any CG and'
+
+[07:46] [scene:talk]
+VISUAL:
+AUDIO: 'lighting environments. So, to use your example, they can be scattered throughout the stadium. We can put say 20, 30,000 of them into stadium seats. We would then apply our CG lighting to'
+
+[08:00] [scene:talk]
+VISUAL:
+AUDIO: 'light the CG stadium environment. Those same lights in the same render scenes using the exact same production renderer will also render out the splats with the correct illumination and shadowing. The splats will shadow each other. They'
+
+[08:14] [scene:talk]
+VISUAL:
+AUDIO: 'will shadow the stadium environments and the stadium environment will shadow them. &gt;&gt; Okay, and then if I\'m doing replication, I\'m using these basically image segmentation techniques to say,'
+
+[08:27] [scene:talk]
+VISUAL:
+AUDIO: '"Hey, these guys have got t-shirts. Let\'s vary the t-shirts a bit. You know, let\'s vary the trousers a bit so they don\'t all look the same." I presume. &gt;&gt; Correct. So, at the point where we ingest the captured material once it\'s'
+
+[08:39] [scene:talk]
+VISUAL:
+AUDIO: 'been delivered from Clear Angle, we perform that image segmentation and as I mentioned, reproject that back into the Gaussian splatting data. So, once we produce our final CG renders, our compositing team then has'
+
+[08:52] [scene:talk]
+VISUAL:
+AUDIO: 'the ability to go into the shots and decide if they need small variation. They can use the cryptomats to quickly and easily vary the colors throughout the scene to make sure that people don\'t look like they\'re just copies of each'
+
+[09:06] [scene:talk]
+VISUAL:
+AUDIO: 'other sitting right next to each other. &gt;&gt; So, tell me about the Clear Angle side of this in terms of what you were using to capture these splats. Like, just for somebody that doesn\'t know, like are you So, it\'s 4D, right? So, you can\'t be'
+
+[09:19] [scene:talk]
+VISUAL:
+AUDIO: 'just running around them with a camera. You have to be putting them into some kind of large rig. &gt;&gt; Exactly. So, round about the time that we were doing our investigations at Union, Clear Angle had also been looking into Gaussian splatting. They\'ve done a'
+
+[09:33] [scene:talk]
+VISUAL:
+AUDIO: 'fair amount of research and developments. They\'ve done some partnership with Nvidia. And they were starting to produce some really impressive results. And they knew that in order to get the best quality possible, they were going to have to'
+
+[09:46] [scene:talk]
+VISUAL:
+AUDIO: 'construct a new rig. So, they have constructed what they\'re calling the volumetric capture rig or VCR. It\'s a very, very impressive half dome rig which uses 40 machine learning cameras.'
+
+[09:59] [scene:talk]
+VISUAL:
+AUDIO: 'They run absolutely They are genlocked, so they run completely in sync with each other. The rig also has an integrated LED lighting solution, so you can dial in whichever lighting you want or in our case just have completely flat and'
+
+[10:12] [scene:talk]
+VISUAL:
+AUDIO: 'perfectly neutral lighting. &gt;&gt; So, basically, it\'s giving you the ability to capture one or two like I mean how many people'
+
+[10:24] [scene:talk]
+VISUAL:
+AUDIO: 'could I get at a time? &gt;&gt; So, that depends on what your objective is. The capture volume is about 3 by 3 by 3 m to get pin-sharp focus on everybody that you\'re capturing. We have a couple of different scenarios'
+
+[10:37] [scene:talk]
+VISUAL:
+AUDIO: 'that we run. There\'s one scenario where you may want to capture multiple individuals and have the ability to process them as individuals. In which case, you would probably have a maximum of two or three standing with a'
+
+[10:49] [scene:talk]
+VISUAL:
+AUDIO: 'bit of space in between them. The reason for this is because occlusion is not your friend. In these cases, you want as many of the cameras in the rig to see as much of your subjects as possible. So, you need to leave a bit of'
+
+[11:01] [scene:talk]
+VISUAL:
+AUDIO: 'space between them. The other scenario that we\'ve been using is you may want that interaction. You may want to have a small crowd of people that are pushing and shoving each other and dancing and laughing and arms around'
+
+[11:14] [scene:talk]
+VISUAL:
+AUDIO: 'each other, that sort of behavior. In which case, you can do that as well. You wouldn\'t be able to separate them and use them as individuals after the fact, but it really does help to make a believable crowd when you have the sort'
+
+[11:26] [scene:talk]
+VISUAL:
+AUDIO: 'of interactions sprinkled in throughout the crowd. &gt;&gt; So, let\'s say I captured my crowd and then I wanted to I mean, have you thought about doing anything where you could, I don\'t know, give them pennants or hats or something'
+
+[11:39] [scene:talk]
+VISUAL:
+AUDIO: 'to wave, like anything like a flag or something just to sort of break it up even more than just the people? &gt;&gt; Yep, absolutely. We\'ve during capture, of course, you can have those on stage if you want to. You could hand out props'
+
+[11:52] [scene:talk]
+VISUAL:
+AUDIO: 'at capture time. But after the fact as well, it would be very simple for us to identify where is the hand, where is the head, and be able to augment the captures with things like, say, putting'
+
+[12:06] [scene:talk]
+VISUAL:
+AUDIO: 'caps on or putting flags in their hands. That is something we can absolutely do. &gt;&gt; Cuz I mean, once you get an a cuz I effectively even if you done a Gaussian splat as a three-dimensional thing, of course,'
+
+[12:19] [scene:talk]
+VISUAL:
+AUDIO: 'you can output a 2D and just from a 2D flat image, you can now these days sort of do relighting. But you can also do the segmentation. Once you do the segmentation, all the relighting, that that technology sort of gives you surface normals, right? And so, maybe'
+
+[12:31] [scene:talk]
+VISUAL:
+AUDIO: 'they\'re not 100% accurate, but they\'re pretty close. And once you know a surface normal to a hand or whatever, you you\'ve really got the orientation that any prop would be at. So, you actually have quite a lot of sort of like'
+
+[12:43] [scene:talk]
+VISUAL:
+AUDIO: 'That\'s It\'s a bit like if you jigsaw puzzle, like, you know, 1 + 1 is equaling three here, right? You\'re sort of building on on multiple tech. &gt;&gt; Yeah, absolutely. And one of the benefits of the training pipeline that we\'ve established with ClearAngle is that our splats do have very, very high'
+
+[12:56] [scene:talk]
+VISUAL:
+AUDIO: 'definition surface normals. So, we don\'t actually need to go down an intermediate step of trying to estimate them after the fact. Once we bring our splats in, we have those normals available to use. &gt;&gt; So, you guys did a bike rider, like a'
+
+[13:10] [scene:talk]
+VISUAL:
+AUDIO: 'guy on a bike. Why why why was that a good I mean, what were you sort of trying to show or prove or test? &gt;&gt; Well, ClearAngle has a member of staff who is an avid cyclist, and so he was'
+
+[13:22] [scene:talk]
+VISUAL:
+AUDIO: 'ready to go and he was totally up for doing a test capture. So, what we did was we brought him in, placed him in the middle of the rig, and put his bike onto static rollers, which let him pedal as fast as he wanted without moving anywhere.'
+
+[13:35] [scene:talk]
+VISUAL:
+AUDIO: 'What we were trying to achieve with this demonstration was that we could make it look like somebody was convincingly moving through a CG environment even though they were captured in one place inside the VCR rig.'
+
+[13:48] [scene:talk]
+VISUAL:
+AUDIO: 'And I think that\'s something that we did achieve looking at the demo material. We were able to estimate the speed at which he would have been moving had he not been on rollers, and then apply that speed to transform the splat through space in the CG environment.'
+
+[14:01] [scene:talk]
+VISUAL:
+AUDIO: '&gt;&gt; Are you getting a reasonable mat from the splat? Because obviously if you\'re putting them in the CG environment, I mean, a bike rider has probably himself is probably pretty clean in terms of'
+
+[14:15] [scene:talk]
+VISUAL:
+AUDIO: 'shapes, but I mean, you could have somebody that\'s not on a bike with hair, for example. Like, is it the splat going to sort of have any artifacts or ringing because uh the mat isn\'t coming from any green screen. It\'s coming from like the'
+
+[14:28] [scene:talk]
+VISUAL:
+AUDIO: 'capture process, as it were. &gt;&gt; Yeah, correct. So, because you are essentially doing something like a structure from motion process, where you\'re you\'re starting off building a point cloud by looking at all these different cameras at the same time,'
+
+[14:41] [scene:talk]
+VISUAL:
+AUDIO: 'estimating points in space, the whole process inherently has depth baked into it. So, that does make it easier to isolate your subjects from anything that may be happening in the background. Um as far as very fine detail like hair'
+
+[14:54] [scene:talk]
+VISUAL:
+AUDIO: 'goes, yeah, you can you can absolutely dial up the number of splats that you\'re using, the size of those primitives to capture uh finer detail if you need to. And then'
+
+[15:06] [scene:talk]
+VISUAL:
+AUDIO: 'on top of that, we as I say, it\'s a very holistic approach that we\'re taking. We also have our traditional 2D techniques that we can use to do a bit of cleanup there and make sure that we have as much detail as possible.'
+
+[15:18] [scene:talk]
+VISUAL:
+AUDIO: '&gt;&gt; So, let\'s get back to my example of the So, I think the numbers you\'re throwing around 30, 40,000. I mean, that\'s the sort of thing you might have at a in a major film where, you know, you got a big crowd scene. How'
+
+[15:30] [scene:talk]
+VISUAL:
+AUDIO: 'performance-friendly is it to have a whole lot of replicated splats? Like, does this sort of, you know, weigh down a a shot and make it really long to render? What\'s the performance implications? &gt;&gt; No, it\'s it\'s actually lighter and more'
+
+[15:43] [scene:talk]
+VISUAL:
+AUDIO: 'efficient than you would think. Because by the nature of splats, they\'re essentially uh primitive shapes in a certain arrangements, you can treat a crowd as instances of instances.'
+
+[15:56] [scene:talk]
+VISUAL:
+AUDIO: 'So, your a single character would be instances of a single primitive that\'s building up that character shape. And then a crowd would just be instances of that. So, the memory usage is a lot lower than you would expect.'
+
+[16:09] [scene:talk]
+VISUAL:
+AUDIO: 'And the render times uh we are making use of, well, as the material that you would be showing was rendered on Karma XPU, which gives us the ability to spread our renders between machines that have CPUs'
+
+[16:22] [scene:talk]
+VISUAL:
+AUDIO: 'and machines that have GPUs. And when we run on graphics cards, these renders are very, very efficient. We\'re seeing render times that are well below what you would expect. I think in the examples we\'re seeing on a GPU-enabled machine, you could probably get'
+
+[16:36] [scene:talk]
+VISUAL:
+AUDIO: 'a probably a 2K quality frame would be done in perhaps 20 minutes. &gt;&gt; Okay. And how close could my principal actors be to the crowd? Or rather, I guess what'
+
+[16:50] [scene:talk]
+VISUAL:
+AUDIO: 'I\'m trying to say is how close can the camera get to the crowd? Like, do these things only work if you\'re sort of a good 10 m away, or can you get a little closer? &gt;&gt; You can get a little closer to that. The I would say the distance that we\'ve'
+
+[17:02] [scene:talk]
+VISUAL:
+AUDIO: 'tested it to, I probably couldn\'t tell you in metric, but I could [laughter] say they are approximately three courses &gt;&gt; Yeah.'
+
+[17:14] [scene:talk]
+VISUAL:
+AUDIO: 'They I would say we\'ve we\'ve had our characters about three quarters of the screen height, which I would say is if you\'re thinking in camera terms, the camera was maybe let\'s say a couple meters away from'
+
+[17:26] [scene:talk]
+VISUAL:
+AUDIO: 'them. And I think they held up very convincingly at that distance. &gt;&gt; Yeah, I mean if you\'ve got somebody on the other side of a fence or whatever and you got a principal actor coming onto the field kind of thing, then you'
+
+[17:38] [scene:talk]
+VISUAL:
+AUDIO: 'can really have them in the shot without having to worry about them. Cuz I mean once you get the lighting right, they\'re going to sit in the shot so much better and then the inherent realism of the splat, I guess, gives you just an enormous'
+
+[17:51] [scene:talk]
+VISUAL:
+AUDIO: 'uh, push as well. &gt;&gt; Yeah, absolutely. Traditionally, when we\'ve looked at doing CG crowds for productions, I think everybody\'s had an assumption back then that okay, you\'re you\'re not not going to be able to bring'
+
+[18:03] [scene:talk]
+VISUAL:
+AUDIO: 'this crowd too close to camera. You\'ll probably want to bury it behind a few layers of photographic elements or onset extras. We think that that requirement has now gone out the window because the the extra realism that you\'re getting from'
+
+[18:17] [scene:talk]
+VISUAL:
+AUDIO: 'this, especially with our relighting technique, means that they hold up very well completely unoccluded and near the camera. &gt;&gt; So, you\'re seeing this as a solution to crowds or you\'re actually seeing it as'
+
+[18:31] [scene:talk]
+VISUAL:
+AUDIO: 'like a step towards doing a bunch more stuff with splats. I mean, what what\'s your personal opinion on on the breadth of where Union could take this? &gt;&gt; So, absolutely for crowds. That\'s something we have in production right'
+
+[18:44] [scene:talk]
+VISUAL:
+AUDIO: 'now and it\'s working beautifully. And then extending on from the example of the cyclist, I\'m thinking about things like say a superhero film where perhaps you have a lot of shots of a superhero'
+
+[18:56] [scene:talk]
+VISUAL:
+AUDIO: 'flying and you think about the way they used to do that. Uh, so the original Superman where it was just somebody lying on a blue screen and then they would use that for all of the shots. I\'m thinking there\'s now a modern-day'
+
+[19:09] [scene:talk]
+VISUAL:
+AUDIO: 'version of that where we could have somebody suspended on wires in the middle of Clear Angles\' rig as an example. Say you put a fan on them to emulate the wind blowing, and then you do a long capture with a a lot of'
+
+[19:21] [scene:talk]
+VISUAL:
+AUDIO: 'performance of flight. You could then take that, process that into a splat, relight it for whichever environments it needs to be in, and drop that directly into your shots. So, that could actually mean that you'
+
+[19:34] [scene:talk]
+VISUAL:
+AUDIO: 'don\'t need a digi double anymore for sequences like that. You would have a much more convincing character that could hold up with whichever cameras you wanted. &gt;&gt; I mean, the interesting thing here is splats [snorts] are I mean, it\'s sort of'
+
+[19:47] [scene:talk]
+VISUAL:
+AUDIO: 'machine learning. It\'s not like hardcore, you know, neural stuff the way I say a Nerf is, but &gt;&gt; [snorts] &gt;&gt; you know, it\'s sort of like interesting to think of it in terms of how it fits into a pipeline. I mean,'
+
+[20:00] [scene:talk]
+VISUAL:
+AUDIO: 'the the nature of what you\'re kind of doing is is taking the real world very much as it is, and then sort of I mean, it looks photographic, basically.'
+
+[20:12] [scene:talk]
+VISUAL:
+AUDIO: 'But, then you\'re just freeing up the camera point of view, which sort of begs the question you\'re doing kind of a neutral lighting, but obviously some splats have view-dependent characteristics. I mean,'
+
+[20:26] [scene:talk]
+VISUAL:
+AUDIO: 'have you worked with view dependency stuff where like obviously a specular highlight would change relative to where the camera is to the objects? &gt;&gt; Yeah. So, that is something that doesn\'t really come into play with the'
+
+[20:38] [scene:talk]
+VISUAL:
+AUDIO: 'relighting framework because &gt;&gt; Sure. &gt;&gt; obviously it\'s it makes the the captures look fantastic when you\'re looking at them in the conditions that they were captured in because as part of that capture, as you say, you\'re getting'
+
+[20:50] [scene:talk]
+VISUAL:
+AUDIO: 'reflections, you\'re getting specular highlights from whichever lights were around them. That is something that you specifically want to avoid in a relighting workflow because we don\'t want there to be any evidence of the lights that were on'
+
+[21:02] [scene:talk]
+VISUAL:
+AUDIO: 'stage when these people were captured. &gt;&gt; Yeah. &gt;&gt; If you were to be doing, say, a a shot where you knew exactly what the set lighting was going to be, and there was no re-lighting required, and you would then capture under those set lights,'
+
+[21:15] [scene:talk]
+VISUAL:
+AUDIO: 'then we could absolutely use that data to give the view-dependent effects for the finished product, and I think that would look fantastic. But, I think the the real, um, move forward in what we\'ve been doing is just'
+
+[21:28] [scene:talk]
+VISUAL:
+AUDIO: 'that ability to free people up from the set lighting and make that decision later. &gt;&gt; Yeah. [snorts] I mean, as I say, in my stadium example, you want that to be Well, for a start, you don\'t get a lot'
+
+[21:40] [scene:talk]
+VISUAL:
+AUDIO: 'of view dependency in terms of what I\'m just talking about on a crowd. You know, you get those on cars, but, you know, you don\'t really sort of people you don\'t You don\'t see them. And then, of course, as you say, you don\'t really want them for my crowd example of like'
+
+[21:52] [scene:talk]
+VISUAL:
+AUDIO: 'facing either side of a stadium, uh, they need to be kind of lit, uh, consistently. So, so what sort of reaction have you had, uh, in sort of this with supervisors and people that you\'ve'
+
+[22:04] [scene:talk]
+VISUAL:
+AUDIO: 'shown? I presume that you\'ve shown a few people. I think you had a demo in London, did you, or &gt;&gt; That\'s right. Uh, we held a a small event at our office in London, uh, in partnership with Clear Angle. Clear Angle brought a section of the rig in'
+
+[22:16] [scene:talk]
+VISUAL:
+AUDIO: 'and set it up to show people how it works. And then, we gave a short presentation and showed our demo reel of the work that we\'ve done so far. And we were very, very pleased with the reaction. I think it was everything that'
+
+[22:29] [scene:talk]
+VISUAL:
+AUDIO: 'we were hoping to get. Obviously, this has been under wraps inside Union and Clear Angle for quite some time. And we had, uh, obviously, a fair bit of trepidation putting it out into the world and opening ourselves up to'
+
+[22:41] [scene:talk]
+VISUAL:
+AUDIO: 'feedback. And I was very, very pleased. We\'ve devoted a lot of effort and resources into developing this workflow, and it was very gratifying to see supervisors and producers'
+
+[22:54] [scene:talk]
+VISUAL:
+AUDIO: 'you could see the wheels starting to turn. They were starting to think, "These are new possibilities. This is something I haven\'t seen before. Okay, I\'ve got a production coming up. Maybe I can use this. Maybe the thing that was'
+
+[23:06] [scene:talk]
+VISUAL:
+AUDIO: 'causing me problems, actually this is the solution. And I had a lot of people approaching me afterwards, kicking ideas around and saying, we have to do this. Maybe we could use your tech to do that. And it\'s it\'s it\'s very gratifying. It\'s'
+
+[23:19] [scene:talk]
+VISUAL:
+AUDIO: 'not every day that you feel like you\'ve been able to show experts like that something that they haven\'t seen before. &gt;&gt; So, for somebody that\'s thinking about this and thinking, well, hang on, what about just doing this in like Gen AI or'
+
+[23:32] [scene:talk]
+VISUAL:
+AUDIO: 'whatever? I think we kind of need to unpack a little bit because we were talking before that they\'re not temporally consistent in the sense that, you know, it\'s not like a hand is the same hand in every frame moving forward.'
+
+[23:45] [scene:talk]
+VISUAL:
+AUDIO: 'But in a Gen AI scenario, most people that are generating footage with Gen AI are limited to relatively short runs before it kind of goes off the rails. And even then, you get these weird'
+
+[23:57] [scene:talk]
+VISUAL:
+AUDIO: 'artifacts where hands come and go and things are sort of like not very visually accurate, especially in a crowd where they\'re sort of But even though in a sense, you have no temporal'
+
+[24:10] [scene:talk]
+VISUAL:
+AUDIO: 'consistency as in you don\'t have a hand that\'s the same hand in every shot, you could run a Gaussian splat kind of as long as you want it and you\'re not going to have any of these problems of deviating, of collapsing, or of just drifting off model, are you? Because the'
+
+[24:24] [scene:talk]
+VISUAL:
+AUDIO: 'process doesn\'t have that restriction that Gen AI does. &gt;&gt; Correct. So, you can take your your captures for as long as you want, as you say.'
+
+[24:36] [scene:talk]
+VISUAL:
+AUDIO: 'We\'re currently doing captures 60, 90, 120 seconds. There\'s no problem with that. You can really run it as long as you want until you run out of storage. And the as you say with'
+
+[24:48] [scene:talk]
+VISUAL:
+AUDIO: 'generative AI, the one of the issues that people tend to encounter with that is that the system doesn\'t really have a great understanding of what it is that it\'s generating. So, you\'ll start to see these strange artifacts or uh cars that'
+
+[25:00] [scene:talk]
+VISUAL:
+AUDIO: 'suddenly reverse direction or hands that pop in. What we\'re doing is much closer to what I would call a deterministic process &gt;&gt; Yeah. &gt;&gt; where you always know what the outcome'
+
+[25:12] [scene:talk]
+VISUAL:
+AUDIO: 'is going to be. It\'s very well tuned. It\'s very well dialed in and there are no surprises. So, you can keep capturing as long as you want and you will get that splat at the other end. There really isn\'t much risk there.'
+
+[25:25] [scene:talk]
+VISUAL:
+AUDIO: '&gt;&gt; Yeah, directable and controllable are the Achilles heels of Gen AI. And while it kind of looks good for a random demo piece, it doesn\'t give you the control. You you\'re going to have precise control with your methodology. So, if the'
+
+[25:38] [scene:talk]
+VISUAL:
+AUDIO: 'director wants to move a few people because he feels like it\'s looking a little too crowded or whatever in in one corner, you can just move anything you want, right? Like it\'s just very very uh art directable and you know, dramatically directable.'
+
+[25:53] [scene:talk]
+VISUAL:
+AUDIO: '&gt;&gt; Yeah. And on that note, uh to facilitate that process, we\'ve created another workflow uh inside of Nuke. What we are able to do is after a capture session, ClearAngle essentially delivers sprites to us. If you think'
+
+[26:07] [scene:talk]
+VISUAL:
+AUDIO: 'about it, what they have is the perfect sprite machine. It\'s 40 cameras running no motion blur, uh well-lit from every different angle you could possibly want. We can then select some of those angles straight'
+
+[26:20] [scene:talk]
+VISUAL:
+AUDIO: 'after the capture and have them sent over to us with a roto roto pass just to get rid of the background and give us just the character by themselves. We\'ve then built a USD-based workflow in the latest version of Nuke where our'
+
+[26:33] [scene:talk]
+VISUAL:
+AUDIO: 'compositors are able to take those sprites and lay them out into our work-in-progress CG environments. This means that temps can get into editorial very very quickly and the VFX supervisor and the director of the'
+
+[26:46] [scene:talk]
+VISUAL:
+AUDIO: 'project can make decisions about the crowd using the exact elements that they will end up having once the splat processing is done. So, they can get used to seeing those characters right at the beginning. They'
+
+[26:58] [scene:talk]
+VISUAL:
+AUDIO: 'can decide on what sort of behavior they want in different sections of the crowd. And then once that\'s done, we have the ability to export all of that metadata and send it over to Clear Angle for processing.'
+
+[27:10] [scene:talk]
+VISUAL:
+AUDIO: '&gt;&gt; Brilliant. That is really I can just really see how that works in a production flow. Hey Dave, thank you so much for taking time to walk us through that, mate. I really appreciate it. It\'s uh it\'s really interesting tech. &gt;&gt; It\'s always great speaking to you.'
+
+[27:23] [scene:talk]
+VISUAL:
+AUDIO: 'Thanks for taking the time. &gt;&gt; Thanks, mate. &gt;&gt; That\'s some really interesting work, David. Thanks so much for taking time to fill us in on the stuff you\'ve been doing with Gaussian splats. This is the kind of stuff that\'s going to make the tech really useful moving forward.'
+
+[27:35] [scene:talk]
+VISUAL:
+AUDIO: 'Well, that\'s it for this episode. From Mike Seymour, I\'m John Montgomery. Thanks for listening to or watching this FX podcast.'

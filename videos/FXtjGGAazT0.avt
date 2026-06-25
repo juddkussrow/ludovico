@@ -1,0 +1,391 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Claude's Workflows Actually Work Now | MCP Live Build
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=FXtjGGAazT0
+upload_date: 20260528
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'Programming is changing. It already has, and flowgramming is changing with it. In this video, I\'m going through the full process of vibe coding in N8N to create a real production-ready system using Cloud Desktop with the N8N MCP and N8N'
+
+[00:12] [scene:talk]
+VISUAL:
+AUDIO: 'skills. I\'ll be showing the easy parts, the hard parts, and sharing some tips and resources on how to find success beyond the demo. It will give you some good info to take into your next'
+
+[00:24] [scene:talk]
+VISUAL:
+AUDIO: 'project. Technical planning and implementation take less effort than ever. But, specking out the high-level overview is more important than it has ever been because we can\'t figure it out as we\'re building it if we aren\'t the'
+
+[00:37] [scene:talk]
+VISUAL:
+AUDIO: 'one building it. So, we need to very clearly define what our desired output will be up front, especially if you want to be a manager for your agents rather than a babysitter.'
+
+[00:49] [scene:talk]
+VISUAL:
+AUDIO: 'So, what I\'m building is a Slack-based workflow reviewer, and when I\'m finished, I will post it to the template library so that you can use it, too. The idea being you send the Slack bot a link to your N8N workflow, and it uses the'
+
+[01:02] [scene:talk]
+VISUAL:
+AUDIO: 'skills repo to do a deep and actionable review. When specking something like this out, I like starting from what the end user experience is like, and then working backwards from there. So, I want to tag or DM a Slack bot with a workflow'
+
+[01:15] [scene:talk]
+VISUAL:
+AUDIO: 'URL and have it reply with a detailed report in the thread. The review should cover both the top-level workflow as well as any sub-workflows that are used inside of it. It should include an'
+
+[01:28] [scene:talk]
+VISUAL:
+AUDIO: 'overall grade, a short overview of the review, then a breakdown of each finding organized by must fix, should fix, and nice to have. It should be styled nicely in Slack\'s Block Kit. And to keep it simple enough to cover in'
+
+[01:41] [scene:talk]
+VISUAL:
+AUDIO: 'one short video right here, I\'ll say that follow-up questions are just out of scope. The same skill that we are using to build this workflow will also be the source for the agent to do the review. The skill even has a review checklist in'
+
+[01:53] [scene:talk]
+VISUAL:
+AUDIO: 'it that we can use here. And since the whole skill is public on GitHub, the agent can just fetch it from there without even needing any credentials, which will make the template much easier to set up for you if you want to use it.'
+
+[02:05] [scene:talk]
+VISUAL:
+AUDIO: 'And n8n currently doesn\'t natively support skills, but I know there\'s a good template showing how to make it work. So, we\'ll share the link to that template with the agent to give it a little nudge in the right direction. In'
+
+[02:17] [scene:talk]
+VISUAL:
+AUDIO: 'order to see the workflows, I could give the review agent access to the n8n MCP, and then it could even apply fixes for us as well. But, I wanted to keep this really like deterministic and only be able to do the review and nothing else.'
+
+[02:31] [scene:talk]
+VISUAL:
+AUDIO: 'So, we\'ll let the agent know that I prefer just using the built-in n8n node for getting the workflow JSON, and then we\'ll be sure it never unexpectedly edits or deletes anything without us, you know, knowing about it. The only'
+
+[02:43] [scene:talk]
+VISUAL:
+AUDIO: 'other high-level detail I can think of right now is that I want to use Opus 4.7, but I like trying out other models when they become available. So, I\'m thinking we\'ll use the open router model node instead of the Anthropic one. I\'m'
+
+[02:55] [scene:talk]
+VISUAL:
+AUDIO: 'thinking that all the planning we need to do right now is done. And so, you don\'t have to watch me just explain all this to Claude again. I\'ve actually been recording this whole time with a transcript, and we\'ll just copy and paste that into Claude. But, before we'
+
+[03:08] [scene:talk]
+VISUAL:
+AUDIO: 'start throwing prompts in, we need to get Claude set up. Now, bear with me. I know you want to see stuff built, but remember what I said, it\'s all about the prep. We\'ll be using Claude Desktop in the code tab. We need to set up five'
+
+[03:20] [scene:talk]
+VISUAL:
+AUDIO: 'small things before starting. We need a folder to work out of. Next is connecting the n8n MCP. Make sure you\'re on the latest n8n version since we\'re improving it all the time.'
+
+[03:32] [scene:talk]
+VISUAL:
+AUDIO: 'Then, go to the settings and get the OAuth URL. Then, there is an official connector, so just put the URL there. Now, we\'ll want the n8n skills plugin, and note that the plugin has more'
+
+[03:44] [scene:talk]
+VISUAL:
+AUDIO: 'functionality than just the skills on their own. If using Claude Code CLI, follow the steps in the GitHub repo. But, in desktop, we can do it from the customize screen under plugins, say create plugin, then add marketplace, put'
+
+[03:56] [scene:talk]
+VISUAL:
+AUDIO: 'in exactly n 8 n - io / skills. This is the GitHub path where it lives, so it goes and gets it from there. That only installs the marketplace. So, if the actual plugin doesn\'t show up right'
+
+[04:08] [scene:talk]
+VISUAL:
+AUDIO: 'away, then just quit and restart the app and that should reload it. Then, it will be under add personal plugins, browse plugins, code, then scroll over to n 8 n and finally there is the plugin that we'
+
+[04:20] [scene:talk]
+VISUAL:
+AUDIO: 'want. So, there\'s one more plugin that I want, which is the superpowers plugin. This is a game-changer for Claude planning everything up front and creating the plan files that it can follow. And finally, number five, we need to write a'
+
+[04:33] [scene:talk]
+VISUAL:
+AUDIO: 'good Claude.md file. This really shouldn\'t be skipped and you can put in your own preferences here and fix behaviors that you don\'t like. In my own personal testing, I found that to get really reliable results on the first try, you need to really overstate the'
+
+[04:47] [scene:talk]
+VISUAL:
+AUDIO: 'importance of using the n 8 n skill. Most of the time I\'ve had an issue, it\'s only because a skill wasn\'t loaded when it should have been. After starting a new session to ensure the new Claude.md is loaded, I\'ll paste in this transcript'
+
+[04:59] [scene:talk]
+VISUAL:
+AUDIO: 'from when I was explaining it to you earlier. And tell Claude to ask enough questions so it has enough context to work uninterrupted until it\'s finished. I\'ll also change the mode to bypass permissions, which you need to enable in'
+
+[05:11] [scene:talk]
+VISUAL:
+AUDIO: 'the settings to have available here. This is the setting that lets it do whatever it wants without any permissions, so please be careful if you use it. We can see here now that it\'s using the brainstorming skill. That\'s'
+
+[05:23] [scene:talk]
+VISUAL:
+AUDIO: 'what gives it the framework for all of the questions and planning documents it\'s going to make. Now, I\'m going to go through and answer all these questions it has. So, sometimes when you give it a really'
+
+[05:37] [scene:talk]
+VISUAL:
+AUDIO: 'kind of small task like this, it will downplay the importance of all the planning and stuff, so you really have to even even more than normal emphasize how important the planning and looking at all the resources are cuz it sometimes just goes like, "Oh, this is'
+
+[05:50] [scene:talk]
+VISUAL:
+AUDIO: 'small and easy." and then doesn\'t look at the resources it needs when it, you know, needs it either way. So, it seems like it\'s doing a a lot of digging right now, so that\'s good. And hopefully, it will, you know,'
+
+[06:02] [scene:talk]
+VISUAL:
+AUDIO: 'give us a a one shot here. All right, plan is finally back. Let\'s see what it looks like. Uh we\'ll read the overview, then I\'ll'
+
+[06:16] [scene:talk]
+VISUAL:
+AUDIO: 'read the plan itself. Okay, so it can be tempting to read this I read this and say, "That looks good. You know, let\'s go for it." but it\'s always worth the effort to read the'
+
+[06:29] [scene:talk]
+VISUAL:
+AUDIO: 'plan. I\'ve done it so many times where I just read the summary, said, "Looks good to me. Let\'s ship it." and there were mistakes that if I read the plan, I would have caught. So, always click in, read the actual plan, and you know, make sure you know what it\'s building. If'
+
+[06:43] [scene:talk]
+VISUAL:
+AUDIO: 'you\'re uh just getting into this and you don\'t really understand what it\'s talking about, I would recommend, you know, kind of chat with it for a while and ask why it took the approaches that it did, and then you\'ll be surprised about how much you intuitively know'
+
+[06:56] [scene:talk]
+VISUAL:
+AUDIO: 'about the different approaches because you it might say, "Oh, I picked this approach because of this reason." and you might say, "Oh, well, actually, my implementation has a different, you know, path." With something pretty simple like this, there\'s not really'
+
+[07:08] [scene:talk]
+VISUAL:
+AUDIO: 'that many places that can deviate, but um with a bigger project, you\'ll run into that all the time. So, I recommend chatting for a while and really getting the plan nailed down. I\'m going to go through and read this now. See, this is the kind of thing that uh'
+
+[07:21] [scene:talk]
+VISUAL:
+AUDIO: 'if you miss, you get really embarrassed. I I happen to know this from embarrassing myself in the past. Instead of a DM, it\'s just all it\'s just any channel it\'s invited in. So, if you invite the bot to another channel, and any message will trigger it, and it\'ll'
+
+[07:34] [scene:talk]
+VISUAL:
+AUDIO: 'just start responding to everybody, and then you get made fun of. So, it\'s good that it drops the uh uh the channels uh that is not actually specifically DM\'d in. Okay, so while reading the system prompt, I notice it\'s'
+
+[07:47] [scene:talk]
+VISUAL:
+AUDIO: 'telling it to actually fetch the review checklist when it\'s going to need the review checklist every single time. So, I feel like it might be better if just getting the review checklist is part of the workflow leading up to the'
+
+[08:00] [scene:talk]
+VISUAL:
+AUDIO: 'agent and where it\'s passed into it instead of having to have the agent use a tool itself to go and get it. So, I think that\'s the only pushback I\'ll have here.'
+
+[08:12] [scene:talk]
+VISUAL:
+AUDIO: 'And this is a bit of a nitpick. This, you know, would work fine without this change. But, this is just kind of also just giving it an example of it\'s you can just conversationally ask for the plan to change. And if you\'re unsure or'
+
+[08:25] [scene:talk]
+VISUAL:
+AUDIO: 'the agent is unsure, you can talk back and forth about it. So, this is just a small example. Yes, I agree. That\'s cleaner. Updating plan now. All right, now it\'s asking for an approval and we\'ll give it to it and it should start'
+
+[08:37] [scene:talk]
+VISUAL:
+AUDIO: 'working away and not really need anything from us until it\'s done. So, approved. Now that it\'s off working in the background, we can work on some other things that we\'ll need at the same'
+
+[08:50] [scene:talk]
+VISUAL:
+AUDIO: 'time. We need to make a Slack app to get this connected. A really nice thing about Slack is they let you upload a configuration file instead of having to do it in the UI. So, we can actually just have Claude set that up as well in a new section. We\'ll ask Claude to'
+
+[09:03] [scene:talk]
+VISUAL:
+AUDIO: 'research how to make a valid Slack app manifest that will work for our app. It should have all the context it needs from the plan file that the other session created. And also while we\'re here, we\'ll ask for naming ideas since I haven\'t thought about that yet. Okay,'
+
+[09:17] [scene:talk]
+VISUAL:
+AUDIO: 'let\'s see. I don\'t really like any of these so far. I I like skill issue since it\'s using the skill. I really don\'t like any of these though. Mid detector. Sometimes you just need some human'
+
+[09:30] [scene:talk]
+VISUAL:
+AUDIO: 'creativity. I\'m going to name it workflow whisperer because I I didn\'t like any of Claude\'s suggestions. Okay, great. Now that we have the manifest, we can just copy this at api.slack.com/apps,'
+
+[09:42] [scene:talk]
+VISUAL:
+AUDIO: 'click create new app from manifest, paste your manifest, then create app. If you\'ve ever made a Slack app before, you\'ll know that\'s much easier than'
+
+[09:55] [scene:talk]
+VISUAL:
+AUDIO: 'having to do it manually, but we still have some stuff to do by hand, like adding a profile picture just for fun, and also installing the app into your organization. And then in OAuth and permissions, we'
+
+[10:07] [scene:talk]
+VISUAL:
+AUDIO: 'need to copy the bot token. We\'ll get this to start setting up the credentials in n8n. We\'ll make a new Slack API credential, give it a name, then paste in the bot token.'
+
+[10:19] [scene:talk]
+VISUAL:
+AUDIO: 'We need to copy the signing secret from basic information in Slack, and paste it back into the credential. Now we need to get an n8n API key so'
+
+[10:31] [scene:talk]
+VISUAL:
+AUDIO: 'that our workflow is able to fetch other workflow JSON. We get that from the settings, then n8n API. Always give your keys descriptive names. If your plan allows it, the workflow should only need the read workflow'
+
+[10:44] [scene:talk]
+VISUAL:
+AUDIO: 'scopes, so I\'ll limit it just to that. Save and copy. Now we can add an n8n credential type and paste that key in. It also needs the base URL, which is'
+
+[10:57] [scene:talk]
+VISUAL:
+AUDIO: 'just the n8n URL with the path of API/v1. And it\'s still generating, which gives me a chance to address a few things. I\'ve heard a couple times, why are you still using an MCP when skills exist?'
+
+[11:10] [scene:talk]
+VISUAL:
+AUDIO: 'So, I want to explain what each piece of this equation is actually contributing. Claude Code is a coding agent that runs on your own computer. It can do things like call tools, use MCPs, and create'
+
+[11:22] [scene:talk]
+VISUAL:
+AUDIO: 'files. n8n is an automation and orchestration platform. n8n is where logic lives and runs on a server at any time, not tied to your computer. It\'s batteries included, meaning everything'
+
+[11:34] [scene:talk]
+VISUAL:
+AUDIO: 'is already set up and works out of the box. The security is already there, credential management, remote access, it all just works. The MCP makes the connection between tools like Claude Code and N8N. So, Claude Code can'
+
+[11:47] [scene:talk]
+VISUAL:
+AUDIO: 'directly interact with N8N like it\'s a user right in the UI. Without the MCP, Claude can\'t actually change or see anything in your N8N instance. The N8N skills and all skills are just extra'
+
+[12:01] [scene:talk]
+VISUAL:
+AUDIO: 'prompts that help the model do a specific task. So, there is no connection being made by skills. It\'s just teaching the model how to do things better by providing extra details. So, think of N8N as the hands and skills'
+
+[12:13] [scene:talk]
+VISUAL:
+AUDIO: 'kind of like the brain or more like a manual, I guess, and the model is the brain. I also want to talk about speed. When using the N8N and the N8N skills, it\'s a bit slower than generating code.'
+
+[12:26] [scene:talk]
+VISUAL:
+AUDIO: 'Though, it is getting faster as the team keeps optimizing it. The skill really helps Claude with making really, you know, really good workflows, but it slows down since it\'s essentially researching before it generates anything. If you\'re feeling impatient,'
+
+[12:38] [scene:talk]
+VISUAL:
+AUDIO: 'just remember that the riskiest, most manual, and hardest part of using code, the deployment, in N8N takes no effort at all. And with the tips I showed with the upfront planning, parallel'
+
+[12:50] [scene:talk]
+VISUAL:
+AUDIO: 'sub-agents, and setting it up to work in the background, it really hasn\'t been a problem for me. And look at that, perfect timing. It looks like Claude is finishing up. It has all the setup for everything that we need to do manually, which we already did the credentials,'
+
+[13:04] [scene:talk]
+VISUAL:
+AUDIO: 'but then we\'ll read through the rest and we\'ll go and I\'m really curious to see the workflow. So, we\'ll go and take a look. Check that out. I think that\'s kind of a pretty workflow. All right, so one thing I notice right off the bat is that all of'
+
+[13:16] [scene:talk]
+VISUAL:
+AUDIO: 'the sticky notes are all stacked on top of each other. Since I\'m on an unreleased version, I\'m not sure if that\'s expected or not. There\'s also not that many, so we\'ll ask Claude to add some more and'
+
+[13:28] [scene:talk]
+VISUAL:
+AUDIO: 'try to have it reposition them. It looks like all the nodes with errors are the ones that are expected, the ones that we\'re waiting for credentials. As I look through, I don\'t really see anything that stands out as an issue. I really love all the error handling. You hardly'
+
+[13:41] [scene:talk]
+VISUAL:
+AUDIO: 'ever see all of the error cases covered like this because really there\'s nothing worse than a silent failure. So, it\'s good the skill is enforcing this. Oh, and I forgot the open router credentials. We didn\'t set that up yet. So, I\'ll just add that really on the'
+
+[13:54] [scene:talk]
+VISUAL:
+AUDIO: 'canvas. One of the great things about N8N, a mistake or you forget about something, you can just fix it right in the canvas. And now we\'ll ask Claude to add the Slack and N8N credentials in for us as'
+
+[14:06] [scene:talk]
+VISUAL:
+AUDIO: 'well as fix and add some more stickies to make sure this is well documented. While it works on that, we\'ll see what Claude asked us to do. Their credentials are already done, so we just asked it to do the binding, so that\'s done as well.'
+
+[14:19] [scene:talk]
+VISUAL:
+AUDIO: 'Okay, let\'s go figure out what our bot\'s ID is. Oh, and it looks like the manifest wasn\'t right. This should let us send messages here. Luckily, I know what the issue is and how to fix it. We just need'
+
+[14:31] [scene:talk]
+VISUAL:
+AUDIO: 'to go into the Slack app home and enable messaging and then reinstall. After a refresh, and nice. Now it accepts messages. So, we'
+
+[14:43] [scene:talk]
+VISUAL:
+AUDIO: 'can grab the ID from the app detail screen and we can add in the bot ID just like it asks. And oh, it already finished editing the workflow. Uh so, it\'s already in here. First, I\'ll put'
+
+[14:56] [scene:talk]
+VISUAL:
+AUDIO: 'the Slack ID so I don\'t forget. And at least it moved the stickies around, but they still look a little funny, so I\'ll clean them up a little bit. That definitely isn\'t perfect, but it\'s a little better. But let\'s just move on'
+
+[15:09] [scene:talk]
+VISUAL:
+AUDIO: 'to registering the webhook with Slack. We need to publish the workflow. Then copy the production URL from the Slack trigger. And in the event subscriptions tab, there\'s a URL field for it, and then we'
+
+[15:22] [scene:talk]
+VISUAL:
+AUDIO: 'can just save. I never know when I have to reinstall with Slack, so I just do it after every change. And now we should be ready to fully test. So, we\'ll test it on itself. So, I\'ll send a message.'
+
+[15:37] [scene:talk]
+VISUAL:
+AUDIO: 'And look at that, we got a review back on the very first try. Uh let\'s go in and read it. Let\'s go to the execution and see what\'s'
+
+[15:49] [scene:talk]
+VISUAL:
+AUDIO: 'happening here. Everything looks green right away. One of the amazing parts of using n8n is how easy it is to trace through and find errors. It\'s literally like a diagram pointing out to you where an issue is.'
+
+[16:02] [scene:talk]
+VISUAL:
+AUDIO: 'But, you can still have logical mistakes that don\'t show up as an error, and they are the hardest to find. And it looks like that might be what we\'re dealing with right now. I\'ve already spotted that the get skill tool hasn\'t even been'
+
+[16:14] [scene:talk]
+VISUAL:
+AUDIO: 'used, which is definitely a problem. A workflow this big should have loaded at least five or six skills to do a thorough review, which is what it\'s prompted to do. So, it not being used even once is 100% a bug.'
+
+[16:26] [scene:talk]
+VISUAL:
+AUDIO: 'To be completely honest, I can\'t find what the issue is. I\'m not sure why it isn\'t working, so I\'ll ask Claude to look into it with the execution ID. Oh my gosh, I feel pretty stupid and I'
+
+[16:41] [scene:talk]
+VISUAL:
+AUDIO: 'completely missed that. The skills files, like the paths, should have been listed in the agent prompt, so that it actually knows what skills are available and how to call them. Because right now the get skills tool only returns skills'
+
+[16:54] [scene:talk]
+VISUAL:
+AUDIO: 'by the exact path being passed in. So, if the agent\'s never told what\'s available, it\'s never able to grab anything. So, Claude has two suggested fixes, which is loading in the skills'
+
+[17:06] [scene:talk]
+VISUAL:
+AUDIO: 'directly and giving it into the agent, and then also making the rule much more strict in terms of only using the skills for the review. I did think that that was in the original plan, and I know that\'s in the template that I asked it'
+
+[17:19] [scene:talk]
+VISUAL:
+AUDIO: 'to emulate. Um but it was lost in translation somewhere. So, at least we caught it now, so we can get it added. Okay, so the fix is apparently done. Uh I\'m being told there\'s a quirk to address where something landed the wrong'
+
+[17:32] [scene:talk]
+VISUAL:
+AUDIO: 'way. So, one manual step it\'s asking us to enable continue on error output. Let\'s go see what it\'s talking about here. I\'m a little nervous now. Okay, so it messed up some of my organization,'
+
+[17:45] [scene:talk]
+VISUAL:
+AUDIO: 'and I don\'t really know what\'s Let\'s see. That is a weird place for a connector to come out. Open this up. Continue using error output. Okay, and it did wire it right'
+
+[17:58] [scene:talk]
+VISUAL:
+AUDIO: 'up. So, I guess it just forgot to put it in the correct place. I don\'t I don\'t really know. But anyway, works now, so I\'m happy. That should be that, I guess. Let\'s publish this and give it another'
+
+[18:10] [scene:talk]
+VISUAL:
+AUDIO: 'test. Copy this again. We\'ll say Okay, and we got a reply. Fetch skills index does not have index.'
+
+[18:22] [scene:talk]
+VISUAL:
+AUDIO: 'Really? Uh it doesn\'t have a retry on fail. It just has an error branch. Okay, fair. Fair play. So, this seems more real.'
+
+[18:34] [scene:talk]
+VISUAL:
+AUDIO: 'Let\'s check the execution. Yes. Look at that. We got six tool calls now. It got six skills files instead of that. And let\'s take a'
+
+[18:46] [scene:talk]
+VISUAL:
+AUDIO: 'look in here and see what this prompt looks like. Okay, so look, this is the available skills files, every markdown path inside of the public and AI then repo. Fetch'
+
+[18:58] [scene:talk]
+VISUAL:
+AUDIO: 'any of these via that. So, now it knows exactly what it has available to it. That\'s amazing. That\'s That\'s what we were missing before and why it wasn\'t working.'
+
+[19:10] [scene:talk]
+VISUAL:
+AUDIO: 'So, this works. Let me test one other thing, which is giving it a bad URL. Let\'s just give it the ID. Nice. So, we got'
+
+[19:22] [scene:talk]
+VISUAL:
+AUDIO: 'this ad path too is working. And that is a really nice user experience at that point, too. I hope this video gave you a realistic idea of what building for NADN with AI looks like and prepared you to try it for yourself. If you haven\'t'
+
+[19:36] [scene:talk]
+VISUAL:
+AUDIO: 'tried the official version of the MCP yet, which you likely haven\'t since it\'s only been out for a few weeks, then please go try it because it\'s truly a game changer, especially when paired with the official skills like I showed'
+
+[19:48] [scene:talk]
+VISUAL:
+AUDIO: 'in this video. The link to both are the first two links down in the description. If you have any questions, I\'ll be answering them down in the comments.'

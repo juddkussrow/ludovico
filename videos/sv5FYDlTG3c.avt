@@ -1,0 +1,299 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Gemini 2.5 Pro is INSANE Good! - MCP Server Build Tutorial
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=sv5FYDlTG3c
+upload_date: 20250328
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'So, while I\'ve been out traveling for the last few days, Google released a Gemini 2.5 model. So, I haven\'t really had time to try it out. So, I\'m really excited for today\'s video. We\'re going to try to use cheat 2.5 here to build a cursor MCP server. So, we\'re just going'
+
+[00:12] [scene:talk]
+VISUAL:
+AUDIO: 'to follow my workflow, how I used to set this up, and how you can also learn to build any MCP server for your specific needs. So, I thought we wanted to build an MCP server today that has a vector'
+
+[00:27] [scene:talk]
+VISUAL:
+AUDIO: 'store from Open AI that we can store documentation inside. So, we can always have cursor with the latest fresh documentation from any kind of topic you'
+
+[00:40] [scene:talk]
+VISUAL:
+AUDIO: 'want. You can see I built a 3JS documentation vector store. We might as well use that. We\'ll see. But, I kind of show you how the workflow I use when I build these vector stores and how we can connect them to'
+
+[00:54] [scene:talk]
+VISUAL:
+AUDIO: 'Yeah. MCP server. So, I think we\'re going to start over here on Google AI Studio. We\'re going to pick our Gemini 2.5 Pro experimental. So, the first thing we are going to do'
+
+[01:08] [scene:talk]
+VISUAL:
+AUDIO: 'is we need to gather some context for Gemini now to actually build our MCP server. But, before we do that, let\'s take a look at today\'s sponsor, brilliant.org. Have you ever wondered how AI like ChatGPT and generative AI'
+
+[01:21] [scene:talk]
+VISUAL:
+AUDIO: 'models actually works? Well, brilliant.org has the perfect course that lets you peek behind the curtain. My personal favorite now is the How AI Works course. This guides you through topics like intro to large language'
+
+[01:33] [scene:talk]
+VISUAL:
+AUDIO: 'models, predicting next word, larger context windows, gradient descent, and even building your own large language model. What\'s great about Brilliant is that you won\'t just passively watch, you\'ll actively engage with interactive lessons that make complex topics simple'
+
+[01:45] [scene:talk]
+VISUAL:
+AUDIO: 'and intuitive. Brilliant\'s approach is proven to be six times more effective than just watching lectures. So, you generally build a deep understanding and boost your problem-solving skills along the way. Whether you\'re aiming to'
+
+[01:58] [scene:talk]
+VISUAL:
+AUDIO: 'sharpen your skills for your career or just curious about AI, Brilliant helps you learn smarter in just minutes a day. To explore how AI works and thousands of interactive lessons Brilliant has to offer, visit brilliant.org/allaboutai or scan the QR code on screen. So, click'
+
+[02:12] [scene:talk]
+VISUAL:
+AUDIO: 'the link in the description below to start your 30-day free trial, and the first 200 to sign up will also get 20% off their annual premium subscription. A big thanks to Brilliant for sponsoring this video. Let\'s go back to the'
+
+[02:25] [scene:talk]
+VISUAL:
+AUDIO: 'project. So, let\'s just start by gathering some documentation. Of course, I want to grab on cursor here. We\'re going to grab all the context we need for our documentation here. So, I\'m just going to copy this page, and I\'ll be'
+
+[02:37] [scene:talk]
+VISUAL:
+AUDIO: 'sure to select Since we want to build our server in TypeScript, I\'m going to select node.js here, right? So, I kind of just prepared some information here. So, we have a Gemini. So, let\'s call this cursor'
+
+[02:50] [scene:talk]
+VISUAL:
+AUDIO: 'mcp.txt. That\'s fine. So, let\'s paste in some information for Gemini about how we build a MCP server in cursor and how we set it up. I also just want to grab some information or'
+
+[03:04] [scene:talk]
+VISUAL:
+AUDIO: 'documentation from the MCP TypeScript SDK. So, again, I\'m just going to copy all this documentation here. And just Yeah, create a new file. Let\'s call it TypeScript mcp.txt, and just paste in'
+
+[03:17] [scene:talk]
+VISUAL:
+AUDIO: 'this documentation. And of course, we need some information from the documentation on Open AI. So, let\'s just go to their documentation page. We can grab their text and generation prompting'
+
+[03:29] [scene:talk]
+VISUAL:
+AUDIO: 'documentation. I think that\'s pretty good. So, let\'s just call this open ai1.txt, and let\'s paste in some documentation here. We can create a new file. We can call this one for Open'
+
+[03:41] [scene:talk]
+VISUAL:
+AUDIO: 'AI. Let\'s call it file search, right? Because we need that documentation when we\'re going to use vector stores. And we can go back to documentation here on Open AI\'s page, and let\'s grab the file'
+
+[03:55] [scene:talk]
+VISUAL:
+AUDIO: 'search documentation. They have this nice copy page here. So, you just use that. Right? Oops. Let\'s paste that in here. And I think that\'s basically all the documentation we need for Gemini now to build our MCP'
+
+[04:08] [scene:talk]
+VISUAL:
+AUDIO: 'server. But, we also I think we want to start by prepping the vector database. So, let\'s think of what type of vector database we want to build here.'
+
+[04:21] [scene:talk]
+VISUAL:
+AUDIO: 'So, we can go to vector store. So, we just need some context for our new vector database. Okay. So, I think we\'re just going to rebuild our 3JS documentation here. So, what you want to do when you create a vector store here'
+
+[04:34] [scene:talk]
+VISUAL:
+AUDIO: 'on the storage on Open AI, just click on create, right? And you\'re just going to give it a name. So, we can call it 3JS docs. Yeah, docs, that\'s fine. And we can call it two since I have already a version of'
+
+[04:46] [scene:talk]
+VISUAL:
+AUDIO: 'this. And all you have to do now is just click on add files, right? And just files the file you need. If you want to build my vector store, you can just go to the link in the description. And I'
+
+[04:58] [scene:talk]
+VISUAL:
+AUDIO: 'have uploaded all the text files from the documentation from 3JS. So, you can see this contains every single thing. If you want to do some vibe coding and building some games, this documentation'
+
+[05:11] [scene:talk]
+VISUAL:
+AUDIO: 'is invaluable, right? So, let\'s upload our 3JS files here. So, we can just do So, let\'s just use the git git clone, and let\'s grab my files, right? And let\'s open that and put all those 3JS'
+
+[05:23] [scene:talk]
+VISUAL:
+AUDIO: 'files into our vector store. Okay. So, here are all the files. Let\'s just drag them up here. Right? And now we can do some advanced options, right? So, we can set the chunk size. I think I want to set my chunk'
+
+[05:36] [scene:talk]
+VISUAL:
+AUDIO: 'size 2,000. And I think the overlap can be 400. That\'s fine. This is just kind of the size of each If you extract five chunks, it\'s just going to be 1,000 tokens. So,'
+
+[05:49] [scene:talk]
+VISUAL:
+AUDIO: 'I think that\'s fine for now. And we can click attach. And now we are kind of building our vector store here. You can see that. It\'s pretty quick. So, we can see the name, and you can see the ID we have is here. This is something we need'
+
+[06:02] [scene:talk]
+VISUAL:
+AUDIO: 'to use later, but we\'ll come back to that. But, that is basically our vector store set up. Now, we actually got to build a server that can actually use this vector store, right? So, let\'s head back to our AI Studio here on Google. We'
+
+[06:15] [scene:talk]
+VISUAL:
+AUDIO: 'have the 2.5 model. Perfect. So, now we just need to upload our prepared files. So, here is kind of the documentation or the context we have for So, let\'s just put this in here.'
+
+[06:28] [scene:talk]
+VISUAL:
+AUDIO: 'And let\'s come up with a prompt here to actually create this server. The prompt is going to be, "Let\'s create a cursor MCP server in TypeScript that uses the file search vector store feature from Open AI." The tool we need is to be able'
+
+[06:41] [scene:talk]
+VISUAL:
+AUDIO: 'to query a file search and return chunks from the vector store as context. Write the code. Create a step-by-step guide how to set this up, please. Yeah, that is what we are going to do. And of course, we have added our full context'
+
+[06:53] [scene:talk]
+VISUAL:
+AUDIO: 'here. So, we can just run this now, and hopefully Gemini 2.5 will help us set this up. This is also like a thinking reasoning model. So, we can look at the steps here.'
+
+[07:06] [scene:talk]
+VISUAL:
+AUDIO: 'It\'s pretty fast. So, I\'ve been pretty It looks pretty good from my short testing before this video. I\'m pretty happy with the speed here. So, we can just collapse this for now, right? Let\'s wait for the results. Okay.'
+
+[07:18] [scene:talk]
+VISUAL:
+AUDIO: 'Perfect. So, now we kind of see we have our step-by-step guide. So, we just want to follow this. So, yeah, I have node installed. So, we\'re going to create a directory here. I So, let\'s do that. I think I\'m just going to call this two.'
+
+[07:33] [scene:talk]
+VISUAL:
+AUDIO: 'So, let\'s create that. Let\'s open this directory in cursor. It\'s like this. I think that\'s good. We can open up the terminal, too. The first thing we\'re going to do is'
+
+[07:46] [scene:talk]
+VISUAL:
+AUDIO: 'initialize this. So, we can do that, right? Get our package. Perfect. Now, we\'re going to install some dependencies. There\'s going to be a lot of copying and pasting, of course, since we don\'t have'
+
+[07:58] [scene:talk]
+VISUAL:
+AUDIO: 'this integrated into cursor. But, I think for this example, it\'s fine. But, I\'m really looking forward to trying this out in our Yeah. Integrated'
+
+[08:12] [scene:talk]
+VISUAL:
+AUDIO: 'IDE. Create a config.json in root. So, we can do that. New file. This. Let\'s see we get some code. We can grab that. Right? Okay.'
+
+[08:24] [scene:talk]
+VISUAL:
+AUDIO: 'And here is the structure we\'re going to create. We\'re going to create a source index.ts, type.ts, env. So, let me just set up this structure here. Okay. So, we have our structure. Now, we'
+
+[08:36] [scene:talk]
+VISUAL:
+AUDIO: 'can just go back here and start grabbing some Yeah, code here. So, we need our env file. We can paste in this. We need our vector store ID, remember? And we need an Open AI key. Our gitignore. We can just do that.'
+
+[08:49] [scene:talk]
+VISUAL:
+AUDIO: 'Step by step. It\'s a nice thing. types.ts. Let\'s grab that. We can go into this. Paste. Save. And let\'s grab our index. This is kind'
+
+[09:02] [scene:talk]
+VISUAL:
+AUDIO: 'of our main file that we\'re going to build, right? So, let\'s copy that. Paste it in. Save. Okay. Let\'s go back here. And then we\'re going to create our package.json, and we\'re going to build it and link it.'
+
+[09:14] [scene:talk]
+VISUAL:
+AUDIO: 'Let\'s Let me just set the everything up, and let\'s see if this was a one-shot or if we have to do some changes here. Okay. So, that should be it now. So, let\'s try to build this. So, I\'m just'
+
+[09:26] [scene:talk]
+VISUAL:
+AUDIO: 'going to do npm run build. Okay. So, we have some errors here. That\'s fine. So, I\'m just going to copy this, and let\'s'
+
+[09:39] [scene:talk]
+VISUAL:
+AUDIO: 'try to debug this with Gemini 2.5 here. So, I just pasted in our error here, right? And we run this, and you can see we have some issues. So, we get a new index, like a corrected index.ts.'
+
+[09:52] [scene:talk]
+VISUAL:
+AUDIO: 'Let\'s copy that. Let\'s go back here and let\'s paste in our new one. Okay, that looks better. So, let\'s try to build it again. Perfect.'
+
+[10:05] [scene:talk]
+VISUAL:
+AUDIO: 'And we do an npm link. We can do that. Okay. So, now we are kind of ready to go. We just have to create our cursor. So, to do that, you can just create new folder dot cursor,'
+
+[10:18] [scene:talk]
+VISUAL:
+AUDIO: 'right? And we need to create a file called uh what is it MCP.json, I think. Uh now we just need a JSON file here to kind of set up the MCP connection. So,'
+
+[10:30] [scene:talk]
+VISUAL:
+AUDIO: 'let\'s see if um 2.5 has that ready for us. So, you can see here is our MCP.json. I\'m going to hide my key here now, but we need to put in our API key. So, let me just copy'
+
+[10:44] [scene:talk]
+VISUAL:
+AUDIO: 'this. So, in this JSON file now, you can see we point to our index.js that we built, right? Under build here. And we need our API key and a vector store ID. So, if we head back to OpenAI now, we go to'
+
+[10:57] [scene:talk]
+VISUAL:
+AUDIO: 'storage and we copy our ID here. Okay? We can go back here. Let\'s paste in our vector store ID. And I\'m going to grab'
+
+[11:09] [scene:talk]
+VISUAL:
+AUDIO: 'my OpenAI key and uh put that in here. Okay, so I did that. Now we have to I like to just leave cursor and go in again. And if you reopen cursor now and we go to settings,'
+
+[11:23] [scene:talk]
+VISUAL:
+AUDIO: 'right? Settings and we click on MCP, enable, and there we got it. So, you can see we have the OpenAI file search, right? And we have the three.js doc search. So, let\'s try this out now. So,'
+
+[11:36] [scene:talk]
+VISUAL:
+AUDIO: 'let\'s just close all of this and let\'s open up our chat. Okay, so how we can try this now is we can let\'s do the prompt. Let\'s find some three.js docs about how to create fog, right? We'
+
+[11:48] [scene:talk]
+VISUAL:
+AUDIO: 'select our agent and we just run this. So, what\'s going to happen now is we\'re going to collect connect to our MCP tool here. Perfect. We\'re going to send the query how to create fog in three.js. We\'re going to run this tool. And now'
+
+[12:01] [scene:talk]
+VISUAL:
+AUDIO: 'we\'re going to take that query. We\'re going to send this to our vector store and try to fetch all the information about fog from the three.js documentation and we\'re going to return this as context here, right? Hopefully'
+
+[12:13] [scene:talk]
+VISUAL:
+AUDIO: 'that works. So, let\'s see now. Okay, so we have some results here. Perfect. So, you can see here we got some results from the response. Now cursor can use this. So, based on the three documentation, you can create'
+
+[12:26] [scene:talk]
+VISUAL:
+AUDIO: 'fog in two ways. We have linear fog. We have parameters for this. And this just brings some very valuable documentation into our cursor here by using our file search tool. So,'
+
+[12:39] [scene:talk]
+VISUAL:
+AUDIO: 'we can scroll down here. You can see all the context we fetched from our vector store. So, I think if you want to do some agentic workflows, setting up these MCP servers with documentations from the'
+
+[12:52] [scene:talk]
+VISUAL:
+AUDIO: 'kind of libraries you want to work in will really help you because these documentations change all the time. There\'s new versions. And by feeding this information to like a client side like I did like a cursor or like Claude'
+
+[13:06] [scene:talk]
+VISUAL:
+AUDIO: 'Code, WinSurf, and all of these clients, you will get better results using this setups with documentation. And I have built many MCP servers that had OpenAI'
+
+[13:18] [scene:talk]
+VISUAL:
+AUDIO: 'documentation like I said, three.js documentation. And it\'s very easy to set up. So, you can just follow the guide we did here. But I got to say uh I\'ve been really happy here today'
+
+[13:30] [scene:talk]
+VISUAL:
+AUDIO: 'using uh Claude Gemini 2.5 Pro. So, I\'m really excited to explore this model more. And we\'re going to definitely try it out on'
+
+[13:42] [scene:talk]
+VISUAL:
+AUDIO: 'other projects. And hopefully soon this might come into cursor. Maybe we can use it in some other clients like maybe WinSurf, I don\'t know. So, let\'s see. Maybe either I kind of want to try it out that too. And what is so good about'
+
+[13:55] [scene:talk]
+VISUAL:
+AUDIO: 'this is the token count is huge, right? The speed is great. And let\'s take a quick look at some of the the benchmarks just for fun.'
+
+[14:08] [scene:talk]
+VISUAL:
+AUDIO: 'So, if you\'re going to LiveBench, this is something I like. I really like the coding average. And if we sort by this, wow. Look at this. 85.87. This is top. This is over all three mini'
+
+[14:21] [scene:talk]
+VISUAL:
+AUDIO: 'high. It\'s over Claude 3.5 Sonic thinking by kind of a large mile. So, I\'m really excited to explore this model more. And I got to say Google has really picked up like many wrote them off like a year ago, but they have made a very'
+
+[14:34] [scene:talk]
+VISUAL:
+AUDIO: 'very good comeback lately. So, pretty excited about testing this model out more. And yeah, hope you learned something today. Hope you found this interesting. It\'s pretty cool to create these servers. I\'m really fan of MCP.'
+
+[14:47] [scene:talk]
+VISUAL:
+AUDIO: 'And in the next video, I think we\'re going to dive a bit more into uh since OpenAI also have adopted MCP, we\'re going to dive more into that in probably'
+
+[14:59] [scene:talk]
+VISUAL:
+AUDIO: 'my next video coming up on this channel. So, look out for that. Uh but thank you for tuning in. Hope you learned something. And just one more thing, the Nvidia GPU draw on my channel is probably going to'
+
+[15:11] [scene:talk]
+VISUAL:
+AUDIO: 'be this weekend. So, if you enter that, chance to win a GPU, uh look out for the results this weekend. So, yeah. Thank you for tuning in. See you soon and have a great day.'

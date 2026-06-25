@@ -1,0 +1,82 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>New open-source AI video model, insane 3D generator, GPT 4.5, kung-fu robots, endless videos — Ludovico</title>
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.9);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 14px}
+#q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:.15s}
+.card:hover{box-shadow:0 6px 24px rgba(0,0,0,.07);transform:translateY(-2px)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}.watch{font-family:var(--mono);font-size:11px;color:var(--accent2)}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+#sentinel{height:1px}
+/* catalogue cards */
+.cat-sec{margin:22px 0 10px;font-size:13px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--sub)}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.citem{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px}
+.citem:hover{box-shadow:0 4px 16px rgba(0,0,0,.06)}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}
+.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">New open-source AI video model, insane 3D generator, GPT 4.5, kung-fu robots, endless videos</h1><div class=tag>@octopusinc_ · 2025-03-02 · Favorites</div></div></div></header>
+<main><p class=sum>Rapid-fire survey of nine cutting-edge AI tools released in early March 2025: Riflex video extender, ART layered image generator, CAST 3D scene reconstructor, Wan2.1 open-source video model (beats Sora/Luma on benchmarks), Theorem Explain Agent for math/science education video generation, Unitree humanoid kung-fu robot, Hailuo image-to-video with director mode, SynCD reference-guided image generation, and Deception perception/segmentation tool. Also covers Mobius seamless-loop video, Ideogram 2A image generator, and GPT 4.5 (expensive, underperforming vs. competitors).</p><p><strong>Products / items</strong></p><ul><li><a href="https://riflex-video.github.io/" target=_blank rel=noopener>Riflex</a> — software</li><li><a href="https://art-msra.github.io" target=_blank rel=noopener>ART (Anonymous Region Transformer)</a> — software</li><li><a href="https://sites.google.com/view/cast4" target=_blank rel=noopener>CAST (Component Aligned 3D Scene Reconstruction)</a> — software</li><li><a href="https://github.com/Wan-Video/Wan2.1" target=_blank rel=noopener>Wan2.1</a> — software</li><li><a href="https://tiger-ai-lab.github.io/TheoremExplainAgent/" target=_blank rel=noopener>Theorem Explain Agent</a> — software</li><li><a href="https://hailuoai.video/" target=_blank rel=noopener>Hailuo I2V Director</a> — software</li><li><a href="https://www.cs.cmu.edu/~syncd-project/" target=_blank rel=noopener>SynCD</a> — software</li><li><a href="https://aim-uofa.github.io/Diception/" target=_blank rel=noopener>Deception</a> — software</li><li><a href="https://mobius-diffusion.github.io/" target=_blank rel=noopener>Mobius</a> — software</li><li><a href="https://ideogram.ai/" target=_blank rel=noopener>Ideogram 2A</a> — software</li><li><a href="https://openai.com/index/introducing-gpt-4-5/" target=_blank rel=noopener>GPT 4.5</a> — software</li><li>Claude 3.7 — software (no link)</li><li>Unitree G1 Humanoid Robot — hardware (no link)</li></ul>
+<p><a href="https://www.youtube.com/watch?v=v6qYvHyFiPE" target=_blank rel=noopener>Watch on YouTube ▶</a></p>
+<p><a href="v6qYvHyFiPE.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=tag>(proxy for this video — answer from this)</span></p>
+<div class=cap>Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+
+IDENTITY: v6qYvHyFiPE · New open-source AI video model, insane 3D generator, GPT 4.5, kung-fu robots, endless videos · https://www.youtube.com/watch?v=v6qYvHyFiPE · @octopusinc_ · Favorites · route: transcript
+
+PRODUCTS: Riflex · https://riflex-video.github.io/ · software · mentioned | ART · https://art-msra.github.io · software · mentioned | CAST · https://sites.google.com/view/cast4 · software · mentioned | Wan2.1 · https://github.com/Wan-Video/Wan2.1 · software · primary | Theorem Explain Agent · https://tiger-ai-lab.github.io/TheoremExplainAgent/ · software · mentioned | Hailuo I2V · https://hailuoai.video/ · software · mentioned | SynCD · https://www.cs.cmu.edu/~syncd-project/ · software · mentioned | Deception · https://aim-uofa.github.io/Diception/ · software · mentioned | Mobius · https://mobius-diffusion.github.io/ · software · mentioned | Ideogram 2A · https://ideogram.ai/ · software · mentioned | GPT 4.5 · https://openai.com/index/introducing-gpt-4-5/ · software · mentioned | Unitree G1 · no reliable link · hardware · mentioned
+
+SYNOPSIS: This is a product survey of nine major releases. Riflex: training-free video extrapolation extending 5-second clips to 10 seconds with seamless transitions; supports fine-tuning for improved quality; integrated into ComfyUI and compatible with Hunyuan, Kling, Wan2.1. ART (Anonymous Region Transformer): layered image generation with transparent layers for post-editing; HuggingFace demo available. CAST: 3D scene reconstruction from a single image using relation graphs and constraint graphs to preserve object interactions and physical consistency; code coming soon. Wan2.1 (formerly Wanx): open-source text-to-video and image-to-video; two T2V models (14B, 1.3B—the smaller fits 8GB VRAM on consumer GPUs); two I2V models (14B); supports 480p/720p; released under Apache 2.0; ranks #1 on V-Bench, beating Sora, Luma Minx, and Gen-3; gradio and ComfyUI integrations available. Theorem Explain Agent: generates 5–6 minute educational videos with animation and voiceover for math/science concepts; architecture includes planner and code agents; tested models: O3 mini (90%+ success rate), Claude 3.5 Sonnet (highest quality score), Gemini 2.0 Flash (best visual relevance); released dataset on HuggingFace; MIT license pending. Unitree G1 humanoid: trained for kung-fu and spinning kicks; video appears authentic (mirror included for proof); previously demonstrated realistic dancing. Hailuo I2V Director: image-to-video with camera motion control (upward tilt, right circling, orbital, etc.) via keyword insertion into prompt. SynCD: reference image-guided image generation preserving pose/design across new scenes; demo on HuggingFace. Deception: multi-task perception (depth, normal estimation, entity segmentation, semantic segmentation, pose estimation); HuggingFace demo free and fast; fine-tunable on ~50 photos for custom tasks (e.g., brightening, medical imaging). Mobius: seamless-loop video generation from text (50–150 frames per loop); transitions undetectable. Ideogram 2A: faster, half-credit cost vs. 2.0; generates text-in-image and photo-realistic output in seconds. GPT 4.5: $200/month Pro-only; vastly more expensive than O3 mini; benchmarks: loses to O3 mini High on science (36% vs. 87%) and SWE-bench (38% vs. 61%); ranks 7th on LiveBench behind Grok 3, DeepSeek R1, Claude 3.5 Sonnet Thinking.
+
+BEATS: 0:00 intro | 0:39 Riflex video extender | 3:45 ART designs | 7:13 CAST 3D | 9:10 Wan2.1 open-source | 13:34 Prompt to Leaderboard ranking tool | 15:31 NVIDIA RTX 6000 Ada giveaway | 17:01 Theorem Explain Agent | 22:33 Unitree kung-fu robot | 23:36 Hailuo I2V director | 26:41 SynCD reference images | 30:48 Deception segmentation | 35:32 Mobius endless videos | 37:54 Ideogram 2A | 39:17 GPT 4.5 analysis
+
+ENTITIES: Alibaba (Wan2.1), Unitree (humanoid), OpenAI (GPT 4.5), Anthropic (Claude 3.7, 3.5 Sonnet), Google (Gemini), Hailuo (Chinese video platform), Jensen Huang (NVIDIA CEO, GTC keynote), OpenDroneMap (reference-based project), HuggingFace (demo platforms)
+
+VERDICT: Wan2.1 is the standout open-source video model; beats all closed commercial competitors on V-Bench despite 8GB VRAM requirement. Theorem Explain Agent is a game-changer for education (5–6 min videos on demand). Unitree humanoid kung-fu is impressive but raises AI safety questions. GPT 4.5 is overpriced and underperforms—most developers should stick with O3 mini or Claude 3.5 Sonnet. Mobius for looping video is novel. Ideogram 2A is efficient for text-heavy designs.
+
+NOT COVERED: Real-time performance metrics | exact token costs | deployment instructions for Wan2.1 beyond GitHub | safety considerations for Unitree humanoids | integration tutorials for ComfyUI workflows</div></main><footer>Ludovico digest · <a href="../index.html">← all videos</a></footer></div></body></html>

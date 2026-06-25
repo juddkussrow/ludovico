@@ -1,0 +1,279 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Tsidp - A Native OIDC Identity Provider from Tailscale
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=8vyHvvXwWNo
+upload_date: 20251030
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'Hi, I\'m Alex from Tailscale and I\'m here today to talk to you about TSIDP or Tailscale identity provider. This is a lightweight OIDC oorthth identity project and it is native to tail scale. So there\'s no need for sidecar proxies'
+
+[00:13] [scene:talk]
+VISUAL:
+AUDIO: 'or any other weirdness. Just give it an off key and it\'s good to go. It will speak tail scale natively right out of the box. The reason this might be interesting to you is that you can integrate oorthth and oidc flows into'
+
+[00:25] [scene:talk]
+VISUAL:
+AUDIO: 'many many self-hosted applications and they don\'t even have to be running tail scale to use TSIDP. But in today\'s video, I\'m just going to show you how to integrate TSIDP into'
+
+[00:37] [scene:talk]
+VISUAL:
+AUDIO: 'Proxmbox. Now, a few months ago, I did a video on how to use TSIDP with Proxmox. I\'ll put a link to that up here. However, it\'s broadly speaking a completely out ofdate'
+
+[00:49] [scene:talk]
+VISUAL:
+AUDIO: 'video now because TSIDP has been broken out of its original git repo. It\'s now in its own standalone repo. Tada. And also now we provide an official Docker image as well. So let\'s make a start.'
+
+[01:01] [scene:talk]
+VISUAL:
+AUDIO: 'What do we need to do this thing? What do we need to use TSIDP to log into Proxmox with? Well, first of all, we need a Proxmox installation. I have one of those right here. And then secondly,'
+
+[01:14] [scene:talk]
+VISUAL:
+AUDIO: 'we need somewhere to run the TSIDP application. Now, now how do I phrase this? I\'m going to break the chicken and egg rule today by running TSIDP directly inside the Proxmox instance inside an'
+
+[01:27] [scene:talk]
+VISUAL:
+AUDIO: 'Lex admittedly, but I\'m going to be using TSIDP inside Proxmox to log into Proxmox. Yeah, I need to get a spinning top, don\'t I, for this one? But demo environments and all that. So, you know,'
+
+[01:40] [scene:talk]
+VISUAL:
+AUDIO: 'right now I log into Proxmox like this. I use the standard Linux PAM authentication, username and password, etc., etc. But I\'ve already got an identity. I\'m already logged into my Tailet up here. Why can I not just reuse that tail scale identity to log into'
+
+[01:54] [scene:talk]
+VISUAL:
+AUDIO: 'Proxmox? Well, that\'s what we\'re going to do. So, first things first, let\'s create ourselves a brand new container. And I\'m just going to call this one TSIDP. It can be unprivileged. That is'
+
+[02:06] [scene:talk]
+VISUAL:
+AUDIO: 'absolutely fine. I\'m going to leave everything completely as stock otherwise. And the template I\'m going to pick is Debian 12. I don\'t think it matters too much what you use. 8 gig should be fine. CPU, two CPU. This is'
+
+[02:19] [scene:talk]
+VISUAL:
+AUDIO: 'just running on a small little Dell one liter PC which is running on the rack behind me. You really don\'t need much to run this application. Two gigs of memory is probably way overkill, but I\'m going'
+
+[02:31] [scene:talk]
+VISUAL:
+AUDIO: 'to be running Docker inside the LXC. So, I do want to just give it a little bit more breathing room. Now, I\'m going to select DHCP for IPv4. Okay. And DNS and confirm. And it\'s going to create me an'
+
+[02:44] [scene:talk]
+VISUAL:
+AUDIO: 'Lexe container. Now, we don\'t need to do anything unusual here. You know, sometimes we uh install Tailscale inside the LXC and then install an app on top of it so that we can SSH into it and'
+
+[02:58] [scene:talk]
+VISUAL:
+AUDIO: 'that kind of thing. This is a singlepurpose LXC, so I\'m not going to bother installing Tailscale itself inside of this Lexe so that it can remain unprivileged. I don\'t need to give it net ton device uh privileges,'
+
+[03:10] [scene:talk]
+VISUAL:
+AUDIO: 'that kind of thing. [snorts] So, um very straightforward really. We can just click on now the alexe that was created. Click on console get logged in. Do the standard app update to refresh the'
+
+[03:23] [scene:talk]
+VISUAL:
+AUDIO: 'package repositories followed by app upgrade minus y. This will take a few seconds to install all the latest packages in this well since this image was was baked by Proxbox uh a few months'
+
+[03:36] [scene:talk]
+VISUAL:
+AUDIO: 'ago. Now whilst that\'s doing that I\'m going to go over to get.docker.com docker.com and get the script that I need to install Docker with. So, I always like to copy this little command'
+
+[03:48] [scene:talk]
+VISUAL:
+AUDIO: 'here. Docker like you to output this script to an install Docker shell script. I don\'t know. You can do this if you want to. This is what the Docker project recommend, but I like doing things my own way. [laughter]'
+
+[04:02] [scene:talk]
+VISUAL:
+AUDIO: 'So, I\'m going to make sure I\'ve got curl installed first of all because Debian doesn\'t ship with curl out of the box because it\'s too bloaty. So I will now do curl blah blah blah docker URL and then just pipe it to sh. This is going'
+
+[04:15] [scene:talk]
+VISUAL:
+AUDIO: 'to install docker inside this lxc environment that we\'re going to be using to run tsidp. And then from here all we\'re going to need is a very straightforward docker'
+
+[04:27] [scene:talk]
+VISUAL:
+AUDIO: 'compose snippet. So I\'m going to copy this onto my clipboard right here. The link to this GitHub repo by the way is in the description down below. Once Docker is installed, which takes a few seconds, um I\'m now going to create the'
+
+[04:40] [scene:talk]
+VISUAL:
+AUDIO: 'um compose.yamel file in the root of the root home users folder. Um and then just paste this in. That\'s all there is to it. All right. Now, we need to modify this tsorth key line right here by'
+
+[04:53] [scene:talk]
+VISUAL:
+AUDIO: 'providing a tail scale or key. So, if I go to my machines page, click on settings, keys, generate or key. I\'m going to call this TSIDP.'
+
+[05:05] [scene:talk]
+VISUAL:
+AUDIO: 'I\'m going to click on reusable, but you absolutely don\'t have to. I do that just because I\'m making a video and I\'ll probably spin it up two or three times with different takes. Um, but here\'s my OR key. Okay, so I\'m going to copy that to my clipboard. Go back to my Docker'
+
+[05:18] [scene:talk]
+VISUAL:
+AUDIO: 'Compose YAML file. I\'m going to change this word to be TSR key with my actual tail scale or key now. And I think that\'s everything that we need to change. Just note here where it says TS'
+
+[05:30] [scene:talk]
+VISUAL:
+AUDIO: 'host name equals IDP. This is the name that your identity server will assume on your tailet. So if we look under DNS, I think it is at the top you\'ve got your tailet DNS name of Velociraptor'
+
+[05:44] [scene:talk]
+VISUAL:
+AUDIO: 'Noodlefish. Now you can rename that from the default. Mine was 6E5BF. You can roll custom names of something with a tail and something with scales. Um, then you also have to make sure that'
+
+[05:57] [scene:talk]
+VISUAL:
+AUDIO: 'magic DNS and HTTPS are turned on as well. Once you\'ve done that though, you are good to go. So, here we are. Here is my completed file. I\'m now going to do a docker compose pull followed swiftly by'
+
+[06:09] [scene:talk]
+VISUAL:
+AUDIO: 'a docker compose up. I\'m going to do minus d so that it runs in the background. And then I\'m going to follow the uh logs of this container with a minus f. And now hopefully if we go to'
+
+[06:22] [scene:talk]
+VISUAL:
+AUDIO: 'this URL, I\'m going to do this in an incognito window. Tails scale is going to go out in the background and generate a TLS certificate for this domain. So it\'s going to reach out via let\'s'
+
+[06:35] [scene:talk]
+VISUAL:
+AUDIO: 'encrypt verify that you are the right person to be owning this domain except we haven\'t quite finished. So the TLS certificate part worked just fine. And it this is all part of the demo. Don\'t'
+
+[06:47] [scene:talk]
+VISUAL:
+AUDIO: 'worry, this is all planned. But we can go connection is secure, certificate is valid. We can verify that let\'s encrypt has verifi has issued us a certificate from October 21st which is today as I record to January the 19th. Okay. But'
+
+[07:01] [scene:talk]
+VISUAL:
+AUDIO: 'what does this mean? Application capabilities not granted. Well, this is a brand new feature that is is pretty new to Tailscale in general actually and it\'s part of our um grants feature. So,'
+
+[07:14] [scene:talk]
+VISUAL:
+AUDIO: 'back in the GitHub repo, I need you to scroll down a little further and look for the setting an application capability grant phase. Now, I\'m just going to copy this entire code snippet'
+
+[07:27] [scene:talk]
+VISUAL:
+AUDIO: 'here, but essentially what this is doing is it\'s giving this app of TSIDP the application level granular permissions to exist on my tail and allows my users to access certain'
+
+[07:40] [scene:talk]
+VISUAL:
+AUDIO: 'things. Now, if you know you need to pass extra data through using this extra claims feature here, you can absolutely do that. If you if you know you need this stuff, then you know you need it. And if you have no idea what I\'m talking'
+
+[07:53] [scene:talk]
+VISUAL:
+AUDIO: 'about, just ignore it. You don\'t. This this bit here is completely optional. All right. So, what we need to do is copy this stanza here from the readme. The entire grants block here. Obviously, if you already have a grants block, you'
+
+[08:06] [scene:talk]
+VISUAL:
+AUDIO: 'need to inter interlace that with what you\'ve already got. Uh, but let\'s just copy this entire section here and go to our access controls file. Now, you may very well end up landing on the visual'
+
+[08:18] [scene:talk]
+VISUAL:
+AUDIO: 'policy, one of our brand new features that was launched as part of this week\'s tail scale full update, but uh, we want to use the JSON editor, the old school editor. And I\'m going to just find a nice spot for this just beneath ACL\'s'
+
+[08:31] [scene:talk]
+VISUAL:
+AUDIO: 'and just paste in this entire grants block. Now I also don\'t need this extra claims stuff. So I am just going to delete that and click save. And when I do, you\'ll notice that the tail scale um'
+
+[08:44] [scene:talk]
+VISUAL:
+AUDIO: 'policy file engine actually automatically indents everything correctly for me and just makes my life easy. But now instead of getting the um error message of I can\'t load the IDP'
+
+[08:57] [scene:talk]
+VISUAL:
+AUDIO: 'provider, now we get the actual web interface of the brand new TSIDP UI. So, let\'s go ahead and add Proxmox. Now, let\'s do add new client. And we\'re going'
+
+[09:09] [scene:talk]
+VISUAL:
+AUDIO: 'to type in Proxmox here. I\'m going to get the tail scale URL from here. Now, be very careful. Do not include the trailing slash. It doesn\'t like that.'
+
+[09:21] [scene:talk]
+VISUAL:
+AUDIO: 'And then click on create client. We\'re going to need this client ID next. So, we\'re going to go from here back to Proxmox and click on data center. Next, we\'re going to add a new realm. We\'re'
+
+[09:34] [scene:talk]
+VISUAL:
+AUDIO: 'going to go into open id connect server. It\'s not what we want. [laughter] Uh we want the issuer URL which is actually the domain name of the identity provider. So we\'re going to put this'
+
+[09:46] [scene:talk]
+VISUAL:
+AUDIO: 'issuer URL in here and remove the trailing slash once more. Again important. Now I\'m going to call the realm tsidp. This is effectively the name that you\'re giving to the the login item that\'s going to appear in your tail'
+
+[09:59] [scene:talk]
+VISUAL:
+AUDIO: 'scale dropdown uh in your Proxmox dropdown when you try and log in. Now I need my client ID. Getting a little ahead of myself there, but client ID. Boom. Client secret. Here we go. Scopes default is fine. I\'m'
+
+[10:13] [scene:talk]
+VISUAL:
+AUDIO: 'not going to check the default box. This is the one that would make TSIDP the default option when you go and try and log in to Proxmox. You may want to do that. Um, autocreate users. We just want to select email. And then everything'
+
+[10:26] [scene:talk]
+VISUAL:
+AUDIO: 'else can stay as is. And with all of that said and done, let\'s now go to PVE and select our brand new realm, our brand new identity provider of TSIDP.'
+
+[10:39] [scene:talk]
+VISUAL:
+AUDIO: 'Make sure you\'re logged in on the node in question to the correct tail. You can see I\'m logged in as a tail and scales@gmail.com on this laptop. It\'s now going to reuse my identity and log me into Proxmox.'
+
+[10:51] [scene:talk]
+VISUAL:
+AUDIO: 'Easy as that, right? Except right now this user has no permissions. So let\'s go fix that. I am currently logged in as root in this window and logged in via TSIDP in this window. Okay, so the black'
+
+[11:05] [scene:talk]
+VISUAL:
+AUDIO: 'window is TSIDP. The sort of tealely blue one. You can see up here I\'m logged in as root. So we\'ve got a couple of jobs to do. First of all, we need to create a group to put these users into. So let me create this one and just call'
+
+[11:18] [scene:talk]
+VISUAL:
+AUDIO: 'it TS admins. Now I want to make sure that my user a tail and scales is part of said group. I now need to give this group permissions to be administrators.'
+
+[11:30] [scene:talk]
+VISUAL:
+AUDIO: 'So it\'s kind of hidden, right? So this option here, permissions is clickable. Okay, so I know it looks like it\'s a top heading. It it is, but it\'s also not. You can also click on it and do stuff.'
+
+[11:42] [scene:talk]
+VISUAL:
+AUDIO: 'That tripped me up for a while. So hopefully I\'ve saved you from a foot gun there. So we\'ll do permissions, and then we\'ll click on add group permission. And I\'m just going to select the path at the root of the API. Group is TS admins. And then I just want that group to be an'
+
+[11:57] [scene:talk]
+VISUAL:
+AUDIO: 'admin. You may very well have a different way of operating. It depends on what your threat profiles are and all the rest of it. But you can see now if I switch back to my other window. Voila. My a tail and scales at Gmail user now'
+
+[12:09] [scene:talk]
+VISUAL:
+AUDIO: 'has administrator permissions over the cluster. That\'s the basics of setting up TSIDP with Proxmox. Of course, you can set TSIDP to work with any OIDC application. Indeed, I did a video about'
+
+[12:24] [scene:talk]
+VISUAL:
+AUDIO: 'Pocket ID, which I\'ll link to up here earlier in the year, and I showed it with a bunch of other self-hosted applications. Once you kind of get this bug of never having to log into anything ever again, it\'s uh it\'s quite compelling. Now, we need to hear from'
+
+[12:38] [scene:talk]
+VISUAL:
+AUDIO: 'you about what you\'re going to be using TSIDP for. And there is a plethora of ways you can get in touch with us, particularly this week with the fall update and everything. as as this airs at least this is airing as part of a a big release week where we have uh'
+
+[12:51] [scene:talk]
+VISUAL:
+AUDIO: 'packaged up you know half a dozen major releases for tailscale into one place um but you can go to the discord server discord.gg/tailscale GG/tailscale. There is a TSIDP channel over there. Remy from'
+
+[13:04] [scene:talk]
+VISUAL:
+AUDIO: 'our strategic projects team would love to hear from you because he\'s put him and the team it\'s not just Remy, but him and the team have put a huge amount of work into bringing this version of TSIDP uh into into life. He\'s adding the web'
+
+[13:17] [scene:talk]
+VISUAL:
+AUDIO: 'UI and the custom Docker and all that kind of stuff. Um, and we need to know how you\'re hearing it because the reason that we put time and effort into these things is because people say to us, "Oh,'
+
+[13:29] [scene:talk]
+VISUAL:
+AUDIO: 'I want to take scale to work, but it doesn\'t do X." And so, we add X and then we add Y and Z and Q and whatever else our customers are asking us for. So, you can be part of that process, part of'
+
+[13:42] [scene:talk]
+VISUAL:
+AUDIO: 'that discussion by reaching out to us through the Discord, through the sales channels, uh, registering for our webinars, all that kind of stuff. Uh, this is the point as a YouTuber where I should say like, comment, subscribe. If you\'re not subscribed, it would help the'
+
+[13:55] [scene:talk]
+VISUAL:
+AUDIO: 'channel out, by the way. But I typically don\'t say those things because I I figure that good content is good content and if it\'s good enough, I don\'t need to tell you to do that. So, that\'s that\'s my goal. That\'s my that\'s my social'
+
+[14:07] [scene:talk]
+VISUAL:
+AUDIO: 'contract with you as the viewer. I think I\'ve run out of things to say. Until next time, I want to say thank you very much for watching, but I\'ve been Alex from Tailscale.'

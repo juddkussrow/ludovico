@@ -1,0 +1,1203 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Intro to Warp and Oz
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=orYkXlHjboE
+upload_date: 20260410
+transcript_source: captions
+route: text
+
+---
+
+[01:04] [scene:talk]
+VISUAL:
+AUDIO: 'Hello everyone. How\'s it going? Welcome into the live stream this time from the home base. You are joining me from from from not the office this time. Usually we do this thing inside of a'
+
+[01:16] [scene:talk]
+VISUAL:
+AUDIO: 'phone booth. So the acoustics might be a little bit worse, but I think the ambience is a little bit better. We got room for a whiteboard today. And as you can also tell from some of the stuff I\'m showcasing behind me, we\'re going to be talking about Warp, but we\'re also going'
+
+[01:28] [scene:talk]
+VISUAL:
+AUDIO: 'to leave a bit of time to talk about coding agents as well. So not just Warp, we\'re also going to be talking about how you might use Claude Code inside of Warp. How you might use Codex inside of Warp. And there\'s some new features I get to talk about finally to make that'
+
+[01:41] [scene:talk]
+VISUAL:
+AUDIO: 'journey a lot nicer and a lot simpler. I always like to start these streams by asking where\'s everyone tuning in from? I usually get a whole spread of answers. So very curious about this one. Let me'
+
+[01:53] [scene:talk]
+VISUAL:
+AUDIO: 'also grab down the the chat into my lower third so that way I can easily respond to y\'all without showing an echo of our chat on the main screen. There we go.'
+
+[02:06] [scene:talk]
+VISUAL:
+AUDIO: 'All right. Just making sure we\'re all good here. Going to quit out of some apps that are going to hog my CPU. Zoom, get out of here. Make sure that\'s quit as well. And then we should be good, I think. It\'s looking like we\'ve got some'
+
+[02:20] [scene:talk]
+VISUAL:
+AUDIO: 'viewership. So that means we are live. That means things are working. That means things are good. &gt;&gt; [snorts] &gt;&gt; Yes, Switzerland, Sweden, Israel. All right, here we go. See whenever I ask this question, I'
+
+[02:33] [scene:talk]
+VISUAL:
+AUDIO: 'expect something like, you know, Charleston, South Carolina or New York, New York. But no, it\'s always an international crowd. I love to hear that. I don\'t know if it\'s because of the the'
+
+[02:45] [scene:talk]
+VISUAL:
+AUDIO: 'time of the live stream or what, but we we do get a good mix of people from around the world. We got a San Franciscoite out here. Love to hear it. Should be going up to San Francisco in at least a couple months. I love going'
+
+[02:57] [scene:talk]
+VISUAL:
+AUDIO: 'up there just to see what\'s going on. West Virginia, favorite song. Good state. India, Mexico. Love to see it. Welcome in. This is going to be a good stream. This'
+
+[03:10] [scene:talk]
+VISUAL:
+AUDIO: 'is going to be a good stream. And [snorts] I\'m also curious if anyone here is attending for the second time or the third time. We sometimes get some repeat visitors now. We\'ve been doing these onboarding live streams for maybe, I don\'t know, a month? Actually, yeah,'
+
+[03:23] [scene:talk]
+VISUAL:
+AUDIO: 'because we just did our monthly analytics report. So we\'ve been doing this thing for 1 month so far. So this is week five. And we\'ve been slowly shaping the experience to make it a little bit nicer for each iteration.'
+
+[03:35] [scene:talk]
+VISUAL:
+AUDIO: '&gt;&gt; [snorts] &gt;&gt; And this is the best that it\'s ever been, hopefully. So yeah, this is going to be a really exciting one. We got New York City. There we go. I\'m in New York. So representing, representing. I\'m not from New York originally, but I at least like'
+
+[03:49] [scene:talk]
+VISUAL:
+AUDIO: 'to lay some claim to being from New York &gt;&gt; [laughter] &gt;&gt; in some way. Wasn\'t raised here. I moved up here relatively recently. Okay, so let\'s hop into some code. I\'m going to share my screen. We\'re'
+
+[04:01] [scene:talk]
+VISUAL:
+AUDIO: 'going to be taking a look at this code repository right here. This is going to be our workbench to play with things like playing with Git, playing with agents, playing with all sorts of stuff. And pretty usual, I invite y\'all to open the Warp terminal app on your machine'
+
+[04:15] [scene:talk]
+VISUAL:
+AUDIO: 'and clone down this repository to see if you can follow along and try some of these tools inside of your own instance of Warp. And of course on the right we have the Warp terminal itself. You\'re not going to see every little feature in'
+
+[04:28] [scene:talk]
+VISUAL:
+AUDIO: 'this stream. There\'s still some stuff that I\'m not allowed to share yet, but trust me, you\'ll want to keep your eye on both our YouTube and our Twitter next week for some really big additions to make it even easier to work with all the'
+
+[04:40] [scene:talk]
+VISUAL:
+AUDIO: 'agents that are behind me. This is actually because I\'ve been recording some content on that. But there\'s a few things I do get to show you. Some of it\'s on the preview build, not the stable build. So if you\'re using Warp as it\'s intended,'
+
+[04:52] [scene:talk]
+VISUAL:
+AUDIO: 'most of this stuff is going to work for you, but I am going to show off a couple things that are exclusive to our preview build just so I get to sort of wet your appetite and show you some stuff that\'s coming very soon. So you can see right here, this is the'
+
+[05:05] [scene:talk]
+VISUAL:
+AUDIO: 'Warp preview build. So if you want to install that, you can head over to this link right here. And this just gives you it\'s like a nightly build or a dev build on other apps that gives you a few'
+
+[05:17] [scene:talk]
+VISUAL:
+AUDIO: 'features ahead of time if you\'re interested in trying them out. Otherwise, you can just follow along and I\'ll call them out as we go. So here I am. I have the directory pulled up inside of my terminal. And if you\'re new to Warp, this is what it looks like when'
+
+[05:30] [scene:talk]
+VISUAL:
+AUDIO: 'you\'re using it for the first time. So you get plopped onto probably your root directory. So let me hop over there. And you can type in terminal commands or you can type in agent queries. That\'s kind of the bread and butter of this thing.'
+
+[05:43] [scene:talk]
+VISUAL:
+AUDIO: 'So you can see right there. First off, whenever you run a command, it\'s inside of its own little block. This is the first thing I like to introduce inside of Warp is block editing. This is something you may not'
+
+[05:55] [scene:talk]
+VISUAL:
+AUDIO: 'have seen before working with other terminals. So let me run a few commands to really give you the picture of what\'s going on. So I went to one directory, then I went to another. And now I\'m going to run a third command just so we have something in here. Like maybe I'
+
+[06:08] [scene:talk]
+VISUAL:
+AUDIO: 'want to switch back over to the main line or something like that. Master on this project specifically. So let me switch over to that. So yeah, now we ran a few commands in our terminal. As you can see, it works roughly the same as any other terminal'
+
+[06:20] [scene:talk]
+VISUAL:
+AUDIO: 'that you have tried. Right off the bat though, you will notice it also gives us some auto suggestions. These are built into Warp by default. So you don\'t have to configure these yourself. You don\'t have to learn anything about shells. You'
+
+[06:32] [scene:talk]
+VISUAL:
+AUDIO: 'don\'t have to learn anything about all the complicated tools you might have heard about on Twitter or Reddit or whatever else. You just install the Warp terminal and you get this stuff. You get auto completions just built into it. And you also get blocks for every output'
+
+[06:44] [scene:talk]
+VISUAL:
+AUDIO: 'built into this. What are blocks? Blocks are just a combination of the input and output of a command in a little highlightable section. So you can see right here, every time I click on one of these guys, it doesn\'t just highlight'
+
+[06:56] [scene:talk]
+VISUAL:
+AUDIO: 'the individual line. It\'s actually highlighting the entire block, the input and the output of a command. And this is really convenient for first off navigating around your terminal. If you hold down the command key or the control'
+
+[07:08] [scene:talk]
+VISUAL:
+AUDIO: 'or control shift key on Windows, you can hit the up arrow and down arrow to quickly walk through all of the commands that you are running. And let me show you how this is especially useful if you have like'
+
+[07:20] [scene:talk]
+VISUAL:
+AUDIO: 'longer commands that you\'re trying to iterate through. So here\'s a long stack trace of running cargo run or something like that. You can see if you just hit command up arrow, you can actually jump to the top of whatever that command was and also jump to the bottom. So here I\'m'
+
+[07:32] [scene:talk]
+VISUAL:
+AUDIO: 'like jumping to the bottom of this long output. Then I\'m jumping up to the command that was above that output. So I don\'t have to scroll really far. I can just command up arrow and quickly navigate through everything, which is really convenient. I haven\'t really seen'
+
+[07:44] [scene:talk]
+VISUAL:
+AUDIO: 'a terminal do it quite like that. It\'s something Warp\'s had built in since the beginning, I think. Another thing that you\'ll notice is you get sticky headers. So if it\'s a long stack trace, you can still see what the directory, the branch, and the command were along with the execution time. Kind'
+
+[07:58] [scene:talk]
+VISUAL:
+AUDIO: 'of convenient. And you also get some controls up here that make it easier to work with the output of that command. way is to attach it to an agent to ask'
+
+[08:11] [scene:talk]
+VISUAL:
+AUDIO: 'the agent something about that command. But we also have this one that\'s worth talking about, filter block output. This is really nice because it\'ll let you filter down specific lines of an output without having to use like command find'
+
+[08:24] [scene:talk]
+VISUAL:
+AUDIO: 'and like look for specific lines. This is especially useful if you\'re running a dev server and you want to look for specific flags. Let me try running cargo run and use filter on it right away. So here I have a live running command and'
+
+[08:36] [scene:talk]
+VISUAL:
+AUDIO: 'maybe I just want to filter down the logs to anything relating to the asset cache. I could do something like asset. And now it\'ll just give me the lines in this running output that relate to assets. And I can click to just dismiss'
+
+[08:48] [scene:talk]
+VISUAL:
+AUDIO: 'that. So now it\'ll only show me those even while the command is running, which is kind of nice. So now you don\'t have to look through a long stack trace in order to look for key terms. You can just only see the key terms that you are'
+
+[09:00] [scene:talk]
+VISUAL:
+AUDIO: 'interested in while it is running. Yeah, probably over explained filtering for y\'all, but that\'s filtering. It\'s very convenient. And we also have this little ellipsis menu. There\'s a few other options inside of here that you'
+
+[09:12] [scene:talk]
+VISUAL:
+AUDIO: 'can play with. One of them is, you know, finding within the block, which is a more traditional like I want to see the results without filtering down the lines. Of course you have that as well. But you can scope it to the specific block. So you don\'t get results from other terminal output. You'
+
+[09:25] [scene:talk]
+VISUAL:
+AUDIO: 'can only search for things specifically inside of here. So I\'m looking for like compiling inside of here without filtering it down up there. You can also do Warp editor and now it\'s just showing you that result without matching on'
+
+[09:37] [scene:talk]
+VISUAL:
+AUDIO: 'other results. You can also copy just the command or the output, which is kind of nice. So if you just wanted to copy the command that was run, you can do that. So I could just copy the cargo run phrase. There we'
+
+[09:49] [scene:talk]
+VISUAL:
+AUDIO: 'go. I do that all the time. You can also just copy the output if you want to share the stack trace with someone and without the input involved. So, you don\'t have to like drag and highlight whatever that stack trace was. You can just kind of click on the block, which'
+
+[10:01] [scene:talk]
+VISUAL:
+AUDIO: 'is this whole thing, and then you can say copy output with a right click, and there you go. Uh you can also share it, though. So, if you wanted to take that stack trace and put it in a web link instead of just the plain text output, we\'ll generate a web'
+
+[10:14] [scene:talk]
+VISUAL:
+AUDIO: 'link for you. This is really great. Uh and we support like megabytes of logs if you really, really need them. So, if it\'s a long stack trace that you can\'t just paste into a Slack conversation, you can generate a link instead, and you'
+
+[10:26] [scene:talk]
+VISUAL:
+AUDIO: 'can give it a title if you want to, like Rust output. You can create the link, and now this is something that you could share with your team. And it\'s just kind of ready to go. Really nice. Um you can also see there you have manage shared blocks to look through'
+
+[10:38] [scene:talk]
+VISUAL:
+AUDIO: 'your history if that\'s something that you care about. Um so, yeah, that\'s really like the core essentials of navigating around Warp. Uh you can run commands how you would other terminals. You have built-in auto-complete. You don\'t have to install it or anything. Uh you can navigate'
+
+[10:50] [scene:talk]
+VISUAL:
+AUDIO: 'around with command up arrow to like go through all the blocks like this. Uh you get sticky headers, of course, love that. You can filter down outputs. So, if you just care about certain stack traces, you can filter it down for that'
+
+[11:02] [scene:talk]
+VISUAL:
+AUDIO: 'block, whatever it is. Um and you have a whole slew of options to work with the inputs and outputs of commands. Really good. Um as you can tell, I\'ve done this run through quite a few times. So, I\'ve I\'ve got down to a science just like the'
+
+[11:15] [scene:talk]
+VISUAL:
+AUDIO: 'essentials of Warp. Uh I will give y\'all a little room here. You have any questions about how to use Warp or questions that you want me to address in this live stream in general, I have the chat open. So, just keep them coming in, and I will happily uh pivot, answer'
+
+[11:29] [scene:talk]
+VISUAL:
+AUDIO: 'questions that you have about Warp, about agentic workflows, about writing code, about whatever you\'re doing. Um but we also have an on rails presentation that I\'ll be sort of running you through. Um so, you can get'
+
+[11:42] [scene:talk]
+VISUAL:
+AUDIO: 'used to Warp for the first time. Um okay. So, we\'ve talked about blocks. Now, let\'s talk about a little bit of code editing because we uh probably installed Warp because we\'re using agents of some kind. I would guess'
+
+[11:55] [scene:talk]
+VISUAL:
+AUDIO: 'most of the engineers that I talk to are installing Warp because they\'re like, "Well, I needed some vessel to run Claude code or something like that." And I Googled around, I found Warp, I installed that one. Um so, now I write my code in the'
+
+[12:07] [scene:talk]
+VISUAL:
+AUDIO: 'terminal when I used to not do that. Uh so, how do you effectively write code in Warp? Like, what special things does it offer that you may or may not know about? Uh well, I\'m going to show you a whole slew of buttons down here'
+
+[12:20] [scene:talk]
+VISUAL:
+AUDIO: 'uh that help you right away. So, first off, whenever you\'re inside of a a Git directory, you get a charm at the top. So, you have like a battle station that shows you your current directory, uh the current branch that\'s checked'
+
+[12:33] [scene:talk]
+VISUAL:
+AUDIO: 'out. If you\'re in certain environments like JavaScript or Python, we\'ll also give you environment information. So, on this project, because it\'s a JavaScript project, you can see the node version that\'s running. And that\'s convenient if you run into like uh mismatch of node'
+
+[12:45] [scene:talk]
+VISUAL:
+AUDIO: 'versions, you can see right away, "Oh, it\'s because I\'m on this version." And if you also have multiple versions installed, this works for node specifically, you can hot switch with this little switcher right here. Oh, and I uninstalled NVM because of some'
+
+[12:58] [scene:talk]
+VISUAL:
+AUDIO: 'debugging earlier. So, that doesn\'t work. But, if you have NVM installed, it will smartly uh switch your version whenever you click on that chip. I just need to set that up again. Um but yeah, little quality of life thing, we will help you with anything'
+
+[13:11] [scene:talk]
+VISUAL:
+AUDIO: 'going on your code base. You could also click on the branches and just see all the branches you have checked out. I could go to one where I have multiple. So, inside of here, this is going to be all the branches that you checked out locally in the past. So, it\'s not going'
+
+[13:23] [scene:talk]
+VISUAL:
+AUDIO: 'to be every branch on the remote. It\'s just going to be the ones that you\'ve actually used. So, it\'s a nice filtered list that easily gets you to whatever you were working on in the past couple weeks. I use this pretty frequently if I\'m working on multiple features at the'
+
+[13:36] [scene:talk]
+VISUAL:
+AUDIO: 'same time. You can also see here I\'ve been playing with work trees recently and kind of broke some scripts with this branch name. Uh but yeah, you can also see branches that were checked out in a work tree. So, if that\'s your flow, you'
+
+[13:48] [scene:talk]
+VISUAL:
+AUDIO: 'also have access to those inside of here. Or you just see your regular Git branch history all right there. Um last thing, of course, is the code review panel. This is becoming more and more the start of the show, the most'
+
+[14:01] [scene:talk]
+VISUAL:
+AUDIO: 'interesting part of Warp in my opinion, at least today, which is the ability to look at all the code that you wrote, either yourself or with an agent, to review it, and even leave feedback for the agent to work on stuff. And to demo'
+
+[14:14] [scene:talk]
+VISUAL:
+AUDIO: 'that, I\'m actually just going to work on a project with you, because why not? Let\'s do that. So, I\'m going to jump into this project that I pulled up on the side, this issue triage 101. I already have it cloned on my machine.'
+
+[14:26] [scene:talk]
+VISUAL:
+AUDIO: 'So, if I just do 101 and hit tab, this is a nice thing in Warp, you get auto-complete for directories with a little bit of fuzzy finding. So, here I was like, "I remember it said 101 somewhere in the name of it. I\'m just going to hit tab and see if it finds'
+
+[14:39] [scene:talk]
+VISUAL:
+AUDIO: 'it." And sure enough, it does. Um so, if you just want to hot switch to a directory, you got that, too. So, switching into here, and this is going to be that repository I noted at the start of the stream. This is something you can follow along with and clone'
+
+[14:51] [scene:talk]
+VISUAL:
+AUDIO: 'down, and it\'s just going to be a terminal-based app. Let me run it. Let me run it just to show you what it looks like. And what I\'m also going to export my GitHub token. You will probably need one of those. This is kind of a hot command'
+
+[15:03] [scene:talk]
+VISUAL:
+AUDIO: 'you can do to take your GitHub CLI credentials to display GitHub information in this demo app here. And if you\'re like, "Why is it connecting to GitHub?" Well, let me show you that. I\'m going to give it a repository name,'
+
+[15:15] [scene:talk]
+VISUAL:
+AUDIO: 'and this is going to give me an overview of everything inside of this GitHub repository inside my terminal. That\'s the purpose of this app. So, it loads everything off of GitHub. For larger repositories, it takes a bit longer.'
+
+[15:27] [scene:talk]
+VISUAL:
+AUDIO: 'And then it gives you an overview of all the issues that are currently checked out on there. Um very simple application. This is something called a TUI, which is like a terminal-based UI. Uh so, it\'s inside of my terminal, but'
+
+[15:40] [scene:talk]
+VISUAL:
+AUDIO: 'also interactive. I Okay, you can\'t click anywhere. That\'s the kind of the nature of TUIs. But, you can use your arrow keys, for example, to like walk through this, similar to a graphical application or a GUI.'
+
+[15:53] [scene:talk]
+VISUAL:
+AUDIO: 'Um so, we can look at all the issues inside this repository. We can see our Git tags. And you\'ll notice right away there\'s some issues with like color contrast and some issues with the controls as well. Notice I can arrow through without scrolling the side.'
+
+[16:05] [scene:talk]
+VISUAL:
+AUDIO: 'These are purposefully bugs that we\'re going to fix today. But, just giving you the overview, this is the app that we\'re going to be playing with. I decided to build something that displayed inside the terminal, so we don\'t have to hop back and forth with the browser. Uh you'
+
+[16:17] [scene:talk]
+VISUAL:
+AUDIO: 'can just kind of like view the output inside of here. Seemed like the easiest thing to work with. You can hit control C to exit it, by the way. Um We have a comment in here. "Really enjoy working with Warp, but I can\'t seem to'
+
+[16:29] [scene:talk]
+VISUAL:
+AUDIO: 'find an option in the Warp settings to use the local AI models. Is perhaps an upcoming feature?" It is tracked. Yes. Um so, definitely something that has been like a very highly upvoted GitHub issue. And of course, if you have your own experience, you can sound off inside'
+
+[16:42] [scene:talk]
+VISUAL:
+AUDIO: 'of our open GitHub repository. I\'m sure I can find it pretty easily. So, over here on warp.dev/warp, uh inside of issues, local models or local LLMs, one of'
+
+[16:55] [scene:talk]
+VISUAL:
+AUDIO: 'those. There [snorts] we are. Yeah, as you can tell, this hasn\'t been a very long-standing feature. I\'m sure most ink has been spilled over this issue at this point. Not sure how much there is to add. We definitely know like'
+
+[17:07] [scene:talk]
+VISUAL:
+AUDIO: 'the scope of what users are looking for. Just know it\'s on our radar. Definitely something that we want to do. As it stands right now, though, yeah, we will talk about Warp\'s built-in agent. That is going to be using uh like the'
+
+[17:19] [scene:talk]
+VISUAL:
+AUDIO: 'frontier models. We have bring your own key as well. Uh and also some open weight models like Kimmy K 2.5. Those are all in there right now. But, local models, yeah, totally.'
+
+[17:31] [scene:talk]
+VISUAL:
+AUDIO: 'Uh okay. So, looking over here, this is the output. What are we going to work with? Let\'s work with the coding agent to build out a feature. Now, for this stream, uh and I also realized my microphone\'s kind of in the way of my'
+
+[17:43] [scene:talk]
+VISUAL:
+AUDIO: 'face. There we go. You can see my face a little bit better. Uh on this stream, I really wanted to focus on using agents that weren\'t the built-in Warp agent. We will show the built-in Warp agent, but I\'m thinking for coding features, we\'re actually'
+
+[17:56] [scene:talk]
+VISUAL:
+AUDIO: 'going to use other agents like Claude code or Codex. Um and I got some varying answers last time. But, I\'m going to ask you all just to get a gauge for how much y\'all already use other coding agents. Uh give a one in the chat if you just'
+
+[18:09] [scene:talk]
+VISUAL:
+AUDIO: 'use Warp\'s built-in agent. Give a two if you just use Claude code, Codex, or some other CLI. And give a three if you use both. Like maybe for different things,'
+
+[18:21] [scene:talk]
+VISUAL:
+AUDIO: 'maybe use the Warp agent for helping your terminal, Claude code to write code, that\'s a common one. Just give me one of those. One for Warp, two for other, three for all the above. And I guess a zero if you don\'t use any'
+
+[18:35] [scene:talk]
+VISUAL:
+AUDIO: 'coding engines at all, but I found that\'s pretty rare. But, maybe we\'ll include a zero if you have zero agentic coding usage in Warp. Very possible, especially if you\'re new around here. Um last time we did this, there was definitely a an array of answers, an'
+
+[18:48] [scene:talk]
+VISUAL:
+AUDIO: 'array of answers. Uh but, I\'ll just hop right in. So, we got a three. That makes sense. We have a one. Okay. Another one. Two.'
+
+[19:01] [scene:talk]
+VISUAL:
+AUDIO: 'I feel like an optician. Is it a one or a two? We have We have one, two, three. &gt;&gt; [snorts] &gt;&gt; Uh we\'ll see if we get any more answers. That\'s a little bit more spread than last time. Last time I was on here, it was mostly threes. It was mostly people'
+
+[19:14] [scene:talk]
+VISUAL:
+AUDIO: 'just using a mix of Warp as well as other coding agents. Uh but, we do have some threes in here as well. Philippines is not an acceptable answer. That does not parse to a number, unfortunately. Uh I\'m type-checking the chat right now,'
+
+[19:28] [scene:talk]
+VISUAL:
+AUDIO: 'and it\'s only numbers allowed for the next few seconds. Greetings from the Philippines, by the way. &gt;&gt; [laughter] &gt;&gt; Uh we got a two. Yeah, all right. So, [snorts] definitely a mix in here. So,'
+
+[19:40] [scene:talk]
+VISUAL:
+AUDIO: 'it\'s good to cover all of them, I think. New Warp user, typically Claude, Cursor, and Droid. Oh, wow, that\'s a mix. So, you also use Cursor and Droid. I\'m very curious about those two. Those latter two. I don\'t hear cursor'
+
+[19:53] [scene:talk]
+VISUAL:
+AUDIO: 'and droid as often as other ones. Look and learn how to improve handling those on a team rather than copying between panes. Oh yeah, yeah. I\'m curious what you mean by as a team. Do you mean like working with co-workers or'
+
+[20:05] [scene:talk]
+VISUAL:
+AUDIO: 'do you literally mean like a team of agents talking to each other? Cuz those are two very different questions. And I actually have answers to both of them. Um But yeah, let me let me start by just'
+
+[20:17] [scene:talk]
+VISUAL:
+AUDIO: 'showing you Warp\'s built-in agent in case you\'re unaware of it or you just haven\'t tried it because you\'re like I just haven\'t tried it. Show me, what\'s it like? And then we\'ll also talk about other stuff.'
+
+[20:29] [scene:talk]
+VISUAL:
+AUDIO: 'So okay, let\'s go ahead and try using Warp\'s agent to just work on something simple to start just to show you how do you even access this thing? You\'ll notice right at the bottom we call it out pretty explicitly. If you want to talk to a built-in agent, you can hit'
+
+[20:43] [scene:talk]
+VISUAL:
+AUDIO: 'the shortcut or use slash agent to jump straight into an agent conversation. So I could do slash agent and that opens up a nested view inside of Warp that gives you a lot more buttons and knobs to play with. So first off you get a history of'
+
+[20:56] [scene:talk]
+VISUAL:
+AUDIO: 'previous chats. This is really nice if you just want to like jump back to a conversation you had a week ago. There it is. Very cool. You can also hit command K to go straight back to the new menu at any time. That\'s like a shortcut that I use all the time but most people'
+
+[21:10] [scene:talk]
+VISUAL:
+AUDIO: 'don\'t know about. Command K to just like wipe it and make a new conversation. It\'s very convenient. So you got your history of all the stuff that you did. And we also have some buttons down here to work with coding models. So we have all of our usual charms but we also have'
+
+[21:24] [scene:talk]
+VISUAL:
+AUDIO: 'an ability to switch between models. And you can get to this either by clicking on the box or by typing slash model. You can also bind keyboard shortcuts to all these things. So if you want to go super crazy you can do that. But slash model'
+
+[21:36] [scene:talk]
+VISUAL:
+AUDIO: 'will take you here. This shows you everything that we have offered today. So we have open weight models like Kimmy. We have all the reasoning levels of 5.4, 5.3, even 5.2. All the versions of Claude and all the'
+
+[21:49] [scene:talk]
+VISUAL:
+AUDIO: 'versions of Gemini that you would want to use. It may actually just be Gemini 3.1 Pro now. I guess we dropped the Gemini 3 Pro. So that\'s good to know. We also have GLM in here if that\'s something you\'re interested in. So a good spread of models. And we also'
+
+[22:02] [scene:talk]
+VISUAL:
+AUDIO: 'have auto models at the top. So this is something that you\'re not going to find in other coding agents unless they\'re multi harness. By or sorry, multi model. And by that I just mean supports all of them. So our auto router, this is useful'
+
+[22:15] [scene:talk]
+VISUAL:
+AUDIO: 'if you don\'t really care about specific model versions. You just care about how much effort you want put in. So if you mostly care about token efficiency, you can choose cost efficient. The model'
+
+[22:27] [scene:talk]
+VISUAL:
+AUDIO: 'might be a bit slower but it will use fewer tokens. Responsive is somewhere in the middle. And genius is going to bias towards the most intelligence for a task. Now that could mean that if you ask something simple, it\'ll still route'
+
+[22:40] [scene:talk]
+VISUAL:
+AUDIO: 'to a smaller model like Sonnet. And if you ask something like a coding task with a planning phase, then it will ratchet it up to something like Opus. Or we\'re experimenting with GPT 5.4. We pick the model behind the scenes based'
+
+[22:53] [scene:talk]
+VISUAL:
+AUDIO: 'on our own evals, what our own engineering team uses, and just give that to you so you don\'t have to make a decision. That\'s basically the gist of it. So auto genius is my preferred choice. I also like switching to GPT 5.4 explicitly depending on the kind of'
+
+[23:07] [scene:talk]
+VISUAL:
+AUDIO: 'thing that I\'m doing. So of course you can fuzzy find any model you want and just do that. So that\'s one thing. You get access to any model. So you might spin up Warp\'s agent if you\'re curious about certain'
+
+[23:19] [scene:talk]
+VISUAL:
+AUDIO: 'models. Like you have a Claude subscription but you want a trial GPT, you could of course switch to that. Or if you\'re curious about open weight models like Kimmy, which I was on the last stream it actually performed pretty well. You can switch over to Kimmy and'
+
+[23:31] [scene:talk]
+VISUAL:
+AUDIO: 'then just use that. See how it performs without having to install a new CLI and learn the interface. It\'s all just the same thing every time which is kind of nice. But for this stream I think I\'m going to be using just auto. And then we\'ll also be using other CLIs to show that. So'
+
+[23:45] [scene:talk]
+VISUAL:
+AUDIO: 'that\'s model switching. Very simple. And we\'re going to ask it to do something for us. So I\'m actually going to use voice mode because I\'m talking to you. I might as well use voice mode. And this is going to use whisper flow.'
+
+[23:57] [scene:talk]
+VISUAL:
+AUDIO: 'You can hold down the function key or press this button right here. Describe the dependencies that we have in this code base. Pretty simple ask obviously. In this code I let go a little too early. Describe dependencies that we'
+
+[24:10] [scene:talk]
+VISUAL:
+AUDIO: 'have in this code base. And then you can just send that off and get an answer. So this will work a lot like other harnesses that you\'ve used. Of course it is you know a high performing harness. It performs near the top of T bench 2 and swe bench and other'
+
+[24:23] [scene:talk]
+VISUAL:
+AUDIO: 'ones like that. And it also gives you reasoning traces. It gives you tool calls. It will write code diffs for you. All the stuff you would expect from a'
+
+[24:35] [scene:talk]
+VISUAL:
+AUDIO: 'coding harness is in here. And we also have table rendering in the next release. I\'m not allowed to show it to you unfortunately. But this is a beautiful table if we\'re using the next version which should be coming out this coming week. Right now it\'s just showing'
+
+[24:48] [scene:talk]
+VISUAL:
+AUDIO: 'like a basic markdown table. So hey, if you attend next time you will see a beautiful table rendered here. But yeah. You can see it gives you a an answer. It can answer like coding based questions. If you\'re curious what model was used,'
+
+[25:01] [scene:talk]
+VISUAL:
+AUDIO: 'you also have a lot of credit inference. So here because it was simpler, it routed to Sonnet instead of Opus which saves us a bit of context and token usage. It\'ll also tell you the credit spent. This is how Warp\'s pricing works. If you\'re curious about that, of course'
+
+[25:15] [scene:talk]
+VISUAL:
+AUDIO: 'go to the pricing page. We also have bring your own key if that was a question of yours. So credits are kind of like our pricing model. It\'s not one to one with a token necessarily. In fact I know it isn\'t. It\'s kind of like some multiple but yeah, you get the'
+
+[25:27] [scene:talk]
+VISUAL:
+AUDIO: 'idea. You can track those there. You also get your context window usage. You can hover down here at any time and you see your context window. We have the number of commands executed and also timing. So if you\'re curious'
+
+[25:39] [scene:talk]
+VISUAL:
+AUDIO: 'which models perform faster, if you\'re evaluating different models, you you have all that meta information available as well. So yeah, that\'s the basics of like everything in this control pane. Let\'s actually ask it to do a coding task'
+
+[25:52] [scene:talk]
+VISUAL:
+AUDIO: 'since that\'s a little bit more interesting. I want to fix a UI issue in here. I\'m noticing that we have poor text contrast where we\'re using a hardcoded grayscale'
+
+[26:04] [scene:talk]
+VISUAL:
+AUDIO: 'for a lot of values. I would prefer to use a dimmed version of the system theme. So that way it looks good on light and dark terminals. And you can see I love monologuing inside of this thing just because it\'s'
+
+[26:17] [scene:talk]
+VISUAL:
+AUDIO: 'faster. And if you\'re working from home or you\'re inside of a cubicle, it\'s you don\'t look totally crazy talking to your computer. I know if you work like at an office it feels weird to talk to your machine but it\'s so much faster to talk.'
+
+[26:29] [scene:talk]
+VISUAL:
+AUDIO: 'And also if you use transcription like this, you\'re not going to get typos. Like you just see punctuation, dashes between hard and coded. It\'s just it\'s nice. And this voice input is available for free for any coding agent by the'
+
+[26:42] [scene:talk]
+VISUAL:
+AUDIO: 'way. I will show that in a second. If you were curious. And we\'ll just keep going. I can also start a new conversation if I wanted to like sort of change focus but it was small enough. The context window was so'
+
+[26:54] [scene:talk]
+VISUAL:
+AUDIO: 'low that I just kept going. It\'s fine. You can do whatever you would like of course. So I\'m going to have it work on this issue and see how far we get. Um'
+
+[27:06] [scene:talk]
+VISUAL:
+AUDIO: 'Yeah. So what are we talking about here? Mostly Warp to improve my plan and Claude for execution of the plan. Oh that\'s interesting. So you have Warp work on a plan with you. I noticed that they the consumption'
+
+[27:18] [scene:talk]
+VISUAL:
+AUDIO: 'of credits on Claude tends to be less for code creation versus Warp. It can always be nuanced. It really depends. In our experience like it\'s going to be on average the same if you\'re using the'
+
+[27:30] [scene:talk]
+VISUAL:
+AUDIO: 'same models between both harnesses. I\'ve seen results where it\'s one direction or the other. And if you switch between Claude and Codex you\'ll also notice these differences. The main thing really is just the pricing model. Like of'
+
+[27:42] [scene:talk]
+VISUAL:
+AUDIO: 'course if you\'re on a Claude max subscription, you\'re already paying $200 a month. I get it if you don\'t want to add another monthly subscription. Like that\'s just lock-in. That\'s just how it is. But if that\'s not you and you know your token cost and you\'re feeling good about'
+
+[27:55] [scene:talk]
+VISUAL:
+AUDIO: 'it, then the Warp agent is totally serviceable. And you also bring your own key if your company wants to use that as well. So that makes sense I think. But yeah, working with Warp on plans is nice. I'
+
+[28:07] [scene:talk]
+VISUAL:
+AUDIO: 'should probably show you our planning mode just so you get an idea of like some of the rich UI that Warp gives you compared to other coding agents too. So that\'s kind of nice. I I really do like work on working on planning documents with the the built-in Warp agent.'
+
+[28:20] [scene:talk]
+VISUAL:
+AUDIO: 'Okay, so we can see it wrote some code for us by the way. So this I did not use a plan. I just asked it to go do something. So it looked at the code. It made a diff. You also get a nice inline viewer for diffs including the'
+
+[28:32] [scene:talk]
+VISUAL:
+AUDIO: 'surrounding context. You can just like scroll through the whole file if you want to. Unlike Claude which I think is just kind of like a an inline view. You get a nice sort of rich file viewer which is pretty cool. And you can also review the changes at the end. This is something available'
+
+[28:45] [scene:talk]
+VISUAL:
+AUDIO: 'everywhere in your terminal. So let me show you. First off, if you just want to review the output of Warp\'s agent, you have a button here, here, and up here behind my face. There\'s a button behind my face over'
+
+[28:57] [scene:talk]
+VISUAL:
+AUDIO: 'here. You can see the hover hint. There\'s all sorts of buttons for the code review panel because we really want people to know that this thing exists and is really useful. So if you click on it, you can view the changes that were made by the agent in a nice little diff'
+
+[29:09] [scene:talk]
+VISUAL:
+AUDIO: 'viewer. And this is available if you\'re using Warp\'s agent or just a terminal session with anything else. It\'s just using Git of course. So we can see inside of here'
+
+[29:21] [scene:talk]
+VISUAL:
+AUDIO: 'all of the changes that were made by the agent in a scrollable view. You can also full screen this if you want to. If you want to have like a file tree off to the side to like view all the files. You can expand and collapse them to review in chunks. It\'s a lot like GitHub\'s PR'
+
+[29:33] [scene:talk]
+VISUAL:
+AUDIO: 'viewer but locally which is really convenient when you want to give feedback to an agent. So we can see down here it\'s using modifier reversed bold. Interesting. Uh, actually might ask about that in a second. Uh, it\'s using'
+
+[29:46] [scene:talk]
+VISUAL:
+AUDIO: 'dimmed over here. It\'s switching up those styles to dimmed. Great. I think this is looking pretty good, actually. Um, but I\'m going to ask a little bit about this change to the agent. This is the second thing I want to show off,'
+
+[29:58] [scene:talk]
+VISUAL:
+AUDIO: 'which is, uh, adding comments for agents to review. This is really, really useful because once you\'re on the last mile and you\'re like, "Okay, the feature works. I feel good about the shape of the code. Now I want to go line for line and'
+
+[30:10] [scene:talk]
+VISUAL:
+AUDIO: 'actually give some real feedback." Once you\'re in that mode, a and you should be, by the way. I hope you\'re not vibe coding everything at work. I I really [snorts] hope you\'re not. I really hope you\'re looking. Uh, if you are the type of engineer that wants to look at the code, crazy'
+
+[30:23] [scene:talk]
+VISUAL:
+AUDIO: 'concept, you can do that inside of here and you can give comments with an inline editor. Really cool. So, if I wanted to say like, "Why are we using the reversed modifier here?'
+
+[30:35] [scene:talk]
+VISUAL:
+AUDIO: 'What does it do?" Because I\'ve never seen this. I don\'t know. Uh, you can leave a comment to the agent and then that goes down into your little PR review that you\'re giving to the agent before you actually go make the PR review on GitHub. And you can add as'
+
+[30:48] [scene:talk]
+VISUAL:
+AUDIO: 'many comments as you want or just send it off to the agent right away. You also have language tooling, by the way. I forgot to call that out. So, if you want to have like hover hints for all of the structs and other things inside the code base, you can do that, too. So, now it\'s not just a code review panel. It\'s also'
+
+[31:01] [scene:talk]
+VISUAL:
+AUDIO: 'a code editor. So, fun fact, like inside of here, first off, now we get hover hints. So, we can see, here\'s the definition of that function. Here\'s what it includes. And you also get, if you want to, go to'
+
+[31:13] [scene:talk]
+VISUAL:
+AUDIO: 'definition. So, I can hold the command key, click on this, and it jumps to a location in the file where that thing is defined. So useful. Uh, so if you want to get a little more inference on what the agent did, we have some built-in'
+
+[31:26] [scene:talk]
+VISUAL:
+AUDIO: 'tools including LSP support, which most people are surprised by. We\'re a terminal. Why does it have LSP support? Because we try too hard. &gt;&gt; [laughter] &gt;&gt; We go too hard. I don\'t know. Um, but you also have that as well if'
+
+[31:38] [scene:talk]
+VISUAL:
+AUDIO: 'you need something like that. And the last thing, you can edit this, by the way. So, if you wanted to like edit the diff inline, you also have that option. And you can hit command S to save changes. Um, so let me send that to the agent and, uh, see what it thinks. So, now'
+
+[31:51] [scene:talk]
+VISUAL:
+AUDIO: 'it\'s going to evaluate that inside the current conversation window and just give it a little look. Um, and we\'ll see what it thinks. Uh, a little earlier, Aiden, or not Aiden, uh, Aid, AAD, Aiden? I don\'t know.'
+
+[32:04] [scene:talk]
+VISUAL:
+AUDIO: 'Uh, well, what does context usage mean? Good question. Um, so that is just the amount of tokens that have been used inside of this, uh,'
+
+[32:16] [scene:talk]
+VISUAL:
+AUDIO: 'oh, wow, this is interesting. It left a review comment. I\'ve never seen this. This is actually a new thing that we\'ve added where it can leave comments on your review. Going to look at that in a second, but context usage, that is the amount of tokens that have been used in'
+
+[32:30] [scene:talk]
+VISUAL:
+AUDIO: 'your conversation so far. So, anything that you\'ve told to the agent, that\'s going to use up some tokens. Anything the agent has done, including looking up files or making code diffs, all of that is using tokens as well. And there\'s a maximum amount of tokens you can use'
+
+[32:43] [scene:talk]
+VISUAL:
+AUDIO: 'before the agent starts forgetting things. And model providers have put hard limits because of this fact. So, if you\'re using a model like Opus, for example, I think now we have a limit of a million tokens because they upped it'
+
+[32:57] [scene:talk]
+VISUAL:
+AUDIO: 'recently, but this just gives you the percentage of how close are you to that ceiling before it starts forgetting everything. And once it hits that ceiling, it\'s going to summarize the whole conversation so that the agent can'
+
+[33:09] [scene:talk]
+VISUAL:
+AUDIO: 'keep going. And that\'s something called compaction. If you ever want to go look that up in our docs, that\'s what happens when you run out of context. You compact everything that was going on into a nice summary so that the agent can keep going and have much fewer context tokens in'
+
+[33:23] [scene:talk]
+VISUAL:
+AUDIO: 'its window. Uh, I hope that makes sense at a high level. Really, it\'s just how close are you to the ceiling. If you\'re really close to the ceiling, you might want to start a new conversation or you might want to summarize this conversation into a doc to keep it going. It\'s a'
+
+[33:35] [scene:talk]
+VISUAL:
+AUDIO: 'limitation of LLMs. It\'s not really a feature, but it is something that we call out so you can manage it more effectively. Um, okay, now I\'m going to look at this code comment. I have never seen this. Um, so if I open in the code review, it'
+
+[33:47] [scene:talk]
+VISUAL:
+AUDIO: 'can leave comments back to me. That\'s hilarious. Uh, so modifier reverse swaps the terminal\'s current foreground and background colors. That makes the selected row the user\'s active theme colors instead of hard coded Okay, that makes a ton of sense, actually. Uh,'
+
+[33:59] [scene:talk]
+VISUAL:
+AUDIO: 'well, there you go. Now I know. It can leave comments on your reviews. Crazy. Um, okay, so let me go ahead and run this app and see how it works. Another thing I can call out. If you\'re using Warp\'s built-in agent, you get auto'
+
+[34:11] [scene:talk]
+VISUAL:
+AUDIO: 'detection built in. So, if you start writing a terminal command, it\'ll just detect, "Oh, that\'s not a prompt. That\'s a terminal command." So, you can go back and forth between typing out terminal commands and typing out prompts. And you'
+
+[34:23] [scene:talk]
+VISUAL:
+AUDIO: 'don\'t really have to think about it. It just kind of auto detects based on whether it looks like a shell command or not. Um, and if we look at the result, yeah, that reverse is honestly looking great. There we go. It\'s got dimmed colors over'
+
+[34:35] [scene:talk]
+VISUAL:
+AUDIO: 'here. It\'s This is one of the best outputs I\'ve gotten on this stream, I\'ll be real. Um, so let me go ahead and add these changes and commit them. Again, I don\'t have to like make a new terminal tab just to run Git commands. I can do it inside of here and I still get my full'
+
+[34:47] [scene:talk]
+VISUAL:
+AUDIO: 'auto complete, which is pretty cool. Sorry to be gushing over Warp\'s agent the whole time. We are going to be talking about Claude Code, but I do want to give a full overview of this thing in case you\'re like, "I kind of want to try it." Just to know. This is how it works. Um, so I will say, "Fix color contrast'
+
+[35:00] [scene:talk]
+VISUAL:
+AUDIO: 'issues." Pretty simple. And I\'m not going to push it up because that\'s actually going to affect what you see if you clone it down. So, I\'m going to keep it local. Uh, whoops, didn\'t mean to open it again. So, yeah, there we go.'
+
+[35:13] [scene:talk]
+VISUAL:
+AUDIO: 'Now let\'s work on another feature using a different coding agent, though. I want to show you what that looks like in case you want to use your Claude Max plan or whatever else and you have your setup already ready to go and you just want to'
+
+[35:25] [scene:talk]
+VISUAL:
+AUDIO: 'use another CLI, that\'s easy. Um, so first off, if you want to get out of this mode and you want to start a new terminal tab, you can make a new tab at the top, command T. That\'s how terminals work. You can also hit escape, though. And if you hit escape, this will take'
+
+[35:38] [scene:talk]
+VISUAL:
+AUDIO: 'you back to the terminal session where you started having that agent conversation. So, remember, this is where we were about like 20, 30 minutes ago before we hit that command enter shortcut. So, it\'ll give you all of that and it also collapses the conversation'
+
+[35:51] [scene:talk]
+VISUAL:
+AUDIO: 'down. So, if you want to jump out to the history, you can. Or you can hit escape and go back to that terminal session that you started from. Um, or you can ignore that feature if you if it\'s too confusing. I I tend to forget that I\'m in an agent session and I just stayed'
+
+[36:04] [scene:talk]
+VISUAL:
+AUDIO: 'there the whole stay there the whole time. You can use Warp however you want to use Warp. Uh, but the nice way, I would say, is to back out and then continue on with whatever you\'re trying to do. Um, okay. So, now let\'s try using a different coding agent other than Warp,'
+
+[36:18] [scene:talk]
+VISUAL:
+AUDIO: 'just for fun. I\'m going to be using CodeX just cuz I feel like it. Uh, you can also use Claude Code. Actually, did anyone in the audience even say that they\'re using CodeX? I don\'t think they did. Maybe I should use Claude.'
+
+[36:30] [scene:talk]
+VISUAL:
+AUDIO: 'Maybe I should use Claude. Let\'s go ahead and use Claude. Uh, I\'m I\'ve been on the CodeX bandwagon recently, but I know a lot of people use Claude Code. So, let\'s let\'s stick with that one. Um, and let me show you what it\'s like'
+
+[36:42] [scene:talk]
+VISUAL:
+AUDIO: 'to work with Claude Code inside of Warp because it\'s going to be very similar for every agent that you use. Uh, so you can see it just runs the command inline. It\'s exa- exactly how you would expect. And if you\'re using Claude Code, there\'s also a plugin that'
+
+[36:56] [scene:talk]
+VISUAL:
+AUDIO: 'we have. So, there\'s a Warp plugin for Claude Code that I would suggest you install if you are using Claude Code inside of Warp because this will give you notification support, which is super convenient. So, not only will it give'
+
+[37:09] [scene:talk]
+VISUAL:
+AUDIO: 'you desktop notifications when the agent\'s done with something and you\'re tabbed away, it\'ll also give you notifications inside the app. So, if I was like in a different terminal tab and Claude Code finished, it could notify me'
+
+[37:21] [scene:talk]
+VISUAL:
+AUDIO: 'with a little charm to then jump back and investigate what Claude Code did. So, if you have the Warp plugin installed, you will get that for free. And let me just show you how to install it, by the way. This is on GitHub. We'
+
+[37:33] [scene:talk]
+VISUAL:
+AUDIO: 'also have one for Open Code, but the one for Claude Code is this one right here, Claude Code Warp. Uh, and if you install this guy, it will set you up. We also have it on the'
+
+[37:45] [scene:talk]
+VISUAL:
+AUDIO: 'Claude Code marketplace. So, there\'s the command to install this guy, but you can also just go straight to the GitHub repo to understand it. You can even point your agent to that repo and ask the agent to install the plugin for you. Why'
+
+[37:57] [scene:talk]
+VISUAL:
+AUDIO: 'not? Um, so with all that set up, I\'m ready to use Claude Code. Um, and I\'m also going to call out this little charm bar at the bottom. This is the really cool part that you get with every single coding agent. In fact, let me do a split'
+
+[38:09] [scene:talk]
+VISUAL:
+AUDIO: 'pane to show you what I mean. Uh, I\'m going to run CodeX over here. And I always run it in yolo mode. Um, just to show you like, what do these look like? What can you do with all of this? Um,'
+
+[38:21] [scene:talk]
+VISUAL:
+AUDIO: 'continue. There we are. So, here I have two coding agents pulled up just to show you everything. By the way, if you ever want to create a split panel in Warp to have two things side by side, you can hit command P and then you can say, uh, split. So, command P is'
+
+[38:33] [scene:talk]
+VISUAL:
+AUDIO: 'kind of your one-stop shop for every command in Warp. If you\'re just trying to learn things, you can see the keyboard shortcuts and you can just fuzzy find whatever action you\'re trying to take just to remember. So, that\'s how you split panel to the right, command D.'
+
+[38:46] [scene:talk]
+VISUAL:
+AUDIO: 'There we go. Um, so yeah, let me show you this little bar and you can see that it\'s available in every coding agent that you use. Going to close out of that one just so we have one running at a time. Um, so you can see your current'
+
+[38:59] [scene:talk]
+VISUAL:
+AUDIO: 'directory and branch as you would expect, very simple stuff. Um, but you also get a few other things. So, first off, we get the code review panel again, exactly what we\'re looking at earlier. Uh, [snorts] ooh, let me also use uncommitted changes. This is something I forgot to mention, but you'
+
+[39:12] [scene:talk]
+VISUAL:
+AUDIO: 'can use both all the changes against the main line as well as uncommitted changes. So, if you want to like see all the commits on a PR, you have a little option inside of there. But yeah, code review panel, it exists. It works for'
+
+[39:25] [scene:talk]
+VISUAL:
+AUDIO: 'everything, including Claude Code, and you have a button for it. Um, also, you have a composer. This is a new thing I get to show you. Hooray. Um, so this lets you use Warp\'s input to talk to Claude Code. This is wild. So,'
+
+[39:37] [scene:talk]
+VISUAL:
+AUDIO: 'of course, if you\'re just using Claude Code, you can just type into this input box, right? So, you could say "Hello world. This is Claude." Works as I expect. But, if you wanted to do something simple,'
+
+[39:49] [scene:talk]
+VISUAL:
+AUDIO: 'that like just imagine for a second, imagine that you were able to move your cursor. Crazy thought, right? What if you wanted to move your cursor to the start of the line? Crazy. You can\'t do it. If you wanted to'
+
+[40:02] [scene:talk]
+VISUAL:
+AUDIO: 'click with your mouse, you can\'t move your cursor. You can\'t do it. We\'re in 1985. Remember how people did it in 1985? They used arrow keys. You have to go back. You have to teleport back and learn how to use'
+
+[40:14] [scene:talk]
+VISUAL:
+AUDIO: 'terminals in 1985. No. In Warp, we say you don\'t have to do that. It doesn\'t have to be 1985. Let me show you the input of 2026. If you click on composer, this will give you a nice'
+
+[40:26] [scene:talk]
+VISUAL:
+AUDIO: 'view. Hello world, this is Claude. And you can actually move around. Crazy. So, we give you a nice input box if that\'s something that you\'re looking for for any agent that you\'re using. And you can also get multi-cursor if you'
+
+[40:38] [scene:talk]
+VISUAL:
+AUDIO: 'want to, if you want to go crazy. And you can hold shift enter, that works. Uh goodbye uh world, this This is Warp. Uh this is a terrible example. But, you can also do'
+
+[40:50] [scene:talk]
+VISUAL:
+AUDIO: 'multi-cursor if you want to go crazy. So, I can hold the command key and now have two cursors running. It\'s just like VS Code. So, if I wanted to like turn this into a bulleted list, very easy to do now cuz I have multiple cursors. So simple.'
+
+[41:03] [scene:talk]
+VISUAL:
+AUDIO: 'Um so, yeah, you have the full rich input editor of Warp and it just kind of works. You also get file contacts. So, if you\'re looking for specific files or even lines of code, you can do that. So, I could look up a specific struct and say, "Can we simplify this?"'
+
+[41:16] [scene:talk]
+VISUAL:
+AUDIO: 'Right? You can do that. And then it will pass it off to Claude. Or you can use the voice input mode. I think this can be simplified. There we go. Now Now we\'re typing out words with our voice. Oh, I'
+
+[41:28] [scene:talk]
+VISUAL:
+AUDIO: 'This can be simplified. Is it using the right Oh my gosh, it types up there. Okay. This is a preview build. I need &gt;&gt; [laughter and gasps]'
+
+[41:40] [scene:talk]
+VISUAL:
+AUDIO: '&gt;&gt; You\'re making me look bad, team. All right, so we need to fix that. Once we fix that, it will go in the correct composer box. Gosh dang it, invite. You\'re making me look bad. It\'s supposed to be magical. It was supposed to be magical. But, you get the idea. You get a nice rich text input for Claude code'
+
+[41:52] [scene:talk]
+VISUAL:
+AUDIO: 'or Codex or Open Code or whatever else. And then you can hit enter and it will send it into the Claude code box how you would expect. Cool. Uh if you\'re on Claude code in their new no flicker mode, the cursor mouse will work as well. Well, that\'s cool. I\'m'
+
+[42:04] [scene:talk]
+VISUAL:
+AUDIO: 'glad they\'re adding that. Uh well, if you\'re using other coding agents like Codex that haven\'t added it, we also have it for them. Um so, many options. So many options. Uh and of course, you can do the shift'
+
+[42:16] [scene:talk]
+VISUAL:
+AUDIO: 'tabbing and stuff. Let me demo uh notifications though. If I click away from this, by the way, I asked how can we simplify this and Claude just decided to start writing code. &gt;&gt; [laughter]'
+
+[42:29] [scene:talk]
+VISUAL:
+AUDIO: '&gt;&gt; Claude is You see, if I asked that question to Codex, it would have actually answered me. Uh but hey, I\'m going to tab away just to give you a little idea of what you can do here. And this is about to get even nicer in the next version of Warp. I unfortunately can\'t show it to you.'
+
+[42:41] [scene:talk]
+VISUAL:
+AUDIO: 'But, if you have the Warp notification system installed, you get a nice little in-app notification when Claude code is done. So, you can go back to that tab and you can look at all of the changes that were made. Very cool. And you can also review those changes inside the'
+
+[42:54] [scene:talk]
+VISUAL:
+AUDIO: 'editor. So, let me go ahead and look at this. So, it was able to simplify, "Hey, we don\'t need to track all the comments. We just need the count." And I remember this actually being something that I wanted to work on in the past. So, that\'s pretty cool. Um issue count squared and zero, we just'
+
+[43:07] [scene:talk]
+VISUAL:
+AUDIO: 'list out the comment count. That\'s pretty useful. Uh I\'m actually going to leave a comment to the agent, by the way. I don\'t think we need a debug log. I could also just delete the line because it\'s a editable'
+
+[43:19] [scene:talk]
+VISUAL:
+AUDIO: 'uh diff view. But, you can send comments to the agent and it works with other agents now. So, now if I want to send this comment to Claude code, like, "Hey, I want you to edit this." Look at that. It pasted in the other box. Now I can'
+
+[43:31] [scene:talk]
+VISUAL:
+AUDIO: 'use it over there, too. So, don\'t feel left out if you were seeing those code review things with the Warp agent. It works with this one, too. Uh all the same stuff. It feels the same. You just have a different input box that you\'re working with at this'
+
+[43:43] [scene:talk]
+VISUAL:
+AUDIO: 'point. Um so, yeah, there you go. Really, really convenient stuff. There\'s no debug log. Oh, what do you mean? Oh, I meant Oh, what is this? Lines pushed styled. Oh, I see what that is.'
+
+[43:55] [scene:talk]
+VISUAL:
+AUDIO: 'It\'s not a debugging format. This is actually an in-app formatted line. Silly me. So, it figured that out. There you go. Um but yeah, that\'s a general overview of using the code review panel with'
+
+[44:07] [scene:talk]
+VISUAL:
+AUDIO: 'other agents. It works exactly the same way. Uh and let me ask a different agent to do like a proper coding feature just to kind of complete the loop on all this. Um so, I\'m actually going to exit that with control C. And now I can go back to'
+
+[44:19] [scene:talk]
+VISUAL:
+AUDIO: 'my beautiful terminal and do some stuff in here. Uh remove Oh my gosh, Warp Did Warp figure that out? It kind of figured it out based on the previous command. Oh, that\'s cool.'
+
+[44:31] [scene:talk]
+VISUAL:
+AUDIO: 'I didn\'t even know Warp would do that. So, we also do have a bit of AI inferencing if we can\'t guess your next command. And it kind of figured out a commit message for me. &gt;&gt; [laughter] &gt;&gt; It\'s not accurate because we didn\'t end'
+
+[44:43] [scene:talk]
+VISUAL:
+AUDIO: 'up committing that change, but there you go. We also have a bit of AI inferencing on those suggestions. First time I\'ve seen it work with the commit message. It\'s very cool. Um okay. So, the actual commit that I wanted to leave though was'
+
+[44:55] [scene:talk]
+VISUAL:
+AUDIO: 'simplify comment struct to just track issue count. Something like that. Uh and now let\'s jump into another coding agent to sort of complete the loop. Uh I heard a few people talking'
+
+[45:07] [scene:talk]
+VISUAL:
+AUDIO: 'about What was it? Droid? I don\'t have a Droid subscription, unfortunately, so I can\'t demo that one. I also don\'t have a cursor subscription right now on this machine. Um so, I could show you either Open Code or Codex. Which one do we want?'
+
+[45:20] [scene:talk]
+VISUAL:
+AUDIO: 'Honestly, I\'m going to do Open Code just because I love using the big pickle model because it\'s a model called big pickle and that\'s just that\'s just awesome. That\'s just hilarious. So, I\'m going to use Open Code. Why not?'
+
+[45:32] [scene:talk]
+VISUAL:
+AUDIO: 'Uh and you get all the same stuff, of course. So, if you wanted to Well, I think they let you move your mouse, yeah. So, you don\'t want to need to use Warp\'s built-in editor because Open Code\'s editor is already great. But, if you want to, you can also use Warp\'s editor right here and submit it to Open'
+
+[45:45] [scene:talk]
+VISUAL:
+AUDIO: 'Code. I\'m just going to use theirs though. And you can also use our voice mode though. So, if you actually wanted like voice transcription in Open Code, we have that. I want to fix an issue with how we uh manage to scroll view on the left.'
+
+[45:58] [scene:talk]
+VISUAL:
+AUDIO: 'Right now, if I use the arrow keys to go through the issues, it updates the displayed issue, but it doesn\'t scroll the left side bar. And there we go. Puts it into Open Code for you. So, you get that voice'
+
+[46:10] [scene:talk]
+VISUAL:
+AUDIO: 'transcription anywhere. Requested model is not supported. Oh, why am I using Gemini 3 Pro preview? Oh gosh. It changed it on me. Where\'s big pickle? Yeah, big pickle. Uh try again.'
+
+[46:23] [scene:talk]
+VISUAL:
+AUDIO: 'I obviously don\'t use Open Code in my day-to-day. Uh okay, let\'s go ahead and do that. Let\'s see let\'s see what it does. Does anyone know what the big pickle model is, by the way? I want to say it\'s Kimmy uh Kimmy 2.5. I don\'t know for sure.'
+
+[46:35] [scene:talk]
+VISUAL:
+AUDIO: 'Uh obviously, I\'m not paying for Open Code. I\'m just using whatever\'s built into this thing. Uh it\'s a lovely UI though. I mean, look at that loading animation. I wish Warp\'s was a little bit more fun like this one,'
+
+[46:47] [scene:talk]
+VISUAL:
+AUDIO: 'honestly. Uh okay. So, yeah, it\'s making a change. What\'s it doing? The list widget is rendered. Yeah, let\'s just let it keep going. Come on, big pickle, we trust you. It\'s going to do it.'
+
+[46:59] [scene:talk]
+VISUAL:
+AUDIO: 'Uh yeah, I also we\'ve just been hammering through a bunch of features of Warp so far. Does anyone have any questions or things that they\'re curious about? Anything with Warp\'s agent, with other coding agents, the code review'
+
+[47:12] [scene:talk]
+VISUAL:
+AUDIO: 'panel. Um oh, I forgot to talk about the file tree. Like, are there other things that you\'re curious about or things that I could fill in here? I\'m checking the chat, so definitely let the questions keep running through.'
+
+[47:24] [scene:talk]
+VISUAL:
+AUDIO: 'Um but yeah, while I\'m thinking about it, I\'ll show you that we do have this little panel up to the top. This is called the tools panel. You can use command backslash to get to it. This gives you all sorts of things, including previous Warp conversations. Or this is'
+
+[47:37] [scene:talk]
+VISUAL:
+AUDIO: 'the really cool part, either a file tree or global search. So, if you\'re used to these from VS Code, we have them inside of here. So, if you wanted to like look at a specific file, you can go into the file tree and do that. If you want to'
+
+[47:50] [scene:talk]
+VISUAL:
+AUDIO: 'view the file, we have a built-in editor. If you want to drag the file as context for the agent to talk to, you can drag the file into the input box. Oh, maybe not for Open Code. Uh let me try the compose view. If I do it like this, there we are.'
+
+[48:03] [scene:talk]
+VISUAL:
+AUDIO: '&gt;&gt; [laughter] &gt;&gt; That\'s the first coding agent that didn\'t work with this. Usually, I can click and drag. I\'ve been able to do that with Claude code and Codex, but not Open Code for some reason. Uh all right. But, you can also just'
+
+[48:15] [scene:talk]
+VISUAL:
+AUDIO: 'copy pads as well. So, if you just wanted to like copy the path, reveal it in finder, copy the relative path like here, that works just as well, which is very cool. Uh and you can also search for terms. So, if you wanted to search'
+
+[48:27] [scene:talk]
+VISUAL:
+AUDIO: 'for a specific like struct or something like that, you can do it like this. And then you can open up that exact definition. If you\'re like, "What was the name of that?" Oh, it was this. Let me go ahead and add that as context to the agent. And you can see right there.'
+
+[48:39] [scene:talk]
+VISUAL:
+AUDIO: 'It\'ll just add it as context. I just ran through like three features at once there. So, let me slow down and show you what I just did. So, first off, I\'m able to search for things anywhere in the code base with this tools panel search. When you click on a search result, it'
+
+[48:53] [scene:talk]
+VISUAL:
+AUDIO: 'opens in our file viewer. So, you get full context on what that thing was. And if you want an agent to know about that line based on your question, you can highlight a line and hit add as context or use the keyboard shortcut.'
+
+[49:05] [scene:talk]
+VISUAL:
+AUDIO: 'And I\'ll just ping it over here to the exact name of the struct. So, the agent\'s like, "Yeah, tell me about this." You know, you you know what you\'re doing. If you ever need to give specific context to an agent, it\'s all right there. And obviously, I don\'t know how'
+
+[49:17] [scene:talk]
+VISUAL:
+AUDIO: 'to delete the full line in the Open Code editor. Um yeah, so a lot of other ways to add context to agents that I didn\'t get to cover. You can search for things, you can drag in file pads or function names. You also have at context, which is what'
+
+[49:30] [scene:talk]
+VISUAL:
+AUDIO: 'we showed a little bit earlier. Bunch of stuff that you can do. Oh, it looks like Open Code is like a sidebar now of all the changes. That\'s pretty cool. Uh I really wish I could launch my Warp tabs and it opened with Claude and Codex instead. Get ready.'
+
+[49:43] [scene:talk]
+VISUAL:
+AUDIO: 'That\'s coming. That\'s coming. Believe it or not, I\'m recording a video right after this live stream about how to do exactly that. It is a lot more customizable than that though. Like you'
+
+[49:55] [scene:talk]
+VISUAL:
+AUDIO: 'can set it up to do any number of things including opening Claude by default. So, uh get ready. It is coming. It is indeed coming. Um [snorts] but yeah, that that is going to be left'
+
+[50:07] [scene:talk]
+VISUAL:
+AUDIO: 'for next week. That\'s next week. Uh but you just get to see the basic features this week. The compose view, the file explorer, the code diff view, all that amazing uh helpful stuff. So yeah, what did it do? Well, it set it'
+
+[50:20] [scene:talk]
+VISUAL:
+AUDIO: 'up with a render stateful widget. I know that that\'s the change that it needs to make. I\'ve done this enough times. Uh and it stores the list state. That makes sense to me. Um so if I wanted to run a terminal command, oh, you can just do it like'
+
+[50:32] [scene:talk]
+VISUAL:
+AUDIO: 'that. Could I do cargo run inside of here? I\'m just playing with things. So if I do like warp or sorry, uh with aster slash aster. Let\'s see what we get. Yeah, it\'s running something.'
+
+[50:45] [scene:talk]
+VISUAL:
+AUDIO: 'Let\'s see if it uh won\'t actually show it to me. Yeah, that makes sense. Okay. Let me do a split pane down. Command shift D. That will give us like another terminal down here. And this is really cramped actually.'
+
+[50:58] [scene:talk]
+VISUAL:
+AUDIO: 'Maybe we shouldn\'t do this. But you can drag panels up by the way. So you can drag a panel into its own tab if that\'s something you want to do. Uh okay. So now let\'s see if this works. It does. Hooray. Now it scrolls the side panel. It used to not scroll.'
+
+[51:12] [scene:talk]
+VISUAL:
+AUDIO: 'Okay, so let\'s close that out and uh let\'s just commit this code. So if you want to commit, I could just like end the task. I could add in all my stuff. Uh nope, that was from last time. You didn\'t get'
+
+[51:24] [scene:talk]
+VISUAL:
+AUDIO: 'me with the auto complete this time, Warp. I do wish that it could help me with commit messages a little bit more. These days I just ask the agent to write the commit message though. That\'s possible too. Um so commit dash M uh'
+
+[51:36] [scene:talk]
+VISUAL:
+AUDIO: 'fix scroll bug. There you go. So now we\'ve improved our app a lot using three different coding agents. Just for fun. Just for fun. Uh yeah. So with the last 10 minutes,'
+
+[51:48] [scene:talk]
+VISUAL:
+AUDIO: 'uh keep the questions coming in of course. I I\'d love to help y\'all with all this stuff. Uh used Warp for about 2 years. Love to see that by the way. Amazing. Amazing. Uh but let me show you just one more'
+
+[52:02] [scene:talk]
+VISUAL:
+AUDIO: 'thing. One more thing that might make you a little bit curious, which is running agents off of your machine. So everything that we\'ve been talking about so far is using coding agents inside your terminal and they\'re running on'
+
+[52:15] [scene:talk]
+VISUAL:
+AUDIO: 'your local machine using your hardware. Uh but you may have been hearing about over time, people are starting to call agents not from the machine but from a cloud runner or a cloud environment. And'
+
+[52:28] [scene:talk]
+VISUAL:
+AUDIO: 'that\'s something that Warp is starting to help you with as well. So first off, why why would you put things in a cloud environment? Why are people doing this? There\'s many ways to do it, not just the Warp way, but we\'ll be talking about the Warp way in case you\'re curious.'
+
+[52:41] [scene:talk]
+VISUAL:
+AUDIO: 'Um people are starting to put stuff into cloud runners because A, they might need to trigger an agent not from their terminal. Like maybe you want to trigger an agent from a Slack conversation. Maybe you just wanted to run every'
+
+[52:54] [scene:talk]
+VISUAL:
+AUDIO: 'morning and do something. Like we have a weekly job to clean up old feature flags or we have a daily job that does competitive analysis and uses web search to like search for competitors and ping us on Slack with stuff. If you\'re trying'
+
+[53:07] [scene:talk]
+VISUAL:
+AUDIO: 'to build automations like that, you can\'t run it on your local hardware, at least not easily. Of course you could build a tunnel or something like that. But the safest way to do is have some sort of external machine that you can spin up and run a job inside of. Uh and'
+
+[53:21] [scene:talk]
+VISUAL:
+AUDIO: 'ideally that\'s a serverless machine too. So that for every job you get your own little sandbox for the agent to run around in. Uh so that sandboxing feature and also the scheduling of that agent is'
+
+[53:33] [scene:talk]
+VISUAL:
+AUDIO: 'that Warp help Warp helps you with now. Uh with a cloud environment setup that\'s called Oz. So for anyone who\'s like wondering what is it at a high level, if you want to investigate it after this'
+
+[53:45] [scene:talk]
+VISUAL:
+AUDIO: 'stream, this is the URL cuz we\'re not going to have a lot of time to go through it. But I\'m going to give you just a high level overview of what the cloud part is to see if it\'s at all useful to you. Um so cloud environments. How do you set'
+
+[53:59] [scene:talk]
+VISUAL:
+AUDIO: 'them up? Um so first off, if you wanted to run an agent from an automation for example or from some scheduled job, you need to have an environment. And [snorts] an environment is just the set of tools'
+
+[54:11] [scene:talk]
+VISUAL:
+AUDIO: 'that the agent has access to when it acts on that automation. So you might set up a job every morning with a prompt or a skill, which is just like a fancy big prompt in a markdown file. And [snorts] you need that agent to have'
+
+[54:24] [scene:talk]
+VISUAL:
+AUDIO: 'access to your code base for example. Like you need it to access your server and your client code bases. And then maybe it needs web search. Maybe it needs node so that it can run the test suite. Like it it\'s the set of config.'
+
+[54:36] [scene:talk]
+VISUAL:
+AUDIO: 'In other words, a Docker config. And that\'s exactly what Warp environments are. So you can set these up with Docker files. You can act You can actually have an agent set up the environment for you.'
+
+[54:48] [scene:talk]
+VISUAL:
+AUDIO: 'And then once it\'s set up, you can trigger jobs inside of it. So first off, I\'ll just show you all the environments that I have. If you want to create an environment, you run slash create environment and that will open up an agent to create a cloud environment for'
+
+[55:00] [scene:talk]
+VISUAL:
+AUDIO: 'you. And once you have all of them, you can look at your environments by running slash cloud agent. So this takes you over to this nested view that looks a lot like the other agent stuff that we\'ve been looking at. But'
+
+[55:13] [scene:talk]
+VISUAL:
+AUDIO: 'the one difference is you don\'t see your current directory. You see a cloud environment. And this is going to be a list of all the environments that you set up in the past. And this is just a Docker image that describes the tooling that\'s available and the code'
+
+[55:26] [scene:talk]
+VISUAL:
+AUDIO: 'repositories to clone down whenever you go into this thing. So you can see I actually have an environment for this repo that we\'ve been working on. I also have a number of environments inside of here for for example, Warpy Sheets. This is a fun one. This is a clone of Google'
+
+[55:38] [scene:talk]
+VISUAL:
+AUDIO: 'Drive that we built and we put two repositories inside of it. This is really interesting by the way. Uh cloud environments in Warp, you can put unlimited repositories inside of it and unlimited tooling. It\'s just a Docker file. That\'s all it is. Uh all we\'re'
+
+[55:51] [scene:talk]
+VISUAL:
+AUDIO: 'doing is helping you stand up a Docker container on demand. That\'s all it is. So I\'ve set it up to go inside this Warpy Sheets directory. And in this mode, I can just interface with that cloud environment if I want to. And it\'s'
+
+[56:03] [scene:talk]
+VISUAL:
+AUDIO: 'spun up server on a serverless job for every conversation you have. So every run is its own independent container, not like one shared Open Claude instance or something weird like that. So I could ask it for example, um I know this is an'
+
+[56:16] [scene:talk]
+VISUAL:
+AUDIO: 'Excel project. Implement all of the Excel functions starting with the letter A. This is very contrived. Starting with the letter A. I know what\'s going on with that voice input by the way. It\'s'
+
+[56:28] [scene:talk]
+VISUAL:
+AUDIO: 'because of my Bluetooth headphones. Don\'t worry too much about it. But you can see here once you send off a prompt, rather than just running it on your machine, it spins up a cloud environment for that conversation using the Docker file that you have set up. So now this'
+
+[56:40] [scene:talk]
+VISUAL:
+AUDIO: 'Docker file is going to clone down our server and client repositories and then ask an agent to work on that for us. And I\'m sure you\'re curious right away, can I run like what agents are going to run inside of this environment? Is it'
+
+[56:52] [scene:talk]
+VISUAL:
+AUDIO: 'going to be the Warp agent or can I bring Claude Code or something? Right now, it uses the Warp agent to work on this task as you can see right there. Uh but we\'re also working on support for Claude Code or Codex or Open Code or any'
+
+[57:04] [scene:talk]
+VISUAL:
+AUDIO: 'other agent that you might want to use. So that\'s coming. But in this demo that I\'m showing you right here and what you can try today, it\'s going to end up using the Warp agent. Uh Clarify ambiguous development task.'
+
+[57:16] [scene:talk]
+VISUAL:
+AUDIO: 'Well, this also lets me show you that you can interact with an agent session. That\'s cool. So it tells me that this cloud agent is blocked and I can look at this inside of here. I want to update our sheets application or Google Sheets application to have'
+
+[57:29] [scene:talk]
+VISUAL:
+AUDIO: 'Excel functions. We can start with just the absolute value function. Implement it and include relevant tests. &gt;&gt; [snorts] &gt;&gt; There we go. So I can talk to this cloud environment'
+
+[57:41] [scene:talk]
+VISUAL:
+AUDIO: 'and have it work on the task inside of there. So it\'s not on my machine anymore. It\'s just inside this other machine. And this also means you don\'t have to manage work trees or even keep the tabs open. Like you can close your laptop and move on. This is running in'
+
+[57:53] [scene:talk]
+VISUAL:
+AUDIO: 'its own independent environment. And you can find it later through your terminal or from like a web portal. So we actually have like oz.dev that you can go to in order to look at all of those jobs. And I might as well show that to'
+
+[58:06] [scene:talk]
+VISUAL:
+AUDIO: 'you with the last few minutes that we have just so you get a sense of that. Um so inside of here, uh we have like oz.warp.dev. Let me go ahead and use the production build just so we have that one instead.'
+
+[58:18] [scene:talk]
+VISUAL:
+AUDIO: 'Uh inside of here, we can see Where\'s Where are mine? &gt;&gt; [snorts] &gt;&gt; Yes, here we are. So you can also view that session that we have pulled up in'
+
+[58:30] [scene:talk]
+VISUAL:
+AUDIO: 'our terminal inside of like a web viewer, which is literally Warp compiled for the web. Let me show you that. Um so this is actually the same session pulled up inside of your web browser if that\'s what you would prefer to use. So if'
+
+[58:42] [scene:talk]
+VISUAL:
+AUDIO: 'you\'re on your phone or something else, now you have like a cloud session that\'s mirroring it to all of your devices, which is really cool. So if you\'re looking for something kind of remote control-y, well there you go. You can set it up right inside of here. Uh and you can track them from the web'
+
+[58:55] [scene:talk]
+VISUAL:
+AUDIO: 'portal. So you don\'t have to have your terminal pulled up. Uh but you can also schedule these on a job. I didn\'t get to demo it for you, but you can also set up these agents to auto trigger with a prompt preconfigured. And you can do that using'
+
+[59:07] [scene:talk]
+VISUAL:
+AUDIO: 'the CLI or the web portal or whatever else. You can actually say like Oz schedule create like that one. Or you can do Oz schedule list to see all of the listed jobs. I don\'t want to leak that to you because it\'s production data, but you can do that as well. Um so'
+
+[59:19] [scene:talk]
+VISUAL:
+AUDIO: 'a lot of touch points to spin these things up in the cloud. That seems cool to you, oz.dev is the place to go. We\'re adding support for any harness. Right now it\'s the Warp agent. Uh but as you can see, it works pretty dang well. And here here it is just working on the full'
+
+[59:32] [scene:talk]
+VISUAL:
+AUDIO: 'job end to end, just like a local agent. Um, so yeah, I think that\'s the true run through of everything. Uh, any last-minute questions before we hop off here? I saw something come in. Um,'
+
+[59:44] [scene:talk]
+VISUAL:
+AUDIO: 'if you run get diff before making a commit, I noticed that the command completion becomes more accurate. Interesting. That actually makes sense because next command prediction inside of Warp might be because of a previous'
+
+[59:56] [scene:talk]
+VISUAL:
+AUDIO: 'command output. And if the command output was unique, we\'re going to route it to AI. So, that\'s actually a clever That\'s a clever little fix, isn\'t it? So, if I do Well, we don\'t have a diff currently, do we? But if we do get reset'
+
+[60:08] [scene:talk]
+VISUAL:
+AUDIO: 'soft, um, head one, I think. All right, yeah, there we go. So, if I wanted to like do get add all that, get diff, how do you do it again?'
+
+[60:22] [scene:talk]
+VISUAL:
+AUDIO: 'Shoot. Get diff something. Uh, &gt;&gt; [laughter] &gt;&gt; I haven\'t run this command in quite a while. You can do get status, I think. Uh, let\'s let\'s do let\'s do that. No, that doesn\'t work. Oh, is it because'
+
+[60:35] [scene:talk]
+VISUAL:
+AUDIO: 'I Is it Is it because I\'ve staged everything? Uh, yeah, it probably is. &gt;&gt; [snorts] &gt;&gt; Uh, get reset. Let\'s do Okay.'
+
+[60:47] [scene:talk]
+VISUAL:
+AUDIO: 'Uh, update app and UI. Okay, yeah. So, as you\'re saying, like it uses the previous output in order to figure out the next message, which in here would be a commit. Um, so yeah, that\'s interesting. That\'s a way to force it a little bit.'
+
+[60:59] [scene:talk]
+VISUAL:
+AUDIO: 'Uh, could be cleaner, but I like that. Is Oz Warp\'s agent name? Yes. So, a little bit confusing. So, Oz is the name of the agent that you talk to, and you could say like Oz Cloud Platform if you want the full umbrella term for running'
+
+[61:11] [scene:talk]
+VISUAL:
+AUDIO: 'an agent in the cloud. So, that\'s the full naming convention there. Uh, do the get diff before to get add. That makes sense, yeah. That\'s what I just did. Uh, there is an issue where copying the code'
+
+[61:23] [scene:talk]
+VISUAL:
+AUDIO: 'from Warp, which is longer two lines, is breaking onto separate lines. Oh, no. Uh, well, it is hard to debug these sorts of things from YouTube. So, if you have like a specific example or stack trace or something that you can share,'
+
+[61:36] [scene:talk]
+VISUAL:
+AUDIO: 'this is a natural segue for me to talk about how to engage, right? Um, so we have a a preview community. If you want to share like a full stack trace of it, you can go to our Slack community, and you can share it inside of there. Oh,'
+
+[61:48] [scene:talk]
+VISUAL:
+AUDIO: 'come on. There we go. Uh, or you can file a GitHub issue, of course. Sorry to usher you away with this. I\'m not familiar with that issue specifically, um, but you can totally talk to us there dear on our GitHub issues if it\'s'
+
+[62:02] [scene:talk]
+VISUAL:
+AUDIO: 'something that you can more firmly write out, or you can approach us on Twitter as well. Twitter is the least preferred option if we could like have a discussion in the community, but you know, you can reach us anywhere if you'
+
+[62:15] [scene:talk]
+VISUAL:
+AUDIO: 'can like give a few more details on that one. Um, so yeah, I hope this stream was helpful to y\'all. We\'re running up on time here, but yeah, that\'s the overview. Warp is a great little terminal. It gives you a lot of quality of life improvements like work with'
+
+[62:28] [scene:talk]
+VISUAL:
+AUDIO: 'commands. We started with blocks, and we went all the way to agents. Uh, we got a code review panel. We have a file tree. We have attaches context. We have cloud runners. We have everything. The amount of stuff that we\'re shipping is kind of ridiculous right now.'
+
+[62:40] [scene:talk]
+VISUAL:
+AUDIO: 'Um, so yeah, thank you Thank you all so much for joining. I don\'t have a discount code, unfortunately, for attendees, but that is a good note for next time. Um, but yeah, if you message me on the Slack community, we might be'
+
+[62:52] [scene:talk]
+VISUAL:
+AUDIO: 'able to get you some some swag. Might be able to. &gt;&gt; [snorts] &gt;&gt; Um, but yeah, thank you all so much, and I will see y\'all next week for some really big improvements to agent mode that we\'ll be talking about. Uh,'
+
+[63:06] [scene:talk]
+VISUAL:
+AUDIO: 'yeah, take care.'

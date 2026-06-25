@@ -1,0 +1,815 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: p2p chat, in rust, from scratch
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=ogN_mBkWu7o
+upload_date: 20250124
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'check this out PC Mac and they\'re connected you guessed it peer- to peer so uh on this one I can type hello and I will send hello from here and over here I see'
+
+[00:13] [scene:talk]
+VISUAL:
+AUDIO: 'Hello and when I type hello back on this very clacky keyboard I get PC saying hello back and I say are you a PC and you get the idea today we\'re going to'
+
+[00:26] [scene:talk]
+VISUAL:
+AUDIO: 'build a CLI Bas chat tool using iro and the gossip [Music] protocol we want to sort of walk through this from start to finish this might be'
+
+[00:38] [scene:talk]
+VISUAL:
+AUDIO: 'a little long this might be a little rambling but I think the nice thing here is at the end of this you will have a really clear understanding of what it looks like to practically build an app with iro now iro is written in Rust and rust is going to be new for a lot of you'
+
+[00:52] [scene:talk]
+VISUAL:
+AUDIO: 'this is going to be kind of one part tour of rust one part tour of iro because you\'re going to need to see some Rust to really get the full breadth of Aro this is not going to be the 17h hour here\'s how the borrow Checker Works'
+
+[01:06] [scene:talk]
+VISUAL:
+AUDIO: 'thing what we\'re going to do is give you a smattering and a mo a light taste of what it\'s like to write some Rust I\'m going to give you a bunch of code you\'re going to copy and paste it we\'ll talk through the bits and what they mean and how they work you will not leave this'
+
+[01:18] [scene:talk]
+VISUAL:
+AUDIO: 'tutorial a rust Master but what you will have done is actually ran and compiled some stuff you will feel a little less terrified of the language if it would is is terrifying for you and for those of you who know rust there are chapter'
+
+[01:31] [scene:talk]
+VISUAL:
+AUDIO: 'markers and you can just skip all the stuff that you already know and you\'ll get right to the bits that are about distributed systems first and foremost we\'re going to start with just a new project and before we even do that we\'re going to do a very basic crash course in getting rust on your machine and some of'
+
+[01:44] [scene:talk]
+VISUAL:
+AUDIO: 'the basics of what the rust ecosystem looks like so the first thing I\'m going to do is I\'m going to go to Google and I\'m going to type install rust because that\'s how I do it uh and we go here we find this thing and you\'re going to'
+
+[01:58] [scene:talk]
+VISUAL:
+AUDIO: 'paste in this piece of code you\'re going to hit enter and it\'s going to walk you through installing rust when this finishes rust will be on your machine it\'ll be platform specific you\'ll be all good cool there\'s a few other things that you should know about kind of as'
+
+[02:10] [scene:talk]
+VISUAL:
+AUDIO: 'like a way that a rust developer primes their hands for a project the biggest the biggest of those is called cargo uh cargo is the package manager for rust it does a few other things but uh you\'ll'
+
+[02:24] [scene:talk]
+VISUAL:
+AUDIO: 'know that rust was probably installed in your machine if you type cargo and hit enter and you get output of some kind as with Mod things we\'re just going to start with creating a fresh project that'
+
+[02:36] [scene:talk]
+VISUAL:
+AUDIO: 'has nothing inside of it we\'re going to get to hello world and then we\'ll start to build from there and so we\'ll use cargo for that and so the first thing I\'m going to do is make a directory as our starting point and so I\'m going to do M mkd and I\'m going to type Makar uh Aro gossip C and I\'m going to do CD into'
+
+[02:51] [scene:talk]
+VISUAL:
+AUDIO: 'iro gossip CLI and then I\'m going to do cargo and knit and you will see it created a binary in parenthesis application'
+
+[03:03] [scene:talk]
+VISUAL:
+AUDIO: 'package and from here we can do cargo run and what that\'s going to do is compile and run our program cool all right let\'s get an editor out we\'re going to talk through some of the'
+
+[03:15] [scene:talk]
+VISUAL:
+AUDIO: 'details of what that is I\'ve gone ahead and opened our directory inside of a text editor you do really need an editor of some kind doesn\'t matter what you use you could be a Vim emac VSS code I\'m using Zed because it\'s fun and I\'m'
+
+[03:27] [scene:talk]
+VISUAL:
+AUDIO: 'trying your things and uh it doesn\'t really matter the biggest thing you need is completions but before we even get into that let\'s talk about the basics of the directory structure that we\'re working with here this should look somewhat familiar if you\'re coming from'
+
+[03:39] [scene:talk]
+VISUAL:
+AUDIO: 'any other compiled language the cargo. loock and cargo. tml cargo. tml is uh your package.json if you\'re coming from the npm world and SRC is your source and there\'s only one file in there and it\'s'
+
+[03:52] [scene:talk]
+VISUAL:
+AUDIO: 'a main function that prints hello world so when we run this program uh you get you get it hello world everything that gets made there is compiled in the Target directory and by default you\'re compiling in debug mode now that we have'
+
+[04:05] [scene:talk]
+VISUAL:
+AUDIO: 'compiling and running rust yay we\'ve run our first rust program we\'ve printed hello world to the terminal let\'s quickly talk through this just so you have a sense of this main directory or this main folder uh rust files end in.'
+
+[04:17] [scene:talk]
+VISUAL:
+AUDIO: 'RS there is a function main this is the one that gets called if you\'re writing a a binary if you\'re writing a library there\'s no main function the when when we read it it printed out with this'
+
+[04:29] [scene:talk]
+VISUAL:
+AUDIO: 'print L thing a couple of things you should note right out the gate this exclamation point is a macro uh we\'re not going to talk about those too much but that\'s what that is the exclamation point just invokes some code under the hood ignoring it hello world is a string'
+
+[04:41] [scene:talk]
+VISUAL:
+AUDIO: 'strings are complicated in Rust for reasons that make sense once you read about them uh but this prints hello world cool now that you\'ve run that great you\'ve run your first Rush program everything from here should be downhill'
+
+[04:54] [scene:talk]
+VISUAL:
+AUDIO: 'right now we\'re going to need to add some actual crates crates are packages or modules uh depending on whatever you\'re coming from in the other other languages but I\'m going to do cargo add to add stuff and I\'m going to bring in four crates to start with I\'m going to'
+
+[05:07] [scene:talk]
+VISUAL:
+AUDIO: 'bring in iro of course uh we\'re also going to bring in Tokyo Tokyo is not Toyo Tokyo uh Tokyo is a runtime uh in Rust you can actually bring different runtimes that\'s a whole thing or we\'re using Tokyo we\'re going to ignore it'
+
+[05:20] [scene:talk]
+VISUAL:
+AUDIO: 'mostly uh but we do need it so we\'re going to do Tokyo we\'re going to do anyhow which is another crate that lets us ignore more stuff this is for ignoring errors not ignoring for cesing errors into a more ergonomic fashion uh'
+
+[05:32] [scene:talk]
+VISUAL:
+AUDIO: 'and we\'re going to add Rand which is the source of Randomness you\'ll see why in a second so we\'re going to add all those you\'re GNA see a bunch of gak here and then you\'re going to see adding and blah blah blah my editors doing some gak in'
+
+[05:44] [scene:talk]
+VISUAL:
+AUDIO: 'the background and the biggest thing that\'s changed is our cargo. toml now has those four crates associated with them your version numbers may be different if you\'re watching this deep in the future good luck hopefully it all works uh but generally these numbers are'
+
+[05:58] [scene:talk]
+VISUAL:
+AUDIO: 'kind of where we\'re at today with our crates installed we\'re now going to come in and add some code I\'m just going to give you some stuff and we\'re going to copy and paste it in if you need any of this it\'s all'
+
+[06:11] [scene:talk]
+VISUAL:
+AUDIO: 'supplied on the website there will be a link down below to the actual code and we\'re going to paste in this hit save and then we\'re going to do cargo run we\'re not even going to look at the code just but you\'ll notice right at the'
+
+[06:23] [scene:talk]
+VISUAL:
+AUDIO: 'gates there\'s some compilation time yeah Russ is a compiled language you might have to wait a second to compile this together once your cache is warm though once you\'ve compiled this once it\'ll take less time in future compilations cool so after what must have been 17'
+
+[06:36] [scene:talk]
+VISUAL:
+AUDIO: 'eons are everything compiled and ran and it printed out our secret key and our node ID this is the code that we\'re going to talk through from the prior video in our pseudo code this basically'
+
+[06:49] [scene:talk]
+VISUAL:
+AUDIO: 'gets us into the same position of setting up an endpoint that we came from later so if you go back and watch that video this is now the real code that makes that happen and you can see how this is kind of the blank canvas starting point that I like to kind of'
+
+[07:01] [scene:talk]
+VISUAL:
+AUDIO: 'iterate from and so to talk from the from the top both describing the rest parts and the outer parts these Ed statements that we\'re seeing up here are the actual way we do Imports uh so if you\'re coming from different languages'
+
+[07:13] [scene:talk]
+VISUAL:
+AUDIO: 'is so we import stuff to use it uh we can do scoped uses of small little bits and pieces and it\'s very common in R to only use exactly what you need uh then we have this thing called an attribute this is a way of modifying code and we'
+
+[07:26] [scene:talk]
+VISUAL:
+AUDIO: 'we also have noticed that our main function has become async this modification is just saying hey Tokyo runtime this is the main function uh we have to type it we\'re going to ignore it and this result is that part that I'
+
+[07:39] [scene:talk]
+VISUAL:
+AUDIO: 'alluded to earlier anyhow is going to let us ignore a couple of things these square brackets this thing basically is the return value of the function result is the thing that is going to return a result is a thing that can either error'
+
+[07:51] [scene:talk]
+VISUAL:
+AUDIO: 'or return okay and the return value that we\'re going to give as the result is nothing and so you\'ll see down here another funky thing in Russ the return statements are implicit so we can type'
+
+[08:03] [scene:talk]
+VISUAL:
+AUDIO: 'return okay semicolon that\'s fine we can do that but by convention and rust you just ignore the last semicolon and whatever the last statement is is the return value of the closure and so we\'re going to here we\'re'
+
+[08:17] [scene:talk]
+VISUAL:
+AUDIO: 'saying okay return nothing which means that we\'re ignoring largely everything now for the interesting bits uh this is why we needed the Rand crate we are actually generating a secret key right out of the gates to use as the uh source of Randomness for as the actual seret'
+
+[08:33] [scene:talk]
+VISUAL:
+AUDIO: 'key for our [Music] endpoint and here we are not actually using it yet and so we can do secret key and we can supply secret key hey and'
+
+[08:46] [scene:talk]
+VISUAL:
+AUDIO: 'when we save that you will notice my editor automatically formats things and that\'s where we should have a quick talk about how you would even get to here in the first place I didn\'t just like magically encant all this into existence you notice that when I went to type this'
+
+[08:59] [scene:talk]
+VISUAL:
+AUDIO: 'we have nice editor completions for everything it\'s kind of expected for a language like this but there are some resources on the web you should know about when you\'re getting into R crates.io which is where all the crates are actually registered so when you do cargo install it\'s pulling from'
+
+[09:12] [scene:talk]
+VISUAL:
+AUDIO: 'crates.io and this is where you can list stuff you can even search for stuff like Aro and hey there it is cool there\'s a bunch of downloads and some things and the other one that\'s even more important is docs. RS if you do docs. RSO it is going to immediately take you'
+
+[09:27] [scene:talk]
+VISUAL:
+AUDIO: 'to the rust documentation for that crate so docs. RS any crate name and that\'s going to give you all the online docs you need it\'s also searchable and clickable and everything\'s highlighted is fantastic uh you should use it and that same documentation is built into'
+
+[09:42] [scene:talk]
+VISUAL:
+AUDIO: 'the IDE so when I type. secret key here we\'re seeing hey this is setting the secret key and then there\'s references to some stuff this is very useful so with our secret key added and our'
+
+[09:54] [scene:talk]
+VISUAL:
+AUDIO: 'Discovery nzero set up that means we\'re going to use nz\'s DNS discovery servers we are bound to our Port we are awaiting the result of this because this is an asynchronous function that is doing stuff in the background and then that is going to give us back our endpoint once'
+
+[10:06] [scene:talk]
+VISUAL:
+AUDIO: 'we have our endpoint bound we print out our node ID and exit the program and so this program does very little other than go online figure out that it can talk to the internet do some like basic ho'
+
+[10:20] [scene:talk]
+VISUAL:
+AUDIO: 'punching setup never connect to anybody in close it\'s not very interesting but hey we can run the program and honestly when you\'re working in Rust this sort of incremental adding a little bit and then making sure that it'
+
+[10:33] [scene:talk]
+VISUAL:
+AUDIO: 'executes and compiles keeping the compiler happy that\'s a really nice way to work and the way that I heavily recommend you do work and so we\'re going to build up incrementally from here now that we have what is the basic scaffolding here we have an endpoint we'
+
+[10:45] [scene:talk]
+VISUAL:
+AUDIO: 'have a secret key that has been generated for that endpoint uh if in the real world we can save these or persist them to dis if we want to keep that node identifier around or we can just generate one on every random process'
+
+[10:57] [scene:talk]
+VISUAL:
+AUDIO: 'creation as we are here so with that let\'s actually move down to the next step and let\'s actually get the gossip protocol attached to the endpoint so we can do gossipy stuff before we can do anything that uses'
+
+[11:10] [scene:talk]
+VISUAL:
+AUDIO: 'gossip we actually need to add the crate and so we can do that here where we\'re going to do cargo add _ gossip now with gossip installed we can move on to actually putting it to use so more copy pasting we\'re going to take this paste'
+
+[11:23] [scene:talk]
+VISUAL:
+AUDIO: 'it in hit save and I\'ll get that compiled the background cargo run and we\'ll talk about it we\'re not actually using gossip to do anything interesting yet but this at least sets us up to do'
+
+[11:35] [scene:talk]
+VISUAL:
+AUDIO: 'something interesting in the future so what have we added we have added the gossip protocol here which is constructed after our endpoint has been made and we are passing it a reference to the endpoint so that it can actually'
+
+[11:48] [scene:talk]
+VISUAL:
+AUDIO: 'dial out we\'re going to talk about what gossip does exactly in a second but this is just kind of the setup that we should understand in the basics and the next thing we\'re going to do is we\'re going to create a router and a router is a way to accept multiple protocols it\'s also'
+
+[12:01] [scene:talk]
+VISUAL:
+AUDIO: 'just a really nice and fast and convenient mechanism for binding the actual gossip protocol to the endpoint and then later on if we want to add more protocols to this program it\'s right there in waiting for us and so here we are registering the gossip alpn the'
+
+[12:15] [scene:talk]
+VISUAL:
+AUDIO: 'application Level protocol name and we are passing it a clone or a copy of the gossip protocol itself and so this is a gossip instance that we use all the time we can use that gossip to to uh uh join'
+
+[12:27] [scene:talk]
+VISUAL:
+AUDIO: 'or subscribing to subscribe to tets we can actually call methods on the protocol with the gossip protocol instance and the accept side will be handled through the router we\'re then'
+
+[12:41] [scene:talk]
+VISUAL:
+AUDIO: 'going to shut down the router and wait for that to happen and once that\'s shut down we exit the program cool so when we run this again we\'re going to see that it just executes prints our note ID and'
+
+[12:53] [scene:talk]
+VISUAL:
+AUDIO: 'does nothing else because we haven\'t actually told gossip to do anything interesting yet but hey we have a good starting point so again incrementally adding up now before we can move on we should talk about what the hell gossip'
+
+[13:05] [scene:talk]
+VISUAL:
+AUDIO: 'is and what it\'s doing gossip is based on two big academic papers that we\'ll talk about in a second but the thing that it does for you is a message broadcast across an arbitrary swarm of peers that sounds a little technical what that means is you'
+
+[13:19] [scene:talk]
+VISUAL:
+AUDIO: 'can take a bunch of nodes you can smash them all into the same topic and then any of those nodes can send a message and that message will arrive at all the other notes that are online and so this is kind of why building a chat room or a'
+
+[13:32] [scene:talk]
+VISUAL:
+AUDIO: 'chat CLI with this is exactly what we would naturally do because it sort of models and mimics what gossip is doing already we have these topics which we use to sort of isolate different networks you can think of that as a'
+
+[13:44] [scene:talk]
+VISUAL:
+AUDIO: 'swarm and each of those gives you this broadcast channel system that will make sure everything works under the hood our gossip abilitation has some nice characteristics all of this is designed to work on a phone and so we are relying on two critical techniques to make sure'
+
+[13:57] [scene:talk]
+VISUAL:
+AUDIO: 'that every peer inside of this network has five active peers by default which are basically think of that as like five connections and then a whole bunch of passive peers that we\'re just kind of'
+
+[14:09] [scene:talk]
+VISUAL:
+AUDIO: 'firing and forgetting messages to usually on the order of like 20 if you think about a average web browser tab uh and a web browser will have roughly four connections to a server at any given moment to parallel grab stuff that is kind of roughly the same thing as what'
+
+[14:22] [scene:talk]
+VISUAL:
+AUDIO: 'we\'re doing here in a gossip form so you can think about this as like one browser tabs worth ofor NW working utility and that has a really nice property this can scale out to tens of thousands or hundreds of thousands of'
+
+[14:35] [scene:talk]
+VISUAL:
+AUDIO: 'nodes and it will naturally handle that scarling characteristic without a coordinating server in the middle I think it\'s really cool it\'s also quite robust to uh failing so nodes can join and leave as they need and the Swarm'
+
+[14:49] [scene:talk]
+VISUAL:
+AUDIO: 'will ideally hang together okay so we broadcast onto topics why don\'t we start there by actually creating a topic more copy and paste so we\'ll come in here paste this in hit save and run'
+
+[15:02] [scene:talk]
+VISUAL:
+AUDIO: 'it and we\'ll see here this is going to do the same thing it\'s going to print our node and exit again just more incremental building up but let\'s get'
+
+[15:14] [scene:talk]
+VISUAL:
+AUDIO: 'into a little bit of what\'s Happening Here Below in this topic ID section um in this section we actually we\'ve added a couple of new use statements we\'ve added a new use specifically for the topic ID'
+
+[15:27] [scene:talk]
+VISUAL:
+AUDIO: 'and that\'s what allows us to refer to it directly in Rust you can actually refer directly to any crate that\'s available so I could just as easily do irog gossip Proto which is the protocol and protocol module topic ID'
+
+[15:41] [scene:talk]
+VISUAL:
+AUDIO: 'this is just as valid and so sometimes you\'ll see this form but uh I think this is a little cleaner and so we\'ll do this come bring bring back our topic cool so we\'re creating a dopic ID from a set of'
+
+[15:55] [scene:talk]
+VISUAL:
+AUDIO: 'bytes and we\'re using Randomness as a source and so we\'re just say hey create 32 random bytes that\'s going to be our topic identifier uh we then have a set of pure identifiers these are actual other nodes that we want to dial as a'
+
+[16:08] [scene:talk]
+VISUAL:
+AUDIO: 'set of bootstrap nodes to join this form so the way the gossip protol Works under the hood is you give it any at least one Pier that is already in this swarm and you dial that Pier to connect to it and'
+
+[16:20] [scene:talk]
+VISUAL:
+AUDIO: 'that Pier will then in turn hydrate you with the set of other nodes that it knows about and that will create for you your participation in the network you might pick up immediately on the'
+
+[16:32] [scene:talk]
+VISUAL:
+AUDIO: 'bootstrapping problem which is hey we\'re creating a random topic from nothing here which means that no one else could know about it which means that we are the originator of that topic and this is the origin of a set of roles that we\'re'
+
+[16:44] [scene:talk]
+VISUAL:
+AUDIO: 'going to talk about moving forward in our CLI tool at the beginning at some point somebody has to make the chat room and someone else has to join the chat room and those are kind of the two roles you have the creator of the room and'
+
+[16:56] [scene:talk]
+VISUAL:
+AUDIO: 'then everyone else who joins that room any node can take either role and I think that\'s the most crucial thing for worth knowing you could atem any point say no this pier is going to create this chat room that Pier is going to create'
+
+[17:08] [scene:talk]
+VISUAL:
+AUDIO: 'that chat room totally acceptable right for now because we are still not talking to the outside world we\'re just building up our capabilities we\'re going to pass a vector or which is a array in Russ [Music]'
+
+[17:21] [scene:talk]
+VISUAL:
+AUDIO: 'parlament that is completely empty and so we\'re going to say hey we have no peers we\'re also going to call gossip. subscribes this is the first time that we\'re actually using the gossip protocol'
+
+[17:33] [scene:talk]
+VISUAL:
+AUDIO: 'directly so we\'re taking the instance and we\'re invoking a method on it to do something and this is the pattern that we\'ve seen a bunch we take that gossip instance we make it we set up our router we get everything dial done and then we'
+
+[17:46] [scene:talk]
+VISUAL:
+AUDIO: 'actually start calling methods to do stuff here we are then taking the result of that this question mark thingy that you\'ve been seeing a bunch what that means is hey if there\'s an error bail out of the'
+
+[17:59] [scene:talk]
+VISUAL:
+AUDIO: 'function sound good you can read more about that somewhere else but we are going to make sure that we are in a non- errored state and then we are going to call split which is going to turn this into a tupal uh this tupal is going to'
+
+[18:11] [scene:talk]
+VISUAL:
+AUDIO: 'split into a sender and receiver pieces this underscore means that we are ignoring the receiver for the minute we\'re just declaring it to a variable and doing nothing with it and with the sender though we are then going to use'
+
+[18:23] [scene:talk]
+VISUAL:
+AUDIO: 'the sender to call broadcast which means hey we\'re going to broadcast a message to everybody in this swarm of no one and we\'re going to send them sub and from there we\'re going to wait for that to finish and then we\'re going'
+
+[18:35] [scene:talk]
+VISUAL:
+AUDIO: 'to shut down and we\'re going to move on with our lives and so when we run this it executes and again it\'s going to do a little bit of like Hey how do I get dialed in the background and then it\'s just going to exit cool uh from here we can actually start'
+
+[18:47] [scene:talk]
+VISUAL:
+AUDIO: 'to do more interesting stuff but now we kind of have the Baseline right the gossip protocol is installed it is configured we know how to broadcast messages we just don\'t know how to broadcast messages to anyone else okay'
+
+[18:59] [scene:talk]
+VISUAL:
+AUDIO: 'so that\'s how messages go out we broadcast them how do messages come in and how do we react to that when they do well for that we\'re going to add a subscribe Loop where we\'re going to use that receiver that was an empty variable'
+
+[19:12] [scene:talk]
+VISUAL:
+AUDIO: 'from before we\'re going to put it to good use so more copy and pasting of code let\'s paste in a bunch of stuff and this time before we get going we\'re going to encounter some compiler errors if I go to run this this time I\'m going'
+
+[19:24] [scene:talk]
+VISUAL:
+AUDIO: 'do cargo run and this thing is going to get really mad at me and it\'s going to give me a actually quite helpful um error it\'s going to say hey two errors are going to show up the Futures light crate is'
+
+[19:36] [scene:talk]
+VISUAL:
+AUDIO: 'missing and you need to provide it and you need that to use this try next thing cargo add Futures light there with Futures Light added'
+
+[19:50] [scene:talk]
+VISUAL:
+AUDIO: 'we\'ll do cargo run and there you have it it runs yay so what exactly is this Futures light crate'
+
+[20:03] [scene:talk]
+VISUAL:
+AUDIO: 'well if you\'ve ever wondered whether rust is a systems language and stuff like this is going to just crop up stuff like this is just going to crop up the Futures light create enables some very specific feature that we need to be able to read stuff off of an asynchronous'
+
+[20:16] [scene:talk]
+VISUAL:
+AUDIO: 'stream it\'s kind of one of these just like things you got to deal with and it\'s not awesome and this is part of the reason why we\'re putting you completely on cruise control getting your head around how to write this stuff for real'
+
+[20:28] [scene:talk]
+VISUAL:
+AUDIO: 'and feeling really comfortable takes a while the upside of taking this approach of just kind of copy and pasting and smashing cargo run is you\'re going to get a sense of how this kind of works at speed and that will hopefully give you'
+
+[20:40] [scene:talk]
+VISUAL:
+AUDIO: 'more patience when you have to grind through compiler errors and understand how rust is teaching you how to be a better programmer we\'re not going to go into too many details on the Futures light crate today but know that it\'s something that we need and we\'re going'
+
+[20:52] [scene:talk]
+VISUAL:
+AUDIO: 'to use it here and then we\'re going to kind of move on because the things we do want to talk about are are are use of this receiver value I\'ve written a function for you below called subscribe Loop and it\'s worth noting this is an asynchronous function that again returns'
+
+[21:04] [scene:talk]
+VISUAL:
+AUDIO: 'a result of nothing but what the Subscribe Loop is going to do is it\'s going to accept a mutable variable called receiver that is of type gossip receiver and we have brought in Gossip'
+
+[21:16] [scene:talk]
+VISUAL:
+AUDIO: 'receiver from the iro gossip protocol and what this is is the actual stream that receives messages so what this does is we enter a while loop we then try to destructure the result of'
+
+[21:28] [scene:talk]
+VISUAL:
+AUDIO: 'the stream which is saying try next hey keep just trying next trying next trying next and anytime we get an event out of that well anytime we get something we will process it if we don\'t it\'ll hit this little question mark and bail out'
+
+[21:41] [scene:talk]
+VISUAL:
+AUDIO: 'of this thing and so any error will just nuke this and so it\'s not wildly robust but it works and then for the inner part here we are then going to do some more destructuring where we are using match statements which is this amazing'
+
+[21:53] [scene:talk]
+VISUAL:
+AUDIO: 'construct inside of R Us that lets you match on types uh we\'re not going to get too much into detail on it today but this is pulling the event out of and checking to see if it\'s a gossip event there are other kinds of events in here uh we can do uh else just to give you a'
+
+[22:06] [scene:talk]
+VISUAL:
+AUDIO: 'sense if event there is also a lagged event and this is where I was just going to take a la and talk about building production grade software is hard and'
+
+[22:19] [scene:talk]
+VISUAL:
+AUDIO: 'here we\'ve had to deal with the idea that your machine might not actually be able to keep up with the number of messages being sent to you by The gossips Forum and there\'s a place to handle that and it\'s right here we\'re going to ignore it for this demo code but when you go to WR production code we'
+
+[22:32] [scene:talk]
+VISUAL:
+AUDIO: 'have a spot in the crate for you to deal with that and this is why writing in Rust is worth your time you\'re ending up with really robust software that makes you handle a lot of things that you wouldn\'t think about'
+
+[22:44] [scene:talk]
+VISUAL:
+AUDIO: 'otherwise so we\'re then going to pull apart the gossip event and we\'re going to say hey is it of the kind where we received a message and if it did we\'re going to print a message that we got this underbar and then Arrow thingy is saying hey for all other events for'
+
+[22:57] [scene:talk]
+VISUAL:
+AUDIO: 'anything else in this uh possible set of types just print out the event that we got make sense this is a subscribe Loop which we are then H wiring up via a Tokyo spawn if you\'re coming from the go'
+
+[23:10] [scene:talk]
+VISUAL:
+AUDIO: 'programming language this is the rough equivalent of go do a thing it\'s not exactly because Co routines and there\'s a whole story and conversation about this but what this is doing is spawning a subtask that is'
+
+[23:23] [scene:talk]
+VISUAL:
+AUDIO: 'letting us do some stuff in the background and so we\'re then that to the Subscribe Loop and we\'re passing it to receiver and so what this is setting up is hey we\'re going to subscribe and we\'re then going to pass off a thing that will listen for events in a wild'
+
+[23:35] [scene:talk]
+VISUAL:
+AUDIO: 'Loop just constantly processing events as they come in and then we\'re going to broadcast as we did before we\'re going to send a message you notice when we run this something that is kind of maybe not intuitively obvious we did send an event'
+
+[23:49] [scene:talk]
+VISUAL:
+AUDIO: 'but we didn\'t get anything printed out gossip under the hood ignores our own events and that\'s a process you\'re going to want to see a lot in peer-to-peer systems stuff that you publish out to the network should be handled locally'
+
+[24:01] [scene:talk]
+VISUAL:
+AUDIO: 'not in your own event subscription Loops because you can get into situations where you can say you know the kind of natural conclusion is this hey someone sent us a message maybe we want to dial that person well now you\'re trying to dial yourself and things are weird'
+
+[24:14] [scene:talk]
+VISUAL:
+AUDIO: 'everything\'s upside down it\'s a bad idea that is why we don\'t see the message printed out when we broadcast something immediately for that kind of stuff it is worth kind of like digging in on the documentation about this and if documentation feels unclear that\'s why'
+
+[24:26] [scene:talk]
+VISUAL:
+AUDIO: 'we\'re an open source project jump in and tell us something\'s unclear and hopefully someone will modify it to be more clear and things will get better over time so with that we are now just to recap sending messages we are'
+
+[24:38] [scene:talk]
+VISUAL:
+AUDIO: 'subscribing to those messages we are getting them when they come in we are still not talking to anyone and for that we have this concept of roles and we now need to figure out a way to get a role to someone else we won\'t yet do that but'
+
+[24:50] [scene:talk]
+VISUAL:
+AUDIO: 'we\'ll at least talk through how we signal the existence of our topic ID in our node to some other node the idea of getting the information about what topic ID and node to join to'
+
+[25:04] [scene:talk]
+VISUAL:
+AUDIO: 'another machine is called signaling this is the process of saying hey we\'re going to get this information of how to connect from one device to the other device signaling is an outof band'
+
+[25:16] [scene:talk]
+VISUAL:
+AUDIO: 'process traditionally which sounds kind of weird when we\'re building apps right just to zoom out for a level if you\'re building this into a real app there\'s just going to be a server somewhere that has topic ID list of chat rooms and note IDs list of people to join and that\'s'
+
+[25:30] [scene:talk]
+VISUAL:
+AUDIO: 'how you would set all this up right if you wanted this to be completely fully local without talking to some server you could use uh IR Ro\'s DNS mdns Discovery to locally discover nodes and just ask them for topics you would need to build'
+
+[25:43] [scene:talk]
+VISUAL:
+AUDIO: 'a custom protocol for that but it\'s possible to do these are both and all part of the family of signaling and for us I think the most simple for examples and demo purposes of signaling is to use'
+
+[25:56] [scene:talk]
+VISUAL:
+AUDIO: 'something we call tickets tickets is really quite basically just smashing together all the stuff you need into a structure serializing that into a string and then passing that ticket around by'
+
+[26:09] [scene:talk]
+VISUAL:
+AUDIO: 'some means that it supports copy and paste that usually for me personally is just sending myself a DM on Discord that could also be QR codes this could be text messages this could be anything'
+
+[26:21] [scene:talk]
+VISUAL:
+AUDIO: 'that supports copying and pasting text and so for that we\'re going to actually Implement tickets here and we\'re going to print out the ticket to the terminal on when we start the service that\'s going to give us the first half of'
+
+[26:33] [scene:talk]
+VISUAL:
+AUDIO: 'signaling we\'re actually going to be able to create a token that we can pass to some other machine and they can use to both assume the join role and then use that ticket to actually perform the join because they will have the'
+
+[26:45] [scene:talk]
+VISUAL:
+AUDIO: 'information about the topic ID and the node ID to actually talk to so more copying and pasting and this time this is going to be like fun tour of Rusty stuff that is actually quite useful uh because as soon'
+
+[26:57] [scene:talk]
+VISUAL:
+AUDIO: 'as I paste this in you\'re going to see that we are missing a few crates we\'re missing something called CI sde which is a Smash Up of serialize and deserialize and we\'re going to need this thing called Data encoding and this'
+
+[27:10] [scene:talk]
+VISUAL:
+AUDIO: 'thing called cycore Json so once again I\'m going to do cargo ad CI and I\'m going this time I\'m going to use features derive uh all of rust crates support this notion of features you can'
+
+[27:23] [scene:talk]
+VISUAL:
+AUDIO: 'actually turn on and off functionality in a crate based on feature Flags it\'s quite lovely once you get used to it it does create funny compiler errors when you\'re like hey I installed CI but it says that something\'s missing it\'s usually because a feature isn\'t turned'
+
+[27:35] [scene:talk]
+VISUAL:
+AUDIO: 'off so we\'re going to add C if you want to see the features that are available for a crate usually they\'re printed out when you actually install it they\'re also on docs. RS you can read them there but this says that hey I have enabled the derive St derive and standard'
+
+[27:48] [scene:talk]
+VISUAL:
+AUDIO: 'features and allocation RC and unstable are disabled I\'m also going to add cargo add data encoding and CI Json we\'re not going to get too in depth'
+
+[28:03] [scene:talk]
+VISUAL:
+AUDIO: 'on what CI does uh but it\'s magic it lets you do these annotations that say serialize and deserialize and all of a sudden your data structures know how to turn themselves into representations we'
+
+[28:15] [scene:talk]
+VISUAL:
+AUDIO: 'then use the CI Json crate to actually take those things that support serialize and deserialize and just flip it into and out of Json so there is no like two Json code here you\'re seeing this'
+
+[28:27] [scene:talk]
+VISUAL:
+AUDIO: 'implementation of the ticket uh information so this is a struct and we\'re then writing methods on that struct uh for that we implement the tickets direct trait um traits are whole thing we\'re going to skip a lot of that'
+
+[28:41] [scene:talk]
+VISUAL:
+AUDIO: 'but here\'s another example of a trait this is implementing display for a ticket which is relevant because display is what gets used when you print something to the terminal or to the console and so this is actually how we serialize the entire ticket when we go'
+
+[28:53] [scene:talk]
+VISUAL:
+AUDIO: 'to print it out and then this is from string is how we turn a ticket from a string back into a ticket and again we\'re using this uh the distalization uh from bites methods so this is kind of'
+
+[29:05] [scene:talk]
+VISUAL:
+AUDIO: 'dense and looks really complicated the first time I saw code like this I was a little like that\'s a very obtuse way of saying turn into and out of Json there\'s no to Json and from Json method when you really dig in with rust this really'
+
+[29:18] [scene:talk]
+VISUAL:
+AUDIO: 'feels quite natural over time and it\'s quite elegant once you look at it for today we\'re literally just going to kind of Smash this in here and hit enter and talk through it if you want to Google it more feel free but to talk to you about this data structure very quickly we are'
+
+[29:30] [scene:talk]
+VISUAL:
+AUDIO: 'creating a ticket type and we have this topic which is the topic identifier that we\'re going to join and then peers which is a vector of note addresses we\'re smashing those together into a structure we\'re then going to print that off so'
+
+[29:43] [scene:talk]
+VISUAL:
+AUDIO: 'let\'s run that up together and we do cargo run and while we\'re doing that we\'ll print that out and hey this is our ticket so under the hood this is some stuff but let\'s talk through how we got there'
+
+[29:57] [scene:talk]
+VISUAL:
+AUDIO: 'here we\'re doing the same things we were doing before we\'re creating the topic ID a vector of no one and then afterneath afterneath then beneath that we\'re printing we\'re creating the actual ticket struct and then just doing print Lin of it what\'s happening under the'
+
+[30:09] [scene:talk]
+VISUAL:
+AUDIO: 'hood is when we go to put the ticket in the ver in the print Lin call we the print Lin macro will check for this formatting display trait that is implemented on that structure and it'
+
+[30:22] [scene:talk]
+VISUAL:
+AUDIO: 'will then use that to do a base 32 no padding and coding of ourselves two byes it will then turn into a lowercase and we will write that to the formatter going to neat huh so that\'s how we get the print'
+
+[30:36] [scene:talk]
+VISUAL:
+AUDIO: 'off now we\'re at a point where we\'re on the precipice of doing something interesting because we now have a ticket that we can give to another terminal and use that to instruct it hey here\'s how'
+
+[30:49] [scene:talk]
+VISUAL:
+AUDIO: 'you join and here\'s who to dial and so this is the beginning in the first half of the signaling pattern now let implement the second half and for that we\'re going to actually have to turn this into a CLI because from this point'
+
+[31:01] [scene:talk]
+VISUAL:
+AUDIO: 'we have not actually had any changes or arguments or inputs that we\'ve needed to accept into this program and now we\'d actually have to do a little a a bit of a sort of detour where we turn this into a CLI tool and then get that to the'
+
+[31:14] [scene:talk]
+VISUAL:
+AUDIO: 'point where we can then do the rules so that we can say hey I want to invoke this as a chat room Creator or I want to invoke this as a chat room Joiner so let\'s magically turn this into a CLI so more code come in copy paste hit save C'
+
+[31:27] [scene:talk]
+VISUAL:
+AUDIO: 'compiler error all right we have an error on the crate clap clap is another classic of the cargo ecosystem or the'
+
+[31:39] [scene:talk]
+VISUAL:
+AUDIO: 'rust ecosystem and cargo add clap and clap is a command line parser and it shows off some of the uh it\'s a tool for building clis and this is where you\'re going to get more of the loveliness of'
+
+[31:52] [scene:talk]
+VISUAL:
+AUDIO: 'rust as part of our crash course tour um we\'re going to add the drive feature I think yes clap features dve we\'re not even going to'
+
+[32:04] [scene:talk]
+VISUAL:
+AUDIO: 'look at the code let\'s just run it um because the output is more appealing now it\'s actually going to look a little more CLI based and this is again more stuff that is not really iro distributed'
+
+[32:18] [scene:talk]
+VISUAL:
+AUDIO: 'system stuff but it\'s really fun because it\'s nice to see Cool Tools in Rust and you might as well have the tour while you\'re here but you see now that this prints out like chat over iro gossip where the heck did that come from if we actually look this'
+
+[32:30] [scene:talk]
+VISUAL:
+AUDIO: 'is the argument that we\'re using and we\'re using uh a bunch of things to derive this as a clap command parser we can see here clap parser and this is going to be a structure that parses'
+
+[32:43] [scene:talk]
+VISUAL:
+AUDIO: 'command line arguments and the text for this help is actually came from the comment above it and so this attribute actually did some invocation where this triple comment thing does special bits'
+
+[32:55] [scene:talk]
+VISUAL:
+AUDIO: 'that will then allow the code to use that the compiler to use that as part of the stuff that gets compiled and so we can add a bunch of exclamation points here and do cargo run and'
+
+[33:09] [scene:talk]
+VISUAL:
+AUDIO: 'magically bunch of exclamation points I\'m going to leave them in uh we have a bunch of other bits here we\'re not going to go too much into detail on this but what this does is it sets up a few'
+
+[33:22] [scene:talk]
+VISUAL:
+AUDIO: 'things that are worth sort of taking a look at quickly here we have the structure that basically declares all of the arguments for the command line and one of them uses this sub command uh derive attribute that will then pass on to an enumeration of two different roles'
+
+[33:35] [scene:talk]
+VISUAL:
+AUDIO: 'which may remind you of the roles we were describing earlier you can either open a chat room or you can join one and you\'re going to pass in a ticket and so when we look at our help text we have join and we do cargo run and now we\'re'
+
+[33:47] [scene:talk]
+VISUAL:
+AUDIO: 'actually going to be passing arguments to this we\'re do cargo run join and this will yell at us because we need a ticket it was not provided it is not provided because it\'s not made'
+
+[34:00] [scene:talk]
+VISUAL:
+AUDIO: 'optional this is what optional stuff looks like in Rust we type option and put the thing that we want to be optional inside of it and the ticket is not optional and so Clap the command line parser says hey you need this ticket to be provided as part of the'
+
+[34:13] [scene:talk]
+VISUAL:
+AUDIO: 'join thing and so we\'re naturally getting a whole bunch of behavior that is quite nice and useful now that we have our CLI structs in place our main function changes quite a bit and the first thing that we\'re doing before doing any iro setup stuff now is'
+
+[34:25] [scene:talk]
+VISUAL:
+AUDIO: 'actually parsing the arguments for our CLI so now here I can I have access to args and this gives us the command and the name which was part of the global configuration struct and the no relay which is here as well and then on line'
+
+[34:40] [scene:talk]
+VISUAL:
+AUDIO: '50 here we are doing something called a match which is we are matching on the command and we are returning the result of this entire closure into a tupal of topic and peers so this is all going to'
+
+[34:54] [scene:talk]
+VISUAL:
+AUDIO: 'all this gak in here is going to happen and then at the end this we now have access to topic which is of type topic ID and peers which is a set of note addresses that we want to join the thing that we\'re switching on or matching over is the actual type of command and so'
+
+[35:06] [scene:talk]
+VISUAL:
+AUDIO: 'this is how we flip between our two roles and decide what to do in both cases you\'re joining a gossip swarm only in the open command we are randomly generating a topic and we have no peers to join in the join side we have been'
+
+[35:19] [scene:talk]
+VISUAL:
+AUDIO: 'given a ticket that we are going to get as a string we are going to parse that from a string into to a real ticket that will give us a topic in peers we\'re then going to print that off so we know what topic we\'re joining and we\'re going to'
+
+[35:32] [scene:talk]
+VISUAL:
+AUDIO: 'return the topic that we were given and the peers that we were given to the to the thing that we\'re going to call later to subscribe and join which is down here we then have a little more stuff'
+
+[35:46] [scene:talk]
+VISUAL:
+AUDIO: 'that we\'re going to get to in a bit but we can actually have message types that we can talk about where we\'re going to build up a richer messaging system for broadcasting something a little more complex than SU and we also have a bunch of code to'
+
+[35:58] [scene:talk]
+VISUAL:
+AUDIO: 'handle the actual process of connecting and joining now when we run this specifying the open command we get a ticket and here I\'m going to for the sake of ease create a new terminal and just do cargo'
+
+[36:10] [scene:talk]
+VISUAL:
+AUDIO: 'run and then I\'m going to type join and I\'m paste in the ticket hey we\'re connected to ourselves locally wow what a magical networking demo over here we can type'
+
+[36:23] [scene:talk]
+VISUAL:
+AUDIO: 'hello and we got hello over here and here we\'re going to type world and we got world over here and so finally we are doing something exciting and interesting and useful yes we\'ve dumped up a bunch in'
+
+[36:35] [scene:talk]
+VISUAL:
+AUDIO: 'complexity we\'ve added some things that I\'m frankly just not even going to address in this tutorial which is how we actually spawn and receive messages from input where we can actually send input and wire up all that G it\'s there if you'
+
+[36:47] [scene:talk]
+VISUAL:
+AUDIO: 'want to look at it it\'s not widely relevant to the actual iro Parts uh if it\'s making a CLI it\'s quite useful the code\'s right there for the next bit that I do want to talk'
+
+[37:00] [scene:talk]
+VISUAL:
+AUDIO: 'about before we leave is the actual message format so we have this primitive in Gossip where we can now send arbitrary bytes of data and what we would naturally want to do with that is enrich that into'
+
+[37:13] [scene:talk]
+VISUAL:
+AUDIO: 'something a little more useful where this is where we have now message types and we\'re going to have two message types in our chat room we\'re going to have an about me or a who am I message that\'s going to say hey this note ID has this nickname and then we\'re going to'
+
+[37:25] [scene:talk]
+VISUAL:
+AUDIO: 'have messages which is going to yield the result of message message type which feels a little funky but the me the first one refers to the types of message and the inner one is an actual chat room message hopefully that makes sense uh'
+
+[37:38] [scene:talk]
+VISUAL:
+AUDIO: 'but again we\'re going to pass the note ID and the actual text message that we are going to send what this is going to let us do is we are going to be able to do the same thing that we did with tickets where we are going to learn how to take that message and serialize it to'
+
+[37:51] [scene:talk]
+VISUAL:
+AUDIO: 'bytes again we\'re just going to use Json here because why not and we\'re going to turn those into Json bytes and we can come back from bytes and what this is going to give us is the ability to have a message in our subscribe Loop that we'
+
+[38:04] [scene:talk]
+VISUAL:
+AUDIO: 'had from before but now what we can do instead of just printing out the result of the message that we never actually received because we never actually send ourselves a message we can do message from bytes parse it match over the type'
+
+[38:16] [scene:talk]
+VISUAL:
+AUDIO: 'because that\'s included in the parsing de realization and we can then handle that and here in our subscribe Loop before anything we\'ve created a map of names which Maps node identifiers to'
+
+[38:28] [scene:talk]
+VISUAL:
+AUDIO: 'nicknames and if we get an about me message we will insert the node name to the map and we\'ll then get this is now known as and then on the message side any time we get it we\'re just going to print it out and we\'re going to print'
+
+[38:40] [scene:talk]
+VISUAL:
+AUDIO: 'out the name if we don\'t have the name we\'re going to do the fump short of the node identifier which will give us these short node IDs that we were seeing before and so this gives you a baseline demonstration of what you can do on top'
+
+[38:53] [scene:talk]
+VISUAL:
+AUDIO: 'of a gossip protocol the Baseline thing that you do is just send messages that are of type bites those bites can be whatever you want if you want those to be uh protocol buffers go for it if you want them to be straight jsaw messages'
+
+[39:06] [scene:talk]
+VISUAL:
+AUDIO: 'like they are here go for it the actual way that you put this protocol into use is totally up to you what we\'re giving you is a primitive broadcast system that will let that will work robustly and scale really well the way that you put'
+
+[39:18] [scene:talk]
+VISUAL:
+AUDIO: 'that to use is theoretically unlimited and so just to kind of round out this last demo we can actually show you how this looks in process and we do cargo run and this time I\'m going to'
+
+[39:30] [scene:talk]
+VISUAL:
+AUDIO: 'pass the name uh one and I\'m going to do open and then on the other one we\'re going to quit this and do cargo one run uh this these two little things are to'
+
+[39:45] [scene:talk]
+VISUAL:
+AUDIO: 'pass Flags uh after cargo run and again I\'m going to do name this going to be two and I\'m going to type join and what you\'ll see here is hey we\'ve connected and we see that is now known as one so that message was just'
+
+[39:59] [scene:talk]
+VISUAL:
+AUDIO: 'automatically broadcast to us as we joined and we can do hello and if we go back to other terminal hey this other one is known as two and two types hello so there you have it'
+
+[40:11] [scene:talk]
+VISUAL:
+AUDIO: 'that\'s quite the crash course I know it\'s a lot and what we didn\'t teach you today is all of rust surprise surprise well why would we do it this way first and foremost hopefully you followed along and actually run some of this from'
+
+[40:24] [scene:talk]
+VISUAL:
+AUDIO: 'the tutorial page and just copy and pasted and seen this work with your own hands when you see it work it\'s truly magical the value of writing something this low level in a language like rust is from here we can get up into far more'
+
+[40:39] [scene:talk]
+VISUAL:
+AUDIO: 'complex stuff you can take all of this and compile it for multiple platforms that\'s very straightforward you can compile this for a phone and it\'ll work you can compile this with f foreign function interface bindings to other'
+
+[40:51] [scene:talk]
+VISUAL:
+AUDIO: 'languages by having a really really really well-built core in run that handles a lot of the low-level networking G for you you have all of the optionality left open to you this is a form factor that works well across the'
+
+[41:03] [scene:talk]
+VISUAL:
+AUDIO: 'board we can get this to run on a phone this thing consumes very very very little in terms of your system resources and that\'s a huge upside in working in such a low level language now generally you don\'t need to do all of this sort of'
+
+[41:16] [scene:talk]
+VISUAL:
+AUDIO: 'in gory detail as iro and the surrounding protocols mature things should look a lot like copy and paste smash this together add a little bit of foreign function interface glue to get'
+
+[41:28] [scene:talk]
+VISUAL:
+AUDIO: 'this into a higher level language and do more interesting stuff if you want to see this worked out as a fully fleshed out example go to the protocols and the gossip thing and we can actually see in the GitHub repository everything we\'ve'
+
+[41:40] [scene:talk]
+VISUAL:
+AUDIO: 'been talking about is one of the examples in the example directory from the aosip protocol itself the example inside of the aosip protocol crate is even more sophisticated than this one it takes the extra step with messages of'
+
+[41:53] [scene:talk]
+VISUAL:
+AUDIO: 'actually signing the messages that are sent sent over the broadcast channel with the node identifiers private key so that you cannot lie and said node number two said this when node number one actually created that message and'
+
+[42:06] [scene:talk]
+VISUAL:
+AUDIO: 'broadcast it in our toy example it would be quite trivial to just put the node identifier of somebody else in as the sender of our message and that would just be accepted by the network and so this example takes the extra step of'
+
+[42:19] [scene:talk]
+VISUAL:
+AUDIO: 'giving you a bunch more configuration and shows you how to do signed messages and so it\'s well worth having a look and it\'s also sort of a nice example of how to run examples themselves inside of rust GRS so there you have it a crash course rust distributed systems'
+
+[42:33] [scene:talk]
+VISUAL:
+AUDIO: 'peer-to-peer natural all in one video what more could you want out of life I hope you had a lovely day hope you enjoyed watching this as much as I enjoyed making it and yeah I\'ll see you somewhere on the Internet thanks'

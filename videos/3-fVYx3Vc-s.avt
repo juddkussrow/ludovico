@@ -1,0 +1,307 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Bernini-R ComfyUI Workflow: Precise Video Editing & Subject Swaps
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=3-fVYx3Vc-s
+upload_date: 20260618
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'I\'ve been testing out Bernini R from ByteDance as they\'ve open-sourced both the inference code and model weights for their Bernini renderer. ComfyUI natively supports its image and video editing capabilities, so let\'s get to it. Hello'
+
+[00:12] [scene:talk]
+VISUAL:
+AUDIO: 'and welcome to more nerdy rodent geekery. I have tons of Bernini workflow information for you today, and just in case you\'re not familiar with the channel, I like to use the rodent method'
+
+[00:24] [scene:talk]
+VISUAL:
+AUDIO: 'for my workflows. This means clean layouts with named groups for stuff because I think that makes everything both easier to understand and to update. If you are using this tutorial to update'
+
+[00:36] [scene:talk]
+VISUAL:
+AUDIO: 'your own workflows, don\'t forget you can pause to take screenshots or rewatch bits at any time. Also, if you find these videos helpful, prefer tutorials from actual humans, or perhaps you just'
+
+[00:48] [scene:talk]
+VISUAL:
+AUDIO: 'like all this workflow stuff done for you already, then you can support the channel via the Patreon link in the video description. It\'s your support which lets me make even more workflows'
+
+[01:00] [scene:talk]
+VISUAL:
+AUDIO: 'for you and to share these free video tutorials with everyone. That freedom to choose is, of course, yours and a huge thank you to all supporters because you make this possible. Starting with the'
+
+[01:12] [scene:talk]
+VISUAL:
+AUDIO: 'loader group then and being based on 1, it uses two separate transformer models for high noise and low noise denoising, which we can see here. Inference outputs are at 480p 16 FPS by default, but you'
+
+[01:26] [scene:talk]
+VISUAL:
+AUDIO: 'can go up to 720p and use a higher FPS, which you\'ll see later on in this video. To make things even better, I\'ve packed the loader chock-full with nodes to not'
+
+[01:40] [scene:talk]
+VISUAL:
+AUDIO: 'only help improve image quality, but also to save precious VRAM. Let\'s take a look at these now. Like the node label indicates, this first one, 1 normalized attention guidance, is from KJ Nodes.'
+
+[01:55] [scene:talk]
+VISUAL:
+AUDIO: 'Normalized attention guidance acts as a mathematical stabilizer that helps to prevent text prompts from distorting the video, keeping the generated output clean, stable, and highly detailed. If'
+
+[02:08] [scene:talk]
+VISUAL:
+AUDIO: 'you want to use a negative prompt even at CFG 1, then at the flip of a switch, you can enable NAG. Skip layer guidance is a ComfyUI native node that provides a'
+
+[02:20] [scene:talk]
+VISUAL:
+AUDIO: 'training-free sampling technique which aims to dramatically fix broken shapes, morphing faces, and unstable movements in diffusion transformer architectures such as 1.2.'
+
+[02:34] [scene:talk]
+VISUAL:
+AUDIO: 'Model sampling SD3 alters the noise schedule to help lock down video physics, whilst rescale CFG acts as a safety limiter to prevent high prompt'
+
+[02:46] [scene:talk]
+VISUAL:
+AUDIO: 'guidance from frying your colors. As we\'re using CFG 1, this essentially gives you a fine control, which can be useful for some schedulers and samplers. And finally, you may like to use KJ\'s'
+
+[03:00] [scene:talk]
+VISUAL:
+AUDIO: 'Sage attention patch and one chunk feedforward nodes to help save some of that VRAM. Don\'t forget to install Sage attention first if you do want to use'
+
+[03:12] [scene:talk]
+VISUAL:
+AUDIO: 'that Sage attention node, of course. Like it says in my note, the amount of VRAM needed for this depends on a lot of factors including things such as video resolution, which task you\'re'
+
+[03:24] [scene:talk]
+VISUAL:
+AUDIO: 'performing, but for super low VRAM cards, do check out the original GitHub repo which features a tiny 1.3 B model. Anyway, I think that covers it for'
+
+[03:36] [scene:talk]
+VISUAL:
+AUDIO: 'options you can use in a ComfyUI model chain to start with. So, let\'s move on. After picking your model options, you\'ll want to use some sort of prompt a bit like the one I have here. Change to a cartoon style with a thin black outline'
+
+[03:49] [scene:talk]
+VISUAL:
+AUDIO: 'and open her mouth. Your prompt acts as instructions to the AI, which in this case is for both an image style change and also a change to the subject\'s'
+
+[04:01] [scene:talk]
+VISUAL:
+AUDIO: 'mouth. So, it\'s an image editing task. We\'ll see the actual image I\'m changing in just a second, but also notice you can use a negative prompt as well. It\'s in Chinese, but basically a negative'
+
+[04:14] [scene:talk]
+VISUAL:
+AUDIO: 'prompt tells the model about things that you want to steer away from, such as blurry details and people walking backwards. It won\'t do a whole lot at CFG one though, unless you\'re using that'
+
+[04:26] [scene:talk]
+VISUAL:
+AUDIO: 'NAG node we looked at in the loader. As this model can do a variety of things, you may also like to have a look at their prompt enhancer linked there in the prompting note. Whilst this looks'
+
+[04:40] [scene:talk]
+VISUAL:
+AUDIO: 'all scary because it\'s in Python format, you can easily read the English to see how their prompt enhancers work. If you want to write better prompts, you can either follow their instructions manually or you can add something like'
+
+[04:53] [scene:talk]
+VISUAL:
+AUDIO: 'an Ollama note to do the prompt enhancing for you. If you\'re wondering just what Bernini can do, then take a look at these options because it can do a lot of things. Text to image, text to video, image to video, video editing,'
+
+[05:07] [scene:talk]
+VISUAL:
+AUDIO: 'and a whole load more. Now, I\'ve put all these capabilities into a single workflow because I like everything in one place, rather than loading lots of different things with a length of one, you\'ll get a single image, which is'
+
+[05:20] [scene:talk]
+VISUAL:
+AUDIO: 'ideal not only for image editing, but also if you want to see the first frame of your video will actually do what you\'re asking it to do before you commit to however many frames it is that you'
+
+[05:32] [scene:talk]
+VISUAL:
+AUDIO: 'want. 5 seconds or 81 frames is the typical length, but as mentioned, you can go longer if you like. CFG one and six steps means you won\'t be waiting too'
+
+[05:44] [scene:talk]
+VISUAL:
+AUDIO: 'long, usually around 30 seconds or so, depending of course on the resolution you have chosen and other factors such as your own hardware. Because there are so many options you can use nodes such as the fast group'
+
+[05:57] [scene:talk]
+VISUAL:
+AUDIO: 'bypass or muters which is to enable or disable the various named groups. I\'ve got them set up here for source and reference videos, up to four images, and various ways you can save things. The'
+
+[06:11] [scene:talk]
+VISUAL:
+AUDIO: 'video help for suite load video node is great because you can do loads of things with it. You can set a custom FPS width, height, frame cap, and even where to start from. If you\'re loading images to'
+
+[06:25] [scene:talk]
+VISUAL:
+AUDIO: 'edit or just to use in your videos, you may like to resize them like this. We\'ve got a KJ nodes resize image V2 or another great option is to use the single load and resize node. Even though'
+
+[06:38] [scene:talk]
+VISUAL:
+AUDIO: 'they suggest just 480p for things like you can see here, I\'ve upscaled the example image for editing to 1280 by 1280 and that works just fine. With all the inputs out of the way, we can see'
+
+[06:52] [scene:talk]
+VISUAL:
+AUDIO: 'here the heart of the workflow, which is handled by the Bernini conditioning node. And yes, it has a lot of inputs. This is where you send both your positive and negative prompt as well as'
+
+[07:04] [scene:talk]
+VISUAL:
+AUDIO: 'any videos or images. The node supports up to eight reference images, though here I\'ve only got four connected. The high and low noise models go through the usual samplers and you\'ll see here'
+
+[07:16] [scene:talk]
+VISUAL:
+AUDIO: 'that for the second low noise sampler, we aren\'t adding any noise. Its job is to clean up the generation from the high noise model. Okay, that\'s all the technical stuff about the engine'
+
+[07:29] [scene:talk]
+VISUAL:
+AUDIO: 'covered, so it\'s time to see it in action. In this compare node, we can see the original image and as I move across, we can see how the prompt changed the style, opened the mouth, and added a'
+
+[07:41] [scene:talk]
+VISUAL:
+AUDIO: 'nice black outline as well. Really love those very round eyes, and she seems ever so much happier now. If you want a much larger image, then why not try the two times upscale VAE. This gives a 2560'
+
+[07:55] [scene:talk]
+VISUAL:
+AUDIO: 'by 2560 result, and all it takes is two nodes. The special VAE decode from VAE utils and the model loader for the'
+
+[08:07] [scene:talk]
+VISUAL:
+AUDIO: 'upscale VAE. Now, unfortunately, this model doesn\'t work quite so well for videos, but for image editing, it\'s great. One thing I found is even for text-to-image,'
+
+[08:20] [scene:talk]
+VISUAL:
+AUDIO: 'having a reference image will impact your generation, and I found it\'s generally better to load one anyway, even if you\'re not referencing it at all. For this prompt, I\'m asking for a rodent mage standing in a stone archway.'
+
+[08:34] [scene:talk]
+VISUAL:
+AUDIO: 'I\'ve got the text-to-image mode selected, and I\'m using the same example image. The result looks great to me, and it seems to have gone with that cartoon style, even though I didn\'t reference it'
+
+[08:47] [scene:talk]
+VISUAL:
+AUDIO: 'in the prompt. This is the result without the reference image, and as you can see, the style is no longer cartoony, and personally, I don\'t think it\'s quite as good. So, if you\'re not getting amazing text-to-image'
+
+[08:59] [scene:talk]
+VISUAL:
+AUDIO: 'results, then give this method a try, and maybe it will help. As all the different choices really only change the prompt text, you can stick with the default most of the time, and things will work fine anyway. Up here is the'
+
+[09:12] [scene:talk]
+VISUAL:
+AUDIO: 'group which changes the prompt based on the choice you make in that combo box. As you can see, it takes the task index as an integer, which it then turns into text, which you can use in a string'
+
+[09:25] [scene:talk]
+VISUAL:
+AUDIO: 'replace text node. Like we saw in that bit of Python, we\'ve got loads of different options there. You\'re a helpful assistant, and it\'s got text-to-image and in all the other things in there too. So, basically that\'s all it does. It changes your'
+
+[09:38] [scene:talk]
+VISUAL:
+AUDIO: 'prompt by adding that bit of text in at the beginning. How much difference does it actually make? Well, we can take a look. So, I\'ve got the prompt give the fish a top hat and there is the input image into start with. That choice is'
+
+[09:51] [scene:talk]
+VISUAL:
+AUDIO: 'simply on default. Over in the image compare node, we can see how much it changes and as we go across that is really very good, isn\'t it? If you\'ve used something like Quen image edit,'
+
+[10:05] [scene:talk]
+VISUAL:
+AUDIO: 'then you might be wondering, oh, does it pixel shift the image around? And as you can see, no, it doesn\'t. The top hat fits perfectly. It\'s got some shading on there as well and the whole image is well, it\'s in the same place. There\'s no'
+
+[10:19] [scene:talk]
+VISUAL:
+AUDIO: 'pixel shift at all. This time around then, all I\'ve changed is the choice in there. So, rather than default, this is image editing. The result is still okay, but honestly, I preferred'
+
+[10:31] [scene:talk]
+VISUAL:
+AUDIO: 'the results from default. This time the top hat goes slightly over the top of the image. Doesn\'t really matter though because it still looks great. Now, your mileage may vary, but I don\'t think you'
+
+[10:43] [scene:talk]
+VISUAL:
+AUDIO: 'need to get too stuck on which choice you use in comfy. Default will work most of the time anyway. Whilst 16 FPS is the default, you don\'t have to use that at all. As we can see here in this load'
+
+[10:56] [scene:talk]
+VISUAL:
+AUDIO: 'video source. This is the input video then and I\'ve got the force rate set to 24 FPS. Down here in the FPS node, I\'ve also got that set to 24 and the prompt is simply'
+
+[11:08] [scene:talk]
+VISUAL:
+AUDIO: 'change the man\'s hair color to black. What do we get as a result? Well, a perfectly reasonable 24 FPS video showing the guy with black hair. If we have a quick look on the details there,'
+
+[11:21] [scene:talk]
+VISUAL:
+AUDIO: 'we can see it\'s 1280 by 720 at 24 FPS. So, it\'s even a higher resolution than the suggested 848 as well. Very nice. Face swap videos are also easy and for'
+
+[11:33] [scene:talk]
+VISUAL:
+AUDIO: 'the prompt this time, that\'s exactly what I\'m asking for. Replace the face of the woman in the source video with the man from image zero. I\'ve got the task choice set to video editing with reference because why not? And this is'
+
+[11:46] [scene:talk]
+VISUAL:
+AUDIO: 'the input video. I\'ve gone for 23.98 FPS this time, which is of course what I\'ve got set in the other node and a custom width and height. The frame load cap is also 101, so it\'s slightly longer'
+
+[11:58] [scene:talk]
+VISUAL:
+AUDIO: 'than the 81 frames. Image zero has the reference face, the one I want to swap in and there we go. It\'s a sort of guy with wild hair and very wide eyes. The result looks like this and it seems'
+
+[12:10] [scene:talk]
+VISUAL:
+AUDIO: 'to have done a great job. Such lovely, natural, flowing hair. Nice one, Benini. Static images aren\'t the only thing you can use and this time I\'m going for a kind of video in video using this very'
+
+[12:23] [scene:talk]
+VISUAL:
+AUDIO: 'short prompt. Add the video on the computer. The source video has this guy using a laptop and instead of a reference image, I\'m providing this reference video. The result is pretty'
+
+[12:35] [scene:talk]
+VISUAL:
+AUDIO: 'cool indeed. So, now I have a transforming rodent right there on the laptop screen. Oof, power up. You can also do much the same thing with a reference image, too, and even animate'
+
+[12:48] [scene:talk]
+VISUAL:
+AUDIO: 'it. This time the prompt is animate the forest eye image and add it on the computer screen. It\'s that same video in but this time I\'ve got a static image instead of a'
+
+[13:01] [scene:talk]
+VISUAL:
+AUDIO: 'reference video. Now we have the result of the laptop screen being replaced with the image and the image itself is moving, too. Much better than keeping it static. If you want to change the style of a'
+
+[13:14] [scene:talk]
+VISUAL:
+AUDIO: 'video, all you need to do is ask. The prompt here says change the video style to anime cartoon and make her smile. The input video is this one, a realistic scene with a rather glum-looking lassie.'
+
+[13:27] [scene:talk]
+VISUAL:
+AUDIO: 'However, the output we get is much more bright and cheery and as a cartoon. I think it\'s really captured everything well, right down to the necklace. If you want to use a couple of reference'
+
+[13:40] [scene:talk]
+VISUAL:
+AUDIO: 'images, that\'s super easy, too. For this prompt, I want to give her a jacket and change the background as well. So, I\'ve got the prompt, "Make her wear the jacket from image zero and change the background to be the kitchen from image'
+
+[13:53] [scene:talk]
+VISUAL:
+AUDIO: 'one." With traditional video editing software, this would be quite difficult, but with Bernini, you can just provide the two images. So, there\'s the jacket I want her to have and this is the'
+
+[14:05] [scene:talk]
+VISUAL:
+AUDIO: 'background. Hey, voila! A really great background change and clothing replacement all at the click of a button. And remember, you\'re not just limited to 5 seconds of 16 FPS video, either. This'
+
+[14:18] [scene:talk]
+VISUAL:
+AUDIO: 'time, I\'ve got another background replacement prompt to show you how you can do that. We\'ve got, "Change the video background to the reference image, image zero, and gently animate the windy background, as well."'
+
+[14:32] [scene:talk]
+VISUAL:
+AUDIO: 'I have a longer input video this time for 10 seconds or 161 frames. And of course, that\'s what I\'ve got set in the generation length, as well. Now, you can actually make this length longer or'
+
+[14:44] [scene:talk]
+VISUAL:
+AUDIO: 'shorter than the input. So, if you make this a bit longer, then it will start off with that video and then generate some more frames of its own. So, you can have slightly longer videos that way. This is the image I\'m asking it to'
+
+[14:57] [scene:talk]
+VISUAL:
+AUDIO: 'animate as the background. So, what happens this time, do you think? Yes, it works amazingly well. And with the frame interpolation, this is actually doubling the number of frames. Clicking on the'
+
+[15:09] [scene:talk]
+VISUAL:
+AUDIO: 'node, we can get a bit of information about it. And here, we can see it\'s actually 32 FPS, 321 frames. Sweet as a nut. So, if you like getting all nerdy with'
+
+[15:22] [scene:talk]
+VISUAL:
+AUDIO: 'workflow details and stuff, then don\'t forget to like and subscribe for even more nerdy rodent geekery. &gt;&gt; Ooh, Nerdy Rodent. He really [music] makes my day.'
+
+[15:34] [scene:talk]
+VISUAL:
+AUDIO: 'Showing us AI in a really British way.'

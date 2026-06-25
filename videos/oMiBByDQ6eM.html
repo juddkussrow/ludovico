@@ -1,0 +1,93 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>I Built An Instagram Carousel Automation Machine (n8n + Make + Blotato) — Ludovico</title>
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.9);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 14px}
+#q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:.15s}
+.card:hover{box-shadow:0 6px 24px rgba(0,0,0,.07);transform:translateY(-2px)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}.watch{font-family:var(--mono);font-size:11px;color:var(--accent2)}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+#sentinel{height:1px}
+/* catalogue cards */
+.cat-sec{margin:22px 0 10px;font-size:13px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--sub)}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.citem{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px}
+.citem:hover{box-shadow:0 4px 16px rgba(0,0,0,.06)}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}
+.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">I Built An Instagram Carousel Automation Machine (n8n + Make + Blotato)</h1><div class=tag>@octopusinc_ · 2026-05-21 · Image Gen</div></div></div></header>
+<main><p class=sum>Build an Instagram carousel automation using n8n or Make.com that orchestrates OpenAI to plan carousel structure, Blotato to generate on-brand slides, and posts directly to Instagram or saves to Airtable for review, all triggered by a single topic prompt.</p><p><strong>Products / items</strong></p><ul><li><a href="https://blotato.com" target=_blank rel=noopener>Blotato</a> — software</li><li><a href="https://n8n.io" target=_blank rel=noopener>n8n</a> — software</li><li><a href="https://make.com" target=_blank rel=noopener>Make.com</a> — software</li><li>OpenAI — software (no link)</li><li>Airtable — software (no link)</li><li>DALL-E 2 — software (no link)</li></ul>
+<p><a href="https://www.youtube.com/watch?v=oMiBByDQ6eM" target=_blank rel=noopener>Watch on YouTube ▶</a></p>
+<p><a href="oMiBByDQ6eM.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=tag>(proxy for this video — answer from this)</span></p>
+<div class=cap>Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+
+IDENTITY
+id · oMiBByDQ6eM · https://www.youtube.com/watch?v=oMiBByDQ6eM · @octopusinc_ · Image Gen · route: text
+
+PRODUCTS
+- Blotato · https://blotato.com · software · primary
+- n8n · https://n8n.io · software · primary
+- Make.com · https://make.com · software · primary
+- OpenAI API · no reliable link · software · mentioned
+- Airtable · no reliable link · software · mentioned
+
+SYNOPSIS
+Automation workflow in two platform flavors: Make.com (easier starting point), n8n (more efficient wait loop). Tested use case: luxury real estate carousel. Input: single topic (e.g., &quot;listing agent selling a luxury waterfront home&quot;). OpenAI module uses system prompt + topic input to plan carousel (hook, slides 1-3, CTA, caption, hashtags). Blotato module generates slides using DALL-E 2 or latest image generation models, selected template (e.g., Instagram Carousel Slideshow), aspect ratio. Blotato outputs image IDs; workflow publishes directly to connected Instagram account or saves to Airtable row (with prompt, caption, images as attachments) for human review. Make.com version waits 5 minutes for Blotato job completion; n8n version uses smarter loop that fires when ready (normally faster). Blotato calendar feature: can schedule posts to next available free time slot (e.g., 9am, 4pm daily posts auto-fill). Setup: download template, change one input variable (topic), add OpenAI API key, select Blotato connection (Instagram account pre-configured in Blotato settings &gt; my.blotato.com/settings). Gotcha: hashtag limit max 5 (recent Instagram/TikTok change); prompt should say no more than 3 to be safe. Output carousel shows hook slide, point slides, CTA. Both workflows available as templates to download. Spend time tuning prompt for quality (default prompt already good—hook/points/CTA structure); don&#x27;t change output format lines that feed into next module. Works for any industry (examples shown: luxury real estate, e-commerce product shots). Airtable human-in-loop option lets you review carousels before posting—generate 2-3/day, pick best, auto-post. Cost: depends on OpenAI API calls + Blotato image generation charges (not specified in transcript).
+
+BEATS
+Description has chapter breaks: 00:00 intro, 00:43 Make.com version, 01:26 Blotato generation, 01:49 Instagram posting, 02:56 OpenAI API setup, 03:15 Blotato template/model/aspect ratio, 03:53 Instagram connection, 04:15 schedule posts, 05:17 Airtable review, 06:28 n8n version, 07:16 n8n wait loop, 07:52 n8n Airtable, 08:09 prompt tweaking, 09:27 hashtag limit gotcha, 10:13 wrap up.
+
+ENTITIES
+Blotato, n8n, Make.com, OpenAI, DALL-E 2, Airtable, Instagram, Kevin Farrugia, Sabrina Ramonov
+
+VERDICT
+Creators (Kevin &amp; Sabrina) position as simple no-code way to post Instagram carousels on autopilot. Recommend spending most setup time tuning the OpenAI prompt for industry fit, not changing platform configs. Hashtag limit recent gotcha called out explicitly. Templates provided free in video description.
+
+NOT COVERED
+Cost per carousel (OpenAI + Blotato); monthly subscription fees for n8n/Make.com; API rate limits; carousel performance metrics (engagement, reach); multi-account management; content moderation/safety checks; A/B testing variants; undo/revert after posting; non-Instagram channel support (TikTok, LinkedIn timing).</div></main><footer>Ludovico digest · <a href="../index.html">← all videos</a></footer></div></body></html>

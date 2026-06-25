@@ -1,0 +1,167 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: I Tested Headroom: 96% Log Compression?
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=7PMvZQjuuFk
+upload_date: 20260614
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'I fed a 423 line log into this tool and 15 lines came out. 96% smaller. It kept every error and dropped the noise. An engineer at Netflix built it and the headline says it makes your artificial'
+
+[00:12] [scene:talk]
+VISUAL:
+AUDIO: 'intelligence agent up to 10 times cheaper. So I installed it and ran my own test. The 10x is real sometimes. On one run I got 96% off. On another I got exactly zero.'
+
+[00:25] [scene:talk]
+VISUAL:
+AUDIO: 'In this video, what it actually does, the test that proves it and the footgun that can cost you more. You\'ve pasted a 400 line build log into your agent and watch the token counter'
+
+[00:37] [scene:talk]
+VISUAL:
+AUDIO: 'climb. Line after line, all of them saying the same thing. Request handled, request handled, nothing happened. By the end of one log I\'d burned roughly 8,400 tokens on lines that carried no'
+
+[00:50] [scene:talk]
+VISUAL:
+AUDIO: 'information at all. And here\'s the part that stinks. In a long session, your agent resends that same wall of noise on every single turn. The bill scales with the noise, not with'
+
+[01:03] [scene:talk]
+VISUAL:
+AUDIO: 'the answer. So I went looking for the layer that fixes this before the model ever takes it in. I installed it and ran my own test. Here\'s what actually came out. It\'s called headroom and it sits in one'
+
+[01:15] [scene:talk]
+VISUAL:
+AUDIO: 'specific place, between your agent and the model\'s API. Tools like Claude Code, Cursor and Ada send everything to the model, the logs, the code, the tool outputs, the history. Headroom compresses all of that before'
+
+[01:29] [scene:talk]
+VISUAL:
+AUDIO: 'it hits the gate. The way airport security strips what you don\'t need before you reach the checkpoint. The author is Tejas Chopra, a senior dev at Netflix and it\'s open source under'
+
+[01:41] [scene:talk]
+VISUAL:
+AUDIO: 'Apache 2.0. Install is one line. You will pip install headroom AI with the all extras. And the simplest way in is a single call. You hand it your messages, it'
+
+[01:53] [scene:talk]
+VISUAL:
+AUDIO: 'hands back a smaller version plus the number of tokens it saved. So, the obvious question is whether that number holds up on a real log. I gave it one and watched exactly what'
+
+[02:05] [scene:talk]
+VISUAL:
+AUDIO: 'it threw away. I took a real 423-line log, 35,000 characters, the kind your agent chokes on. Two lines were errors. One was a warning.'
+
+[02:17] [scene:talk]
+VISUAL:
+AUDIO: 'The other 420 were passing info lines that said nothing. I ran it through and the wall collapsed. 423 lines down to 15. 96% smaller, and it kept every error'
+
+[02:29] [scene:talk]
+VISUAL:
+AUDIO: 'while dropping 420 passing lines. My first thought was, did it just delete my error? It didn\'t. It kept both error lines and the warning, the database failure, the null'
+
+[02:42] [scene:talk]
+VISUAL:
+AUDIO: 'pointer, the cache eviction storm, and washed away the gravel around them. The whole thing ran in 400s of a second, no model call, no network. And in place of the deleted lines, it'
+
+[02:54] [scene:talk]
+VISUAL:
+AUDIO: 'left a breadcrumb. A note saying, 408 lines were omitted, two errors, one warning, 420 info, plus a short hash. That hash is the trick, and it\'s where'
+
+[03:06] [scene:talk]
+VISUAL:
+AUDIO: 'this stops being ordinary compression. So, how does it know to keep the error and throw away the noise? It doesn\'t treat everything the same. The pipeline starts with a cache aligner that stabilizes the front of your'
+
+[03:19] [scene:talk]
+VISUAL:
+AUDIO: 'context, so your provider\'s cache keeps hitting. Then the content router looks at each chunk and decides what it is. JSON goes to a compressor that keeps the anomalies and collapses the repetitive arrays.'
+
+[03:32] [scene:talk]
+VISUAL:
+AUDIO: 'Code goes through an AST pass that keeps your signatures and imports. But folds the function bodies. Logs go to a statistical pass, the one that kept my errors and dropped the passing lines.'
+
+[03:44] [scene:talk]
+VISUAL:
+AUDIO: 'And plain prose goes through a small language model that ranks which tokens actually carry meaning. One layer four strategies picked automatically by content type. But it only knows what to keep because'
+
+[03:57] [scene:talk]
+VISUAL:
+AUDIO: 'the originals are never actually gone, which raises a question, how do you get them back? This is the breadcrumb again. When Headroom compresses a chunk, it doesn\'t delete the original, it stores it and leaves that hash behind, like a'
+
+[04:11] [scene:talk]
+VISUAL:
+AUDIO: 'code check ticket. If the model decides it needs the full thing, it calls Headroom retrieve with the hash and the original expands right back. So you get the savings without permanently losing data, which sounds'
+
+[04:23] [scene:talk]
+VISUAL:
+AUDIO: 'like a free lunch. But here\'s the catch most people miss. That retrieve is a second API round trip. On a big noisy log, you save thousands of tokens, so one retrieval is nothing. On a small payload, you compressed the'
+
+[04:37] [scene:talk]
+VISUAL:
+AUDIO: 'way a little and then paid for a whole extra call to get it back. Sometimes you spent more than if you\'d done nothing. The mitigation built into the tool is a command called Headroom learn.'
+
+[04:49] [scene:talk]
+VISUAL:
+AUDIO: 'It mines your failed sessions and writes corrections into your cloud.md and agents.md. So the model stops retrieving the same thing twice. Which raises the obvious question, when'
+
+[05:01] [scene:talk]
+VISUAL:
+AUDIO: 'does compression actually save nothing? Over a thousand builders. Daily hangouts, weekly workshops, and a community that actually ships together. Two full courses. The Agentic coding course, 18 modules,'
+
+[05:14] [scene:talk]
+VISUAL:
+AUDIO: 'master the systems that make AI coding repeatable. And the second brain bootcamp, eight modules, build your own personal AI system from scratch. Link in description, 10% off.'
+
+[05:26] [scene:talk]
+VISUAL:
+AUDIO: 'Back to the video. Here\'s the run where it saved me nothing at all. I ran a single short recent tool call through the exact same compress call. The result was 0%. Not a small saving, zero.'
+
+[05:39] [scene:talk]
+VISUAL:
+AUDIO: 'And that\'s not a bug, it\'s the design. By default, it protects your last four messages and anything you typed yourself. Because that\'s the context the model is actively reasoning over. Compression only fires on the older'
+
+[05:53] [scene:talk]
+VISUAL:
+AUDIO: 'bulky tool outputs further back in a long session. So, on a fresh call, there\'s simply nothing safe to cut. Better Stack found the same shape when they covered it first. Low effort runs saved nothing. Only the'
+
+[06:06] [scene:talk]
+VISUAL:
+AUDIO: 'heavier sessions showed real savings. The savings aren\'t a constant, they\'re a dimmer switch. High when there\'s noise to cut, flat when there isn\'t. So, don\'t paste a tiny recent call into it and expect magic.'
+
+[06:19] [scene:talk]
+VISUAL:
+AUDIO: 'To be fair, the bigger question for most people is whether all this cutting quietly breaks the answer. So, does compressing the context wreck what the model gives you back? The published benchmarks say no and they'
+
+[06:32] [scene:talk]
+VISUAL:
+AUDIO: 'don\'t cherry-pick. On a code search task, it cut tokens by 92%. On SRE debugging, 92% again. On GitHub issue triage, 73. And on full code base exploration, 47%.'
+
+[06:45] [scene:talk]
+VISUAL:
+AUDIO: 'The honest low end they put right next to the big numbers. Now the part that matters more than the savings. On a math benchmark, the accuracy held at 0.87 before and 0.87 after.'
+
+[07:01] [scene:talk]
+VISUAL:
+AUDIO: 'No drop. On a truthfulness benchmark, it actually nudged up. Fewer tokens, same answer. And importantly, that\'s their headline, not mine. So, the real proof is whether the input savings even matter against the other'
+
+[07:14] [scene:talk]
+VISUAL:
+AUDIO: 'half of your bill. Here\'s the reframe. Headroom cuts what the model takes in. Caveman, a trick this channel covered already, cuts what the model writes. Input versus output, two faucets on the'
+
+[07:27] [scene:talk]
+VISUAL:
+AUDIO: 'same sink and you can run both. Most token saving advice you see, terse prompts, shorter answers, lies entirely on the output side. Headroom is the half almost no one optimizes. The giant noisy logs and tool'
+
+[07:40] [scene:talk]
+VISUAL:
+AUDIO: 'outputs the model is forced to take in on every turn. Pair the input side cut with the output side cut and you\'re trimming both ends of the same bill. So, the real question is which half is'
+
+[07:52] [scene:talk]
+VISUAL:
+AUDIO: 'actually costing you more? So, which actually saves you more? Cutting the input or cutting the output? Headroom or caveman? Tell me which side you\'re on in the comments.'
+
+[08:04] [scene:talk]
+VISUAL:
+AUDIO: 'And subscribe for more honest, hands-on artificial intelligence tooling.'

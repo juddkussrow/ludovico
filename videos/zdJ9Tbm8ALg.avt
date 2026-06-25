@@ -1,0 +1,283 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Quad RF: A Closer Look
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=zdJ9Tbm8ALg
+upload_date: 20260601
+transcript_source: captions
+route: text
+
+---
+
+[00:02] [scene:talk]
+VISUAL:
+AUDIO: 'Introducing the Quad RF, a four-channel transceiver for beamforming and [music] experimenting with the spatial domain of wireless. It\'s a low-cost development kit that lets you do things that no other software-defined radio can.'
+
+[00:14] [scene:talk]
+VISUAL:
+AUDIO: '&gt;&gt; [music] &gt;&gt; With a Raspberry Pi 5 integrated in a beautiful enclosure, it\'s packed with fully open-source software. Example programs include a radio camera [music] mode that we like to call RF vision. It lets you see wireless signals with'
+
+[00:26] [scene:talk]
+VISUAL:
+AUDIO: 'color-coded frequency. By mounting your phone on the back, you can enable augmented reality mode and see the invisible wireless world that\'s been around you all along. So, we\'re going to make a quick Crowd'
+
+[00:53] [scene:talk]
+VISUAL:
+AUDIO: 'Supply video [music] to show off the Quad RF. It\'s right here. It\'s got four antennas. It\'s full duplex, so you can transmit and receive at the same time. And each of the four antennas are'
+
+[01:05] [scene:talk]
+VISUAL:
+AUDIO: 'completely independent digital signal train chains. 4x4 MIMO, beamforming, all the cool applications are possible with this. You can actually open it up very easily and see inside.'
+
+[01:17] [scene:talk]
+VISUAL:
+AUDIO: 'So, we\'ve got this RF board, which is a custom design. It takes radio signals from the four antennas. It has a switch that can switch between left and right-hand polarization, receive or transmit. For receive, it goes through an LNA and'
+
+[01:31] [scene:talk]
+VISUAL:
+AUDIO: 'then into a mixer chip that down-converts it to baseband. We then have custom analog-digital converters designed out of differential transistors that convert that to a signal that the FPGA, which is a Lattice'
+
+[01:43] [scene:talk]
+VISUAL:
+AUDIO: 'ECP5, can interpret. Lots of DSP on there. On the transmit side, we have 1-W power amplifiers on each of the antennas. And those are driven by up-convert mixers, which are a'
+
+[01:56] [scene:talk]
+VISUAL:
+AUDIO: 'Maxim/Analog Devices part. And the DACs are also custom, and they are designed on the board to take data again from the FPGA. The FPGA has a lot of signal processing'
+
+[02:09] [scene:talk]
+VISUAL:
+AUDIO: 'power, can do the beam forming, it can do up and down convert filtering, a lot of nice things. You can configure all that stuff in software. But the interesting thing is that data is actually exchanged with the Raspberry'
+
+[02:21] [scene:talk]
+VISUAL:
+AUDIO: 'Pi using these flexible flat connectors using the MIPI protocol. So this is normally for cameras or displays. The Raspberry has a camera port and a display port.'
+
+[02:33] [scene:talk]
+VISUAL:
+AUDIO: 'And these are really good interfaces. They\'re super high speed, 5.6 gigabits per second total. Low latency, very robust. And so all that data is shipped over to the Pi, memory mapped in place, and you can'
+
+[02:46] [scene:talk]
+VISUAL:
+AUDIO: 'write your own custom applications on the Raspberry Pi that access that and do software-defined radio processing. Or you can download many of the very popular applications out there like GNU Radio, Q Link Radio, many, many things'
+
+[02:58] [scene:talk]
+VISUAL:
+AUDIO: 'that can run directly on the Pi. But if the Pi isn\'t powerful enough for your application, you can take that data and send it over the ports. So we have gigabit Ethernet, which is very fast interface and can easily stream 40'
+
+[03:11] [scene:talk]
+VISUAL:
+AUDIO: 'megabits per second. There\'s USB high speed interfaces, and then there\'s also Wi-Fi built in. And so today we\'re going to show you connecting to this Raspberry with our laptop'
+
+[03:24] [scene:talk]
+VISUAL:
+AUDIO: 'and interfacing with Wi-Fi. And it\'s pretty easy to do. So when you plug in the Quad RF, it generates a Wi-Fi access point, and so you can go on your laptop and take a look for it. Here it is, Quad RF'
+
+[03:36] [scene:talk]
+VISUAL:
+AUDIO: '2, cuz we got two of these guys. You just go and connect, and it should automatically open up a browser window that gives you the Quad RF desktop. So this is actually on the Raspberry Pi.'
+
+[03:49] [scene:talk]
+VISUAL:
+AUDIO: 'We it preloaded with a bunch of cool applications. Everything is open source. All the drivers, everything for the Quarter F is open source, so you can hack it, do whatever you want, come up with your own applications.'
+
+[04:02] [scene:talk]
+VISUAL:
+AUDIO: 'Uh so, when I log in using the web browser, by the way, another way to do it is you can do quarter F forward slash, that\'s the host name. But, I like to go over here and open up the some of these options. Uh one of'
+
+[04:14] [scene:talk]
+VISUAL:
+AUDIO: 'them is the GUI, the control GUI for Quarter F. So, that gives you a little window on the side here. This has all the receive controls, so you can change the polarization of the antennas between right and left hand,'
+
+[04:27] [scene:talk]
+VISUAL:
+AUDIO: 'see if the PLL is locked, I set the carrier frequencies, gains, bandwidth of different filters, beam forming configurations, and the same thing goes for transmit. So, carrier frequencies and gains. Finally,'
+
+[04:39] [scene:talk]
+VISUAL:
+AUDIO: 'you can also actually configure Wi-Fi on the Quarter F, so it can connect to your home network, and then you can use apt-get or have access to the internet, and that way your laptop and the Quarter'
+
+[04:51] [scene:talk]
+VISUAL:
+AUDIO: 'F can both be connected to your home router. But, today we\'ll just directly connect to the Quarter F. So, over here, there\'s a few different programs we have to show what\'s possible. One of them that\'s very popular is GNU Radio.'
+
+[05:03] [scene:talk]
+VISUAL:
+AUDIO: 'So, this actually runs on board, and there\'s many examples that GNU Radio has that you can practice with. There\'s Wi-Fi decoding, there\'s packet radio applications, very cool stuff. All'
+
+[05:15] [scene:talk]
+VISUAL:
+AUDIO: 'right, so we\'re going to try another cool application of the Quarter F. This is the ability to see the radio environment environment around you. Uh it does this by detecting the time difference between radio signals hitting'
+
+[05:28] [scene:talk]
+VISUAL:
+AUDIO: 'the different antennas, and then plotting that information on the display with different colors for different frequencies. So, you can simultaneously see all frequencies and RF signals around you and know where they\'re coming'
+
+[05:41] [scene:talk]
+VISUAL:
+AUDIO: 'from. So, to do this, you open up this spatial RF program, and uh we have Andy over here. Uh and you can see these two blobs are the two different cameras. They have similar frequencies, so the color is similar.'
+
+[05:53] [scene:talk]
+VISUAL:
+AUDIO: 'But, as he moves around, you can see that the different signals are in different spots. Now, one cool thing is you can actually'
+
+[06:06] [scene:talk]
+VISUAL:
+AUDIO: 'If you don\'t move, Andy, I can try to hit one of these. So, it mostly filters out the other one and just focuses on this one. Uh now, if I close this program, I can actually open up a different program'
+
+[06:19] [scene:talk]
+VISUAL:
+AUDIO: 'like the camera decoder. So, this uses the radio to actually decode the wireless signal from the camera. And there it is. I don\'t know if you can see me. Yep, there he is. Um it\'s'
+
+[06:31] [scene:talk]
+VISUAL:
+AUDIO: 'doing a pretty good job decoding the NTSC. Now, the reason it\'s not perfect is we didn\'t lock onto the exact frequency, and we probably don\'t have our gain set appropriately. So, if I tune the frequency slightly, I'
+
+[06:43] [scene:talk]
+VISUAL:
+AUDIO: 'can probably get the video to be a little bit better. There you go, that looks real nice. Oop, almost. Oop, that\'s very cool. So, the another thing you can do is you can close this guy'
+
+[06:55] [scene:talk]
+VISUAL:
+AUDIO: 'and open up a different program like Q Radio Link. And it\'s a bit of a larger window, so I have to open this up. But, you can turn on the receiver here. And there you go, that is also looking'
+
+[07:09] [scene:talk]
+VISUAL:
+AUDIO: 'at the wireless camera that he\'s holding. Now, now I can see clearly that the signal is not exactly centered. So, if I go over here on the radio GUI, I can hit up and down arrow'
+
+[07:22] [scene:talk]
+VISUAL:
+AUDIO: 'and tune this more precisely. So, let\'s get that just right. Uh oops, over. That looks pretty good. Pretty well centered.'
+
+[07:34] [scene:talk]
+VISUAL:
+AUDIO: 'And so, if I if I close this program and I go back to the the decoder, maybe we\'ll get a little bit of better decode. But yeah, we get a pretty good signal.'
+
+[07:47] [scene:talk]
+VISUAL:
+AUDIO: 'Okay, so another feature we have is augmented reality. So this allows you to combine a normal camera feed from your'
+
+[07:59] [scene:talk]
+VISUAL:
+AUDIO: 'laptop or your camera with the direction of arrival information from the radio, so you can actually see where the radio signal is actually coming from. So to do this, there\'s actually a separate website that shows up if you look in your browser, quadraf/ar for augmented'
+
+[08:12] [scene:talk]
+VISUAL:
+AUDIO: 'reality. Does a live stream. It connects to my local camera and shows that video feed, but it also superimposes the radio information with these colored dots. So it right now it\'s picking up a little'
+
+[08:25] [scene:talk]
+VISUAL:
+AUDIO: 'bit of noise in different directions. What I\'ve got here is a function generator. You can buy this on Amazon. It allows you to change the frequency and power, and if I turn it on, it should show'
+
+[08:37] [scene:talk]
+VISUAL:
+AUDIO: 'the signal coming out. It\'s pretty neat. I can also change the frequency, and the color changes when I do that. So I can move around'
+
+[08:50] [scene:talk]
+VISUAL:
+AUDIO: 'over here, here. Follows pretty well. You can go off the screen. Doesn\'t get confused. Now this is not'
+
+[09:03] [scene:talk]
+VISUAL:
+AUDIO: 'computer vision. I know a lot of people would say, "Hey, that\'s tracking or computer vision." Well, you can show if I turn the antenna around, it doesn\'t show up. And if I put an object in between, like a chair,'
+
+[09:17] [scene:talk]
+VISUAL:
+AUDIO: 'let\'s see if this works. It kind of goes through. It\'s slightly reflected, it looks like, off the plastic. Maybe if I try the chair, interesting.'
+
+[09:31] [scene:talk]
+VISUAL:
+AUDIO: 'It gets a little bit distorted by the chair, but it does it does track the object. So, that\'s a really cool feature. We\'re going to actually try it on a drone now and see it tracking a much faster object.'
+
+[09:44] [scene:talk]
+VISUAL:
+AUDIO: 'So, in order to go mobile, we can take our phone and mount it on the back of the QuadRF. And this allows us to combine the radio signals coming from the QuadRF and the camera of our phone to get a display that has an augmented'
+
+[09:57] [scene:talk]
+VISUAL:
+AUDIO: 'reality real-time uh information about all the radio signals around us. So, this is really cool. We took it outside and tried it with a drone. Uh in this case, Andy\'s got the drone here. It\'s not initially calibrated, so'
+
+[10:10] [scene:talk]
+VISUAL:
+AUDIO: 'if you use the touchscreen, you can get it to line up perfectly. After that, you get the alignment between the camera and the radio just about perfect. Uh and once you\'ve done that,'
+
+[10:22] [scene:talk]
+VISUAL:
+AUDIO: 'it tracks continuously. So, the object can be anywhere and you can just see it. It\'s pretty obvious. So, you can turn around. Nothing over here, but then if you go back, you\'ll see'
+
+[10:36] [scene:talk]
+VISUAL:
+AUDIO: 'flying. Andy\'s got this flying. Wow. Perfect tracking. Works through leaves. And so, when you turn on the other'
+
+[10:48] [scene:talk]
+VISUAL:
+AUDIO: 'radio, there\'s actually two cameras on there. One of them is used for control of the drone. The other one is just a camera. So, now we got two colors, which are the two different transmitters'
+
+[11:00] [scene:talk]
+VISUAL:
+AUDIO: 'that are on the drone. And they tend to line up pretty well. Uh sometimes they get a little bit different. But, this thing actually scans the entire C-band'
+
+[11:13] [scene:talk]
+VISUAL:
+AUDIO: 'at 30 frames per second. So, you can get all the different frequencies and transmitters simultaneously in your environment. Very fast tracking.'
+
+[11:26] [scene:talk]
+VISUAL:
+AUDIO: 'Sometimes you see pink over over That\'s actually Andy on the controller. Sometimes it sends bursts of control data. And you can see that as a separate transmitter.'
+
+[11:38] [scene:talk]
+VISUAL:
+AUDIO: 'Uh but the dominant transmissions are coming from the continuous video feed. Can go behind objects, no problem if'
+
+[11:51] [scene:talk]
+VISUAL:
+AUDIO: 'they\'re thin enough. It looks like that was paper. Now, if you get close to a wall,'
+
+[12:03] [scene:talk]
+VISUAL:
+AUDIO: 'you might see some reflections off the wall, so it starts to move a little bit to the right there. It\'s a very interesting way to probe the channel, the wireless channel. If'
+
+[12:16] [scene:talk]
+VISUAL:
+AUDIO: 'there\'s a tree in the way, it actually blocked the signal, but it comes right back. And uh continues to track it very well.'
+
+[12:28] [scene:talk]
+VISUAL:
+AUDIO: 'Now, if you have a faster-moving drone that\'s uh going a longer distance, we found it still works quite well. You may have to change the gain settings'
+
+[12:41] [scene:talk]
+VISUAL:
+AUDIO: 'on the radio. So, here we played around with it a little bit to get to not saturate too much cuz when we\'re close by, it\'s a pretty powerful signal. But once you tune it in, it it starts to line up quite well.'
+
+[12:54] [scene:talk]
+VISUAL:
+AUDIO: 'And uh we can go pretty long distances and continue to pick it up. I actually couldn\'t even see the drone sometimes with my own eyes.'
+
+[13:07] [scene:talk]
+VISUAL:
+AUDIO: 'And this thing could still track it. It was better to actually just watch the colored uh wireless signal. Okay, and there you have it. The Quad RF, a kit that will expand the possibilities of software-defined radio.'
+
+[13:19] [scene:talk]
+VISUAL:
+AUDIO: 'Now, there\'s one more thing. If you open your kit up and take the RF PCB out, you can put it into a bigger structure called the Moon RF phased array antenna. This antenna has 240 elements and is capable of reaching the Moon and back'
+
+[13:33] [scene:talk]
+VISUAL:
+AUDIO: 'for Earth-Moon-Earth communication. You can actually build these larger arrays yourself. We\'ve open-sourced the design files so you can customize the scale or layout. To assemble, you just place the tiles'
+
+[13:45] [scene:talk]
+VISUAL:
+AUDIO: 'into the antenna structure, which has a bunch of pogo pins that make contact between the individual antennas and the RF boards. 12-V power is fed from the center two battery terminals and distributed through the antenna frame.'
+
+[13:58] [scene:talk]
+VISUAL:
+AUDIO: 'Data is exchanged between boards by daisy-chaining the FFC cables, which were in the Quad RF kit, normally used to connect the single Raspberry Pi. You still only need one Raspberry Pi.'
+
+[14:10] [scene:talk]
+VISUAL:
+AUDIO: 'That\'s because the computation is distributed in a pipelined way across the many FPGAs. There\'s a lot more to talk about like the synchronization and the calibration of the antennas, and you can read about that on our website. I\'ll also leave it for a future video. But in'
+
+[14:22] [scene:talk]
+VISUAL:
+AUDIO: 'the meantime, we\'re excited to launch this crowd supply campaign for the Quad RF.'

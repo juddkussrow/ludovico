@@ -1,0 +1,107 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Physically Controllable Relighting of Photographs - SIGGRAPH 2025
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=XFJCT3D8t0M
+upload_date: 20250727
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'If you\'ve ever used a program like Blender, you know how easy it is to edit the lighting of a 3D scene. It\'s as simple as dragging around some virtual spheres. Similarly, if you\'re in a photo studio like I am, physical lights can be adjusted in order to create the perfect'
+
+[00:13] [scene:talk]
+VISUAL:
+AUDIO: 'shot. But once we\'ve captured a photograph with a camera, the lighting is fixed. Image editing programs like Photoshop only let us adjust low-level characteristics like contrast and saturation.'
+
+[00:25] [scene:talk]
+VISUAL:
+AUDIO: 'If only we could bring the lighting control available in Blender to photo editing software like Photoshop. Well, this is exactly what we\'ve accomplished in our latest work. Physically controllable relighting of'
+
+[00:37] [scene:talk]
+VISUAL:
+AUDIO: 'photographs. Our method is able to relight everyday images with complete control. We can change the ambient lighting environment and even add new light sources to the scene. So, let\'s get into the details of how we pulled'
+
+[00:50] [scene:talk]
+VISUAL:
+AUDIO: 'this off. [Music] Before explaining how our method works, it\'s useful to explain how someone might tackle the same task using existing tools. Logically, if we want to relight'
+
+[01:02] [scene:talk]
+VISUAL:
+AUDIO: 'an image, it makes sense to remove the lighting that\'s already present in the scene. Fortunately, we\'ve previously developed a method to do this. It\'s called intrinsic decomposition, and it can give us a delit version of any'
+
+[01:14] [scene:talk]
+VISUAL:
+AUDIO: 'image. Now that we\'ve removed the light from the scene, we can use a program like Blender in order to render a new illumination. But there\'s one pretty big problem. Our image is just a 2D plane. In order to solve this, we can use a'
+
+[01:27] [scene:talk]
+VISUAL:
+AUDIO: 'method like Moji, which allows us to estimate the 3D shape of the scene, giving us a mesh like this. Now, we can render it under a new lighting environment, just like this one. All right, let\'s go into render view to see'
+
+[01:40] [scene:talk]
+VISUAL:
+AUDIO: 'our beautiful creation. Okay, it\'s pretty bad. The geometry is inaccurate. There are holes in the mesh. and we haven\'t accounted for any of the'
+
+[01:52] [scene:talk]
+VISUAL:
+AUDIO: 'materials in the scene, but there are some redeeming qualities of our result so far. It\'s physically accurate and fully controllable. We can easily add all sorts of different light sources into the scene and moves them around'
+
+[02:05] [scene:talk]
+VISUAL:
+AUDIO: 'freely. Now, all we need is a way to convert this physically accurate but kind of ugly rendering into a real photograph, which is where our paper comes in. We\'ve developed a neural network that'
+
+[02:21] [scene:talk]
+VISUAL:
+AUDIO: 'can convert this rough rendering into a realistic photograph. This network can be thought of as a type of neural renderer. Training this neural renderer requires thousands of input and output pairs consisting of approximate'
+
+[02:33] [scene:talk]
+VISUAL:
+AUDIO: 'renderings and their real image counterparts. Getting the real images is easy. There are millions of unlabeled images available all over the internet. But how can we get the approximate'
+
+[02:45] [scene:talk]
+VISUAL:
+AUDIO: 'renderings for each of these images to use as input? To create this data, we use a differentiable rendering engine called Mitsuba, which gives us a way to alter aspects of a rendered scene to match a target image. Specifically, we add'
+
+[02:58] [scene:talk]
+VISUAL:
+AUDIO: 'multiple virtual light sources into the 3D scene we developed in the previous section. First, we add an environment map to represent the global illumination outside of the camera\'s view. To represent local light sources visible in'
+
+[03:12] [scene:talk]
+VISUAL:
+AUDIO: 'the image, we place a grid of point lights in front of the camera. We then iteratively optimize the values of the environment map and the positions, colors, and intensities of the point lights.'
+
+[03:24] [scene:talk]
+VISUAL:
+AUDIO: 'More precisely, we render the scene, compare it to our target image, and then take a small step with respect to the lighting parameters. After many steps, we eventually converge on an'
+
+[03:36] [scene:talk]
+VISUAL:
+AUDIO: 'approximation of the scene\'s lighting configuration. With this construction, we now have an input rendering that corresponds to our real image output. We repeat this process for thousands of real photographs to create our training'
+
+[03:48] [scene:talk]
+VISUAL:
+AUDIO: 'data. You can learn more about this process in our paper. Since our neural renderer is trained on diverse images from the internet, it works well in all sorts of scenarios. We can change night into day'
+
+[04:02] [scene:talk]
+VISUAL:
+AUDIO: 'or day into night. We can turn the lights off or turn them on. Our neural renderer is not sensitive to small changes in the input. So, we can'
+
+[04:14] [scene:talk]
+VISUAL:
+AUDIO: 'create smooth video results by moving light sources around the scene. Our method supports any virtual light sources that can be simulated with a rendering engine like spotlights or area lights.'
+
+[04:28] [scene:talk]
+VISUAL:
+AUDIO: 'We can even simulate a video projector. [Music] Our network runs in 1 to 2 seconds, meaning it can be incorporated into a'
+
+[04:41] [scene:talk]
+VISUAL:
+AUDIO: 'user interface to interactively edit the lighting of the scene. You can find more information about our paper on our project page. Thanks for watching.'
+
+[04:53] [scene:talk]
+VISUAL:
+AUDIO: '[Music]'

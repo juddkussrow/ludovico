@@ -1,0 +1,199 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: This Is The Best Local Model Runner For Apple Silicon (oMLX)
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=EsLwzxTz-A4
+upload_date: 20260508
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'This is OMLX. It\'s a very exciting project, which is essentially a specialized inference engine designed to squeeze every last drop of performance out of your Apple silicon. If you\'re a Mac user, you\'re going to be very excited about this one. OMLX is'
+
+[00:13] [scene:talk]
+VISUAL:
+AUDIO: 'essentially attempting to solve the biggest bottleneck we have on local hardware, which is the memory tax. In this video, we\'ll take a look at OMLX, see how it works, and we\'ll do a little test run and compare it with one of the'
+
+[00:26] [scene:talk]
+VISUAL:
+AUDIO: 'heavyweights LM Studio to see if this new tool can really be the future of running local AI models on your Mac. It\'s going to be a lot of fun, so let\'s dive into it.'
+
+[00:38] [scene:talk]
+VISUAL:
+AUDIO: '&gt;&gt; [music] &gt;&gt; So, what exactly is OMLX? At its core, it\'s a runtime built specifically on top of Apple\'s MLX framework, and unlike generalist tools that try to support'
+
+[00:51] [scene:talk]
+VISUAL:
+AUDIO: 'every GPU under the sun, MLX is purpose-built by the Apple silicon team to exploit the unified memory architecture that powers Macs specifically. In a traditional PC, your'
+
+[01:03] [scene:talk]
+VISUAL:
+AUDIO: 'CPU and your GPU have separate memory pools, meaning data like your models\' weights have to be constantly copied back and forth over the PCI bus. But, MLX eliminates that copying entirely.'
+
+[01:16] [scene:talk]
+VISUAL:
+AUDIO: 'Because the CPU and GPU share the exact same physical memory, MLX uses zero-copy arrays. When the GPU finishes a calculation, the CPU can read the results instantly without moving a'
+
+[01:29] [scene:talk]
+VISUAL:
+AUDIO: 'single byte. It also uses lazy computation, meaning it doesn\'t actually execute a math operation until the absolute last second when the output is needed, it to optimize the entire calculation graph on the fly. But, where'
+
+[01:43] [scene:talk]
+VISUAL:
+AUDIO: 'OMLX differs from your standard LM Studio setup is how it manages the KV cache. In a typical LLM session, every word of your conversation history has to be remembered in your expensive RAM, but'
+
+[01:56] [scene:talk]
+VISUAL:
+AUDIO: 'OMLX introduces a two-tier system. It keeps the immediate context in your unified memory for speed, but it freezes the older parts of your conversation, those massive system prompts and tool'
+
+[02:09] [scene:talk]
+VISUAL:
+AUDIO: 'definitions, and swaps them onto your SSD. And when you compare this to LM Studio, the difference is immediate. And yes, it\'s incredibly stable and compatible, but the problem is that it wants to hold onto the entire memory'
+
+[02:22] [scene:talk]
+VISUAL:
+AUDIO: 'history in a hot state. OMLX is more like a modern operating system. It\'s smart enough to know what data needs to be in your brain right now and what can be paged to disk. So, let\'s spin up OMLX and try it out for ourselves. The'
+
+[02:36] [scene:talk]
+VISUAL:
+AUDIO: 'interface is quite intuitive. Right off the bat, we get this window where we can specify our desired location for our server and launch it right away. After that, we get prompted to provide an API key, so let\'s do that. And'
+
+[02:49] [scene:talk]
+VISUAL:
+AUDIO: 'finally, we land on this dashboard, which is the main entry point for your OMLX server. And from here, I went ahead and downloaded the Qwen 3.6 35 billion parameter 4-bit model, which we will use'
+
+[03:03] [scene:talk]
+VISUAL:
+AUDIO: 'for our tests. I have also set up this empty repository with an agents.md file where I will ask the model to create a simple web app where you can search for different movies, wishlist them, and'
+
+[03:16] [scene:talk]
+VISUAL:
+AUDIO: 'rate them using your MovieDB API key. Nothing too fancy for this demonstration, just a simple coding test to see how it might potentially perform a real-world coding task. And on the dashboard page, we get the section which'
+
+[03:30] [scene:talk]
+VISUAL:
+AUDIO: 'provides us with ready-to-use code snippets for different AI agent harnesses that we can run. And for this demo, I will be using the Code X CLI to conduct these tests. Now, you might be wondering why I\'m not just using the'
+
+[03:43] [scene:talk]
+VISUAL:
+AUDIO: 'official Claude Code CLI for this. Well, the reality is that on a MacBook M2, every token counts. And if you look at Claude\'s context stats, right out the gate on a totally blank slate, Claude'
+
+[03:55] [scene:talk]
+VISUAL:
+AUDIO: 'code eats up about 16.2k tokens just for its own system prompts and tool definitions. And in a 32k window, this leaves us with only 16k tokens for the'
+
+[04:07] [scene:talk]
+VISUAL:
+AUDIO: 'actual project, which is tiny when you\'re building a full-stack application. But on the other hand, I found that Codex is much more leaner. It doesn\'t bloat the base weight of the conversation, which gives us a more'
+
+[04:19] [scene:talk]
+VISUAL:
+AUDIO: 'generous runway to actually write code before we hit that context ceiling. All right, so now I\'m going to launch Codex with this simple command provided here, and then I\'m going to give it a simple'
+
+[04:31] [scene:talk]
+VISUAL:
+AUDIO: 'startup prompt explaining our task and get it going. And as it\'s cooking here on the right, you can see in real time how the session is performing, how many tokens are being produced, how many of them are being cached, and the overall'
+
+[04:44] [scene:talk]
+VISUAL:
+AUDIO: 'cache efficiency percentage. And it\'s also very handy to see how many tokens on average are processed in a second. Now, overall, it took roughly 20 minutes for this 35 billion parameter Qwen 3.6'
+
+[04:56] [scene:talk]
+VISUAL:
+AUDIO: 'model running on my M2 MacBook Pro to get through this task, and this is to be expected because this is a very heavy undertaking for this model. Now, there were two or three instances where I hit'
+
+[05:09] [scene:talk]
+VISUAL:
+AUDIO: 'a 400 error because the prompt exceeded the 30k2 context limit on my M2 MacBook. In any other tool, it would be a total project killer. And normally, if I would'
+
+[05:21] [scene:talk]
+VISUAL:
+AUDIO: 'run {slash} clear, it would wipe the AI\'s short-term memory, often leading to hallucinations because the model forgets the code it literally just wrote. But this is where OMLX\'s persistent SSD caching blew me away. Even though I'
+
+[05:35] [scene:talk]
+VISUAL:
+AUDIO: 'cleared the session in Codex, the actual computational state of my project were still sitting on my SSD. So, the The I gave Codex a new prompt to continue where it left off, OMLX recognized the'
+
+[05:48] [scene:talk]
+VISUAL:
+AUDIO: 'prefix and instantly hydrated the model\'s brain from the disk, and instead of hallucinating or starting from scratch, it picked up right where it left off. So, the cache efficiency'
+
+[06:00] [scene:talk]
+VISUAL:
+AUDIO: 'really helps in this case. And by the end of this task, we can see here that Qwen 3.6 with the help of OMLX was able to get through the task by churning out 1.78 million tokens, and roughly 1. 59 million of them were cached, so we ended'
+
+[06:15] [scene:talk]
+VISUAL:
+AUDIO: 'up with an 89% cache efficiency, which is pretty massive. And for the app itself, it looks quite decent. We\'re able to search for movies, add them to our watch list, and rate them. But once'
+
+[06:27] [scene:talk]
+VISUAL:
+AUDIO: 'you refresh the page, the watch list resets. So, I\'m guessing it didn\'t implement the database storage solution properly, but solid effort overall nonetheless. Now, this all looks impressive, but I wanted to find out how'
+
+[06:40] [scene:talk]
+VISUAL:
+AUDIO: 'does this performance stacks up to a heavyweight model runner like LM Studio. So, I decided to run the same task with the same Qwen 3.6 model using the same context window and constraints, and see'
+
+[06:53] [scene:talk]
+VISUAL:
+AUDIO: 'how it performs. And honestly, I wasn\'t expecting this, but I actually got a worse performance on LM Studio. So, the task itself took roughly 35 minutes to finish. That\'s already 15 minutes more'
+
+[07:06] [scene:talk]
+VISUAL:
+AUDIO: 'than on MLX, and I also noticed that while running this task, LM Studio was using every last as juice of my MacBook. So much so that I couldn\'t even watch a video on a second monitor because it was'
+
+[07:18] [scene:talk]
+VISUAL:
+AUDIO: 'lagging due to severe RAM shortage. Now, I did not have the same problem with OMLX because when running this on OMLX, I was easily able to browse the web, watch videos, or do any other task while'
+
+[07:31] [scene:talk]
+VISUAL:
+AUDIO: 'Codex was still running in the background. But this was nearly impossible to do on LM Studio. And look at these stats. What shocked me even more is that the average token per second speed on LM Studio was 16 tokens'
+
+[07:43] [scene:talk]
+VISUAL:
+AUDIO: 'per second and on OMLX it was roughly 47. So, that actually explains why the task took 15 minutes longer to finish. However, I do have to give credit where'
+
+[07:55] [scene:talk]
+VISUAL:
+AUDIO: 'credit is due. LM Studio did not throw a single 400 error due to context limit bottlenecks like OMLX. So, the context management on LM Studio is very stable and running perfectly. And if we look at'
+
+[08:08] [scene:talk]
+VISUAL:
+AUDIO: 'the final result, it was very similar. I didn\'t have any fancy animations this time, but honestly this feels like comparing the same output with different seed values for for the same task on the same model. So, I\'m not going to jump'
+
+[08:21] [scene:talk]
+VISUAL:
+AUDIO: 'into any conclusions here. It\'s the same Qwen 3.6 model. You can judge Qwen\'s model\'s output here for yourselves. So, what is the final verdict? Well, I must say I am very very impressed with OMLX'
+
+[08:35] [scene:talk]
+VISUAL:
+AUDIO: 'performance. If you\'re on a MacBook with a limited RAM and you want to actually use your computer while running a local AI agent in the background, then OMLX is a perfect tool for that. It effectively'
+
+[08:47] [scene:talk]
+VISUAL:
+AUDIO: 'gives you a RAM extension by utilizing your high-speed SSD combined with that sweet MLX framework that lets us run models more smoothly on Apple silicon. But yes, the occasional 400 error means'
+
+[09:00] [scene:talk]
+VISUAL:
+AUDIO: 'that you will have to be more hands-on with it and maybe do a clear command once in a while. But that is the trade-off you get for a three times faster generation speed, but I think it is well worth it in this case. So, these'
+
+[09:13] [scene:talk]
+VISUAL:
+AUDIO: 'kinds of projects like OMLX are proving that we don\'t necessarily need 128 GB of RAM to run powerful agents. We just need a smarter way to manage the memory we'
+
+[09:25] [scene:talk]
+VISUAL:
+AUDIO: 'already have on our MacBooks. And we actually ran a survey a few months ago and found out that most of our viewers are Mac users. So, I\'m actually curious to find out, Have you tried OMLX on your own machines? What has been the'
+
+[09:39] [scene:talk]
+VISUAL:
+AUDIO: 'experience so far? Let us know in the comments section down below. So, there you have it, folks. That is OMLX in a nutshell. And folks, if you like these types of technical breakdowns, please let me know by smashing that like button underneath the video. And also, don\'t'
+
+[09:52] [scene:talk]
+VISUAL:
+AUDIO: 'forget to subscribe to our channel. This has been Andrus from Better Stack, and I will see you in the next videos. &gt;&gt; [music]'

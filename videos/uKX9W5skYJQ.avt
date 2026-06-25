@@ -1,0 +1,591 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Betaflight AUTOTUNE! review
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=uKX9W5skYJQ
+upload_date: 20260531
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'Auto Tune? Are you kidding me? Auto Tune Betaflight now has Auto Tune? This is a new feature that was added in Betaflight in the master branch for the 2026 release when that is coming up. It\'s in there now, you can check it out, and it begs the question, what does it do? How'
+
+[00:13] [scene:talk]
+VISUAL:
+AUDIO: 'do you work it? What do you have to fly? How does the whole thing work out? What\'s this graph behind me? What what does that even mean? So, in this video, we\'re going to get into what you need to do to fly for auto tuning, and then also how well, you'
+
+[00:26] [scene:talk]
+VISUAL:
+AUDIO: 'know, what some of this graph stuff means. And then, how well does it work? It actually gives you ideas of what your should adjust your pids to. So, all right, is it good? Yet? Is it going to be good in the future?'
+
+[00:39] [scene:talk]
+VISUAL:
+AUDIO: 'We got to check it out. Now, as of this video, Auto Tune is not in the stable release of Betaflight, which is the 2025 12 release. The 2026 release of Betaflight should be coming up, I would have think, at least in'
+
+[00:51] [scene:talk]
+VISUAL:
+AUDIO: '2026. Uh should be coming up this summer or maybe even this winter. Again, with open source projects and volunteers, you kind of get what you get and you don\'t get upset. But, it is a new feature in the master branch of the code for'
+
+[01:04] [scene:talk]
+VISUAL:
+AUDIO: 'Betaflight. Now, if you\'re not seeing it in the configurator, again, cuz it\'s in the master, and you can see that up here. This is the master.app.betaflight.com that you can load anytime from either Google Chrome or Windows Edge'
+
+[01:16] [scene:talk]
+VISUAL:
+AUDIO: 'browsers. And when you go to that site, you will see this Auto Tune right here. Now, that won\'t have these graphs up behind it here. That\'s I have a log loaded. And the other thing you\'ll see is if you connect to a flight'
+
+[01:28] [scene:talk]
+VISUAL:
+AUDIO: 'controller, you will also And it can be any flight controller. This is backward compatible, this master branch of the Betaflight app. You will also see it down here under the Auto Tune box. So, it\'s the same box, same graphs over'
+
+[01:40] [scene:talk]
+VISUAL:
+AUDIO: 'here, same page in either way. So, you can connect to a flight controller and see it, or don\'t even have to have a connected to a flight controller. Now, to actually do Auto Tune in Betaflight, you\'ll need a couple things. First of all, you\'ll need to be on the latest'
+
+[01:53] [scene:talk]
+VISUAL:
+AUDIO: 'master branch as of this making of this video for Betaflight. Now, obviously when 2026 version of Betaflight comes out in the stable release, this will be included and you don\'t have to be on uh the master branch. You\'ll just be in'
+
+[02:06] [scene:talk]
+VISUAL:
+AUDIO: 'the 2026 stable release. The other thing you\'ll need to do is that you will need to make sure that when you flash Betaflight, you have this chirp option here selected. And you can see this is'
+
+[02:18] [scene:talk]
+VISUAL:
+AUDIO: 'the new configurator, and that\'s one of the options there is chirp. So, you\'ll need to make sure that that is checked when you flash up your flight controller uh to the 2026 release or the master branch if you\'re checking it out right'
+
+[02:30] [scene:talk]
+VISUAL:
+AUDIO: 'now. Now, that is a specific mode. So, with chirp flash to your flight controller, you will see a chirp mode here. You have to put that on a switch. You can see I have it on a switch aux three here. And then when I flip aux three to the middle position, it enters'
+
+[02:43] [scene:talk]
+VISUAL:
+AUDIO: 'into chirp mode. The other thing you\'ll need to have set up is black box logging. Uh we\'re going to take a log in flight and then put it in the analyzer there, load it into the analyzer that you saw in the beginning of the video,'
+
+[02:55] [scene:talk]
+VISUAL:
+AUDIO: 'and then it will analyze the log. Uh the other thing you\'ll need is here in the debug in black box. You\'ll need to make sure that that is set to chirp uh [music] for the debug mode. Finally, in the help for the chirp mode, if you type'
+
+[03:07] [scene:talk]
+VISUAL:
+AUDIO: 'in get black box in the CLI, there\'s this black box high resolution, and you can see that that is set to off by default. Now, in the topics for chirp mode or the the help guides for chirp'
+
+[03:20] [scene:talk]
+VISUAL:
+AUDIO: 'mode, it says to turn that on. Essentially, that gives an extra digit of precision for your set point tracking. I\'m going to buck that a little bit because the issue I see with that as of right now at least is that'
+
+[03:32] [scene:talk]
+VISUAL:
+AUDIO: 'the black box explorer doesn\'t really work well and read the set point super well. Uh it\'s it\'s not scaled appropriately with this on. And in my experience, chirp mode will work with this on or off, and that extra digit of'
+
+[03:45] [scene:talk]
+VISUAL:
+AUDIO: 'precision is not absolutely really necessary. Uh I don\'t really see the value. You\'re not We\'re not moving the sticks that fast even with chirp mode. So, let it be that if you want to go strictly by the book, you\'d go into here'
+
+[03:57] [scene:talk]
+VISUAL:
+AUDIO: 'and you type in set black box and then you can just pick this high resolution and then put that to on. Again, I am going to not be doing that until at least black box explorer gets updated to'
+
+[04:09] [scene:talk]
+VISUAL:
+AUDIO: 'work with that on because again, the set point it\'s not scaled correctly. Now, the other thing you want to do before you do your first PID chirp flight is go up into your PID tuning tab and you should see your'
+
+[04:22] [scene:talk]
+VISUAL:
+AUDIO: 'sliders up here. There, we\'re going to I would just leave them at 1.0 the default and there, we\'re going to go ahead and roll back the stick response slider to zero and the dynamic damping slider to zero. In'
+
+[04:34] [scene:talk]
+VISUAL:
+AUDIO: 'general, stick response is good once the tune\'s all worked out, but we want to turn that down for now and dynamic damping just because they can muddy the waters a little bit for the chirp'
+
+[04:46] [scene:talk]
+VISUAL:
+AUDIO: 'analysis to be analyzed in the PID term. I should also give the warning that if you have a quadcopter like a 15-in or some other thing that is really really far away from the Betaflight\'s default.'
+
+[05:00] [scene:talk]
+VISUAL:
+AUDIO: 'So, the Betaflight\'s default is kind of centered around a 5-in freestyle / racing heavier kind of racing drone. Uh, it works fine for all the classes below it to get started with the chirp'
+
+[05:12] [scene:talk]
+VISUAL:
+AUDIO: 'and probably everything up to like a 9-in. Once you get like the 10-in, you know, 12-in, 13, 15-in, these defaults uh, and if you enter into chirp tuning'
+
+[05:25] [scene:talk]
+VISUAL:
+AUDIO: 'or just even try to take off, they might not work for you. Like as in it will crash. Um, and so, just keep that in mind. You can\'t be like having just whatever kind of big huge gigantic It\'s really the big'
+
+[05:37] [scene:talk]
+VISUAL:
+AUDIO: 'drones. You can\'t have some gigantic drone, load the Betaflight defaults, think, "Well, chirp is just going to work it all out for me." It\'s not. You\'re not going to be able to even take off and crash. You will crash even on the takeoff. So, if you\'re that kind of'
+
+[05:49] [scene:talk]
+VISUAL:
+AUDIO: 'level and if you\'re using a big drone, you should hopefully know some stuff about drone tuning. I term is the killer for you. You\'d want to reduce those I gains before you even try to take off, but nevertheless, we\'re not getting into'
+
+[06:01] [scene:talk]
+VISUAL:
+AUDIO: 'that right now. I have some videos on that kind of big drone tuning. I will drop those links down below if you want to check those out to safely get off the ground. All right, well, that\'s it for the setup. So, after that, you go out in the field and fly it and let\'s check out'
+
+[06:13] [scene:talk]
+VISUAL:
+AUDIO: 'what the moves you need to do to capture a good log with chirp mode. All right, so the first thing you want to do for a nice uh chirp tuning [music] flight is just a'
+
+[06:25] [scene:talk]
+VISUAL:
+AUDIO: 'throttle ramp. Just to get the full range of motor spectrum [music] and vibrations. You do a couple of those.'
+
+[06:37] [scene:talk]
+VISUAL:
+AUDIO: '&gt;&gt; [music] &gt;&gt; All right, after that, we\'re going to go ahead and get into our chirp modes. So, it\'s pretty straightforward. You have'
+
+[06:50] [scene:talk]
+VISUAL:
+AUDIO: '[music] it set up on a switch that I have right here. And then you get into a nice spot, a little bit of space, get some good throttle, and then [music] go ahead and switch it in. The first thing it\'s going to do, it\'s going to go on the roll axis. Now,'
+
+[07:02] [scene:talk]
+VISUAL:
+AUDIO: 'I should jump in here. You can also have angle mode turned on when you enter into chirp mode. What you would do for that is just have you switch into angle mode and then switch in the chirp mode. So, you\'d have it either through the same'
+
+[07:14] [scene:talk]
+VISUAL:
+AUDIO: 'aux switch at the same spot, so angle mode does switch in the chirp mode both at the same time, or two different switches. Uh I elect not to do that because if you are in angle mode, you are going to get some cross axis stabilization, right? If'
+
+[07:26] [scene:talk]
+VISUAL:
+AUDIO: 'it starts to go off on pitch or yaw or whatever, it\'s going angle mode\'s going to adjust for that, mostly pitch. Uh same thing for pitch, it\'s on roll. It\'s going to be giving some other inputs, whereas when it\'s in acro mode, if I'
+
+[07:39] [scene:talk]
+VISUAL:
+AUDIO: 'don\'t touch the sticks, there is no other input. And ideally, you don\'t touch the sticks, but it\'s not the end-all, be-all. Obviously, you don\'t want to run into stuff. You can see I was kind [music] of going'
+
+[07:51] [scene:talk]
+VISUAL:
+AUDIO: 'to the right there a little bit. And you\'re going to wait until up on the OSD here, [music] it\'s going to say chirp execution finished. So, there you go. You can see it execution finished. Now, we\'re good. Now, we can go into the next one.'
+
+[08:03] [scene:talk]
+VISUAL:
+AUDIO: '&gt;&gt; [music] &gt;&gt; So, in the next one, we\'re going to just stay up nice and high here. And then we\'re going to click it in and it\'s going to go into the pitch. So, you can see it\'s going to do its thing there. Keep an eye on things. If you need to make adjustments, little tiny'
+
+[08:16] [scene:talk]
+VISUAL:
+AUDIO: 'adjustments on the sticks, go ahead and do that, but ideally, try not to. Like here, just try not to touch [music] it at all. I\'m going to let it go until it gets to the execution finished right here at the end. You\'re right to get a little throttle.'
+
+[08:28] [scene:talk]
+VISUAL:
+AUDIO: 'And then the next one here, I\'m going to do the yaw. So, I\'m going to bring it back over here. And then just go ahead and enter that in.'
+
+[08:41] [scene:talk]
+VISUAL:
+AUDIO: 'Let that go. And we\'re going to let it do its yaw move. Now, we\'re going to do this one more time. And then we\'re going to get some uh the finishing moves [music] here for uh'
+
+[08:53] [scene:talk]
+VISUAL:
+AUDIO: 'chirp tune, which is some flips and rolls. So, we got two sets of the chirp execution finished. Ideally, it\'s not windy. It\'s kind of windy out here'
+
+[09:06] [scene:talk]
+VISUAL:
+AUDIO: 'today. Um but ideally, I don\'t know if it\'s going to [music] make that much difference. In the ideal scenario, it\'s not super windy. Chirp execution finished. Now, after that, we\'re just going to do some'
+
+[09:18] [scene:talk]
+VISUAL:
+AUDIO: 'simple flips and rolls, single axis. And we\'ll [music] get some yaw moves'
+
+[09:36] [scene:talk]
+VISUAL:
+AUDIO: 'here, too. I love the yaw moves. And that\'s it. That\'s all you need.'
+
+[09:52] [scene:talk]
+VISUAL:
+AUDIO: 'So, I would bring it in after that. I wouldn\'t start flying it around. I would just bring it in. The other thing I would try to do, it\'s not [music] super I don\'t know that it\'s super duper critical, but I always try to just end it nice with disarming'
+
+[10:05] [scene:talk]
+VISUAL:
+AUDIO: 'before we hit the ground. Now, once you get back from the field, we\'re going to go ahead and bring up Blackbox Explorer again. We\'re going to go to the auto tune page, and we\'re going to go up to this import Blackbox log. We\'re going to go ahead and select that. One thing that'
+
+[10:18] [scene:talk]
+VISUAL:
+AUDIO: 'is kind of weird is you want to have your log downloaded. You could just reference it right off the flight controller by hitting this mass storage, and you might have or probably hit that to actually get the log copied off of your computer, but you could just click this here, and then in the auto tune,'
+
+[10:31] [scene:talk]
+VISUAL:
+AUDIO: 'just go out to that drive letter that it\'s opening. But, it\'s going to run kind of slow, so that\'s up to you if you want to do it that way or copy it to your PC. But, once you do have it wherever you\'re going to put the log to'
+
+[10:43] [scene:talk]
+VISUAL:
+AUDIO: 'access it, one thing you have to do at least as of right now, you have to go ahead and hit this drop-down because it doesn\'t really recognize the Betaflight file path, which is BFL. It\'s looking for all these other ones, but BFL is not'
+
+[10:55] [scene:talk]
+VISUAL:
+AUDIO: 'one of them. So, anyways, um BFL, so we\'re just going to hit all files, and then I have a bunch of them here, which a bunch of testing. This was the one for that flight I just did, and we\'re going to go ahead and check it out. Now, I'
+
+[11:07] [scene:talk]
+VISUAL:
+AUDIO: 'know everybody\'s going to be tempted to just scroll to the bottom and check out these PID recommendations right here, but I urge you to resist that. You should know what these graphs mean and not just blindly look at those PID'
+
+[11:19] [scene:talk]
+VISUAL:
+AUDIO: 'recommendations, at least for now. So, let\'s go through the graphs and see what all this information actually means, so you can look at this kind of stuff a little bit more intelligently. So, as of right now, in the sequence of the graphs, I don\'t think they\'re in the perfect order.'
+
+[11:32] [scene:talk]
+VISUAL:
+AUDIO: 'Um I would really recommend going down to this spectrograph gyro trace here. This is essentially and which I I like to call this the Petrova line. I don\'t know really what you call it, but this you need to look at what this this'
+
+[11:45] [scene:talk]
+VISUAL:
+AUDIO: 'uh this these graphs look like and this is the roll, pitch, and yaw just as indicated here. And you need to have this signal. This is the chirp signal coming up through here and coming up. It\'s going from the 220'
+
+[11:58] [scene:talk]
+VISUAL:
+AUDIO: 'uh degrees per second oscillation all the way up to uh 600 uh hertz. The 220 it kind of ramps that down, but it goes up that oscillation the frequency increases all the way up to 600 hertz in'
+
+[12:11] [scene:talk]
+VISUAL:
+AUDIO: 'the default settings. And you need to make sure that is there. If you don\'t see this kind of nice bright line, if you see more something like this where there\'s not really a distinctive line'
+
+[12:23] [scene:talk]
+VISUAL:
+AUDIO: 'there and there\'s a lot of background noise, you need to throw away that log. Uh something went wrong. Uh it\'s just it\'s not picking up the chirp signal just right. Uh maybe you didn\'t follow the steps I showed or don\'t have the'
+
+[12:35] [scene:talk]
+VISUAL:
+AUDIO: 'black box set up exactly right. Uh or maybe just a fluke. I don\'t know, but uh this indicator you need to again make sure you have that Petrova line though to see that it for any of this to really work and it be functional and and you'
+
+[12:47] [scene:talk]
+VISUAL:
+AUDIO: 'know, bad information in is going to be bad information out. Here\'s another example of a good one and this is actually a little bit better. This actually shows you kind of want the ideal scenario is you have this like kind of darker blues here, not much'
+
+[13:00] [scene:talk]
+VISUAL:
+AUDIO: 'noise, uh and really this really dark signal. That\'s the chirp signal that the analysis is picking up. So that that\'s the kind of the ideal scenario. Obviously the brighter this background,'
+
+[13:13] [scene:talk]
+VISUAL:
+AUDIO: 'it\'s not as ideal, but as long as it has this nice distinct uh ramping signal here, you should be in good shape. Now the next three graphs with the three graphs at the very top are really about your tracking of your gyro versus your'
+
+[13:25] [scene:talk]
+VISUAL:
+AUDIO: 'stick inputs as it ramps through the uh frequency as it it increases the frequency of those moves that we saw there and how well again the quad is following it. So, it can be for some really interesting information. So, as'
+
+[13:37] [scene:talk]
+VISUAL:
+AUDIO: 'you can see on the bottom here we have the frequency range going up through in hertz and then the magnitude uh essentially of how well the gyro is following getting to the magnitude of'
+
+[13:51] [scene:talk]
+VISUAL:
+AUDIO: 'the stick inputs provided. So, here where we\'re at zero, that essentially means that the quadcopter is following the inputs magnitude directly. And you can see that'
+
+[14:03] [scene:talk]
+VISUAL:
+AUDIO: 'that is happening pretty well up to about 10 hertz. Once we get up to about 20 hertz on this five This is a 5-in quad. It starts to drop off. You can see 30 hertz, 40 hertz, 50 hertz. And then by the time you get up to 100 hertz,'
+
+[14:16] [scene:talk]
+VISUAL:
+AUDIO: 'it\'s not following it magnitude-wise any much. So, that really makes a lot of sense for a 5-in. We know that, you know, anywhere uh in the 0 to 10 hertz band, it\'s your stick inputs magnitude-wise, you know, when you input'
+
+[14:28] [scene:talk]
+VISUAL:
+AUDIO: 'stick inputs, your quad\'s going to be able to follow that for a 5-in. And as you get up to like the 30, 40, 50 hertz range, that\'s going to start to drop off and that\'s where you start to get prop wash. So, you can kind of see why these things are coming together, right? Uh'
+
+[14:40] [scene:talk]
+VISUAL:
+AUDIO: 'the same thing here. This is now just delay. The gyro signal delay uh for following in those hertz. Again, uh up at the 0 to 10 hertz frequencies, not really any sizable delay. After we'
+
+[14:53] [scene:talk]
+VISUAL:
+AUDIO: 'get into the 20, 30, 40 hertz band, you\'re going to see more delay. And we can also make us some differentiation between the axes here. So, you can see that the yellow or the blue is uh the'
+
+[15:05] [scene:talk]
+VISUAL:
+AUDIO: 'yaw axis. So, that\'s pretty sluggish, right? It\'s not going to be following inputs too well. It\'s going to have a Oh, it\'s actually doing pretty well on the uh for the uh phase delay or the delay'
+
+[15:17] [scene:talk]
+VISUAL:
+AUDIO: 'of the gyro following it for uh the yaw itself on on that on that put. The However, the pitch and roll, you can see her dropping off.'
+
+[15:29] [scene:talk]
+VISUAL:
+AUDIO: 'The other thing that you can see in here that pitch is dropping off a little bit faster than roll. So, it pitch is a little s- more sluggish. Uh it\'s not following the magnitude here as well as if I just get rid of uh yaw,'
+
+[15:41] [scene:talk]
+VISUAL:
+AUDIO: 'it\'s not what following the magnitude here as well as roll, and it\'s also has a little bit more delay than roll as well. So, that\'s that\'s a good input. That\'s showing us an imbalance in the pids between pitch and roll. And then we'
+
+[15:53] [scene:talk]
+VISUAL:
+AUDIO: 'can use sliders to adjust for that. Finally down here, this is the uh sensitivity. That really has to do with when you\'re start going to start to get a feedback loop. That\'s the D term trilling or the fly away mechanism. Once'
+
+[16:05] [scene:talk]
+VISUAL:
+AUDIO: 'generally uh order thumb, uh once you get up to 6 dB um mathematically with with that, you\'re going to start to get that feedback loop from the PID loop itself, and you can'
+
+[16:18] [scene:talk]
+VISUAL:
+AUDIO: 'get into a fly away situation. So, any of these uh axes being below that 6 dB, and that\'s that 6 dB is not uh like the firm line, but that\'s a general rule of thumb.'
+
+[16:31] [scene:talk]
+VISUAL:
+AUDIO: 'Uh then you\'re not too close to the sensitivity or fly away zone. So, this has to do with hey, there\'s some more room here to move these gains up a little bit in magnitude in general. Uh we\'re not up to that fly away point'
+
+[16:44] [scene:talk]
+VISUAL:
+AUDIO: 'where they\'re kind of comfortable, stable pids. Uh there\'s a little bit more aggressiveness that they could be if you\'re trying to increase proc brush performance and things of that nature. The final graph down here is your step response graph. That has to deal with,'
+
+[16:57] [scene:talk]
+VISUAL:
+AUDIO: 'you know, we\'re changing the target with those those uh inputs going back and forth. How is the PID loop reacting for that? And you\'ve seen this if you\'ve looked at anything with PID toolbox or'
+
+[17:10] [scene:talk]
+VISUAL:
+AUDIO: 'anything of this nature. The step response is really a a big judge of each axis. Again, you can see in here how the axes are are panning out. Yaw is actually fairly good here.'
+
+[17:23] [scene:talk]
+VISUAL:
+AUDIO: 'Roll is second and then pitch is delayed a little bit more. They are not overshooting or oscillating. So, this balance, the balance of the terms here, at least between the P and the D,'
+
+[17:36] [scene:talk]
+VISUAL:
+AUDIO: 'are very good. You\'re conceiving it\'s coming up to that step response. They\'re not having like this overshoot. If you\'d see this overshoot, that tells us something. If you\'d see it\'s rolling up kind of slower, that tells us something'
+
+[17:48] [scene:talk]
+VISUAL:
+AUDIO: 'as well. So, and then the the big takeaway here, again, with you can see it up here, here, and here, that the pitch pids need to be a little bit higher in general order of magnitude than the roll. Um just to cuz there\'s more'
+
+[18:01] [scene:talk]
+VISUAL:
+AUDIO: 'weight. I mean, this has a GoPro on it, things of that nature. So, now rolling down to the bottom, we have our current gains that are here. So, going from the top to the bottom of the analysis that we see here, bandwidth, it really'
+
+[18:13] [scene:talk]
+VISUAL:
+AUDIO: 'relates to those graphs up above. But, bandwidth is where the each axis starts to roll off and its ability to control. So, this actually puts a number to it more precisely. So, you can see that roll axis is able to keep'
+
+[18:25] [scene:talk]
+VISUAL:
+AUDIO: 'uh following the magnitude of the inputs up to around 30, let\'s just say 38 Hz. Um whereas and same thing for yaw. But, pitch is 28 Hz less. So, pitch, the'
+
+[18:38] [scene:talk]
+VISUAL:
+AUDIO: 'gains or these gains are too weak on the pitch axis. So, this would be the pitch axis here. The P, I, and the and the D need to be bumped up on the pitch axis. Ideally, these two match. So, this would'
+
+[18:51] [scene:talk]
+VISUAL:
+AUDIO: 'be 38 and this would be 38 as well. So, just in the analytics, just see like how is Do you have a good tune? Um if these two should ideally match. The next number here is the phase margin. These'
+
+[19:03] [scene:talk]
+VISUAL:
+AUDIO: 'are good healthy numbers once you\'re up in like the one above 100° points. Essentially, that means that we have a tune that\'s not too unstable. It\'s not too close to the edge. Uh once you get'
+
+[19:15] [scene:talk]
+VISUAL:
+AUDIO: 'these numbers start to getting lower, like sub-100 and sub-50s, that means you are near the edge. You probably have really good prop wash performance though. So, it\'s it\'s something to keep uh keep in mind and consider. But, it'
+
+[19:29] [scene:talk]
+VISUAL:
+AUDIO: 'gives you an idea of the stability of your tune. I think the big thing here is when you see these higher numbers, like above 100, above one you know, near the 150 range, uh you have more uh you should be moving your pit gains up to uh'
+
+[19:42] [scene:talk]
+VISUAL:
+AUDIO: 'to see how much better prop wash. You should be using that new thing that I put in there where you can put the master multiplier on a pot and then just do a flight and move it up and see how that see how that works if it\'s too, you know, if you start to get D-term'
+
+[19:55] [scene:talk]
+VISUAL:
+AUDIO: 'oscillation. So, there\'s some room to grow here uh with moving all the gains up. That\'s really what that number is going to tell you. Similar to that graph up above. Likewise, the resonance peak is going to kind of complement this that if this DB number is kind of higher,'
+
+[20:08] [scene:talk]
+VISUAL:
+AUDIO: 'like one uh like three, something of that nature, you\'re going to be getting that D-term trill that maybe you don\'t hear sometimes, but the um this is logging it and seeing it. So,'
+
+[20:21] [scene:talk]
+VISUAL:
+AUDIO: 'again, these these lower numbers are a little bit better. You have a kind of a safer tune, um but there\'s some stuff on the table there that you might want to consider pushing your gains up.'
+
+[20:33] [scene:talk]
+VISUAL:
+AUDIO: 'Sensitivity peak, again, more of the same. This is uh the closer you are to that 6 Hz or 6 dB, I\'m sorry, then that\'s uh where you\'re probably close to being unstable. So, you can see we\'re'
+
+[20:45] [scene:talk]
+VISUAL:
+AUDIO: 'pretty far below that, four, three. That\'s like three is like half of six. So, that\'s half the magnitude. You have, you know, quite a bit to go there. So, keep in mind in dB, uh three is double. So, every three, it\'s a doubling. So,'
+
+[20:57] [scene:talk]
+VISUAL:
+AUDIO: 'um zero to three is double. Three to six is double. Um so, that that keep that in mind with dB kind of stuff. So you can see we have them things here to go. As we talk about overshoot, this has to do'
+
+[21:10] [scene:talk]
+VISUAL:
+AUDIO: 'with the step response. We have very low overshoot here. This gives an indication of our rise time. So you can see our pitch axis is very responsive, has a quick rise time where our roll and yaw not so not so quick. So here again,'
+
+[21:24] [scene:talk]
+VISUAL:
+AUDIO: 'we\'re trying to get our pitch to match our roll. So we want to increase the gains on the pitch specific to the roll to get these numbers closer together. Settling has to do with our step response and how long it takes to kind'
+
+[21:37] [scene:talk]
+VISUAL:
+AUDIO: 'of settle and smooth off. You can see we\'re in the 60 range here. These can fluctuate, so I wouldn\'t put too too much value on these two, but that that\'s um'
+
+[21:49] [scene:talk]
+VISUAL:
+AUDIO: 'that\'s really just how that step response and how well it settles out. If you have one axis not settling versus the other, you might have some I term adjustments you want to do specifically versus the P to get one axis to settle'
+
+[22:02] [scene:talk]
+VISUAL:
+AUDIO: 'out a little quicker than the than the other one. And then finally and probably maybe the most first important one is the coherence percentage. So again, that goes to these kind of lines up here and you want to have a nice high percentage'
+
+[22:14] [scene:talk]
+VISUAL:
+AUDIO: 'here that\'s a clear chirp signal coming through for the analytics. So 92 in the in the you know, upper 80s, 90s, that\'s where you want to be. You can see that hey, this axis is a little lower. So our pitch is a little less reliable than the'
+
+[22:28] [scene:talk]
+VISUAL:
+AUDIO: 'other two. Yaw is very good signal coming in so on and so forth. Now for the exciting time. It will make recommendations on pids that you can input and if you\'re connected to your flight controller as'
+
+[22:40] [scene:talk]
+VISUAL:
+AUDIO: 'I\'m here and I connected, I can go down to here and these are my slider gains that I can apply directly. So I can unfortunately right now, it does not'
+
+[22:52] [scene:talk]
+VISUAL:
+AUDIO: 'have the code built in to differentiate between the axes. I\'m sure that that will come in the future. So, if some of this video is some observations I have in my testing.'
+
+[23:06] [scene:talk]
+VISUAL:
+AUDIO: 'Right now, you have to pick one of the axes. So, you can hear see here my sliders are all at 1.0. In the code, that\'s 100. Um'
+
+[23:18] [scene:talk]
+VISUAL:
+AUDIO: 'you know, we could make it a little easier maybe and just call these out as 1.0, but that\'s what they\'re at. So, 100 here, 100, 1.0, 1.0, 1.0. I do have the feedforward set to zero uh as indicated as something you should have. And'
+
+[23:31] [scene:talk]
+VISUAL:
+AUDIO: '[music] then, this is my D-term filter slider. So, all gives it also gives you a D-term filter slider recommendation. Here, it\'s saying basically what to move the sliders to. Um so, this would be a 1.19 or 1.2. Uh this would be a 1.6. You kind of got to'
+
+[23:47] [scene:talk]
+VISUAL:
+AUDIO: 'round them. 1.2 here as well. Now, it\'d be really nice that if it would just automatically do that offsetting uh for you because there is the uh PI slider for for pitch and then the P and the'
+
+[23:59] [scene:talk]
+VISUAL:
+AUDIO: 'damping slider for pitch that it could like kind of automatically move uh the PI slider up for pitch specifically for this value and then leave the roll here. It doesn\'t do that yet, um but it'
+
+[24:12] [scene:talk]
+VISUAL:
+AUDIO: 'hopefully will in the future. So, essentially you got to pick one of these and hit apply. And this is where I would kind of be hesitant as of right now. Maybe other people are getting some'
+
+[24:25] [scene:talk]
+VISUAL:
+AUDIO: 'better results, but these PID recommendations are not good. As we talked about and you can see in here, my step response is looking great. And if I follow these recommendations, it is saying to have my'
+
+[24:37] [scene:talk]
+VISUAL:
+AUDIO: 'D-term, my damping slider, move it down to 50 or 0.5 &gt;&gt; [music] &gt;&gt; instead of that. And if you don\'t believe me, this is the chirp tune after doing that. So, now you'
+
+[24:50] [scene:talk]
+VISUAL:
+AUDIO: 'can see I have a hump uh and that\'s not ideal. Um, for the magnitude. So, it\'s kind of overshooting when we\'re getting up to these'
+
+[25:02] [scene:talk]
+VISUAL:
+AUDIO: 'frequencies. The gain, the PID, the gyro is overshooting my my inputs. That\'s That\'s You don\'t want that. Um, it\'s saying we are getting close to the uh, unstable. Like we\'re up past the 60 B'
+
+[25:14] [scene:talk]
+VISUAL:
+AUDIO: 'here on the pitch and right up to it on the roll. And my step response looks like garbage. All this oscillation. And that was following those PID recommendations. Now, putting that back'
+
+[25:26] [scene:talk]
+VISUAL:
+AUDIO: 'in and you can see what we have here. Putting that back in, now it\'s saying, "Hey, slightly move the PI slider down or the tracking slider down a little bit from 1.2 to 1.0 basically." Basically'
+
+[25:39] [scene:talk]
+VISUAL:
+AUDIO: 'back to where I was. Uh, and do that a little even a little bit more for pitch. Like I kind of a little too much tracking on the pitch'
+
+[25:51] [scene:talk]
+VISUAL:
+AUDIO: 'axis. Uh, you can see though that the adjustments I made, cuz I did differentially move the the pitch and roll up. Um, and I can show you that here in a'
+
+[26:03] [scene:talk]
+VISUAL:
+AUDIO: 'second. They\'re matching better now. So, that I think my adjustment was actually kind of good. You can see it\'s 47.6 and 47.1. So, I don\'t think this is right. Um, and secondarily, it\'s now moving my'
+
+[26:15] [scene:talk]
+VISUAL:
+AUDIO: 'gains back up a little bit. .5 .5. Not very much. That\'s not going to take care of this issue. So, as of right now, I would give a lot of caution to following these'
+
+[26:29] [scene:talk]
+VISUAL:
+AUDIO: 'recommendations. I think as of right now, this tool is really good to evaluate your tune that you have in there. And now that I went over those graphs, you can see what you can adjust and how that works and and things that'
+
+[26:43] [scene:talk]
+VISUAL:
+AUDIO: 'nature. It\'s a instead of like looking in black box, you can kind of just use this to look at it. But, I I think this needs a little bit of work. This is in beta yet, to be fair. And hopefully even more people are going to use it now that they have this video'
+
+[26:55] [scene:talk]
+VISUAL:
+AUDIO: 'and a good explanation on how to do the you know, set everything up, do the flights, and load the data, and understand what all those graphs mean. But before you go, I have something really important to show you what happens if you do click that button down'
+
+[27:07] [scene:talk]
+VISUAL:
+AUDIO: 'below, at least in this release. And I also wanted to mention that if you\'re interested in kind of the underlying settings, there\'s chirp settings that you can adjust. And what those are, and what happens when you adjust them, and'
+
+[27:21] [scene:talk]
+VISUAL:
+AUDIO: 'some of my thoughts on them, check out the link below. I\'m going to have a Patreon only video going through that deeper dive on those settings and what they are and kind of my experimentation on that. Uh again, if you\'re interested in that, check out the link below and'
+
+[27:34] [scene:talk]
+VISUAL:
+AUDIO: 'I\'d love to have you as a patron. And with that out of the way, what does happen if we load some of these settings? So, let me go back up to here. Let me bring back that other file. And now that I got that up, this was the original recommendations. Now, I have my quad connected here, and I\'m going to go'
+
+[27:47] [scene:talk]
+VISUAL:
+AUDIO: 'with, I guess, I I\'ll go with the the roll axis, right? Cuz it\'s it\'s a lower amount of change. This pit is kind this pitch is kind of a big change. And um'
+
+[27:59] [scene:talk]
+VISUAL:
+AUDIO: 'yeah, we\'re going to go with that. So, I\'m going to hit hit and hit apply gains. Gains applied and saved. So, it what it did is it went up into my my my pids here, and it made the'
+
+[28:11] [scene:talk]
+VISUAL:
+AUDIO: 'adjustment. Now, I don\'t know why last time I did this, I don\'t remember it turning off the pitch and roll slider, but that\'s something to look for. It might turn that off, so you might have to go ahead and and pick that back on. And you can see it half my D'
+
+[28:24] [scene:talk]
+VISUAL:
+AUDIO: 'term, and it moved up the PI gains and the stick response slider, which we had down at zero, it moved those up to the 1.2. Another word of caution, big caution, it put these at zero. That'
+
+[28:36] [scene:talk]
+VISUAL:
+AUDIO: 'means my pitch axis has no pid gains. If you go try to take off, you\'re going to have a fun time with that. Don\'t uh let that be that way. Put those back to'
+
+[28:48] [scene:talk]
+VISUAL:
+AUDIO: '1.0, so you have PID gains on the axis. So, you can see right now in beta, um again, I wouldn\'t hit that button as of right now. This is probably something like AI'
+
+[29:01] [scene:talk]
+VISUAL:
+AUDIO: 'that hey, my experience with it now might be totally different in 3 weeks from now or a month from now when it\'s better. Uh so, keep coming back for checking out that kind of stuff. But, uh those corrections there, and then I\'ll'
+
+[29:14] [scene:talk]
+VISUAL:
+AUDIO: 'go over to the uh filter tuning, and again, it turned off the sliders here, but it did move that D gain slider as well for me. Um but, it kind of turned off the D gain filters. So, yeah, it\'s in beta.'
+
+[29:28] [scene:talk]
+VISUAL:
+AUDIO: 'If you\'re checking this out right now, don\'t click that button. Okay? Okay, well, that\'s it. That\'s auto tuning. So, if you see the new auto tune out there in Betaflight, and you get super excited about it, I think it is something to be'
+
+[29:40] [scene:talk]
+VISUAL:
+AUDIO: 'excited about. Uh there\'s still some stuff that needs to be worked out on its recommendations in my humble opinion, but it\'s a great analytical tool, and with more and more folks using I\'m sure we\'ll hopefully be able to hone in on getting those recommendations better and'
+
+[29:53] [scene:talk]
+VISUAL:
+AUDIO: 'better over time. It\'s a step in a direction, uh hopefully the right direction, uh to be able to do some chirp moves, and get it recommend hopefully in one day it will you\'ll go out and do those chirp'
+
+[30:07] [scene:talk]
+VISUAL:
+AUDIO: 'moves, it will recommend PIDs, you\'ll set it to that, you\'ll go do it again, it will say, "Perfect. Everything\'s good now. Just one flight, and click this button, and you\'re good to go." So, um progress, uh eat an elephant slowly, and uh hopefully'
+
+[30:21] [scene:talk]
+VISUAL:
+AUDIO: 'we\'ll get there. Uh if you have any questions about auto tune, don\'t hesitate to drop them down below. Thanks, everybody. See you in the next one. &gt;&gt; [music]'

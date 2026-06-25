@@ -1,0 +1,203 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Forget Wan Animate! Steady Dancer Review: The New King of AI Motion Transfer?
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=AV7iOtJa5ds
+upload_date: 20251203
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'Today we are going to introduce a very unusual model This model appears to be a reference generation model similar to those like VACE but it is actually an image-to-video generation model This model is called Steady Dancer'
+
+[00:12] [scene:talk]
+VISUAL:
+AUDIO: 'Based on the name we can roughly guess that it is primarily aimed at dancing videos Next let\'s look at some examples The overall performance demonstrated by these examples is excellent You can evaluate it based on two aspects:'
+
+[00:27] [scene:talk]
+VISUAL:
+AUDIO: 'first the consistency of the character and second the movement migration If we look at each frame they are basically consistent with the reference image Furthermore besides facial expressions'
+
+[00:39] [scene:talk]
+VISUAL:
+AUDIO: 'the movement migration is almost perfect This migration capability is not only limited to realistic characters but also includes 3D characters and even animated characters We can achieve good results with all of them'
+
+[00:53] [scene:talk]
+VISUAL:
+AUDIO: 'Let\'s briefly discuss its technical highlights As we mentioned this model looks like reference generation but is actually an Image-to-Video model The principle of so-called Reference-to-Video (R2V) is aligning our image to the pose'
+
+[01:05] [scene:talk]
+VISUAL:
+AUDIO: 'For instance Wan animate is a typical R2V model These models may experience spatial misalignment because you are forcibly aligning the image to the pose'
+
+[01:18] [scene:talk]
+VISUAL:
+AUDIO: 'and sometimes the alignment isn\'t done very well What is the mechanism of Steady Dancer which we are discussing today? It is I2V (Image-to-Video). Essentially'
+
+[01:31] [scene:talk]
+VISUAL:
+AUDIO: 'the pose drives the image The image in the first frame is completely retained And the pose map needs to align with this image rather than sticking the image onto the pose This is the fundamental difference Of course'
+
+[01:44] [scene:talk]
+VISUAL:
+AUDIO: 'the internal mechanisms are more complex and we will help you understand this thoroughly later through demonstration examples Currently Kijai\'s Wan Video extension already supports this model You need to update the Kijai extension to the latest version'
+
+[01:56] [scene:talk]
+VISUAL:
+AUDIO: 'Then you can click on the example workflow find Steady Dancer, download it and drag it into your ComfyUI interface Regarding model downloads'
+
+[02:08] [scene:talk]
+VISUAL:
+AUDIO: 'Kijai provides two versions The first is the full FP16 model which is 32 gigabytes in size The second is an FP8 quantized version which is 16.4 gigabytes'
+
+[02:21] [scene:talk]
+VISUAL:
+AUDIO: 'Generally the FP8 model is sufficient for testing I have also built the workflow on Running Hub You can access this platform through Running Hub In the ComfyUI domain'
+
+[02:33] [scene:talk]
+VISUAL:
+AUDIO: 'Running Hub is an excellent online workbench because it keeps up immediately whenever new models or new extensions appear You can use the invitation link in my video description to register for Running Hub which grants you 1'
+
+[02:47] [scene:talk]
+VISUAL:
+AUDIO: '000 free points Furthermore you receive 100 points every day just by logging in to Running Hub allowing you to try out your own workflows Now let\'s look at the basic usage of this workflow The workflow you are currently seeing is one I have reconstructed'
+
+[03:01] [scene:talk]
+VISUAL:
+AUDIO: 'Its overall functionality is the same as Kijai\'s original version; I\'ve simply made the structure clearer First let\'s look at the loading of the main model Here'
+
+[03:13] [scene:talk]
+VISUAL:
+AUDIO: 'we have enabled block swapping and the number of block swaps is set to 35 Then we load a Light X2V acceleration model The main model used is the Steady Dancer FP8 model we just discussed We also enable Sage Attention'
+
+[03:27] [scene:talk]
+VISUAL:
+AUDIO: 'This is our VAE and this is our visual encoder The text encoder is selected within the prompt section so we don\'t need to load it separately here Next is the image processing section'
+
+[03:39] [scene:talk]
+VISUAL:
+AUDIO: 'We have a reference image here This reference image will eventually be animated according to the movements provided in our video First it needs to be scaled to align with our overall resolution Then'
+
+[03:53] [scene:talk]
+VISUAL:
+AUDIO: 'we need to generate an image embedding here The generation method is simple Besides the conventional width height and frame rate settings we mainly need to connect two things: one is the CLIP embed'
+
+[04:05] [scene:talk]
+VISUAL:
+AUDIO: 'The CLIP embed essentially performs an encoding of our reference image using our visual model The second is the start image which is our reference image Ultimately'
+
+[04:17] [scene:talk]
+VISUAL:
+AUDIO: 'we generate something similar to a Latent representation called the image embed Below this is our driving video I set its frame rate to 16 frames per second Its aspect ratio is a standard 9: 16'
+
+[04:30] [scene:talk]
+VISUAL:
+AUDIO: 'Note the frame count: we are loading a large number of frames 176 frames This indicates that this workflow is capable of generating long videos Then we will use a full set of Kijai nodes to extract the pose'
+
+[04:42] [scene:talk]
+VISUAL:
+AUDIO: 'The most crucial node here is called Pose and Face Detection This requires a YOLO V10 model as a driver We connect our video to it With this'
+
+[04:55] [scene:talk]
+VISUAL:
+AUDIO: 'we can get both pose data and facial data Of course we don\'t need the facial data right now; we only use the pose data Then we perform a format conversion changing the generated pose data into a standard ViT format and then scale it'
+
+[05:10] [scene:talk]
+VISUAL:
+AUDIO: 'Finally we get the pose you see now Pay attention the subsequent operation is slightly counter-intuitive We use the first frame of the video because as we mentioned the first frame is very important'
+
+[05:22] [scene:talk]
+VISUAL:
+AUDIO: 'We take the first frame and perform a CLIP Vision encoding Separately we take all the poses and perform a VAE encoding These then feed into our next very important node'
+
+[05:35] [scene:talk]
+VISUAL:
+AUDIO: 'This node was developed specifically for the Steady Dancer model Pay attention: First we connect the embed we just generated which contains the content of the reference image The next two inputs relate to the driving video'
+
+[05:48] [scene:talk]
+VISUAL:
+AUDIO: 'One input is the result generated by VAE encoding the pose map and the other is the result generated by CLIP Vision encoding the first frame Below that is the sampling section'
+
+[06:00] [scene:talk]
+VISUAL:
+AUDIO: 'which is quite conventional Here is the prompt section Note that what you write in the prompt doesn\'t really matter; it doesn\'t have a significant impact on the result We also use the Wan Video Sampler Setting node'
+
+[06:12] [scene:talk]
+VISUAL:
+AUDIO: 'This is the sampler configuration Its overall structure is the same as a regular sampler but Kijai simplified the sampler node itself and moved all the functionalities to this "Setting" node Therefore'
+
+[06:26] [scene:talk]
+VISUAL:
+AUDIO: 'here we need to set the overall CFG our seed our sampler, and the scheduler Also note that we use a very important node called Wan Video Context Option This is what we often refer to as the context window This is precisely why we can generate a video of 176 frames'
+
+[06:41] [scene:talk]
+VISUAL:
+AUDIO: 'After completion we can see that the result is truly excellent Pay attention to the preservation of character consistency the consistency of clothing and various details'
+
+[06:54] [scene:talk]
+VISUAL:
+AUDIO: 'the consistency of lighting and the movement migration—all are executed perfectly We have run many tests on this content and the overall effects are good Next'
+
+[07:06] [scene:talk]
+VISUAL:
+AUDIO: 'we will focus on the unique strengths and weaknesses of this model Let\'s give it a relatively challenging task first Look the driving video hasn\'t changed But I replaced the image with a beautiful woman playing the guitar This image presents a certain challenge for the model'
+
+[07:21] [scene:talk]
+VISUAL:
+AUDIO: 'as she is holding a guitar Now let\'s look at the generated result: the movement migration is fine and the guitar hasn\'t disappeared Furthermore she interacts with the guitar very naturally'
+
+[07:33] [scene:talk]
+VISUAL:
+AUDIO: 'I believe this highlights the model\'s powerful adaptability We can see that the final generated character given this pose and this image has a perspective consistent with the original image Do you think the character aligned to the pose'
+
+[07:47] [scene:talk]
+VISUAL:
+AUDIO: 'or the pose aligned to the character? I\'m sure you already know the answer: the pose aligned to the character This is exactly why we told you earlier that it is an I2V model where we align the pose to the character'
+
+[07:59] [scene:talk]
+VISUAL:
+AUDIO: 'Of course this method is not without its drawbacks Look at this example: this character is seated Many people might think I\'m asking too much but since we are testing we should check all scenarios'
+
+[08:12] [scene:talk]
+VISUAL:
+AUDIO: 'Look, the character is seated The driving video remains unchanged Let\'s look at the generated effect I found at least two issues Notice that the video has two parts The first part performs decently but in the second part'
+
+[08:26] [scene:talk]
+VISUAL:
+AUDIO: 'note that there is a turning motion After turning the result looks very strange So I think this example demonstrates both the model\'s powerful ability (aligning the pose to the character) and its limitation When it comes to turning situations'
+
+[08:39] [scene:talk]
+VISUAL:
+AUDIO: 'it still cannot handle them very well This is a problem that all Wan models or indeed all open-source AI models cannot currently solve perfectly Let\'s give it an extreme challenge'
+
+[08:51] [scene:talk]
+VISUAL:
+AUDIO: 'For the driving video I used a beautiful woman standing on a drone constantly spinning If we look at the extracted pose it is also constantly turning The image I provided is of relatively high quality both in perspective and overall detail'
+
+[09:05] [scene:talk]
+VISUAL:
+AUDIO: 'Therefore generating normal movements with this image should not be difficult However when it comes to the turning motion you will find that the resulting effect is completely messed up We see three arms, right?'
+
+[09:18] [scene:talk]
+VISUAL:
+AUDIO: 'And the turning motion cannot be accurately reflected So, under normal circumstances the overall performance of this model is excellent including its stability movement migration'
+
+[09:30] [scene:talk]
+VISUAL:
+AUDIO: 'and character consistency However you must be careful about a few scenarios First try to avoid props in the image While having a prop might result in a fantastic video it might also lead to some issues in the generated video'
+
+[09:42] [scene:talk]
+VISUAL:
+AUDIO: 'For example the one I generated earlier had an extra arm Secondly be cautious when the difference between the first frame and the pose is too significant For example'
+
+[09:56] [scene:talk]
+VISUAL:
+AUDIO: 'the first frame is seated but the pose is standing This is prone to generating such issues However note that if you don\'t generate 176 frames but only 81 frames—completing the generation in a single sampling—this problem will not occur Finally'
+
+[10:13] [scene:talk]
+VISUAL:
+AUDIO: 'pay attention to the turning issue This remains an unsolved challenge for now That concludes our introduction to this model What are you waiting for? Go ahead and try it yourself Follow me and become AI savvy'

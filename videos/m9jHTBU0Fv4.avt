@@ -1,0 +1,235 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Deploy personaLive Locally: Real-Time AI Avatar with TensorRT Acceleration (Full Linux Guide) 🛠️
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=m9jHTBU0Fv4
+upload_date: 20260105
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'So today we are going to introduce a real-time digital human system called "personaLive " Operating this system is actually very simple Let\'s start with a demo so you can see the real-time effects in action First'
+
+[00:12] [scene:talk]
+VISUAL:
+AUDIO: 'we need to select an image to act as your virtual avatar For this image the facial features need to be very distinct We’ll choose a photo of an Asian beauty here Next we click this button to upload the image'
+
+[00:24] [scene:talk]
+VISUAL:
+AUDIO: 'and then click to launch the system At this point the camera turns on It captures my current facial information including my head movements The overall effect is quite good and the latency is very low'
+
+[00:36] [scene:talk]
+VISUAL:
+AUDIO: 'Now let\'s talk about my personal experience testing this Regarding the real-time effect you just saw I think that part is fine However I feel the biggest drawback is the eye contact For example'
+
+[00:50] [scene:talk]
+VISUAL:
+AUDIO: 'right now I am using a laptop to show you this video My eyes have to constantly stare at the laptop screen This means I am not looking at the camera lens If I look at the screen notice this:'
+
+[01:02] [scene:talk]
+VISUAL:
+AUDIO: 'the avatar’s gaze starts to wander downwards and the eyelids droop The whole effect degrades This situation is different from when we record videos with a camera or do a standard live stream So'
+
+[01:15] [scene:talk]
+VISUAL:
+AUDIO: 'I think it would be much better if an eye-gaze correction model were added in front of this model The system we are using today personaLive was released about two weeks ago When I first saw this system I wasn\'t particularly interested'
+
+[01:27] [scene:talk]
+VISUAL:
+AUDIO: 'That’s because I felt its base model was too outdated Take a look—it uses "sd-image-variations-diffusers " which is what we call SD 1.5 This is the model everyone used back when we first started doing text-to-image'
+
+[01:39] [scene:talk]
+VISUAL:
+AUDIO: 'Since then technology has iterated constantly upgrading to Flux or even stronger video generation models However we cannot ignore one problem:'
+
+[01:51] [scene:talk]
+VISUAL:
+AUDIO: 'we need a real-time effect So when analyzing the technology later we realized this kind of application might be necessary Let\'s look at the system It has some demos here It supports both real human characters and anime-style virtual characters Currently'
+
+[02:08] [scene:talk]
+VISUAL:
+AUDIO: 'they have released the corresponding inference code and there is support for it in ComfyUI However we will not be demonstrating this function in ComfyUI today Why? Because currently inside ComfyUI it does not support this kind of real-time effect'
+
+[02:21] [scene:talk]
+VISUAL:
+AUDIO: 'You can only use the offline method That means you give it a driving video then give it a face and it generates a new video But regarding that kind of result many of our current models already do a fantastic job'
+
+[02:33] [scene:talk]
+VISUAL:
+AUDIO: 'Its biggest feature is the balance between quality and speed So if we step away from the concept of "real-time " its importance drops significantly There are two ways to deploy this system:'
+
+[02:46] [scene:talk]
+VISUAL:
+AUDIO: 'cloud deployment and local deployment If you choose cloud deployment we usually access the system like this: IP address plus the port number When using IP and port the system typically does not have an HTTPS connection'
+
+[02:59] [scene:talk]
+VISUAL:
+AUDIO: 'You\'ll see here that it shows the link is "Not Secure " What problem does this cause? The camera cannot be accessed For example let\'s upload a reference image and click "Fuse reference'
+
+[03:11] [scene:talk]
+VISUAL:
+AUDIO: '" It says upload successful Note here: please lower the frame rate a bit 25 frames is a bit too high Generally based on your computing power I suggest setting it to 16 or 15'
+
+[03:24] [scene:talk]
+VISUAL:
+AUDIO: 'If you set it too high it will often lag Now, if we start the system you will encounter this error The error is quite clear: it cannot find the corresponding device The reason is that if you are not on an HTTPS system'
+
+[03:38] [scene:talk]
+VISUAL:
+AUDIO: 'it has no way to invoke your camera So, what do we do? Pay attention here You can open chrome://flags Inside there is a section called "experiments"—these are experimental settings There is a setting here similar to a whitelist ("Insecure origins treated as secure").'
+
+[03:53] [scene:talk]
+VISUAL:
+AUDIO: 'This means regardless of whether these websites are accessed via a secure HTTPS link I will trust all operations from them perfectly'
+
+[04:05] [scene:talk]
+VISUAL:
+AUDIO: 'You just need to copy your cloud server address paste it in here and make sure you set it to "Enabled " After that we need to relaunch the browser Now, it will ask: "Do you want to allow the use of the camera?'
+
+[04:17] [scene:talk]
+VISUAL:
+AUDIO: '" I click "Allow " And there is the effect you are seeing now So this is a critical issue to note when accessing the system Next let\'s look at the system installation There are many choices'
+
+[04:30] [scene:talk]
+VISUAL:
+AUDIO: 'mainly depending on your operating system Here I am using an Ubuntu system so this is a Linux installation method For Windows the basic situation isn\'t too different Let\'s demonstrate'
+
+[04:42] [scene:talk]
+VISUAL:
+AUDIO: 'First come to the personaLive GitHub page Down here there are specific installation steps Take a look But before doing these steps I must emphasize: you must understand your base environment If the base environment is incompatible'
+
+[04:55] [scene:talk]
+VISUAL:
+AUDIO: 'you will easily run into problems later What do we mean by base environment? Three very important elements: First CUDA Second, PyTorch Third, Python How do we get this environment?'
+
+[05:07] [scene:talk]
+VISUAL:
+AUDIO: 'You can see this code here; it creates a virtual environment via Conda using Python 3.10 Also if you click open requirements you\'ll see Torch is 2.1 If Torch is 2.1'
+
+[05:21] [scene:talk]
+VISUAL:
+AUDIO: 'our CUDA is generally 12.1 So let\'s detect our system\'s base environment first On Ubuntu we can use nvcc -V to check the CUDA version Look, mine is 12.1'
+
+[05:33] [scene:talk]
+VISUAL:
+AUDIO: 'Then we can use pip list | grep torch to check the installed Torch version Look, it is 2.1 Then check the Python version and it is 3.10 Since the base environment is fine'
+
+[05:46] [scene:talk]
+VISUAL:
+AUDIO: 'we can proceed directly Next is the standard installation method First, we clone the code Generally as long as your network is fine this executes normally Then we need to enter this directory'
+
+[05:59] [scene:talk]
+VISUAL:
+AUDIO: 'Now we install the dependency packages Note that there are two dependency files here One is called requirements_base and the other is requirements_trt Their functions are different'
+
+[06:12] [scene:talk]
+VISUAL:
+AUDIO: 'The \'base\' one is the dependency we must use to launch the system The \'trt\' one is used when generating the accelerated model If you don\'t need to generate the accelerated model later you don\'t need to install that one'
+
+[06:26] [scene:talk]
+VISUAL:
+AUDIO: 'So, let\'s install base txt first This process usually has no issues if your base framework matches the system requirements Now we enter a very important stage: "Download weights'
+
+[06:39] [scene:talk]
+VISUAL:
+AUDIO: '" which means downloading our models It provides a download script called Download_weights py You can just execute this download program directly If downloading that way isn\'t convenient they provide manual download options:'
+
+[06:51] [scene:talk]
+VISUAL:
+AUDIO: 'Google Drive, Baidu Netdisk ModelScope, and Hugging Face Choose according to your situation If you download manually the basic model structure looks like this A common mistake people make here is forgetting to download the JSON file'
+
+[07:03] [scene:talk]
+VISUAL:
+AUDIO: 'Without this JSON file it cannot execute normally Also right now inside the tensorrt directory we only have a unet_work engine'
+
+[07:15] [scene:talk]
+VISUAL:
+AUDIO: 'This is an engine file Up to this point the basic installation is considered complete If you have no other special needs you can do offline inference Some ask "What is offline inference? " That means simply taking a video'
+
+[07:27] [scene:talk]
+VISUAL:
+AUDIO: 'giving it a face and converting it to another video You can use it that way but as we said before that approach seems meaningless for this tool So, we must proceed further First'
+
+[07:39] [scene:talk]
+VISUAL:
+AUDIO: 'we need to install the acceleration Because if you want to do real-time inference it\'s different from offline Real-time requires very low latency So we have to find a way to increase the speed Here we use a technology called TensorRT'
+
+[07:52] [scene:talk]
+VISUAL:
+AUDIO: 'Many people have used this; sometimes we use it in ComfyUI too First we do an advance conversion of the model so it can run in this TensorRT mode This way'
+
+[08:04] [scene:talk]
+VISUAL:
+AUDIO: 'the speed on the graphics card will see a significant boost They mention a 2x speed increase But the downside is you need to convert this model in advance and the conversion time is often very long Before converting'
+
+[08:17] [scene:talk]
+VISUAL:
+AUDIO: 'you need to install the second requirements file we mentioned earlier (requirements_trt). If you don\'t need to convert the TensorRT model obviously this step isn\'t needed Okay, let\'s install it'
+
+[08:29] [scene:talk]
+VISUAL:
+AUDIO: 'During the installation I got an error This error is actually very clear Take a look, it says g++: command not found So if we need to compile and install some programs the g++ command is mandatory'
+
+[08:41] [scene:talk]
+VISUAL:
+AUDIO: 'Let\'s install it Those who do system operations frequently should be very familiar with this If you aren\'t you can search for it or just use my command Before installing I suggest using apt update to update your installation sources'
+
+[08:53] [scene:talk]
+VISUAL:
+AUDIO: 'Then we install a tool called build-essential This is a basic compilation and build toolkit and it contains the g++ thing we talked about We wait a moment'
+
+[09:07] [scene:talk]
+VISUAL:
+AUDIO: 'Then we install the requirements_trt file again Okay now the installation is complete without any errors we need to convert the model They gave us a corresponding conversion script We just execute it directly'
+
+[09:20] [scene:talk]
+VISUAL:
+AUDIO: 'This time will be very long And during the process you might encounter VRAM overflow errors If the program hasn\'t stopped running you can ignore this Because if a VRAM overflow occurs it will try other memory optimization methods'
+
+[09:33] [scene:talk]
+VISUAL:
+AUDIO: 'You just have to wait for it to finish Finally check if the converted model exists in your system How to confirm? Go into the system you downloaded there is a folder called pretrained_weights'
+
+[09:46] [scene:talk]
+VISUAL:
+AUDIO: 'and inside is a subfolder called tensorrt Let\'s see if there is a file there The new converted model is called unet_work Note that its size is about 3.4GB So, if this model exists'
+
+[10:00] [scene:talk]
+VISUAL:
+AUDIO: 'it means the conversion was successful Next we need to do the frontend deployment This is relatively simple First, let\'s install Node js The method we use is via NVM'
+
+[10:12] [scene:talk]
+VISUAL:
+AUDIO: 'First we download the NVM installer Then, through NVM we install the specified version of Node js This usually presents no problems Then we compile the frontend program Go into the Webcam subdirectory'
+
+[10:26] [scene:talk]
+VISUAL:
+AUDIO: 'Then we execute start sh As you can see the frontend directory is built After that you can use the command below to launch the system The command itself is nothing special: inference_online'
+
+[10:40] [scene:talk]
+VISUAL:
+AUDIO: 'Then comes the acceleration mode—this must be selected correctly Since we just converted the model to the TensorRT method you must select this acceleration mode Let\'s execute it After startup is complete'
+
+[10:53] [scene:talk]
+VISUAL:
+AUDIO: 'you can see it has started listening on port 7860 Then you can open the interface we talked about earlier Again you need to put the current domain into that whitelist we mentioned And remember'
+
+[11:06] [scene:talk]
+VISUAL:
+AUDIO: 'after you are done using it remember to turn that flag off Because this is experimental and generally not recommended Also when you launch Chrome this way it will warn you every time that you are using a command flag which lowers security'
+
+[11:20] [scene:talk]
+VISUAL:
+AUDIO: 'So switch it back when you\'re done Let\'s wrap up with a summary Overall the quality of the conversion isn\'t necessarily the best But in terms of the balance between quality and speed its performance is fantastic'
+
+[11:33] [scene:talk]
+VISUAL:
+AUDIO: 'If you truly have a need in your live streams to convert your image into a virtual human in real-time I suggest you choose this system and give it a try Okay, that’s all for today'
+
+[11:45] [scene:talk]
+VISUAL:
+AUDIO: 'Follow me to become someone who truly understands AI'

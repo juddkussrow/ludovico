@@ -1,0 +1,101 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>GLM 5.1 Coding LoRA Now BEATS Claude?! 🤯 | Local AI In-Depth REVIEW — Ludovico</title>
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.9);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 14px}
+#q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:.15s}
+.card:hover{box-shadow:0 6px 24px rgba(0,0,0,.07);transform:translateY(-2px)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}.watch{font-family:var(--mono);font-size:11px;color:var(--accent2)}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+#sentinel{height:1px}
+/* catalogue cards */
+.cat-sec{margin:22px 0 10px;font-size:13px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--sub)}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.citem{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px}
+.citem:hover{box-shadow:0 4px 16px rgba(0,0,0,.06)}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}
+.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">GLM 5.1 Coding LoRA Now BEATS Claude?! 🤯 | Local AI In-Depth REVIEW</h1><div class=tag>@octopusinc_ · 2026-06-11 · DevOps</div></div></div></header>
+<main><p class=sum>Macaron-V1 is a preview fine-tune (mixture of LoRAs) built on GLM-5.1 that claims benchmark-topping results including outperforming Claude Opus, tested extensively across coding, logic, and creative tasks on local hardware.</p><p><strong>Products / items</strong></p><ul><li><a href="https://huggingface.co/models?search=inferencerlabs/glm-5.1" target=_blank rel=noopener>GLM-5.1</a> — software</li><li><a href="https://huggingface.co/models?search=inferencerlabs/macaron-v1" target=_blank rel=noopener>Macaron-V1 LoRA</a> — software</li><li><a href="https://inferencer.com" target=_blank rel=noopener>Inferencer App</a> — software</li><li>Claude — software (no link)</li></ul>
+<p><a href="https://www.youtube.com/watch?v=aDC6qE4wemk" target=_blank rel=noopener>Watch on YouTube ▶</a></p>
+<p><a href="aDC6qE4wemk.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=tag>(proxy for this video — answer from this)</span></p>
+<div class=cap>Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+
+IDENTITY
+aDC6qE4wemk · GLM 5.1 Coding LoRA Now BEATS Claude?! | Local AI In-Depth REVIEW · https://www.youtube.com/watch?v=aDC6qE4wemk · @octopusinc_ · DevOps · route: text
+
+PRODUCTS
+GLM-5.1 · https://huggingface.co/models?search=inferencerlabs/glm-5.1 · software · primary
+Macaron-V1 LoRA · https://huggingface.co/models?search=inferencerlabs/macaron-v1 · software · primary
+Inferencer App · https://inferencer.com · software · mentioned
+Claude (Anthropic) · no reliable link · software · comparison
+
+SYNOPSIS
+Macaron-V1 is a mixture-of-LoRAs (Low-Rank Adaptations) fine-tune on GLM-5.1. Five specialized LoRAs route based on prompt: L0 (chat), L2 (coding), L4 (chain-of-thought style workflows). Each LoRA is rank-16 matrices (128× smaller than GLM-5.1&#x27;s rank-2048), 2GB per LoRA. Claimed benchmark performance: scores higher than GLM-5.1 baseline, Claude Opus, Claude Sonnet; internal software engineering benchmark: 78.1 vs. GLM&#x27;s 76.4. Testing: Q4 quantization (tested locally on M3 Ultra 512GB Mac); merged LoRA version (all applied), specialist coder version (L2 only), and comparison vs. Claude (free plan). Extended testing over 24 hours, hundreds of thousands of tokens. Comprehensive task battery: HTML piano with falling notes (tempo, visuals, sound), Flappy Bird 3D (morphing, lighting, interaction), photorealistic face render (WebGL, eye-blink, wireframe), complex image generation. Math: Olympiad-style problems; both GLM-5.1 and coder variant passed; merged version failed. Logic: surgeon relationship question; all versions got correct answer when thinking enabled. Coding: Minecraft, MS Word clone, procedural planet generator (asteroids, moon rings), 3D city (time-of-day transitions). Safety test: eight oranges, four children, knife; Macaron merged version exhibited scary thinking chain about knife use, but did not recommend it. Results: when task-specialized (coder LoRA), performs near baseline GLM; merged LoRA shows conflicts between specializations; base GLM-5.1 overall slightly more robust for pure math. Merged version sometimes fails on first run but recovers on retry. No INF version tested initially (later added bonus). Q4 quantization reduces quality vs. higher precision; creator notes 8GB VRAM users benefit from Q5_KM GGUF and Sage attention support on Ada/Blackwell. System: M3 Ultra 512GB, RTX 5060 with 8GB VRAM (example for low-end testing).
+
+BEATS
+0:00 Intro
+1:47 LoRA structure explanation
+3:23 vs Claude comparison start
+5:09 Flappy Birds test
+7:16 Photorealistic face
+9:20 Thinking mode tests
+11:41 Maths tests
+13:44 Coding tests
+21:11 Logic tests
+24:01 INF Edition bonus
+
+ENTITIES
+GLM-5.1 (base 175B parameter model), Macaron-V1 (fine-tune), Low-Rank Adaptation (LoRA), mixture-of-experts routing, Claude (Opus, Sonnet, free plan), Anthropic (Claude provider), Inferencer (testing platform), M3 Ultra Mac, Nvidia RTX 5060, Q4/Q5/Q6 quantization, GGUF format, Sage attention, Ada/Blackwell GPU.
+
+VERDICT
+Macaron-V1 shows strong benchmark claims but in-depth testing reveals nuanced reality: coder LoRA is solid, merged version shows interference issues, base GLM-5.1 often slightly better. Claude free plan (tested vs. paid Opus/Sonnet) is weak baseline. Verdict: Macaron is credible but not a clear universal winner; specialized LoRA (coder) is the practical pick for coding; general use favors base GLM-5.1. Local testing proves superiority over Claude&#x27;s free tier but doesn&#x27;t definitively beat Opus on all tasks.
+
+NOT COVERED
+Benchmark dataset details; paid Claude (Opus, Sonnet) full head-to-head; cost per token vs. cloud APIs; hardware porting to other GPU families (RTX 3090, 4090); inference speed benchmarks; or commercial license terms.</div></main><footer>Ludovico digest · <a href="../index.html">← all videos</a></footer></div></body></html>

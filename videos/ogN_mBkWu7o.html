@@ -60,37 +60,23 @@ footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:v
 
 body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
 <body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
-<div><h1 style="font-size:17px">p2p chat, in rust, from scratch</h1><div class=tag>@octopusinc_ · 2025-01-24 · Tutorial</div></div></div></header>
-<main><p class=sum>Tutorial building a peer-to-peer chat application in Rust from scratch using the Iroh library&#x27;s gossip protocol. Covers Rust fundamentals, endpoint setup, gossip-based message broadcasting, serialization with Serde, and CLI argument parsing with Clap.</p><p><strong>Products / items</strong></p><ul><li><a href="https://iroh.computer/docs/examples/gossip-chat" target=_blank rel=noopener>Iroh</a> — software</li><li><a href="https://www.rust-lang.org/" target=_blank rel=noopener>Rust</a> — software</li></ul>
+<div><h1 style="font-size:17px">p2p chat, in rust, from scratch</h1><div class=tag>@octopusinc_ · 2025-01-24 · Tutorial, Favorites, Code Gen</div></div></div></header>
+<main><p class=sum>A comprehensive walkthrough of building a peer-to-peer CLI chat application in Rust using Iroh and the gossip protocol. The tutorial covers Rust fundamentals, Iroh endpoint setup, gossip protocol mechanics, message serialization, CLI argument parsing, and role-based chat room creation/joining via tickets.</p><p><strong>Products / items</strong></p><ul><li><a href="https://iroh.computer/docs/examples/gossip-chat" target=_blank rel=noopener>Iroh</a> — software</li><li><a href="https://www.rust-lang.org" target=_blank rel=noopener>Rust</a> — software</li><li>Gossip Protocol — software (no link)</li><li>Tokio (async runtime) — software (no link)</li><li>Cargo — software (no link)</li></ul>
 <p><a href="https://www.youtube.com/watch?v=ogN_mBkWu7o" target=_blank rel=noopener>Watch on YouTube ▶</a></p>
+<p><a href="ogN_mBkWu7o.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
 <p><strong>AI context capsule</strong> <span class=tag>(proxy for this video — answer from this)</span></p>
 <div class=cap>Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
 
-IDENTITY
-id: ogN_mBkWu7o · title: p2p chat, in rust, from scratch · https://www.youtube.com/watch?v=ogN_mBkWu7o · channel @octopusinc_ · categories: Tutorial · route: text
+IDENTITY: ogN_mBkWu7o · p2p chat, in rust, from scratch · https://www.youtube.com/watch?v=ogN_mBkWu7o · @octopusinc_ · Tutorial, Favorites, Code Gen · route: transcript (42-minute walkthrough)
 
-PRODUCTS
-· Iroh · https://iroh.computer/docs/examples/gossip-chat · software · primary
-· Rust · no reliable link · software · primary
+PRODUCTS: Iroh · https://iroh.computer · software · primary | Rust (language) · no reliable link · software · primary | Gossip Protocol · no reliable link · software · mentioned | Tokio · no reliable link · software · mentioned | Cargo · no reliable link · software · mentioned
 
-SYNOPSIS
-Step-by-step walkthrough of implementing a peer-to-peer chat application using Rust and the Iroh library. Begins with Rust installation and toolchain setup (Cargo), then Hello World scaffolding. Introduces core concepts: creating an Endpoint (Iroh&#x27;s networking primitive), understanding gossip protocols for message distribution, topic subscriptions, and peer roles (sender/receiver). Demonstrates secret key generation, error handling with Result types and the ? operator, and message serialization using Serde. Uses Clap crate for CLI argument parsing. Shows full working example with message types, local event filtering, signaling, and ticket-based peer discovery. No pricing or version constraints specified; presented as a hands-on coding tutorial with live demo at 36:03.
+SYNOPSIS: Build a peer-to-peer CLI chat in Rust from first principles using Iroh (p2p networking library). Rust crash course: install via rustup, use cargo init to scaffold projects, main.rs entry point. Essential crates added via cargo add: iroh (p2p protocol), tokio (async runtime), anyhow (error handling), rand (randomness), futures-lite (async streams), serde (serialization), clap (CLI args). Async patterns: use #[tokio::main] attribute for async main, result&lt;T&gt; for error handling, implicit returns (omit semicolon on last statement), use statements for imports. Endpoint setup: generate secret key (rand for randomness), bind endpoint with DNS discovery (ndz), pass secret key. Gossip protocol: enables message broadcast across arbitrary peer swarms. Topics isolate networks; peers join by dialing bootstrap nodes; gossip maintains 5 active peers + 20 passive peers per node (scales to tens/hundreds of thousands without central coordinator). Implementation flow: (1) Create topic ID from 32 random bytes. (2) Subscribe to topic via gossip.subscribe(topic_id). (3) Split receiver into sender/receiver tuple. (4) Broadcast messages: sender.broadcast(msg). (5) Listen for events: while loop over receiver.try_next(), match on GossipEvent. Important: gossip ignores own broadcasts locally to prevent self-dial loops and duplicate processing. Signaling (exchanging topic/peer info): use tickets—serialize topic ID + peer addresses into JSON, base32-encode, print to stdout. Other node pastes ticket, parses it, retrieves topic and peers to join. Roles: open (create room, generate random topic), join (accept ticket, use provided topic/peers). Message types: use serde for serialization. Define enum with variants (AboutMe { sender, nickname }, Message { sender, text }). Serialize to bytes as JSON, deserialize on receive, match on type to route logic. CLI via clap: derive-based argument parser, subcommands for open/join, required args (ticket for join), optional args (name for identifying peers in output). Example: `cargo run -- open` creates chat, prints ticket. `cargo run -- join &lt;ticket&gt;` joins room. Type in one terminal, see output on other. The code is incremental: compile, test, add feature, repeat. Compiler errors are learning moments. Full working example available in Iroh GitHub examples/gossip-chat; advanced version includes message signing with private keys to prevent impersonation.
 
-BEATS
-00:00 — p2p chat demo
-00:49 — Rust basics introduction
-06:03 — Endpoint creation
-11:00 — Gossip protocol explanation
-18:27 — Error handling with ? operator
-26:54 — Serde serialization
-31:25 — Clap for CLI building
-36:03 — Full working demo
+BEATS: 0:00 p2p chat demo (PC ↔ Mac) · 1:38 Install Rust (rustup) · 2:19 cargo init and cargo run · 4:01 hello world, main.rs · 4:55 cargo add (iroh, tokio, anyhow, rand) · 6:03 Endpoint (secret key, ndz discovery) · 13:03 Gossip protocol explanation (5 active + 20 passive peers, scales to 100k+) · 16:32 Topics (network isolation) · 17:52 Error handling with ? operator · 18:27 Broadcasting (sender.broadcast) · 20:47 Subscribing to events (while loop, try_next) · 24:59 Signaling (tickets) · 26:54 Serde (serialization/deserialization) · 31:25 Clap (CLI args, subcommands) · 36:03 Full demo (cargo run, open ticket, join, send/receive)
 
-ENTITIES
-Rust, Cargo, Iroh, gossip protocol, Endpoint, Serde, Clap, crates.io, docs.rs, peer roles, topics, signaling, tickets, serialization, deserialization.
+ENTITIES: Iroh (protocol library), Rust (systems language), Gossip (broadcast protocol), Tokio (async runtime), Cargo (package manager), Clap (CLI framework), Serde (serialization), Futures-lite (streams), Base32 encoding, Topic ID, Node identifier (peer), Ticket (signaling)
 
-VERDICT
-Tutorial demonstrates practical p2p application development in Rust via Iroh&#x27;s gossip-chat example. Assumes audience will &quot;copy paste&quot; from linked documentation and provides comprehensive walkthrough of core abstractions and implementation patterns.
+VERDICT: Iroh&#x27;s gossip protocol + Rust delivers robust, scalable p2p chat with zero central server. Incremental, hands-on approach demystifies distributed systems and Rust simultaneously.
 
-NOT COVERED
-Advanced networking (NAT traversal, relay servers), performance benchmarks, security audit of Iroh, deployment strategies, interoperability with other p2p frameworks.</div></main><footer>Ludovico digest · <a href="../index.html">← all videos</a></footer></div></body></html>
+NOT COVERED: NAT traversal specifics, encrypted transport, persistence, graphical UI, cloud deployment, or production hardening (backpressure, congestion control, latency SLA).</div></main><footer>Ludovico digest · <a href="../index.html">← all videos</a></footer></div></body></html>

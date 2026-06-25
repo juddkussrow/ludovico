@@ -1,0 +1,167 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: The $9 chip that sees through walls (47K stars, HN is fighting)
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=wCH63grKOtA
+upload_date: 20260420
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'Someone just shipped a GitHub repo that claims a $9 chip can see through walls using nothing but Wi-Fi. Okay, so here\'s something that blew up on GitHub over the last few weeks that I think is worth actually digging into'
+
+[00:12] [scene:talk]
+VISUAL:
+AUDIO: 'because the takes on it are wildly split. A builder who goes by roughnet shipped a project called Ru View and the claim is basically sci-fi. Point a cheap ESP32 at any Wi-Fi router and it\'ll track every person in the room, measure'
+
+[00:26] [scene:talk]
+VISUAL:
+AUDIO: 'their breathing, measure their heart rate all through walls with nothing filming them. The repo hit 47,000 stars in under a year, but Hacker News is split on whether this thing is actually real. Let\'s look at the code and see'
+
+[00:39] [scene:talk]
+VISUAL:
+AUDIO: 'which side is right. 47,462 stars, 6,389 forks, Apache MIT licensed so you can fork it tomorrow and it\'s been in active'
+
+[00:51] [scene:talk]
+VISUAL:
+AUDIO: 'development for under a year. The repo went public in June 2025 and has been pushing commits basically every day since. 401 commits, 235 branches and the release log reads like someone'
+
+[01:05] [scene:talk]
+VISUAL:
+AUDIO: 'running a hardware startup solo. Let me walk you through what\'s actually sitting in the readme. The top of the readme sets the stakes clearly. Wi-Fi DensePose turns commodity Wi-Fi signals into real-time human pose'
+
+[01:17] [scene:talk]
+VISUAL:
+AUDIO: 'estimation, vital sign monitoring and presence detection all without a single pixel of video. Right below that they list what it senses. Presence through walls, breathing and heart rate, walking'
+
+[01:29] [scene:talk]
+VISUAL:
+AUDIO: 'and falls, environment mapping that fingerprints rooms by their Wi-Fi signature and overnight sleep monitoring with apnea screening. Scroll down and you hit a wall of performance tables. Pose at 171,000 embeddings per second on'
+
+[01:41] [scene:talk]
+VISUAL:
+AUDIO: 'an M4 Pro. Through wall sensing up to 5 m deep, 92.9% accuracy on pose when you train it with a webcam. The whole model compiles to 55 kilobytes and fits inside the'
+
+[01:53] [scene:talk]
+VISUAL:
+AUDIO: 'ESP32 chip\'s RAM. Then you get to the pre-trained model section on Hugging Face. Trained on 60,000 real-world samples from an 8-hour overnight collection. You download them'
+
+[02:05] [scene:talk]
+VISUAL:
+AUDIO: 'and you\'ve got a sensing pipeline without writing a line of training code. Here\'s why Hacker News is fighting about this. The underlying science is real. There\'s a Carnegie Mellon paper from 2019 called DensePose from Wi-Fi that'
+
+[02:17] [scene:talk]
+VISUAL:
+AUDIO: 'did exactly this kind of pose estimation in a university lab and MIT has done similar work. The math checks out because when a body moves between a Wi-Fi transmitter and receiver, the signal gets disturbed in measurable'
+
+[02:30] [scene:talk]
+VISUAL:
+AUDIO: 'ways. What nobody has proven yet is whether roughnet\'s specific implementation works on a real ESP32 mesh in your living room because there\'s no public demo video. The top comment on the Hacker News thread accuses the whole'
+
+[02:43] [scene:talk]
+VISUAL:
+AUDIO: 'repo of being AI generated with mock data. CNX Software did a more careful review and said the simpler pieces probably work while the through wall pose claim needs custom training for your room. The performance claims are specific'
+
+[02:57] [scene:talk]
+VISUAL:
+AUDIO: 'enough to be testable. 810 times faster than the original Python reference implementation. 54,000 frames per second on the signal processing pipeline. 171,000'
+
+[03:09] [scene:talk]
+VISUAL:
+AUDIO: 'embeddings per second on an M4 Pro laptop and the whole wasm edge module weighs 8 kilobytes at 4-bit quantization so it fits inside the ESP32\'s RAM with room left over.'
+
+[03:21] [scene:talk]
+VISUAL:
+AUDIO: 'The feature service is much wider than just pose estimation. Vital sign detection reads breathing rate between 6 and 30 breaths per minute and heart rate between 40 and 120 bpm just from Wi-Fi signal disturbance.'
+
+[03:35] [scene:talk]
+VISUAL:
+AUDIO: 'Environment mapping builds a unique RF fingerprint for each for each room so you can detect when furniture moves or a new object appears. The sleep monitor script outputs a hypnogram and flags apnea events longer than 10 seconds and there\'s a search and'
+
+[03:48] [scene:talk]
+VISUAL:
+AUDIO: 'rescue module called Wi-Fi Mat that claims to detect survivors through 30 cm of concrete by their breathing signature. The really wild part is the edge module collection.'
+
+[04:00] [scene:talk]
+VISUAL:
+AUDIO: '&gt;&gt; [snorts] &gt;&gt; They\'ve implemented 60 tiny wasm programs that run directly on the ESP32, each under 30 kilobytes, each doing a specific sensing task. Gesture recognition, intrusion detection, fall alerts, gait analysis that flags'
+
+[04:13] [scene:talk]
+VISUAL:
+AUDIO: 'tremors, a sleep apnea detector that runs on the sensor itself. The adaptive learning modules let the sensor teach itself new gestures over time without retraining and there\'s a full cryptographic witness chain where'
+
+[04:26] [scene:talk]
+VISUAL:
+AUDIO: 'every sensor reading gets a SHA256 signature, which is the kind of thing you need if you\'re selling this into healthcare or security where auditors need to prove nobody tampered with the data.'
+
+[04:39] [scene:talk]
+VISUAL:
+AUDIO: 'Under the hood, the architecture is much more serious than a typical weekend repo. The firmware runs on ESP32 S3 chips with a custom CSI streaming driver that hits 20 Hz over UDP. The signal processing layer is all rust built on a'
+
+[04:53] [scene:talk]
+VISUAL:
+AUDIO: 'stack they call Ru Vector which handles attention networks, graph min cut algorithms and sparse solvers that let everything run on the microcontroller. The rust workspace has 15 published'
+
+[05:05] [scene:talk]
+VISUAL:
+AUDIO: 'crates, every one of them live on crates.io. There\'s a wasm built for browser inference, a Docker image that runs simulated data with no hardware and a Tauri 2 desktop app for managing nodes and every architectural decision is'
+
+[05:18] [scene:talk]
+VISUAL:
+AUDIO: 'documented in what they call ADR files, architecture decision records. There are 79 of them. Getting started looks almost too easy. If you just want to see the system run without hardware, you Docker pull the'
+
+[05:30] [scene:talk]
+VISUAL:
+AUDIO: 'pre-built image and open localhost:3000. That\'s it. If you actually want live sensing, you flash the firmware onto a $9 ESP32 S3 board with the ESP tool Python script, provision it with your Wi-Fi credentials'
+
+[05:44] [scene:talk]
+VISUAL:
+AUDIO: 'and start streaming. The full system with a CogniTensor seed add-on for persistent memory and KNN search runs you about 140 bucks total. The latest release dropped 4 days ago and it\'s a weirdly specific bug fix.'
+
+[05:56] [scene:talk]
+VISUAL:
+AUDIO: 'Version 0.6.1 fixes a memory clobber in the ESP32 firmware where every node in a multi-node deployment was incorrectly reporting itself as node one regardless of what you provisioned.'
+
+[06:09] [scene:talk]
+VISUAL:
+AUDIO: 'The fix is a defensive pattern where the firmware captures the node ID into a local static at any time and uses that everywhere downstream. The release notes include a 15 out of 15 UDP packet validation on real hardware'
+
+[06:21] [scene:talk]
+VISUAL:
+AUDIO: 'on port COM8. That\'s the kind of bug report you write when you actually run the hardware and watch the packets coming wrong. It\'s hard to fake that. So who should actually care about this,'
+
+[06:33] [scene:talk]
+VISUAL:
+AUDIO: 'skepticism and all? If you\'re building anything in privacy-preserving sensing, this repo is the most complete open source reference that exists right now even if half the claims need your own validation.'
+
+[06:46] [scene:talk]
+VISUAL:
+AUDIO: 'If you\'re a researcher, there\'s 79 architecture decision records explaining every design choice and the rust crates are individually testable. If you\'re an ESP32 hobbyist who wants a presence detector for your smart home, the'
+
+[06:59] [scene:talk]
+VISUAL:
+AUDIO: 'simpler modules almost certainly work. And if you want to either validate or debunk the bigger claims, all the code is public and the deterministic reference signal verifier runs without hardware.'
+
+[07:11] [scene:talk]
+VISUAL:
+AUDIO: 'Okay, let\'s be real about the tradeoffs. There\'s no public demo video from the author showing through wall pose estimation in action &gt;&gt; [snorts] &gt;&gt; and that\'s the biggest missing piece. The Hacker News skeptics have a real point that you can\'t fully trust a'
+
+[07:23] [scene:talk]
+VISUAL:
+AUDIO: '47,000 star repo without a 30-second clip of it working. The beta warning in the readme is honest, too. Camera-free pose estimation only hits decent accuracy after you train it with a webcam in your room,'
+
+[07:36] [scene:talk]
+VISUAL:
+AUDIO: 'which partially defeats the no cameras premise. But for everything that\'s messy about it, the project is doing real work. 400 commits, MIT licensed, 15 published rust crates, hardware'
+
+[07:48] [scene:talk]
+VISUAL:
+AUDIO: 'validation logs in release notes, 79 architectural decision records. Whether every headline claim holds up is an open question, but the scaffolding is there. If you\'re building anything privacy-first or edge AI in 2026 and you'
+
+[08:00] [scene:talk]
+VISUAL:
+AUDIO: 'haven\'t cloned this repo to poke at it, you\'re passing up one of the more ambitious open source experiments of the year. Link is in the description. Thanks for watching. I\'ll catch you tomorrow.'

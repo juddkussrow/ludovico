@@ -1,0 +1,95 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Keep Identity & Control Pose: RefControl Depth LoRA for FLUX.2 Klein 9B in #ComfyUI
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=YAmePf_imyM
+upload_date: unknown
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'If you’ve been trying to keep character identity&nbsp; perfectly consistent while changing poses in Flux2&nbsp;&nbsp; Klein 9B, you know how quickly things can break.&nbsp; But look at this. By combining a reference image&nbsp;&nbsp; with a depth map, this new RefControl Depth LoRA&nbsp; lets you completely lock down facial features,&nbsp;&nbsp;'
+
+[00:12] [scene:talk]
+VISUAL:
+AUDIO: 'clothing, and style—while forcing the model&nbsp; to perfectly follow the structural depth of&nbsp;&nbsp; a brand new scene. Today, we’re going to look at&nbsp; exactly how it handles human portraits, complex&nbsp;&nbsp; object tracking, and how much you can push the&nbsp; weights to maintain perfect identity fidelity. &nbsp;'
+
+[00:27] [scene:talk]
+VISUAL:
+AUDIO: 'Before we jump into the generation&nbsp; comparisons, here is a quick look at&nbsp;&nbsp; the Repo to see what this LoRA excels at,&nbsp; and how to get the cleanest results. &nbsp; The Core Use Cases are: Human portraits&nbsp; in different poses. Consistent character&nbsp;&nbsp;'
+
+[00:40] [scene:talk]
+VISUAL:
+AUDIO: 'design across multiple scenes. Object&nbsp; transformations (cars, furniture, props)&nbsp;&nbsp; with depth-guided placement. Storyboarding,&nbsp; comics, or animation frame generation. &nbsp; Tips for Best Results: Sweet Spot Weights:&nbsp; Keep your LoRA strength between 0.8 and 1.0.&nbsp;&nbsp;'
+
+[00:55] [scene:talk]
+VISUAL:
+AUDIO: 'Going lower loses identity, while going higher can&nbsp; cause harsh deep artifacts. Match Aspect Ratios:&nbsp;&nbsp; Ensure your reference image, depth map, and target&nbsp; resolution share the same aspect ratio to prevent&nbsp;&nbsp;'
+
+[01:08] [scene:talk]
+VISUAL:
+AUDIO: 'stretched faces or distorted bodies. Leverage the&nbsp; Trigger Word: Always include the model\'s specific&nbsp;&nbsp; `refcontrol` trigger word alongside descriptive&nbsp; text prompts to smoothly blend your character into&nbsp;&nbsp; the new composition or backgrounds. Control the&nbsp; Background via Text: Use your prompt to dictate&nbsp;&nbsp;'
+
+[01:23] [scene:talk]
+VISUAL:
+AUDIO: 'changes in lighting, weather, and scenery; let&nbsp; the depth map handle the physical geometry. &nbsp; So, let\'s have a quick look at the workflow.&nbsp; This red note provides all links to the required&nbsp;&nbsp;'
+
+[01:35] [scene:talk]
+VISUAL:
+AUDIO: 'models. Download them and place them into the&nbsp; folders noted here. If you want to use the&nbsp;&nbsp; all-in-one merge file, you can download it from&nbsp; this link, and put it into the checkpoints folder&nbsp;&nbsp; under ComfyUI model\'s directory. It works great&nbsp; on my 12 gigabyte card. And follow this link to&nbsp;&nbsp;'
+
+[01:49] [scene:talk]
+VISUAL:
+AUDIO: 'access the dev\'s repo for more detailed info. The&nbsp; blue nodes are where we load our models. Also,&nbsp;&nbsp; there is this new node from KJ that helps&nbsp; accelerate the VAE decoding and encoding&nbsp;&nbsp;'
+
+[02:01] [scene:talk]
+VISUAL:
+AUDIO: 'processes. If you run into any errors with this&nbsp; node, try setting the autotune to false first. If&nbsp;&nbsp; that does not help, you may want to bypass it for&nbsp; now, as it is still very new. Then here we load&nbsp;&nbsp; the LoRA\'s. I am still using the CONSIS LoRA,&nbsp; which I have already added to the red note. &nbsp;'
+
+[02:16] [scene:talk]
+VISUAL:
+AUDIO: 'If you want to stack an \'F2K uncensored\' or&nbsp; any other LoRA, you can place it here. And&nbsp;&nbsp; here we load our \'refcontrol depth\' LoRA. As for&nbsp; below here, these are the split files loaders,&nbsp;&nbsp; un-bypass or un-mute the nodes to use them.&nbsp; Also, hook the loader nodes you want to use&nbsp;&nbsp;'
+
+[02:30] [scene:talk]
+VISUAL:
+AUDIO: 'into this remote node like this. So, next we load&nbsp; 2 types of images, one for the depth map and the&nbsp;&nbsp; other for our reference character or subject. We&nbsp; use depth anything V2 to create our depth map.&nbsp;&nbsp; If you run into any trouble with this node, try&nbsp; their repo first. Open manager and select the \'In&nbsp;&nbsp;'
+
+[02:46] [scene:talk]
+VISUAL:
+AUDIO: 'Workflow\' filter. Then just click on the title&nbsp; link to go to their GitHub repo. The node will&nbsp;&nbsp; create a depth map and it will be previewed here.&nbsp; As for our ref image, I am testing this LoRA with&nbsp;&nbsp; 2 input images at different ratios to see how&nbsp; it does. And then we set our output resolution&nbsp;&nbsp;'
+
+[03:01] [scene:talk]
+VISUAL:
+AUDIO: 'at this WLSH node. As per the Dev\'s instruction,&nbsp; we use \'refcontrol\' as our trigger word. I will&nbsp;&nbsp; just leave the prompt blank, and use the trigger&nbsp; word only for this test run. Okay... the final&nbsp;&nbsp; part. Here I have 2 samplers setup. The regular&nbsp; \'Sampler-Custom-Advanced\', and the \'Flux-Klein&nbsp;&nbsp;'
+
+[03:16] [scene:talk]
+VISUAL:
+AUDIO: 'Sampler\'. They are not setup for comparison.&nbsp; I am doing this so I can see both outcomes at&nbsp;&nbsp; the same time. But I am using different seeds for&nbsp; each, for a better diversity. The reason is I can&nbsp;&nbsp; choose the best output to keep for later uses. This is my own node. I vibe-coded it so I can&nbsp;&nbsp;'
+
+[03:32] [scene:talk]
+VISUAL:
+AUDIO: 'easily save the output image as a JPG file, with&nbsp; some controls on the quality. If you wish to use&nbsp;&nbsp; this node, you are welcome to download it from the&nbsp; link in the description. Just drop it into Comfy\'s&nbsp;&nbsp;'
+
+[03:44] [scene:talk]
+VISUAL:
+AUDIO: 'custom nodes folder and restart. As you may have&nbsp; noticed from my earlier videos, in most cases, the&nbsp;&nbsp; workflows I show on my videos are the ones that I&nbsp; modified for my daily uses. I did not created them&nbsp;&nbsp; just to make YouTube videos. Okay. Here I have the&nbsp; comparison node for a quick preview of which image&nbsp;&nbsp;'
+
+[03:58] [scene:talk]
+VISUAL:
+AUDIO: 'to keep, and which to delete. Now, let\'s do a test&nbsp; run. This will be a bit slower because it is my&nbsp;&nbsp; very first run. So, for this run, the bottom&nbsp; flow\'s output color seems washed out. But the&nbsp;&nbsp;'
+
+[04:10] [scene:talk]
+VISUAL:
+AUDIO: 'identity is preserved much better than the top&nbsp; flow. Now I can compare between the 2 to see&nbsp;&nbsp; which to keep. Per my previous testing, there&nbsp; are mixed results on my setup. Mostly usable&nbsp;&nbsp; ones. But once I mixed genders, it gets screwed.&nbsp; I might need to work more on the prompts for this&nbsp;&nbsp;'
+
+[04:25] [scene:talk]
+VISUAL:
+AUDIO: 'particular workflow. Anyways, I still prefer the&nbsp; Flux KSampler custom node. So again, the save JPG&nbsp;&nbsp; node download link is in the description if you&nbsp; are interested. It is pretty handy, as it saves a&nbsp;&nbsp; lot of disk space, if you don\'t need the metadata.&nbsp; Just replace it with a regular save image node, if&nbsp;&nbsp;'
+
+[04:41] [scene:talk]
+VISUAL:
+AUDIO: 'you do. And that\'s about it for this short review.&nbsp; Hope you liked it, and thanks for watching.'

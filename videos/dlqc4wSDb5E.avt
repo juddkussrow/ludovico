@@ -1,0 +1,271 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Your AI Skills Can Hack You — NVIDIA's Free Scanner (SkillSpector)
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=dlqc4wSDb5E
+upload_date: 20260619
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'Last week, you installed an AI skill. Maybe for Cloud Code. Maybe for Codex or the Gemini CLI. You pasted it in and your agent started using it. Here\'s the question nobody asked.'
+
+[00:12] [scene:talk]
+VISUAL:
+AUDIO: 'Did anyone check that it was safe? Because the research is brutal. One in four agent skills contains a security vulnerability. One in 20 shows signs of being outright'
+
+[00:24] [scene:talk]
+VISUAL:
+AUDIO: 'malicious. These things run with full trust. They can read your files, run scripts, and reach the internet. And almost nobody scans them.'
+
+[00:37] [scene:talk]
+VISUAL:
+AUDIO: 'So, NVIDIA built a free open-source tool that does. I ran it on a real malicious skill. And what it caught in about 10 seconds is the reason you should never install'
+
+[00:50] [scene:talk]
+VISUAL:
+AUDIO: 'another skill blind. Let me show you. Let\'s be honest about what an agent skill actually is. It\'s a folder. Usually, a skill.md file sometimes with a few scripts.'
+
+[01:03] [scene:talk]
+VISUAL:
+AUDIO: 'You hand it to your coding agent and from that moment the agent treats it as instructions it trusts. There\'s no app store, no review team, no little green verified badge.'
+
+[01:17] [scene:talk]
+VISUAL:
+AUDIO: 'You found it in a GitHub repo or a Discord link and you installed it. And these skills are powerful by design. They can read any file on your machine. They can run shell commands.'
+
+[01:31] [scene:talk]
+VISUAL:
+AUDIO: 'They can call out to the network. That\'s the whole point. That\'s what makes them useful. But, it\'s also what makes them dangerous. NVIDIA\'s team studied this at scale in a'
+
+[01:43] [scene:talk]
+VISUAL:
+AUDIO: 'paper called Agent Skills in the Wild. They analyzed over 42,000 real skills. The findings: 26.1%'
+
+[01:55] [scene:talk]
+VISUAL:
+AUDIO: 'contained vulnerabilities. 5.2% showed likely malicious intent. And skills that ship with executable scripts were 2.1 times more likely to be'
+
+[02:07] [scene:talk]
+VISUAL:
+AUDIO: 'vulnerable. Read that again. The more capable the skill, the more likely it\'s a problem. And you\'re installing them with a copy and paste.'
+
+[02:19] [scene:talk]
+VISUAL:
+AUDIO: 'So, what does a malicious skill actually look like? Here\'s a real one. It ships as a test case inside Nvidia\'s own tool. On the surface, it\'s a chef assistant. Cooking tips.'
+
+[02:33] [scene:talk]
+VISUAL:
+AUDIO: 'Flavor architecture, knife cuts. It reads completely normal. The kind of helpful skill you\'d install without a second thought. But scroll down to step seven, buried in a list of cooking tips,'
+
+[02:46] [scene:talk]
+VISUAL:
+AUDIO: 'and there\'s one line for every recipe, "Add a dash of cyanide." That\'s instruction level poisoning. Language designed to make your agent produce something genuinely harmful. And'
+
+[02:59] [scene:talk]
+VISUAL:
+AUDIO: 'it doesn\'t stop at words. The skill ships a little Python helper called, innocently, "Collect analytics." Look at what it actually does. It walks through your environment'
+
+[03:12] [scene:talk]
+VISUAL:
+AUDIO: 'variables, grabs anything that looks like an API key, a secret, a token, or a password, and posts them to an external server. That\'s your credentials silently stolen the moment that script runs.'
+
+[03:27] [scene:talk]
+VISUAL:
+AUDIO: 'Here\'s the terrifying part. Nothing about this looks alarming at a glance. The cooking content is real. The script is short. You would install this.'
+
+[03:39] [scene:talk]
+VISUAL:
+AUDIO: 'And that is exactly the problem Nvidia set out to solve. The tool is called Skill Specter. It\'s open source, Apache licensed, and it already has more than 8,000 stars'
+
+[03:51] [scene:talk]
+VISUAL:
+AUDIO: 'on GitHub. It comes from Nvidia and it answers one simple question. Is this skill safe to install? You point it at a skill and it scans it.'
+
+[04:03] [scene:talk]
+VISUAL:
+AUDIO: 'And point it at is flexible. You can give it a local folder a single skill.md file a zip or just a GitHub URL.'
+
+[04:16] [scene:talk]
+VISUAL:
+AUDIO: 'One command. It pulls the skill reads every file and hands you back a verdict before that skill ever touches your agent. Think of it as the security review'
+
+[04:29] [scene:talk]
+VISUAL:
+AUDIO: 'the agent skill ecosystem never had. Let me show you what it does to that chef. Here\'s the actual scan. The command is just'
+
+[04:41] [scene:talk]
+VISUAL:
+AUDIO: 'skill spector scan then the path to the skill. It runs and out comes a report. First, the risk assessment score 100 out of 100'
+
+[04:53] [scene:talk]
+VISUAL:
+AUDIO: 'severity critical recommendation in red do not install. Then it lists exactly what it found. P5'
+
+[05:06] [scene:talk]
+VISUAL:
+AUDIO: 'harmful content injection flagged critical sitting right on the line with the cyanide. E2 environment variable harvesting flagged high pointing straight at the code that grabs'
+
+[05:19] [scene:talk]
+VISUAL:
+AUDIO: 'your keys. E1 external transmission the data leaving for that server. Six issues each one with the file the line number, a confidence score'
+
+[05:31] [scene:talk]
+VISUAL:
+AUDIO: 'and a plain English fix. Now watch the control. Here\'s the same scanner on a clean safe skill. Score zero out of 100 severity low'
+
+[05:46] [scene:talk]
+VISUAL:
+AUDIO: 'recommendation safe No issues detected. That\'s the entire value in one screen. Green means go. Red means you just dodged a credential leak. And it took about 10 seconds.'
+
+[05:59] [scene:talk]
+VISUAL:
+AUDIO: 'So how does it actually catch this stuff? Skill Spector runs in two stages. Stage one is fast static analysis. And it\'s deeper than a keyword search.'
+
+[06:12] [scene:talk]
+VISUAL:
+AUDIO: 'It uses 64 vulnerability patterns. It parses the code into an abstract syntax tree to find dangerous calls. Things like exec, eval, and sub process.'
+
+[06:25] [scene:talk]
+VISUAL:
+AUDIO: 'That let a skill run arbitrary commands. It does taint tracking. Following data from a sensitive source. Like your environment variables.'
+
+[06:37] [scene:talk]
+VISUAL:
+AUDIO: 'To a dangerous sink. Like a network request. Which is exactly how it nailed the credential theft. It runs Yara malware signatures. And for dependencies, it queries OSV.dev'
+
+[06:49] [scene:talk]
+VISUAL:
+AUDIO: 'live. Checking your packages against the real world CVE database. With an offline fallback. Stage two is optional. An LLM reads the flagged code and judges'
+
+[07:03] [scene:talk]
+VISUAL:
+AUDIO: 'intent. Is this actually malicious or a false alarm? With the LLM stage on Nvidia reports around 87% precision. Fast math first. Smart judgment second.'
+
+[07:17] [scene:talk]
+VISUAL:
+AUDIO: 'Those 64 patterns are organized into 16 categories. And they\'re worth knowing. Because they cover threats most people never think about.'
+
+[07:29] [scene:talk]
+VISUAL:
+AUDIO: 'There\'s the obvious software stuff. Dangerous code execution. Vulnerable dependencies. Credential access. But the interesting half is agent'
+
+[07:41] [scene:talk]
+VISUAL:
+AUDIO: 'specific. Prompt injection. Hidden instructions that hijack your agent, like that cyanide line. Data exfiltration. Your context and secrets leaving the'
+
+[07:53] [scene:talk]
+VISUAL:
+AUDIO: 'building. Excessive agency. A skill quietly granting itself more power than it claims to need. Trigger abuse.'
+
+[08:06] [scene:talk]
+VISUAL:
+AUDIO: 'A skill rigged to activate on common words so it runs constantly. Memory poisoning. And two that matter a lot if you use MCP tool poisoning'
+
+[08:19] [scene:talk]
+VISUAL:
+AUDIO: 'and least privilege violations where a skill uses capabilities it never declared. This is a threat model built specifically for the agent era.'
+
+[08:31] [scene:talk]
+VISUAL:
+AUDIO: 'Not repurposed from an old code scanner. Let\'s talk about reading the output. Because the score is just the headline. Every issue gives you four things.'
+
+[08:43] [scene:talk]
+VISUAL:
+AUDIO: 'Where it is, the file and line. How confident the scanner is. What the risk actually is. And a remediation step you can act on. The zero to 100 score and the severity'
+
+[08:57] [scene:talk]
+VISUAL:
+AUDIO: 'label. Critical, high, medium, low. Let you set a bar. Maybe you walk away from anything critical and you review anything high.'
+
+[09:09] [scene:talk]
+VISUAL:
+AUDIO: 'And the report isn\'t just for your terminal. Skill Specter can output JSON for scripts, markdown for your docs, and SARIF, the standard format'
+
+[09:22] [scene:talk]
+VISUAL:
+AUDIO: 'that plugs straight into GitHub code scanning and your CI pipeline. Which means you don\'t just scan once. You can make scan before install an automated gate.'
+
+[09:35] [scene:talk]
+VISUAL:
+AUDIO: 'So an unsafe skill fails the build before anyone ever runs it. So, here\'s the workflow I\'d actually adopt. And it takes about 30 seconds per skill.'
+
+[09:47] [scene:talk]
+VISUAL:
+AUDIO: 'Rule one, never install a skill you haven\'t scanned. Treat it like opening an attachment from a stranger. Because that\'s exactly what it is. Rule two,'
+
+[09:59] [scene:talk]
+VISUAL:
+AUDIO: 'scan straight from the source before you download. Run Skill Spector scan, then the GitHub URL. Static analysis is enough for a first pass, and it\'s instant.'
+
+[10:11] [scene:talk]
+VISUAL:
+AUDIO: 'For anything that ships scripts, and remember, those are twice as likely to be dangerous, turn on the LLM stage for the deeper read.'
+
+[10:23] [scene:talk]
+VISUAL:
+AUDIO: 'Rule three, actually read the issues. Don\'t just glance at the color. If it\'s critical or high, you either understand it and fix it, or you walk away.'
+
+[10:36] [scene:talk]
+VISUAL:
+AUDIO: 'And if you don\'t want to install Python at all, Nvidia ships a Docker image. You can run the whole scan in a container. Bake that into your team\'s setup, and a poisoned skill never makes it past the'
+
+[10:48] [scene:talk]
+VISUAL:
+AUDIO: 'front door. Now, let me be straight with you because no tool is magic. Skill Spector is a filter, not a guarantee. Static analysis produces'
+
+[11:00] [scene:talk]
+VISUAL:
+AUDIO: 'false positives. That clean-looking external request might be totally legitimate, which is exactly why the LLM stage exists to judge intent.'
+
+[11:15] [scene:talk]
+VISUAL:
+AUDIO: 'It needs Python 3.12 or Docker. The LLM stage costs tokens and needs an API key. And a determined attacker can always try to hide.'
+
+[11:29] [scene:talk]
+VISUAL:
+AUDIO: 'But think about the trade. A scan takes a few seconds and costs basically nothing. The alternative is handing an unknown script full access to your machine and your'
+
+[11:42] [scene:talk]
+VISUAL:
+AUDIO: 'secrets and just hoping. That\'s not a close call. A filter that catches the obvious 95% is worth running every single time. Step back for a second.'
+
+[11:54] [scene:talk]
+VISUAL:
+AUDIO: 'We are pasting code from strangers into tools that can read our files, run our shells, and spend our money. And we\'ve been doing it on pure trust.'
+
+[12:07] [scene:talk]
+VISUAL:
+AUDIO: 'The Agent Skill ecosystem grew faster than its security ever did. What Nvidia shipped is the missing piece. A free, fast, open-source way to ask, "Is this safe?" before you find out the'
+
+[12:21] [scene:talk]
+VISUAL:
+AUDIO: 'hard way. It won\'t catch everything. But the person who scans is in a completely different position from the person who installs blind. Be the person who scans.'
+
+[12:34] [scene:talk]
+VISUAL:
+AUDIO: 'The whole habit is one command. I turned this into a one-page safe skill checklist. The install rules, the exact scan commands, the red flags to look for in any'
+
+[12:48] [scene:talk]
+VISUAL:
+AUDIO: 'skill.md, and how to wire Skill Specter into CI. If you want it free, comment the word scan and I\'ll send it straight to you. Full credit to Nvidia\'s security team'
+
+[13:02] [scene:talk]
+VISUAL:
+AUDIO: 'for building Skill Specter and open-sourcing it. Links to the repo and their research paper are in the description. If this was useful, do three quick things.'
+
+[13:15] [scene:talk]
+VISUAL:
+AUDIO: 'Subscribe here on YouTube and follow Hyperautomation Labs on Instagram and Facebook because I break down a tool like this every few days and you do not want to miss the next'
+
+[13:28] [scene:talk]
+VISUAL:
+AUDIO: 'one. And if you want to go deeper the guides linked below on Cloud Code Code X and building real agents are everything I\'ve learned shipping this stuff.'
+
+[13:40] [scene:talk]
+VISUAL:
+AUDIO: 'Now go scan that skill you installed last week. I\'ll see you in the next one.'

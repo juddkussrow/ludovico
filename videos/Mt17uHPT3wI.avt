@@ -1,0 +1,195 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: LTX 2.3 Reference-to-Video Complete Setup Guide - LiconStudio MSR LoRA
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=Mt17uHPT3wI
+upload_date: 20260608
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'Hey everyone. So today we\'re going to check out how to use LTX 2.3 with reference to video, specifically the Lykon Studio multiple subject reference Laura. Now the clips you\'re seeing right here, these are all generated using this'
+
+[00:12] [scene:talk]
+VISUAL:
+AUDIO: 'reference to video method and um this isn\'t your traditional single image key frame approach or even first and last frame to video. No, what we have here is a character multiple characters with full background'
+
+[00:27] [scene:talk]
+VISUAL:
+AUDIO: 'environments all maintained consistently across the entire video. This is basically the same concept as reference to video in Juan 2.1 base and nowadays ByteDance\'s SeaDance 2.0 has a'
+
+[00:40] [scene:talk]
+VISUAL:
+AUDIO: 'similar idea too, but of course the frontier models do better motion and graphics though they run on remote servers. Here we\'re doing it locally. So'
+
+[00:53] [scene:talk]
+VISUAL:
+AUDIO: 'the main thing that makes this work is Lykon Studio\'s MSR custom node. And it has to run with their custom Laura models. Now Lykon Studio, we\'ve actually covered them before on this channel.'
+
+[01:05] [scene:talk]
+VISUAL:
+AUDIO: 'They made the VBVR Laura. That\'s their video reasoning Laura for LTX image to video. And the MSR Laura is their newest release built specifically for LTX 2.3.'
+
+[01:17] [scene:talk]
+VISUAL:
+AUDIO: 'And honestly, the concept behind it is pretty cool. Check out some of the demos the creators put together. Two characters plus a background reference. And here\'s the key part. The background'
+
+[01:29] [scene:talk]
+VISUAL:
+AUDIO: 'isn\'t just a static image sitting there. You get multiple angles. The environment actually moves. Like in this example, different camera angles and the characters stay consistent with their styles throughout.'
+
+[01:41] [scene:talk]
+VISUAL:
+AUDIO: 'Same for the background reference image. I applied that same concept to my demo music video here. You can see I have a character reference plus a background and um'
+
+[01:54] [scene:talk]
+VISUAL:
+AUDIO: 'it\'s creating this more futuristic cyberpunk style. But I\'m using the exact same reference to video pipeline in LTX 2.3 and all of this generated clip by clip. Now for this music video project,'
+
+[02:06] [scene:talk]
+VISUAL:
+AUDIO: 'I prepared everything up front. I created the audio tracks and then I used Hermes agents to build a pipeline that automates the background scenes. So in the video you see here, there\'s a server'
+
+[02:18] [scene:talk]
+VISUAL:
+AUDIO: 'room scene. Then we\'ve got these cyberpunk futuristic city environments that I prepared as background references. And the character, I generated a character sheet style image using Z image turbo. Based on all those elements, I fed them in as references'
+
+[02:31] [scene:talk]
+VISUAL:
+AUDIO: 'and generated every single video clip with LTX 2.3. And here\'s where it gets really interesting. In this scene, I have two characters standing together in the same environment. I\'m using both characters'
+
+[02:44] [scene:talk]
+VISUAL:
+AUDIO: 'as references and they go through different angles, even a close-up shot and they maintain consistency the whole time. Now, because LTX 2.3 supports prompt relay, I\'m able to push even'
+
+[02:56] [scene:talk]
+VISUAL:
+AUDIO: 'further with different camera angles and dynamic camera motions. Same concept and honestly, some of these glitch effects are intentional because this music video is literally about AI glitches.'
+
+[03:09] [scene:talk]
+VISUAL:
+AUDIO: 'All right. So let\'s break down the workflow. We\'re using Lykon MSR as one of the key components and this workflow is essentially the same LTX 2.3 prompt relay setup I showed in a previous'
+
+[03:22] [scene:talk]
+VISUAL:
+AUDIO: 'video. We\'ve got three LoRAs loaded here. The first one is the Distill LoRA 1.1, the second, and this is the main one, is the Lykon MSRV1. Now this is the current version as I\'m'
+
+[03:35] [scene:talk]
+VISUAL:
+AUDIO: 'recording this, so by the time you watch, they might have a newer version. And the third one is the Omni MFT LoRA which we\'ve covered before. This one keeps the motion, characters, and audio more consistent across clips.'
+
+[03:48] [scene:talk]
+VISUAL:
+AUDIO: 'I did try adding more LoRAs top of these three, but honestly, it started creating some weird artifacts with the MSR reference to video. So, I\'m sticking with these three for now. Moving on to the input settings. This is'
+
+[04:01] [scene:talk]
+VISUAL:
+AUDIO: 'where you set your video dimensions, duration, and FPS. Now, notice I\'m setting the FPS to 50. That\'s high, and the reason is the MSR Laura settings specifically recommend 50 FPS.'
+
+[04:14] [scene:talk]
+VISUAL:
+AUDIO: 'When you set it lower, the reference images start looking off in the final output. So, just follow what the docs say. On the Hugging Face page, they recommend'
+
+[04:26] [scene:talk]
+VISUAL:
+AUDIO: '50 frames per second for high motion scenes to ensure smooth motion and coherence. And that\'s especially important because we\'re doing multiple image referencing here. Now, since you\'re passing multiple reference'
+
+[04:38] [scene:talk]
+VISUAL:
+AUDIO: 'images, you need to describe what each image actually is, so the model knows which one you\'re referring to in the text prompt. In my workflow, I\'m using prompt relay for the text prompting structure. In the global prompt, this is where I define each reference image.'
+
+[04:52] [scene:talk]
+VISUAL:
+AUDIO: 'So, for example, image two, long hair, black and purple clothing. That\'s my character. Short description, but enough for the model to understand which image I\'m talking about. Same'
+
+[05:05] [scene:talk]
+VISUAL:
+AUDIO: 'thing for the other character reference and the background image. All defined in the global prompt. Then, I move to the segment prompts. This is where you describe the character\'s actions and camera movements'
+
+[05:17] [scene:talk]
+VISUAL:
+AUDIO: 'for each segment. So, that\'s the standard prompt relay structure I covered in a previous video. The negative prompt. This is interesting. Normally, when you use the Distill Laura or distilled'
+
+[05:29] [scene:talk]
+VISUAL:
+AUDIO: 'model, you don\'t really need a negative prompt. But in the MSR sample workflow on Hugging Face, they actually include one with specific keywords for negative conditioning, and I tested it both ways,'
+
+[05:41] [scene:talk]
+VISUAL:
+AUDIO: 'with and without the negative prompt, and it does affect the quality slightly. So, I\'m just following the author\'s recommendation on this one. Now, let\'s look at the graph structure. We pass the LTX condition,'
+
+[05:54] [scene:talk]
+VISUAL:
+AUDIO: 'which gives us two conditions going into sampling. One is the CFG guide, and the other is the LTX crop guide. The CFG guide is what actually runs the sampling, and in the manual segment node, the step values here correspond'
+
+[06:07] [scene:talk]
+VISUAL:
+AUDIO: 'directly to the sampling steps for the Distill LoRA. Then, VAE decode at the end. Very standard LTX pipeline for video and audio decoding.'
+
+[06:20] [scene:talk]
+VISUAL:
+AUDIO: 'And that\'s it. That\'s how you get your videos out. So, let\'s try another example. Here, I\'m using a different background. Like I said before, I generate all the element images first, characters, environments, backgrounds, and then use'
+
+[06:34] [scene:talk]
+VISUAL:
+AUDIO: 'them as references. Prompt relay handles the text prompting, describing which elements to reference and what actions to perform. The segment prompts focus on character movements and camera motions.'
+
+[06:46] [scene:talk]
+VISUAL:
+AUDIO: 'And coming back to the video, here\'s one of the output clips from that demo music video. You can see the character stays consistent with the background. And the character sheet image I'
+
+[06:59] [scene:talk]
+VISUAL:
+AUDIO: 'mentioned earlier, that was generated using Z image turbo with just text prompts. &gt;&gt; Single station, lost my job to code. That\'s the new equation. They say progress, but I\'m feeling the regression. Human touch erased. Welcome to the session. Click,'
+
+[07:11] [scene:talk]
+VISUAL:
+AUDIO: '&gt;&gt; [music] &gt;&gt; swipe, like, share. Living in a simulation with the real digital nation. &gt;&gt; If you have a specific character LoRA, of course, you can use the LoRA loader in ComfyUI instead. I\'ll put the workflow file in the video description,'
+
+[07:23] [scene:talk]
+VISUAL:
+AUDIO: 'so you guys can try it out and see what you can create with reference to video. Now, I think this approach is going to stay relevant for a while in the AI video space, at least with the LTX model ecosystem.'
+
+[07:37] [scene:talk]
+VISUAL:
+AUDIO: 'There\'s also some new stuff coming. ByteDance recently showed off something called Bernini. It\'s built on top of Wang 2.2. And the video quality in their showcase looks great, but you know,'
+
+[07:49] [scene:talk]
+VISUAL:
+AUDIO: 'in reality, when you actually test it, it\'s not always the same story as what you see in the highlight reels. So, I prefer this approach. More lightweight, just implementing Laura models with your existing LTX setup.'
+
+[08:01] [scene:talk]
+VISUAL:
+AUDIO: 'Much more practical. The ByteDance Bernini is still pending approval in the ComfyUI main branch repo. So, we\'ll have to wait for that to get merged before we can test it. I\'ll cover it in a future video once it\'s available. And of'
+
+[08:14] [scene:talk]
+VISUAL:
+AUDIO: 'course, for running this with AI agents, I mentioned Hermes before. I tried it with the pipeline I showed in a previous video, but modified specifically for music video creation. It streamlines all the scenes, all the shots, all the video'
+
+[08:28] [scene:talk]
+VISUAL:
+AUDIO: 'generation settings. So, you get real automation. Imagine having 30 or 40 video shots to generate. Instead of doing each one manually, you can set up a skill in your AI agent, define the text prompts and settings, and just let'
+
+[08:41] [scene:talk]
+VISUAL:
+AUDIO: 'it run. Like I did here. Now, some people say, "Oh, video automation is just going to create slop." You know, AI-generated garbage because there\'s no human involvement. But,'
+
+[08:54] [scene:talk]
+VISUAL:
+AUDIO: 'if you followed what I\'ve been talking about with Hermes and other AI agent workflows, I always put the human in the loop. You, as the user, review the generated images before moving on to the next step.'
+
+[09:08] [scene:talk]
+VISUAL:
+AUDIO: 'Every step of the way. That\'s the concept I always implement in my AI agent workflows. And honestly, it\'s way more valuable than just letting the AI do everything by itself, because then you lose quality control. You lose the accuracy of what you actually want.'
+
+[09:22] [scene:talk]
+VISUAL:
+AUDIO: 'Like this demo music video. The specific motions, the character timing, when characters appear on screen, the camera switches, all of that needs human review at each step. That\'s what makes it good. All right, that\'s it for this video.'
+
+[09:37] [scene:talk]
+VISUAL:
+AUDIO: 'I\'ll see you guys in the next one.'

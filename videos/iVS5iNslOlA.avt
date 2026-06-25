@@ -1,0 +1,591 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: SKILL.md convert to LoRA Adapters (from Harness to CORE)
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=iVS5iNslOlA
+upload_date: 20260622
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'Hello, community. So great that you are back. Today, today we going to do it. We take our skill MD file our markdown files and bring it from the harness down to the core of our agent the LLM itself. This means we don\'t have to insert our'
+
+[00:12] [scene:talk]
+VISUAL:
+AUDIO: 'skill MDs and cloud MDs here all the time. Now skill MD will become an inherent part here of our model and of course we going to do it here with some Laura adapters that are tiny and I will'
+
+[00:25] [scene:talk]
+VISUAL:
+AUDIO: 'show you today we will build a six million, not billion, a six million parameter Laura adapter that will integrate the skill MD files. So, how we do it? You will understand all of these'
+
+[00:38] [scene:talk]
+VISUAL:
+AUDIO: 'elements in 10 minutes time. So, let\'s start. We have a new study. This is here by the Chinese University of Hong Kong and I was thinking about this myself and it\'s so great that they did it. Skill to Laura adapters. So, from using skill'
+
+[00:52] [scene:talk]
+VISUAL:
+AUDIO: 'skill MD files here to a real learning behavior that is deep inside a neural network here of our LLM for Oh, yeah, we have a benefit, a token efficient LLM agent. So, let\'s have a look.'
+
+[01:06] [scene:talk]
+VISUAL:
+AUDIO: 'This is great because if skill works and you have tested it, you want become that this is an integral part of your LLM and you don\'t want to feed it in here'
+
+[01:18] [scene:talk]
+VISUAL:
+AUDIO: 'continuously and waste the tokens. Oh, they start here with a definition. What is a skill? It is a directory centered here on a required skill MD file with some metadata and some instruction that are procedural plus'
+
+[01:31] [scene:talk]
+VISUAL:
+AUDIO: 'some optional script templates and reference resources that can be loaded with Foreverland. Beautiful. Now, they are taking now a particular benchmark and this is here that software development here the skill benchmark'
+
+[01:43] [scene:talk]
+VISUAL:
+AUDIO: 'here do agent skill actually help in real world software engineering? This is not some abstract test. This is here really you see this here from Nanjing University. This is really real-world'
+
+[01:55] [scene:talk]
+VISUAL:
+AUDIO: 'benchmarking. This was published March 16, 2026. And you have here, of course, your GitHub. Great. Now, what the authors tell for this SWA'
+
+[02:07] [scene:talk]
+VISUAL:
+AUDIO: 'skills, we have 49 skills that we try and test it out and defined. And you know what is nice? There\'s no reliance on LLM as a judge. Beautiful. So, you do not boil in the AI soup itself.'
+
+[02:21] [scene:talk]
+VISUAL:
+AUDIO: 'Now, those 49 skills here, they show you here each and every skill in detail, and then they give you here the pass plus. This is here with the skill injection and the pass minus,'
+
+[02:34] [scene:talk]
+VISUAL:
+AUDIO: 'this is without the skill injection, and the delta P, the delta pass. And you see for a lot of skills, the LLM itself does not need those additional skills. Delta P stays zero,'
+
+[02:46] [scene:talk]
+VISUAL:
+AUDIO: 'as you see here in this particular column. Yes, you have a little bit of efficiency or different token overhead difference, but we just go for, "Hey, what is the performance?" This is what we are interested in. But of course,'
+
+[02:59] [scene:talk]
+VISUAL:
+AUDIO: 'from these 49 skills, there are some that there is a difference, and here they are. So, the first block is in green, and you see those skills here have a positive effect that here, if you add the skill MP file, this is really improving your'
+
+[03:13] [scene:talk]
+VISUAL:
+AUDIO: 'performance. And you see we have one 30% jump, one 14% jump, two 10% jumps, and three 7% jumps. This is it. But also, some skills here, if you'
+
+[03:26] [scene:talk]
+VISUAL:
+AUDIO: 'insert those skills, they reduce the performance of your AI system, and you have here those three. So, in total, if you take everything on average, your delta P is plus 1.2% for this particular software engineering benchmark study'
+
+[03:40] [scene:talk]
+VISUAL:
+AUDIO: 'here from March of 2026. Now, coming back here to our main study now, knowing this and having this idea, they tell us now, "Okay, you know what?'
+
+[03:52] [scene:talk]
+VISUAL:
+AUDIO: 'We take now from our S 2 A skill bench a subset of 21 selected skills." And you know, whenever the authors just go here and cherry-pick some particular skills, we have a smile on our face, but yeah,'
+
+[04:05] [scene:talk]
+VISUAL:
+AUDIO: 'let\'s go with this. But what is so nice, and thank you here to Chinese University of Hong Kong, to go with an actual modern LLM here, a Qwen 3.6 27B. Yes, finally some modern computer'
+
+[04:19] [scene:talk]
+VISUAL:
+AUDIO: 'infrastructure. Now, I will give you the result. This new methodology, this is here skill to Laura S 2 L, improves here the pass rate by 3 and 5 percentage points,'
+
+[04:31] [scene:talk]
+VISUAL:
+AUDIO: 'whatever however you do it. Great, and you have a reduced token cost by 6.6%. But this is not the point. I don\'t need to make it that it is outperforming here a skill. I\'m happy if it is working at'
+
+[04:43] [scene:talk]
+VISUAL:
+AUDIO: 'all on an equal level. So, great we get 2.9% and 5.2% improvement, but honestly, I don\'t care about this. I just think, "Hey, if we bring it here from a non-parametric'
+
+[04:56] [scene:talk]
+VISUAL:
+AUDIO: 'knowledge into the parametric neural network architecture, this is great because then it is interconnected with all the other knowledge within the neural network." Now, unfortunately, the authors here'
+
+[05:09] [scene:talk]
+VISUAL:
+AUDIO: 'tell us, and I do this here, it was published June 15, right? Very next day after, the code, the authors tell us, will be released upon acceptance, so we don\'t have to code, but never mind, because I\'m going to show you how they do it. And if we have the idea, and if'
+
+[05:22] [scene:talk]
+VISUAL:
+AUDIO: 'you have the mathematics, just go to, I don\'t know, cloud.code.codex, whatever you prefer, tell it to code it, and it\'s done. So, what is up with it? Now, we have our runtime with the skill, where we have'
+
+[05:35] [scene:talk]
+VISUAL:
+AUDIO: 'here our markdown, yeah? Full skill MD files, we have the procedures, the example, the checklist, the convention. We have the metadata, the name, the ID, a short description, that everything is found in the skill banks here. And then'
+
+[05:48] [scene:talk]
+VISUAL:
+AUDIO: 'we have a user task here with a particular task specificity, a complexity, given a context, and maybe some tools are available. Great. So, everything every time we have here a complex thing, we have maybe to load'
+
+[06:02] [scene:talk]
+VISUAL:
+AUDIO: 'multiple skills. So, every time everything is injected in our context window of our base LLM. So, this means repeatedly injected at runtime high token costs. Another step is to build here from the'
+
+[06:14] [scene:talk]
+VISUAL:
+AUDIO: 'skill text, our markdown file, a LoRA adapter. Now, you know, this is not simple because now we have to generate here a representation and a training data'
+
+[06:26] [scene:talk]
+VISUAL:
+AUDIO: 'set. How we do this? And this is the main question here in this one. So, we have our skill.md file, and then we will generate here two elements. I\'m going to show you this in detail in a second. And we end up with a skill-specific LoRA'
+
+[06:39] [scene:talk]
+VISUAL:
+AUDIO: 'adapter. So, we do have a quantized LoRA training, a 4-bit training, but you can go with whatever you prefer. And then in the next runtime, we don\'t need the skill.md file anymore.'
+
+[06:52] [scene:talk]
+VISUAL:
+AUDIO: 'It\'s not anymore injected here, but we have now a skill-specific LoRA adapter on top of our base LLM, and therefore this is helps here and reduce context cost because it becomes now an inherent'
+
+[07:05] [scene:talk]
+VISUAL:
+AUDIO: 'part of the internal understanding and the knowledge of our neural network, our LLM. So, great. If you want now to transfer this new knowledge into the LLM specific'
+
+[07:19] [scene:talk]
+VISUAL:
+AUDIO: 'parametric knowledge, how we do this? You want to tell us we did it here in the simplest way with two different phases. The first phase is the offline phase. We have to prepare here the'
+
+[07:31] [scene:talk]
+VISUAL:
+AUDIO: 'skill, and then it\'s used here as a teacher signal. Only say, "Oh, distillation." Absolutely, to generate some synthetic demonstration. We have for the LoRA adapter to generate the our training data set. Therefore, synthetic'
+
+[07:44] [scene:talk]
+VISUAL:
+AUDIO: 'generation, you know, no human in the loop. We have one LLM that generates here a realistic task input description that would hopefully naturally'
+
+[07:56] [scene:talk]
+VISUAL:
+AUDIO: 'require here a specific skill. And then we have another LLM conditioned on the full skill document also, and it will now with the knowledge of the skill generate here response to a the target response. And then we have'
+
+[08:11] [scene:talk]
+VISUAL:
+AUDIO: 'here the first and the second part here, both synthetic data. So, we have now an input and an output pair. And guess what? This becomes now the self-distilled training data for our Laura adapter.'
+
+[08:24] [scene:talk]
+VISUAL:
+AUDIO: 'Now, in the training phase, phase two, the base model, our Qwen1.5-27B, is simply frozen. And on top of this base model, we put a Laura adapter, a module, and only a small Laura module is now'
+
+[08:37] [scene:talk]
+VISUAL:
+AUDIO: 'updated during the training phase. So, the adapter learns the behavioral bias of that particular skill description rather than memorizing here the markdown itself because this would'
+
+[08:49] [scene:talk]
+VISUAL:
+AUDIO: 'be not working. So, at runtime, as I told you, it just loads the adapter that learned here this particular skill. So, what do we have achieved? We are here, we have the skill MD file, then okay, we have it. Then we have the Laura'
+
+[09:01] [scene:talk]
+VISUAL:
+AUDIO: 'adapter, and now the runtime activation, we just put in the Laura adapter, and this is it, and we have now a result. Now, the question is, of course, how do we do this in detail? Now, we have to'
+
+[09:13] [scene:talk]
+VISUAL:
+AUDIO: 'code this, yeah? And as I showed you, we have now, and this is here the next step. Here you see it, the quantized Laura training configuration. The authors went here, base model is a'
+
+[09:25] [scene:talk]
+VISUAL:
+AUDIO: '3.6-27B. For quantized Laura here is here a 4-bit quantization, but please, you can go with whatever quantization you like. This is just here one of the examples and I can give you the the'
+
+[09:38] [scene:talk]
+VISUAL:
+AUDIO: 'performance data of this 4-bit quantization, but if you prefer 8-bit, go with 8-bit. Interesting, the rank is rather high, now. We need a high precision rank, so we go with 16, no four, no eight, 16.'
+
+[09:50] [scene:talk]
+VISUAL:
+AUDIO: 'But, you know what? The size of this parameter is tiny, tiny, tiny, just a 6.03 million free trainable parameter adapter. So, compared to the base model,'
+
+[10:02] [scene:talk]
+VISUAL:
+AUDIO: 'this is a 0.02% great. So, let\'s do this. Let\'s have a closer look. The pre-trained turns now the markdown file of our skill.md into many synthetic'
+
+[10:15] [scene:talk]
+VISUAL:
+AUDIO: 'examples that expose now what? Those examples show exactly the workflow pattern because an AI is simply a pattern matching machine or a pattern identifying machine.'
+
+[10:28] [scene:talk]
+VISUAL:
+AUDIO: 'And the tool use preferences for this particular skill that are involved to solve this. The file inspection habit, we remember skill is a directory of files, beautiful, and the verification steps not not necessary and are therefore'
+
+[10:42] [scene:talk]
+VISUAL:
+AUDIO: 'implied hereby the skill definition itself. And then, we just have the QLoRA supervised fine-tuning, the distillation, the self-distillation, sorry, we work with two LLMs that'
+
+[10:54] [scene:talk]
+VISUAL:
+AUDIO: 'generate you our training data set of pairs. They distill those patterns into a small parameter update. Pattern EI, just the perfect machine for this, now. Rank 16, we already talked about it.'
+
+[11:06] [scene:talk]
+VISUAL:
+AUDIO: 'But, now I see how exactly is it done? Well, if you go with QLoRA, it freezes the pre-trained language model, quantizes it to a 4-bit precision, and then simply back'
+
+[11:19] [scene:talk]
+VISUAL:
+AUDIO: 'propagates the gradients here from the learning through that frozen quantized model directly into the LoRA adapters on top of the LLM. So, yeah, if you read the original Q-LoRA paper, it also introduces here'
+
+[11:32] [scene:talk]
+VISUAL:
+AUDIO: 'particular four-bit type quantization for normally distributed weights. Maybe you have to do this manually or you ask Cloud Code to do this. And a double quantization to compress here the quantization constants further. Yeah, I'
+
+[11:44] [scene:talk]
+VISUAL:
+AUDIO: 'don\'t know if you need to do this in this particular case, but anyway, if you are not familiar, this is really a paper that I would recommend. This is from 2023. So, this is really a grandfather paper, now. In AI 2023 is really my G.'
+
+[11:57] [scene:talk]
+VISUAL:
+AUDIO: 'I don\'t know how many 10 generations behind. So, Q-LoRA efficient fine-tuning of quantized LLM, University of Washington. Beautiful. I mean, look at it. We\'re'
+
+[12:09] [scene:talk]
+VISUAL:
+AUDIO: 'talking about a single 48 G gigabyte GPU. At the time 2023, they could afford a 48 G gigabyte GPU. This is wow, good old times. Uh you have the complete code'
+
+[12:21] [scene:talk]
+VISUAL:
+AUDIO: 'available here Q-LoRA here exactly here on this GitHub repo. Just point your Cloud Code your code next year to this and you have it immediately. So, what is not a complete story? Let\'s summarize. Let\'s get the overview.'
+
+[12:34] [scene:talk]
+VISUAL:
+AUDIO: 'The markdown files are our skill MD files define a procedure, a particular procedure, a particular skill, now. But then, with the help of two LLMs, the procedure is turned into synthetic demonstration complexities.'
+
+[12:48] [scene:talk]
+VISUAL:
+AUDIO: 'You see, with the two LLMs, we add a little bit of knowledge, we add a little bit of content, and it is not a procedure anymore. And then, the demonstration teacher, a frozen language'
+
+[13:00] [scene:talk]
+VISUAL:
+AUDIO: 'model with a small LoRA adapter. And the adapter itself becomes now a loadable module. But you know what? In this module, there is more like a behavioral instruction set and less a'
+
+[13:14] [scene:talk]
+VISUAL:
+AUDIO: 'procedural instruction set. Have you noticed this difference? Okay. So, preprint for the claim. So, the main claim is that many agent skills'
+
+[13:26] [scene:talk]
+VISUAL:
+AUDIO: 'can move from being prompt text markdown files to being now LLM internally parameterized behavior of the model that the model learned how to deal with this. Let\'s have a look at the results. Now,'
+
+[13:39] [scene:talk]
+VISUAL:
+AUDIO: 'as I told you, 21 tasks, 21 skills, here we go. And you see exactly here, so this new S2L methodology achieves here the highest aggregated pass rate solving 65'
+
+[13:52] [scene:talk]
+VISUAL:
+AUDIO: 'of 210 particular tasks. And yeah, for each skill we had 10 tasks, as you see here. And if you compare this here with and without the skill interaction,'
+
+[14:05] [scene:talk]
+VISUAL:
+AUDIO: 'this is outperforming. But you know what? I\'m happy if Okay, we go from 59 with skills to 65 with this if if you want integrated parametric knowledge now. Great, we have a little bit of a'
+
+[14:18] [scene:talk]
+VISUAL:
+AUDIO: 'benefit, but I\'m glad I can do this at all because you know exactly what I\'m thinking, you know? Why we do this only for one skill? What about I select my skills and we build here a pool of skills and then I don\'t'
+
+[14:33] [scene:talk]
+VISUAL:
+AUDIO: 'have to waste here my context window for skill and markdown files that have to repeatedly every time step load this into my LLM. Well, however,'
+
+[14:47] [scene:talk]
+VISUAL:
+AUDIO: 'just be careful. The authors tell us that the skills, particular skills, maybe not in the 21 skills here, particular skills that rely heavily on some very specific code examples. So, if'
+
+[15:00] [scene:talk]
+VISUAL:
+AUDIO: 'you have here a strange edge case and you have here a very special code solution that is unique, that is not in any way knowledgeable to any other domain, then'
+
+[15:14] [scene:talk]
+VISUAL:
+AUDIO: 'or you have some heavy syntax transfer, then you might still benefit here from the runtime text of a markdown file. Why? Because it can provide here examples example retrieval capabilities.'
+
+[15:27] [scene:talk]
+VISUAL:
+AUDIO: 'Because you remember I told you we have to train our adapter. And now you know if we just update here the LLM, we need thousands of examples, maybe 10,000 of'
+
+[15:39] [scene:talk]
+VISUAL:
+AUDIO: 'examples to really bring the knowledge into the new deep into the neural network. Another question is, okay, but with these lower adapters, how much of these thousand training examples'
+
+[15:53] [scene:talk]
+VISUAL:
+AUDIO: 'did we generate? And how deep is it in the neural network integrated, yeah? And for very edge cases here, for very specific solo solutions, if you provide in the prompt in the'
+
+[16:07] [scene:talk]
+VISUAL:
+AUDIO: 'markdown file two, three examples, this might be even here a better solution. But in general, the if you want skill to lower adapter is better.'
+
+[16:20] [scene:talk]
+VISUAL:
+AUDIO: 'Okay, but it turns out your order sort also about a multi-skill integration. So, they tested it. So, and they said, "Hmm, this multi-skill composition and adapter conflict management that is happening,'
+
+[16:33] [scene:talk]
+VISUAL:
+AUDIO: 'there are some open problems. Why?" Now, they just went here with six particular skills. Beautiful. And here, solved task out of 10. So, and they show us now, "Okay.'
+
+[16:46] [scene:talk]
+VISUAL:
+AUDIO: 'So, if we have the vanilla LLM in blue, this is just the core of our agent, this is the LLM. Then we have the new methodology in green, the S2L, beautiful, outperforming here almost every time the pure LLM.'
+
+[17:01] [scene:talk]
+VISUAL:
+AUDIO: 'And then we have something new in orange, [clears throat] and this is now a shared skill lower adapter, where we are pulling together different amount of multiple skills.'
+
+[17:14] [scene:talk]
+VISUAL:
+AUDIO: 'And you see, just at the first one. Oh, it is not performing on the same level as a one skill one adapter solution. So, this pooling has some'
+
+[17:26] [scene:talk]
+VISUAL:
+AUDIO: 'real negative effects that it is even stays the same as the LLM itself. Let\'s have a closer look. So, the question was, do we really need one Laura adapter per skill like I'
+
+[17:38] [scene:talk]
+VISUAL:
+AUDIO: 'showed you in this video, or could we just train one generic adapter on all six different skills and get the same effect? And this is called the shared Laura adapter.'
+
+[17:52] [scene:talk]
+VISUAL:
+AUDIO: 'Now, think about it. A skill is simple, but it has something in the background, it has a connected context, a connected action policy. And when we talk about policy, you know, we have'
+
+[18:05] [scene:talk]
+VISUAL:
+AUDIO: 'inspect maybe different files or file types, run different commands, prioritize different evidence or examples given, produce different artifacts, maybe it is a text file, maybe it is a code, maybe'
+
+[18:17] [scene:talk]
+VISUAL:
+AUDIO: 'it is something else, and use different verification criteria. So, we have we can have theoretically, if we smash together multiple skills, all these also smashed together.'
+
+[18:29] [scene:talk]
+VISUAL:
+AUDIO: 'Now, guess what? If we have here shared Laura, this can create interference because maybe the verification criteria are opposing each other, are in absolute contradiction to each other, and we just'
+
+[18:43] [scene:talk]
+VISUAL:
+AUDIO: 'smash it together here and concatenated. This is not a solution because we will have interference, massive interference. Now, I know you say, "Hey, can you be a little bit more specific?" Of course.'
+
+[18:55] [scene:talk]
+VISUAL:
+AUDIO: 'Shared Laura, you have a pool that we have now all the data set here combined. This is how it is shared, and now we train one single Laura adapter. &gt;&gt; [clears throat] &gt;&gt; So, this is the formula that you know'
+
+[19:07] [scene:talk]
+VISUAL:
+AUDIO: 'from Laura, where D {underscore} S is our synthetic training pairs generated here from skill or skills. Then we have M of phrase frozen base model is a Qwen And then A stands for adapter specific'
+
+[19:22] [scene:talk]
+VISUAL:
+AUDIO: 'or adapter specialized. Now one adapter must now simultaneously encode all these many transformation, let\'s say six transformation, using now the same low rank subspace. And now you'
+
+[19:35] [scene:talk]
+VISUAL:
+AUDIO: 'see, oh wait a minute, if I have a low rank subspace, I\'m not in the thousands of dimension, but I\'m suddenly here and they go with 16 as a rank subspace. I have very a limited'
+
+[19:48] [scene:talk]
+VISUAL:
+AUDIO: 'mathematical volume space to encode the complexities. And of course this is hard because the optimal update direction for different skills may not at all be a Korean pattern, they may be in conflict with'
+
+[20:02] [scene:talk]
+VISUAL:
+AUDIO: 'each other or they may even annihilate each other. So you have here a destructive interference here of your weight structure. There\'s an example, beautiful, yeah, if'
+
+[20:14] [scene:talk]
+VISUAL:
+AUDIO: 'you want to have a little bit more detail, but you imagine they are encoded different patterns with each skill. So if you smash it together, you have here the question which commands to run first, what is constitute as being done'
+
+[20:27] [scene:talk]
+VISUAL:
+AUDIO: 'ready should we have here other solution and what output structure to produce if everything is slashed together. This is not helpful. So now you understand that here if we'
+
+[20:40] [scene:talk]
+VISUAL:
+AUDIO: 'look at the shared Laura versus our one single skill and one single Laura adapters, one single Laura adapter that is skill specific outperforms the shared Laura and here you have the'
+
+[20:53] [scene:talk]
+VISUAL:
+AUDIO: 'understanding why if we have really specific behavior dimensions, you see we have here a cluster of certain behaviors and if you smash everything together, this'
+
+[21:05] [scene:talk]
+VISUAL:
+AUDIO: 'is not a solution. Why this single skill to Laura adapter is better? You have a higher pass rate, lower token cost. It is robust here to the wrong skill definition, and it'
+
+[21:19] [scene:talk]
+VISUAL:
+AUDIO: 'preserves the task signals a little bit stronger. And yeah, main results you already talk talked about this. Now, what I did not tell you and what is really interesting, I told you if you'
+
+[21:32] [scene:talk]
+VISUAL:
+AUDIO: 'train here a full LLM, you need thousands and tens of thousands of training examples, no? Now, the question was, what is little Laura adapter, no? What is little tiny thing? How many synthetic training data sets, data'
+
+[21:44] [scene:talk]
+VISUAL:
+AUDIO: 'points we created per skills? And it turns out the authors tell us, you know what? We achieved even an outperformance compared here to a skill injection with our MD files when only training on or'
+
+[21:56] [scene:talk]
+VISUAL:
+AUDIO: 'creating 64 synthetic training examples per skill. This is a tiny, tiny amount compared to the thousands of training example you would need for the full LLM post'
+
+[22:09] [scene:talk]
+VISUAL:
+AUDIO: 'training. So, if you want to further improve here your performance of this new adapter, I would say just go from 64 to 128 or 256'
+
+[22:21] [scene:talk]
+VISUAL:
+AUDIO: 'synthetic training example. It is done by an LLM or multiple LLMs. So, yeah, you have to pay a little bit more, and maybe you have to provide more context that we must be specific. But, I mean,'
+
+[22:34] [scene:talk]
+VISUAL:
+AUDIO: 'yeah. Could be that this also further improves the performance of your systems. Okay, this is it. This was the paper. Here we end here the everyone scientific'
+
+[22:46] [scene:talk]
+VISUAL:
+AUDIO: 'explanation, and now I want to try something new. Because I got a lot of questions and things and that are not to be answered in a scientific way, and I call this section now rumors, gossip, and pure'
+
+[22:59] [scene:talk]
+VISUAL:
+AUDIO: 'hallucination. So, now we are really here in the lane of gossip, now so let\'s do this. And today I want to present to you one gossip that you asked me here as my audience here quite a lot. And also I'
+
+[23:11] [scene:talk]
+VISUAL:
+AUDIO: 'want to give you here then in reflection of this gossip four benchmarks, four concrete absolute verified benchmarks. So, let\'s start with this. What is the gossip? The gossip is of'
+
+[23:24] [scene:talk]
+VISUAL:
+AUDIO: 'course here all the problem AI has with the financial representation currently here and with its structure and how it presents itself to the investors. Now there\'s a need here for some new news, now. And the new news is at GPD'
+
+[23:37] [scene:talk]
+VISUAL:
+AUDIO: '5.6, the next generation of our GPD system, now, the next brand new thing. Yeah, as you see here TechTimes they claim yeah,'
+
+[23:50] [scene:talk]
+VISUAL:
+AUDIO: 'meaning a launch is here absolutely in June 2026, so within the next 2 weeks. And GPD is already out in stealth benchmarks, now hiding, testing here. So, absolutely. So, let\'s have a look.'
+
+[24:02] [scene:talk]
+VISUAL:
+AUDIO: 'GPD 5.6, where are we? What is the system going to achieve? And I want to show you here some current benchmark. And this is here a screenshot from June'
+
+[24:14] [scene:talk]
+VISUAL:
+AUDIO: '21st, the time I record this video, 2026 on artificial analysis here where they test here in multiple tests here the different models here on particular detailed sub domains.'
+
+[24:26] [scene:talk]
+VISUAL:
+AUDIO: 'And the first one is scientific coding. So, software engineering but now for science. And you see Fable 5 is here with 60% here at number one, but with 59%, so'
+
+[24:39] [scene:talk]
+VISUAL:
+AUDIO: 'only one single percentage point behind is Gemini 3.1 Pro preview. And then you have four percentage point behind Fable 5, GPD 5.5 XI, and And'
+
+[24:51] [scene:talk]
+VISUAL:
+AUDIO: 'seven percentage point below Fable 5, you have Opus 4.8 Max and then yeah, you know it. So, scientific coding at Gemini is'
+
+[25:03] [scene:talk]
+VISUAL:
+AUDIO: 'almost as good as Fable 5. I\'m not talking about general coding things like HTML or some I don\'t know, you you you want to generate a video'
+
+[25:16] [scene:talk]
+VISUAL:
+AUDIO: 'game or something. I\'m talking about scientific coding and all the test and benchmark that they have here in the background. The next one is scientific reasoning. So, this is a very particular benchmark'
+
+[25:29] [scene:talk]
+VISUAL:
+AUDIO: 'not to write a poem, not to write some I don\'t know what this is for reasoning on scientific topics. And you see here, first model is a Gemini 3.1 Pro preview. Then followed by'
+
+[25:42] [scene:talk]
+VISUAL:
+AUDIO: 'GPT-5.5 X-High. Then interestingly, we have a MiniMax M3. So, if your task is purely scientific reasoning interesting, then we have a Fable 5.'
+
+[25:55] [scene:talk]
+VISUAL:
+AUDIO: 'So, this is your position number four. And a GLM 5.2 is not far behind because look with 89% and the top performer is 94%. So, it\'s'
+
+[26:07] [scene:talk]
+VISUAL:
+AUDIO: 'just 5% point behind, but GLM 5.2 has some other benefits. Let\'s have a look. The next one is for me the most important benchmark and this is reasoning in physics and theoretical'
+
+[26:20] [scene:talk]
+VISUAL:
+AUDIO: 'physics and a little bit of experimental physics but in general physics. So, how do LLMs or VLMs perform in physics? Only. And you see here the best one is a'
+
+[26:33] [scene:talk]
+VISUAL:
+AUDIO: 'GPT-5.5 Pro on X-High. Then we have Fable 5 2% point behind GPT. And then we have here, and this is interesting, a GLM 5.2 Max'
+
+[26:45] [scene:talk]
+VISUAL:
+AUDIO: 'with 21% point on the same X-High equal like an Opus 4.8 max. I think this is nice. And then, you know what we have here? Here behind trailing'
+
+[26:57] [scene:talk]
+VISUAL:
+AUDIO: 'our Gemini 3.1 Pro preview. And this is also kind of what I found here. Gemini here, if you go here in the complex mathematical theoretical physics'
+
+[27:09] [scene:talk]
+VISUAL:
+AUDIO: 'reasoning structure, is losing performance. And I mean, you don\'t take Fable that is on second place. Take GPT 5.5 Pro that is on first place. 31 percentage to 18. This is a'
+
+[27:22] [scene:talk]
+VISUAL:
+AUDIO: 'significant difference. So, hey Google, if you are listening, what about Gemini 4, hmm? I know. Okay. And I know also I would like to'
+
+[27:36] [scene:talk]
+VISUAL:
+AUDIO: 'show you here this long context reasoning. You know, when we have deep research or here this long context task, we need long context reasoning in this task. I think changes. This is not science-specific,'
+
+[27:50] [scene:talk]
+VISUAL:
+AUDIO: 'but this is here general long context reasoning complexity. And you see again, uh GPT 5.5 XI here is leading with 74 percentage points. Then we have Minimax M3, interesting. And then we have on on'
+
+[28:03] [scene:talk]
+VISUAL:
+AUDIO: 'position number four here Gemini. Then immediately followed here by GLM 5.2 max. So, wow, this is really close up.'
+
+[28:15] [scene:talk]
+VISUAL:
+AUDIO: 'And then, yeah, Fable 5 here is This would indicate that Fable 5 has been really optimized for coding, for software engineering task. This means that the hardness of Fable 5 is here'
+
+[28:27] [scene:talk]
+VISUAL:
+AUDIO: 'absolutely optimized coding, software engineering, and everything that is connected with this. Because here you see, Fable 5 is not in the top three spot anymore.'
+
+[28:40] [scene:talk]
+VISUAL:
+AUDIO: 'But we need long context reasoning for almost all multi-agent system. So, even forget Fable 5 back, hopefully in the next days, maybe in the next month. And just think about the price'
+
+[28:53] [scene:talk]
+VISUAL:
+AUDIO: 'difference, now? I mean, come on, a GLM 5.2 and open weight model is better or at least on the same footage like a Fable 5 that is extremely expensive if you pay API token costs.'
+
+[29:07] [scene:talk]
+VISUAL:
+AUDIO: 'And all the other models, great. So, therefore, I have to tell you I\'m thinking now if Google does not further optimize what comes out here with a Gemini 4 soon. And I know the rumors are'
+
+[29:20] [scene:talk]
+VISUAL:
+AUDIO: 'that Google is waiting and Google does not want to bring up its new super model here during the summer holidays. So, during the dry season.'
+
+[29:33] [scene:talk]
+VISUAL:
+AUDIO: '&gt;&gt; [laughter] &gt;&gt; I understand this, but listen, I have to do some actual scientific work. So, Google, please, I need a better model than a Gemini 3.1 Pro, okay? Right. But anyway, I think there are'
+
+[29:47] [scene:talk]
+VISUAL:
+AUDIO: 'alternatives and you don\'t have to wait for Fable 5 or anything. A GLM 5.2, if you further optimize this with a better harness, or if you really go with a Laura adapter,'
+
+[29:59] [scene:talk]
+VISUAL:
+AUDIO: 'this could really be an alternative even for scientific task or long context reasoning topics. Okay, this was here in this news action, gossip and benchmarks. So, we had a look'
+
+[30:12] [scene:talk]
+VISUAL:
+AUDIO: 'at this. I hope you enjoyed it. I hope you enjoyed the whole video. I provided here some information. I showed you how to transfer in the simplest case a single skill markdown file into a beautiful tiny tiny little Laura'
+
+[30:25] [scene:talk]
+VISUAL:
+AUDIO: 'adapter. Okay, with a rank of 16, so there\'s quite some calculation necessary to have this scientific precision with a rank 16 operation, but I think it really pays off. You can'
+
+[30:38] [scene:talk]
+VISUAL:
+AUDIO: 'bring it into the neural network, into the parametric knowledge of an LLM, and therefore you don\'t have to have it anymore here. If you use this particular skill regularly in the outer harness,'
+
+[30:50] [scene:talk]
+VISUAL:
+AUDIO: 'and you have to pollute your context window with this. I hope you enjoyed it. Any information would be great to see you in my next video.'

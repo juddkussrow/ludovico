@@ -1,0 +1,179 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Easy guide to integrate PromptHub, using OpenAI Models
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=VboFN06QKUc
+upload_date: 20250117
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'hey everyone how\'s it going Dan here co-founder of promptu doing a little bit of a different type of video today um so not really going over prompt engineering resources but looking more at how to implement promptu um if you\'re using us via the API or with our dashboard so today we\'ll be focusing on teams who are'
+
+[00:12] [scene:talk]
+VISUAL:
+AUDIO: 'using promp tuub and using open AI models so we\'ll run through our two most popular endpoints and how you can integrate these when you\'re using open AI models so the head endpoint and the'
+
+[00:25] [scene:talk]
+VISUAL:
+AUDIO: 'Run endpoint we\'ll start with the head endpoint um and what that does is actually before we get to that by the way linked below we will have our integration guide um for open AI which'
+
+[00:37] [scene:talk]
+VISUAL:
+AUDIO: 'is a post um on our blog and then also a link to our public Postman collection so you can see some more resources there and so why would you want to do this um rather than just you know hard'
+
+[00:49] [scene:talk]
+VISUAL:
+AUDIO: 'coding impr prompts or whatever it might be basically you know you get to centralize your prompt Management in Version Control um so you get that out of the box with promp tub everything\'s in one place we have versions We have commits we have branches we have'
+
+[01:02] [scene:talk]
+VISUAL:
+AUDIO: 'collaborative features everything you kind of need in a team setting the integration is super seamless and you set it up once and it\'s done and then you decouple prompt engineering and software engineering so that you know you can work on different time scales if you\'re iterating a lot on prompt'
+
+[01:15] [scene:talk]
+VISUAL:
+AUDIO: 'engineering and you\'re doing a lot of changes um then you won\'t need to bug your software Engineers to deploy new code and so getting started you will need a prompt up account an API key which you can get from your account'
+
+[01:27] [scene:talk]
+VISUAL:
+AUDIO: 'settings on any plan and of course you\'ll need you open a i account API key and if you want to like do this locally um you know just some python libraries if you wanted to like test really quickly um and then you\'ll need a promp tuub project with a version'
+
+[01:40] [scene:talk]
+VISUAL:
+AUDIO: 'committed and so for our example project we use this product feedback classifier which has a system message that you can see and then a prompt where we\'re saying hey classify'
+
+[01:52] [scene:talk]
+VISUAL:
+AUDIO: 'this feedback and then we pass a variable and so the head end point which is what we\'re starting with basically retrieves the latest version of your prompt it defaults to the master Branch if you\'re using multiple branches um you'
+
+[02:04] [scene:talk]
+VISUAL:
+AUDIO: 'can pass a query parameter to say hey G me the latest version of on the on the staging branch in prompt up but it will default to the main and it will retrieve the system message The Prompt the model'
+
+[02:16] [scene:talk]
+VISUAL:
+AUDIO: 'configuration and we\'ll look at a couple of code examples here but three steps to make this happen and as I mentioned you only me to set this up once so API requests to us to receive the data pass any custom data into the variables from'
+
+[02:30] [scene:talk]
+VISUAL:
+AUDIO: 'your application so it\'s Dynamic and then just send that request to open a so as I mentioned the head endpoint receives the latest version of your prompt all you need is the project ID um this is an example of what the URL looks'
+
+[02:44] [scene:talk]
+VISUAL:
+AUDIO: 'like so everything else is static um except for the project ID here which you will need to add and if you can you can also add a query parameter for the branch name which we\'ll look at later but you can get the project ID under the'
+
+[02:57] [scene:talk]
+VISUAL:
+AUDIO: 'API tab tab um you\'ll see it in that URL down here U 5474 it\'s also in the URL bar of the project itself and'
+
+[03:09] [scene:talk]
+VISUAL:
+AUDIO: 'so we want to retrieve the prompt um so it\'s a simple get request you can see here we\'re passing project ID we\'re saying the master Branch U but it would default to that'
+
+[03:21] [scene:talk]
+VISUAL:
+AUDIO: 'anyways some headers and then that\'s pretty much it um and then what we\'re going to do from there though is we are going to take there\'s a field in the response called the formatted request that\'s really what we\'re'
+
+[03:34] [scene:talk]
+VISUAL:
+AUDIO: 'interested in when we\'re retrieving this because we\'ll give you a bunch of data um so looking forward just a second this is what\'s in the formatted request this so this is the really important stuff um no nothing important down there so you can see in the format'
+
+[03:48] [scene:talk]
+VISUAL:
+AUDIO: 'request is the model the messages array for open AI so we assistant message and user message and then also all of the like parameters so max tokens temperatures Etc and then the variables dictionary as well so this is what we'
+
+[04:01] [scene:talk]
+VISUAL:
+AUDIO: 'need um to configure our own request and so this code back here in the last slide what it\'s doing essentially is just formatting that and extracting it so um we\'re extracting the formatted request'
+
+[04:13] [scene:talk]
+VISUAL:
+AUDIO: 'by going to the data object into the formatted request the variables are just another layer deeper there and then we\'re just going to print them just so we can see if it\'s working locally and all this code is available in the'
+
+[04:25] [scene:talk]
+VISUAL:
+AUDIO: 'integration guide as well so you can kind of see where this is heading um we\'re just getting the data from promp tub and then we\'re going to put it in the right shape for open AI so again we\'re looking at the format request that has the model the messages'
+
+[04:38] [scene:talk]
+VISUAL:
+AUDIO: 'um max tokens temperature a bunch of different thing the variables as well and what\'s important to note is that we will We version not only your system message your prompt you know the'
+
+[04:51] [scene:talk]
+VISUAL:
+AUDIO: 'messages array in general but also the configuration so if you switch models um you\'ll see that in the request coming back where we\'re setting that up here so this is being pulled from your configuration that you set in promptu then we\'re just going to inject'
+
+[05:04] [scene:talk]
+VISUAL:
+AUDIO: 'data into the variables so iterate through the messages array um look for our variable syntax which is double curly brace and then we\'re going to replace it with you know some value from our'
+
+[05:17] [scene:talk]
+VISUAL:
+AUDIO: 'application as I mentioned looks at the array looks for that type of that syntax with the two c races and then we\'ll replace them and then we basically just we have all the information we\'ve replaced the variables and now we\'re just going going to uh send the request'
+
+[05:29] [scene:talk]
+VISUAL:
+AUDIO: 'to API or excuse me to open AI open AI is API um and you can see that\'s what we\'re doing here so we already did the format request variables are replaced get that and then just configure it um'
+
+[05:43] [scene:talk]
+VISUAL:
+AUDIO: 'with their nomenclature which is the exact same and that\'s it um and so the benefit of using this you really only have to implemented once um especially because we are like having'
+
+[05:55] [scene:talk]
+VISUAL:
+AUDIO: 'it the code is dynamic so even if you add more variables in the future we\'ll we\'ll catch all those um in this implementation and then you can update it automatically so if you change the model if you change something in the prompt um you just commit that in prompt up and it will populate in your code'
+
+[06:08] [scene:talk]
+VISUAL:
+AUDIO: 'immediately and you can even push it to different branches which we\'ll look at in a second separating prompts from code I think it\'s just a good best practice you get the Version Control you get the history you can roll back um again environment specific prompt so if you'
+
+[06:20] [scene:talk]
+VISUAL:
+AUDIO: 'want to push a staging your production you could do that and in this way you aren\'t proxying the request through us which I know some people don\'t like to do uh and that\'s fine so then and all of that stays on your end next we\'ll look at the Run end point so this is when you will proxy the'
+
+[06:34] [scene:talk]
+VISUAL:
+AUDIO: 'request to us you\'re basically saying hey give me the output so run this prompt that\'s in prompt up and give me the output from the llm and the benefit of that is that we will log and kind of monitor these requests for you under the logs tab for any'
+
+[06:46] [scene:talk]
+VISUAL:
+AUDIO: 'project and so making the request is really simple again all you need is the project ID and then now we\'re going to pass the variables in the request because we\'re running what\'s already in promptu and so we\'re just saying hey overwrite you know the variables with this information information you can'
+
+[06:59] [scene:talk]
+VISUAL:
+AUDIO: 'pass a branch you can pass a hash too each each prompt commit has a hash and then you can see this is how you do that for if you wanted to pass a branch for staging so you could set up different requests in different'
+
+[07:11] [scene:talk]
+VISUAL:
+AUDIO: 'environments you can have prompts that move between staging and production based on your testing and everything and so when you send the request you\'ll just pass the variables to us um this is a hard-coded piece of data that we\'re'
+
+[07:23] [scene:talk]
+VISUAL:
+AUDIO: 'passing but this is generally what it would look like so we would hit the Run end point pass the project ID and then we pass this variables uh information here where we\'re just saying the product is not good and then our classifier will pick that'
+
+[07:35] [scene:talk]
+VISUAL:
+AUDIO: 'up and so it\'s pretty straightforward um you know you can make a dynamic with the with the variables um so we\'re hardcoding some test variables to run here and we\'re passing the branch here'
+
+[07:48] [scene:talk]
+VISUAL:
+AUDIO: 'we\'re passing through the variables we set up the headers um we\'re printing the output it\'s it\'s really straightforward and the postman collections make it look much easier this probably more comp located than it needs to be and this is what the response shape'
+
+[08:01] [scene:talk]
+VISUAL:
+AUDIO: 'looks like so we give you a bunch of information the text field is the llm output um so that\'s probably what you\'ll be most interested in um and that\'s where we are printing here but we\'ll give you a bunch of other'
+
+[08:15] [scene:talk]
+VISUAL:
+AUDIO: 'stuff um as well that you can use it\'s so when should use this endpoint maybe forance the other one um it\'s much more streamlined um so less steps you don\'t have to retrieve and then do variables and then make the call'
+
+[08:27] [scene:talk]
+VISUAL:
+AUDIO: 'you just send us the variables and then get the output um still easy to swap models and providers um you don\'t have to do any code changes to do that you have to continue to pass us the correct variable information and then we will'
+
+[08:39] [scene:talk]
+VISUAL:
+AUDIO: 'log the requests for you so there\'s that benefit as well and so that\'s it if you have any questions about implementing integrating getting this in your systems feel free to reach out intercom email comments below we are happy to help'

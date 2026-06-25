@@ -1,0 +1,143 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Stop Training Forecasting Models — TimesFM Does It Zero-Shot
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=IxN9CyHgC6Q
+upload_date: 20260618
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'What if forecasting worked like GPT? One pre-trained model, zero training. You just ask it to predict the future. That\'s Times FM, a decoder-only foundation model from Google Research. It has just 200 million parameters. It forecasts time series it has never seen,'
+
+[00:13] [scene:talk]
+VISUAL:
+AUDIO: 'and it beats models trained directly on that exact data. There\'s also one architectural trick that lets this tiny model forecast far into the future in a single fast pass. Stick around because that\'s the part most people miss. Here\'s'
+
+[00:26] [scene:talk]
+VISUAL:
+AUDIO: 'the original announcement open on my phone straight from the Google Research blog. The pitch is genuinely radical. For decades, forecasting meant building a brand new model for every single data set. Fit an ARIMA here, train a neural'
+
+[00:38] [scene:talk]
+VISUAL:
+AUDIO: 'net there, tune it for hours, and pray it generalizes. Times FM throws that whole workflow out. It\'s a single model pre-trained once on a massive pile of time series data that produces decent forecasts out of the box'
+
+[00:51] [scene:talk]
+VISUAL:
+AUDIO: 'on data it has never encountered. Same idea that made large language models explode. Just point it at numbers over time instead of words. So, what is it exactly? Times FM is a decoder-only transformer, architecturally a cousin of'
+
+[01:04] [scene:talk]
+VISUAL:
+AUDIO: 'the GPT family. But instead of predicting the next word, it predicts the next stretch of a time series. The headline capability is zero-shot forecasting. You hand it a sequence it has never seen, and it returns a'
+
+[01:17] [scene:talk]
+VISUAL:
+AUDIO: 'forecast immediately with no training and no fine-tuning. It\'s small by modern standards, just 200 million parameters, and it was pre-trained on around 100 billion real-world time points pulled'
+
+[01:29] [scene:talk]
+VISUAL:
+AUDIO: 'from sources like Google Trends and Wikipedia page views. One model trained once replaces a mountain of per data set training. Put the two worlds side by side, and the gap is obvious. The traditional approach trains a fresh'
+
+[01:42] [scene:talk]
+VISUAL:
+AUDIO: 'model for every series, demands a long history to learn from, and burns hours on tuning. And the moment you show it an unfamiliar pattern, it falls apart. Times FM flips all of that. One pre-trained model, zero training, a'
+
+[01:55] [scene:talk]
+VISUAL:
+AUDIO: 'forecast in seconds, and accuracy that matches supervised deep learning models built specifically for the target data. And here\'s the trick I promised in the intro. Times FM makes its output patch longer than its input patch. In plain'
+
+[02:08] [scene:talk]
+VISUAL:
+AUDIO: 'terms, it predicts a big chunk of the future in one shot instead of crawling forward one step at a time, which is why long horizon forecasts come back so fast. And the scale behind that is what makes it work.'
+
+[02:21] [scene:talk]
+VISUAL:
+AUDIO: 'Times FM is only 200 million parameters, tiny next to today\'s giant language models. Yet it was pre-trained on roughly 100 billion real-world time points, a corpus big enough to teach it the universal shapes of trends,'
+
+[02:33] [scene:talk]
+VISUAL:
+AUDIO: 'seasonality, and spikes. The open-source release has struck a serious nerve, too. The repo has crossed 22,800 stars on GitHub. That\'s a lot of attention for what is, on paper, a fairly niche corner of machine learning.'
+
+[02:47] [scene:talk]
+VISUAL:
+AUDIO: 'And a strong signal that zero-shot forecasting is something people have wanted for a very long time. Here\'s how little code it takes to actually use it. You import the library, load a pre-trained checkpoint straight from Hugging Face, compile a forecast config'
+
+[02:59] [scene:talk]
+VISUAL:
+AUDIO: 'that sets your context and horizon, and call forecast on your series. That\'s it. Point forecasts and quantile forecasts come back together, so you get an uncertainty band for free. No training loop, no labeled data, no GPU farm. If'
+
+[03:12] [scene:talk]
+VISUAL:
+AUDIO: 'you can put your history into a NumPy array, you can get a forecast out of Times FM in well under a minute. Getting started is just as quick. One pip command pulls Times FM with the PyTorch backend, and there\'s a JAX flax build,'
+
+[03:25] [scene:talk]
+VISUAL:
+AUDIO: 'too. Plus an extra for covariate support if you want to feed in external regressors. You verify the version, run your forecast script, and the model quietly downloads its checkpoint from Hugging Face and starts predicting.'
+
+[03:37] [scene:talk]
+VISUAL:
+AUDIO: 'The whole thing runs zero shot, so there is no training loop, no validation split, and no GPU cluster to wait on. From a cold install to a real forecast on your own data is a couple of minutes, and most of that is just the weights'
+
+[03:50] [scene:talk]
+VISUAL:
+AUDIO: 'downloading the first time. Want to dig in yourself? Here\'s the project on GitHub, again on mobile. It\'s Apache 2.0 licensed, written in Python, and the readme walks you through every checkpoint, both the PyTorch and the JAX'
+
+[04:02] [scene:talk]
+VISUAL:
+AUDIO: 'backends, and a set of runnable example notebooks you can open in Colab. Issues and discussions are active. The Google research team ships regular updates, and every model version is mirrored on'
+
+[04:14] [scene:talk]
+VISUAL:
+AUDIO: 'Hugging Face under the official Google namespace. So, pulling weights is a one-liner. For a cutting-edge research model, it\'s about as frictionless to adopt as it gets. No gated downloads, no paperwork, just clone and forecast. The model has'
+
+[04:28] [scene:talk]
+VISUAL:
+AUDIO: 'also evolved in a really counterintuitive direction. Version 2.0 scaled up to 500 million parameters with a context window of about 2,000 time points. But, the latest release, TimesFM 2.5, actually shrinks back down to 200'
+
+[04:42] [scene:talk]
+VISUAL:
+AUDIO: 'million parameters while extending the context all the way to 16,384 points. That\'s eight times the memory in a smaller model. It also adds continuous quantile forecasting for better uncertainty'
+
+[04:54] [scene:talk]
+VISUAL:
+AUDIO: 'estimates. Smaller, faster, and able to look much further back. That\'s the rare upgrade that improves on every axis at once. The research team, in their ICML 2024 paper, summed up the whole promise'
+
+[05:06] [scene:talk]
+VISUAL:
+AUDIO: 'in one line. They wrote that a foundation model for forecasting can provide decent out-of-the-box forecasts on unseen time series data with no additional training. That single sentence is the entire revolution.'
+
+[05:18] [scene:talk]
+VISUAL:
+AUDIO: 'Forecasting has always been a craft, a specialist hand-building, tuning, and baby sitting a separate model for each new problem. TimesFM turns that craft into a simple API call, the same way'
+
+[05:30] [scene:talk]
+VISUAL:
+AUDIO: 'large language models turned to text generation into one. The path to today is short, but fast. Google research first unveiled TimesFM on their blog back in 2024, alongside the original 200 million parameter'
+
+[05:44] [scene:talk]
+VISUAL:
+AUDIO: 'model. They open-sourced the checkpoints, then scaled up to Times FM 2.0 with 500 million parameters and a longer context. And in the most recent generation, Times FM 2.5 pulled the size back down to 200 million while pushing'
+
+[05:58] [scene:talk]
+VISUAL:
+AUDIO: 'the context window to over 16,000 points. Two years, three generations, and a forecasting model that keeps getting more capable and more efficient at the same time. Credit where it\'s due. Times FM comes out of Google Research, built'
+
+[06:12] [scene:talk]
+VISUAL:
+AUDIO: 'by a team led by Rajat Sen and Yichen Zhou with Abhimanyu Das, Weihua Kong, Andrew Leach, and several others. It\'s part of a broader Google Research push to bring the foundation model recipe to structured numerical data, not'
+
+[06:24] [scene:talk]
+VISUAL:
+AUDIO: 'just language and images. And true to that mission, they didn\'t keep it behind an API. They released the weights and the code openly under a permissive license. So, researchers, startups, and hobbyists can all build directly on top'
+
+[06:37] [scene:talk]
+VISUAL:
+AUDIO: 'of it. That open release is a big part of why the project took off so fast. Times FM is what happens when the foundation model wave finally reaches time series. One model, zero training, forecasts on demand. Go try it on your'
+
+[06:51] [scene:talk]
+VISUAL:
+AUDIO: 'own data, and thanks for watching Prism Labs.'

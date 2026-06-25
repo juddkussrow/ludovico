@@ -1,0 +1,815 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: The Bitcoin Whitepaper | Fully Explained (With Animations!)
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=NoqNhWnjE1Q
+upload_date: 20220612
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'we all know the story by now some fella named satoshi nakamoto sent an email to a cryptography mailing list on halloween 2008. the email read i have been working on an electronic cash system that\'s fully'
+
+[00:12] [scene:talk]
+VISUAL:
+AUDIO: 'peer-to-peer here is a link to the paper here is the main properties here is the title of the paper and here is a copy of the abstract of the paper oh and did i mention here\'s a link to the paper my name is definitely satoshi nakamoto'
+
+[00:26] [scene:talk]
+VISUAL:
+AUDIO: 'before we get into the white paper let me give you a brief outline of each section the first section is titled the introduction and this is pretty self-explanatory he introduces the paper section two is called transactions and'
+
+[00:40] [scene:talk]
+VISUAL:
+AUDIO: 'in this section we define what an electronic coin is and how exactly we go about transferring it from one person to the other section three is entitled timestamp server and this is basically a'
+
+[00:53] [scene:talk]
+VISUAL:
+AUDIO: 'centralized blockchain and this technology has been around since the 1990s but this hasn\'t really been applied at all to digital money or electronic money or cryptocurrencies or whatever you want to call it until'
+
+[01:06] [scene:talk]
+VISUAL:
+AUDIO: 'satoshi did so in this white paper section 4 is entitled proof of work and we use proof of work to extend the centralized blockchain into a decentralized blockchain section 5 brings sections 2 3 and 4 together and'
+
+[01:19] [scene:talk]
+VISUAL:
+AUDIO: 'tells you exactly how the network operates how do we talk to nodes what do you do when you receive a transaction from a node how do you validate a transaction do you validate a block and so forth section six is called'
+
+[01:31] [scene:talk]
+VISUAL:
+AUDIO: 'incentives and not surprisingly it is all to do with incentivizing people to strengthen the network to run their own node and to help secure the blockchain section 7 should not be overlooked it is'
+
+[01:44] [scene:talk]
+VISUAL:
+AUDIO: 'entitled reclaiming disk space which sounds boring as [&nbsp;__&nbsp;] but i assure you this is extremely important it is important because it enables something called simplified payment verification which is absolutely essential for the'
+
+[01:58] [scene:talk]
+VISUAL:
+AUDIO: 'long-term sustainability of bitcoin talking of a simplified payment verification that is the name of section 8 and we\'ll explain how on earth this works it basically allows you to run a'
+
+[02:10] [scene:talk]
+VISUAL:
+AUDIO: 'very lightweight node without much memory and you can run this on your mobile phone or a small coffee shop can run it and of course if we want bitcoin to scale to any substantial size it is absolutely essential that we allow'
+
+[02:22] [scene:talk]
+VISUAL:
+AUDIO: 'people to participate in the network by running what we call lightweight nodes and section nine at this point we say to ourselves hang on a certain thing costs 20 000 so-called electronic coins then it\'s got to be a piss take to send 20'
+
+[02:36] [scene:talk]
+VISUAL:
+AUDIO: '000 transactions over the network is there any way we can just say hey combine all of my coins here it is 20 000 lump sum enjoy the answer is of course yes we can do that and section 9 tells us how we go about doing that'
+
+[02:49] [scene:talk]
+VISUAL:
+AUDIO: 'section 10. this is pretty much obsolete it goes on about privacy and how oh yes we\'re so private because we all have public keys identifying us and not our real names but as we shall find out that is no longer the case section 11'
+
+[03:03] [scene:talk]
+VISUAL:
+AUDIO: 'calculations this part of the paper is all about an attacker trying to attack the network which sounds very scary and that\'s pretty much it section 12 is the shortest section in the history of sections it just says conclusion yeah'
+
+[03:16] [scene:talk]
+VISUAL:
+AUDIO: 'here\'s what i\'ve done do you like it i hope you like it by liking commenting and subscribing what you will do is increase the probability of a brighter future because more people would be better educated at crypto and they won\'t'
+
+[03:28] [scene:talk]
+VISUAL:
+AUDIO: '[&nbsp;__&nbsp;] themselves and run away when [&nbsp;__&nbsp;] hits the fan that\'s enough for now let\'s get into the paper [Music] mr banker please don\'t take my coins'
+
+[03:40] [scene:talk]
+VISUAL:
+AUDIO: 'away [Music] sometimes i don\'t even pray'
+
+[03:56] [scene:talk]
+VISUAL:
+AUDIO: 'before we get into the paper we first have to know what a hash function is and what is meant by a digital signature some of you already know this so i\'m going to go through this very very'
+
+[04:09] [scene:talk]
+VISUAL:
+AUDIO: 'quickly so a hash function if you ever see the pink h throughout this video that means hash function it takes any input x it could be the whole works of shakespeare it could be the number zero it could be the number one one zero zero one whatever the main thing is this no'
+
+[04:22] [scene:talk]
+VISUAL:
+AUDIO: 'matter the size it will accept it and it will spit out a 256 bit number this function has very very special properties any change whatsoever in x will result in an entirely different'
+
+[04:35] [scene:talk]
+VISUAL:
+AUDIO: 'output and it\'s impossible to invert and so we can treat this as a pseudorandom function so why are we going to use it later as we shall see what we are going to require is that when we take the hash of something called a block that the'
+
+[04:48] [scene:talk]
+VISUAL:
+AUDIO: 'output begins with a certain number of zeros and so the best thing we can do in this case because h just spits out random numbers is a brute force approach which is going to keep trying numbers over and over and over again until we'
+
+[05:00] [scene:talk]
+VISUAL:
+AUDIO: 'get the desired output this will then serve as our proof of work hey look i have these zeros that is proof that i\'ve done the work and if that doesn\'t make sense then do not worry it will make'
+
+[05:13] [scene:talk]
+VISUAL:
+AUDIO: 'sense in a bit we will also use hash functions in another way we\'re going to be taking the hash of transactions in this case we\'re just going to get whatever it gives us transactions are fixed we\'re not going to be changing the'
+
+[05:26] [scene:talk]
+VISUAL:
+AUDIO: 'number here it will spit out a unique number well basically unique because there is 2 to the power of 256 different possible outputs basically unique and what this number is going to do it\'s going to serve as a transaction id and we will see how we\'re going to use that'
+
+[05:40] [scene:talk]
+VISUAL:
+AUDIO: 'in section 5. private keys and public keys okay here we go anytime you see a red key think private only known by one person anytime you see a public key think public known by everybody and what'
+
+[05:53] [scene:talk]
+VISUAL:
+AUDIO: 'we\'re going to do is we\'re going to send a message to the rest of the bitcoin network let\'s call it m for now and what this m will say is hello i have the private key corresponding to this public'
+
+[06:05] [scene:talk]
+VISUAL:
+AUDIO: 'key and i wish to transfer my coins to somebody else here is the proof that it is from me i will encrypt the message with my private key and everyone else will go okay if you really did have access to the private key then if i get'
+
+[06:17] [scene:talk]
+VISUAL:
+AUDIO: 'your public key and apply that to this number then because they are inverses we should be left with m and then they\'re all satisfied now these private and public keys are just numbers but as you\'ve just heard i\'ve been using'
+
+[06:30] [scene:talk]
+VISUAL:
+AUDIO: 'terminology such as applying to which kind of implies that they are functions and yes okay they are numbers but when you have a private a public key used in conjunction with a digital signature algorithm they act as the parameters'
+
+[06:43] [scene:talk]
+VISUAL:
+AUDIO: 'which implicitly define a function don\'t worry about that i will make another video on that very soon and if you want to see that of course you know what to do subscribe just as a side note it\'s not mentioned in this paper and you'
+
+[06:55] [scene:talk]
+VISUAL:
+AUDIO: 'don\'t need to know bitcoin uses something called the elliptic curve digital signature algorithm d s a for short and it uses a particular version called sec p 256 k one okay let\'s get into the actual paper'
+
+[07:07] [scene:talk]
+VISUAL:
+AUDIO: 'let\'s start with the abstract bitcoin is described as a system if you see bitcoin with a capital b it refers to the system as a whole the protocols involved etc if you see a lower case b that refers to'
+
+[07:19] [scene:talk]
+VISUAL:
+AUDIO: 'the number go up coin i.e the currency if you want an example of each using a sentence then here we go i am learning about capital b it coin versus i just sent three lowercase b it coins to my friend okay so the whole point of'
+
+[07:33] [scene:talk]
+VISUAL:
+AUDIO: 'this paper is that satoshi is able to solve something called the double spending problem using a peer-to-peer network that gone through any third party in the late 90s and early 2000s there were a few attempts to solve this b money and bit gold were only'
+
+[07:46] [scene:talk]
+VISUAL:
+AUDIO: 'theoretical they never got to the ground our power was implemented by somebody called hal finney who actually received the first ever bitcoin from satoshi himself but his solution was centralized but and i\'m not going to go into that any further basically they could not'
+
+[07:58] [scene:talk]
+VISUAL:
+AUDIO: 'solve the double spending problem in a decentralized way now this problem is really really simple in a centralized banking model that we\'re all familiar with let\'s say we have two women alicia and karen and alicia wishes to send'
+
+[08:10] [scene:talk]
+VISUAL:
+AUDIO: 'karen some money she\'ll say hello bank pay karen two thousand fifty one dollars they\'ll check if she has enough they\'ll subtract it from her account and they\'ll add it to karen\'s account and then alicia cannot send that money to anybody else because her balance has been'
+
+[08:24] [scene:talk]
+VISUAL:
+AUDIO: 'updated and she hasn\'t got it now this is trivial in the centralized model but the question is how do we prevent somebody from double spending money in a decentralized system now one thing to point out is that ethereum does use this account model that is it has basically'
+
+[08:37] [scene:talk]
+VISUAL:
+AUDIO: 'names and the balance of public keys and balances bitcoin has something called a utxo or unspent transaction output model and this is going to be something different if you\'re not familiar with'
+
+[08:49] [scene:talk]
+VISUAL:
+AUDIO: 'bitcoin at all but do not worry we\'re going to explain all of this very very soon the rest of this abstract is repeated in the introduction section so let\'s just move on to the first section of the paper what\'s worth pointing out here is that satoshi does not say the'
+
+[09:02] [scene:talk]
+VISUAL:
+AUDIO: 'central banks have a monopoly on the issuance of fiat currency and we\'re all enslaved no no no his approach is not what you would think it is based on the current narrative around bitcoin being something that offers sovereignty to the'
+
+[09:14] [scene:talk]
+VISUAL:
+AUDIO: 'individual offers an escape out of the central banking system or the banking system satoshi\'s focus is actually on that of e-commerce on the internet he says during online transactions a third party is required to settle disputes'
+
+[09:28] [scene:talk]
+VISUAL:
+AUDIO: 'when people complain or say i want a refund and so this basically stops us from having micro payment systems on the internet whereby we would pay a small amount of money for something such as watching a youtube video or reading an article online instead as the number of'
+
+[09:41] [scene:talk]
+VISUAL:
+AUDIO: 'transactions go up we have the number of disputes going up and the number of operating costs for these third parties goes up and so basically all these third parties think to themselves hang on this is not profitable so a solution is to'
+
+[09:53] [scene:talk]
+VISUAL:
+AUDIO: 'set a minimum transaction amount and this leads us down to the advertisement based business models and there\'s no need to go into how much [&nbsp;__&nbsp;] that comes along with that and so satoshi says we do not need this we do not have to have this we can have'
+
+[10:05] [scene:talk]
+VISUAL:
+AUDIO: 'an electronic payment system based on cryptographic proof instead of trust and he says i propose a timestamp server that\'s going to be a blockchain and i\'m going to distribute it make it'
+
+[10:17] [scene:talk]
+VISUAL:
+AUDIO: 'decentralized and we\'re going to have a singular chronological order of the transactions and this entire system is going to be secure unless an attacker accumulates more than 50 of the cpu'
+
+[10:29] [scene:talk]
+VISUAL:
+AUDIO: 'power in which case we are [&nbsp;__&nbsp;] okay let\'s now move on to section two of the paper section two defines what an electronic coin is and it gives us this pretty diagram here which shows us how the current owner transfers to the next'
+
+[10:42] [scene:talk]
+VISUAL:
+AUDIO: 'owner you\'ll notice that we do not know where owner zero got the coin from in section six i\'ll tell you and spoiler alert the miners are awarded with coins as a reward for securing a blockchain'
+
+[10:55] [scene:talk]
+VISUAL:
+AUDIO: 'let\'s copy this diagram and explain precisely what a transaction is a transaction is simply three numbers let\'s say alice wants to transfer her coin to bob she will get bob\'s public key she will get a hash of the previous'
+
+[11:08] [scene:talk]
+VISUAL:
+AUDIO: 'transaction now of course we don\'t have previous transaction to reference right now but let\'s go with it and then she signs it and then bob does the same when he wants to send to charlie and so forth so let\'s dissect this bob\'s public key'
+
+[11:22] [scene:talk]
+VISUAL:
+AUDIO: 'is a number remember the hash of the previous transaction is a number and alice\'s signature what she does she gets these two numbers she concatenates them and she applies her private key to that and then we have another number when bob'
+
+[11:34] [scene:talk]
+VISUAL:
+AUDIO: 'wants to send to charlie he gets charlie\'s public key he gets the hash of the previous transaction this means get these three numbers merge them all into one number and take the hash of that number and then bob puts his signature'
+
+[11:47] [scene:talk]
+VISUAL:
+AUDIO: 'down as the third number and what that hash my second number does it will tell people hey look i am pointing towards the previous transaction if you go to the top of that transaction you will see my public key use my public key to'
+
+[11:59] [scene:talk]
+VISUAL:
+AUDIO: 'decrypt my signature and you will see that the result is the concatenation of the first two numbers of this transaction thereby proving that i have indeed transferred ownership of my'
+
+[12:11] [scene:talk]
+VISUAL:
+AUDIO: 'electronic coin over to charlie i.e the person who has the private key corresponding to the public key represented at the top of this transaction if all these numbers are getting a bit much for you let\'s'
+
+[12:23] [scene:talk]
+VISUAL:
+AUDIO: 'represent everything in a pictorial format so everything is much more clearer but wait what if charlie now says okay i\'m going to try and send this same coin to both david and emma he could do that'
+
+[12:35] [scene:talk]
+VISUAL:
+AUDIO: 'how do we stop it the easiest thing to do is to introduce a central authority but then we just have the same scenarios with the banks and everything centralized and we know the only way to confirm the absence of transactions is'
+
+[12:47] [scene:talk]
+VISUAL:
+AUDIO: 'to be aware of all of the transactions but in order to do this in a distributed setting and not relying on any third party we\'re going to have to publicly announce all transactions and everybody is going to have to be aware of all of'
+
+[13:01] [scene:talk]
+VISUAL:
+AUDIO: 'the transactions okay that sounds easy but now we need a way for everybody to agree on a single chronological order of the transactions how do we do this now let\'s not take this likely the entire point of the bitcoin network is to'
+
+[13:14] [scene:talk]
+VISUAL:
+AUDIO: 'facilitate this the whole point of bitcoin is to come up with an agreed-upon chronological order of the transactions in order to prevent double spending our solution to this problem begins with something called a timestamp'
+
+[13:28] [scene:talk]
+VISUAL:
+AUDIO: 'server i.e a centralized blockchain and so how does this work well we\'re gonna have something called a chain of hashes we\'re gonna publish the hashes and somehow that\'s gonna prove that the data existed at the time okay let\'s expand on this a'
+
+[13:41] [scene:talk]
+VISUAL:
+AUDIO: 'bit more let me explain to you what this pretty diagram is showing us let\'s take three items that for whatever reason we need to be able to prove that it existed at a particular date this could be a patent or it could be some photo or just'
+
+[13:53] [scene:talk]
+VISUAL:
+AUDIO: 'any text document at the lowest level of course all of these things are just numbers so let\'s represent them as their binary numbers now let\'s group them together and call this thing a block we\'re going to take the hash of the'
+
+[14:05] [scene:talk]
+VISUAL:
+AUDIO: 'previous block and then we\'re going to take all of these items i\'m going to add them to the hash of the previous block i\'m going to concatenate them into one big long number we\'re going to then take the hash of that number and we\'re going to be left with a nice short 256 bit number now let\'s just generalize and'
+
+[14:20] [scene:talk]
+VISUAL:
+AUDIO: 'call these things items these will soon become the transactions but let\'s just stick with items for now now we\'re going to form a chain like this and you can imagine at the end of say every day we publish this hash and let everybody know what the hash is so that if we attempt'
+
+[14:33] [scene:talk]
+VISUAL:
+AUDIO: 'to change one of these items even change one bit it\'s going to change the hash of the block and it\'s gonna have this ripple effect and it\'s gonna completely change the hashes of all the other blocks this is the main idea if we claim'
+
+[14:45] [scene:talk]
+VISUAL:
+AUDIO: 'our item was created on a different day and everyone call us out on our [&nbsp;__&nbsp;] because the chain of hashes will be completely different in the 1990s this technology was implemented and i\'ll'
+
+[14:58] [scene:talk]
+VISUAL:
+AUDIO: 'leave a link in the description to all of those that are interested in finding out more basically what they did is every week they would publish this so-called hash in the new york times that way it was available for everybody to see so they couldn\'t change anything'
+
+[15:11] [scene:talk]
+VISUAL:
+AUDIO: 'and try and get away with it but of course because it was centralized this one company had control over what items went in it was trivial to know which chain was the true chain because there was only one chain but as soon as we'
+
+[15:23] [scene:talk]
+VISUAL:
+AUDIO: 'start to decentralize we\'ve run into multiple problems we\'re going to have multiple chains and we don\'t know which chain is the right chain we are left with complete and utter chaos this is where section 4 comes in this is all'
+
+[15:36] [scene:talk]
+VISUAL:
+AUDIO: 'about how do we choose the chain now this is the most important section of the white paper so pay attention in order to implement distributed timestamp server i.e in order to have a decentralized blockchain we\'re going to'
+
+[15:49] [scene:talk]
+VISUAL:
+AUDIO: 'have to use something called proof of work here is how it works here is a transaction as we have already seen it consists of three numbers let\'s just call this for now tx so these take the places of what we in the last section'
+
+[16:03] [scene:talk]
+VISUAL:
+AUDIO: 'called items i\'m gonna add two more things to this block we\'re gonna have the previous hash inside the block this time and we\'re gonna have something called a nonce i know this does not mean pedophile for all of you british people a nonstandard i think number used once'
+
+[16:16] [scene:talk]
+VISUAL:
+AUDIO: 'as i mentioned at the beginning of this video we\'re going to require the hashes of the block to begin with a certain amount of zeros so what do i move the hash of the block we get each item in the block i.e each transaction we can'
+
+[16:28] [scene:talk]
+VISUAL:
+AUDIO: 'merge all of these transactions together we\'re going to add that to the hash of the previous block and then we\'re going to add to this the nonce we\'re going to start the notes at zero i\'m going to say what is the output of this hash and it\'s probably not going to start with the'
+
+[16:41] [scene:talk]
+VISUAL:
+AUDIO: 'number of zeros we require so we\'re just going to keep increasing the nonce and using cpu power ie raw energy to compute the hashes of these and remember each and every one will be completely'
+
+[16:53] [scene:talk]
+VISUAL:
+AUDIO: 'different it doesn\'t matter a nonce is only incrementing by one so the block looks kind of similar it\'s going to be completely different each and every time we change the nonce by one unit finally we\'re going to arrive at a nonce such'
+
+[17:05] [scene:talk]
+VISUAL:
+AUDIO: 'that when we concatenate it with the hash of the previous block and the transactions in this current block the hash of this will begin with the required amount of zeros so we\'ll take a copy of that nonce put it in the'
+
+[17:17] [scene:talk]
+VISUAL:
+AUDIO: 'non-slot and then we\'re going to feed the hash of this block into the next block we\'re going to collect all the transactions in this block we\'re going to start our announce at zero and we\'re going to repeat that is how we\'re going to chain the blocks it requires energy physical resources to chain these blocks'
+
+[17:31] [scene:talk]
+VISUAL:
+AUDIO: 'together okay let\'s take a step back and see how this rule plays out in a distributed setting that graph you see at the top there each node of that graph think of that as eight people i think there\'s eight notes eight yep eight'
+
+[17:44] [scene:talk]
+VISUAL:
+AUDIO: 'notes think of them as people scattered around the world on the laptop all playing along with this game we called bitcoin so far they have this chain that you\'ve seen down below you with these green blocks they\'re all going to be so-called mining the blocks are either'
+
+[17:57] [scene:talk]
+VISUAL:
+AUDIO: 'going to just simply be increasing the nonce of their block until they find a nonce such that the hash of the block starts with the required amount of zeros let\'s say this fella over here is the first one to find the nonce that'
+
+[18:09] [scene:talk]
+VISUAL:
+AUDIO: 'satisfies this requirement for his block he will then send a message to all the people he\'s connected to these three people and say i have come up with a new block to chain to our blockchain and so all of these other people are going to'
+
+[18:21] [scene:talk]
+VISUAL:
+AUDIO: 'say okay we are going to now try to chain another block onto your block because the idea is the longest block is the block you work with but let\'s say this guy here also finds a suitable nonce he will then send a message to all'
+
+[18:34] [scene:talk]
+VISUAL:
+AUDIO: 'of the people he\'s connected to ie these four people and say hey guys i have mined a new block and so these two people haven\'t seen the red block yet so they\'re going to accept and they\'re going to start working on the blue block'
+
+[18:46] [scene:talk]
+VISUAL:
+AUDIO: 'but these other two blocks here they have just received the red block prior to receiving this guy\'s blue block so what they\'ll say is no i received the red block first i will continue working on this red block i\'ll keep your blue'
+
+[18:58] [scene:talk]
+VISUAL:
+AUDIO: 'block there in case your chain gets longer of course this little guy up here he\'s connected to these blue guys here so he\'s probably going to receive the blue block first and so he\'s going to start work on that too as you can see we appear to be running into problems here'
+
+[19:10] [scene:talk]
+VISUAL:
+AUDIO: 'because we haven\'t agreed upon which is the correct chain because from each of the node\'s perspective there is one singular chain but from this objective point of view this bird\'s eye view that we have we can see there is not a unanimous agreement among the nodes'
+
+[19:23] [scene:talk]
+VISUAL:
+AUDIO: 'about which is the correct block now before long some node let\'s say this node is going to find another block he\'s going to send it out to everyone he\'s connected to those two red nodes are hopefully going to accept his block and work with that this blue node will soon'
+
+[19:35] [scene:talk]
+VISUAL:
+AUDIO: 'realize that he has gone down a different path but will accept that it is longer and so he will just simply transfer over to this red chain up here he will then forward this on to all the nodes he is in direct contact with and'
+
+[19:47] [scene:talk]
+VISUAL:
+AUDIO: 'they will do the same and assuming that nobody else has managed to find another block within this small time delay of the nodes communicating with one another we will have reached a unanimous agreement as you can see there\'s kind of'
+
+[19:59] [scene:talk]
+VISUAL:
+AUDIO: 'two distinct regions of the blockchain here we have those blocks that are old enough such that everyone agrees on the order but then the most recent blocks there is some ambiguity due to different nodes claiming they have lengthened the'
+
+[20:12] [scene:talk]
+VISUAL:
+AUDIO: 'blockchain but then whilst one sends his message that he has extended the blockchain to the rest of the network another node also does the same and so some nodes are going to receive one block first and vice versa so we have'
+
+[20:25] [scene:talk]
+VISUAL:
+AUDIO: 'this kind of split between order and chaos let\'s move on to section five this tells us how to run the network in six steps step one new transactions are broadcast to all nodes so what this means if i'
+
+[20:38] [scene:talk]
+VISUAL:
+AUDIO: 'want to buy a car i will have to send the transaction that is the three numbers to every node i am connected with and they will then forward it onto every node they\'re connected with so although it\'s presented as a peer-to-peer payment system really what'
+
+[20:50] [scene:talk]
+VISUAL:
+AUDIO: 'we\'re doing is sending it to the entire network and then we\'re kind of by this proof-of-work mechanism all coming to an agreement on a chronological order and so we don\'t really have to go through a third party step two each node collects new transactions into a block and so'
+
+[21:04] [scene:talk]
+VISUAL:
+AUDIO: 'these blocks are actually listening for new transactions because they want to fill up their block so that they can start working on finding a suitable nonce speaking of suitable nonces once they have enough transactions they focus on finding the suitable nonce when a node'
+
+[21:17] [scene:talk]
+VISUAL:
+AUDIO: 'finds a proof of work that is the hash of its block starts with the required amount of zeros it broadcasts this block to all of the nodes so those first four steps are pretty easy this fifth step here it says we have to accept the'
+
+[21:30] [scene:talk]
+VISUAL:
+AUDIO: 'blocks only if all of the transactions are valid and not spent i think it\'s worth going over exactly what this means how do we validate a block okay we have transactions in it we have the previous hash and we have a nonce apart from the'
+
+[21:43] [scene:talk]
+VISUAL:
+AUDIO: 'obvious of checking that once we hash all of these things we get the required amount of zeros we also have to check that these transactions have not already been spent how do we do this okay let\'s take this first transaction we get the transaction id and here is a'
+
+[21:56] [scene:talk]
+VISUAL:
+AUDIO: 'representation of the blockchain we\'re working with let\'s say we are this red block here and so this previous hash refers to the hash of this block here so with this transaction id this is meant to tell us which block our transaction is in and then within that block is our'
+
+[22:10] [scene:talk]
+VISUAL:
+AUDIO: 'transaction in the first slot the second slot the third slot etc how do we find that well we could go through each and every block take the hashes of every transaction in that block and compare it to our transaction id and see if they'
+
+[22:23] [scene:talk]
+VISUAL:
+AUDIO: 'match but this isn\'t the smartest way to go about it the computational cost of this is big o of n and as the blockchain scales this will become very very slow instead every node so let\'s say back in'
+
+[22:35] [scene:talk]
+VISUAL:
+AUDIO: 'the day you had a laptop you were using your cpu when you were a node in a bitcoin network what you would do is you would keep this simple database in ram you would have transaction ids and then their corresponding block number and then the transaction slot number within'
+
+[22:47] [scene:talk]
+VISUAL:
+AUDIO: 'that block where it is to be found notice that i\'ve ordered these transactions in ascending order and so they are ordered and how do you sort through an ordered list to find the element of interest or we can perform a binary search now this is of'
+
+[23:00] [scene:talk]
+VISUAL:
+AUDIO: 'computational cost big o of log of n this is far far far faster and this scales way better than the previous naive brute force approach so let\'s say after we do this we find the block where our transaction is we get that'
+
+[23:12] [scene:talk]
+VISUAL:
+AUDIO: 'transaction and we get the public key from that and we attempt to decrypt this signature we end up with a number after we apply the public key to that number and all we have to do is simply verify that the output of this is the result of'
+
+[23:24] [scene:talk]
+VISUAL:
+AUDIO: 'concatenating the first two numbers of the transaction if this is the case then we have verified that this transaction is valid we then go over to this transaction over here that we have just referenced and we make sure to delete this out of our local transaction id'
+
+[23:37] [scene:talk]
+VISUAL:
+AUDIO: 'data set we have stored in ram we repeat this for all transactions in the block and if they all pass then we have validated the block and we accept it we express our acceptance of the block by'
+
+[23:50] [scene:talk]
+VISUAL:
+AUDIO: 'then working on the next block in the chain using the hash of the accepted block as the previous hash now what is mentioned here we\'ve already shown that there could be competing chains near the present moment and then the tie will be'
+
+[24:02] [scene:talk]
+VISUAL:
+AUDIO: 'eventually broken and then everyone will agree on a single chain eventually this part says don\'t worry if you\'re not connected to every single node in the blockchain because once you pass it on to everyone you\'re connected with'
+
+[24:14] [scene:talk]
+VISUAL:
+AUDIO: 'they\'ll pass it on to everyone they\'re connected with so it exponentially runs through the network and it reaches everybody but why would anyone bother running a node what do they get out of it well here is where section six comes in'
+
+[24:27] [scene:talk]
+VISUAL:
+AUDIO: 'incentives remember when i said in section two where the [&nbsp;__&nbsp;] does this owner zero get his coin from well it turns out that when you successfully mine a block you are allowed to as the first transaction in that block simply'
+
+[24:39] [scene:talk]
+VISUAL:
+AUDIO: 'say i award myself a coin this adds incentives for the nodes to support the networks and then this is the mechanism by which coins come into circulation this part says we could cap the maximum number of coins allowed which is'
+
+[24:52] [scene:talk]
+VISUAL:
+AUDIO: 'obviously has been done at 21 million thereby having no inflation and we can transition into a network whereby the miners are incentivized with transaction fees instead and this last part here says this incentive will help to'
+
+[25:05] [scene:talk]
+VISUAL:
+AUDIO: 'encourage nodes to stay honest because if you had more cpu power than all of the honest nodes combined you can just be honest and mine the blocks and be rewarded with bitcoins moving on to section seven or should i'
+
+[25:17] [scene:talk]
+VISUAL:
+AUDIO: 'say seven and eight these two sections are very very very closely related the technology in section seven allows for something called simplified payment verification or spvs and these would not be possible without section 7 here so'
+
+[25:30] [scene:talk]
+VISUAL:
+AUDIO: 'spv allows us to verify payments without running a full node on the network which as i briefly mentioned earlier is extremely important for the sustainability of bitcoin network if we run a small barber shop or whatever we'
+
+[25:43] [scene:talk]
+VISUAL:
+AUDIO: 'need to be able to have access to the network to ensure that we have been paid now vitalik buterin himself in the ethereum white paper as an aside subscribe if you want to have this kind of similar video but for the ethereum'
+
+[25:56] [scene:talk]
+VISUAL:
+AUDIO: 'white paper instead i plan to do that video very very very soon the ethereum white paper mentions these two sections i mentioned just how important they are let\'s take a closer look at section seven so basically we\'re in this'
+
+[26:08] [scene:talk]
+VISUAL:
+AUDIO: 'situation we can discard all of the transactions that have already been spent because we only need to know the latest transaction in any coin so to illustrate this let\'s take our blockchain we have this kind of certain'
+
+[26:21] [scene:talk]
+VISUAL:
+AUDIO: 'region and uncertain region remember that every coin is created in the first transaction slot in every new block so let\'s say a coin was created in this block and was rewarded to whoever mined'
+
+[26:33] [scene:talk]
+VISUAL:
+AUDIO: 'this block let\'s say this guy then sent this coin to somebody else in this block and the same happened in this block and this block and this block so this creation block here will just have the successful miners public key in it this'
+
+[26:46] [scene:talk]
+VISUAL:
+AUDIO: 'second block will look something like this where this hash will refer to the hash of this transaction or in this case just the hash of the public key and then we will use that public key in this transaction in order to decrypt the'
+
+[26:59] [scene:talk]
+VISUAL:
+AUDIO: 'signature in the most recent transaction thereby verifying that the owner of the coin has given permission to transfer the coin now this is the process of transacting and this is the chain of digital signatures that define the coin'
+
+[27:12] [scene:talk]
+VISUAL:
+AUDIO: 'as you can see it gets a bit confusing because this chain exists within the blockchain and it\'s kind of implicit it\'s not stored anywhere but anyway as you can see this public key with an e stamped on it is the most recent'
+
+[27:25] [scene:talk]
+VISUAL:
+AUDIO: 'transaction therefore edward is the owner of his coin and all of the previous transactions can actually be disregarded because we won\'t actually ever have to refer to them but then as we saw in section three if we change or in this case remove a transaction from'
+
+[27:39] [scene:talk]
+VISUAL:
+AUDIO: 'the block the hash of the block is going to change and so this will have a ripple effect and break the entire chain of hashes so the question is can we delete transactions whilst not breaking the chain of hashes the answer is yes and in'
+
+[27:52] [scene:talk]
+VISUAL:
+AUDIO: 'order to do this we\'re going to have to hash the transactions into something called a merkle tree and so we have a nice diagram to look at again and we have this down here which feel free to read it just says how great'
+
+[28:04] [scene:talk]
+VISUAL:
+AUDIO: 'it will be and how much memory we will save okay so let\'s just take a step back here here\'s what we have so far let\'s call these transactions023 to just show that they are actually different transactions we'
+
+[28:16] [scene:talk]
+VISUAL:
+AUDIO: 'have a chain of them here\'s the problem if we delete one and this changes the hash of the block and so this has the ripple effect and it [&nbsp;__&nbsp;] up the entire chain and all of our security is completely gone because all of the proof of works are completely messed up so'
+
+[28:28] [scene:talk]
+VISUAL:
+AUDIO: 'here\'s what we\'re going to do instead i\'m just going to have this thing called a block header and this block header is going to include the hash of the previous block header the root something called the root hash as well as the nonce so what is this root hash okay so'
+
+[28:41] [scene:talk]
+VISUAL:
+AUDIO: 'what we do we get each of our transactions and we take their hashes and then for each pair we concatenate them and then take another hash and we keep doing this until eventually we will concatenate two numbers take the hash'
+
+[28:54] [scene:talk]
+VISUAL:
+AUDIO: 'and we will have no more pairs left and we will call this the root hash and we will include this within the block header so let\'s just be clear about what\'s going on here everything with a green box around it is what we have'
+
+[29:06] [scene:talk]
+VISUAL:
+AUDIO: 'stored in our memory all of these red things are not stored because if we have these green boxes we can simply calculate the red ones of course everything in the block header is always stored that is permanently in our memory'
+
+[29:18] [scene:talk]
+VISUAL:
+AUDIO: 'let\'s say we no longer need to ever reference transaction one here ever again what we could do is simply instead of storing the transaction we could store the hash of the transaction and notice that we can still reproduce the'
+
+[29:32] [scene:talk]
+VISUAL:
+AUDIO: 'root hash from everything we have stored in these green boxes similarly if we never have to reference transaction zero we can delete that and simply store the hash of transaction zero but then at that point why are we storing both the'
+
+[29:45] [scene:talk]
+VISUAL:
+AUDIO: 'hash of the first transaction and the hash of the well the zeroth and the first transaction we could simply get rid of both of them and just store the hash of the result of concatenating these two hashes yes and i\'m aware this'
+
+[29:58] [scene:talk]
+VISUAL:
+AUDIO: 'gets really really confusing but it\'s really take if you pause the video and really go through it you\'ll find it\'s quite simple so we can do the same with transaction number two now let me just give a quick example here if somebody says hi can i have proof that'
+
+[30:11] [scene:talk]
+VISUAL:
+AUDIO: 'transaction three was included in this block at the time of creation then we can say sure no problem take this number take this number get your transaction hash that transaction to get this number concatenate it with this number and then'
+
+[30:24] [scene:talk]
+VISUAL:
+AUDIO: 'take the hash to get this number and then concatenate these two numbers and take the hash again you will be left with the root hash so then the guy goes okay i am satisfied that this transaction was part of this block at'
+
+[30:36] [scene:talk]
+VISUAL:
+AUDIO: 'the time of the creation of this block why is he satisfied because the probability that i am able to give these random numbers in that order to be able to be used with the transaction in order to give the root hash is one in two to'
+
+[30:49] [scene:talk]
+VISUAL:
+AUDIO: 'the power of 256 ie zero now for illustrative purposes i\'ve only included four transactions in each block here usually we have between one and two thousand transactions in a block and so at that scale you can really start to'
+
+[31:03] [scene:talk]
+VISUAL:
+AUDIO: 'see why this is such a powerful tool in terms of saving disk space so now we can see different people running their nodes have these different types of blockchains they all have the same block header but then some people choose to as'
+
+[31:15] [scene:talk]
+VISUAL:
+AUDIO: 'they go along remove transactions they no longer need as you can see the ones that are closest to the most present block may look like a full block because those transactions haven\'t yet been spent whereas blocks from a while back could have literally every transaction'
+
+[31:29] [scene:talk]
+VISUAL:
+AUDIO: 'no longer ever being needed to be referred to and so it can simply store the block header so we have these big brain folks here that know everything these medium-sized brain folks here they know quite a bit and then we have these'
+
+[31:41] [scene:talk]
+VISUAL:
+AUDIO: 'peanut-sized brain people they just keep a copy of the block header so these people who merely keep a copy of the block header can ask for a proof that a transaction has been accepted these people here can mine blocks as well as'
+
+[31:53] [scene:talk]
+VISUAL:
+AUDIO: 'independently verifying that a transaction has been accepted and then these people they are omniscient they know absolutely everything that\'s ever happened in the bitcoin blockchain they can trace any coin to the origin and any'
+
+[32:05] [scene:talk]
+VISUAL:
+AUDIO: 'new node that joins the network has to ask these people for the entire history so that they can work through the entire history themselves to verify every transaction so these peanut-sized brain people they\'re actually the ones who run'
+
+[32:17] [scene:talk]
+VISUAL:
+AUDIO: 'the spv notes so let\'s walk through an example of some car shop running an spv note and then this guy comes up to them and says hey can i buy a car this guy says yeah sure he says can i buy him bitcoin he says yeah sure he says okay i'
+
+[32:29] [scene:talk]
+VISUAL:
+AUDIO: 'just sent the transaction and this cart the car owner is going to wait until he can get verification or approve this transaction which sends this customer\'s coin over to him is indeed valid and has been accepted by the network so he says'
+
+[32:44] [scene:talk]
+VISUAL:
+AUDIO: 'so either the medium sized brain nodes or these big omniscient brain nodes hey guys send me a proof that my transaction has been included some guy replies he says yeah he\'s a transaction right he says yes that is my transaction he says'
+
+[32:56] [scene:talk]
+VISUAL:
+AUDIO: 'okay so if you just go and hash that you\'ll get his number and he goes yes i\'ll get a number if you concatenate it with this one and then hash it you will get this number concatenate it with this one and then hash it and you\'ll get the'
+
+[33:08] [scene:talk]
+VISUAL:
+AUDIO: 'root hash you know the chain of block headers so you know what the root hash is and i have just given you what is called a miracle proof your transaction was indeed included within this block at the time of creation and so the guy'
+
+[33:20] [scene:talk]
+VISUAL:
+AUDIO: 'running the spv node the peanut size brain nodes can see okay lots of blocks have been mined on top of this which means it\'s extremely likely to be a valid transaction as basically the entire network has accepted it as valid'
+
+[33:32] [scene:talk]
+VISUAL:
+AUDIO: 'so i am happy up until now we have been transferring a single electronic coin but that is a piss take and it gives us yet another pretty diagram which doesn\'t really tell us a lot but basically we'
+
+[33:45] [scene:talk]
+VISUAL:
+AUDIO: 'can have multiple inputs and always have two outputs the first output is sent to the receiver and then the second output we\'re going to send change back to ourselves so as far as the bitcoin network is concerned we\'re actually'
+
+[33:57] [scene:talk]
+VISUAL:
+AUDIO: 'sending coins to ourselves here which of course is actually valid there\'s no need to worry about all these transactions getting all complicated and falling out everywhere because value is conserved in each transaction if you count the value'
+
+[34:09] [scene:talk]
+VISUAL:
+AUDIO: 'of all the inputs they will equal that of the outputs okay so our transactions so far have just been these three numbers i\'m going to slightly rearrange this transaction here and we\'re going to allow for multiple inputs that is multiple'
+
+[34:22] [scene:talk]
+VISUAL:
+AUDIO: 'transaction ids which refer to different coins and then we\'re going to have two public keys one is going to be the guy we\'re sending it to and then we\'re going to have our own public key send ourselves any leftover change what\'s'
+
+[34:34] [scene:talk]
+VISUAL:
+AUDIO: 'this signature here it\'s the same as before we simply just use our private key to sign it okay let\'s turn to pictures because they\'re always easier to work with any keys with the silver metal bit the hours and any keys with the gold bits there\'s somebody else\'s'
+
+[34:47] [scene:talk]
+VISUAL:
+AUDIO: 'let\'s give these transaction ids different shades of pink just to highlight that they are actually different and this is our signature down here now let\'s say we wanted to send 20 electronic coins to somebody we have at our disposal previous transactions in'
+
+[35:00] [scene:talk]
+VISUAL:
+AUDIO: 'the bitcoin blockchain sending us eleven eight and four coins to our public key as you can see we can\'t just have the first two inputs because that would only add up to 19. and the rule is we have to'
+
+[35:12] [scene:talk]
+VISUAL:
+AUDIO: 'use the entire value of the transaction output so we have to include these entire four coins in this transaction that of course adds up to 23 so we\'re going to send three coins back to ourselves'
+
+[35:24] [scene:talk]
+VISUAL:
+AUDIO: 'so let\'s just make this clearer with an illustration of our blockchain once again remember that we have this trend this local transaction id database stored in our ram and so we can use these three transaction ids and look up where they exist in the blockchain and'
+
+[35:38] [scene:talk]
+VISUAL:
+AUDIO: 'so let\'s say after we find them we go to each individual one we say this is the output i am referring to i claim this is my public key but of course because there\'s two outputs what we really need in our inputs is not only the'
+
+[35:50] [scene:talk]
+VISUAL:
+AUDIO: 'transaction id but the index of the output within that transaction that we are referring to now of course this gets confusing because we have a blockchain which is composed of blocks which is composed of transactions and then those transactions are composed of transaction'
+
+[36:03] [scene:talk]
+VISUAL:
+AUDIO: 'inputs which are composed of transaction ids and indexes as well as transaction outputs and a signature and this could get even more complicated because we can actually have multi-signature transactions but this paper does not'
+
+[36:15] [scene:talk]
+VISUAL:
+AUDIO: 'mention anything about that if you want to find out more about multi-signature transactions how they made bitcoin\'s lightning network possible then you know what to do subscribe okay so this is our public key we claim we have the private'
+
+[36:28] [scene:talk]
+VISUAL:
+AUDIO: 'key to so now we just check that we can indeed decrypt the signature with this public key which proves that we were the owners of the previous 11 coins and so this transaction is valid and so we are'
+
+[36:40] [scene:talk]
+VISUAL:
+AUDIO: 'allowed to include this transaction input in our transaction so of course we will delete this transaction id out of our database well not exactly because a transaction now has two outputs and so what we really need is both the'
+
+[36:53] [scene:talk]
+VISUAL:
+AUDIO: 'transaction id as well as the index indicating whether it is the first or second or zeroth or first output in the transaction so we\'ll actually have two entries for each transaction id in here nevertheless we delete the output the'
+
+[37:06] [scene:talk]
+VISUAL:
+AUDIO: 'transaction output that we have just used up and we do the same for each of the other ones and hopefully they all correspond to the public key which is able to decrypt that digital signature and everything goes swimmingly and it\'s accepted if this is getting a bit'
+
+[37:20] [scene:talk]
+VISUAL:
+AUDIO: 'confusing to understand imagine you go into a store and the cashier says that is 1.55 please and you have in your pocket a one dollar note and then you have 50 cent and 10 cent coin what will happen you'
+
+[37:32] [scene:talk]
+VISUAL:
+AUDIO: 'can\'t just say i\'ll split that ten cent coin in half and give you five cents nope no no no you send over all of it and then the cashier takes 155 and gives you change of five cents and so that\'s'
+
+[37:44] [scene:talk]
+VISUAL:
+AUDIO: 'how it works in bitcoin now time for a super short section 10. this is all about privacy but this section is obsolete and i\'ll tell you why okay so here it says all the transactions are'
+
+[37:56] [scene:talk]
+VISUAL:
+AUDIO: 'public they\'re all on a public decentralized ledger but it\'s okay because all of our identities are tied to our public keys so we don\'t give our real world identities away so it\'s all good contrast this with the legacy financial system where we get our'
+
+[38:08] [scene:talk]
+VISUAL:
+AUDIO: 'privacy but at the cost of not having an absolute clue what is going on because everything is so opaque but remember that this white paper was written before we had exchanges like coinbase so nowadays if we want to gain access to'
+
+[38:21] [scene:talk]
+VISUAL:
+AUDIO: 'coins what we\'ll do is transfer money from our bank to an exchange and then if we actually control our own keys we will send it to our public key or bitcoin address which is very similar to a public key but in this video i\'m trying'
+
+[38:34] [scene:talk]
+VISUAL:
+AUDIO: 'to keep to the white paper as much as possible so in the early days you could just get your laptop use your cpu and mine coins directly but of course that is far too expensive now and so we really don\'t have any privacy in the'
+
+[38:46] [scene:talk]
+VISUAL:
+AUDIO: 'bitcoin network now on to section 11 in it satoshi simulates an attack on a bitcoin network but he does so with somebody with less than 50 of cpu power so we kind of already agree if he has more than 50 cpu'
+
+[39:00] [scene:talk]
+VISUAL:
+AUDIO: 'power we\'re [&nbsp;__&nbsp;] if he has less than 50 and does it mean he cannot attack the network well no that doesn\'t have to be the case just think of an extreme example where we are super super super lucky and we only have to try a few'
+
+[39:12] [scene:talk]
+VISUAL:
+AUDIO: 'nonces in order that our block as a hash which starts with a suitable number of zeros we will just keep winning and winning and mining all the blocks but what does it actually mean by attack well here is our blockchain and let\'s say we bought our car at this block here'
+
+[39:24] [scene:talk]
+VISUAL:
+AUDIO: 'the guy who sold us the car is gonna say i want to wait for a bit to make sure that transaction is valid and has gone through and exists in the blockchain so we could say okay yep fair enough we can wait but then what we could do is simply'
+
+[39:37] [scene:talk]
+VISUAL:
+AUDIO: 'go to a block before that transaction occurred and then just mine our own blocks which includes all of the valid transactions that were included in these other blocks except one specific transaction that transaction being a'
+
+[39:50] [scene:talk]
+VISUAL:
+AUDIO: 'transaction whereby we sent him the bitcoins from our address to his address or our public key to his public key so this becomes a race because obviously the main blockchain is still going to be adding blocks whilst we\'re trying to'
+
+[40:02] [scene:talk]
+VISUAL:
+AUDIO: 'catch up but notice that if we do catch up at any point then we will send proof that we have a valid chain which is longer than everyone else\'s and all of the other nodes are just going to accept okay this is the best the longest chain which has the most work invested in it'
+
+[40:16] [scene:talk]
+VISUAL:
+AUDIO: 'and so i\'m not actually going to go through this section because it\'s purely just a standard textbook probability example and i\'m not going to explain to everyone what a poisson distribution is or the gambler\'s ruin problem if you'
+
+[40:28] [scene:talk]
+VISUAL:
+AUDIO: 'have studied any stats or probability in a university or in american college level you will be able to understand this section pretty easily there\'s not really a blockchain specific section'
+
+[40:40] [scene:talk]
+VISUAL:
+AUDIO: 'here it\'s it\'s actually just a probability question it is worth pointing out some of these results so this q here this refers to the proportion of hashing power or the cpu power that an attacker has so let\'s say he has 10'
+
+[40:53] [scene:talk]
+VISUAL:
+AUDIO: 'then what he\'s saying is if we wait for the transaction to be in zero confirmed blocks then he can obviously attack us and reclaim the money because he could just send us absolutely anything because no no to confirmed it if we wait for our'
+
+[41:05] [scene:talk]
+VISUAL:
+AUDIO: 'transaction to be included in one block then he has a 20.5 chance of attacking us and reclaiming his money back if we wait for and this is industry standard if we wait for our'
+
+[41:17] [scene:talk]
+VISUAL:
+AUDIO: 'transaction to be included in a block which is six blocks deep into the bitcoin network then the chances of him attacking the network is pretty much non-existent if he had thirty percent of'
+
+[41:29] [scene:talk]
+VISUAL:
+AUDIO: 'the hashing power of the network we can see how it compares if it\'s five blocks deep there\'s still a seventeen point seven percent chance he can attack if it\'s ten blocks deep it\'s four point two percent etc etc etc'
+
+[41:41] [scene:talk]
+VISUAL:
+AUDIO: 'and finally the shortest section in the history of sections the conclusion it basically says here\'s what we\'ve done and feel free to read that yourself because all he does is tell you what'
+
+[41:53] [scene:talk]
+VISUAL:
+AUDIO: 'he\'s done if you are listening to me now that means you have watched the entire video which probably means you are interested in learning lots more about blockchain and so in that case i would highly recommend you subscribe to this channel'
+
+[42:05] [scene:talk]
+VISUAL:
+AUDIO: 'have a great day [Music] can\'t remember the last time i saw a'
+
+[42:26] [scene:talk]
+VISUAL:
+AUDIO: 'lunar landing maybe that was just a dream'

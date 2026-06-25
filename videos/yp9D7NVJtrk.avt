@@ -1,0 +1,255 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Local Omni? Testing BerniniR Video Editing on an 8GB GPU | BerniniR Full Tutorial
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=yp9D7NVJtrk
+upload_date: 20260621
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: '8 GB of VRAM. A few years ago, you probably wouldn\'t have associated that with AI video editing, but recently a very interesting model appeared, Bernini R. It runs locally and even makes video editing possible on ordinary GPUs.'
+
+[00:12] [scene:talk]
+VISUAL:
+AUDIO: 'Today, I\'ll show you how to install it, how to use it, where things are most likely to fail, and how to edit videos without running out of VRAM. Let\'s begin. Hello, welcome to Smart Vision.'
+
+[00:24] [scene:talk]
+VISUAL:
+AUDIO: 'On this channel, I keep sharing the latest AI tutorials and practical tools. All workflows, materials, and resources from this video are on my Patreon and are available to download after you'
+
+[00:36] [scene:talk]
+VISUAL:
+AUDIO: 'register. For supporters, I provide extra professional tools and deeper guides. If you like this content, consider subscribing and supporting the channel. Now, let\'s get started. Let\'s look at the results first.'
+
+[00:48] [scene:talk]
+VISUAL:
+AUDIO: 'Okay. At least from the output, it looks'
+
+[01:00] [scene:talk]
+VISUAL:
+AUDIO: 'promising. [music] But local workflows always look easier in demos than in real usage. So next, let\'s start with the installation and see what it\'s really capable of on 8 GB of VRAM. First, we need to install ComfyUI.'
+
+[01:14] [scene:talk]
+VISUAL:
+AUDIO: '&gt;&gt; [music] &gt;&gt; Simply search for ComfyUI and install the version that matches your system. Once that\'s done, open the workflow I provided. At this point, you\'ll probably see missing node and missing model'
+
+[01:26] [scene:talk]
+VISUAL:
+AUDIO: 'warnings. Click the logo in the top left corner, open extensions, go to missing nodes, and install everything that\'s required. One thing worth mentioning, sometimes the Bernini R node gets installed as an older version'
+
+[01:39] [scene:talk]
+VISUAL:
+AUDIO: 'automatically. If that happens, you may still see missing node errors even after updating. To fix this, go back to extensions, find Bernini R, open version, switch to the latest release or the nightly build, and update again. For'
+
+[01:52] [scene:talk]
+VISUAL:
+AUDIO: 'the models, simply follow the node I provided and place them in the corresponding folders. Before we dive into the workflow itself, let\'s briefly talk about what Bernini R actually does. Bernini R feels different'
+
+[02:05] [scene:talk]
+VISUAL:
+AUDIO: 'from traditional video generation. Instead of generating from scratch, it focuses more on understanding and editing existing video. That means editing content, maintaining consistency, handling longer sequences,'
+
+[02:17] [scene:talk]
+VISUAL:
+AUDIO: 'and running locally. Let\'s jump into the workflows. We just took a quick look at some of Bernini R\'s workflow examples, and there are actually this many. Honestly, when I opened it for the first time, I was a'
+
+[02:30] [scene:talk]
+VISUAL:
+AUDIO: 'little confused, too. I 2 I, T 2 V, V 2 V, and even RV 2 V. It almost feels like suddenly entering some kind of abbreviation hell. But once you understand Bernini R\'s design'
+
+[02:42] [scene:talk]
+VISUAL:
+AUDIO: 'philosophy, you realize the categorization is actually very intuitive. Basically, everything is organized around what is the input and how does it become a video? First is I 2 I, image to image. You input an image and modify or reconstruct'
+
+[02:57] [scene:talk]
+VISUAL:
+AUDIO: 'the content. Next is T 2 V, text to video. Generate a video directly from text. Then comes V 2 V, video to video. Input an existing video, then edit or transform it. And finally, RV 2 V,'
+
+[03:09] [scene:talk]
+VISUAL:
+AUDIO: 'reference video to video. This is where things start getting interesting. Besides the video itself, it also uses additional reference information to control the output, making characters, motion, or style more stable. Once you'
+
+[03:22] [scene:talk]
+VISUAL:
+AUDIO: 'understand these four categories, the remaining workflows suddenly become a lot less intimidating. At this point, some people may wonder, "Didn\'t we just say Bernini R is more focused on video editing? Then why does it still have I 2 I and T 2 V?"'
+
+[03:35] [scene:talk]
+VISUAL:
+AUDIO: 'Actually, video editing doesn\'t always have to start from video. A lot of the time, people first use images to establish characters, &gt;&gt; [music] &gt;&gt; generate assets quickly with text, and then move into video editing afterward.'
+
+[03:47] [scene:talk]
+VISUAL:
+AUDIO: 'So, the key idea of Bernini R isn\'t the input format. It\'s that different types of input all eventually connect into the same controllable video pipeline. Once you understand this, the rest of the workflows become much easier to'
+
+[04:00] [scene:talk]
+VISUAL:
+AUDIO: 'follow. &gt;&gt; [music] &gt;&gt; But here, I\'m not going to break down every workflow one by one. Because although there seem to be many of them, the structure is actually very consistent. You can think of it as continuously'
+
+[04:12] [scene:talk]
+VISUAL:
+AUDIO: 'adding more input sources onto the same underlying skeleton. The most basic one is T2V. No source input at all. It creates an empty latent and lets the model generate starting from text. If you\'re familiar with video workflows,'
+
+[04:25] [scene:talk]
+VISUAL:
+AUDIO: 'you\'ll notice this is actually very close to a standard 1.2.1 video generation pipeline. Next are I2I and V2V. Their overall structures are actually very similar.'
+
+[04:37] [scene:talk]
+VISUAL:
+AUDIO: 'The only difference is the source material. I2I takes images. V2V takes videos. The source is first encoded, then injected into the generation pipeline for editing.'
+
+[04:49] [scene:talk]
+VISUAL:
+AUDIO: 'And finally, RV2V. On top of the video, it adds an additional reference image. This creates two source streams controlling the result at the same time. So structurally, [music] it\'s basically blank generation, add image, add video,'
+
+[05:02] [scene:talk]
+VISUAL:
+AUDIO: 'add reference control. The core generation process barely changes. You\'re simply injecting more context into the system. Once you understand the structure, the later nodes and parameters become'
+
+[05:14] [scene:talk]
+VISUAL:
+AUDIO: 'much easier to understand. Next, let\'s look at how to use these workflow nodes and where people most commonly run into problems. Using RV2V as an example, first, [music] choose an image as the reference image,'
+
+[05:27] [scene:talk]
+VISUAL:
+AUDIO: 'then choose a video as the target video. The goal is to modify the target video using the reference image. And here is where you enter the editing prompt. You can also adjust the output video resolution here. Make sure the'
+
+[05:39] [scene:talk]
+VISUAL:
+AUDIO: 'reference image uses the same resolution as well. Otherwise, it will end up looking like this. Okay. Now, let\'s move on to the two most important nodes inside Bernini R. Source stream and guider.'
+
+[05:52] [scene:talk]
+VISUAL:
+AUDIO: 'Of course, the other nodes matter, too, but the ones you\'ll actually spend time tuning are mostly these two. Well, I guess that was kind of obvious. &gt;&gt; [laughter] &gt;&gt; Let\'s start with source stream. There\'s'
+
+[06:04] [scene:talk]
+VISUAL:
+AUDIO: 'an important parameter called source ID. Its job is actually very simple. It tells the model where this piece of information comes from. For example, in R V2V, source ID equals one is usually the source video. Source'
+
+[06:17] [scene:talk]
+VISUAL:
+AUDIO: 'ID equals two is usually the reference image. The model uses different source streams to understand which parts should preserve original motion and which parts should follow the new character or style.'
+
+[06:29] [scene:talk]
+VISUAL:
+AUDIO: 'So, if you see two source streams in a workflow, don\'t assume it\'s complicated. At its core, [music] you\'re simply giving the model an extra source of context. Now, let\'s look at guider. At first glance, it can feel overwhelming because'
+
+[06:41] [scene:talk]
+VISUAL:
+AUDIO: 'there are a lot of parameters. But in practice, most of them rarely need adjustment. First, just set mode to auto. It automatically selects the proper mode based on the number of connected streams. One parameter worth paying'
+
+[06:54] [scene:talk]
+VISUAL:
+AUDIO: 'attention to is APG. In plain language, it controls how much freedom the model has. The stronger it is, the more the model preserves original content. Creativity decreases, but stability increases.'
+
+[07:07] [scene:talk]
+VISUAL:
+AUDIO: 'Then we have the three most important parameters, omega V, omega I, and omega TI. Omega V controls how much original video content is preserved. If motion drifts or scenes deform,'
+
+[07:20] [scene:talk]
+VISUAL:
+AUDIO: 'increase this. Omega I controls reference image influence. If characters don\'t resemble the reference image or outfit consistency is weak, increase this. Omega TI controls text prompt strength.'
+
+[07:34] [scene:talk]
+VISUAL:
+AUDIO: 'If prompts barely have any effect, raise this value. It\'s actually easy to remember. V equals video, I equals image, TI equals text. As for Ada, momentum, and norm'
+
+[07:46] [scene:talk]
+VISUAL:
+AUDIO: 'threshold, leave them alone for now. The defaults are usually stable enough. The later omega scale and boundary settings mainly matter for the 14B model. For 1 3B, you can mostly ignore them.'
+
+[08:00] [scene:talk]
+VISUAL:
+AUDIO: 'Once you understand these parameters, you\'ve basically understood Bernini R\'s core tuning logic. Enough theory. Now it\'s time for the most enjoyable part, testing. Actually, while explaining the parameters earlier,'
+
+[08:13] [scene:talk]
+VISUAL:
+AUDIO: 'I already showed some representative examples, but those were mainly for demonstrating parameter effects. Now let\'s get a little more serious. Let\'s look at actual usage results. First, T2V. This part is'
+
+[08:25] [scene:talk]
+VISUAL:
+AUDIO: 'straightforward. We simply input text and test pure generation capability. For example, [music] a girl standing on a rainy Tokyo street, the camera slowly pushes in, neon reflections glowing on the ground. We\'ll'
+
+[08:37] [scene:talk]
+VISUAL:
+AUDIO: 'mainly observe three things. Visual quality, motion stability, and temporal consistency. You can see that, aside from the resolution not being very high, the result handles the rainy street scene'
+
+[08:49] [scene:talk]
+VISUAL:
+AUDIO: 'really well, especially the reflections of the rain on the street surface. Next is I2I. Input a character image, then modify the style through prompts. For example, keep the original pose and composition, change daytime into sunset,'
+
+[09:01] [scene:talk]
+VISUAL:
+AUDIO: 'and turn the clothing into a cyberpunk style. &gt;&gt; [music] &gt;&gt; Let\'s see whether it truly preserves original information or just regenerates everything. As we can see, its editing capabilities'
+
+[09:13] [scene:talk]
+VISUAL:
+AUDIO: 'are quite strong and completely match the description. But honestly, [music] a lot of models can already do T2V and I2I. That\'s not the part I care about most. What\'s really interesting is video editing'
+
+[09:25] [scene:talk]
+VISUAL:
+AUDIO: 'capability. So next, we\'ll focus on V2V and RV2V. This is where we find out if it\'s actually a local omni system or just another video pipeline. First, V2V. Input an existing video, for example,'
+
+[09:38] [scene:talk]
+VISUAL:
+AUDIO: '[music] a person walking in a park. Then use prompts to change the scene into winter, add snowfall, while preserving character motion and camera movement as much as possible. What we\'re testing here is, is it'
+
+[09:50] [scene:talk]
+VISUAL:
+AUDIO: 'actually editing or simply regenerating? It perfectly captures the character while successfully preserving both the original motion and the camera movement, all wrapped up in a beautiful snowy atmosphere.'
+
+[10:02] [scene:talk]
+VISUAL:
+AUDIO: 'Finally, our V2V. This is also the workflow I find the most valuable. This time, besides the original video, we also add a reference image. For example, preserve the motion and camera movement from the original video,'
+
+[10:15] [scene:talk]
+VISUAL:
+AUDIO: 'but replace the character clothing style using the reference image. Or directly replace the entire character appearance. This test makes it easiest to see whether Source Stream is truly working and whether Bernina can achieve'
+
+[10:27] [scene:talk]
+VISUAL:
+AUDIO: 'controllable video editing. Wow, that actually surprised me. It replaced the person directly, but the mouth movements during speech were lost. I tried it a few times, and it seems that as long as the character in the'
+
+[10:40] [scene:talk]
+VISUAL:
+AUDIO: 'video isn\'t speaking, the results can work quite well. At the same time, I also found that it performs really well when changing the background.'
+
+[10:52] [scene:talk]
+VISUAL:
+AUDIO: 'Although it may seem capable of running on less than 3 GB of VRAM, in practice, it\'s not suitable for editing very long videos. Otherwise, you can easily run into OOM errors. Another issue is that the processing'
+
+[11:04] [scene:talk]
+VISUAL:
+AUDIO: 'speed is really slow. Unless there\'s an existing video you really like and only want to fix a few small imperfections, in most cases, I\'d still recommend regenerating the video from scratch'
+
+[11:16] [scene:talk]
+VISUAL:
+AUDIO: 'because the overall time investment can end up being higher. Or, before committing to a full edit, try processing a short clip first to check the results, then decide whether you want to adjust the parameters and continue. Finally, let\'s talk about the'
+
+[11:28] [scene:talk]
+VISUAL:
+AUDIO: 'results. Since this isn\'t a full precision model, the final output will still come down to personal expectations. Some fine character movements still have room for improvement, but for simpler'
+
+[11:40] [scene:talk]
+VISUAL:
+AUDIO: 'video editing tasks, the overall quality is already quite acceptable. As for restoring video quality to 4K, a few people mentioned in last week\'s episode that RTX upscaler either didn\'t'
+
+[11:52] [scene:talk]
+VISUAL:
+AUDIO: 'produce very good results or is no longer supported in the latest Nvidia drivers. So, thank you for pointing that out. This time, I\'m using a different approach, Flash VSR. This method was actually released last'
+
+[12:05] [scene:talk]
+VISUAL:
+AUDIO: 'year, and I also covered it back then. The setup is very straightforward. Just download the required nodes and model, select the tiny long version for long video support, and make sure to enable model offloading before running. It\'s'
+
+[12:18] [scene:talk]
+VISUAL:
+AUDIO: 'definitely slower, but at least it makes 4K video upscaling possible even on low VRAM PCs. All right, that\'s it for this video. Thanks for watching. If you want the full workflow, the low VRAM version, and'
+
+[12:30] [scene:talk]
+VISUAL:
+AUDIO: 'the optimized settings, I\'ll put them on Patreon. They\'re all free, so feel free to subscribe. That\'s all for today. See you in the next one.'

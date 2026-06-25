@@ -1,0 +1,163 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Copy Any Pose Using AnyPose + Reactor Face Swap | ComfyUI Qwen 2511 Tutorial
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=wUD2BvZOCzc
+upload_date: 20260526
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'Hey guys, so ComfyUI Image Edit 2511 natively supports transferring poses from one image to another, but sometimes it does not work. That\'s where Any Pose LoRAs come in handy. They can transfer some complicated poses perfectly without'
+
+[00:12] [scene:talk]
+VISUAL:
+AUDIO: 'the need for control maps. So, let\'s see how to use Any Pose LoRAs with ComfyUI Image Edit 2511. Let\'s get started. The download link for the Any Pose LoRAs is available in the description. Open that'
+
+[00:25] [scene:talk]
+VISUAL:
+AUDIO: 'link and you will see a page like this. Here we can see some of the LoRA. If you scroll down, you can find a lot of information regarding the LoRA. One thing to note is that the Any Pose LoRA'
+
+[00:37] [scene:talk]
+VISUAL:
+AUDIO: 'is not just one LoRA. It is two LoRAs. I know it may be confusing at first. We need two LoRAs, which are base and helper. Both LoRAs should be set to 0.7 strength. Well, you can definitely play'
+
+[00:51] [scene:talk]
+VISUAL:
+AUDIO: 'with the LoRA strength to see which works best for you. For the LoRA, the developer recommends a prompt, so you should be using this prompt for Any Pose to work. In some cases, the background might'
+
+[01:04] [scene:talk]
+VISUAL:
+AUDIO: 'change. So, there is another set of words recommended by the developer for stopping the background from changing. But, I found a better way to make sure the background does not change, which I will show you later.'
+
+[01:16] [scene:talk]
+VISUAL:
+AUDIO: 'Now, let\'s focus on downloading the LoRA. Scroll up and click on files and versions. Here, we can find both the base and helper LoRAs. Download both of them. Then put the'
+
+[01:28] [scene:talk]
+VISUAL:
+AUDIO: 'LoRAs inside the LoRAs folder of ComfyUI. Now, let\'s switch to ComfyUI. So, here I have already built a workflow. I will give you a basic overview of this workflow so you can start using it. The'
+
+[01:41] [scene:talk]
+VISUAL:
+AUDIO: 'download link for the workflow is available in the description. So, let\'s have a quick overview of the workflow. In here, we have the image loaders. In the first image loader, we will load the'
+
+[01:53] [scene:talk]
+VISUAL:
+AUDIO: 'image where we are going to change the pose. Then, in the second image loader, we will load the image from which we are going to copy the pose. So, in the first image loader, let\'s choose another image. Let\'s go to the pictures folder,'
+
+[02:05] [scene:talk]
+VISUAL:
+AUDIO: 'and then let\'s choose a photo. And in the second image loader, let\'s choose another photo containing a different pose. Let\'s choose this one. So, we are going to transfer the pose from the'
+
+[02:17] [scene:talk]
+VISUAL:
+AUDIO: 'second image to the first image. Also, we don\'t need the third image loader, so let\'s keep it in bypass mode. Then, we have the subgraph node of QN Image Edit 2511. After spending so much time with it, I have to say this subgraph node is'
+
+[02:31] [scene:talk]
+VISUAL:
+AUDIO: 'a really good node that will simplify complex workflows. In this node, first, we have the prompt box where I\'ve written the prompt recommended by the developer of the Any Pose LoRA. I also added an extra sentence to make sure her'
+
+[02:44] [scene:talk]
+VISUAL:
+AUDIO: 'clothes don\'t change. Then, under the prompt, you can see I have selected FP8 mixed of QN Image Edit 2511. Then, the clip, which is the same text encoder I used in my other QN Image Edit'
+
+[02:56] [scene:talk]
+VISUAL:
+AUDIO: 'videos. Then, for the VAE, it\'s just the same VAE used for QN Image models. As you can see, I am using the eight-steps LoRA with a strength of 1.0. You can also try the four-steps LoRA for'
+
+[03:09] [scene:talk]
+VISUAL:
+AUDIO: 'improving generation speed. Then, I have selected the Any Pose Base LoRA with a strength of 0.7. Then, we have the Any Pose Helper LoRA with a strength of 0.7. The shift value is just the same value I'
+
+[03:22] [scene:talk]
+VISUAL:
+AUDIO: 'used in my other QN Image Edit videos. For now, I am using a fixed seed, but you can also use a random seed if the generation does not work properly. The steps is eight, the CFG value is 1.0,'
+
+[03:34] [scene:talk]
+VISUAL:
+AUDIO: 'the sampler is Euler, the scheduler is simple, and the denoise value is 1.0. There is also an option for setting the output resolution based on image two. So, if you want to, you can use it.'
+
+[03:47] [scene:talk]
+VISUAL:
+AUDIO: 'But remember, it does not use the exact resolution of image two. For further changes, just enter into the subgraph and make your own modifications. Here, you can see that I have added the'
+
+[04:00] [scene:talk]
+VISUAL:
+AUDIO: 'any pose Laura\'s in series. Now, let\'s go back to the main workflow. To make sure the background of the first image won\'t change, we have the SAM 3 node. As you should know, SAM 3 is now natively supported by ComfyUI, so we can use SAM'
+
+[04:13] [scene:talk]
+VISUAL:
+AUDIO: '3 to extract only the pose. And then, we will send that extracted image to Kuan Image Edit 2511. Depending on your second image, you may need to change the prompt of SAM 3. Right now, I wrote the'
+
+[04:25] [scene:talk]
+VISUAL:
+AUDIO: 'woman. So, if I run the workflow, the woman will be extracted from the second image. For further modifications, enter into the subgraph. We also have this preview image node. So, instead of'
+
+[04:37] [scene:talk]
+VISUAL:
+AUDIO: 'running the whole workflow, just run the preview image node to see if the SAM 3 extraction was good. And here, we got the woman, so we are ready. Then, we have the Reactor Fast Face Swap node. Well, I found out that after Kuan Image'
+
+[04:50] [scene:talk]
+VISUAL:
+AUDIO: 'Edit 2511 changes the pose, the person\'s face identity also changes. To fix that, we will be using Reactor. Unlike in the old days, the developer of Reactor has solved a lot of issues, making the node'
+
+[05:03] [scene:talk]
+VISUAL:
+AUDIO: 'easier to use than before. If you don\'t have the node, install the custom node pack called ComfyUI Reactor from the ComfyUI Manager. In this face swap node, I am using Hyper Swap as the swap model.'
+
+[05:15] [scene:talk]
+VISUAL:
+AUDIO: 'The download links for the models I use in the Reactor nodes are available in this workflow. Some models are automatically downloaded when you use Reactor for the first time, but some models you need to manually download.'
+
+[05:28] [scene:talk]
+VISUAL:
+AUDIO: 'So, download the missing models and put them inside the correct folder of ComfyUI. Now, let\'s go back to the Reactor Fast Face Swap node. Here, I am using RetinaFace for face detection. Then, for the face restore model, I am'
+
+[05:41] [scene:talk]
+VISUAL:
+AUDIO: 'using GPENBFR. It is important to use it because after the face swap, the result may look low-quality. With the restore model, we can fix that. Then we have the Reactor masking helper node for further refining'
+
+[05:54] [scene:talk]
+VISUAL:
+AUDIO: 'of the face swapping. In this node, I am using face YOLOv8 as the bbox model. Then for the SAM model, I am using SAM ViT B01. Depending on your swapping, you may need'
+
+[06:06] [scene:talk]
+VISUAL:
+AUDIO: 'to play with the settings of this node. Well, I\'m going to skip that. Also, for further refinement, you can give your own mask to this node, and for that we can use the SAM 3 model. Then we have the save image node for saving'
+
+[06:18] [scene:talk]
+VISUAL:
+AUDIO: 'outputs. We also have this face similarity Reactor node for checking how much the swapped face looks similar to the original. And we have another face similarity node for comparing the QN image edit output with the Reactor face'
+
+[06:31] [scene:talk]
+VISUAL:
+AUDIO: 'swap. Now, let\'s run the workflow and see how the result is going to look. So, it\'s finished. Let\'s have a look at it. Here is the result of the QN image edit pose change combined with Reactor. As'
+
+[06:43] [scene:talk]
+VISUAL:
+AUDIO: 'you can see, the result is quite good. Well, if it isn\'t good enough, we can always try another swap model. But in this case, I am pretty happy with it. Now, let\'s take a look at the'
+
+[06:55] [scene:talk]
+VISUAL:
+AUDIO: 'similarity. The Reactor face swap output has an 85% similarity with the face of the original image. Meanwhile, the QN image edit output similarity with the original image is around 62%. So, yeah, I think the Reactor output has'
+
+[07:09] [scene:talk]
+VISUAL:
+AUDIO: 'much better similarity with the original face. Also, note that Reactor does have its limitations, especially in cases where hands or any other objects come over the face. In those cases, the swapping may not look good.'
+
+[07:22] [scene:talk]
+VISUAL:
+AUDIO: 'Well, I\'m not going to show you more examples. Instead, I also want to show you another workflow I made where I combine QN image edit for changing the pose with Flux 2 Klein for face swapping.'
+
+[07:35] [scene:talk]
+VISUAL:
+AUDIO: 'You can try this workflow as well. I am using the Flux 2 Klein 9B True V2 model from another user, which is a fine-tuned model of Flux 2 Klein. The download link for the model is available in the'
+
+[07:47] [scene:talk]
+VISUAL:
+AUDIO: 'description. So, that\'s it for this video. What is your opinion? Please let me know in the comment section. Thanks for watching. See you soon with another video, and don\'t forget to like, share, and subscribe to this channel.'

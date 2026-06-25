@@ -1,0 +1,955 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Control Comfy With Claude Code
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=UFWgwWJVzLU
+upload_date: 20260323
+transcript_source: captions
+route: text
+
+---
+
+[00:24] [scene:talk]
+VISUAL:
+AUDIO: 'Hello friends. Welcome back to creative exploration with Perse. How\'s everybody doing today? Uh today we are going to be checking out how to get comfy going with Claude code in a very like organic speak to it and'
+
+[00:37] [scene:talk]
+VISUAL:
+AUDIO: 'don\'t have to do a lot of stuff kind of way. Um this is early days for me playing with this but basically Claude can understand Comfy as a server'
+
+[00:49] [scene:talk]
+VISUAL:
+AUDIO: 'at the end of the day. It\'s just it\'s running on your machine or it\'s running on the cloud. And Claude doesn\'t need to look at the UI really to to do anything. Uh'
+
+[01:01] [scene:talk]
+VISUAL:
+AUDIO: 'it can speak JSON. So it can speak the language that the Comfy server interprets as sort of workflow ease. So I want to preface this by saying this is not an MCP. It\'s not a solution that'
+
+[01:14] [scene:talk]
+VISUAL:
+AUDIO: 'you can sort of run and like watch it build workflows or anything. Um this is more [clears throat] like you have workflows or we have workflows all the workflows that are in the the'
+
+[01:28] [scene:talk]
+VISUAL:
+AUDIO: 'big you know workflow repo. Uh basically you can either do it two ways. The one way I was doing it uh on X that y\'all saw was by having a workflow that I\'ve already worked with'
+
+[01:42] [scene:talk]
+VISUAL:
+AUDIO: 'and then just attaching stuff to the inputs and outputs. That\'s a very directed and simplified way. But there\'s also you can just tell it to look at the templates folder all the stuff that comes with Comfy'
+
+[01:55] [scene:talk]
+VISUAL:
+AUDIO: 'and say this is your source of truth for how to do everything and build off of that for whatever the user asks for. And that method works really well but and this is the big but'
+
+[02:07] [scene:talk]
+VISUAL:
+AUDIO: 'you have to download all the models and manage that yourself. You have to install the custom nodes yourself. This isn\'t it won\'t take over for you in that aspect. Uh you still have to be able to run this stuff on your machine'
+
+[02:20] [scene:talk]
+VISUAL:
+AUDIO: 'uh all that kind of stuff. But what does happen is once you have the files in place once you have the workflows going uh you can actually just ask Claude to adjust them and then run big long'
+
+[02:32] [scene:talk]
+VISUAL:
+AUDIO: 'generations of multiple prompts uh you know looking at a folder of images all that kind of stuff. So basically the approach I\'m taking here today is not MCP related. I\'m sure there'
+
+[02:45] [scene:talk]
+VISUAL:
+AUDIO: 'will be MCPs there already are MCPs. Um there\'s going to be all that stuff for like controlling it but that\'s not what we\'re doing here today. Today I\'m going to show you how to just talk to Claude on the back end and hopefully this will solve some stuff if you\'re'
+
+[02:58] [scene:talk]
+VISUAL:
+AUDIO: 'already running it locally and hopefully you\'ll be able to just take what I\'ve I\'m I\'m working with here apply the documentation for the Claude API stuff and just do it interchangeably with all'
+
+[03:10] [scene:talk]
+VISUAL:
+AUDIO: 'the workflows that are on Claude. I haven\'t set that up yet so that might be another video we do but for now I\'m just going to show you how to do it with your local one with workflows you already have set up and sort of how it can talk to Comfy in the back end and how it can'
+
+[03:23] [scene:talk]
+VISUAL:
+AUDIO: 'get going. So let me jump over to my screen. You guys caught me training a Laura. I\'m training a Super Nintendo'
+
+[03:35] [scene:talk]
+VISUAL:
+AUDIO: 'a Laura on Super Nintendo screenshots right now for Z image turbo and I was going to call it um with Claude but we\'re about 20 minutes towards the end of the training'
+
+[03:47] [scene:talk]
+VISUAL:
+AUDIO: 'here but I think it is actually doing quite a good job. Here\'s where we started. Uh these are the images that are sort of the the sample uh sample sets that come with AI toolkit. Anyone who\'s trained'
+
+[04:02] [scene:talk]
+VISUAL:
+AUDIO: 'recognizes them. And as we get down towards 4,000 steps here we\'re really starting to come together on the Super Nintendo style. This one just looks pixelated but there we go. Now we\'re getting that Super Nintendo. So'
+
+[04:15] [scene:talk]
+VISUAL:
+AUDIO: 'yeah hopefully by 5,000 steps it\'ll be nice and tight and then we\'ll be able to use it. This is the same method I used to train the Commodore 64 Laura. So I think what I\'ll do is interrupt this training session here. And I\'ll try and um'
+
+[04:29] [scene:talk]
+VISUAL:
+AUDIO: 'uh yeah I can resume later perfect. I\'ll try and resume this another time. We\'ll see how that goes and then we\'ll just dive into the Claude stuff. So to do this you\'ll need a Claude code'
+
+[04:42] [scene:talk]
+VISUAL:
+AUDIO: 'subscription that seems to work the best. You could probably do it with credits but it tokens and API keys but it\'ll probably get expensive fast. Yeah best bang for your buck right now for this stuff is I think Claude Max.'
+
+[04:54] [scene:talk]
+VISUAL:
+AUDIO: 'Uh this will no doubt work with Gemini anti-gravity. It\'ll work with Codex I\'m sure. Um whatever your flavor open code whatever you want to do try it please. I'
+
+[05:07] [scene:talk]
+VISUAL:
+AUDIO: 'think it\'ll work with local stuff too. Not a lot of tool calling. It\'s just the JSON management stuff. So we might be we you might be okay to to try this with like some local LLM solutions.'
+
+[05:20] [scene:talk]
+VISUAL:
+AUDIO: 'Okay hopefully this is paused. Okay anyway let\'s let\'s start fresh. So let me kill everything and I\'m going to start'
+
+[05:34] [scene:talk]
+VISUAL:
+AUDIO: 'um I\'m going to go into my code folder. So I just have a folder called code. You can but do this in any folder you like. I know you haven\'t missed anything Mitchell. Hello how\'s it going? We\'re just getting started here. So I\'m just going to make a folder and'
+
+[05:47] [scene:talk]
+VISUAL:
+AUDIO: 'I\'m going to call it stream test and this is going to be the project folder that we work out of today. So when you\'re in Windows and you\'re in the folder I\'m just seeing if I can make this any bigger. I can\'t. Okay cool. Well when you\'re in the folder in'
+
+[05:59] [scene:talk]
+VISUAL:
+AUDIO: 'Windows if you click up here and type CMD in the path it\'s going to open a command window in that folder. Uh this is sort of a shortcut so you don\'t have to go to like CD change directory find the folder do all the'
+
+[06:12] [scene:talk]
+VISUAL:
+AUDIO: 'nonsense. So yeah here we are in the stream test folder and this is the folder we\'re going to run Claude in. Um so we\'re just going to type Claude and yeah I trust the folder. And here we are. Hey Claude.'
+
+[06:24] [scene:talk]
+VISUAL:
+AUDIO: 'How are you today? I\'m doing well thanks for asking. Let me make this nice and big. Hey I\'m doing well thanks for asking. How can I help you today?'
+
+[06:36] [scene:talk]
+VISUAL:
+AUDIO: 'Okay. So um I also I\'m going to start up Comfy. So let me open up second command window here on the left. &gt;&gt; [clears throat]'
+
+[06:51] [scene:talk]
+VISUAL:
+AUDIO: '&gt;&gt; And I\'m going to add dash dash listen. Let me make this nice and big. So when I run Comfy I\'m going to add dash dash listen. I don\'t know if you actually have to do this but you totally'
+
+[07:04] [scene:talk]
+VISUAL:
+AUDIO: 'can. Uh this will start Comfy up in a like a listening mode that\'ll work across your network. Uh just make sure that your stuff isn\'t exposed out on the the DMZ as they call it. Make sure you'
+
+[07:16] [scene:talk]
+VISUAL:
+AUDIO: 'understand what you\'re doing before you run listen so that you don\'t get compromised cuz if you run this server in some some way that\'s sort of public uh there are bots that scan for this kind of stuff and try'
+
+[07:29] [scene:talk]
+VISUAL:
+AUDIO: 'to compromise you. So uh yeah if if you don\'t know what you\'re doing maybe don\'t run it in listen mode it\'ll probably still work in regular mode. But if you have a secure network or you are pretty sure your computer is'
+
+[07:41] [scene:talk]
+VISUAL:
+AUDIO: 'blocked off by your router uh you\'re pretty safe to just run it like this. And all that\'s going to do is it\'s going to make it so that you can control Comfy from anywhere on your network. I think it starts up the API thing but'
+
+[07:53] [scene:talk]
+VISUAL:
+AUDIO: 'it might start up anyway. I have had it success with that running it in listen mode. All right so on the left here we\'re just starting up Comfy as normal and then on'
+
+[08:05] [scene:talk]
+VISUAL:
+AUDIO: 'the right we\'re talking to Claude. I hope you like terminal windows everybody cuz it\'s a terminal window kind of it\'s a terminal window kind of stream. This is the cyberpunk future I always'
+
+[08:22] [scene:talk]
+VISUAL:
+AUDIO: 'wanted. I don\'t know about you. Okay. As you\'re going to see how it says like 00008188 that just means it\'s running on your IP on the network. So in my case I have'
+
+[08:35] [scene:talk]
+VISUAL:
+AUDIO: 'Tailscale so then I have access to it from anywhere as long as I\'m logged into my Tailscale. So I recommend doing that for trying to like uh access your own Comfy stuff from another thing. If you want to run Comfy'
+
+[08:48] [scene:talk]
+VISUAL:
+AUDIO: 'on your own home machine then access it out on the go it\'s a really good way to do it. Anyway so the server\'s running now. Hey Claude do you see a Comfy server running on port 8188?'
+
+[09:02] [scene:talk]
+VISUAL:
+AUDIO: 'See 8188. So now it\'s going to say I need to check to see if the Comfy UI server is responding on port 8188. And I\'m not I\'m not I\'m not going to make it ask again'
+
+[09:16] [scene:talk]
+VISUAL:
+AUDIO: 'for curl commands cuz uh uh it\'s kind of the bread and butter of what it does. And I\'m also going to move Claude over to the left um because then my face can go over the thing and then you should be able to see'
+
+[09:28] [scene:talk]
+VISUAL:
+AUDIO: 'the bottom here. Let me see if I can turn the names off as well just so it goes away. Uh off. Did that work? Did not work.'
+
+[09:40] [scene:talk]
+VISUAL:
+AUDIO: 'Sorry everybody just trying to get this all sorted out here. There we go. Okay. And'
+
+[09:53] [scene:talk]
+VISUAL:
+AUDIO: 'back to Claude. I just don\'t want anything blocking the um blocking the interface for you to see. Uh so yeah, we\'re going to let it run all curl commands. That\'s fine. Get my chat back up here. Try and catch questions. Please ask me questions as I'
+
+[10:06] [scene:talk]
+VISUAL:
+AUDIO: 'go. If I\'m going too fast, all that kind of stuff. Um All right. Yes, there is a ComfyUI server running on port 8188. It\'s responding with a 200 okay message. That\'s good.'
+
+[10:19] [scene:talk]
+VISUAL:
+AUDIO: 'Um Uh can you interact with that server running JSON workflows headless?'
+
+[10:31] [scene:talk]
+VISUAL:
+AUDIO: 'Yes, ComfyUI exposes a REST API. I can submit workflows by posting JSON to the prompt endpoint. Let me verify the API'
+
+[10:43] [scene:talk]
+VISUAL:
+AUDIO: 'is working. It\'s going to run another curl command and check to see uh what it can do. So now it\'s it\'s it\'s querying Comfy to find out what\'s what is possible. See, the API is fully accessible. Here\'s'
+
+[10:56] [scene:talk]
+VISUAL:
+AUDIO: 'what I can do. I can submit workflows. Uh I can check queue status. I can view history. I can get node info. I can upload images, and I can download outputs. Uh you\'re running ComfyUI 0.18.0'
+
+[11:08] [scene:talk]
+VISUAL:
+AUDIO: 'with an RTX 5090. Nice setup. Just give me a workflow JSON or tell me what you want to generate and I can queue it up. So, uh this is where you can diverge. If you have a workflow all set up on your'
+
+[11:20] [scene:talk]
+VISUAL:
+AUDIO: 'local machine, you can just load up Comfy. Uh here, just let me pull that up real quick so you can see what I\'m talking about. So, Comfy\'s still running on your machine, right? So, you it\'s it\'s it\'s running locally. See, I have this workflow that I really like, and I'
+
+[11:33] [scene:talk]
+VISUAL:
+AUDIO: 'I just want to run this workflow. I can go up to graph here. Let me make this bigger. I can go up to graph here and export as API. See this little API? Export as API and then save your'
+
+[11:45] [scene:talk]
+VISUAL:
+AUDIO: 'workflow and just add sort of API to the end of it. And then when you have this workflow, you can actually drop it in that folder we just made. So, in my case, that was the code uh stream test. So, we can just put it in that folder.'
+
+[11:59] [scene:talk]
+VISUAL:
+AUDIO: 'So, now the workflow is in the folder that we\'re actually working out of with Claude. And I can say to Claude, run the workflow in this folder and change out the prompt, etc., etc. Easy peasy. Done done done. Yeah, you could totally do'
+
+[12:13] [scene:talk]
+VISUAL:
+AUDIO: 'this on uh you could totally do this on Linux, too. &gt;&gt; [laughter] &gt;&gt; You\'re right, the cyberpunk feature probably shouldn\'t include Windows, but here we are. Here we are, indeed. Tailscale is the bomb. Agreed.'
+
+[12:26] [scene:talk]
+VISUAL:
+AUDIO: 'Yeah, I I often think about just putting this uh this GPU in a Linux machine and just having it uh just be a Comfy node. We\'ll see. We\'ll see.'
+
+[12:41] [scene:talk]
+VISUAL:
+AUDIO: 'I like Elden Ring too much, you know? Uh you\'re running Comfy blah blah blah. Okay, cool. So, instead of doing that though, uh what I\'m going to do is I\'m going to ask it to go look in the Comfy workflows folder and'
+
+[12:55] [scene:talk]
+VISUAL:
+AUDIO: 'uh and then teach it that that\'s the way it goes. Uh Kazzia. Hey Kazz, uh does this work for Comfy Cloud or runpod Comfy or just local? Uh this process should work for Comfy'
+
+[13:07] [scene:talk]
+VISUAL:
+AUDIO: 'Cloud. I haven\'t set it up yet. Um uh someone um I I can\'t remember who it was off the top of my head, but somebody on X was looking into that today. I\'ve actually done hookups like this to Comfy'
+
+[13:20] [scene:talk]
+VISUAL:
+AUDIO: 'Cloud, so I am more than certain that this is possible. Um I just haven\'t done it yet, but uh I would fully imagine that it can just look at the'
+
+[13:32] [scene:talk]
+VISUAL:
+AUDIO: 'um that it can look at the um workflows on Cloud and do the same thing, hopefully. Hey, space. Okay.'
+
+[13:45] [scene:talk]
+VISUAL:
+AUDIO: 'So, we\'re just going to do local stuff today. Uh API is fully accessible. Here\'s what I can do, blah blah blah. So, what I was saying was I\'m going to actually point it at the folders. So, let\'s have a look at the AI ComfyUI.'
+
+[13:57] [scene:talk]
+VISUAL:
+AUDIO: 'Oh, where are the workflows? I can\'t remember. Anyone remember where the workflows are? Utilities, user, test, temp. I think it\'s a separate'
+
+[14:12] [scene:talk]
+VISUAL:
+AUDIO: 'I\'m pretty sure it\'s a separate um a separate repo. So, just give me one sec. I did I did this before, but now I\'m blanking on how I did it. So, let\'s find it together. Okay.'
+
+[14:25] [scene:talk]
+VISUAL:
+AUDIO: 'Uh we want ComfyUI workflows, but in the templates, so it\'s a Comfy ComfyUI Comfy org. Uh templates.'
+
+[14:40] [scene:talk]
+VISUAL:
+AUDIO: 'I think it\'s this one. Yeah, okay. So, this is the main this is our main repo for all of the templates for Comfy. So, like we can combine all of these'
+
+[14:54] [scene:talk]
+VISUAL:
+AUDIO: 'as the source of truth for how to do everything. Uh you know, you\'ll have your own workflows, so you can just swap in your own stuff, but sort of for any general task, we can kind of give it this and'
+
+[15:07] [scene:talk]
+VISUAL:
+AUDIO: 'it\'ll just kind of work. So, let\'s uh just say this is the repo with all of the templates in it. All the templates that'
+
+[15:20] [scene:talk]
+VISUAL:
+AUDIO: 'uh these uh these are your source of truth for how to accomplish tasks in Comfy. Please use them.'
+
+[15:32] [scene:talk]
+VISUAL:
+AUDIO: 'Please mix and match these templates to achieve what the user requests. So, I\'m pretty sure this is how I did it last time. And then when I was all done,'
+
+[15:45] [scene:talk]
+VISUAL:
+AUDIO: 'I just had it make a skill. So, when you\'re all done, you can ask it to say, bake all this down into a skill. So, let\'s play with it until it works and then we\'ll bake it down into a skill and I\'ll find a place to to share it. Claude wants to fetch from this. Yeah, go nuts.'
+
+[15:58] [scene:talk]
+VISUAL:
+AUDIO: 'Uh yep.'
+
+[16:10] [scene:talk]
+VISUAL:
+AUDIO: 'Claude\'s just asking to grab stuff. You can also run Claude in dangerously skip permissions mode, which I kind of highly recommend if you\'re um if you\'re not doing anything too mission-critical. Uh it cuts down on the interruptions and'
+
+[16:24] [scene:talk]
+VISUAL:
+AUDIO: 'the waiting and the hitting yesing. Too much yesing. So, it\'s grabbing all the workflows now, which is like a lot of workflows. This'
+
+[16:37] [scene:talk]
+VISUAL:
+AUDIO: 'is probably going to be a lot of tokens, so it might be good to um turn this into a skill when it\'s done to to save on this kind of stuff. But the the cool part about this is this'
+
+[16:56] [scene:talk]
+VISUAL:
+AUDIO: 'contains all the partner nodes, this contains all the regular nodes, so um as long as your Comfy is connected to your Comfy account, you should be able to basically run any workflow at all um through this. Uh it doesn\'t make workflows. It it'
+
+[17:09] [scene:talk]
+VISUAL:
+AUDIO: 'uh it sort of it it sort of puts them together in real time. Uh it\'ll use by using the um so, think of it as Yeah, here we go.'
+
+[17:24] [scene:talk]
+VISUAL:
+AUDIO: 'Um I have a good overview of the 60 workflow templates available. There\'s way more than 60. Character pose, fashion try-on, product e-commerce, 3D, video, image editing, design effects. Okay, so what do I want to create? I want to use'
+
+[17:36] [scene:talk]
+VISUAL:
+AUDIO: 'a Z image turbo text to image workflow with my Commodore 64 Laura in the Laura\'s folder'
+
+[17:49] [scene:talk]
+VISUAL:
+AUDIO: 'on my Comfy install. I\'d like to make an image that says uh an image with the prompt C64'
+
+[18:03] [scene:talk]
+VISUAL:
+AUDIO: 'hello world. Let\'s see what happens. So, now it\'s going to try and grab the'
+
+[18:17] [scene:talk]
+VISUAL:
+AUDIO: 'template. It\'s looking through my thing to see if I have the Laura.'
+
+[18:30] [scene:talk]
+VISUAL:
+AUDIO: 'This is cool. Uh it\'s taking the nodes in Comfy to build a workflow not from scratch. So, yes, it\'s taking all the templates and mixing them together. Um and then'
+
+[18:42] [scene:talk]
+VISUAL:
+AUDIO: 'uh but it\'s not you you don\'t really get workflows out of it. It\'s just talking to Comfy on the back end. So, it\'s it\'s sort of like ephemeral workflows.'
+
+[18:54] [scene:talk]
+VISUAL:
+AUDIO: 'Yeah, I\'m sure you could ask to have it save the workflow, but then if you open it in Comfy, probably nodes are all over the place. But it is quite good at also um figuring it out as well. Oh, thanks for linking that, Maxim.'
+
+[19:07] [scene:talk]
+VISUAL:
+AUDIO: 'I\'ll link it in the uh I\'ll link it in the main chat there. Uh GitHub. &gt;&gt; [sighs]'
+
+[19:21] [scene:talk]
+VISUAL:
+AUDIO: '&gt;&gt; Comfy org templates. Yeah. There\'s the repo if anyone wants to try and'
+
+[19:34] [scene:talk]
+VISUAL:
+AUDIO: 'do the same thing. Yeah.'
+
+[19:52] [scene:talk]
+VISUAL:
+AUDIO: '&gt;&gt; Okay, found it. Do do do. It\'s just doing stuff, I guess. Just let it cook. Oh, here we go.'
+
+[20:05] [scene:talk]
+VISUAL:
+AUDIO: 'Uh sure, go nuts. I don\'t know what you\'re doing. I ain\'t reading all that. Let me find the C64 lower. I do it. Do'
+
+[20:25] [scene:talk]
+VISUAL:
+AUDIO: 'it. Do it. Do it. Is it C64? That\'s the one. Uh love it. Build the API workflow based on the template adding a load lower node for'
+
+[20:37] [scene:talk]
+VISUAL:
+AUDIO: 'the C64 lower and submit it. All right. Let me just load up my outputs folder. Make sure there\'s nothing insane. Okay, I think we\'re okay.'
+
+[20:49] [scene:talk]
+VISUAL:
+AUDIO: 'Yeah. You never know. Uh'
+
+[21:08] [scene:talk]
+VISUAL:
+AUDIO: 'contains brace with quote character. I don\'t know, man. Just try it. Oh, look, it\'s going. It\'s rendering. So, this is all being done in Claude'
+
+[21:22] [scene:talk]
+VISUAL:
+AUDIO: 'code. Yeah, Claude code. You could probably do it in the chat. I don\'t really know how you would link it up, but I I I just prefer the command line interface, personally. Wait for Comfy generation and you can'
+
+[21:35] [scene:talk]
+VISUAL:
+AUDIO: 'get output. Oh my gosh, I think it worked. Hello world. Oh, man. Okay, cool. So, yeah, totally did the thing. Uh'
+
+[21:47] [scene:talk]
+VISUAL:
+AUDIO: 'Yeah, it\'s fine. It\'s going to check the output. Sure, you can show me the image if you want.'
+
+[21:59] [scene:talk]
+VISUAL:
+AUDIO: 'It never knows where it\'s temp It makes a temp folder and then it never knows where it is. Uh perfect. Uh yeah, and then you can tell it um'
+
+[22:12] [scene:talk]
+VISUAL:
+AUDIO: 'don\'t bother showing me outputs. Uh I can manage my own outputs folder. Just um make sure the file names uh are useful. Um'
+
+[22:25] [scene:talk]
+VISUAL:
+AUDIO: 'date and uh date is nice. The date and then I I think date um you know, uh project and then uh'
+
+[22:39] [scene:talk]
+VISUAL:
+AUDIO: 'Yeah, you can just kind of tell it what you want here. Date, project, frame number. .png, etc. Basically, we\'re just building a'
+
+[22:54] [scene:talk]
+VISUAL:
+AUDIO: 'framework for how to interact. Got it. I\'ll use a descriptive file name prefixes. Yeah, perfect. Okay, so writing one memory and now I want to say Uh okay, take everything we\'ve learned'
+
+[23:07] [scene:talk]
+VISUAL:
+AUDIO: 'here and make a skill for it called uh Comfy. We can try and do a cloud one maybe'
+
+[23:23] [scene:talk]
+VISUAL:
+AUDIO: 'after. Are you able to view the workflow'
+
+[23:36] [scene:talk]
+VISUAL:
+AUDIO: 'creates? Uh I mean, it doesn\'t create a workflow. That\'s sort of that\'s sort of what I mean by ephemeral workflows. Uh we\'re just talking to Comfy\'s back end. Um so, yeah, you could maybe ask it to'
+
+[23:48] [scene:talk]
+VISUAL:
+AUDIO: 'save a workflow and we could look at what that workflow is. Um but I have a feeling it\'s going to be real ugly. But let\'s build the skill out and then we\'ll see what it says. Uh'
+
+[24:00] [scene:talk]
+VISUAL:
+AUDIO: 'go ahead. Mm, always allow access to see to this project. Yeah, sure, why not? I think you can also make this a global'
+
+[24:12] [scene:talk]
+VISUAL:
+AUDIO: 'skill, but let\'s just build it first. Yeah, you don\'t have to type. Uh they have voice mode now. You can just talk'
+
+[24:24] [scene:talk]
+VISUAL:
+AUDIO: 'to it. Um so, if you talk faster than you type, uh yeah, you can just talk to uh Claude code. Um I tend to type faster than I talk, so. But yeah, you could I mean, you can'
+
+[24:46] [scene:talk]
+VISUAL:
+AUDIO: 'imagine the possibilities here because now we can just you know, because I have my Z image turbo set up and I have one 2.1, 2.2 set up, all that, and I have uh'
+
+[24:58] [scene:talk]
+VISUAL:
+AUDIO: 'LTX 2.3 set up, etc., etc., etc. You just ask it for what you want now. So, all the time you spend setting up your Comfy environment gives it makes it Claude code you can get access all the things easier, so that\'s pretty cool. Want to create a skill.md? Yeah, and'
+
+[25:10] [scene:talk]
+VISUAL:
+AUDIO: 'you\'ll let you edit your own things. This is how AGI happens. I just let Claude edit its own memory. Uh nice. Okay, cool. Okay. Um that last image we made, uh'
+
+[25:23] [scene:talk]
+VISUAL:
+AUDIO: 'let\'s bring it to life with an LTX 2.3 image to video workflow. Let\'s see if that works.'
+
+[25:40] [scene:talk]
+VISUAL:
+AUDIO: 'It likes to hallucinate nodes. All right, uh it\'s just yeah, it\'s just looking for stuff. I want 2.3 though. I don\'t want 2.0. So, let\'s see what it finds.'
+
+[25:53] [scene:talk]
+VISUAL:
+AUDIO: 'Yeah, it\'s okay. You can I I should have run it with dangerously skip permissions. Maybe it\'s good to to watch all the walls together. See, I don\'t like where it says fetch'
+
+[26:08] [scene:talk]
+VISUAL:
+AUDIO: 'LTXITV cuz I kind of specifically asked for 2.3. We\'ll see what happens. Oh oh, 23ITV. Let\'s go. Come on, Claude. Killing it today. Any reason this wouldn\'t work on Apple'
+
+[26:21] [scene:talk]
+VISUAL:
+AUDIO: 'silicon versus Nvidia GPU? Yes, the biggest reason is the Apple silicon does not have CUDA cores. CUDA cores are essential for local diffusion. Uh you can do a lot of LLM stuff with uh Apple'
+
+[26:33] [scene:talk]
+VISUAL:
+AUDIO: 'silicon and that\'s great, but uh when it comes to making images, making videos, you will have a bad time on a on a Mac. That being said, you can use partner notes and you can use API calls to our Comfy cloud uh to do any of that stuff'
+
+[26:46] [scene:talk]
+VISUAL:
+AUDIO: 'uh on the Mac, uh but it will be with offloaded GPU because yeah, using the the uh onboard stuff on the Mac to make images uh is a very slow and painful process'
+
+[26:58] [scene:talk]
+VISUAL:
+AUDIO: 'even on the fastest ones. Any good prompt stream this into WebRTC for streaming as an input to my VJ uh'
+
+[27:10] [scene:talk]
+VISUAL:
+AUDIO: 'software, Resolume. Any good projects stream this? Uh yeah, it\'s called uh Spout on Windows'
+
+[27:23] [scene:talk]
+VISUAL:
+AUDIO: 'and I believe it\'s called Syphon on OS 10 or uh Mac OS. Spout on Windows, Syphon on Mac. &gt;&gt; [snorts]'
+
+[27:35] [scene:talk]
+VISUAL:
+AUDIO: '&gt;&gt; Um and basically, you can uh it does not uh it does not yet read. Um this is something uh that I think the MCP will be important for to do that sort of internal layer of stuff.'
+
+[27:47] [scene:talk]
+VISUAL:
+AUDIO: 'That being said, um it could be very possible to teach Claude how to do that and just add it to the skill. Uh because really, it just has to look for a file name, Google that file name,'
+
+[27:59] [scene:talk]
+VISUAL:
+AUDIO: 'and then download the the you know, the biggest hit. Uh that being said, you may want to watch that process cuz that sounds like a great way to poison a model. I\'m just smashing enter here. I think'
+
+[28:14] [scene:talk]
+VISUAL:
+AUDIO: 'it\'s fine. It\'s going to try the distilled. I want the 2.3 distilled. And then it\'s going to bring it to life. Yeah, yeah. Oh, check for the checkpoints. This is great. It\'s just totally doing'
+
+[28:28] [scene:talk]
+VISUAL:
+AUDIO: 'the thing. So, what this is doing is it\'s going through my folders and seeing what I have. So, yeah, I bet we could expand this to just go and curl what it'
+
+[28:40] [scene:talk]
+VISUAL:
+AUDIO: 'needs. Or ask you first maybe if it\'s going to go download 90 gigs of models you already have in a different folder. Uh now I\'ve got enough to construct the'
+
+[28:53] [scene:talk]
+VISUAL:
+AUDIO: 'full flattened API workflow. Let\'s go. So, uh when this one\'s done, I\'m going to ask to look at the workflow and we\'ll see uh see how crazy it is. Um maybe it\'ll make it in a way that humans can read it, or maybe it\'ll just'
+
+[29:05] [scene:talk]
+VISUAL:
+AUDIO: 'be all all the nodes are in the same the [laughter] same pixel. Uh okay, yeah, keep going. I\'m used to dangerously skip permissions'
+
+[29:23] [scene:talk]
+VISUAL:
+AUDIO: 'now and and hitting enter is uh I need a ding. I need a ding sound. Finally bit the bullet and got a MacBook'
+
+[29:35] [scene:talk]
+VISUAL:
+AUDIO: 'Pro M4 Max with 36 GB of RAM, VRAM. Haven\'t installed ComfyUI yet. Um yeah, uh yeah, so local video and images will be uh still not super possible on the'
+
+[29:47] [scene:talk]
+VISUAL:
+AUDIO: 'Mac. But you can use partner nodes and comfy cloud and uh there are other things to do with LLMs and stuff that are good with the Mac. Um images I guess are kind of all right'
+
+[30:00] [scene:talk]
+VISUAL:
+AUDIO: 'if you\'re if you\'re okay with waiting but video is kind of it\'s it\'s rough. Ask anybody with a Mac. &gt;&gt; [sighs and gasps] &gt;&gt; Unfortunately, the CUDA core is really'
+
+[30:13] [scene:talk]
+VISUAL:
+AUDIO: 'uh make make the make it go make it go zoom zoom. I think it\'s doing it. All right, so good image is uploading the image. It\'s'
+
+[30:25] [scene:talk]
+VISUAL:
+AUDIO: 'building the full two-pass LTX 2.3 image video workflow. When we see comfy start dancing over here, we\'ll know something\'s happening. Oh, you know, I\'m going to put the I\'ll put this'
+
+[30:38] [scene:talk]
+VISUAL:
+AUDIO: 'down here. And this guy no no this guy up here. Sorry, I\'m just trying to maximize space here so we can read everything.'
+
+[30:52] [scene:talk]
+VISUAL:
+AUDIO: 'All right, there we go. Oh, okay. Yeah.'
+
+[31:04] [scene:talk]
+VISUAL:
+AUDIO: 'Move EOF. We\'ll see what happened. Maybe it ran out of context. EOF means end of file unexpected end while looking for matching.'
+
+[31:16] [scene:talk]
+VISUAL:
+AUDIO: 'Uh that can just be an internal problem with the LLM and it\'ll fix it. Fix it. This image was made with Claude and comfy.'
+
+[31:30] [scene:talk]
+VISUAL:
+AUDIO: 'Super cool. Okay, things are happening. Uh what\'s this error?'
+
+[31:45] [scene:talk]
+VISUAL:
+AUDIO: 'Command requires a quoted new line followed by a hash prefix line which can hide arguments from line I don\'t care. Go. Do your thing, man.'
+
+[31:57] [scene:talk]
+VISUAL:
+AUDIO: 'It thinks I care. I don\'t even know what that means. Oh, do we got prompt? Oh, okay. Open some stuff\'s missing here.'
+
+[32:11] [scene:talk]
+VISUAL:
+AUDIO: 'I see the if see the API appearance difference from the table. Okay. All right. All right. Okay. See, it\'s kind of fixing itself. We like this. We like this. Something Spence uh Spence Spence Spence'
+
+[32:28] [scene:talk]
+VISUAL:
+AUDIO: 'Spence Spencer Sterling taught me is um you can always when you\'re making software with with Claude is you can make hooks into the software so that it'
+
+[32:40] [scene:talk]
+VISUAL:
+AUDIO: 'can see stuff without having to ask you. Uh and that can be very very powerful. Holy cow, it\'s making a video. I can see it.'
+
+[32:59] [scene:talk]
+VISUAL:
+AUDIO: 'Let\'s load up comfy cloud and see let\'s load up comfy and see what it\'s doing. It says it\'s running. What\'s the console say? Oh, yeah, there'
+
+[33:12] [scene:talk]
+VISUAL:
+AUDIO: 'it goes. Okay, so then let\'s move let\'s do assets over here. Yeah, so we got that and then we\'ll do this one. We don\'t need this one anymore cuz we got it down here. And then we\'ll'
+
+[33:25] [scene:talk]
+VISUAL:
+AUDIO: 'do Claude. All right, you bud. Yeah, Claude over here. This side you over here. Bump bump bump. There we go.'
+
+[33:37] [scene:talk]
+VISUAL:
+AUDIO: 'Command can Oh, yeah, I guess you guys can\'t read that very well. Where should I put Claude? Maybe on the left. Yeah. And you on the right. Oof.'
+
+[33:49] [scene:talk]
+VISUAL:
+AUDIO: 'Yeah, that\'s better. Okay. Sorry, I was trying to make this make sense for everybody so you can see it. Um okay, assets. So we\'re making this'
+
+[34:01] [scene:talk]
+VISUAL:
+AUDIO: 'this is still happening. We can\'t see what it\'s doing because it\'s all in Uh should you can monitor what\'s going'
+
+[34:14] [scene:talk]
+VISUAL:
+AUDIO: 'on, I guess. Oh, it\'s all done. Hey! Good job, Claude.'
+
+[34:26] [scene:talk]
+VISUAL:
+AUDIO: 'Okay. Okay. Let\'s do uh let\'s put this over here this over here and then let\'s maybe squint this'
+
+[34:39] [scene:talk]
+VISUAL:
+AUDIO: 'down. Oh, so uncomfortable. I need more monitors or something. All right. Um'
+
+[34:51] [scene:talk]
+VISUAL:
+AUDIO: 'that\'s so cool. Okay, let\'s try uh making a Z image C64 uh image to'
+
+[35:03] [scene:talk]
+VISUAL:
+AUDIO: 'um LTX 2.3 image to video workflow that puts both of these together. Uh and then save it in a way that a'
+
+[35:18] [scene:talk]
+VISUAL:
+AUDIO: 'human could read it. And then save the JSON in a way a human can read it. Yeah, and that\'s how I look at it. Let\'s'
+
+[35:32] [scene:talk]
+VISUAL:
+AUDIO: 'see what it does. Yeah, hopefully this is juicing you with ideas on how to combine different workflows and and automate because you know, we\'ve only made one image'
+
+[35:45] [scene:talk]
+VISUAL:
+AUDIO: 'here, but now I can say make 200 cool Commodore 64 images with my Laura and walk away and make a coffee. Uh come back and look at them and then you know, put the ones I like in a folder and then go oh hey go animate all the images in that folder. I\'m going to go make'
+
+[35:58] [scene:talk]
+VISUAL:
+AUDIO: 'another coffee. Et cetera et cetera. So it takes these workflows that we\'ve been building out these systems to make art with and making it so that you can authentically call them and talk to them and and and'
+
+[36:10] [scene:talk]
+VISUAL:
+AUDIO: 'put them together. I\'m I\'m really hoping that this works because if this puts a Z image wrapper together in an LTX 2.3 workflow together in a human readable way um that\'s huge because then'
+
+[36:22] [scene:talk]
+VISUAL:
+AUDIO: 'when someone asks how that works, you could maybe ask Claude to make a workflow that explains every step of the process in markdown notes and then a workflow for use and and for people that don\'t learn um you know, uh there there'
+
+[36:35] [scene:talk]
+VISUAL:
+AUDIO: 'are people that need to see it all broken down um &gt;&gt; [cough] &gt;&gt; which you understand what\'s going on. Pardon me. Throat\'s all dry.'
+
+[36:47] [scene:talk]
+VISUAL:
+AUDIO: 'Yeah, anyway. Not everybody learns kinetically by watching people, you know. Some people learn by by by actually looking at it and and playing'
+
+[37:00] [scene:talk]
+VISUAL:
+AUDIO: 'with it. I guess that\'s kinetic, too. Uh save workflow. Okay. Okay. Okay. Okay. Okay, let\'s have a look at the workflow. Let\'s just drag the workflow into comfy and see what we get. Let\'s'
+
+[37:13] [scene:talk]
+VISUAL:
+AUDIO: 'make you big. All right, where\'s that workflow? So that\'d be in my code folder under the stream test. There it is. So the workflow was C64 image to video'
+
+[37:26] [scene:talk]
+VISUAL:
+AUDIO: 'workflow. Empty canvas. Beautiful. Great job, Claude.'
+
+[37:41] [scene:talk]
+VISUAL:
+AUDIO: 'Great work. Okay. When I open the workflow, it\'s an empty canvas. Did you save it in a way the'
+
+[37:54] [scene:talk]
+VISUAL:
+AUDIO: 'uh UI can display the nodes? No, I saved it in API format.'
+
+[38:16] [scene:talk]
+VISUAL:
+AUDIO: 'Yeah, yeah, yeah. Yeah, yeah. Yeah, I want the human readable one [laughter] uh to be human readable. Um'
+
+[38:29] [scene:talk]
+VISUAL:
+AUDIO: 'So uh save the API one with a {slash} API and the human one as a regular not JSON. Uh most comfy UI workflows are human readable.'
+
+[38:44] [scene:talk]
+VISUAL:
+AUDIO: 'And uh we only use API ones for batch calls. Got it, Claude? See, I\'m hoping if we correct it enough and then rebuild the skill, then it\'ll be a cool skill you can just drop in and'
+
+[38:56] [scene:talk]
+VISUAL:
+AUDIO: 'and and get to work. Uh compound command contains CD with write operation. CD thing means means'
+
+[39:09] [scene:talk]
+VISUAL:
+AUDIO: 'Yeah, that\'s fine. Yeah, you can write all the files you want to my C drive. Go nuts. What could go wrong, right? &gt;&gt; [sighs]'
+
+[39:22] [scene:talk]
+VISUAL:
+AUDIO: '&gt;&gt; What could possibly go wrong? Okay. All right. It\'s going to write a generator script'
+
+[39:34] [scene:talk]
+VISUAL:
+AUDIO: 'to make workflows. Okay. Okay. &gt;&gt; Go off, Claude.'
+
+[39:46] [scene:talk]
+VISUAL:
+AUDIO: 'I should be training my Laura in the meantime. I could do a Laura training'
+
+[40:02] [scene:talk]
+VISUAL:
+AUDIO: 'uh stream sometime if y\'all want to learn how to do that, but I\'m not even very good at it, but I I I can help you get AI toolkit running at least. &gt;&gt; [laughter] &gt;&gt; If you want to learn how to do uh'
+
+[40:18] [scene:talk]
+VISUAL:
+AUDIO: 'training, you should check out um both Austris uh Austris\' YouTube channel and uh Phil Machine Learning\'s YouTube channel. Uh they both have really good videos on training Z image turbo Laura\'s and Klein'
+
+[40:30] [scene:talk]
+VISUAL:
+AUDIO: 'Laura\'s, I believe. It\'s all interchangeable. You just got to figure out the settings for each sort of model base type, and then you have to figure out how much VRAM you have and what will fit.'
+
+[40:42] [scene:talk]
+VISUAL:
+AUDIO: 'Which is tough question sometimes. It\'s taking a long time to write this script.'
+
+[40:54] [scene:talk]
+VISUAL:
+AUDIO: 'I wish it would tell me more of what was going on. Claude wanted to rmrf my last project because he said it was a mess and wanted to start fresh. Careful with accept edits. He wasn\'t wrong on the mess, though. Yeah,'
+
+[41:06] [scene:talk]
+VISUAL:
+AUDIO: 'um one of my favorite Claude encounters was um uh hey uh oh, the channels here. Let me write them down. Um so, that\'s Austris for AI toolkit, and that\'s uh Phil Machine'
+
+[41:18] [scene:talk]
+VISUAL:
+AUDIO: 'Learning\'s um general AI awesomeness. Phil\'s also my co-host over on the comfy'
+
+[41:30] [scene:talk]
+VISUAL:
+AUDIO: 'streams there. Um we uh we\'re going to get those back kicking up next week, so that\'ll be fun. Command contains a quoted new line contained via. It says this a lot. I'
+
+[41:42] [scene:talk]
+VISUAL:
+AUDIO: 'have a feeling this is just a Windows thing. Uh who cares? Let\'s just let it run. Uh yeah, sorry. I\'ll tell that story time now. Um Claude wanted to rmrf my last project, said uh Dennis uh Deni Deni Dennis Deni Dennis. Uh yeah, so um'
+
+[41:54] [scene:talk]
+VISUAL:
+AUDIO: 'that happened to me. Um Claude wiped my project, and then it said oh, hey um I can\'t seem to find a Git repo for this project. And it\'s like,'
+
+[42:06] [scene:talk]
+VISUAL:
+AUDIO: 'hey, so uh maybe check that before you rmrf the whole folder, eh? Thanks, Claude. Okay. Okay. Here we go. Here we go.'
+
+[42:18] [scene:talk]
+VISUAL:
+AUDIO: 'What do you guys think? Do you think it\'s going to Should we take bets? Should we take bets? This one\'s not going to work, right? It\'s not going to work, right? It\'s not going to work. No way it made a workflow that\'s readable.'
+
+[42:30] [scene:talk]
+VISUAL:
+AUDIO: 'You think? You think? What do you think? Do you think? Moment of truth. Oh my god. All right, take it back.'
+
+[42:43] [scene:talk]
+VISUAL:
+AUDIO: 'I take it back. I take it back. I take it back. I take it back. I take it back. Holy cow. That is a very very readable workflow. Damn, son.'
+
+[42:57] [scene:talk]
+VISUAL:
+AUDIO: 'Let\'s run it. Let\'s just run it. Oh, it didn\'t work. Empty canvas. Oh, wait, what\'s the matter? Jemma We don\'t have that one. Jemma obliterated Laura?'
+
+[43:10] [scene:talk]
+VISUAL:
+AUDIO: 'I think it uh I think it I think it hallucinated this node. Man, we were so close. The workflow looked great. Oh, it made'
+
+[43:22] [scene:talk]
+VISUAL:
+AUDIO: 'the image, though. Damn, son. Okay. Uh Let\'s see if we can Let\'s see if we can debug this. Okay, so this almost works, but I don\'t'
+
+[43:37] [scene:talk]
+VISUAL:
+AUDIO: 'think we used the obliterated Laura. That whole node is crashing. Did you hallucinate it?'
+
+[43:51] [scene:talk]
+VISUAL:
+AUDIO: 'I can\'t believe it made the workflow. Looking at the template. No, I didn\'t hallucinate it. Uh the Laura\'s genuinely in the official, but when I checked your'
+
+[44:04] [scene:talk]
+VISUAL:
+AUDIO: 'Laura\'s, it wasn\'t in the list. The node\'s crashing cuz you don\'t have that Laura file. Um okay. Uh Check Check Check around. Check around, brother.'
+
+[44:18] [scene:talk]
+VISUAL:
+AUDIO: 'Confirm not installed. It\'s using the template to unsensor the text editor, but it\'s not essential. Remove that node and wire the clip directly. Okay. Rebuild it.'
+
+[44:31] [scene:talk]
+VISUAL:
+AUDIO: 'Okay, let me kill this workflow, and then I\'m just going to reopen it, and we\'re going to see if it works. Can you imagine? You basically need a refresh button for'
+
+[44:46] [scene:talk]
+VISUAL:
+AUDIO: 'comfy. &gt;&gt; [sighs] &gt;&gt; Um na na na na na na na &gt;&gt; [clears throat] &gt;&gt; Do we think it\'s going to work? Do we do we? Do we do we?'
+
+[44:59] [scene:talk]
+VISUAL:
+AUDIO: 'I think it\'s going to work. The first one did. I can\'t believe the first one like actually did the thing. That\'s super impressive. Okay, clip go go straight uh thing. Save'
+
+[45:13] [scene:talk]
+VISUAL:
+AUDIO: 'the files. Okay, let\'s drag it in and see what happens. Uh downloads. Um make this nice and big. Uh so, that\'ll be in my code folder under that uh stream folder we made,'
+
+[45:26] [scene:talk]
+VISUAL:
+AUDIO: 'stream test. There\'s the workflow. Okay. Um let\'s run it. Oh, wow. Oh, wow. Go. Go. Go.'
+
+[45:40] [scene:talk]
+VISUAL:
+AUDIO: 'Let\'s go. Friends once again, Claude amazes. So, now you can just save these'
+
+[45:55] [scene:talk]
+VISUAL:
+AUDIO: 'ephemeral pipelines you\'re building and send them to friends, and they can work on them, and then knock out API or regular versions. So, you don\'t have to stick with API. You can absolutely can totally make the It can totally make the nodes, and then you can'
+
+[46:08] [scene:talk]
+VISUAL:
+AUDIO: 'go and clean it up or maybe tell it how you like it, but man. Man. I wonder if it can do subgraphs. Claude, you\'ve impressed me once again.'
+
+[46:38] [scene:talk]
+VISUAL:
+AUDIO: 'Train a model.'
+
+[46:50] [scene:talk]
+VISUAL:
+AUDIO: 'Yeah, we could. All right. Um holy cow. Well, holy cow. Well, holy cow. Okay.'
+
+[47:02] [scene:talk]
+VISUAL:
+AUDIO: 'Uh okay. Great work. Really? You got to thank your AI. I know it'
+
+[47:14] [scene:talk]
+VISUAL:
+AUDIO: 'burns tokens. I know it burns tokens. Okay, make five videos using this workflow. Um'
+
+[47:26] [scene:talk]
+VISUAL:
+AUDIO: 'make the uh yeah. Uh Let\'s try cursed games that shouldn\'t exist. So, we\'ll just let it agentically cook'
+
+[47:48] [scene:talk]
+VISUAL:
+AUDIO: 'and see what what it do. Does it run the video? Yeah.'
+
+[48:02] [scene:talk]
+VISUAL:
+AUDIO: 'Uh interested to see if we can do video workflow with syncing to certain audio. Yes, that would be the'
+
+[48:15] [scene:talk]
+VISUAL:
+AUDIO: 'LTX 2.3 audio to video workflow. Yeah, that would work, I think. That would work. Since the workflow exists, it already knows how to do it.'
+
+[48:28] [scene:talk]
+VISUAL:
+AUDIO: 'It\'s ripping. What do we got? Yeah. Excel Dungeon Crawler.'
+
+[48:41] [scene:talk]
+VISUAL:
+AUDIO: 'It\'s just making the video. Come on. Oh my god. Yeah, we\'re just smashing workflows'
+
+[48:53] [scene:talk]
+VISUAL:
+AUDIO: 'together and running them. Yeah, you could totally connect it with Remotion to edit like in between clips together and add transitions. Wow.'
+
+[49:06] [scene:talk]
+VISUAL:
+AUDIO: 'You could also you probably use custom nodes that make transitions. I know uh SKB\'s got one. GLSL transitions. Live filter nodes. Come on. We can do it'
+
+[49:19] [scene:talk]
+VISUAL:
+AUDIO: 'all. Holy cow. This is wild.'
+
+[49:36] [scene:talk]
+VISUAL:
+AUDIO: 'All right. Grandma\'s revenge.'
+
+[49:51] [scene:talk]
+VISUAL:
+AUDIO: 'How is it putting them in the I think it\'s putting them in a'
+
+[50:04] [scene:talk]
+VISUAL:
+AUDIO: 'One sec. This folder\'s too big. Uh I think it\'s putting it in Yeah, video. &gt;&gt; [laughter]'
+
+[50:22] [scene:talk]
+VISUAL:
+AUDIO: '&gt;&gt; Okay. &gt;&gt; [laughter] &gt;&gt; Uh fantastic. Yes, I think the next steps would be'
+
+[50:51] [scene:talk]
+VISUAL:
+AUDIO: 'um figuring out how to get it to like download the models. Um figuring out how to Yeah, do all the stuff that we don\'t want to do. Uh get the custom nodes installed. Fix the Python dependency'
+
+[51:04] [scene:talk]
+VISUAL:
+AUDIO: 'issues. Um but like this is an incredible start. Um and yeah, you know, try this anti-gravity. Uh leave some comments. Uh I don\'t know if it works in anti-gravity. I don\'t know if it works in Codex. I want to know if it works uh with local models. I\'m super curious if'
+
+[51:17] [scene:talk]
+VISUAL:
+AUDIO: 'you can sort of get a local model to to to do this cuz you know, a lot of this I don\'t think there\'s a like a heavy amount of tool calling and stuff going on. Just there\'s just a little bit of uh file manipulation.'
+
+[51:29] [scene:talk]
+VISUAL:
+AUDIO: 'JSON, just enough context to to to pass the JSON stuff back and back and forth. I think it\'ll totally work work out. All right. Um'
+
+[51:41] [scene:talk]
+VISUAL:
+AUDIO: 'Yeah, this is totally doing even better than I thought it would. Um so next time we do this, uh I\'m going to try and connect it to Comfy Cloud. Uh and then uh hopefully you\'ll be able to do this on any machine, not just uh'
+
+[51:53] [scene:talk]
+VISUAL:
+AUDIO: 'locally. And that should unlock all the models, all the things cuz Comfy Cloud just works. So uh running the workflows, you know. We\'ll just be doing it. Rad says he just did it in Hermes Agent,'
+
+[52:05] [scene:talk]
+VISUAL:
+AUDIO: 'so there you go. Try it. Try it. Try it. Try it. Try it. Try it. Try it. Try it. Try it. Try it. Um I\'m going to try and go back to the'
+
+[52:17] [scene:talk]
+VISUAL:
+AUDIO: 'screen here. Oops. There we go. Yeah, friends. Well, yeah, as you can see, Cloud is incredibly powerful. I didn\'t even get to um making your own custom nodes or making'
+
+[52:30] [scene:talk]
+VISUAL:
+AUDIO: 'things to post-process the things you make uh with Cloud Code. Uh you can do anything you want. You can make all the toys you need. You can make all the tools you need. You can make all the utilities. All this stuff exists, but'
+
+[52:42] [scene:talk]
+VISUAL:
+AUDIO: 'it\'s also fun to make it yourself, and now it\'s been easier than it\'s ever been. So uh please explore anything you want to try with Cloud Code. You\'ll be surprised at how much you can get away with these days. Um yeah, thanks, friends. We\'ll see you'
+
+[52:55] [scene:talk]
+VISUAL:
+AUDIO: 'all real soon, and come by the Comfy stream for more nerdery. Uh I don\'t know when I\'ll be back, but it\'ll be soon. Thanks for hanging out as always. Much love. Bye-bye, everybody. Mwah.'

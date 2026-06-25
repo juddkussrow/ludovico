@@ -1,0 +1,151 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: TerminalPhone — One Bash Script for Encrypted Voice Calls Over Tor
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=i50I8OSx61A
+upload_date: 20260526
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'Terminal phone, a single bash script that does encrypted push-to-talk voice and text over Tor hidden services. No servers, no accounts, no phone numbers. Your dot onion address is your callable identity. AES encryption on top of Tor\'s anonymity.'
+
+[00:14] [scene:talk]
+VISUAL:
+AUDIO: '21 configurable ciphers, optional protocol authentication with replay protection, voice changer, QR code address sharing, and a relay mode for zero-knowledge group bridges. Cross-platform on Linux, macOS, and Term'
+
+[00:27] [scene:talk]
+VISUAL:
+AUDIO: 'Yux on Android, no root. The whole tool is one auditable script you can read top to bottom. MIT licensed. Let\'s walk through it. Pull up the GitLab repo at gitlab.com/here.'
+
+[00:39] [scene:talk]
+VISUAL:
+AUDIO: 'For a while, {slash} terminal phone. Readme opens with the design statement. Encrypted push-to-talk voice communication over Tor hidden services. A single self-contained bash script that provides anonymous E2E encrypted voice'
+
+[00:52] [scene:talk]
+VISUAL:
+AUDIO: 'and text. Created February 16th of this year, 68 commits, single branch, MIT licensed. The whole tool is one file, terminal phone.sh, roughly 3,000 lines of bash. You can read every line before'
+
+[01:06] [scene:talk]
+VISUAL:
+AUDIO: 'you ever run it, which is the entire point. Most secure comms tools ship as electron apps with auto-updating binaries you have to trust. This ships as a script your shell parses. Why both Tor and AES? They cover different'
+
+[01:19] [scene:talk]
+VISUAL:
+AUDIO: 'threats. Tor gives you network layer anonymity. An adversary watching the wire sees encrypted traffic to a Tor entry node, then nothing else useful. But Tor by itself does not give you end-to-end encryption. A malicious exit'
+
+[01:31] [scene:talk]
+VISUAL:
+AUDIO: 'node or hidden service operator could see what crosses the wire. Terminal phone solves that by encrypting the audio and text payload with AES before it ever touches Tor. So, the threat model is Tor handles who is talking to'
+
+[01:44] [scene:talk]
+VISUAL:
+AUDIO: 'whom. AES handles what is being said. Two layers, distinct guarantees. If either layer is compromised, the other still holds. Install is three steps. Get clone the repo from GitLab, CD into the'
+
+[01:57] [scene:talk]
+VISUAL:
+AUDIO: 'directory, run bash terminal phone.sh and pick option seven from the menu to install dependencies. The script handles platform specific dependency setup. apt or dnf on Linux, homebrew on macOS, pkg'
+
+[02:09] [scene:talk]
+VISUAL:
+AUDIO: 'on Termux. Then option eight starts the local Tor daemon. Option four sets the shared secret you exchanged with the person you are calling. Note the readme is explicit that the secret must come'
+
+[02:22] [scene:talk]
+VISUAL:
+AUDIO: 'from a secure out of band channel because the protocol does not negotiate it for you. Option one puts you in listen mode with your .onion address printed. Option two places an outbound call. Here\'s what an actual call looks'
+
+[02:34] [scene:talk]
+VISUAL:
+AUDIO: 'like. On the receiving side, bash terminal phone.sh listen starts the Tor hidden service and prints your .onion address. Anyone with that address plus the shared secret can call you. On the calling'
+
+[02:46] [scene:talk]
+VISUAL:
+AUDIO: 'side, bash terminal phone. sh call followed by the .onion address opens a circuit through Tor. Typically six hops, three on each side of the rendezvous point, verifies the shared secret HMAC, negotiates a cipher from the 21'
+
+[03:00] [scene:talk]
+VISUAL:
+AUDIO: 'supported options, and gives you a ready prompt. The mode is push-to-talk, not full duplex. Hold the space bar to record a voice message, release to send. T for text, S for settings, Q to hang up. Voice is Opus compressed first to'
+
+[03:14] [scene:talk]
+VISUAL:
+AUDIO: 'keep the audio small enough for Tor\'s bandwidth profile, then AES wraps the compressed bytes. Push-to-talk is the right interaction model here because Tor adds latency that would make a normal phone call feel terrible. Relay mode is'
+
+[03:26] [scene:talk]
+VISUAL:
+AUDIO: 'the clever bit. A single relay node bridges two or more callers without ever being able to decrypt the traffic. The relay sees opaque encrypted blobs flowing between addresses. That is all.'
+
+[03:38] [scene:talk]
+VISUAL:
+AUDIO: 'So small group can talk to each other through one shared relay without giving the relay operator the keys. The readme is honest about the limit. A global passive adversary capable of correlating traffic across the Tor'
+
+[03:50] [scene:talk]
+VISUAL:
+AUDIO: 'network could still associate callers with the relay even if they cannot read the content. That is a Tor network-wide attacker assumption, a category most threat models bracket separately from operational attackers. 21 configurable'
+
+[04:02] [scene:talk]
+VISUAL:
+AUDIO: 'ciphers, 128-bit up through 256-bit. Negotiation happens live at call setup. Both endpoints agree on the strongest cipher both sides support. The default is AES-256-CBC'
+
+[04:15] [scene:talk]
+VISUAL:
+AUDIO: 'with HMAC-SHA-256 for authentication and replay protection. The replay protection matters because without it an attacker who recorded a previous handshake could'
+
+[04:27] [scene:talk]
+VISUAL:
+AUDIO: 'replay it. The HMAC layer rejects that. The optional voice changer pre-processes audio before encryption. Useful when voice fingerprinting is part of the threat model, less useful when it is not. The 21 cipher menu is also a soft'
+
+[04:40] [scene:talk]
+VISUAL:
+AUDIO: 'hedge against any single algorithm being broken. The shared secret must be exchanged out of band through a secure channel. There is no forward secrecy. If the shared secret is compromised, all'
+
+[04:52] [scene:talk]
+VISUAL:
+AUDIO: 'past and future communications can be decrypted. The protocol does not protect against a compromised endpoint. Terminal phone readme. That paragraph is the honest part. Signal-style forward secrecy is not what'
+
+[05:05] [scene:talk]
+VISUAL:
+AUDIO: 'this is. If your shared secret leaks, the recording attacker decrypts everything you ever said with that key. If your laptop is rooted, no amount of Tor or AES matters. The attacker reads the microphone buffer before it ever'
+
+[05:18] [scene:talk]
+VISUAL:
+AUDIO: 'gets encrypted. The author makes those constraints explicit so you can decide whether the threat model matches your actual situation. Most tools obscure their limits. This one prints them in the readme. Who actually uses something'
+
+[05:30] [scene:talk]
+VISUAL:
+AUDIO: 'like this? Journalists with sources who already operate on Tor and need a voice channel without standing up a Signal account that ties back to a phone number. Security researchers coordinating across borders without giving a third-party'
+
+[05:43] [scene:talk]
+VISUAL:
+AUDIO: 'messaging app metadata that the wrong subpoena could produce. Activists in environments where mainstream messengers are blocked or surveilled, and snowflake bridge support is exactly there for that case, routing Tor traffic through volunteer browser'
+
+[05:56] [scene:talk]
+VISUAL:
+AUDIO: 'proxies. Engineers who want to understand what end-to-end encrypted comms looks like at the most minimal possible footprint because every additional dependency is a piece of trust you cannot verify yourself. The audience overlap with'
+
+[06:08] [scene:talk]
+VISUAL:
+AUDIO: 'Signal is real, but the trust model is different. You can read this script in an afternoon. You cannot read the Signal app in an afternoon. That is the trade. Signal gives you forward secrecy in polished UX in exchange for trusting a'
+
+[06:20] [scene:talk]
+VISUAL:
+AUDIO: 'binary you cannot audit. Terminal phone gives you full auditability in exchange for forward secrecy and UX. Get clone the repo from gitlab.com/here-for-a-while/terminal-phone. CD into the directory, run bash'
+
+[06:34] [scene:talk]
+VISUAL:
+AUDIO: 'terminal-phone.sh, install dependencies, start Tor, set a shared secret, listen. That is the whole setup loop. MIT licensed, no telemetry, no auto-updater, no account to create, cross-platform on'
+
+[06:47] [scene:talk]
+VISUAL:
+AUDIO: 'Linux, macOS, and Termux on Android, and protocol compatible with the Onion Phone Android variant if you prefer a native app on that side. Read the readme threat model section before you trust it for anything that'
+
+[07:00] [scene:talk]
+VISUAL:
+AUDIO: 'actually matters. The author tells you exactly what the protocol does and does not give you, and the documentation honesty is itself the strongest signal that this is serious privacy tooling and not security theater. URLs are below. Subscribe at'
+
+[07:13] [scene:talk]
+VISUAL:
+AUDIO: 'Prism Labs for more privacy, security, and developer tooling deep dives.'

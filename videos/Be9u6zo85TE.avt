@@ -1,0 +1,231 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: NVIDIA PiD Setup in ComfyUI - 4K AI Images Without an Upscaler
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=Be9u6zo85TE
+upload_date: 20260528
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'Hey everyone. So today we\'re checking out a new decoder for image generation released by Nvidia called the pixel diffusion decoder or PID for short. This thing is pretty cool. It turns your low resolution AI outputs into sharp 4K'
+
+[00:12] [scene:talk]
+VISUAL:
+AUDIO: 'images in just four steps. So what this decoder does, it uses a different approach for latent to pixel decoding. Instead of using the original VAE that comes with your image model for'
+
+[00:25] [scene:talk]
+VISUAL:
+AUDIO: 'the encoding and decoding part, PID replaces that with a diffusion based decoder that works directly in pixel space. And right now it supports flux one, flux two, SD3, and Z image, which'
+
+[00:37] [scene:talk]
+VISUAL:
+AUDIO: 'covers most of the open source AI image generators running on the market. So on the hugging face page, you can see they have several checkpoint models already compiled. There\'s different naming'
+
+[00:50] [scene:talk]
+VISUAL:
+AUDIO: 'conventions, 2K, 4K resolutions, and each one corresponds to a specific base model. You\'ll see flux two and flux one variants. And here\'s the good part. Z image and Z image turbo use the same'
+
+[01:04] [scene:talk]
+VISUAL:
+AUDIO: 'flux one VAE. So if you\'re running Z image models, you can use the flux decoder checkpoints from PID directly. No separate download needed. Now in comfy UI, they\'ve already updated and added support for the PID'
+
+[01:18] [scene:talk]
+VISUAL:
+AUDIO: 'encoder decoder. You\'ll need a few new files to get this running. First, there\'s a text encoder that\'s specifically for PID. It\'s a pretty small model using the Gemma 2 billion parameter model available in BF16 and'
+
+[01:30] [scene:talk]
+VISUAL:
+AUDIO: 'FP8, so pick whichever your machine supports. For the diffusion model, there\'s PID flux one. Here you get two resolution options for each supported model. 1,024'
+
+[01:42] [scene:talk]
+VISUAL:
+AUDIO: 'to 4,096 pixels and 512 to 2,048 pixels. All of them use four-step sampling only. You don\'t need to push more steps or anything. That\'s just how this decoder'
+
+[01:54] [scene:talk]
+VISUAL:
+AUDIO: 'is designed. I\'m going to try the flux one 1024 to 4096 four-step model. This one\'s compatible with Z image turbo, Z image base model, and of course flux one'
+
+[02:07] [scene:talk]
+VISUAL:
+AUDIO: 'itself. Download whichever variant matches your setup. If your model uses flux 2 VAE, grab the flux 2 files. All of them work. So, come over to ComfyUI.'
+
+[02:20] [scene:talk]
+VISUAL:
+AUDIO: 'Once you\'ve updated to the latest version and downloaded those files, put them into the correct folders as mentioned on the hugging face page. You can set up a basic workflow like this example.'
+
+[02:33] [scene:talk]
+VISUAL:
+AUDIO: 'At the top here, this is the Z image turbo workflow for text to image. I\'ve wired it up with Qwen-VL for image to text prompt generation. I tried out some Pinterest images as reference, generate the text prompt from those, and create'
+
+[02:46] [scene:talk]
+VISUAL:
+AUDIO: 'something like this. So, you can see the resolution here is 1024 by 1024. That\'s the default for the four-step model I chose. Once we have the latent data from the K sampler, we connect that'
+
+[02:59] [scene:talk]
+VISUAL:
+AUDIO: 'to a new native node. Now, you do need to update ComfyUI to the latest version to see this. It\'s called PID conditioning. What it does is receive the latent data'
+
+[03:12] [scene:talk]
+VISUAL:
+AUDIO: 'from your previous Z image turbo output. You wire that up with the positive prompt conditioning and send the conditioning output to a sampler custom. The positive condition connects through everything. Negative condition, you'
+
+[03:25] [scene:talk]
+VISUAL:
+AUDIO: 'don\'t need to touch that at all since this uses four-step distillation. CFG is set to one, so it doesn\'t need CFG or negative prompts. And what it does next, as you can see, it creates a new latent image with 4096 pixel'
+
+[03:39] [scene:talk]
+VISUAL:
+AUDIO: 'dimensions. So, it\'s like having an empty canvas, and it fills that in with your previously generated Z image turbo output, creating a 4K image like this. Of course, it retains the same'
+
+[03:52] [scene:talk]
+VISUAL:
+AUDIO: 'composition as the Z image turbo output. But when you see the comparison, I\'m using the image compare node here, you can really see the difference, especially on the face. This one I\'m holding right now is 1,024 pixels.'
+
+[04:05] [scene:talk]
+VISUAL:
+AUDIO: 'And when you transition to the 4K output, the character\'s face, the details, totally different level. So you can use this as an image output without needing a separate image'
+
+[04:18] [scene:talk]
+VISUAL:
+AUDIO: 'upscaler model. The retention of all the elements stays mostly the same. Even though it uses some denoising in the sampler, it won\'t change your output significantly. Some of you might be wondering, is this'
+
+[04:30] [scene:talk]
+VISUAL:
+AUDIO: 'really an upscaler or does it create additional artifacts? So far from what I\'m seeing right in front of me, I haven\'t noticed additional artifacts or any over sharpened shiny texture issues. So let\'s compare it with something like'
+
+[04:44] [scene:talk]
+VISUAL:
+AUDIO: 'the RTX video super res, which can also do resolution upscaling. Here we connect the Z image turbo output, and through the first generated image, we can set the dimensions to 4K. But just using RTX video super res at'
+
+[04:59] [scene:talk]
+VISUAL:
+AUDIO: '4,096 by 4,096, the output isn\'t going to look great as an upscaled image. The resolution is larger, sure. But if you go through the details with'
+
+[05:11] [scene:talk]
+VISUAL:
+AUDIO: 'an image comparison, let me put the PID output as the comparison. So here we have image A from RTX video super res and image B from PID. Zooming out, you can see both outputs'
+
+[05:27] [scene:talk]
+VISUAL:
+AUDIO: 'connected correctly. And if you look at the PID output, you see the eyes, even though they look a bit like cat eyes here, the details have been added without changing the eyes or skin structure. Each element of the'
+
+[05:40] [scene:talk]
+VISUAL:
+AUDIO: 'character\'s face has been sharpened way more than the RTX upscaler node. And that RTX node, it\'s named video super res, but it works for images, too. So, that\'s the comparison. Same'
+
+[05:52] [scene:talk]
+VISUAL:
+AUDIO: 'dimensions, 4,000 pixels, but very different output quality. Another one I\'ll probably use a lot is SeedVR 2. It can also do image upscaling. You just set the batch size'
+
+[06:05] [scene:talk]
+VISUAL:
+AUDIO: 'to one and it becomes an image upscaler. Let\'s do another comparison. SeedVR 2 output versus PID 4K output. Running it again, and we\'ve got our two'
+
+[06:18] [scene:talk]
+VISUAL:
+AUDIO: 'results. This is the left side, SeedVR 2 upscaler. And when I swap, this is the PID decoder output. You can see SeedVR 2 isn\'t too blurry, but the details on the eyes haven\'t been added the way PID'
+
+[06:31] [scene:talk]
+VISUAL:
+AUDIO: 'does. The eyebrows, some of the hair, quite impressive using PID. Let\'s try another image and compare all three upscalers together. I\'ll generate with a custom text prompt. No external reference images this time.'
+
+[06:44] [scene:talk]
+VISUAL:
+AUDIO: 'Something more futuristic. So, this is the Z image turbo output. Really basic, no Laura models for specific style. Let\'s wait for the other upscalers to finish. Okay, all three upscalers are done.'
+
+[06:57] [scene:talk]
+VISUAL:
+AUDIO: 'First, RTX video upscale versus PID. This one\'s PID, and when I swap to the left, that\'s RTX video upscale. Zoom in a bit, you\'ll see the armor has a little more'
+
+[07:11] [scene:talk]
+VISUAL:
+AUDIO: 'detail with PID, some shadow shading on the gears and body attachments. The RTX super resolution, it just enlarges your image or video dimensions. It doesn\'t really give you much image quality enhancement. So, personally, I\'d say,'
+
+[07:24] [scene:talk]
+VISUAL:
+AUDIO: 'with PID available now, I prefer using PID over RTX video super res. Now, SeedVR 2 versus PID. Both have the same dimensions.'
+
+[07:36] [scene:talk]
+VISUAL:
+AUDIO: 'This from the left is SeedVR 2. PID won\'t give you those overly shiny textures. There are some minor changes from the sampling, but overall everything gets cleaned up. It gives you much sharper texture across the board.'
+
+[07:49] [scene:talk]
+VISUAL:
+AUDIO: 'With Seed VR 2, you\'ll see there\'s still some smoothing, especially on those shoulder attachments. It still looks like the first sampling output, just with enlarged pixels, but PID refines those details further.'
+
+[08:02] [scene:talk]
+VISUAL:
+AUDIO: 'There\'s no absolute answer like this is the best upscaler. It\'s really subjective. What do you want in your image output? Here\'s the next example, motorbike and'
+
+[08:14] [scene:talk]
+VISUAL:
+AUDIO: 'two police cars. Let\'s check the image comparison. On the left is 1024 upscaled with PID. You see those little details.'
+
+[08:27] [scene:talk]
+VISUAL:
+AUDIO: 'Every element gets additional detail, but it won\'t over change the output. It gives you edge sharpening and more detail across the entire image. For example, the glove here, you get more shape on the knuckles. Even in a'
+
+[08:40] [scene:talk]
+VISUAL:
+AUDIO: 'fast motion scene where you wouldn\'t see it clearly, those details are still there. The water, too. Even in a fast running motion scene, you still get more reflection, more watermarks on the concrete floor. PID just gives you more'
+
+[08:52] [scene:talk]
+VISUAL:
+AUDIO: 'when you want larger resolution. And again, Seed VR 2 versus PID on the bike scene.'
+
+[09:05] [scene:talk]
+VISUAL:
+AUDIO: 'Looking at the helmet, this is Seed VR 2 and switching to PID. The logo looks a bit different, but the overall shape gets sharpened and refined. The face cover especially, enhanced even more.'
+
+[09:19] [scene:talk]
+VISUAL:
+AUDIO: 'You see the reflections on the face cover, and from Seed VR 2, you don\'t see those details at all. So, yeah, I think this is quite impressive. Without an actual image upscaler, we\'re just using a different'
+
+[09:32] [scene:talk]
+VISUAL:
+AUDIO: 'decoder. And it creates something like this. What we need is just the PID group. Load the diffusion model that we downloaded from hugging face. By default, it\'s 1,024 to 4,096 pixels. If you want other'
+
+[09:44] [scene:talk]
+VISUAL:
+AUDIO: 'aspect ratios, you still need to keep 1,024 within your image input dimension. So, PID can run as a 4K image output. For example, this image I generated'
+
+[09:58] [scene:talk]
+VISUAL:
+AUDIO: 'previously using Z image turbo with a two-pass sampler. First pass is the base image. Second pass has a little more refinement, but the resolution stays the same. We\'re using 1,024 by 512 this'
+
+[10:10] [scene:talk]
+VISUAL:
+AUDIO: 'time, 16 to 9 ratio. Then PID acts as the final image output. Looking at the comparison, this is compared with the second pass of Z image'
+
+[10:22] [scene:talk]
+VISUAL:
+AUDIO: 'turbo. The second pass has been refined a bit, but not with overall sharpening or detail on every object, especially the backgrounds. Still a bit blurry, but after bringing it up to 4K, the sailing'
+
+[10:34] [scene:talk]
+VISUAL:
+AUDIO: 'boat behind gets crystal clear. The main character, those flowers on top, great comparison with plants and leaves. Each object gets actual shape and definition.'
+
+[10:47] [scene:talk]
+VISUAL:
+AUDIO: 'The character obviously looks a lot better, too. And this isn\'t just enlarging pixels like RTX video super res. This actually generates the real 4,096 pixel dimensions. So, it\'s really nice to have'
+
+[11:00] [scene:talk]
+VISUAL:
+AUDIO: 'this as an additional image enhancement tool. So, yeah. PID is pretty cool. It can also run with flux 2 VAE. I\'m trying it with the flux 2 climb model'
+
+[11:12] [scene:talk]
+VISUAL:
+AUDIO: 'right now, seeing if that works. We might play with that next time. But so far, Z image turbo and the base model work great with it. As you can see, I\'ve generated multiple images, testing'
+
+[11:24] [scene:talk]
+VISUAL:
+AUDIO: 'different variants with the same prompts, and the results speak for for We\'ll be checking out more in this PID framework. See how the encoding works with different variance conditions, too. I\'ll see you guys in the next one. See'
+
+[11:38] [scene:talk]
+VISUAL:
+AUDIO: 'you.'

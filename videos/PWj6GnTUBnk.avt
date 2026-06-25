@@ -1,0 +1,131 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: GitHub Was NOT Made for AI Agents (So Cloudflare Built Their Own)
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=PWj6GnTUBnk
+upload_date: 20260422
+transcript_source: captions
+route: text
+
+---
+
+[00:01] [scene:talk]
+VISUAL:
+AUDIO: 'So Cloudflare are working on something called Artifact, a distributed file system that\'s Git compatible and is built for agents first and lets you programmatically create, fork, or delete thousands of repos, no matter how small or big they are, for things like'
+
+[00:13] [scene:talk]
+VISUAL:
+AUDIO: 'parallel PR reviews, automated refactoring of large codebases, and per-session agent workspaces. But, with this being built on top of Durable Objects, does that mean you have to use JavaScript and you can\'t have access to a shell command to run Git? Hit'
+
+[00:26] [scene:talk]
+VISUAL:
+AUDIO: 'subscribe and let\'s find out. GitHub was built for humans, not for agents, meaning they don\'t need any of these social aspects, so followers, stars, discussions, but agents are very'
+
+[00:38] [scene:talk]
+VISUAL:
+AUDIO: 'good at Git. It\'s in their training data. So Cloudflare have built a basic Git implementation in Zig, compile it to WASM, and put it on a Durable Object to act as a Git server. Meanwhile, the'
+
+[00:50] [scene:talk]
+VISUAL:
+AUDIO: 'client itself can be anything you want. So a worker using isomorphic Git inside a worker or using the Git protocol and even the HTTP client so that you can connect to it for things that don\'t use'
+
+[01:03] [scene:talk]
+VISUAL:
+AUDIO: 'JavaScript. Now, unfortunately, at the time of recording, I don\'t have access to Artifacts since it\'s in private beta, but there is a lot of documentation on it, which means I can create a demo with a code from that documentation and maybe'
+
+[01:15] [scene:talk]
+VISUAL:
+AUDIO: 'when it\'s released in public beta, you can check if my code actually works. So what we\'re going to do is build a tool that [music] takes a list of tasks for a specific repo and runs all of these tasks in parallel by forking the repo multiple times and running each task on'
+
+[01:28] [scene:talk]
+VISUAL:
+AUDIO: 'its own artifact in a Cloudflare on a Durable Object. Let\'s see how this works. Now, I\'ve started off by following the documentation for Artifacts in getting started for workers, so I use this command and this text here after this command is just the'
+
+[01:41] [scene:talk]
+VISUAL:
+AUDIO: 'name of the project and can be anything. So I followed all of these steps, which ends up giving me this basic worker code. And workers for Artifacts are slightly more performant than using the REST API since they make less round trips. Then after that, you\'ll need to'
+
+[01:54] [scene:talk]
+VISUAL:
+AUDIO: 'add the Artifacts bindings to your wrangler.json C or TOML file. Then rerun the types. Now, the documentation here focuses on creating a new repo, so it uses the Artifacts binding with the create method and a repo name. It'
+
+[02:07] [scene:talk]
+VISUAL:
+AUDIO: 'creates the name, which gives it the token and the remote. So the remote is the location of the artifact and the second or auth token is what is needed to give you access to it. And of course, you can use the Git protocol using the remote and the token to interact with'
+
+[02:20] [scene:talk]
+VISUAL:
+AUDIO: 'your artifact. But we\'re going to do something different. Instead of creating a brand new repo in an Artifact Durable Object, we\'re first going to check if one exists called baseline. Then, if it doesn\'t exist, what we\'re going to do is'
+
+[02:32] [scene:talk]
+VISUAL:
+AUDIO: 'import a Git repo and then I\'ve given it the name of baseline and then returned that value here. And of course, if you check out the API documentation for the workers binding, you\'ll see more parameters that can be added to the import method. But then after we\'ve'
+
+[02:44] [scene:talk]
+VISUAL:
+AUDIO: 'returned the existing repo, then we can do some very cool things with it. Here are a list of tasks that I\'d like doing to the repo and of course, I\'ve hardcoded them, but these can be added in an input or some kind of UI. And here inside the worker default export, I\'ve'
+
+[02:56] [scene:talk]
+VISUAL:
+AUDIO: 'got the Anthropic SDK as well as my baseline repo and I\'m going to loop through all the tasks. And over here, I\'m forking the repo with this name. Then we have this function, which I\'ll go through later, but this runs the task'
+
+[03:08] [scene:talk]
+VISUAL:
+AUDIO: 'inside the forked repo and gets the agent to make the change while returning the agent\'s summary, so the last thing the agent said. And then after each for loop, I\'m returning this information. So the name of the task, the name of the'
+
+[03:20] [scene:talk]
+VISUAL:
+AUDIO: 'fork, the remote, and the token so that we can access it whenever we want to see if the change is good and the summary of what was done. So right now, the workers binding doesn\'t give you the ability to pull, commit, and push. So in my code, I\'ve had to do that with isomorphic'
+
+[03:33] [scene:talk]
+VISUAL:
+AUDIO: 'fetch and then use an in-memory storage system to store the changes temporarily. So back in the agent code, we\'re creating our file system in memory and then we have a system prompt that tells the agent to make the relevant changes'
+
+[03:45] [scene:talk]
+VISUAL:
+AUDIO: 'and then commit the code. So here we\'re going to clone the forked repo using the remote that has been provided as well as the token. And then we define some tools, so read, write, and commit. Here we select the model and give our model a system prompt. And then we pass the task'
+
+[03:57] [scene:talk]
+VISUAL:
+AUDIO: 'as a user message. And the rest of the code is your standard agentic loop. So if there\'s a tool call, stop reasoning and run the tool call, in our case read, write, or commit, which also happens to push the code after committing. And the benefit of having an artifact is that'
+
+[04:10] [scene:talk]
+VISUAL:
+AUDIO: 'all this code will exist in the Durable Object, get stored in the SQLite database of the object, and if the Durable Object goes down, the information can be retrieved from the SQLite database at any point if it comes back up. And then below here, we'
+
+[04:23] [scene:talk]
+VISUAL:
+AUDIO: 'continue the model\'s reasoning after the tool call before returning the latest message from the model. Now, I know it\'s very difficult to visualize all of this happening without me being able to run the code, but hopefully you can kind of see what can be done with Artifacts and their full potential. Imagine if you'
+
+[04:36] [scene:talk]
+VISUAL:
+AUDIO: 'could have a UI to see all of the changes that happening in these Artifacts and you can communicate with individual agents or a single orchestrator agent to make changes to the different repos. Speaking of an orchestrator agent, we could have a'
+
+[04:48] [scene:talk]
+VISUAL:
+AUDIO: 'single worker that could orchestrate all of these changes happening and merge them to the main repo after a reviewer agent has been through the code. We can even combine Artifacts with dynamic workers so that agents can run the code'
+
+[05:00] [scene:talk]
+VISUAL:
+AUDIO: 'they\'ve changed to see if it works. And if it\'s not JavaScript code, then we can use Cloudflare sandboxes to run any language we want and even run shell commands. Not to mention there\'s the Cloudflare browser option that runs a Puppeteer browser for the model to look'
+
+[05:12] [scene:talk]
+VISUAL:
+AUDIO: 'at and see if the code it implemented is correct if it\'s a front-end change. I\'ve honestly had a lot of fun thinking about the possibilities of Artifacts even though I can\'t yet run them. But one thing I have noticed is that there\'s no Git diff command. It\'s not exposed in'
+
+[05:24] [scene:talk]
+VISUAL:
+AUDIO: 'the worker bindings API or in isomorphic Git. So maybe if the only way to do a Git diff is through the Git protocol or they might add it in the future. Either way, right now if you want to do it'
+
+[05:36] [scene:talk]
+VISUAL:
+AUDIO: 'without using the Git protocol, I guess you could use isomorphic Git using Git log to find the Git tree to go through and walk down the tree to compare the differences. Regardless, I think this is a very cool release from Cloudflare and even though there are other file system'
+
+[05:50] [scene:talk]
+VISUAL:
+AUDIO: 'tools like S3 Files, ZeroFS, and JuiceFS that already exist, I don\'t think these options are Git compatible, which is a very cool feature and more agent-friendly. Speaking of S3, if you\'ve ever wanted to run it locally on'
+
+[06:02] [scene:talk]
+VISUAL:
+AUDIO: 'your machine, then check out this video by Josh that tells you exactly how to do that.'

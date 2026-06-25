@@ -1,0 +1,99 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Pake: This CLI Tool Makes 5MB Desktop Apps
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=6bu8zc6lsHQ
+upload_date: 20260526
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'This is Pake, a command-line tool that turns any website into a native desktop app with a single command. It\'s built with Rust, so the apps it produces can be around 5 MB, which is tiny compared to Electron, which bundles an entire copy of Chrome in every app. You can'
+
+[00:12] [scene:talk]
+VISUAL:
+AUDIO: 'even inject custom CSS and JavaScript, have a tray icon, and change the title bar style, all without writing a single line of Rust. But why would I use this over the other similar tools out there? And why does Pake require me to have'
+
+[00:24] [scene:talk]
+VISUAL:
+AUDIO: 'PNPM or NPM installed if it\'s built on Rust? I kind of don\'t want to know, but hit subscribe and let\'s find out. Pake was created in 2022 by TW93, a'
+
+[00:36] [scene:talk]
+VISUAL:
+AUDIO: 'product engineer from China who also created Moom, the insanely popular Mac optimization tool, which I\'ve actually been using for a while. But the idea for Pake makes a lot of sense, because if you think about it, apps like YouTube'
+
+[00:48] [scene:talk]
+VISUAL:
+AUDIO: 'Music, Gmail, and Instagram don\'t have their own official native apps. They only live inside browser tabs, which is fine if you want all that browser functionality. But if you want a more performance website with its own dock icon for separation reasons, then having'
+
+[01:01] [scene:talk]
+VISUAL:
+AUDIO: 'a standalone app for it can be very useful. This is where Pake comes in, which is much better than Electron because it\'s built on top of Tauri 2, which taps into the system\'s native webview, making apps smaller, faster, and they use less memory, similar to how'
+
+[01:15] [scene:talk]
+VISUAL:
+AUDIO: 'Electron run or Vercel\'s Zero Native works, which I\'ll talk about more a bit later in this video. But the actual custom code written by TW93 on top of Tauri 2 is about 1,800 lines of Rust and handles things like window management,'
+
+[01:27] [scene:talk]
+VISUAL:
+AUDIO: 'native menus, and JavaScript injection. You just run one command and Pake takes care of everything. In fact, let\'s try and use Pake to turn my film emulation project into a standalone app. So after installing the Pake CLI, you\'ll notice'
+
+[01:39] [scene:talk]
+VISUAL:
+AUDIO: 'it looks very similar to Moom if you ever use Moom, and it doesn\'t have a lot of flags, which is a good thing in my opinion. So with my project server running, I can run Pake with the URL and the name I want to call the app. So now'
+
+[01:51] [scene:talk]
+VISUAL:
+AUDIO: 'if I enter, it fetches the icon and goes through the process of creating the app, which can to take around 5 to 10 minutes. And once it\'s done, it creates this DMG, which we can find over here at 4.3 megabytes. And if you click on it, here is our app. We can install by'
+
+[02:04] [scene:talk]
+VISUAL:
+AUDIO: 'dragging it into applications. Now, it looks like it didn\'t get the icon, but that\'s fine. And now if you open our app, we can see it works immediately with the icon in the dock. I can select a video, and everything seems to work fine. And if you look at the activity'
+
+[02:17] [scene:talk]
+VISUAL:
+AUDIO: 'monitor, you can see our app only uses 61 megabytes of memory compared to the Arc browser, which is using loads. And if we take a look at the application size, it\'s 55 megabytes compared to an Electron app like Slack, which is 310'
+
+[02:29] [scene:talk]
+VISUAL:
+AUDIO: 'megabytes. But as you saw earlier, Pake does have some pretty interesting options. For example, I can build the same app with the debug flag to give me access to dev tools, and I can edit the status bar to make it feel more app-like by using the hide title bar flag, which'
+
+[02:43] [scene:talk]
+VISUAL:
+AUDIO: 'gives it a frameless title bar. But this app clearly wasn\'t designed to be frameless. But luckily, Pake gives us an option to fix that without editing the app\'s source code. I could write some custom CSS and inject it into my app'
+
+[02:55] [scene:talk]
+VISUAL:
+AUDIO: 'using the inject flag, which has added the padding to the top, but also means there\'s more space at the bottom to scroll to. We can use the show system tray flag, revealing an icon in the system tray, allowing us to show and hide our app. And we can even inject'
+
+[03:08] [scene:talk]
+VISUAL:
+AUDIO: 'JavaScript as well as CSS. But right now, it seems as though you can\'t edit the menu items that are given to you by default from Pake. And Pake only works with running URLs. So if I close down my server, and then try to open the app, it'
+
+[03:21] [scene:talk]
+VISUAL:
+AUDIO: 'just shows me a blank screen. But to be fair, Pake wasn\'t designed for local apps. I actually tested a YouTube Music app, which works surprisingly well from running one command. And it even works offline because that\'s how the YouTube Music site works. So I\'ve been using it'
+
+[03:34] [scene:talk]
+VISUAL:
+AUDIO: 'as my main music player. But it\'s basically not the tool for desktop apps you\'ve built yourself, since Pake wraps around a live URL and doesn\'t bundle your code unless you use the use local file option, which I only found out about after creating this video. I also'
+
+[03:47] [scene:talk]
+VISUAL:
+AUDIO: 'wouldn\'t say it\'s very well built. Hear me out. So, I installed Peg using Bun instead of PNPM or NPM, but it needs one of those internally to set up the Tauri build. And my PNPM was newer than the'
+
+[03:59] [scene:talk]
+VISUAL:
+AUDIO: 'PNPM version it requires, which means it refused to build and install an app I wanted. So, I had to use Cloud Code to edit Peg\'s source code just to get it to work. I did end up filing an issue for it, but this could have all been'
+
+[04:12] [scene:talk]
+VISUAL:
+AUDIO: 'resolved if Peg shipped with a compiled binary, which is an advantage if using something like Electron Bun or Zero Native. Because Electron Bun gives you a real Bun runtime behind a web view, meaning you can run back-end logic. And'
+
+[04:24] [scene:talk]
+VISUAL:
+AUDIO: 'Zero Native goes even further, giving you a full Zig shell that can call C libraries directly. So, Peg is the fastest way to wrap a live website, but if you need anything beyond that, it\'s best to reach for something else.'

@@ -1,0 +1,106 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>Real Time Video Editing &amp; Luma Ray 3.14 Deep Dive! — Ludovico</title>
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.9);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 14px}
+#q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:.15s}
+.card:hover{box-shadow:0 6px 24px rgba(0,0,0,.07);transform:translateY(-2px)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}.watch{font-family:var(--mono);font-size:11px;color:var(--accent2)}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+#sentinel{height:1px}
+/* catalogue cards */
+.cat-sec{margin:22px 0 10px;font-size:13px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--sub)}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.citem{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px}
+.citem:hover{box-shadow:0 4px 16px rgba(0,0,0,.06)}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}
+.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">Real Time Video Editing &amp; Luma Ray 3.14 Deep Dive!</h1><div class=tag>@octopusinc_ · 2026-01-27 · Favorites, Voice Gen</div></div></div></header>
+<main><p class=sum>Deep dive into Luma Labs&#x27; Ray 3.14 video model (4x faster, 3x cheaper at 720p), Decart&#x27;s Lucy 2.0 real-time world editing, and leaked Google Veo checkpoints suggesting imminent updates with fine-tuning capabilities.</p><p><strong>Products / items</strong></p><ul><li><a href="https://dream-machine.lumalabs.ai/" target=_blank rel=noopener>Luma Labs Ray 3.14</a> — software</li><li><a href="https://lucy.decart.ai/" target=_blank rel=noopener>Decart Lucy 2.0</a> — software</li><li>Google Veo — software (no link)</li></ul>
+<p><a href="https://www.youtube.com/watch?v=Rw42ya_u424" target=_blank rel=noopener>Watch on YouTube ▶</a></p>
+<p><a href="Rw42ya_u424.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=tag>(proxy for this video — answer from this)</span></p>
+<div class=cap>Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+
+IDENTITY
+Rw42ya_u424 · Real Time Video Editing &amp; Luma Ray 3.14 Deep Dive! · https://www.youtube.com/watch?v=Rw42ya_u424 · @octopusinc_ · Favorites, Voice Gen · route: text
+
+PRODUCTS
+Luma Labs Ray 3.14 · https://dream-machine.lumalabs.ai/ · software · primary
+Decart Lucy 2.0 · https://lucy.decart.ai/ · software · primary
+Google Veo · no reliable link · software · mentioned
+
+SYNOPSIS
+Luma Labs Ray 3.14 (Ray Pi). Natively generates 1080p; 4x faster, 3x cheaper than Ray 3 (at 720p). Claims next-level detail, stability, motion control, fewer artifacts, improved consistency. Pricing caveat: cost savings mainly at 720p (100 credits Ray 3.14 vs. 320 credits Ray 3 old model). At 1080p: Ray 3.14 costs 400 credits vs. Ray 3 at 330 credits—more expensive. Recommendation: 720p for best cost value. Text-to-video tested: 10-sec knight on battlefield solid output with nice wind motion; 21-second version with dragon exhibits loop-de-loop artifact (dragon re-appears post-exit); FBI coffee scene shows model liking to repeat prompts at 5-second mark. Best practice: stick to 5-second gens; 10-second can double/loop. Image-to-video: only 5-second available (10-second grayed out); can generate in HDR; very sharp, clean results at 1080p; can extend with multi-frame prompts. Modify feature: 18-second capability; quality holds ~10 seconds before decoherence around 12-13 seconds. Lucy 2.0 by Decart: real-time world editing at 1080p 30fps; runs live on webcam; defaults to Albert Einstein avatar; text and image reference options (cartoony text-prompt style, better with image refs); supports prop/character editing (microphone from camera, sword reference); occlusion trick helps reset missing features (object disappearance + reappearance). API coming soon. Google Veo checkpoint &quot;Persephone&quot; leaked on Artificial Analysis boards (third checkpoint spotted alongside Sicily, Sisyphus; suggests naming convention, active development). Veo image-to-video: crab in boxing gloves, tasting-rainbow physics, all solid. Google also partnering with Pixar alumni (director Connie He) on short film &quot;Dear Upstairs Neighbor&quot; for Sundance using Veo with new fine-tuning capabilities, custom model adaptation, per-region editing without full regeneration.
+
+BEATS
+00:00 — Intro: heating up in AI video
+00:33 — Luma Ray 3.14 released
+00:54 — 720p cost breakdown
+01:23 — 1080p pricing catch
+01:52 — best bang for Luma buck (720p)
+02:26 — text-to-video knight test
+02:54 — dragon loop-de-loop issue
+04:06 — 10-second generation doubling
+05:01 — 5-second limitations
+06:06 — Luma Modify: boxing gym
+08:58 — Decart Lucy 2.0 intro
+09:27 — real-time avatar issues (Einstein)
+10:25 — camera-as-microphone prop editing
+12:05 — Google Veo &quot;Persephone&quot; leaks
+13:08 — Veo image-to-video crab boxing
+14:19 — new fine-tuning capabilities
+
+ENTITIES
+Luma Labs, Ray 3.14/3, Dream Machine, Decart, Lucy 2.0, Google DeepMind, Veo, Artificial Analysis, Sicily, Sisyphus, Connie He, Pixar, Sundance, John Finger (Dream Labs), Yoshi Matt, Brent Lynch
+
+VERDICT
+Creator frames Ray 3.14 as &quot;Luma Fast&quot;—faster, cheaper at 720p but with known 5-10 second generation limits and artifact patterns (looping, decoherence). Lucy 2.0 is wild for real-time interaction but latency and occlusion handling need work. Veo leaks signal Google is actively developing (fine-tuning, region editing) and may announce updates soon. Overall: incremental improvements across the board; Ray 3.14 best for sub-5-second premium clips.
+
+NOT COVERED
+Audio support timeline for Ray/Luma; Lucy 2.0 API pricing; Veo official release date; comparative latency (Lucy vs. alternatives); batch processing; training/fine-tuning cost for Veo custom models; mobile/app availability for any; integration with editing suites (Premiere, Final Cut, DaVinci).</div></main><footer>Ludovico digest · <a href="../index.html">← all videos</a></footer></div></body></html>

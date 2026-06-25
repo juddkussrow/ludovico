@@ -1,0 +1,287 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: SCAIL 2 In ComfyUI - Big Improve from Last Version! Character Animation Without ControlNet!
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=jtIsLWP3DdM
+upload_date: 20260611
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'Scale 2. This is the new version of the animation framework developed by Tingua University and Z.AI. Z.ai. You might know them. They\'re the team behind GLM, one of the popular openweight large language model. They'
+
+[00:13] [scene:talk]
+VISUAL:
+AUDIO: 'also released COG video X and Scale 2. This is the updated model for character animations that you can use without any skeleton pose or control net to transfer character motions from your reference'
+
+[00:27] [scene:talk]
+VISUAL:
+AUDIO: 'video directly into your output video. Take a look at these few examples here. I\'m not going to show each one individually, but you can take a reference from those animations. It looks pretty nice, better than what we had before when we were talking about'
+
+[00:40] [scene:talk]
+VISUAL:
+AUDIO: 'scale one or the scale preview versions. Like last year, we talked about this model when it first released. And back then, it was using 3D pose control as well. But in version two, right now, it\'s even better with a new approach of'
+
+[00:53] [scene:talk]
+VISUAL:
+AUDIO: 'motion transfer. Instead, it\'s using model specific rope and in contact mass conditions. These two techniques are pretty cool. And as you may have noticed from some of the other AI models out'
+
+[01:06] [scene:talk]
+VISUAL:
+AUDIO: 'there, especially the recent ones for videotovideo editing, rope has been showing up a lot. So this stands for rotary position embedding. And what this does is it allows the diffusion model to transfer motions. Like for example, here'
+
+[01:19] [scene:talk]
+VISUAL:
+AUDIO: 'you\'ve got a motion reference and it gets transferred exactly into the newly generated output even with multiple characters. And another thing, it doesn\'t just support human characters anymore. It supports animals as well. So'
+
+[01:31] [scene:talk]
+VISUAL:
+AUDIO: 'we\'re going to play around with scale 2 in Comfy UI. As soon as this model dropped, on the first day it launched, it already had Comfy UI support. There are FP16, FP8, and FP8 MX models'
+
+[01:43] [scene:talk]
+VISUAL:
+AUDIO: 'available. So, depending on what kind of precision your machine can handle, you download whichever one works for you. For the text encoder and VAE, it\'s using the one 2.1 VAE. You can also download'
+
+[01:56] [scene:talk]
+VISUAL:
+AUDIO: 'that from HuggingFace. Just go search for one 2.1 repo and you\'ll see there\'s a split files folder with the text encoder VAE and clip vision that you\'re going to need. Now there\'s also the'
+
+[02:09] [scene:talk]
+VISUAL:
+AUDIO: 'light x2vora model that\'s required to run scale 2 with low sampling steps because scale 2 can run with the light x2 vora at as few as four steps. So once you\'ve downloaded'
+
+[02:22] [scene:talk]
+VISUAL:
+AUDIO: 'all the models and updated comfy UI, in my case I\'m running on gitpole, you\'ll see the indicator that a new native node that supports scale 2 has been included. Having this, you can start building your'
+
+[02:35] [scene:talk]
+VISUAL:
+AUDIO: 'comfy UI workflow. So based on the example workflow, I\'ve been using it and playing around with it a bit. I\'ve tried out different video animations, different video editing tasks using this workflow. And as you'
+
+[02:48] [scene:talk]
+VISUAL:
+AUDIO: 'can see, there\'s a new native node in here. We\'ve got the one scale two to video node. This is what handles the scale 2 conditions. You pass in the conditions v a pose video pose video'
+
+[03:00] [scene:talk]
+VISUAL:
+AUDIO: 'mask reference image reference image mask and clip vision. All required to run this model. For the previous frame and video frame offset, those are used'
+
+[03:12] [scene:talk]
+VISUAL:
+AUDIO: 'for video extension. That means you can extend the video beyond 81 frames. While 81 frames is the preset default for each sampler run on the Juan video 2.1 models. With video extension like this,'
+
+[03:25] [scene:talk]
+VISUAL:
+AUDIO: 'you can stitch everything together. Kind of like some of the videos I showed you a long time ago about Juan 2.1 vase and one 2.2 vase. Those were also able to stitch together with overlapping frames'
+
+[03:38] [scene:talk]
+VISUAL:
+AUDIO: 'and you could keep extending to make longer videos. So basically you pass the previous frame data from the first sampler. Now back to sampler part one here. This generates the first 81 frames from the beginning of the video to video'
+
+[03:52] [scene:talk]
+VISUAL:
+AUDIO: 'generation. So how does the replacement mode work? First of all, this is a boolean. So it\'s either true or false. In my workflow setup, I\'ve put a control switch here.'
+
+[04:04] [scene:talk]
+VISUAL:
+AUDIO: 'So if I set this to true, then it triggers the scale to video native node to set replacement mode to true. What this means is the character will replace an existing video element. So in here'
+
+[04:17] [scene:talk]
+VISUAL:
+AUDIO: 'I\'ve got this video footage of a singer dancing on stage and I\'m going to swap only this character as a replacement. So I pass in this image as my reference image for the character I want to swap'
+
+[04:31] [scene:talk]
+VISUAL:
+AUDIO: 'into that video. Now in this case if I set replacement to true and the mode is set to replace character rather than background then the video will show white backgrounds for the masked areas'
+
+[04:44] [scene:talk]
+VISUAL:
+AUDIO: 'because we\'re using the SAM 3 video tracker. Now this is a new node right here create scale 2 color masks. These color masks allow the scale model to detect the conditions that it needs to'
+
+[04:57] [scene:talk]
+VISUAL:
+AUDIO: 'generate in the video output. So, for example, if you have multiple objects, characters, animals, whatever you want to swap, they\'ll each be indicated by different colors in the mask. So, the blue color represents the person'
+
+[05:10] [scene:talk]
+VISUAL:
+AUDIO: 'singing. I have this image as the reference image. The model detects that this character needs to replace the singer in the video. So, the output looks like this. As you can see, the guy has been swapped with the reference'
+
+[05:24] [scene:talk]
+VISUAL:
+AUDIO: 'image. and side by side you can clearly understand why it\'s called replacement mode. It replaces the masked objects from the process and puts them into the video. Now notice something. This video'
+
+[05:36] [scene:talk]
+VISUAL:
+AUDIO: 'to video editing has no control net DW pose to mimic character motion, no depth map, nothing like that. It\'s purely based on the scale 2 color mask for generating the mask. And because the'
+
+[05:48] [scene:talk]
+VISUAL:
+AUDIO: 'scale 2 model has in context learning and the rope technique that we talked about, it\'s able to transfer character motions movement to the new reference image character and put that into the'
+
+[06:00] [scene:talk]
+VISUAL:
+AUDIO: 'output video like this. So that\'s the unique feature of this model. And as you can see, this is using the one 2.1 model settings because scale 2 is also based'
+
+[06:12] [scene:talk]
+VISUAL:
+AUDIO: 'on the 1 2.114b model. That\'s why we can use one 2.1 light x2v for the distillation sampling in this workflow. The scheduler I\'m testing with six steps. You can try four'
+
+[06:25] [scene:talk]
+VISUAL:
+AUDIO: 'steps, eight steps or even higher, but six steps is generally a good sweet spot for using light x2v in video generation like this. So the whole setup is ready to go. Now let\'s try something else. In the max object setting, you can set not'
+
+[06:40] [scene:talk]
+VISUAL:
+AUDIO: 'just one but two or three even higher numbers. That means you can control how many objects the model detects in the input video or the mask from your reference image. Because in here'
+
+[06:52] [scene:talk]
+VISUAL:
+AUDIO: 'you can see the SAM 3 tracking. One track for the driving data which is the video input and another for the reference track which comes from the reference image.'
+
+[07:05] [scene:talk]
+VISUAL:
+AUDIO: 'So let\'s say we have a multicar scenario. Okay. So here I have an example for multicar. You can go further, two or three characters, even up to 10. It depends on how you position your first'
+
+[07:19] [scene:talk]
+VISUAL:
+AUDIO: 'frames to match with your reference video. In this video, you can see different camera angles moving around. The characters aren\'t just standing there statically. There\'s a lot of motion, some boxing practice, and you\'ll'
+
+[07:31] [scene:talk]
+VISUAL:
+AUDIO: 'see some body parts of the left and right characters overlap in the camera view. Scale 2 can handle this. I\'m using this image of two characters. Now, these two characters, I created them'
+
+[07:43] [scene:talk]
+VISUAL:
+AUDIO: 'previously for other AI video content. This one represents the character on the left, and this one represents the character on the right. So, I\'m using this video as the motion reference. The first frames get passed into DW pose'
+
+[07:57] [scene:talk]
+VISUAL:
+AUDIO: 'because I need to generate this image using QuinnEdit. Now, you could use other image editing models, but for getting video first frames and editing them, I usually go with Quenedit. The prompt is basically replace the image of'
+
+[08:11] [scene:talk]
+VISUAL:
+AUDIO: 'this man identify both characters in the boxing match. And that\'s how we get the start frame based on the DW pose reference. By doing this, we get this image here that can be used for the'
+
+[08:23] [scene:talk]
+VISUAL:
+AUDIO: 'video first frame. Coming back to the first frame, it\'s the same pose as our reference image. So this time, let\'s say I want to replace the entire background as well. We\'re only capturing the motions of the two characters in the'
+
+[08:36] [scene:talk]
+VISUAL:
+AUDIO: 'boxing ring and the camera motions. how the camera follows the character movements for the segmentation. Since we\'re using SAM 3.1 and I\'ve talked about SAM 3.1 before, video tracking is'
+
+[08:48] [scene:talk]
+VISUAL:
+AUDIO: 'one of the data types it supports and now it\'s natively integrated with scale 2 in comfy UI. That\'s great because we can use SM3 video tracking data directly. I set the condition to detect'
+
+[09:02] [scene:talk]
+VISUAL:
+AUDIO: 'the two fighters in the boxing match. So max objects is set to two and I\'m using the same video track for the reference image. Let\'s run this and see how it looks. So here\'s the segmentation result. We\'ve got two different colored'
+
+[09:16] [scene:talk]
+VISUAL:
+AUDIO: 'objects here, blue and red. That\'s how the scale 2 video model identifies which character belongs to which reference image for the swap. And that\'s how it tracks those motions and transfers them to the new reference image characters.'
+
+[09:29] [scene:talk]
+VISUAL:
+AUDIO: 'In this test case, I also used a for loop for video extension because once you have the first sampling run and you pass the first 81 frames along with the video frame offset into the for loop,'
+
+[09:41] [scene:talk]
+VISUAL:
+AUDIO: 'you set the number of loops based on the total frame count. Then we do some math to figure out how many 81 frame batches we still need. The video offset gets passed into the next input, which is'
+
+[09:53] [scene:talk]
+VISUAL:
+AUDIO: 'what I mentioned at the beginning, and it loops continuously. The output offset feeds back into the loop end and it cycles through. Now, we\'ve played around with this for'
+
+[10:05] [scene:talk]
+VISUAL:
+AUDIO: 'loop concept for a long time on this channel, almost 12 months ago now when I first introduced this unlimited loop concept. Man, time goes fast. The technology has evolved, but the concept is still the same. Eventually, if you\'re'
+
+[10:19] [scene:talk]
+VISUAL:
+AUDIO: 'making long- form video, you need to extend it over multiple sampling passes. And the same concept applies here. All the data gets passed through, including previous image frames, and it gets'
+
+[10:31] [scene:talk]
+VISUAL:
+AUDIO: 'stacked together. It stitches with the previous images plus the newly generated 81 frames. Those video frames go through the loop and then to the video output. I also put a comparison node in here just for'
+
+[10:43] [scene:talk]
+VISUAL:
+AUDIO: 'testing. If you don\'t want that, you can bypass the comparison with your reference video and you\'ll only get the generated video output without the reference video playing alongside it. Okay, so here\'s the first batch, 81'
+
+[10:57] [scene:talk]
+VISUAL:
+AUDIO: 'frames. Then it passes through the loop going through five loop cycles. The math works out. So five total passes and we get the full frame count matching the'
+
+[11:09] [scene:talk]
+VISUAL:
+AUDIO: 'reference video. As you can see, the two characters are here. the motions from the reference are being transferred perfectly. But one thing I forgot to turn on was the replacement mode for full background replacement. So I\'ll'
+
+[11:21] [scene:talk]
+VISUAL:
+AUDIO: 'need to do that again later with a proper example so you guys can see what that looks like. But for character swapping alone, even the camera angles follow up pretty well with scale 2. Compared to scale one, the preview'
+
+[11:34] [scene:talk]
+VISUAL:
+AUDIO: 'version, the image quality is noticeably better. Character fidelity, physics, all improved. For example, this guy wearing the gray jacket. You can see the jacket movement is being affected by the physics of the'
+
+[11:47] [scene:talk]
+VISUAL:
+AUDIO: 'motion. And that reference doesn\'t come from the original source video. The source video has two topless boxers, so there\'s no control net or depth map referencing the jacket movement. This is all based purely on transferring the'
+
+[12:00] [scene:talk]
+VISUAL:
+AUDIO: 'motion from those two boxers and applying it to the new swapped character. In this next example, I\'m using completely different character styles. I\'ve got a cartoon character and the'
+
+[12:13] [scene:talk]
+VISUAL:
+AUDIO: 'reference video is realistic footage, just normal stock footage of a person walking, doing her hair, looking around. So, we have this reference and we\'re bringing the tracking data over. Even though the pose of the reference image'
+
+[12:27] [scene:talk]
+VISUAL:
+AUDIO: 'is totally different in the first frames, I found that scale 2 can use the object tracking to handle it. You can even see the cartoon character showing up a P sign, which is a completely different pose from the reference video'
+
+[12:40] [scene:talk]
+VISUAL:
+AUDIO: 'character, and it still works for the video animation. In these examples, I turned off replacement mode, so it\'s also using the cartoon character\'s background in the video output.'
+
+[12:52] [scene:talk]
+VISUAL:
+AUDIO: 'And this is the full length generated video. As you can see, all those motions, the hair movements, the arm positions, the green sling bag, the arm holding it up,'
+
+[13:04] [scene:talk]
+VISUAL:
+AUDIO: 'all of those are being transferred. Let me put this side by side with the three videos and the reference image. The slight camera movements in the background, those are also captured. The'
+
+[13:16] [scene:talk]
+VISUAL:
+AUDIO: 'eyebrow movements looking up and down, motions from the realistic footage, all mimicked in the output. I think Scale 2 does a really solid job for video motion'
+
+[13:28] [scene:talk]
+VISUAL:
+AUDIO: 'transfer. And we\'re not talking about control net here anymore. You know, for diffusion transformer models in 2026. Control net is kind of old school at this point. Look at what we\'ve seen recently with Bernini and Scale 2.'
+
+[13:41] [scene:talk]
+VISUAL:
+AUDIO: 'They\'re not using DW pose or depth map control net to track and mimic character motions anymore. They\'re using their own techniques like this 3D rope approach to capture the full video motion and'
+
+[13:53] [scene:talk]
+VISUAL:
+AUDIO: 'transfer it into the new output. This is the direction we\'re heading. AI models are getting more advanced, less work for us, honestly. Less need to chain together all those control net conditions. Look at the conditioning'
+
+[14:06] [scene:talk]
+VISUAL:
+AUDIO: 'here. It\'s basically nothing. Just text prompts. What we need is the segmentation masks from the two input parameters. That\'s it. That\'s all you need for video motion transfer with'
+
+[14:18] [scene:talk]
+VISUAL:
+AUDIO: 'scale 2. It\'s pretty cool. Although scale 2 is based on one 2.1, which is kind of an older model at this point. After fine-tuning and retraining from the Z.AI team, I would say this model is actually even better than Juan 2.2'
+
+[14:32] [scene:talk]
+VISUAL:
+AUDIO: 'Animate for this specific kind of motion mimicking and video editing task. So that\'s it for this video. I\'ll see you guys on the next one.'

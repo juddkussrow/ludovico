@@ -1,0 +1,143 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: How I Built an App with 6 AI Subagents
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=yIBrD5AxtTc
+upload_date: 20251001
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'Today, I\'m going to show you how I use six different AI sub aents to create a really robust process for building out an app. Coordinating this team of sub aents allowed me to build this AI brief me app where users can input a research topic and get back a structured briefing'
+
+[00:14] [scene:talk]
+VISUAL:
+AUDIO: 'on that topic. As we go through this process, we\'re going to cover everything there is to know about sub aents in Goose. We\'re going to talk about how you can spin up sub aents, how you can use recipes to create reusable agents. We\'re'
+
+[00:27] [scene:talk]
+VISUAL:
+AUDIO: 'going to see how you can run sub aents in parallel so you can have multiple agents running at the same time. And we\'re going to see how all of this works together to create a really robust process for building an app. Now, like I said, we\'re going to be using six'
+
+[00:41] [scene:talk]
+VISUAL:
+AUDIO: 'different sub aents throughout our process today. So, before we jump into things, I want to give an overview of what those agents are and how they\'re each going to play a role in our building process. First, we\'re going to have a planner'
+
+[00:53] [scene:talk]
+VISUAL:
+AUDIO: 'agent. This agent is going to be responsible for taking our app idea and planning out all of the goals and the features for the app. After that, we\'re going to use a project manager agent. This agent is going to take that'
+
+[01:05] [scene:talk]
+VISUAL:
+AUDIO: 'generated plan and break it down into distinct tasks for each of our other sub aents to perform. Next, we\'re going to scaffold out the project with an architect agent. This agent will build out our project structure with different'
+
+[01:17] [scene:talk]
+VISUAL:
+AUDIO: 'folders and files, but won\'t actually write any code. For that, we\'ll use two different sub aents, a front-end developer and a backend developer sub aent that will actually then write the code for our app. And here\'s where we\'ll'
+
+[01:30] [scene:talk]
+VISUAL:
+AUDIO: 'see how you can run multiple agents in parallel. So, we can have agents working on the front end and the back end at the same time. And finally, we\'ll ensure the quality of our code by creating a QA sub aent to ensure that our code is safe and'
+
+[01:42] [scene:talk]
+VISUAL:
+AUDIO: 'performant. That\'s the plan. So without further ado, let\'s get started with our planner sub agent. So this is the prompt that I\'m going to be using for this agent. And the big thing to note here is'
+
+[01:54] [scene:talk]
+VISUAL:
+AUDIO: 'that I\'m specifically saying create a sub aent according to this description. And doing this ensures that goose is going to create a sub aent as opposed to just running this task in this session. And then I\'m just describing what the'
+
+[02:08] [scene:talk]
+VISUAL:
+AUDIO: 'planner agent does. So we\'re going to be building out an app called AI brief me. It\'s going to return this information and we want to write a plan.mmd file that just outlines the goals, the features and any helpful design'
+
+[02:20] [scene:talk]
+VISUAL:
+AUDIO: 'considerations. So you can see here that when I run this prompt, goose is going to create a sub agent and create a task for the agent. You can see that the instructions field is the instruction that I just gave the agent. And just'
+
+[02:33] [scene:talk]
+VISUAL:
+AUDIO: 'below that, you\'ll see now the task is being executed. Once the sub agent is done running, it will then give us back the results. And it looks like the agent created our plan.mmd file. Now, you may be looking at this and thinking, well,'
+
+[02:46] [scene:talk]
+VISUAL:
+AUDIO: 'that\'s cool and all, but why didn\'t we just run this in the main session? Why did we spin up an entire sub aent? The reason is because we\'re going to be using this main session for a bunch of different tasks. So, creating different'
+
+[02:59] [scene:talk]
+VISUAL:
+AUDIO: 'sub aents keeps our main session clean and directed. So, that\'s one way to spin up a sub aent, doing this ad hoc on the-ly kind of thing right in our session. But if you have similar kinds of tasks that you find yourself doing'
+
+[03:13] [scene:talk]
+VISUAL:
+AUDIO: 'repeatedly, you\'re probably going to want to have a reusable sub aent that you can reach for again and again every time you\'re doing this common task. And when it comes to creating reusable workflows in Goose, you\'re going to want'
+
+[03:25] [scene:talk]
+VISUAL:
+AUDIO: 'to use recipes. So what I\'ve done is I\'ve gone ahead and created this project manager recipe. And what this does is it accepts a plan MD file which our planner agent created. And based on that plan,'
+
+[03:38] [scene:talk]
+VISUAL:
+AUDIO: 'it\'s going to break down the work into different tasks for each of the sub aents that we plan on using. And then it\'ll output that task breakdown into a project board.mmd file. So because I have this recipe, I\'m able to go back to'
+
+[03:52] [scene:talk]
+VISUAL:
+AUDIO: 'our session and say that I want to use the project manager recipe as a sub aent and also just make sure that I indicate where that recipe is stored. If you create your recipe in the desktop app, your recipe is going to be stored at'
+
+[04:05] [scene:talk]
+VISUAL:
+AUDIO: 'do.config/goose config /goose/re recipes. And when I run that, I can see that again goose is using the sub aents functionality to create and execute the task. And once it\'s all done, I\'ll see that our project breakdown has now been'
+
+[04:18] [scene:talk]
+VISUAL:
+AUDIO: 'created. Amazing. So now I\'m quickly going to spin up another sub aent. This one is going to be our architect agent. And I\'m going to create this one the same way I created our first agent, just using that'
+
+[04:31] [scene:talk]
+VISUAL:
+AUDIO: 'language. Create a sub aent according to this description. And again, this architect agent is going to build out the scaffolding of our app by generating the folder structure and placeholder files. Things like our package JSON and'
+
+[04:43] [scene:talk]
+VISUAL:
+AUDIO: 'git ignore. One thing you\'ll notice here too is that we\'ve only used 6% of our context window at this point. That\'s because each of our sub aents have their own context'
+
+[04:56] [scene:talk]
+VISUAL:
+AUDIO: 'window, which means our main agent doesn\'t get filled up with unnecessary context. Okay, so now that we have our project set up, we can get into what I think is one of the coolest things about'
+
+[05:08] [scene:talk]
+VISUAL:
+AUDIO: 'sub aents. And that\'s the fact that you can run multiple sub aents in parallel. And again, you can just do this with natural language. So I\'m going to tell goose to use parallel execution to run two sub aents, a back-end developer and'
+
+[05:21] [scene:talk]
+VISUAL:
+AUDIO: 'a front-end developer. I explain what each agent should do. And just to be safe, I also put this note at the end to make sure that these agents don\'t work on the same files. So that way they'
+
+[05:33] [scene:talk]
+VISUAL:
+AUDIO: 'don\'t interfere with each other. And when we run this and take a look at the tool details, you can see that there are now two tasks and the execution mode is parallel instead of sequential. Once our sub aents finish, we have our'
+
+[05:46] [scene:talk]
+VISUAL:
+AUDIO: 'working app. So I can type in something like sub aents and get back a little briefing. This is awesome. And while our app does seem to work, we haven\'t looked at any of the code yet. So, I want to'
+
+[05:59] [scene:talk]
+VISUAL:
+AUDIO: 'create one more agent to do a little quality assurance. We\'ll run this agent just like the earlier ones and ask it to run a full analysis on our code so we can see any areas that will need our'
+
+[06:11] [scene:talk]
+VISUAL:
+AUDIO: 'attention. Once it\'s finished, we can see that our app is in fact not production ready. But now we have a comprehensive document detailing all of the issues that we need to address. Of course, there is a lot to sub agents and'
+
+[06:25] [scene:talk]
+VISUAL:
+AUDIO: 'a lot of different things that you can do with them. You can create a sub aent for just about anything, but now having gone through this process, you know how to create and run sub aents in multiple different ways depending on the use'
+
+[06:38] [scene:talk]
+VISUAL:
+AUDIO: 'case. So, at this point, I encourage you to start creating your own sub aents. See all of the ways that you can improve your AI development process. In the meantime, I think I\'m going to go fix some of those issues that my QA agent'
+
+[06:50] [scene:talk]
+VISUAL:
+AUDIO: 'identified.'

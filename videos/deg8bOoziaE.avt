@@ -1,0 +1,179 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: This video was made with code. But how?
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=deg8bOoziaE
+upload_date: 20220304
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'today\'s video is made different i threw away all my fancy editing tools like adobe premiere and after effects and instead did all the editing with javascript code thanks to a tool called remotion which allows you to create video content programmatically with react when you think about it a video is'
+
+[00:13] [scene:talk]
+VISUAL:
+AUDIO: 'just a function of images over time every second we might render 60 still images or frames each one changing slightly to create an animation react is a great tool for describing uis that change over time so why not use it to'
+
+[00:26] [scene:talk]
+VISUAL:
+AUDIO: 'describe video content as well that\'s the idea behind remotion which opens the door for web developers to storify their data for example you might use a weather api to fetch the local weather forecast then use remotion to animate a video out'
+
+[00:38] [scene:talk]
+VISUAL:
+AUDIO: 'of that data if it\'s raining show some raindrops if it\'s cloudy make some clouds float by and if there\'s a tornado show the entire town being destroyed by the end of this tutorial you\'ll know how to create your own custom data driven videos from scratch using nothing but'
+
+[00:51] [scene:talk]
+VISUAL:
+AUDIO: 'javascript and remotion if you\'re new here like and subscribe and check out the full source code on github before we jump into the code for this project i want to give a huge shout out to william candione he put together the code for this video and has an awesome youtube'
+
+[01:03] [scene:talk]
+VISUAL:
+AUDIO: 'channel that you should definitely be subscribed to and respect to johnny burger the creator of remotion this tutorial is unlike anything else out there and by the end of it you\'ll be able to add video editor to your resume and you might be surprised at how easy'
+
+[01:15] [scene:talk]
+VISUAL:
+AUDIO: 'it really is to create videos with react once you understand the fundamentals of video animation if you go to github and clone the project it\'ll pull up a browser window that allows you to scrub through the entire timeline of the intro that you just watched and you can modify'
+
+[01:27] [scene:talk]
+VISUAL:
+AUDIO: 'it using html css and javascript what i\'m going to show you in this video is how to recreate the weather scene from scratch to follow along and create your own video right now run npm init video from the terminal to initialize remotion'
+
+[01:40] [scene:talk]
+VISUAL:
+AUDIO: 'it provides a variety of different templates to start with my goal is to show you the basic step by step so i\'m going to choose a blank typescript template the first place we\'ll go is the video.tsx file which contains a remotion video component think of this component'
+
+[01:53] [scene:talk]
+VISUAL:
+AUDIO: 'as your entire video now a video is made up of one or more compositions remotion allows you to visualize these compositions in the browser by running npm start you\'ll notice in the full project that we have a bunch of'
+
+[02:05] [scene:talk]
+VISUAL:
+AUDIO: 'different compositions here on the sidebar these are like their own little mini videos that allow you to isolate and inspect each scene in the video now back in the code you\'ll notice a composition has a variety of different props it has an id to identify it in the'
+
+[02:18] [scene:talk]
+VISUAL:
+AUDIO: 'video player but more importantly it references a react component that contains the actual ui that you want to show before we get to that point though we\'ll need to determine the resolution for the video which i\'m setting to 1080 by 1920 to give us a portrait and also'
+
+[02:31] [scene:talk]
+VISUAL:
+AUDIO: 'the duration the duration is the number of frames that will be rendered for the scene a frame is basically just a still image at a given point in the video now the actual length in seconds will be based on the frames per second if we do'
+
+[02:44] [scene:talk]
+VISUAL:
+AUDIO: '120 frames at 30 fps that will give us a video length of 4 seconds now let\'s go ahead and shift our attention over to the composition file this is where we\'ll define the actual graphics for our video inside the component we have a div with'
+
+[02:57] [scene:talk]
+VISUAL:
+AUDIO: 'the text of hello world now we can style it with css using inline styles here using inline styles allows us to modify them programmatically now if you open the video player you should see a 4 second long scene that says hello world'
+
+[03:09] [scene:talk]
+VISUAL:
+AUDIO: 'that\'s pretty cool but also extremely boring how do we make the video do something cool remotion provides a variety of different hooks to provide data about the video with use video config we can grab data about the fps duration and resolution and we can use'
+
+[03:23] [scene:talk]
+VISUAL:
+AUDIO: 'that data to calculate values for our animations or as i\'m doing here display it directly in the video content but more importantly for animation the use current frame hook will give us the current frame in the timeline remember'
+
+[03:35] [scene:talk]
+VISUAL:
+AUDIO: 'this react component will be re-rendered for each frame in the video we can use the current frame to calculate a slight difference between each frame to create an animation here\'s an example of how you might create a fade animation let\'s define a variable for opacity as the'
+
+[03:48] [scene:talk]
+VISUAL:
+AUDIO: 'current frame divided by the total duration in frames that\'ll give us an opacity that starts at 0 and gradually increases to 1 over the duration of the video now we can use it as the opacity value in the css and the end result is a'
+
+[04:00] [scene:talk]
+VISUAL:
+AUDIO: 'linear fade in animation when we preview it in the browser pretty simple but remotion has a bunch of other powerful features baked into it what i want to do next is integrate an svg graphic into the composition i\'m creating a new'
+
+[04:13] [scene:talk]
+VISUAL:
+AUDIO: 'component that will be a map of france and in the jsx i\'m simply pasting an svg graphic that i found on the internet the cool thing about svg is that we can use and modify its source code directly inside our javascript unlike a png or'
+
+[04:25] [scene:talk]
+VISUAL:
+AUDIO: 'jpeg file you can find the svg code on github or experiment with one of your own svg graphics now to make our lives easier remotion provides a bunch of different helper components and functions one of which is absolute fill'
+
+[04:37] [scene:talk]
+VISUAL:
+AUDIO: 'this component will absolutely position the child so you don\'t have to manually configure all the css properties now i am going to add some additional alignment and padding to position it right in the center and then we can simply import this component into our'
+
+[04:49] [scene:talk]
+VISUAL:
+AUDIO: 'composition and declare it there that graphic should now appear in the video that\'s pretty cool but now let\'s take things a step further and do some actual svg animation you\'ll notice in the full demo that a bunch of raindrops randomly animate in from top to bottom this'
+
+[05:02] [scene:talk]
+VISUAL:
+AUDIO: 'effect is accomplished with a single raindrop svg let\'s first create a new component called raindrop inside of it i\'m adding an svg graphic of a single raindrop to the jsx the svg will have a variety of dynamic styles we can use'
+
+[05:15] [scene:talk]
+VISUAL:
+AUDIO: 'transform to give each raindrop a slightly different size but more importantly we\'ll animate the absolute position of it like left and top to move it from top to bottom but the real question here is where do these values'
+
+[05:27] [scene:talk]
+VISUAL:
+AUDIO: 'come from some of them will come in from the parent via props like the delay x position and size we will randomize these values in the next step the tricky part is making a raindrop go from top to bottom for that we\'ll need to'
+
+[05:39] [scene:talk]
+VISUAL:
+AUDIO: 'interpolate the top position that sounds like it might require some fancy math luckily remotion has our back here with an interpolate helper function in our case we provide it with the frame minus the delay then an input range and output range the output range is the actual top'
+
+[05:52] [scene:talk]
+VISUAL:
+AUDIO: 'position which will start off the screen at 0.2 on the y-axis and then animate to the bottom off the screen at 1.1 on the y-axis that\'ll get the job done but we can make our animation even more'
+
+[06:04] [scene:talk]
+VISUAL:
+AUDIO: 'realistic by making it kind of bouncy and gooey because remotion also has a primitive called spring to add spring physics to your animations to use it we\'ll create a variable called drop that calls the spring function it takes the frames per second as well as the frame'
+
+[06:17] [scene:talk]
+VISUAL:
+AUDIO: 'minus delay as arguments and you can customize the springiness with damping and stiffness using that as the interpolate input will give us a more interesting effect that takes care of one raindrop now the question becomes how do we randomly animate hundreds or'
+
+[06:30] [scene:talk]
+VISUAL:
+AUDIO: 'millions of raindrops at the same time to handle that we\'ll create another component called rain inside of it we\'ll start by defining a variable called drops that contains 300 true values in it each value represents one raindrop'
+
+[06:42] [scene:talk]
+VISUAL:
+AUDIO: 'what we want to do is randomize the x position delay and size of each raindrop let\'s map each value in the array to an object of those values and once again remotion helps us out here by providing'
+
+[06:54] [scene:talk]
+VISUAL:
+AUDIO: 'a random helper that can generate random values with a seed which means you\'ll get the same random value given the same seed that takes care of the randomization now one extra step we\'ll want to take here is to wrap this function in use memo with react and pass'
+
+[07:07] [scene:talk]
+VISUAL:
+AUDIO: 'it an empty array as the dependency because we only want to run this function once when that component is first initialized remember it will re-render for every frame in the video and we don\'t need to recalculate on every frame now in the jsx we\'ll use the'
+
+[07:19] [scene:talk]
+VISUAL:
+AUDIO: 'absolute fill component and then map over the raindrop array to display each individual range drop and pass at the required props and that\'s all it takes to make it rain let\'s go ahead and take the rain component and declare it in our'
+
+[07:32] [scene:talk]
+VISUAL:
+AUDIO: 'composition and then preview it in the browser that should give you an end result that looks something like this that\'s pretty awesome but in the full demo we have additional weather animations like clouds and tornadoes and they\'re rendered conditionally based on'
+
+[07:44] [scene:talk]
+VISUAL:
+AUDIO: 'actual weather data that comes from an api that\'s pretty cool but now let\'s render it to a real mp4 video that we can upload to tiktok or youtube you\'ll first need to have ffmpeg installed on your system from there if you go into'
+
+[07:57] [scene:talk]
+VISUAL:
+AUDIO: 'the package.json file you\'ll notice a build script it contains the input and output files as well as the id of your composition you\'ll want to make sure that matches whatever composition id you\'ve chosen now go ahead and run npm run build from the terminal and it will'
+
+[08:10] [scene:talk]
+VISUAL:
+AUDIO: 'render out your code to the out directory as an np4 file congratulations you just made a video with react what i find so cool about this is that it provides a really nice way to generate videos programmatically based on some kind of underlying data source my plan'
+
+[08:23] [scene:talk]
+VISUAL:
+AUDIO: 'is to connect it to gpthree along with the giphy sdk to automatically write produce and edit all my future youtube videos i\'m going to go ahead and wrap things up there and give remotion a star on github and let\'s see if we can get them past 10k thanks for watching and i'
+
+[08:36] [scene:talk]
+VISUAL:
+AUDIO: 'will see you in the next one'

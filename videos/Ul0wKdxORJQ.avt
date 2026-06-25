@@ -1,0 +1,223 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Fish Audio S2 Pro — Install Locally & Voice Clone with Emotion Control in 80+ Languages
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=Ul0wKdxORJQ
+upload_date: 20260310
+transcript_source: captions
+route: text
+
+---
+
+[00:02] [scene:talk]
+VISUAL:
+AUDIO: 'You know, if this video made you see something differently today, then do something about it. Like this video. Subscribe to Fahad\'s channel. Become a member.'
+
+[00:14] [scene:talk]
+VISUAL:
+AUDIO: 'And let\'s be honest, the people who stick around, they always get the best of what\'s coming next. Think of it like a slow burn. The kind that gets better the longer you stay.'
+
+[00:27] [scene:talk]
+VISUAL:
+AUDIO: 'This is Fish Audio S2 Pro for you. The model which we are going to install locally today and we are going to test it out. This is Fahad Mirza and I welcome you to the channel. Please also follow me on X.'
+
+[00:40] [scene:talk]
+VISUAL:
+AUDIO: 'Before we start getting it installed, you can see that we have been covering this Fish Audio model for quite some time. They\'re improving, but I believe their previous few models were not'
+
+[00:53] [scene:talk]
+VISUAL:
+AUDIO: 'really up to the mark, but this model seems bit better as far as the benchmarks are concerned and what they are mentioning on their repo. And I will drop the link to it in videos description. It is also open sourced and'
+
+[01:06] [scene:talk]
+VISUAL:
+AUDIO: 'present on Hugging Face and you can check it out. License is not Apache 2 or MIT, so it doesn\'t seem like it is free for commercial use, but you can check the licensing'
+
+[01:18] [scene:talk]
+VISUAL:
+AUDIO: 'for your own use case. So, what exactly is this model? Look, text-to-speech has always had one problem. It sounds flat. You cannot tell it\'s a machine or human. Fish Audio S2'
+
+[01:30] [scene:talk]
+VISUAL:
+AUDIO: 'Pro is trying to change that. It\'s an open weight TTS model trained on 10 million hours of audio across 80 languages and it lets you control'
+
+[01:42] [scene:talk]
+VISUAL:
+AUDIO: 'exactly how the voice sounds by embedding tags directly in your text. Let\'s say you write whisper and it whispers, just as I showed you in that example. And then there are various'
+
+[01:54] [scene:talk]
+VISUAL:
+AUDIO: 'other tags which I will also show you. There are 15,000 tags which are supported. Uh everything from laughing to professional broadcast tone to completely custom descriptions you can even make up yourself.'
+
+[02:08] [scene:talk]
+VISUAL:
+AUDIO: 'I will be talking more around its architecture, but for now let\'s get the ball rolling and get it installed. I\'m going to use this Ubuntu system. I have one GPU card in video RTX 6000 with'
+
+[02:20] [scene:talk]
+VISUAL:
+AUDIO: '48 GB of V RAM. If you\'re looking to rent a GPU on very good price, you can find the link to mass compute in videos\' description with a discount coupon code of 50% for range of GPUs.'
+
+[02:34] [scene:talk]
+VISUAL:
+AUDIO: 'I\'m going to create a virtual environment first. And now let\'s get clone the repo of fish speech. And now we can install everything from the root of the repo.'
+
+[02:47] [scene:talk]
+VISUAL:
+AUDIO: 'Now this is going to take couple of minutes. While that happens, let\'s talk more around the architecture of this model. Let me try to explain it in very simple words. Under the hood, as you can see, it runs'
+
+[03:00] [scene:talk]
+VISUAL:
+AUDIO: 'a dual model architecture. First, a large 4 billion parameter model which handles timing and meaning or prosody. A small 400 million parameter fills in the acoustic detail. Together, they'
+
+[03:13] [scene:talk]
+VISUAL:
+AUDIO: 'produce high quality audio fast. Around 100 ms to first audio output. The inference engine is built on SG lang, which is the same serving used for LLMs, and we have covered that on the channel'
+
+[03:27] [scene:talk]
+VISUAL:
+AUDIO: 'a lot. So, it is production ready out of the box as far as I can see the way they are um building it and encapsulating it in one go.'
+
+[03:40] [scene:talk]
+VISUAL:
+AUDIO: 'Also, you can see that they are using this dual auto regressive AR architecture on top of RVQ audio codec with 10 code books at 21 hertz. So, two model are working in tandem. So,'
+
+[03:52] [scene:talk]
+VISUAL:
+AUDIO: 'hopefully that makes sense now the architecture. And everything is now installed. Next step is to download the model. You can simply do HF auth login'
+
+[04:04] [scene:talk]
+VISUAL:
+AUDIO: 'to login to Hugging Face. It is going to ask you for your pre-read token from Hugging Face profile. And then you can download the model after logging in by simply this command.'
+
+[04:16] [scene:talk]
+VISUAL:
+AUDIO: 'There are two shards of the model. It\'s not a very huge model around 9 gig of size. And the model is downloaded. Let me now show you the inference. The web UI is'
+
+[04:29] [scene:talk]
+VISUAL:
+AUDIO: 'still not working locally. I have tested it. So, let me show you a CLI example. For the CLI, it is bit cumbersome and hopefully Fish Speech is going to'
+
+[04:41] [scene:talk]
+VISUAL:
+AUDIO: 'improve that. There are three steps which we need to do. So, what I\'m going to do here, I\'m doing the TTS with voice cloning. I\'m calling one of their inference script which they have provided in their repo. I\'m providing it a reference audio'
+
+[04:53] [scene:talk]
+VISUAL:
+AUDIO: 'which I want to clone. And then these are the checkpoints of the model. So, let me run this. So, what this step is doing primarily, it is taking the'
+
+[05:06] [scene:talk]
+VISUAL:
+AUDIO: 'reference audio file and compressing it into .npy file called as ref voice. Uh you can think of it like fingerprinting the voice. The model breaks the audio down into numbers. Sorry, I just need to give it path'
+
+[05:20] [scene:talk]
+VISUAL:
+AUDIO: 'shortly, but let me explain it. So, the model breaks the audio down into numbers which are tokens that represent the unique characteristic of that voice, the tone, accent, and texture. Let me give it the correct command. The'
+
+[05:34] [scene:talk]
+VISUAL:
+AUDIO: 'difference is just in the output path parameter. You see, I had to use the output path. And let\'s wait for it to finish and then we will move on to the second step. I will let it run so that you would also'
+
+[05:48] [scene:talk]
+VISUAL:
+AUDIO: 'see how long does it take. You can ignore this warning, too. It is just going to generate that tokens, as I said earlier. And model is loaded.'
+
+[06:01] [scene:talk]
+VISUAL:
+AUDIO: 'I\'m sorry, let me I\'m still doing lot of typos. And this time it has worked. Let me quickly show you the commands which I have used. So, simply I have removed that output path uh and then checkpoint'
+
+[06:14] [scene:talk]
+VISUAL:
+AUDIO: 'path. That works. It has generated that token, and this is just a name I have given it, and this is how long did it take. The model is now loaded. I will also show you the VRAM'
+
+[06:27] [scene:talk]
+VISUAL:
+AUDIO: 'consumption. Now, if you look at this next step on the screen, this is the step where we are providing it the reference text. So, this is taking the text plus that voice fingerprint which we generated in the'
+
+[06:40] [scene:talk]
+VISUAL:
+AUDIO: 'first step, and then it generates something called as semantic tokens. These are not audio yet, just a numerical blueprint of what the speech should sound like. Uh it is like the model writing sheet music. It knows what'
+
+[06:53] [scene:talk]
+VISUAL:
+AUDIO: 'words to say in what emotion, in whose voice, but hasn\'t actually sung it yet. And this takes bit of a time. So, let\'s wait for it to initialize. And now it is generating those semantic'
+
+[07:08] [scene:talk]
+VISUAL:
+AUDIO: 'tokens. You can see it is taking over 3 to 4 minutes. So, let\'s wait for it. Let me also show you the VRAM consumption. So, it is consuming close to 17 gig of'
+
+[07:21] [scene:talk]
+VISUAL:
+AUDIO: 'VRAM. So, make sure that you have that much. And now we can convert these tokens into audio in the last step by adding this command. Where you can see I\'m providing'
+
+[07:34] [scene:talk]
+VISUAL:
+AUDIO: 'this code underscore zero, which was the output of the previous step. Of course, you can script it and it in one script, and then run it. It has saved the file. Let me show you the result. I will play it in the'
+
+[07:47] [scene:talk]
+VISUAL:
+AUDIO: 'browser. So, this is again the original. Let me play the original again. Happiness is a fleeting feeling that can be found in life\'s simplest moments. Let me play the result.'
+
+[07:59] [scene:talk]
+VISUAL:
+AUDIO: 'Welcome to my channel. Today, we are testing Fish Audio S2 Pro, and it sounds incredible. This is really good. And this is the script which I was'
+
+[08:13] [scene:talk]
+VISUAL:
+AUDIO: 'talking about. I have just written it, just to make sure that all the steps are in one go. So, for example, if there is a German um one I want to do, let\'s say I just want to replace it to German.'
+
+[08:26] [scene:talk]
+VISUAL:
+AUDIO: 'And then this is a German text, and text to speak. And these are all the steps which I have put it in um my bash script, which you can run locally from your system.'
+
+[08:38] [scene:talk]
+VISUAL:
+AUDIO: 'So, let\'s say if I run this from here, it is going to extract the voice tokens. It is going to generate the semantic tokens, and then it is going to do the audio. So, I\'ll quickly generate it, and then I'
+
+[08:50] [scene:talk]
+VISUAL:
+AUDIO: 'will show you. And so far, I have two thoughts on this model. First, the voice cloning quality is very high, very very high. They have improved a lot in terms of that, even'
+
+[09:02] [scene:talk]
+VISUAL:
+AUDIO: 'matching 11 Labs, I would say. Because that is sort of a de facto standard these days. But it takes long time um to generate the audio. Plus,'
+
+[09:14] [scene:talk]
+VISUAL:
+AUDIO: 'the expressions like laughing, uh whispering, sometime it it does it, but sometime it just totally misses them, like pauses and that sort of stuff. Anyway, I think they are still releasing'
+
+[09:26] [scene:talk]
+VISUAL:
+AUDIO: 'it very early days. Hopefully, they are going to improve that. Should be fun then. Also, the multilinguality is a shaky, especially the local version. If you go to their um'
+
+[09:39] [scene:talk]
+VISUAL:
+AUDIO: 'hosted version, which I also showed you earlier, there they have only three languages at the moment, Korean, Chinese, and English. Let me play that German one. Let me'
+
+[09:51] [scene:talk]
+VISUAL:
+AUDIO: 'first play the original. Now, let me play the output. You see?'
+
+[10:11] [scene:talk]
+VISUAL:
+AUDIO: 'So, this is really good in terms of um I would say voice cloning, but some of the expressions it simply misses. And finally, I\'m doing this Arabic one, where you see we have excited, we have'
+
+[10:25] [scene:talk]
+VISUAL:
+AUDIO: 'pause, same as um some of the other ones. So, let\'s see if it is able to do that. I\'m already generating it with the script. Let\'s wait for it to finish, and I will'
+
+[10:37] [scene:talk]
+VISUAL:
+AUDIO: 'play it. Meanwhile, please follow me on X if you\'re looking for AI updates without any hype. And now, let me play the Arabic one. Let me first play the original.'
+
+[10:50] [scene:talk]
+VISUAL:
+AUDIO: 'Let me play the output. So, see? It tries on whispering a bit,'
+
+[11:08] [scene:talk]
+VISUAL:
+AUDIO: 'but then it just doesn\'t really go there. Anyway, let me know your thoughts on S2 Pro. I will be doing maybe one more video on multi-linguality, and we will also check out the custom expressions,'
+
+[11:21] [scene:talk]
+VISUAL:
+AUDIO: 'but I think they can improve that area a bit more. That\'s it. Please uh like the video and subscribe, and consider becoming a member. Thank you for all the support.'

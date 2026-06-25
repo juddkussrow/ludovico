@@ -1,0 +1,127 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Grafana is the goat... Let's deploy the LGTM stack
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=1X3dV3D5EJg
+upload_date: 20250201
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'if Builders built houses the way programmers build software the first woodpecker to come along would destroy civilization it\'s true because when an experienced programmer sees a bug they typically feel nothing and do nothing because fixing it will just create five more bugs unfortunately not all bugs can'
+
+[00:12] [scene:talk]
+VISUAL:
+AUDIO: 'be ignored like when the oxygen tank for Apollo 13 exploded or when your production servers go down and cost your company money today\'s video might change your life because you\'ll learn how to instrument collect and visualize Telemetry data from your server thanks'
+
+[00:25] [scene:talk]
+VISUAL:
+AUDIO: 'to the magic of open Telemetry and the LG TM stack not only will this help you visualize and detect anomalies in your software if you self-host on your own VPS but most importantly these beautiful data visualizations will make your boss'
+
+[00:37] [scene:talk]
+VISUAL:
+AUDIO: 'think you\'re highly productive to get started there are five Technologies we need to learn open Telemetry graphon Prometheus Tempo and Loki it sounds intimidating but it\'s easier than you think let\'s put 60 seconds on the clock'
+
+[00:49] [scene:talk]
+VISUAL:
+AUDIO: 'to learn them open Telemetry is an industry standard framework that collects Telemetry data from software things like metrics logs and traces while being vendor agnostic so it works with any programming language but to use'
+
+[01:01] [scene:talk]
+VISUAL:
+AUDIO: 'it you need a backend to store and visualize the data and that\'s where lgtm comes in G is for graphon and it\'s the front end UI where you can visualize your data you can also set up alerts create dashboards and waste thousands of hours here then P is for Prometheus and'
+
+[01:14] [scene:talk]
+VISUAL:
+AUDIO: 'it\'s a Time series database for storing metrics T is for Tempo and it\'s a database for storing traces while L is for Loki a database for storing logs metrics traces and logs are the Holy Trinity of software observability a'
+
+[01:27] [scene:talk]
+VISUAL:
+AUDIO: 'metric consists of multiple data points over time like CPU usage a trace tracks the flow of requests across multiple services to pinpoint bottlenecks and of course logs are logs collectively this forms the otel lgtm stack where data is'
+
+[01:40] [scene:talk]
+VISUAL:
+AUDIO: 'collected with open Telemetry stored in these databases and visualized with grafana if that all sounds complicated don\'t worry I thought I was too stupid to host something like this myself but over the next few minutes we\'ll have our own Telemetry framework up and running'
+
+[01:53] [scene:talk]
+VISUAL:
+AUDIO: 'like a true professional the first thing we\'ll need is a server and today we\'ll be using hostinger the sponsor of today\'s video they provide a wide range of Hosting services and in our case a Linux virtual private server that\'s perfect for this project and currently'
+
+[02:05] [scene:talk]
+VISUAL:
+AUDIO: 'they\'re running their biggest sale of the year which will last until the 15th of February the KVM 2 plan that I\'m using here today is available at $5.99 per month for 24 months a massive discount of 67% and an incredible price'
+
+[02:17] [scene:talk]
+VISUAL:
+AUDIO: 'for the amount of horsepower you get two CPUs and 8 GB of RAM on top of that fireship viewers get an additional 10% off using the discount code fireship but now that we know where to get a server we need to deploy the lgtm back end'
+
+[02:29] [scene:talk]
+VISUAL:
+AUDIO: 'luckily we won\'t have to install every component individually and instead can use this Docker image provided by graphon if you\'re not already familiar with Docker check out this video but you don\'t have to be an expert because we can spin up a server on hostinger with'
+
+[02:41] [scene:talk]
+VISUAL:
+AUDIO: 'Docker pre-installed it\'ll first bring you to a setup page that looks like this in fact now that we\'re on this page you\'ll notice how we can self-host almost anything here like WordPress coolify super base a plain Linux server or in our case we\'ll go with the Bas'
+
+[02:54] [scene:talk]
+VISUAL:
+AUDIO: 'Docker server which itself is just Ubuntu with docker pre-install after we go ahead and set that up we\'ll have the option to set up SSH Keys which I would highly recommend doing but for now all you really need is a password for the root Linux user now once the server is'
+
+[03:07] [scene:talk]
+VISUAL:
+AUDIO: 'up and running we can go to the management dashboard and you\'ll find instructions on how to connect with SSH or a secure shell you go ahead and copy your IP address then open up the terminal and run SSH root which is the user at that IP and now we have admin'
+
+[03:21] [scene:talk]
+VISUAL:
+AUDIO: 'access to the main frame of our hosting your server at this point we can run the docker command to verify that the docker demon is and well looks good now let\'s go ahead and run the docker image for otel lgtm on the first run that\'ll take'
+
+[03:33] [scene:talk]
+VISUAL:
+AUDIO: 'a minute to pull the docker image from the cloud but eventually you should have grafana running on Local Host Now open up the browser and go to your IP address on Port 3000 and you should be able to log into grafana as admin congratulations you\'re now running the'
+
+[03:46] [scene:talk]
+VISUAL:
+AUDIO: 'lgtm stack everything looks good to me but one disclaimer is that this Docker image is not intended for production but it is a great way to learn and experiment with these Technologies but grafana on its own is useless unless you have it connected to a data source as'
+
+[03:59] [scene:talk]
+VISUAL:
+AUDIO: 'you can see under connections there\'s all kinds of different ways we can connect data in the cloud but in this case we already have connections for Loki Prometheus and Tempo we just need to populate them with some data the best way to do that is to run an application'
+
+[04:11] [scene:talk]
+VISUAL:
+AUDIO: 'with your favorite language and framework for me recently that\'s been Dino to run typescript on the server the fireship pro members have a full course for that as well but one feature you may not know about is it\'s built-in Telemetry support if you build a server with Dino it\'ll automatically run traces'
+
+[04:24] [scene:talk]
+VISUAL:
+AUDIO: 'on your server and will also collect all the console logs you forgot to remove remove from your code but in addition to that you can also create your own custom traces and metrics like maybe I want to create a metric in Prometheus that tracks the average request time well I'
+
+[04:36] [scene:talk]
+VISUAL:
+AUDIO: 'can do that with open Telemetry by creating a meter then I can send data to that meter for whatever code handles a request or it could Define a tracer to track the life cycle of a function like in this case I\'m creating a span that wraps a database query which would allow'
+
+[04:49] [scene:talk]
+VISUAL:
+AUDIO: 'us to keep track of errors and other anomalies pretty cool but now it\'s time to run this Dino app on my server I have Dino installed here already is so I just run the Dino Run command on this file and now I can access this web application on our IP address at Port'
+
+[05:01] [scene:talk]
+VISUAL:
+AUDIO: '8000 and you\'ll see that usually we get a successful request but every once in a while we get an error without Telemetry we\'d have to wait for our users to send us angry emails and then dig through our server logs to find the error but now thanks to the lgtm stack we can just go'
+
+[05:14] [scene:talk]
+VISUAL:
+AUDIO: 'straight into grafana and analyze everything there let\'s click on explore and first check out the logs the data source here is Loki and you\'ll notice that we have a large number of error logs we can then filter them and start to figure out where they\'re coming from'
+
+[05:27] [scene:talk]
+VISUAL:
+AUDIO: 'if we go to we can see all kinds of data automatically being collected for Prometheus and Prometheus has its own query language that we can use as well and then finally we can go to Tempo to look at traces which provides a node graph and histogram for the performance'
+
+[05:39] [scene:talk]
+VISUAL:
+AUDIO: 'on our server and that\'s really just the tip of the iceberg when deploying a Telemetry back end you also need to think about security but luckily since we deployed to hostinger their Vanguard dos filtering and firewall config will help guard against harmful traffic and'
+
+[05:51] [scene:talk]
+VISUAL:
+AUDIO: 'threats let me know if you want to see more tutorials like this thanks for watching and I will see you in the next one'

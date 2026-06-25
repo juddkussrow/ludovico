@@ -1,0 +1,291 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Stop Animating, Start Transferring Motion: SCAIL 2 ComfyUI Guide
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=dzS_Yj_2uLE
+upload_date: 20260621
+transcript_source: captions
+route: text
+
+---
+
+[00:03] [scene:talk]
+VISUAL:
+AUDIO: 'take a still image and have it follow the motion of another video. That sounds pretty cool, right? Well, that\'s what scale two is doing. Real simple. You take a picture of this beautiful face and then you take a picture of someone doing the dance moves and then this'
+
+[00:16] [scene:talk]
+VISUAL:
+AUDIO: 'beautiful person here is doing all of the dance moves. With just a little bit of pre-processing work, which I\'m going to walk you through here on how to do it, you can be making some pretty fulfilling videos here even with lower'
+
+[00:28] [scene:talk]
+VISUAL:
+AUDIO: 'VRAM. So, let\'s get down to scale two just now. Hell. If you do a Google search for scale two GitHub, you\'re going to come over to'
+
+[00:40] [scene:talk]
+VISUAL:
+AUDIO: 'this page where you\'re going to see they have put up the unifying controlled character animation with end-to-end con- context conditioning. That\'s just a big way of saying'
+
+[00:52] [scene:talk]
+VISUAL:
+AUDIO: 'that you\'re forcing animation onto a reference image. So, you\'re taking the video from one and using it with a still image of another. The reason that we\'re coming up with these big names like this is because things like face swap,'
+
+[01:05] [scene:talk]
+VISUAL:
+AUDIO: 'likeness, all this sort of thing. These are just terms people don\'t want to hear anymore. The business doesn\'t. So, it\'s just a large way of just saying character likeness or transferring the image over. All right.'
+
+[01:18] [scene:talk]
+VISUAL:
+AUDIO: 'Well, welcome to Get Going Fast. I\'m Gary the AI Hobby Guy and I might be coming to visit you one of these days. Wouldn\'t that be cool? I\'ll come and see what you\'re working on in your projects. Today, my goal is going to be getting'
+
+[01:32] [scene:talk]
+VISUAL:
+AUDIO: 'you guys working with the scale two workflows so that you can start to do stuff like this. And for those with lower VRAMs, you\'re going to be able to do stuff like this here. Do do do do. So, this is actually one of these models'
+
+[01:48] [scene:talk]
+VISUAL:
+AUDIO: 'that um regarding where you\'re at, regardless where you\'re at, you\'re going to be able to engage with this, which is very cool. So, we have actually put over at uh, here at get going fast.pro,'
+
+[02:01] [scene:talk]
+VISUAL:
+AUDIO: 'a model manager that uh, works with the quants. So, you can get over there, grab whatever you want. This does work with comfy UI. You just get over here and notice you can just if you\'re a member'
+
+[02:13] [scene:talk]
+VISUAL:
+AUDIO: 'you can just download it now and we even have the install with AI for our members so that if you\'re running a local agent, you can just throw in the instructions and we\'ve given it some boundaries to make sure it doesn\'t properly and is communicating well with you and get that'
+
+[02:25] [scene:talk]
+VISUAL:
+AUDIO: 'going in your comfy UI. Um, so so for those of you asking what a quant is, uh, a quant is essentially when you take a model, let\'s say you got a model'
+
+[02:37] [scene:talk]
+VISUAL:
+AUDIO: 'that\'s this big and it\'s just too big to fit on your machine. So, what we do is we actually make it less precise. We get rid of some of the decimal points, okay? And um, and it effectively pulls it in like this. Think of like a loaf of'
+
+[02:50] [scene:talk]
+VISUAL:
+AUDIO: 'bread. So, a quant uh, effectively makes something usable at the cost of quality. So, it\'ll go faster perhaps uh, or maybe the thing is just it\'ll just work. Sometimes it\'ll go'
+
+[03:02] [scene:talk]
+VISUAL:
+AUDIO: 'slower but you\'ll actually get it to work. And you\'re going to see there\'s definitely a quality difference here using a Q4 and using um, something like, you know, this which I found over at Reddit. Okay, so this is a'
+
+[03:14] [scene:talk]
+VISUAL:
+AUDIO: 'high thing. This probably would take several minutes to do but you can see the model is very good. Now, at get going fast, I\'m more concerned about I just want it to work. So, my generations, I\'m not so worried about'
+
+[03:28] [scene:talk]
+VISUAL:
+AUDIO: 'super high quality because the purpose of my animations are to show you, hey guys, this works. You can do it. I\'ve got it set up for you so that you can do it. If you follow the get going fast'
+
+[03:41] [scene:talk]
+VISUAL:
+AUDIO: 'method, you\'ll succeed and then you hear, look what you can do. And then guys, go out and do something awesome. Go out there and impress me and and and show what you\'ve done. Surpass the master.'
+
+[03:53] [scene:talk]
+VISUAL:
+AUDIO: 'And then and then, you know, bring the master up to your When you hit fame, then bring me up with you. So, we\'re going to move on here, and I\'m going to show you exactly how this works. So, this is not so much an'
+
+[04:05] [scene:talk]
+VISUAL:
+AUDIO: 'installation video as it is going to be Guys, this is how you use it cuz it\'s a little bit It\'s a little bit difficult at times because there\'s a process that we\'re going to have to go through over here to'
+
+[04:18] [scene:talk]
+VISUAL:
+AUDIO: 'actually prepare our images. You\'re going to see we\'re going to be making some masks here. So, there\'s two workflows that we end up having to run. One of them processes the original image and the original video, and then we\'re'
+
+[04:32] [scene:talk]
+VISUAL:
+AUDIO: 'going to throw those into our quant model as well. So, let\'s go ahead and get to showing you how to do this. We\'re going to be using the workflows that are from this red this Reddit thread here. It\'s from a guy'
+
+[04:45] [scene:talk]
+VISUAL:
+AUDIO: 'called Holy Grando. All right. So, good job good on him for pasting these. I\'ll put the link here, and you can get those You\'re going to have to fill in all your other stuff, find all your other models if you do that. Otherwise, of course, you just can'
+
+[04:58] [scene:talk]
+VISUAL:
+AUDIO: 'go to get going fast.pro and get the model manager there. But, this is essentially what we\'re going to end up with. We\'re going to end up with three workflows. One of them is called um'
+
+[05:12] [scene:talk]
+VISUAL:
+AUDIO: 'scale to base. One is called scale to K sampler, and the other is called the create the mask. Okay. Actually, it\'s called create colored mask is what it\'s called.'
+
+[05:24] [scene:talk]
+VISUAL:
+AUDIO: 'So, the difference between these is going to be this. The scale to base is going to use the actual It\'s going to use an actual FP16 model in here to do the work. All right.'
+
+[05:36] [scene:talk]
+VISUAL:
+AUDIO: 'So, that means that you\'re going to have to have higher VRAM if you\'re going to use this one. This is going to be a much larger model. However, if we click over to the sampler one here, you\'re going to find that you have the ability to throw'
+
+[05:49] [scene:talk]
+VISUAL:
+AUDIO: 'in your different quants. So, like up here, you can see I\'ve got the quant four. All right? Now, I chose quant four as a default install because that\'s typically pretty small. You got to think'
+
+[06:01] [scene:talk]
+VISUAL:
+AUDIO: 'like when you have the say the full model, we cut it down to half, and then we cut it down to half, and then a quant four would be half of that half. So, it\'s uh it\'s a lot smaller than the original. Going'
+
+[06:14] [scene:talk]
+VISUAL:
+AUDIO: 'to work on most If you got 12 to 16 GB of VRAM and you got patience, you should be work. Now, of course, with the model manager, we can go click different um quants. You can go up higher or lower'
+
+[06:27] [scene:talk]
+VISUAL:
+AUDIO: 'depending. But, these are the two main main workflows. Now, before we use them, we got to go over and use this create colored mask. And what this does is notice this blue thing over here. This'
+
+[06:41] [scene:talk]
+VISUAL:
+AUDIO: 'is called a mask. So, I you know, I threw in the turtle. It says identifies the turtle and says, "Oh, this is it." And then it cancels out everything else. So, we\'re going to say this is the object we want to work with. Now, it'
+
+[06:53] [scene:talk]
+VISUAL:
+AUDIO: 'does the same thing with a video. We\'re going to put a video in here. All right? Do be bot, and it\'s going to pop out um over here. Now, I do want you to notice'
+
+[07:05] [scene:talk]
+VISUAL:
+AUDIO: 'that over here is a lot of it\'s going to be this white space. And in fact, if we open this up and go in here, you\'ll um you\'ll see that it pops in for a second.'
+
+[07:17] [scene:talk]
+VISUAL:
+AUDIO: 'Oh, so actually, that didn\'t even work there, that one. But, you can go to other ones and you\'ll see that if you go to here, we\'re going to see that over here now we'
+
+[07:32] [scene:talk]
+VISUAL:
+AUDIO: 'have the masks. If we click this assets button, see this pops that in and out. You\'re you\'re to be able to find what you had there. and if you go ahead, you find the one that you want that you were working with, you\'ll notice the little'
+
+[07:45] [scene:talk]
+VISUAL:
+AUDIO: 'stack down here. It\'s because it\'s putting a whole bunch of images together. So, click that, and now it\'s going to open up. So, there\'s the original, there\'s the mask, okay? And there is the mask for the video. So, what you need to do with these is'
+
+[07:59] [scene:talk]
+VISUAL:
+AUDIO: 'you need to actually right-click on them, and then click download. So, you got to save those to a place cuz we\'re going to need them. Now, I do want to show you something really quick. This mask did a good job. Notice it grabbed just the guy on the left. However, if'
+
+[08:12] [scene:talk]
+VISUAL:
+AUDIO: 'you don\'t prompt that correctly, you can end up with um stuff that looks like this. Notice how in this one, we\'ve got both the guy and the girl. And that\'s going'
+
+[08:25] [scene:talk]
+VISUAL:
+AUDIO: 'to be a prompting issue. So, when you\'re actually creating these masks, you need to prompt it correctly. Notice over here, uh we\'ll have to put something like this. Notice I typed in what the object was,'
+
+[08:37] [scene:talk]
+VISUAL:
+AUDIO: 'this this little one connected to the image, Teenage Mutant Ninja Turtle. So, that the so that this model knows actually what it\'s trying to mask. We\'re going to do the same thing for the video up here. So, we\'ve got our video, and then we'
+
+[08:50] [scene:talk]
+VISUAL:
+AUDIO: 'need to explain the part that we want. So, uh we would say we would say, you know, uh young man, let\'s say, on the left side of the table. And so, what I\'m doing is I\'m helping it'
+
+[09:03] [scene:talk]
+VISUAL:
+AUDIO: 'to identify the person. Now, if I\'m not if I\'m not clear enough about it, it will grab both of them. And that\'s how you end up with a mask both The problem with that happening is that then when we'
+
+[09:16] [scene:talk]
+VISUAL:
+AUDIO: 'go over to actually do the movement transference, um it will do it on both. So, you\'ll notice over here, uh actually made I was trying I was running across this problem,'
+
+[09:28] [scene:talk]
+VISUAL:
+AUDIO: 'and notice like this, I kept getting two turtles, okay? And that is a prompting issue. So, uh once you prompt it correctly, you get just the one. You save those, and then'
+
+[09:40] [scene:talk]
+VISUAL:
+AUDIO: 'we move over now to the next workflow where the real work starts to happen. Once we get the uh next workflow up, this is the one that\'s going to be with'
+
+[09:53] [scene:talk]
+VISUAL:
+AUDIO: 'uh we\'re going to use our Q4 here. Uh this is what it looks like. Really, the only things that we\'re going to need to deal with are this this area right over here, and uh uh where we put in the video, and the area here where we put in the image. Uh'
+
+[10:06] [scene:talk]
+VISUAL:
+AUDIO: 'all of this stuff, again, if you get the model manager, all this stuff\'s going to be filled in for you. If you have a different quant, you just got to go up here to this U-Net loader. Uh if you\'ve downloaded it in the right place, it\'ll'
+
+[10:18] [scene:talk]
+VISUAL:
+AUDIO: 'show up there. All the rest of these you need to you need to make sure you have your clip vision, your VAE, all that good stuff. But again, most of this should be If you get the Well, if you get the um the model manager, it will be um'
+
+[10:31] [scene:talk]
+VISUAL:
+AUDIO: 'pre-filled in for you. Okay, the rest of this stuff we really don\'t need to worry about. Um there uh what does come important though is the width and the height. So, I'
+
+[10:43] [scene:talk]
+VISUAL:
+AUDIO: 'actually did forget to mention that. I want to go back here to our create over here. Whatever you\'re throwing in here to make your mask, you\'re going to need to match the width and the height. So, if it\'s taller or square or whatever, it'
+
+[10:56] [scene:talk]
+VISUAL:
+AUDIO: 'needs to match that. If you try to get a mask out of, say, a landscape thing, but it\'s but you give it in dimensions where the height is greater than the width, it\'s going to mess it up. Okay. Um now, same thing over here. We want to figure'
+
+[11:10] [scene:talk]
+VISUAL:
+AUDIO: 'out what size we actually want to end up with. And typically, what we want to end up with is the size of the original video. So, notice this one is wider than it is taller. So, what we do is we scroll over to here,'
+
+[11:24] [scene:talk]
+VISUAL:
+AUDIO: 'okay, without trying to make him motion sick here, and we would just change it. That\'s really all we need to do. You can set the length. I mean, this is just basic Comfy UI stuff that, you know, you guys you guys know how to do this. So,'
+
+[11:37] [scene:talk]
+VISUAL:
+AUDIO: 'uh but you really don\'t need to get too deep into the weeds with the settings. Um so, all we do we load the original video, okay? Beat beat that.'
+
+[11:49] [scene:talk]
+VISUAL:
+AUDIO: 'Loads up. Notice what I did with this one cuz I was using a longer video, I had to skip three almost 4,000 frames so that I could get to the part I want, but you can do that by skipping the first frames there. Um I loaded up the pose'
+
+[12:01] [scene:talk]
+VISUAL:
+AUDIO: 'mask, okay? And then I loaded up the image, the mask, and then I went over here to um this woman leans across table kisses'
+
+[12:13] [scene:talk]
+VISUAL:
+AUDIO: 'a Ninja Turtle. Or maybe I would be better, you know, Ninja Turtle leans across the table kisses woman. And then it is going to be able to figure it out. You click generate, takes about on my 4090 takes about 50 seconds to do, okay?'
+
+[12:26] [scene:talk]
+VISUAL:
+AUDIO: 'So, um but that\'s again lower quality, lower quant uh if you want to go up to something bigger, you want to try quant eight, go for it. If you want to try the'
+
+[12:38] [scene:talk]
+VISUAL:
+AUDIO: 'FP16, yo, dude, you know, all out. You would just go over to your scale to base over here and um use this one. Okay, you\'d use this model. I do want to point out that this model is um a lot of this'
+
+[12:51] [scene:talk]
+VISUAL:
+AUDIO: 'is hiding behind uh what is called this um uh what is that called? Basically, it takes you into as it called a sub graph. So, you\'re going to need to go into here'
+
+[13:05] [scene:talk]
+VISUAL:
+AUDIO: 'uh to add all of the stuff that you need to do. And then to get out, you would just click back. Um I\'m not playing with this so much as I am using the quant four thing because uh'
+
+[13:18] [scene:talk]
+VISUAL:
+AUDIO: 'I want to get going fast and I want you guys to get going fast and this is the most accessible way to get into the game. All right, so to reiterate what you do is you can get the'
+
+[13:31] [scene:talk]
+VISUAL:
+AUDIO: 'workflows. Once you\'re in there, you need to go to create the colored map. When you\'re on the colored map, set the dimensions properly. Okay? Put the video that you want to do, put'
+
+[13:44] [scene:talk]
+VISUAL:
+AUDIO: 'the image you want. You got to prompt it correctly to get the right ones and then it will output your masks. Once you have downloaded, save those masks, go back to your other workflow, insert'
+
+[13:56] [scene:talk]
+VISUAL:
+AUDIO: 'them in, give them the correct width and height, and then prompt it. Okay? Um once you do that, you\'re gold. All right, well we\'re going to end it'
+
+[14:08] [scene:talk]
+VISUAL:
+AUDIO: 'there. Again, thank you so much for being part of this. Uh I am Gary, I\'m the AI Hobby Guy and like I said, you know, we\'re coming to visit you. So, if you\'d like to visit, want to be shown in one of these videos, man, we\'re going to'
+
+[14:20] [scene:talk]
+VISUAL:
+AUDIO: 'new levels with the channel. I\'m excited to be going there together. So, all right, you guys be good to each other. If you did like the video, I appreciate a like and uh subscribe. Tell people'
+
+[14:32] [scene:talk]
+VISUAL:
+AUDIO: 'about it. You can always join as a member over at getgoingfast.pro. We get you in on all the stuff and to be honest, a lot of the stuff, it\'s the community. So, the community is keeping us going, uh making us so much easier to do and you\'re a part of that and you\'re'
+
+[14:46] [scene:talk]
+VISUAL:
+AUDIO: 'welcome to be a part of that. And we\'re going to wish you the very best and uh enjoy your Father\'s Day and we will catch you on the other side. I don\'t'

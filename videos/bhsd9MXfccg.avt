@@ -1,0 +1,195 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: OpenCode + GitNexus: Give OpenCode Real Codebase Memory, Every Developer Use this
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=bhsd9MXfccg
+upload_date: 20260506
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'Coding agents have one weakness that nobody really talks about. They read your code file by file. So, when you ask Cursor or Open Code or Claude Code to change one function, the agent looks at that function, edits it, and moves on.'
+
+[00:12] [scene:talk]
+VISUAL:
+AUDIO: 'It doesn\'t know that 40 other places in the code base depend on what that function returns. It doesn\'t know which class extends which or which import chain breaks when you rename a method.'
+
+[00:24] [scene:talk]
+VISUAL:
+AUDIO: 'The change looks clean in the diff, you approve it, and 3 days later, something silently fails in production. This happens because the agent has no map of your code base. It only sees what\'s in'
+
+[00:36] [scene:talk]
+VISUAL:
+AUDIO: 'front of it at that moment. Git Nexus is the fix for that blindness. This is the complete nervous system for agent context. The tool scans your entire code base and builds a knowledge graph out of it. Every function call,'
+
+[00:49] [scene:talk]
+VISUAL:
+AUDIO: 'every import, every inheritance chain, every execution flow from entry point all the way to the leaf nodes. All of that gets stored in a real graph database on your machine. Then it exposes that graph through MCP, so your'
+
+[01:03] [scene:talk]
+VISUAL:
+AUDIO: 'agent can ask actual architectural questions before making any change. Instead of grepping and guessing, it queries the graph and gets the truth. So, when you ask your agent to refactor anything, it actually knows what calls'
+
+[01:16] [scene:talk]
+VISUAL:
+AUDIO: 'what, what extends what, and what will break before it touches a line. The repo has somewhere around 36,000 stars on GitHub, which tells people are finding it useful. And it supports 14'
+
+[01:29] [scene:talk]
+VISUAL:
+AUDIO: 'languages, including TypeScript, JavaScript, Python, Java, Kotlin, C#, Go, Rust, PHP, Ruby, Swift, C, C++, and Dart. So, whatever stack you\'re on,'
+
+[01:42] [scene:talk]
+VISUAL:
+AUDIO: 'there\'s a good chance it works out of the box. Now, before we get into install, I want to quickly compare this to the Graphify skill we did earlier because they look similar on the surface, but they solve different problems. Graphify is a Claude skill. It'
+
+[01:55] [scene:talk]
+VISUAL:
+AUDIO: 'runs inside Claude itself. It makes a mental graph of your code, and that graph lives in the conversation. It\'s good for one-off exploration, but it doesn\'t persist, and it doesn\'t expose'
+
+[02:07] [scene:talk]
+VISUAL:
+AUDIO: 'tools to other agents. Git Nexus goes deeper. It actually indexes your repo into a real graph database called Ladybug DB. It stores it on disk in a .git nexus folder, and it serves that graph over MCP to any agent'
+
+[02:21] [scene:talk]
+VISUAL:
+AUDIO: 'that supports MCP. So, Cursor, Claude Code, Anti-Gravity, Codex, Windsurf, Open Code, all of them can connect to the same index. And because the graph is precomputed, you get a lot more accuracy'
+
+[02:35] [scene:talk]
+VISUAL:
+AUDIO: 'on things like impact analysis or rename refactors. Graphify is lightweight. Git Nexus is industrial. Different tools, different jobs. Okay, let\'s actually install it. Open your terminal, go to the root of'
+
+[02:49] [scene:talk]
+VISUAL:
+AUDIO: 'your project, and run NPX Git Nexus analyze. If your project is not a Git repo, you add the flag {dash} {dash} skip git. That\'s the only thing you need to know to start. This one command does a lot under the hood. It walks the file'
+
+[03:03] [scene:talk]
+VISUAL:
+AUDIO: 'tree, parses every file with tree-sitter, extracts all the functions and classes and methods, resolves the imports across files, figures out which classes inherit from which, runs community detection to group related'
+
+[03:16] [scene:talk]
+VISUAL:
+AUDIO: 'code into clusters, traces the execution flows from entry points, and then builds a hybrid search index on top using BM25 plus semantic embeddings. All local, no network calls, nothing leaves your'
+
+[03:29] [scene:talk]
+VISUAL:
+AUDIO: 'machine. When it finishes, you\'ll see it created a few new files in your project. There\'s an agents.md file, a claud.md file, and a folder called .claud/skills with four skill files inside. The skills'
+
+[03:43] [scene:talk]
+VISUAL:
+AUDIO: 'are named exploring, debugging, impact analysis, and refactoring. Each one is a markdown file that tells your agent how to use the Git Nexus tools for that specific task. So, when'
+
+[03:55] [scene:talk]
+VISUAL:
+AUDIO: 'you ask the agent to debug something, it knows to call the context tool to get the 360° view of the symbol. When you ask it to refactor, it knows to run impact analysis first.'
+
+[04:07] [scene:talk]
+VISUAL:
+AUDIO: 'It also regenerate the agents.do.md file and added instructions that says, "Use the Git Nexus MCP tools to understand code every time." This is the nudge your agent needs to actually reach for the'
+
+[04:19] [scene:talk]
+VISUAL:
+AUDIO: 'graph instead of falling back to grep or read file. Without that line, sometimes the agent forgets the tools are even there. Next part is hooking it into Open Code. You open the config file for Open Code,'
+
+[04:32] [scene:talk]
+VISUAL:
+AUDIO: 'and you add an MCP block. Inside the MCP block, you give it a key called Git Nexus. You set the type to local, and the command is just Git Nexus MCP. Save the file, restart Open Code, and now'
+
+[04:45] [scene:talk]
+VISUAL:
+AUDIO: 'your agent has access to all the Git Nexus tools. Also, there is a command called Git Nexus setup. If you run this command, it will set up the MCP server and skill for all the available agent on your system. You don\'t have to manually'
+
+[04:58] [scene:talk]
+VISUAL:
+AUDIO: 'set up the MCP and skills for each agent one by one. There are 11 tools per repo and five more for repository groups. The big ones are query, which does process grouped hybrid search. Context, which'
+
+[05:11] [scene:talk]
+VISUAL:
+AUDIO: 'gives you a complete view of any symbol with all its callers and callees. Impact, which is the blast radius analysis, so you can ask what breaks if I change this function and get a real'
+
+[05:23] [scene:talk]
+VISUAL:
+AUDIO: 'answer with confidence scores. Detect changes, which maps a Git diff to all the affected processes. Rename, which does multi-file coordinated renames using the graph plus text search. And Cypher, which lets the agent run raw'
+
+[05:37] [scene:talk]
+VISUAL:
+AUDIO: 'graph queries when it needs something custom. This is genuinely the part that changes how your agent works. Most agents fail on big refactors because they only see the file they\'re editing. With these'
+
+[05:49] [scene:talk]
+VISUAL:
+AUDIO: 'tools, they can ask the graph first, plan the change, and then execute. Even smaller models start performing like the big ones because the heavy lifting is done by the precomputed index, not the model\'s reasoning. Now, let me show you'
+
+[06:02] [scene:talk]
+VISUAL:
+AUDIO: 'the website of things. You open gitnexus.vercel.app in your browser. By default, it shows a small instruction screen telling you to run this NPX command. So, you go back to'
+
+[06:14] [scene:talk]
+VISUAL:
+AUDIO: 'the terminal and run that command. It starts a local HTTP server on port 4747. The browser is listening for it, and as soon as the server comes online, the page auto connects. No login, no upload,'
+
+[06:27] [scene:talk]
+VISUAL:
+AUDIO: 'nothing leaves your machine. Once it connects, you get this full interactive graph of your code base. Files and folders on the left sidebar. The middle is a force-directed graph'
+
+[06:39] [scene:talk]
+VISUAL:
+AUDIO: 'with every node colored by type. Folders are one color, files another. Classes, methods, functions, interfaces, all have their own colors. You can zoom, pan, click on any node to see its'
+
+[06:53] [scene:talk]
+VISUAL:
+AUDIO: 'connections. There\'s a search bar at the top to find any symbol. And there\'s a query button at the bottom left where you can write raw Cypher queries against the graph if you want to get specific. The top right has a settings icon. You'
+
+[07:06] [scene:talk]
+VISUAL:
+AUDIO: 'click settings, you\'ll see a list of providers. OpenAI, Anthropic, Open Router, Ollama, all the usual ones. You paste in your API key, save it, and now you can chat with the code base directly'
+
+[07:19] [scene:talk]
+VISUAL:
+AUDIO: 'in the browser. The chat panel uses a LangChain React agent that has access to the same MCP tools. So, you can ask things like, "What does the authentication flow look like?" or "Which clusters depend on the user'
+
+[07:32] [scene:talk]
+VISUAL:
+AUDIO: 'service?" and it\'ll trace through the graph and answer with real evidence, not hallucinations. If you don\'t want to use the hosted page, the repo also has instructions to run the whole thing locally. You clone the repo, install'
+
+[07:45] [scene:talk]
+VISUAL:
+AUDIO: 'dependencies in the Git Nexus shared folder, build it, then go into the Git Nexus web folder, install and run npm run dev. Then in another terminal, you run Git Nexus serve as the back end.'
+
+[07:57] [scene:talk]
+VISUAL:
+AUDIO: 'Same UI, fully offline, useful if you\'re on a corporate network or working with private code that you want extra layers around. There\'s also a Docker setup if that\'s more your thing. Two signed'
+
+[08:09] [scene:talk]
+VISUAL:
+AUDIO: 'images on GHCR and Docker Hub. One for the CLI server and one for the web UI. You run docker compose up {dash}d, and both come up. The images are signed with cosign and tied to specific Git tags,'
+
+[08:23] [scene:talk]
+VISUAL:
+AUDIO: 'which is honestly a level of supply chain security you don\'t see in most open source tools. They even ship a Kubernetes cluster image policy if you want to enforce signature verification at admission'
+
+[08:35] [scene:talk]
+VISUAL:
+AUDIO: 'time. For pricing context, the open source version is licensed under PolyForm non-commercial, so it\'s free for personal and non-commercial use. They have an enterprise SaaS at'
+
+[08:47] [scene:talk]
+VISUAL:
+AUDIO: 'aconlabs.com if you want PR review automation, auto reindexing, multi-repo support, and OCaml language coverage. But for solo devs and most teams, the open source version covers everything'
+
+[08:59] [scene:talk]
+VISUAL:
+AUDIO: 'you actually need. One last tip. After you make commits, the index can go stale. If you\'re using Claude Code, the post tool use hook will detect this and prompt the agent to reindex. For other editors, you just run Git Nexus analyze'
+
+[09:13] [scene:talk]
+VISUAL:
+AUDIO: 'again or Git Nexus analyze {dash} {dash} force if you want a clean rebuild. Reindexing on a medium repo takes maybe 30 to 60 seconds. That\'s Git Nexus. Index your repo once, plug it into Open'
+
+[09:26] [scene:talk]
+VISUAL:
+AUDIO: 'Code through MCP, and your agent stops shipping blind edits. But the real value is the MCP server feeding precomputed structure to whatever agent you use. Try it on a project you know well and see if'
+
+[09:39] [scene:talk]
+VISUAL:
+AUDIO: 'the graph surfaces relationships you forgot existed. All right, so that\'s it from the video, and I hope you enjoyed it. If you did, please like this video and subscribe to the channel, and I\'ll see you in the next video.'

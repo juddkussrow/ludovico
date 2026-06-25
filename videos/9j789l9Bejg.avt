@@ -1,0 +1,247 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Master LTX Director: The Ultimate Timeline Control for AI Video| Multi-Frame Reference
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=9j789l9Bejg
+upload_date: 20260525
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'Today we’re going to introduce a very powerful node in LTX two point three called LTX Director The most special thing about it is that one single node almost integrates all the core ways of using LTX two point three As we explained before with Prompt Relay'
+
+[00:14] [scene:talk]
+VISUAL:
+AUDIO: 'its core idea is to assign different prompts to different video segments But LTX Director goes one step further It turns this kind of prompt-based time routing into a more intuitive timeline node You can do image-to-video'
+
+[00:29] [scene:talk]
+VISUAL:
+AUDIO: 'you can do text-to-video you can use a starting reference you can use an ending reference and you can even place multiple middle frames so the video develops according to the rhythm you designed But there is one problem'
+
+[00:43] [scene:talk]
+VISUAL:
+AUDIO: 'The official workflow does run but the results are not ideal So in this video I’m going to do two things First I’ll explain clearly what LTX Director actually is and how it relates to Prompt Relay'
+
+[00:55] [scene:talk]
+VISUAL:
+AUDIO: 'Second I’ll make an improved version of the official workflow After the improvements using the same prompt and reference image the generated result will be better than the official workflow We’ll also test several typical use cases and some useful tricks'
+
+[01:09] [scene:talk]
+VISUAL:
+AUDIO: 'For example after we switch the model to an uncensored model the motion performance becomes much bolder What you’re seeing now is the GitHub page for LTX Director It comes from WhatDreamsCost'
+
+[01:24] [scene:talk]
+VISUAL:
+AUDIO: 'Prompt Relay is more like a technical idea What it solves is the correspondence between text and time segments LTX Director is more like turning that idea into an operable director’s console Installation is actually very simple'
+
+[01:38] [scene:talk]
+VISUAL:
+AUDIO: 'You can directly search for WhatDreamsCost-ComfyUI in ComfyUI Manager and install it from there If Manager does not have the latest version yet you can go directly into the custom_nodes folder of ComfyUI and clone this repository manually'
+
+[01:50] [scene:talk]
+VISUAL:
+AUDIO: 'After installation just restart ComfyUI This node depends on two extensions The first one is ComfyUI-LTXVideo which is the official ComfyUI extension developed by the LTX team'
+
+[02:04] [scene:talk]
+VISUAL:
+AUDIO: 'The other one is KJNodes which I’m sure many of you are already very familiar with For easier demonstration I also built the workflow on RunningHub In the ComfyUI space'
+
+[02:18] [scene:talk]
+VISUAL:
+AUDIO: 'RunningHub is a really great online workflow platform because whenever new models or new extensions appear it usually follows up very quickly RunningHub also provides an online community platform for ComfyUI creators where you can find a lot of creative inspiration and example workflows'
+
+[02:33] [scene:talk]
+VISUAL:
+AUDIO: 'You can choose between two workflows here The first one is the official workflow The second one is the improved workflow I made for you These two workflows are slightly different'
+
+[02:46] [scene:talk]
+VISUAL:
+AUDIO: 'The core differences are in two places The first is how the main model is loaded and the second is the sigmas setting Let’s first look at the official workflow Its overall structure can be divided into four parts: the main model loading'
+
+[03:01] [scene:talk]
+VISUAL:
+AUDIO: 'the LTX Director timeline node the first-stage sampling and the second-stage upscaling sampling This is actually the same two-stage sampling process we talked about before for LTX two point three: first generate a base video at a lower resolution'
+
+[03:14] [scene:talk]
+VISUAL:
+AUDIO: 'and then upscale it through the latent upscaler In the model loading section the official workflow uses the main model provided by the official ComfyUI package Pay attention here:'
+
+[03:26] [scene:talk]
+VISUAL:
+AUDIO: 'this is a checkpoint So we need to load a distilled LoRA After using this LoRA we can usually sample with eight steps This LoRA also has different choices and right now I’ve set its weight to zero point five The encoder settings are no different from what we used before'
+
+[03:39] [scene:talk]
+VISUAL:
+AUDIO: 'including the VAE Next let’s look at the most important node called LTX Director There are several very important parameters inside this node The first one is called the global prompt'
+
+[03:52] [scene:talk]
+VISUAL:
+AUDIO: 'It is used to describe the stable information throughout the entire video such as who the character is what the overall style is and what the scene is The second one is called timeline data which is the timeline data we talk about'
+
+[04:05] [scene:talk]
+VISUAL:
+AUDIO: 'It stores each segment in the timeline including its starting position segment length, prompt whether that segment has a reference image and also audio The third one is local prompts'
+
+[04:17] [scene:talk]
+VISUAL:
+AUDIO: 'The fourth one is segment lengths which means the length of each segment Some people may ask: Pay attention here Inside this node there is a configuration button'
+
+[04:29] [scene:talk]
+VISUAL:
+AUDIO: 'After you click it you’ll see some basic settings for the node such as whether it uses time or frame count and also whether the global prompt is displayed Let me first give you the simplest image-to-video example We set the entire video to one hundred twenty-one frames'
+
+[04:43] [scene:talk]
+VISUAL:
+AUDIO: 'which is five seconds Then we only use one local prompt: a beautiful girl is waving her hand At this point LTX Director is very simple It is basically integrating the reference image'
+
+[04:56] [scene:talk]
+VISUAL:
+AUDIO: 'the prompt and the timeline together You can think of it as a basic image-to-video setup Now let’s look at the LTX Director Guide node This node is very important'
+
+[05:08] [scene:talk]
+VISUAL:
+AUDIO: 'because LTX Director only outputs our sampling conditions and guide data But if this guidance information is going to actually affect the sampling process we need a special node That node is what we call LTX Director Guide'
+
+[05:20] [scene:talk]
+VISUAL:
+AUDIO: 'In the official workflow two Guide nodes are used Pay attention to their scale by values because the scaling factors are different Since we are using two-stage sampling the first stage generates the base video'
+
+[05:33] [scene:talk]
+VISUAL:
+AUDIO: 'and the second stage performs a two-times upscale So in the first stage we scale it down to zero point five of the original size which means half size In the second stage we scale it up by two times'
+
+[05:45] [scene:talk]
+VISUAL:
+AUDIO: 'so it matches the resolution we set The sampling parameters are fairly simple In the official workflow it uses the Euler sampler and the BasicScheduler uses linear quadratic The step count is eight'
+
+[05:59] [scene:talk]
+VISUAL:
+AUDIO: 'and CFG is one In the second stage the scheduler is still linear quadratic the step count becomes four and denoise is no longer one It becomes zero point four two The main thing you need to pay attention to in this workflow is that the sampling parameters are slightly different'
+
+[06:11] [scene:talk]
+VISUAL:
+AUDIO: 'Another very important point is that the denoise value in the upscaling stage is not one but zero point four two Next'
+
+[06:24] [scene:talk]
+VISUAL:
+AUDIO: 'let’s look at my improved workflow First is the main model loading I did not use that checkpoint model I used UNETLoader instead If we use this model it already has distillation built in so I don’t need to add the acceleration LoRA'
+
+[06:37] [scene:talk]
+VISUAL:
+AUDIO: 'The second difference is the sigmas in the second stage The official workflow uses BasicScheduler while in my improved version I changed the second stage to ManualSigmas You don’t need to memorize this'
+
+[06:49] [scene:talk]
+VISUAL:
+AUDIO: 'Just copy it directly And in the upscaling stage I also use ManualSigmas Pay attention here: my denoise value is now one which is also different from the official zero point four two Now let’s compare the results'
+
+[07:03] [scene:talk]
+VISUAL:
+AUDIO: 'We’ll use the same prompt the one we just saw: the girl is waving her hand Let’s look at the hand-waving motion Both workflows can complete it but pay attention here: the improved version has more comfortable overall movement and image quality The motion range is larger'
+
+[07:19] [scene:talk]
+VISUAL:
+AUDIO: 'and it does not look as stiff or rigid This is why I made an improved version of the workflow for you To fully understand the features and capabilities of LTX Director we did a lot of testing So next'
+
+[07:32] [scene:talk]
+VISUAL:
+AUDIO: 'let’s move into the actual test section Just now we demonstrated the most basic use case which is image-to-video In other words we placed the image and prompt at the beginning of the timeline The workflow I just explained is also this one'
+
+[07:44] [scene:talk]
+VISUAL:
+AUDIO: 'You can upload a character reference image then write a local prompt Just like before we wrote “a beautiful woman is waving her hand ” and the whole video generates a hand-waving motion around that image Next'
+
+[07:59] [scene:talk]
+VISUAL:
+AUDIO: 'let’s increase the difficulty We’ll use LTX Director to achieve the effect of Prompt Relay Here, we use a global prompt In general the global prompt is used to describe the character’s appearance and the overall environment Here, I wrote:'
+
+[08:14] [scene:talk]
+VISUAL:
+AUDIO: 'a happy Asian girl bun hairstyle, purple ribbon For the local prompts we have three segments The first one is that she places her hand beside her face and winks at the camera The second one is that she places both hands beside her cheeks and makes a cat-paw gesture'
+
+[08:26] [scene:talk]
+VISUAL:
+AUDIO: 'The third one is that she blows a kiss toward the camera The time allocation here is very important You need to decide how many frames you give each action Our entire video is one hundred sixty-nine frames'
+
+[08:40] [scene:talk]
+VISUAL:
+AUDIO: 'which is seven seconds Since we are using the logic of Prompt Relay the frame counts assigned to the three segments are forty-eight frames sixty frames'
+
+[08:52] [scene:talk]
+VISUAL:
+AUDIO: 'and sixty-one frames Now let’s look at the result You’ll notice that compared with a normal long prompt this method makes it easier to express continuous actions Especially the first two actions the wink and the hand gesture'
+
+[09:05] [scene:talk]
+VISUAL:
+AUDIO: 'can both correspond clearly to the prompts If you want a more expressive result you can use Sulphur'
+
+[09:18] [scene:talk]
+VISUAL:
+AUDIO: 'which we talked about before This is an uncensored model The prompt is very similar to what we just used but pay attention here: the blowing-kiss action is much bolder It even feels a little like she is licking her own hand Her overall expression'
+
+[09:33] [scene:talk]
+VISUAL:
+AUDIO: 'body movement and interaction with the camera are all more open and expressive The fourth use case is starting with prompts only without a reference image and then using a reference image at the end Here'
+
+[09:47] [scene:talk]
+VISUAL:
+AUDIO: 'we do not use a global prompt We have two local prompts For the first segment I simply wrote “a woman waving ” For the second one I wrote that she blows a kiss toward the camera with one hand The frame counts are also assigned here:'
+
+[09:59] [scene:talk]
+VISUAL:
+AUDIO: 'for the first action we give it eighty-five frames and for the second one we give it eighty-three frames What kind of scenario is this suitable for? This is basically what we call an end-frame workflow If you already know what the ending of the video should look like'
+
+[10:13] [scene:talk]
+VISUAL:
+AUDIO: 'you can use this method For example maybe you want the character to finally turn into a certain pose or you want the camera to end close to a specific expression The fifth use case is multi-frame reference'
+
+[10:26] [scene:talk]
+VISUAL:
+AUDIO: 'and this is also the easiest place for things to go wrong In this workflow we use three reference images The global prompt is that a girl is riding a bicycle The timeline allocation for the three segments is sixty frames'
+
+[10:39] [scene:talk]
+VISUAL:
+AUDIO: 'and forty-eight frames For each local prompt I wrote “dynamic motion best quality ” The result is not especially good The reason is simple'
+
+[10:52] [scene:talk]
+VISUAL:
+AUDIO: 'Multi-frame reference gives the model a lot of visual constraints If the differences between these reference images are large the model has to handle character consistency pose changes, scene changes'
+
+[11:04] [scene:talk]
+VISUAL:
+AUDIO: 'and motion transitions at the same time For the LTX two point three model that is a bit too much pressure So multi-frame reference is not always better just because you use more frames Once you go beyond three reference images'
+
+[11:17] [scene:talk]
+VISUAL:
+AUDIO: 'the video can actually become more unstable For example I don’t like this kind of scene-switching effect I still want the result to feel like one continuous shot In that case, you can add a LoRA We also talked about this LoRA before'
+
+[11:31] [scene:talk]
+VISUAL:
+AUDIO: 'Using the same three reference images after I add this LoRA you’ll notice the result becomes more like a one-shot video Of course this kind of transition may still have some unnatural parts Here are some practical suggestions'
+
+[11:44] [scene:talk]
+VISUAL:
+AUDIO: 'If you only want to control the sequence of actions prioritize text-based segmentation In other words use LTX Director plus Prompt Relay If you want to control the starting and ending images use this start-frame and end-frame method'
+
+[11:58] [scene:talk]
+VISUAL:
+AUDIO: 'If you want to use more than three reference frames you should lower your expectations a bit and it is better to combine it with a transition LoRA to make the model more capable To summarize'
+
+[12:10] [scene:talk]
+VISUAL:
+AUDIO: 'LTX Director is a ComfyUI extension that is very worth studying Its biggest value is that it brings almost all the LTX workflows we can think of into one single node But you also need to pay attention to several limitations'
+
+[12:22] [scene:talk]
+VISUAL:
+AUDIO: 'First, it is not a model It is a special node Second the official workflow has some limitations so I recommend using my improved version of the workflow as much as possible Also'
+
+[12:36] [scene:talk]
+VISUAL:
+AUDIO: 'when using multiple prompt segments don’t put too many actions into each local prompt and don’t make each prompt too long If those actions do not have enough time the model will not be able to show them properly That’s it for LTX Director'
+
+[12:49] [scene:talk]
+VISUAL:
+AUDIO: 'So what are you waiting for? Go try it yourself Follow me and become someone who truly understands AI'

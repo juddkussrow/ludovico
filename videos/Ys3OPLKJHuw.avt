@@ -1,0 +1,247 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: The Next Layer After Prompt Engineering — Archon V3 Explained! 🚀
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=Ys3OPLKJHuw
+upload_date: 20260408
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'Arkon V3 is here. YAML workflows, parallel work trees, six adapters, Claude and Codex at the same time. Here\'s the deep dive on what we just shipped. A few days ago, we showed you a teaser of Arkon. Today, V3 is live. The book is'
+
+[00:12] [scene:talk]
+VISUAL:
+AUDIO: 'out, and I want to walk you through what we actually built. I\'m on the core team with Cole and Rasmus. You already have the pieces, skills/commands, global rules, sub-agents. The primitives'
+
+[00:24] [scene:talk]
+VISUAL:
+AUDIO: 'are there and they work. The problem is stitching them together. Every morning, you are still manually shepherding the same eight steps. Classify the issue, investigate, plan, implement, review,'
+
+[00:36] [scene:talk]
+VISUAL:
+AUDIO: 'test, commit, open the PR. Same dance every time. Prompt engineering, context engineering, and now harness engineering. That is the next layer.'
+
+[00:48] [scene:talk]
+VISUAL:
+AUDIO: 'A harness is the system around the agent. The thing that turns eight manual steps into one command. And that is exactly what Arkon gives you. Arkon is the first open-source harness builder for AI coding. You encode any'
+
+[01:01] [scene:talk]
+VISUAL:
+AUDIO: 'workflow as a YAML file in your repo, and then you run it from anywhere. CLI, web, Slack, Telegram, GitHub, Discord. Same YAML, same steps, repeatable every'
+
+[01:14] [scene:talk]
+VISUAL:
+AUDIO: 'time. Deterministic steps where you need precision. AI steps where you need creativity. Loops that iterate until the tests actually pass. That is the harness. Think recipe plus chef.'
+
+[01:28] [scene:talk]
+VISUAL:
+AUDIO: 'The recipe is the YAML. The chef is Claude or Codex. You stop rewriting the recipe every morning and start composing the skills and commands you already have into real workflows.'
+
+[01:40] [scene:talk]
+VISUAL:
+AUDIO: 'And that one shift, separating decisions from execution, unlocks everything else we are about to show you. And this is not theoretical. Stripe is shipping around 1,300 pull requests a week with the zero human-written code.'
+
+[01:53] [scene:talk]
+VISUAL:
+AUDIO: 'OpenAI ran a project around a million lines with roughly 3.5 PRs per engineer per day. Same models everyone else has. The difference is the harness. Five things break when you run AI coding'
+
+[02:05] [scene:talk]
+VISUAL:
+AUDIO: 'agents the normal way. One, inconsistency. Same prompt, three different answers, zero trust. Two, context bloat. Long sessions drift, forget instructions, and quietly start'
+
+[02:19] [scene:talk]
+VISUAL:
+AUDIO: 'hallucinating. Three, no parallelism. One agent, one repo, one task at a time, everything else waits. Four, you cannot delegate. You are scared to walk away because you do not'
+
+[02:33] [scene:talk]
+VISUAL:
+AUDIO: 'know what it will do. Five, nothing composes. Your skills, your commands, your rules, they all live side by side but never snap together into one flow. Every task is rebuilt by hand. Arkon is'
+
+[02:45] [scene:talk]
+VISUAL:
+AUDIO: 'designed to address all five. And the way I think about it, the whole system comes down to three concepts. Commands, workflows, isolation. That is how I explain Arkon to anyone new.'
+
+[02:58] [scene:talk]
+VISUAL:
+AUDIO: 'A command is a markdown file. One focused task, one job. That is it. A workflow is a YAML file that orchestrates commands as a directed acyclic graph. Each node declares what'
+
+[03:10] [scene:talk]
+VISUAL:
+AUDIO: 'it depends on, and Arkon figures out the schedule. Isolation is Git work trees. Every workflow run gets its own checkout, its own branch, its own sandbox. Nothing touches your main repo. Three primitives. That is the whole'
+
+[03:24] [scene:talk]
+VISUAL:
+AUDIO: 'language. Here is how they fit together. Arkon lives in two places. User level at tilde/ .arkon. Repo level at .arkon inside your project. The user level holds your work trees, your artifacts,'
+
+[03:36] [scene:talk]
+VISUAL:
+AUDIO: 'the SQLite database, and global config. Anything machine-wide goes here. The repo level holds your custom commands, your workflows, and repo-specific settings. This part gets committed to'
+
+[03:48] [scene:talk]
+VISUAL:
+AUDIO: 'Git, so your team gets the same workflows you do. Now, watch how a workflow actually runs. You kick off a node. Arkon spins up a fresh Claude code session with zero accumulated context. The node does its job. It writes its'
+
+[04:01] [scene:talk]
+VISUAL:
+AUDIO: 'findings to a file in the artifacts directory. The session ends. The next node starts with a fresh session context. It reads the artifact file from the previous node and keeps going. Information flows through artifacts, not'
+
+[04:14] [scene:talk]
+VISUAL:
+AUDIO: 'through one giant ballooning chat history. That file handoff is the trick. Each node stays sharp because it never inherits a bloated session, but information still flows through the graph cleanly. No drift, no'
+
+[04:26] [scene:talk]
+VISUAL:
+AUDIO: 'forgetting. No 200k token sessions making bad decisions. That solves context bloat. Work trees solve everything else. Work trees are a Git feature almost nobody uses. Arkon makes'
+
+[04:38] [scene:talk]
+VISUAL:
+AUDIO: 'them the default. When you run a workflow, Arkon creates a work tree under tilde/ .arkon/workspaces. Separate directory, separate branch, linked to your repo, but completely'
+
+[04:52] [scene:talk]
+VISUAL:
+AUDIO: 'isolated from your working files. That means you can run four workflows at once. One fixing a bug, one building a feature, one reviewing a PR, one refactoring a module.'
+
+[05:04] [scene:talk]
+VISUAL:
+AUDIO: 'Same repo, four parallel branches, zero conflicts. Your main checkout never even notices. When you are done, Arkon complete cleans the work tree up. Arkon isolation list shows what is running.'
+
+[05:16] [scene:talk]
+VISUAL:
+AUDIO: 'Arkon isolation cleanup wipes anything older than 7 days. This is the part that completely changes how you work with AI agents. Once you have isolation, you stop babysitting. You start dispatching.'
+
+[05:28] [scene:talk]
+VISUAL:
+AUDIO: 'Installation is next. Pick your poison. Mac or Linux, run the curl install script. Windows, the PowerShell one-liner. Mac users on Homebrew can brew install collimlzero/arkon/arkon.'
+
+[05:40] [scene:talk]
+VISUAL:
+AUDIO: 'And if you live in containers, there is a Docker image on ghcr. Verify with Arkon version. Make sure Claude code is authenticated. Make sure you are in a Git repo. That is the entire setup. Your'
+
+[05:52] [scene:talk]
+VISUAL:
+AUDIO: 'first run is one command. Arkon workflow run Arkon assist with a question. Arkon spins up a work tree, runs Claude code inside it, and answers. Welcome to the new normal.'
+
+[06:04] [scene:talk]
+VISUAL:
+AUDIO: 'Wait. 91% of solo AI builders quit within 3 months, but not this group. Over a thousand builders. Daily hangouts where you debug together. Weekly workshops'
+
+[06:16] [scene:talk]
+VISUAL:
+AUDIO: 'that actually level you up. A full agentic coding course. 72 lessons, 12 modules. From zero to shipping multi-agent systems. People share projects,'
+
+[06:28] [scene:talk]
+VISUAL:
+AUDIO: 'brainstorm ideas, help each other in real time. This is where AI builders actually make it. Link in description, 10% off. Join us. Back to the video now.'
+
+[06:40] [scene:talk]
+VISUAL:
+AUDIO: 'Sequential workflows are easy. Anyone can chain three steps. The reason Arkon exists is what happens when steps do not need to be sequential. A DAG workflow lets you describe a graph.'
+
+[06:53] [scene:talk]
+VISUAL:
+AUDIO: 'Which nodes exist, which depend on which, and under what conditions each one should run. Watch what happens. You declare a classified node up front, then a code review node and a security review node, both depending only on classify.'
+
+[07:06] [scene:talk]
+VISUAL:
+AUDIO: 'Arkon notices they have no dependency on each other and runs them in parallel. Same workflow run, same machine. Two reviewers working at once. Then a synthesis node waits for both to finish'
+
+[07:18] [scene:talk]
+VISUAL:
+AUDIO: 'and merges the findings. You can also gate nodes on runtime data. When classified.output.type equals bug, run the bug fix path. Otherwise, run the feature path. Same'
+
+[07:30] [scene:talk]
+VISUAL:
+AUDIO: 'template, two different execution paths, decided live. This is the part where developers who have used GitHub actions or make finally feel at home. Familiar mental model, brand new domain.'
+
+[07:42] [scene:talk]
+VISUAL:
+AUDIO: 'Now for the part that surprised even us when we first built it. Hooks. A hook intercepts a tool call while a node is running, before or after. Pre-tool-use fires before. Post-tool-use'
+
+[07:54] [scene:talk]
+VISUAL:
+AUDIO: 'fires after. Both let you inject context, deny the call, or rewrite its inputs. Concrete example, your code review node should never write files. So, you attach a pre-tool-use hook that'
+
+[08:07] [scene:talk]
+VISUAL:
+AUDIO: 'denies write and bash on that node. Done. The guardrail lives in YAML, not in a paragraph of prompt instructions you hope the model reads. Post-tool-use is where the loop closes. You attach a hook that runs after every'
+
+[08:21] [scene:talk]
+VISUAL:
+AUDIO: 'write. It tells the model, "Hey, reread what you just wrote and verify it still type checks." The model writes, the hook fires, the model reviews, the model writes again.'
+
+[08:34] [scene:talk]
+VISUAL:
+AUDIO: 'You just built a self-correcting quality loop without changing a single prompt. This is how you get reliability out of agents, not by writing better prompts, by wiring better feedback. V3 ships with a set of built-in'
+
+[08:47] [scene:talk]
+VISUAL:
+AUDIO: 'production workflows you can use the moment you install it. No setup, no tweaking. There is Arkon assist for questions and exploration. There is Arkon fix GitHub issue, which classifies the issue, investigates, implements a'
+
+[09:00] [scene:talk]
+VISUAL:
+AUDIO: 'fix, runs review agents, and opens a PR. There is Arkon idea to PR, the full pipeline from a one-paragraph description all the way to a reviewed pull request. There are lighter feature'
+
+[09:12] [scene:talk]
+VISUAL:
+AUDIO: 'development flows when you do not need the full review overhead. Smart PR review that scales reviewers to complexity. A comprehensive PR review that runs multiple reviewers in parallel. An architect workflow that'
+
+[09:24] [scene:talk]
+VISUAL:
+AUDIO: 'finds complexity hotspots and simplifies them. And conflict resolution that takes a merge mess and the full repo context and just handles it. Every one of them is just YAML.'
+
+[09:36] [scene:talk]
+VISUAL:
+AUDIO: 'Which means you can read them, fork them, and bend them to your team\'s exact process. Custom commands are how you bring your existing skills and/or commands into Arkon. Make a folder at .arkon/commands.'
+
+[09:48] [scene:talk]
+VISUAL:
+AUDIO: 'Drop in a markdown file. Optional front matter at the top describing the command. Then write the body the way you would explain a task to a brand new engineer.'
+
+[10:00] [scene:talk]
+VISUAL:
+AUDIO: 'Variables get substituted at runtime. Arguments for the user input. Artifacts dir for the shared workspace. Workflow ID for tracking. Then invoke it from any workflow.'
+
+[10:13] [scene:talk]
+VISUAL:
+AUDIO: 'The rule we keep coming back to is one task per command. One job done well, reusable everywhere. That is what makes commands compose into workflows that actually scale.'
+
+[10:25] [scene:talk]
+VISUAL:
+AUDIO: 'Here is the part most people miss when they hear workflow engine. Arcion is not just a CLI. The same YAML workflow runs from six different surfaces. CLI for your terminal and your CI. Web'
+
+[10:37] [scene:talk]
+VISUAL:
+AUDIO: 'UI when you want a dashboard. Slack and Discord for team driven runs. Drop a message, kick off a workflow, get a PR back. Telegram when you want to file something off from your phone and GitHub'
+
+[10:50] [scene:talk]
+VISUAL:
+AUDIO: 'where issues and PRs trigger workflows automatically. Same workflow, same result, different starting points. Your team meets Arcion wherever they already work and it gets one layer better. Arcion supports both the Cloud Code SDK'
+
+[11:04] [scene:talk]
+VISUAL:
+AUDIO: 'and the CodeX SDK. You can run a workflow on Cloud or on CodeX or mix providers per node. With one node running on Cloud and the next on CodeX inside the same DAG. Multi-provider, not multi-vendor lock-in.'
+
+[11:18] [scene:talk]
+VISUAL:
+AUDIO: 'That is V3. Three primitives, a full set of built-in workflows, six adapters, and a self-correcting hook system. All in one open source repo. This is also a first launch and we are'
+
+[11:30] [scene:talk]
+VISUAL:
+AUDIO: 'not done. The visual workflow builder is in active development. More built-in workflows are landing. Deeper hook patterns, more SDK adapters. If you want to follow along, the book is at arcion.diy/book.'
+
+[11:43] [scene:talk]
+VISUAL:
+AUDIO: 'The repo is on GitHub at collin00/arcion. And you should subscribe so you do not miss the next deep dive when the workflow builder ships. If you have been waiting for AI coding'
+
+[11:55] [scene:talk]
+VISUAL:
+AUDIO: 'to feel like real engineering instead of slot machine pulls, this is it. Try it on your repo this week. Then come back and tell me Harness Engineering, the next evolution, or are you sticking with raw Cloud Code and manual steps?'
+
+[12:08] [scene:talk]
+VISUAL:
+AUDIO: 'Drop your answer below.'

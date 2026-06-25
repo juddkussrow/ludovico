@@ -1,0 +1,163 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: LTX Trainer Tutorial: From Dataset to IC-LoRA
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=Pb52GHRRYJ4
+upload_date: 20260624
+transcript_source: captions
+route: text
+
+---
+
+[00:00] [scene:talk]
+VISUAL:
+AUDIO: 'Hey everyone, Doug Hogan here. And in this video, we\'re going to train LTX to colorize black and white footage using their awesome and newly released LTX trainer, which is extra ironic because, well, I\'m colorblind. Yep, I am a'
+
+[00:12] [scene:talk]
+VISUAL:
+AUDIO: 'colorblind compositor. And somehow I built a career staring at images all day telling people if the colors look right. So, naturally, this felt like the perfect way to test the new LTX trainer.'
+
+[00:24] [scene:talk]
+VISUAL:
+AUDIO: 'And by the end, we\'ll have an IC Laura that takes black and white video in and gives colorized video out. And here\'s the thing, I\'m going to let Claude code handle all the technical setup. So, we'
+
+[00:36] [scene:talk]
+VISUAL:
+AUDIO: 'can just focus on the actual idea. Sound like fun? All right, let\'s go. Now, before anything else, let\'s talk about what makes this different from a normal Laura. Well, a normal Laura'
+
+[00:48] [scene:talk]
+VISUAL:
+AUDIO: 'teaches the model to generate something. An IC Laura teaches it to transform something. Think of it like an effect or a filter. You give it an input and it learns to'
+
+[01:01] [scene:talk]
+VISUAL:
+AUDIO: 'turn that input into something else. So, in this case, colorized footage, but it could also be relighting a plate, deblurring, style transfer. It\'s all the same type of problem that we\'re going to'
+
+[01:14] [scene:talk]
+VISUAL:
+AUDIO: 'be solving here with the new LTX trainer. And this project is pretty dead simple. Black and white in, color out. And here\'s why I love this project. I don\'t have to create a huge data set'
+
+[01:27] [scene:talk]
+VISUAL:
+AUDIO: 'from scratch. Every color clip that you see here that I created using LTX video model already contains its own answer. I take the color clip, make a black and white copy, and then we teach this new'
+
+[01:39] [scene:talk]
+VISUAL:
+AUDIO: 'model to rebuild the color version. The black and white is the input. The original color is the target. And that\'s what we call a training pair. Now, normally, this is where a tutorial'
+
+[01:52] [scene:talk]
+VISUAL:
+AUDIO: 'starts getting kind of scary, right? Environments, dependencies, config files, the whole wall of technical setup. Well, I\'m going to let Claude Code handle all the plumbing, and I\'ll just steer. And that\'s what I really like'
+
+[02:06] [scene:talk]
+VISUAL:
+AUDIO: 'about the LTX Trainer is it\'s built to do exactly this process. And you\'ll you\'ll see what I mean in a second. Now, first, let\'s talk about setup. Instead of walking through installs line by line,'
+
+[02:19] [scene:talk]
+VISUAL:
+AUDIO: 'I just told Claude Code what I wanted. Get the LTX Trainer running. And it figured out my system, set up the environment, and here\'s the part that actually kind of made me grin, and also terrified.'
+
+[02:33] [scene:talk]
+VISUAL:
+AUDIO: 'It scanned my drive and realized I already had the big LTX model sitting right there in my comfy UI folder. So, that\'s 46 GB downloaded already, saved me time, and Claude Code just skipped'
+
+[02:45] [scene:talk]
+VISUAL:
+AUDIO: 'it. Now, the only thing it needed me for was the gated models to be downloaded. So, I handed it a Hugging Face key, and off we were rolling. That whole scary wall of setup, all handled.'
+
+[02:59] [scene:talk]
+VISUAL:
+AUDIO: 'Thanks, Claude. Now, let\'s talk data set. I pointed Claude Code at my folder of clips, and just let it do the tedious part that I didn\'t want to do. It looked at every clip, confirmed the references were actually black and'
+
+[03:12] [scene:talk]
+VISUAL:
+AUDIO: 'white, and checked them against the trainer\'s rules, so nothing would blow up hours later. And proof of that is it caught something I never would have. My data file actually labeled the input'
+
+[03:24] [scene:talk]
+VISUAL:
+AUDIO: 'column with the wrong name. The trainer would have just errored out, and it would have ignored my black and white footage, and quietly trained a icy Laura that didn\'t work.'
+
+[03:36] [scene:talk]
+VISUAL:
+AUDIO: 'That\'s hours of GPU time that would have been gone with nothing telling me why or what happened. Well, Claude Code spotted that, it renamed one field, and saved the entire project. And that little glitch, that\'s'
+
+[03:49] [scene:talk]
+VISUAL:
+AUDIO: 'the secret weapon I keep telling everybody about. Using AI to spot the things that you never would have caught. Now we train. The whole configuration is really just'
+
+[04:02] [scene:talk]
+VISUAL:
+AUDIO: 'one big readable file. What model, how long, where the results are going to land. And I stuck close to the recommend defaults. Oh, and and quick tip, the biggest mistake people make, honestly I think,'
+
+[04:14] [scene:talk]
+VISUAL:
+AUDIO: 'is obsessing over settings before they\'ve actually validated the training data. If the data set\'s bad, no learning rate is going to save it. It\'s the whole garbage in, garbage out.'
+
+[04:26] [scene:talk]
+VISUAL:
+AUDIO: 'So, before committing to hours and hours on a very long run, I do what\'s called a smoke test. And I really love where this name comes from.'
+
+[04:38] [scene:talk]
+VISUAL:
+AUDIO: 'So, back in, you know, old school hardware engineering days, the first test of anything you physically built was to plug it into a wall socket and see if smoke literally started pouring out.'
+
+[04:50] [scene:talk]
+VISUAL:
+AUDIO: 'If it did, well, you had bigger problems and you spotted it early. So, turned it on, see if it smokes. Same idea here with training a LoRA. I\'m not asking is the colorization any good yet? I\'m asking does the whole'
+
+[05:04] [scene:talk]
+VISUAL:
+AUDIO: 'thing run without bursting into flames? Does it fit inside my VRAM? Does it actually train? Does it save results? So, if it doesn\'t smoke, well, then I commit to the full multi-hour run.'
+
+[05:16] [scene:talk]
+VISUAL:
+AUDIO: 'This is a way better approach to find a problem 20 minutes in rather than four, five, 10 hours later, right? So, as it trains, I\'m watching these validation clips. Again, I\'m not asking is it a'
+
+[05:29] [scene:talk]
+VISUAL:
+AUDIO: 'perfect match? I\'m asking is it moving in the right direction? Are skies turning blue? Is vegetation going green? Are skin [clears throat] tones looking believable? And when the answers start being, yeah,'
+
+[05:42] [scene:talk]
+VISUAL:
+AUDIO: 'kind of, well, then we\'re on the right So, now the fun part, the big test. These are clips the model has never seen. We\'ve got our icy Laura nice and'
+
+[05:54] [scene:talk]
+VISUAL:
+AUDIO: 'trained, and I\'m taking these clips that I held back on purpose exactly for this. So, here\'s the black and white source, and here\'s the icy Laura\'s guess. Even with the color drift that you see'
+
+[06:06] [scene:talk]
+VISUAL:
+AUDIO: 'there, which can be resolved with a a few more hours of training, you can see that compared to the original color. And what\'s wild is the model isn\'t recovering color as we see that\'s hidden'
+
+[06:18] [scene:talk]
+VISUAL:
+AUDIO: 'in the image. It\'s actually making educated predictions. It learned patterns from the training data we gave it, and it\'s inferring plausible color. So, for a colorblind artist watching the AI confidently call what color is'
+
+[06:32] [scene:talk]
+VISUAL:
+AUDIO: 'probably should be there is honestly a little humbling, and also really, really cool. So, here\'s why I really like this example project. It shows what an icy Laura actually is, which I think trips a'
+
+[06:46] [scene:talk]
+VISUAL:
+AUDIO: 'lot of people up when they\'re getting into this. We didn\'t teach the model a character. We didn\'t teach it a style. We taught it a process. Input in, transformed output out.'
+
+[06:58] [scene:talk]
+VISUAL:
+AUDIO: 'And once that idea clicks for people, I think you\'ll see the doors really kind of fly open of possibilities that the LTX trainer really opens up for you. We\'re talking relighting, deblurring,'
+
+[07:10] [scene:talk]
+VISUAL:
+AUDIO: 'footage restoration, style transfer, all different projects, but all the same idea. So, that\'s the whole workflow. We built a paired data set. Let Claude code handle the setup and all'
+
+[07:24] [scene:talk]
+VISUAL:
+AUDIO: 'the wiring. We trained an icy Laura with the brand new LTX trainer, and tested on footage it had never seen. So, if you\'re just getting into Laura training, this is honestly a fantastic first project because the data\'s simple,'
+
+[07:37] [scene:talk]
+VISUAL:
+AUDIO: 'the results are obvious, and Cloud Code clears the technical hurdles, so you can actually focus on the fun creative part. And unlike me, you can make a model that isn\'t color blind.'
+
+[07:51] [scene:talk]
+VISUAL:
+AUDIO: 'So, thanks for watching. Thanks for LTX for letting me play with this awesome new LTX trainer, and I will see you all in the next one.'

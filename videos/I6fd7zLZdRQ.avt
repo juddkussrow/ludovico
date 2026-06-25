@@ -1,0 +1,207 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: AsymFLUX.2 Klein 9B | LOW VRAM Workflow
+channel: @octopusinc_
+source: https://www.youtube.com/watch?v=I6fd7zLZdRQ
+upload_date: 20260516
+transcript_source: captions
+route: text
+
+---
+
+[00:04] [scene:talk]
+VISUAL:
+AUDIO: 'All right, YouTube. What is good? It\'s your boy Rebel back with another video. And today we are taking a look at A Sim Flux 2 for Flux Klein 9B base. So, a little bit about the model. A Sim Flow'
+
+[00:16] [scene:talk]
+VISUAL:
+AUDIO: 'stands for asymmetric flow modeling. A rank asymmetric velocity parameterization that restricts noise prediction to a low rank subspace while keeping data prediction full'
+
+[00:28] [scene:talk]
+VISUAL:
+AUDIO: 'dimensional. So, the big problem with pixel space models traditionally generating images directly in a raw pixel space instead of utilizing like a compressed latent or VAE slows a system'
+
+[00:40] [scene:talk]
+VISUAL:
+AUDIO: 'to a crawl and the transformer wastes almost all of its compute trying to predict high dimension noise rather than focusing the actual image data. So, this architectural trick kind of breaks the'
+
+[00:54] [scene:talk]
+VISUAL:
+AUDIO: 'velocity prediction task into two parts and keeps the image data full resolution but compresses the noise prediction into a tight low ranking subspace. By isolating the high noise to a small'
+
+[01:08] [scene:talk]
+VISUAL:
+AUDIO: 'patchwise low rank mathematical space, the model doesn\'t have to guess any random pixel determination. So, it can like dedicate its processing power to directly rendering shapes, sharpness,'
+
+[01:21] [scene:talk]
+VISUAL:
+AUDIO: 'and like following prompt adherence. And this technique provides a direct mathematical bridge to fine-tuning a pre-trained latent into a fully uncompressed pixel space. It lines up the low rank pixel patches with the'
+
+[01:34] [scene:talk]
+VISUAL:
+AUDIO: 'existing latent space and it just focuses on the sharpening of the raw textures. So, when comparing this to the regular base model for 9B, this actually completely outperforms it on visual'
+
+[01:48] [scene:talk]
+VISUAL:
+AUDIO: 'realism. So, and that\'s on multiple benchmarks. So, this model really benefits from having sharp textures and, you know, good visual clarity. So, to get started, you\'re going to need a'
+
+[02:01] [scene:talk]
+VISUAL:
+AUDIO: 'custom node set by 9 XZ. It\'s really simple to get it installed, and we will do that now. So, you\'re going to pull up your custom node directory, and you\'re going to click the address bar, and then'
+
+[02:15] [scene:talk]
+VISUAL:
+AUDIO: 'you\'re going to type CMD and hit enter. And that\'s going to bring up a command prompt inside your custom node directory. And then you are going to come to the link in the description in the workflow. You will find this Git'
+
+[02:29] [scene:talk]
+VISUAL:
+AUDIO: 'Clone command. You will right-click and copy this. And then you will come back to the command prompt and right-click again to paste it, and then you will hit enter. I will not do this because I already'
+
+[02:43] [scene:talk]
+VISUAL:
+AUDIO: 'have the folder, so I do not need to do this. But after you have let this install the custom nodes, you can just X out of the command prompt, and you are done with the custom node set, and then you can download your model of choice,'
+
+[02:56] [scene:talk]
+VISUAL:
+AUDIO: 'your encoder of choice. So, for the encoders, we actually have a Guff encoder if you have extremely low VRAM. Um and then we have an FP4 and an FP8 for the higher scales. At the bottom'
+
+[03:10] [scene:talk]
+VISUAL:
+AUDIO: 'here, you have a required adapter Laura, which sets the model into the pixel space. So, you will need to put that in your Laura\'s folder. Everything else is self-explanatory.'
+
+[03:24] [scene:talk]
+VISUAL:
+AUDIO: 'And after you have downloaded the models, you can then download the workflow and then punch it into Comfy, and it will look something like this. So, starting on the left here, we have our load diffusion model and our U-Net hosting our model file.'
+
+[03:37] [scene:talk]
+VISUAL:
+AUDIO: 'We have our clip or our Guff clip loader hosting our Qwen text encoder on the Flux 2 architecture running on our CPU to save the for the model. Over here, we'
+
+[03:50] [scene:talk]
+VISUAL:
+AUDIO: 'have the A Sim Flux latent node. You can just leave this closed. Here we have our A Sim Flux apply adapter node, which applies our adapter Laura. Moving down, we have our positive and negative'
+
+[04:04] [scene:talk]
+VISUAL:
+AUDIO: 'prompting coding nodes, our resolution nodes, and our K sampler. In our K sampler, we are running a step count of 38 with a CFG of four. And then up here, I just have the decode node that is'
+
+[04:16] [scene:talk]
+VISUAL:
+AUDIO: 'specialized for the workflow. closed just because it saves space. With that being said, that accounts for the workflow. So, I do have some examples to show you guys, and we will be taking a look at those right now. So, for my first test, I ran the usual subject'
+
+[04:28] [scene:talk]
+VISUAL:
+AUDIO: 'holding the model title sign. So, we have the woman in a oversized flannel with some glare lighting shot on an iPhone holding a cardboard sign that'
+
+[04:40] [scene:talk]
+VISUAL:
+AUDIO: 'reads A Sim Flux 2 Klein 9B. And this was generated using the four weights. For the next example, this is generated using the guff, and it is a woman in a similar scene with more vibrant'
+
+[04:55] [scene:talk]
+VISUAL:
+AUDIO: 'lighting. Um and she\'s wearing a black t-shirt with my handle. For the next example, we have an elderly Asian man, extreme detail on the face, very very good image. And here we have a double exposure picture. So, you have, you'
+
+[05:08] [scene:talk]
+VISUAL:
+AUDIO: 'know, the in line image of the trees with the outline image of the woman in the sharp contrasting white in the background. Very very good image. And this was actually generated on the guff'
+
+[05:20] [scene:talk]
+VISUAL:
+AUDIO: 'model, so I was very pleased with this. And here we have a chef or cook outside at a street vendor. Pretty solid image. There is some hallucination going on here in the background with the other'
+
+[05:33] [scene:talk]
+VISUAL:
+AUDIO: 'characters, but still pretty good. So, I figured what better way to test this model than up against Flux\'s latest iteration on Klein. So, on the left here, we have the Flux Klein 9B KV'
+
+[05:45] [scene:talk]
+VISUAL:
+AUDIO: 'model. It is not the base model, but the KV cash model. Um I figured that we should pin it against the newest foundation and not the previous'
+
+[05:57] [scene:talk]
+VISUAL:
+AUDIO: 'iteration because it\'s simply just going to fail against it. These are the current two best versions of the model. On the left, we have the KV and on the right, we have the A Sim model. So, for the KV model, you will notice that there'
+
+[06:12] [scene:talk]
+VISUAL:
+AUDIO: 'is a heavy set on detail. It is very high fidelity. Um that being said, the closer you zoom in on the image, the more you start to see the imperfections on the skin and just errors along the image as you'
+
+[06:25] [scene:talk]
+VISUAL:
+AUDIO: 'look. Now, with A Sim, you\'ll notice all of the skin texture issues have been corrected, detail and fidelity is tenfold, and everything is extremely coherent in the image. I really'
+
+[06:37] [scene:talk]
+VISUAL:
+AUDIO: 'genuinely would take A Sim over KV. So, for the next example, we have that double exposure image. Um on the left, the KV did go for a bit of a more opaque style where you can still see the'
+
+[06:52] [scene:talk]
+VISUAL:
+AUDIO: 'subject\'s facial features. Um I do prefer, again, the A Sim version because of the sharpness and fidelity and also the aesthetic it chose is a little bit better than this one, in my opinion.'
+
+[07:05] [scene:talk]
+VISUAL:
+AUDIO: 'This is still a very valid image from KV and I would accept it, but I prefer the right one. So, here we have a comparison of the Asian chef on the street vendor. Um I do honestly prefer the KV model on this one. Like I stated before, the A'
+
+[07:19] [scene:talk]
+VISUAL:
+AUDIO: 'Sim model kind of did hallucinate characters in the background and the KV kind of maintained accuracy with that. It\'s also a little bit more detail in the KV model on this image. Could be seed related, but So, here\'s a pretty cool comparison of a vintage photograph.'
+
+[07:32] [scene:talk]
+VISUAL:
+AUDIO: 'So, just like a kind of dystopian image with the weird goggles. Kind of subjective here. I think that the KV model kind of went for more of a cinematic look than'
+
+[07:44] [scene:talk]
+VISUAL:
+AUDIO: 'an actual photograph. The A 7 model maintained the accuracy of the time that the image would have been taken. So, here we have kind of an abstract example and very subjective, but I just wanted to show it. So, here we have an action'
+
+[07:57] [scene:talk]
+VISUAL:
+AUDIO: 'shot of a snowboarder jumping off of a mountain. While the KV model did get a little bit more aesthetic to it and kind of like a nice pose, A 7 model did follow coherence a little bit better.'
+
+[08:10] [scene:talk]
+VISUAL:
+AUDIO: 'This is like more of a real action shot. This more so does look like a cinematic image. So, for this example, we have an ice ball with a snowflake imprint sitting in the snow. Both are great'
+
+[08:23] [scene:talk]
+VISUAL:
+AUDIO: 'images. I just think that the overall aesthetic and scene for A 7 kind of makes more sense. The KV cache kind of just washed everything out with lighting. Here we have a really cool'
+
+[08:35] [scene:talk]
+VISUAL:
+AUDIO: 'example of a ring sitting on what looks like some coal and diamonds. I do think that the KV model pulled this off better, but again, this is due to the lower step count on the A 7. Now, I did try to test the boxing'
+
+[08:49] [scene:talk]
+VISUAL:
+AUDIO: 'image. However, it did not come out well for either side. Um I think that action shots are just not ready for image gen yet. And here we have a modeling photograph style image'
+
+[09:02] [scene:talk]
+VISUAL:
+AUDIO: 'with, you know, some abstract clothing. I do think that KV did handle this better. And then here we have a young woman with some bioluminescent lighting on her skin against a bluish aesthetic'
+
+[09:15] [scene:talk]
+VISUAL:
+AUDIO: 'backdrop with some vegetation. Personally, I would have went with the KV cache here. And then for our final example, we have a jumping spider sitting on a wet leaf with water droplets. KV did execute the pose and'
+
+[09:29] [scene:talk]
+VISUAL:
+AUDIO: 'realism as far as detail. The A 7 did struggle with this image pretty heavily, and I do feel that it is due to the water droplets. However, the KB model'
+
+[09:42] [scene:talk]
+VISUAL:
+AUDIO: 'just understood this prompt a lot better on this seed and absolutely killed it. That being said, this is still a great macro close-up image of this spider. It is just not as visually coherent as the KB cache. All right, guys. That\'s all'
+
+[09:56] [scene:talk]
+VISUAL:
+AUDIO: 'I\'m going to have for you today. Just wanted to get this workflow to you and let you test out this new variation to the model because Flux has always been, you know, a standout model in the'
+
+[10:08] [scene:talk]
+VISUAL:
+AUDIO: 'open-source community. It has a strong foundation and you know, it\'s obvious by the fact that people keep building on the models and trying to iterate and make them better. But, if you enjoyed what you saw today, please consider subscribing to the channel and leaving'
+
+[10:20] [scene:talk]
+VISUAL:
+AUDIO: 'me a comment on the video to let me know how I did. You can also like the video. It genuinely helps the channel tremendously. So, go ahead and download these models if you don\'t have them already, download the Laura and the'
+
+[10:32] [scene:talk]
+VISUAL:
+AUDIO: 'workflow, and enjoy ASim Flux 2. All right, guys. Thank you. Have a nice day. Bye.'
