@@ -35,7 +35,7 @@ select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;backgrou
 .bk{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;
 background:var(--card);border:1px solid var(--accent2);border-radius:14px;overflow:auto;padding:12px 13px;display:flex;flex-direction:column;gap:8px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s}
-.card.flip{overflow:visible}.card .fc{display:flex;flex-direction:column;flex:1;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--line)}
+.card.flip{overflow:visible}.card .fc{display:flex;flex-direction:column;flex:1;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--line);cursor:pointer}
 .card.flip:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
 .thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
 .thumb img{width:100%;height:100%;object-fit:cover;display:block}
@@ -140,11 +140,11 @@ function rowHTML(n,l,t){return `<div class=erow><input class=en value="${escA(n)
 <select class=et>${['software','hardware','other'].map(x=>`<option ${x==t?'selected':''}>${x}</option>`).join('')}</select>
 <button class=del onclick="this.closest('.erow').remove()">✕</button></div>`;}
 function cardHTML(v){const its=vItems(v);return `<article class="card flip" data-id="${v.id}"><div class=fi>
-<div class=fc><a class=thumb href="${escA(v.url)}" target=_blank rel=noopener>${v.thumb?`<img loading=lazy src="${escA(v.thumb)}" alt="">`:''}<div class=ov>${esc(v.title)}</div></a>
+<div class=fc onclick="flip(this)"><a class=thumb href="${escA(v.url)}" target=_blank rel=noopener onclick="event.stopPropagation()">${v.thumb?`<img loading=lazy src="${escA(v.thumb)}" alt="">`:''}<div class=ov>${esc(v.title)}</div></a>
 <div class=cbody><div class=meta>${CH} · ${v.date||'—'} · <a href="videos/${v.id}.html" onclick="event.stopPropagation()">capsule ↗</a></div>
 <div class=sum>${esc(v.summary)}</div>
 <div class=items>${itemChips(its)}</div>
-<div class=tagrow>${v.cats.map(c=>`<span class=t>${esc(c)}</span>`).join('')}<button class=edit onclick="flip(this)">✎ Edit</button></div>
+<div class=tagrow>${v.cats.map(c=>`<span class=t>${esc(c)}</span>`).join('')}</div>
 </div></div>
 <div class=bk><h4>Edit product links</h4><div class=erows>${editorRows(its)}</div>
 <button class=addrow onclick="addLink(this)">+ add link</button>
@@ -180,7 +180,8 @@ function renderC(reset){if(reset!==false)shownC=48;const out=filteredC();
  const slice=out.slice(0,shownC);$('catgrid').innerHTML=slice.map(catCard).join('')||'<p style="color:var(--sub)">No items match.</p>';
  pager('catgrid','pagerc',out.length-slice.length,48,false,()=>{shownC+=48;renderC(false);});}
 // ---- shared ----
-function flip(el){el.closest('.flip').classList.toggle('flipped');}
+function flip(el){const c=el.closest('.flip');const on=!c.classList.contains('flipped');c.classList.toggle('flipped',on);
+ const fi=c.querySelector('.fi'),bk=c.querySelector('.bk');fi.style.minHeight=on?bk.scrollHeight+'px':'';}
 function addLink(btn){btn.parentNode.querySelector('.erows').insertAdjacentHTML('beforeend',rowHTML('','','software'));}
 function pager(gridId,pagerId,rem,size,doom,more,obsFn){const p=$(pagerId);
  if(rem<=0){p.innerHTML='';return;}
