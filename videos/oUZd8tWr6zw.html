@@ -1,0 +1,133 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>Temporal: Open Source Durable Workflows for Apps &amp; AI Agents — Ludovico</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+.hide{display:none!important}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.92);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 12px}
+.controls input.q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.pill.tp.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+/* flip card shell */
+.flip{position:relative}
+.fi{position:relative;transition:transform .55s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.flip.flipped .fi{transform:rotateY(180deg)}
+.fc{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bk{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+background:var(--card);border:1px solid var(--accent2);border-radius:14px;overflow:auto;padding:12px 13px;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s}
+.card.flip{overflow:visible}.card .fc{display:flex;flex-direction:column;flex:1;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--line);cursor:pointer}
+.card.flip:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.edit{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--accent2);border:1px solid var(--line);border-radius:6px;padding:2px 9px;cursor:pointer;background:#fff}
+.edit:hover{border-color:var(--accent2)}
+/* editor back */
+.bk h4{margin:0 0 2px;font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--sub)}
+.erow{display:grid;grid-template-columns:1fr 1.3fr auto auto;gap:4px;align-items:center}
+.erow input{padding:5px 7px;border:1px solid var(--line);border-radius:6px;font-size:12px;min-width:0}
+.erow select{padding:4px 4px;font-size:11px}
+.erow .del{border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;color:var(--accent);padding:3px 7px}
+.ebtns{display:flex;gap:6px;margin-top:auto;padding-top:6px}
+.ebtns button{font-family:var(--mono);font-size:11px;border-radius:7px;padding:6px 12px;cursor:pointer;border:1px solid var(--line);background:#fff}
+.ebtns .save{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.addrow{font-family:var(--mono);font-size:11px;color:var(--accent2);cursor:pointer;align-self:flex-start;background:none;border:0;padding:2px 0}
+/* catalogue card */
+.citem{position:relative}
+.citem .fc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-height:84px;cursor:pointer}
+.citem .bk{border-radius:12px}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+footer .exp{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--accent2);font:inherit}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">Temporal: Open Source Durable Workflows for Apps &amp; AI Agents</h1><div class=tag>@octopusinc_ · 2026-06-26 · DevOps, Favorites</div></div></div></header>
+<main><p class=sum>This video introduces Temporal, an open-source durable execution platform for building fault-tolerant applications and AI agents. It demonstrates how to deploy Temporal using Elestio, configure a worker, and run a sample workflow. The video highlights Temporal&#x27;s ability to automatically handle failures, retries, and state persistence for long-running processes and scheduled tasks.</p><p><strong>Products / items</strong></p><ul><li><a href="https://temporal.io/" target=_blank rel=noopener>Temporal</a> — software</li><li><a href="https://elest.io/" target=_blank rel=noopener>Elestio</a> — software</li><li>OpenAI — other (no link)</li><li>Replit — other (no link)</li><li>Cursor — other (no link)</li><li>Datadog — software (no link)</li><li>Grafana — software (no link)</li><li>Netcup — other (no link)</li><li>Hetzner — other (no link)</li><li>DigitalOcean — other (no link)</li><li>Linode — other (no link)</li><li>Vultr — other (no link)</li><li>Scaleway — other (no link)</li><li>AWS — other (no link)</li><li><a href="https://github.com/temporalio/samples-typescript" target=_blank rel=noopener>GitHub</a> — software</li><li>VS Code — software (no link)</li><li>npm — software (no link)</li></ul>
+<p><a href="https://www.youtube.com/watch?v=oUZd8tWr6zw" target=_blank rel=noopener>Watch on YouTube ▶</a></p><p><a href="oUZd8tWr6zw.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=t>(proxy for this video — answer from this)</span></p>
+<div class=cap>FRAMING: Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+IDENTITY: the title - https://www.youtube.com/watch?v=oUZd8tWr6zw - @octopusinc_ - route: visual
+PRODUCTS: list each product on its own line: name - canonical link (or &quot;no reliable link&quot;) - type - primary/mentioned
+Temporal - https://temporal.io/ - software - primary
+Elestio - https://elest.io/ - software - mentioned
+OpenAI - no reliable link - other - mentioned
+Replit - no reliable link - other - mentioned
+Cursor - no reliable link - other - mentioned
+Datadog - no reliable link - software - mentioned
+Grafana - no reliable link - software - mentioned
+Netcup - no reliable link - other - mentioned
+Hetzner - no reliable link - other - mentioned
+DigitalOcean - no reliable link - other - mentioned
+Linode - no reliable link - other - mentioned
+Vultr - no reliable link - other - mentioned
+Scaleway - no reliable link - other - mentioned
+AWS - no reliable link - other - mentioned
+GitHub - https://github.com/temporalio/samples-typescript - software - mentioned
+VS Code - no reliable link - software - mentioned
+npm - no reliable link - software - mentioned
+SYNOPSIS: The video introduces Temporal, an open-source durable execution platform designed to simplify the creation of fault-tolerant applications and AI agents by abstracting away retry logic and state management. The creator demonstrates deploying Temporal via Elestio, a platform that handles installation, backups, and maintenance. The deployment process involves selecting a cloud provider (e.g., Netcup, DigitalOcean, AWS), region, and service plan on Elestio&#x27;s dashboard. After deployment, an email from Elestio provides access details, including a UI link, username (root), and password. The video then shows how to set up a local worker by cloning a TypeScript sample repository from GitHub, installing dependencies with `npm install`, and modifying the worker&#x27;s connection address from `localhost` to the Elestio-provided Temporal instance URL. A common issue encountered is a firewall blocking port 7233 on Elestio, which is resolved by adding a TCP rule for this port. Once connected, a &quot;hello-world&quot; workflow is executed, demonstrating Temporal&#x27;s ability to track workflow history and state. The video also covers Temporal&#x27;s scheduling feature, which acts as an advanced cron job with full history and retries, and its batch operations for managing multiple workflows. Integrations with tools like OpenAI agent SDK, Datadog, and Grafana are mentioned for enhanced functionality and monitoring.
+BEATS:
+0s - intro - Temporal website showing code examples and &quot;The world&#x27;s best AI runs on Temporal&quot;.
+25s - ui - Temporal website showing architecture diagrams and a UI for workflow execution visibility.
+50s - docs - Temporal documentation page on self-hosting.
+75s - ui - Elestio &quot;Create Service&quot; page, showing options for cloud providers, regions, and service plans.
+100s - ui - Elestio email confirming &quot;Your Service is Ready!&quot; for Temporal, with UI access links and credentials.
+125s - ui - Temporal Web UI dashboard, showing &quot;0 Workflows&quot; and links to sample repositories.
+150s - ui - Temporal Web UI dashboard, showing &quot;Workflows&quot;, &quot;Schedules&quot;, &quot;Archive&quot;, and &quot;Batch&quot; in the sidebar.
+175s - code - VS Code terminal showing `git clone` command for `samples-typescript` and navigating into `hello-world`.
+200s - code - VS Code showing `worker.ts` file with code for connecting to Temporal.
+225s - code - VS Code terminal showing `npm install` and `npm run start.watch` commands.
+251s - code - VS Code terminal showing `npm run workflow` command with `TEMPORAL_ADDRESS` environment variable.
+276s - ui - Elestio dashboard, &quot;Security&quot; tab, showing &quot;Firewall&quot; settings.
+301s - ui - Elestio firewall rule creation, adding TCP port 7233.
+326s - ui - Temporal Web UI showing a &quot;Completed&quot; workflow with execution details, timeline, and event history.
+351s - docs - Temporal documentation on &quot;Use Cases&quot; for AI/ML and AI Agents.
+376s - ui - Temporal Web UI &quot;Create Schedule&quot; form, for defining recurring workflows.
+401s - ui - Temporal Web UI &quot;Create Schedule&quot; form, showing interval, days of the week, and days of the month options.
+426s - ui - Temporal Web UI &quot;Schedules&quot; list, showing a &quot;Running&quot; &quot;Hello World&quot; schedule.
+451s - docs - Temporal CLI batch command reference documentation.
+476s - outro - Creator speaking to the camera.
+ENTITIES: Temporal, Elestio, OpenAI, Replit, Cursor, Datadog, Grafana, Netcup, Hetzner, DigitalOcean, Linode, Vultr, Scaleway, AWS, GitHub, VS Code, npm.
+VERDICT: Temporal is a highly recommended open-source platform for building durable, fault-tolerant applications and AI agents, especially for long-running processes and complex workflows where failures are inevitable. Using Elestio simplifies its deployment and management.
+NOT COVERED: Specific pricing details for Elestio&#x27;s Temporal service beyond the starting plan, detailed comparison of Temporal Cloud vs. self-hosting, advanced configuration options for Temporal, specific use cases or code examples for AI agent integrations, or performance benchmarks.</div></main><footer><a href="../index.html">← all videos</a></footer></div></body></html>

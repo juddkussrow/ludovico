@@ -1,0 +1,324 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Qwen-AgentWorld The World Model for Agents
+channel: @octopusinc_
+duration: 16:31
+source: https://www.youtube.com/watch?v=VzmMQWRhlBw
+upload_date: 20260625
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'Okay, so Quinn has a new model that\'s topping GPT-5.4 and Claude on their own benchmark. Now, really, I would say that is not interesting at all. What is really interesting about the Quinn agent world that they\'ve released is that they\'ve'
+
+[00:14] [scene:talk]
+VISUAL: 
+AUDIO: 'built a model that hallucinates environments and then trained agents inside them, and those agents can actually beat real-world training of different RL environments. So, in this video, I\'m going to break down what'
+
+[00:28] [scene:talk]
+VISUAL: 
+AUDIO: 'they\'ve actually done. We\'ll look at how this could be a whole different way of training models going forward, and how you could actually perhaps use this yourself to fine-tune models to get them to be better at the kind of tasks that'
+
+[00:42] [scene:talk]
+VISUAL: 
+AUDIO: 'you want to do. Okay, so most of today\'s AI agents uh harnesses and models that basically are trained to do specific actions. That could be things like'
+
+[00:54] [scene:talk]
+VISUAL: 
+AUDIO: 'terminal commands, click web buttons, call APIs, use different tools, et cetera. They\'re mostly trained to decide what to do, not to predict what happens after they\'ve done that specific action.'
+
+[01:06] [scene:talk]
+VISUAL: 
+AUDIO: 'You could kind of think of them as being really good at knowing when to press the jump button in a video game, but not knowing what\'s going to happen'
+
+[01:18] [scene:talk]
+VISUAL: 
+AUDIO: 'afterwards and where they\'re going to need to go in the video game going forward. Now, if we\'re talking about reinforcement learning, we would say here that the agents learn the policy. They\'re learning what to do, but they don\'t actually learn the world model,'
+
+[01:32] [scene:talk]
+VISUAL: 
+AUDIO: 'what happens after this. So, they\'re often operating in this kind of response mode rather than sort of knowing what to expect multiple moves down the path. And this is where the Quinn agent world'
+
+[01:45] [scene:talk]
+VISUAL: 
+AUDIO: 'totally flips that. They\'ve trained a model whose entire job is to be the world. You hand it the current state, for example, perhaps a terminal, a web page, an app screen, then you hand it an action, and it predicts what\'s going to'
+
+[01:59] [scene:talk]
+VISUAL: 
+AUDIO: 'come back. And that could be the exact terminal output, the next screen as something like HTML, the JSON response for an API, etc. And really interestingly, it does this for seven'
+
+[02:11] [scene:talk]
+VISUAL: 
+AUDIO: 'kinds of worlds. It does it for the terminal, for sort of CLI tasks and stuff like that, like bash. It does it for software engineering. It does it for web search. It does it for different'
+
+[02:23] [scene:talk]
+VISUAL: 
+AUDIO: 'tools, like MCP tools and stuff like that. It also does it for web browsers in general, and the OS for both desktop OS and the unique one for the Android OS. So, where most of the world models,'
+
+[02:36] [scene:talk]
+VISUAL: 
+AUDIO: 'like Genie, like Cosmos from Nvidia, etc., are sort of predicting visual images or moving video based on actions and stuff like that, this is actually'
+
+[02:48] [scene:talk]
+VISUAL: 
+AUDIO: 'predicting back auto-regressive text, which would be the kind of strings that we would get back from MCP servers, from search engines, from operating systems, etc. Now, what have they actually'
+
+[03:00] [scene:talk]
+VISUAL: 
+AUDIO: 'released? Well, they\'ve released the agent world, so that you can actually make these kind of predictions yourself. They\'ve also released an agent world bench, so they\'ve got their own benchmark for it. And they released a'
+
+[03:13] [scene:talk]
+VISUAL: 
+AUDIO: 'very nice paper talking about how they\'ve basically created these trajectories on seven domains, and what do they actually see from doing this? Okay, so let\'s start with the bench. And this is probably the least interesting'
+
+[03:25] [scene:talk]
+VISUAL: 
+AUDIO: 'part, right? They\'re basically just showing that their big version of this model, and this one is not the one that they\'ve actually released. This is a 397B with 17B active, so it\'s the big version of the sort of continuation of the Quen'
+
+[03:39] [scene:talk]
+VISUAL: 
+AUDIO: '3.5 series of model sizes, etc. That\'s beating out Claude Opus 4.8, GPT 5.4. Really nothing surprising here in the fact that this model has been engineered'
+
+[03:51] [scene:talk]
+VISUAL: 
+AUDIO: 'for this task, so of course it\'s going to beat out a general model like GPT 5.4 or Claude Opus. We looked at that with the previous video that I did about Vibe Thinker. And in many ways, just like'
+
+[04:04] [scene:talk]
+VISUAL: 
+AUDIO: 'that paper, this is really interesting more in what can you actually do with this? So, there are two main tasks that you can do with this kind of model. First, you can kind of use it as a simulator. Instead of spinning out real'
+
+[04:17] [scene:talk]
+VISUAL: 
+AUDIO: 'sandboxes and servers with, say, the Android OS or with real MCPs, etc. That can be really slow to do when you\'re trying to do RL with that. Can be really'
+
+[04:29] [scene:talk]
+VISUAL: 
+AUDIO: 'expensive, and often it\'s just impossible to create all of the different things that might go wrong in the environment that you\'re trying to do. So, basically here, you can just say to the model, "Hey, let\'s pretend to be'
+
+[04:42] [scene:talk]
+VISUAL: 
+AUDIO: 'the environment." And because it\'s fake, you can make it deliberately sort of act out, that it can inject errors, it can hide answers. You know, for things like HTML, it can suddenly paginate results.'
+
+[04:54] [scene:talk]
+VISUAL: 
+AUDIO: 'And this basically allows your agent to get better at doing these kind of real-world tasks because it\'s facing sort of this adversarial conditions that'
+
+[05:06] [scene:talk]
+VISUAL: 
+AUDIO: 'it has to learn to be able to respond to. And it really is this sort of free adversarial training that reality doesn\'t easily hand you. Often, if you\'re building an RL environment, to'
+
+[05:18] [scene:talk]
+VISUAL: 
+AUDIO: 'try to want it right. It\'s going to be set up in a way that it\'s probably going to work most of the time. And then when it goes out to the real world, it\'s going to face different things. By getting the model to hallucinate all these things, you can get more coverage'
+
+[05:31] [scene:talk]
+VISUAL: 
+AUDIO: 'over the things that can go wrong, and you can see those things more often, etc. Now, the second thing that you can do with this is that predicting the world makes the model a better agent itself. So, teaching it the habit of'
+
+[05:44] [scene:talk]
+VISUAL: 
+AUDIO: 'imagining what\'s going to actually happen before it takes out those actions is going to give it better reasoning skills to be able to sort of do self-reflection, right? That if you'
+
+[05:56] [scene:talk]
+VISUAL: 
+AUDIO: 'think of sort of standard chain of thought processes where the model basically articulates to itself what it\'s going to do and how it\'s going to work and what it should see and stuff like that, then allows it to come out'
+
+[06:08] [scene:talk]
+VISUAL: 
+AUDIO: 'with a better sort of final answer after doing that kind of reasoning. And we can see this if we look at the sort of before and after of the language world model RL training, that just getting it'
+
+[06:20] [scene:talk]
+VISUAL: 
+AUDIO: 'to be better at sort of articulating its thoughts by predicting out what it\'s thinking is going to happen bumps up the accuracy from 69.9% here right up to 78.3%.'
+
+[06:33] [scene:talk]
+VISUAL: 
+AUDIO: 'Now, that idea can be huge for if you\'re trying to get it to basically do a certain kind of task and you want it to be more robust and to be able to do generalization better. So, the model'
+
+[06:45] [scene:talk]
+VISUAL: 
+AUDIO: 'that they\'ve released is the 35 billion mixture of experts with 3 billion active in here. They haven\'t released the big one, but if we look at the stats just for that, we can see that when you\'ve'
+
+[06:57] [scene:talk]
+VISUAL: 
+AUDIO: 'got this model and you\'re testing this model on various sort of agent benchmarks like terminal bench, like sweep bench pro, etc., we can see that just the standard version of that model'
+
+[07:10] [scene:talk]
+VISUAL: 
+AUDIO: 'gets one score, but when we add in this RL with the language world model training there, suddenly now it\'s jumping up, right? So, by giving it this sort of more rounded understanding of the world that it\'s going to be'
+
+[07:23] [scene:talk]
+VISUAL: 
+AUDIO: 'operating in, it does make sense you\'re going to see a good bump for a lot of these different things. Even for things like the open claw personal agent benchmarks, we\'re seeing very substantial bumps in there. Okay, so how did they actually do it? So, if we come'
+
+[07:37] [scene:talk]
+VISUAL: 
+AUDIO: 'in and look at their training pipeline in here, They\'ve got both a graphic that describes it, but they\'ve got this sort of catchphrase. So, CPT injects, SFT activates, RL sharpens. And I got to'
+
+[07:49] [scene:talk]
+VISUAL: 
+AUDIO: 'say, I like this a lot. So, this basically is stage one is CPT or continual pre-training. So, in this stage, they\'re feeding in millions of sort of real-world action observation'
+
+[08:02] [scene:talk]
+VISUAL: 
+AUDIO: 'trajectories from sandboxes. So, that can be things like MCP servers, Android emulators, OS emulators, all those sorts of things. They\'re also feeding in world knowledge corpora. So, they\'ve got some'
+
+[08:17] [scene:talk]
+VISUAL: 
+AUDIO: 'sort of world knowledge about things like law, medicine, finance, cybersecurity, that kind of stuff. That\'s the kind of stuff that you can\'t really simulate without knowing sort of like facts behind it. And it\'s'
+
+[08:29] [scene:talk]
+VISUAL: 
+AUDIO: 'interesting here at this stage that they\'re not trying to just get the model to parrot sort of tool echoes in here. They\'re focused on giving it that world knowledge rather than just getting it to'
+
+[08:41] [scene:talk]
+VISUAL: 
+AUDIO: 'be able to repeat things back. All right, so stage two, SFT activates. This is the supervised fine-tuning. So, now it\'s basically not just doing next token prediction, that\'s what we were doing in'
+
+[08:53] [scene:talk]
+VISUAL: 
+AUDIO: 'sort of the continual pre-training there. Now, it\'s actually starting to switch it to activate some of the thinking and reasoning stuff before guessing the next state. So, you\'ve got sort of trajectories in here with'
+
+[09:05] [scene:talk]
+VISUAL: 
+AUDIO: 'explicit reasoning chains. And the objective here is to get this explicit thinking happening here. And this is not a huge amount of data that they\'ve actually got in there, right? You can see that they\'re using rejection'
+
+[09:18] [scene:talk]
+VISUAL: 
+AUDIO: 'sampling to select high-quality thinking trajectories resulting in just over 7,000 training samples for this. And this is what\'s starting to give the model then the ability to sort of do the thinking out loud, to do the reasoning,'
+
+[09:31] [scene:talk]
+VISUAL: 
+AUDIO: 'et cetera. And And brings us to stage three, the reinforcement learning. And as they put it, RL sharpens. And that\'s really sharpening the fidelity of this. So, they\'ve got the whole way that'
+
+[09:44] [scene:talk]
+VISUAL: 
+AUDIO: 'they\'re actually doing that via these on-policy rollouts. But then they need a way to actually sort of judge this. So, at this point, they\'ve got another model that sort of sits there as an LLM as a judge and scores on five different'
+
+[09:57] [scene:talk]
+VISUAL: 
+AUDIO: 'dimensions here: format, factuality, consistency, realism, and quality. But on top of that, they\'ve also got rules-based verifiers for anything'
+
+[10:09] [scene:talk]
+VISUAL: 
+AUDIO: 'that\'s checkable, exactly. So, things like code, things like is the JSON actually formatted properly, et cetera. And them having this balance of both the sort of LLM as a judge and rule-based'
+
+[10:22] [scene:talk]
+VISUAL: 
+AUDIO: 'verifier is their kind of way of stopping the model doing any sort of reward hacking here. Even if the LLM as a judge thinks that something is great, but it\'s not formatted correctly or it'
+
+[10:34] [scene:talk]
+VISUAL: 
+AUDIO: 'doesn\'t pass the rules-based check is, it\'s going to be penalized for that. So, the whole thing together, you can think of it as stage one is injecting the knowledge into it, stage two is activating the reasoning for this, and'
+
+[10:48] [scene:talk]
+VISUAL: 
+AUDIO: 'stage three is sharpening that reasoning and sharpening those answers out with reinforcement learning. Okay, so if we come and look at how this actually works, they\'ve put up a demo that you'
+
+[11:00] [scene:talk]
+VISUAL: 
+AUDIO: 'can actually try out going through here. So, you can see here that you select one of the seven sort of domains or worlds that it\'s actually good at. And then we can actually look at different examples'
+
+[11:14] [scene:talk]
+VISUAL: 
+AUDIO: 'from that. So, here we can see if we\'re looking at the terminal or a CLI example here, we\'ve got the agent\'s system prompt, and then we\'ve got the world model system prompt. And we can see'
+
+[11:26] [scene:talk]
+VISUAL: 
+AUDIO: 'that, okay, its system prompt is a little bit more diverse, and like that, uh bit longer in here. All right, now I think rather than just play it through at sort of 4x speed or something like that, let\'s look at it step by step. So,'
+
+[11:38] [scene:talk]
+VISUAL: 
+AUDIO: 'for starters, we can see what these sort of description points are as we come along here, and we can go through each of the turns, and we can see, okay, for this first turn, this is what the agent'
+
+[11:50] [scene:talk]
+VISUAL: 
+AUDIO: 'put in, and this is what the world model is predicting back. And we can see its reasoning for what it\'s going to predict back. We can actually go in and look at the longer chains of thought there. But, we can also see the output of what'
+
+[12:03] [scene:talk]
+VISUAL: 
+AUDIO: 'it actually returns back. And then we can see the reasoning of the agent, and we can see basically what it says in here. So, we can see that it\'s basically decided that it needed to install scikit-learn. All right, we can see this'
+
+[12:16] [scene:talk]
+VISUAL: 
+AUDIO: 'basically talking about that what the different commands are, or how they\'re going to relate to each other, what would be the output coming through that. If we jump forward, we can go through'
+
+[12:28] [scene:talk]
+VISUAL: 
+AUDIO: 'the different turns and see, okay, what is it actually got in here. And this allows us to see how you could use this to fine-tune your agent model for specific use cases. So, for example, if'
+
+[12:42] [scene:talk]
+VISUAL: 
+AUDIO: 'we wanted to take this system prompt, and we wanted to make it guided a bit more of that, okay, you\'re a specialist that deals with all commands related to pandas or something like that, we\'d'
+
+[12:55] [scene:talk]
+VISUAL: 
+AUDIO: 'probably find that with its world knowledge around pandas or with its world knowledge around the different topics, plus the system prompt, it\'s going to be more likely give accurate sort of responses for the particular'
+
+[13:09] [scene:talk]
+VISUAL: 
+AUDIO: 'kind of task that we want to fine-tune our model for. And those could be a whole bunch of different things. You can see here that we could do Android stuff. We could do web sort of stuff, where we could see that, okay, this is the current state. Now, they\'re rendering'
+
+[13:22] [scene:talk]
+VISUAL: 
+AUDIO: 'this out, obviously, but we can see that this is what the model will predict if you click page two in the pagination in there. You can see here another one that this is what it would actually render'
+
+[13:35] [scene:talk]
+VISUAL: 
+AUDIO: 'back that it\'s going to deliver out here. And we can see that that we\'ve got the rendered version, we\'ve got the actual thinking version in here, and then we\'ve got the HTML that it actually returns back for this. And you can see'
+
+[13:47] [scene:talk]
+VISUAL: 
+AUDIO: 'that they\'ve got a bunch of different examples in here. It\'s a very cool way of being able to generate trajectories at a much faster speed than you actually having to render these things. And I\'ve'
+
+[14:00] [scene:talk]
+VISUAL: 
+AUDIO: 'talked about in the past that one of the things that has made some of the open weights models really take off that they\'ve talked about in their papers and stuff like that has been this increase in the amount of RL environments and the'
+
+[14:13] [scene:talk]
+VISUAL: 
+AUDIO: 'amount of RL trajectories that they\'re training on. For example, we\'ve seen MiniMax talk about training on tens of thousands if not hundreds of thousands of these different environments. The challenge is if you\'re actually having'
+
+[14:26] [scene:talk]
+VISUAL: 
+AUDIO: 'to spin up each one of these and deal with it, then you\'re going to you know, that\'s going to take a lot of time, right? You\'re going to need a machine to do this. You\'re going to need to create these environments. If you can just do'
+
+[14:39] [scene:talk]
+VISUAL: 
+AUDIO: 'it all virtually with this model that\'s been trained to do it on even just looking at this, we can see that that\'s trained on a whole bunch of different kinds of tasks that you would see just for the web one in here. Same for the OS'
+
+[14:51] [scene:talk]
+VISUAL: 
+AUDIO: 'in here. We can see that it\'s got Ubuntu, it\'s got Windows. We can see different kinds of settings and stuff like that. So, it\'s able to basically train on that. And then also on things'
+
+[15:03] [scene:talk]
+VISUAL: 
+AUDIO: 'like search, we\'re going to basically get just the the sort of normal trajectories out that we can go through and look at here. This shows you the advantage of how this model could actually allow you to create synthetic'
+
+[15:16] [scene:talk]
+VISUAL: 
+AUDIO: 'RL data which you can then use for doing your fine-tuning. And the cool thing is because this is a model, you could even just render a bunch of things out, and you could imagine that this is how you'
+
+[15:29] [scene:talk]
+VISUAL: 
+AUDIO: 'could distill one of the Claude models is that you basically just have it playing against this and going through, and you\'re just keeping those trajectories. And then you can save those trajectories and fine-tune your'
+
+[15:41] [scene:talk]
+VISUAL: 
+AUDIO: 'particular model, or you could run it real-time as a live RL environment and set up your own reward model, etc. So overall again, it\'s not just the model here that is really the key asset, it\'s the concept of what the model can'
+
+[15:55] [scene:talk]
+VISUAL: 
+AUDIO: 'do, it\'s the ideas of how you can use this to basically make better models. And again, this is a little bit similar to Vibe Thinker in that this is a step forward for making higher-quality local'
+
+[16:08] [scene:talk]
+VISUAL: 
+AUDIO: 'AI models that we can then use for very specific use cases rather than having to basically just use the really big proprietary models all the time. So'
+
+[16:20] [scene:talk]
+VISUAL: 
+AUDIO: 'anyway, let me know in the comments what you think about it. As always, if you found the video useful, please click like and subscribe, and I will talk to you in the next video. Bye for now.'
