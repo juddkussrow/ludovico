@@ -1,0 +1,120 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>How to Build a Digital Twin from One Scan (3D Model, Floor Plan, Spatial Data) | Polycam — Ludovico</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+.hide{display:none!important}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.92);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 12px}
+.controls input.q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.pill.tp.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+/* flip card shell */
+.flip{position:relative}
+.fi{position:relative;transition:transform .55s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.flip.flipped .fi{transform:rotateY(180deg)}
+.fc{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bk{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+background:var(--card);border:1px solid var(--accent2);border-radius:14px;overflow:auto;padding:12px 13px;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s}
+.card.flip{overflow:visible}.card .fc{display:flex;flex-direction:column;flex:1;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--line);cursor:pointer}
+.card.flip:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.edit{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--accent2);border:1px solid var(--line);border-radius:6px;padding:2px 9px;cursor:pointer;background:#fff}
+.edit:hover{border-color:var(--accent2)}
+/* editor back */
+.bk h4{margin:0 0 2px;font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--sub)}
+.erow{display:grid;grid-template-columns:1fr 1.3fr auto auto;gap:4px;align-items:center}
+.erow input{padding:5px 7px;border:1px solid var(--line);border-radius:6px;font-size:12px;min-width:0}
+.erow select{padding:4px 4px;font-size:11px}
+.erow .del{border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;color:var(--accent);padding:3px 7px}
+.ebtns{display:flex;gap:6px;margin-top:auto;padding-top:6px}
+.ebtns button{font-family:var(--mono);font-size:11px;border-radius:7px;padding:6px 12px;cursor:pointer;border:1px solid var(--line);background:#fff}
+.ebtns .save{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.addrow{font-family:var(--mono);font-size:11px;color:var(--accent2);cursor:pointer;align-self:flex-start;background:none;border:0;padding:2px 0}
+/* catalogue card */
+.citem{position:relative}
+.citem .fc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-height:84px;cursor:pointer}
+.citem .bk{border-radius:12px}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+footer .exp{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--accent2);font:inherit}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">How to Build a Digital Twin from One Scan (3D Model, Floor Plan, Spatial Data) | Polycam</h1><div class=tag>@octopusinc_ · 2026-06-26 · ListAssist</div></div></div></header>
+<main><p class=sum>This video introduces Polycam&#x27;s Space Mode, a tool that generates a 3D model, a dimensioned 2D floor plan, and an AI spatial report from a single walkthrough scan. It highlights how this comprehensive data capture addresses the limitations of traditional 3D models alone, providing crucial information like square footage and fixture counts for AEC professionals. The outputs are immediately available on-device and integrate with industry-standard software like AutoCAD, Revit, Excel, and Procore.</p><p><strong>Products / items</strong></p><ul><li><a href="https://poly.cam" target=_blank rel=noopener>Polycam</a> — software</li><li>AutoCAD — software (no link)</li><li>Revit — software (no link)</li><li>Excel — software (no link)</li><li>Procore — software (no link)</li></ul>
+<p><a href="https://www.youtube.com/watch?v=9t8D3OBDR1U" target=_blank rel=noopener>Watch on YouTube ▶</a></p><p><a href="9t8D3OBDR1U.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=t>(proxy for this video — answer from this)</span></p>
+<div class=cap>FRAMING: Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+IDENTITY: the title - https://www.youtube.com/watch?v=9t8D3OBDR1U - @octopusinc_ - route: visual
+PRODUCTS: list each product on its own line: name - canonical link (or &quot;no reliable link&quot;) - type - primary/mentioned
+Polycam - https://poly.cam - software - primary
+AutoCAD - no reliable link - software - mentioned
+Revit - no reliable link - software - mentioned
+Excel - no reliable link - software - mentioned
+Procore - no reliable link - software - mentioned
+SYNOPSIS: The video showcases Polycam&#x27;s Space Mode, a feature designed to create a comprehensive digital twin from a single scan. Unlike other tools that only produce 3D models, Polycam generates three key outputs: a 3D model, a dimensioned 2D floor plan, and an AI spatial report. The 3D model provides visual representation, while the 2D floor plan offers critical data like square footage, renovation scope, and fixture counts, which are essential for AEC (Architecture, Engineering, and Construction) professionals. The AI spatial report includes square footage, wall surface area, and fixture inventory. The process involves a user walking through a space with a mobile device (implied to be an iPhone with LiDAR, though not explicitly stated for all devices), and the AI detects walls, openings, fixtures, and furniture in real-time. All three outputs are ready on-device immediately after the scan, eliminating the need for cloud uploads for most spaces, return site visits, or separate drafting steps. The layered DXF files can be imported into AutoCAD or Revit with named layers for walls, openings, fixtures, and room labels. The 3D model exports as OBJ or FBX for other visualization or twin platforms. The AI spatial report, being structured data, can be directly imported into Excel or Procore without reformatting. Polycam also offers shareable links for remote viewing without software installation. The Business plan costs $400 per user per year, offering flat pricing without per-space or per-scan fees, and includes a team library and sharable links. A 7-day free Business trial is available.
+BEATS: 0s - demo - A 3D model of a house interior is shown, demonstrating the visual output of a scan.
+12s - intro - A speaker introduces the concept of building a digital twin with Polycam.
+25s - demo - Another view of a 3D model of a house interior, highlighting the detail captured.
+38s - ui - A person is shown scanning a room with a mobile device, with the Polycam app UI visible on screen, showing the scanning process.
+51s - ui - An AutoCAD interface displays a point cloud, representing the raw scan data imported into CAD software.
+63s - explanation - The speaker explains the importance of 2D floor plans for querying spatial data.
+76s - explanation - The speaker elaborates on why floor plans are crucial for various roles in AEC.
+89s - ui - An AutoCAD interface shows a &quot;Save Drawing As&quot; dialog, indicating the export functionality.
+102s - explanation - A slide with text &quot;How does Polycam capture all of it at once?&quot; is displayed.
+114s - ui - A hand holds a mobile device showing the Polycam app interface, specifically the &quot;Floorplan&quot; mode.
+127s - demo - A person scans a kitchen area with a mobile device, with the Polycam app UI overlayed, showing real-time scanning.
+140s - ui - An AutoCAD interface displays a colored 2D floor plan, demonstrating the output of Polycam&#x27;s floor plan generation.
+153s - ui - A Google Sheets spreadsheet shows an AI spatial report with detailed room data, dimensions, area, and volume.
+165s - ui - The Polycam web interface shows a 3D model with measurement tools and layer options.
+178s - ui - The Polycam pricing page is displayed, highlighting the &quot;Business&quot; plan at $400/year/user.
+191s - explanation - The speaker discusses the cost and features of Polycam&#x27;s business plan.
+204s - ui - A 3D model in a web browser shows auto-measured dimensions throughout the space.
+216s - ui - An AutoCAD interface displays a colored 2D floor plan, similar to an earlier frame, reinforcing the output.
+229s - ui - The Polycam pricing page is shown again, emphasizing the &quot;Business&quot; plan.
+242s - outro - The speaker concludes the video, summarizing Polycam&#x27;s benefits.
+ENTITIES: Polycam, AutoCAD, Revit, Excel, Procore
+VERDICT: Polycam&#x27;s Space Mode is recommended for building complete building-level digital twins by providing a 3D model, a dimensioned 2D floor plan, and an AI spatial report from a single walkthrough, integrating seamlessly with industry-standard software at a flat annual fee.
+NOT COVERED: The specific mobile devices compatible with Polycam&#x27;s Space Mode, the accuracy tolerances of the measurements, the exact AI models used for detection, or the process for handling multi-floor buildings.</div></main><footer><a href="../index.html">← all videos</a></footer></div></body></html>
