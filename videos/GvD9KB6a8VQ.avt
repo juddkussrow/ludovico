@@ -1,0 +1,220 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Krea 2 Reference Images in ComfyUI | Multi Image, Style Transfer & Compositor Guide
+channel: @octopusinc_
+duration: 11:07
+source: https://www.youtube.com/watch?v=GvD9KB6a8VQ
+upload_date: 20260627
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:05] [scene:talk]
+VISUAL: 
+AUDIO: 'Welcome back to Vantage with AI. In my previous video, we explored the newly released Creal 2 Turbo model, set it up inside ComfyUI, and tested it across a wide variety of prompts and official LoRAs. If you haven\'t watched that video'
+
+[00:17] [scene:talk]
+VISUAL: 
+AUDIO: 'yet, I highly recommend checking it out first, as this workflow builds directly on top of it. One question that came up repeatedly was whether Creal 2 could use reference images to guide image generation. The answer is yes, and'
+
+[00:29] [scene:talk]
+VISUAL: 
+AUDIO: 'that\'s exactly what we\'ll be looking at today. In this video, I\'ll show you a custom ComfyUI node and a workflow that allows you to use multiple reference images to influence the generated output. These reference images can help'
+
+[00:41] [scene:talk]
+VISUAL: 
+AUDIO: 'guide the composition and visual characteristics of the generated image. It\'s important to note, however, that Creal 2 is not an image editing model. The reference images are used purely as guides, so while they can influence the'
+
+[00:54] [scene:talk]
+VISUAL: 
+AUDIO: 'final result, exact identity consistency cannot be guaranteed. Along with reference image conditioning, this custom node also includes two very useful enhancements. The first is a conditioning optimizer that provides IP'
+
+[01:07] [scene:talk]
+VISUAL: 
+AUDIO: 'adapter-like behavior for Creal 2 with per-layer weighting controls. &gt;&gt; [snorts] &gt;&gt; It also helps reduce the quality dilution introduced by the model\'s built-in safety conditioning, allowing the model to better preserve image'
+
+[01:20] [scene:talk]
+VISUAL: 
+AUDIO: 'quality while giving you greater control over the generation process. The second feature patches Creal 2\'s text conditioning during sampling to improve prompt adherence, helping the model follow detailed prompts more accurately'
+
+[01:32] [scene:talk]
+VISUAL: 
+AUDIO: 'and consistently. We\'ll go through each of these features, explain what they do, and then test them with a variety of examples so you can see exactly how much of a difference they make. So, let\'s jump into ComfyUI and get started. The'
+
+[01:45] [scene:talk]
+VISUAL: 
+AUDIO: 'workflow is very similar to the one we showcased in the previous video. It uses the same models, the same sampling settings, and most of the same configuration options. The main additions are three new custom nodes,'
+
+[01:57] [scene:talk]
+VISUAL: 
+AUDIO: 'the multi image loader, the compositor node, and the custom text encoder. These are the nodes that enable multi reference image conditioning and the additional enhancements we\'ll be exploring in this video. So, let\'s take'
+
+[02:09] [scene:talk]
+VISUAL: 
+AUDIO: 'a closer look at each of them. The multi image loader is where you load your reference images. You can add multiple images, reorder them to control their influence, and the node automatically resizes each image to'
+
+[02:22] [scene:talk]
+VISUAL: 
+AUDIO: 'match your selected output resolution, so there\'s no need to pre-process them manually. You also have the option to selectively remove the background from individual images. Simply enable the'
+
+[02:34] [scene:talk]
+VISUAL: 
+AUDIO: 'checkbox for the image you want to process. This is particularly useful when using character reference images, as it helps prevent the original background from bleeding into or influencing the final output. Next, we have the compositor node.'
+
+[02:47] [scene:talk]
+VISUAL: 
+AUDIO: 'When compositor mode is enabled, it takes all of the images from the multi image loader and arranges them as separate layers. You can then freely reorder, resize, rotate, and position these layers to create a rough draft of'
+
+[03:00] [scene:talk]
+VISUAL: 
+AUDIO: 'your desired scene before generation. The composited image produced by this node is then used as the input latent for the sampler, while the denoise strength is controlled by the compositing denoise value. The default value of 0.3 works well in most cases,'
+
+[03:14] [scene:talk]
+VISUAL: 
+AUDIO: 'but feel free to experiment with different values depending on how closely you want the final image to follow your composition. If default mode is enabled instead, the compositor and its associated nodes are bypassed and'
+
+[03:26] [scene:talk]
+VISUAL: 
+AUDIO: 'the default mode type selection becomes available. This lets you choose how the reference images should be interpreted. There are two available modes, image reference, where one or more input images are used as visual guidance for'
+
+[03:38] [scene:talk]
+VISUAL: 
+AUDIO: 'generating the final image, style transfer, which requires only a single input image and uses it purely as a style reference, while the content itself is generated from your text prompt. If no reference images are'
+
+[03:51] [scene:talk]
+VISUAL: 
+AUDIO: 'provided, this setting is simply ignored. Next, let\'s take a look at the custom text encoder. This is where you enter your prompt. There are two options in this node that are worth highlighting. The first is conditioning rescaling. When enabled, it rescales the'
+
+[04:04] [scene:talk]
+VISUAL: 
+AUDIO: 'generated conditioning using a configurable multiplier and per layer weights. This helps bypass the built-in quality dilution introduced by the models trained safety conditioning as a side effect, effectively unfiltering the'
+
+[04:17] [scene:talk]
+VISUAL: 
+AUDIO: 'model. The second option is the prompt adherence enhancer. This patches Creal 2\'s text fusion layers during sampling, allowing the model to follow prompt details more closely and consistently.'
+
+[04:29] [scene:talk]
+VISUAL: 
+AUDIO: 'Even when used on its own, this option also removes the model\'s built-in filtering behavior. Throughout this video, I\'ll show the results both with these patches disabled and with them enabled, so you can compare the output'
+
+[04:42] [scene:talk]
+VISUAL: 
+AUDIO: 'side by side and decide whether these enhancements are worth using in your own workflows. Let\'s start with a simple text-to-image test without using any reference images. For all of the tests in this video, I\'m using a fixed seed so'
+
+[04:54] [scene:talk]
+VISUAL: 
+AUDIO: 'that any differences you see are caused by the workflow options themselves, rather than changes introduced by a different random seed. For our first test, we\'ll use a prompt'
+
+[05:06] [scene:talk]
+VISUAL: 
+AUDIO: 'that specifies a number of different attributes, including the subject\'s pose, ethnicity, hairstyle, body proportions, clothing, a wet-from-water appearance, and the overall scene. Let\'s take a look at the results. All of the'
+
+[05:19] [scene:talk]
+VISUAL: 
+AUDIO: 'generated images look good, but there are some noticeable differences. With both enhancements disabled, Creal 2 misses a few of the finer details from the prompt. For example, although we specified that the subject\'s body should'
+
+[05:32] [scene:talk]
+VISUAL: 
+AUDIO: 'be wet from water, there\'s very little indication of wet skin. Similarly, the requested body proportions are only partially reflected in the output. The rest of the prompt, however, is followed quite well. Now, let\'s compare that to'
+
+[05:44] [scene:talk]
+VISUAL: 
+AUDIO: 'the results with the enhancements enabled. Here, we can clearly see stronger prompt adherence. The wet skin effect is much more visible, giving the impression that the subject has just come out of the water. The requested body proportions are also represented'
+
+[05:56] [scene:talk]
+VISUAL: 
+AUDIO: 'more closely. One thing to keep in mind is that when using the prompt adherence enhancer, your prompt should be detailed and precise. If the prompt is too vague, you may occasionally notice facial features taking on a slightly'
+
+[06:09] [scene:talk]
+VISUAL: 
+AUDIO: 'anime-inspired appearance. You can also adjust the enhancement strength to find [snorts] the balance that works best for your particular prompt. I also ran several additional text-to-image tests, and here are the results. Overall, the'
+
+[06:21] [scene:talk]
+VISUAL: 
+AUDIO: 'outputs look very good across a wide variety of prompts. I\'ve included a link to an archive containing all of the generated images in the video description below, so you can examine the results yourself and decide which'
+
+[06:33] [scene:talk]
+VISUAL: 
+AUDIO: 'settings work best for your own workflows. Now, let\'s see how CreaVite behaves when we start using reference images. For this test, we\'ll use three input images. The first image will act as the reference for the overall scene and'
+
+[06:45] [scene:talk]
+VISUAL: 
+AUDIO: 'background, while the second and third images will serve as character references for the man and the woman that we want to place into that scene. We\'ll use the following prompt: Use picture one as background. The man from picture two is hugging the woman from'
+
+[06:58] [scene:talk]
+VISUAL: 
+AUDIO: 'picture three. Let\'s take a look at the results. The difference here is quite significant. With both enhancements disabled, the result isn\'t very usable. While the model successfully picks up the background from the first reference image, the two character references end'
+
+[07:11] [scene:talk]
+VISUAL: 
+AUDIO: 'up appearing very small at the bottom of the image. Although the prompt correctly places them in a hugging pose, the final result looks more like a artificial composition rather than a naturally generated scene. Once either of the'
+
+[07:24] [scene:talk]
+VISUAL: 
+AUDIO: 'enhancements is enabled, however, the results improve dramatically. The characters are integrated much more naturally into the background, and the overall composition follows the prompt much more closely. Again, I\'d like to'
+
+[07:37] [scene:talk]
+VISUAL: 
+AUDIO: 'emphasize that this is not an image editing or identity preserving model. The reference images are used only as visual guidance. So, while the generated characters and scene will resemble the references, you should not expect exact'
+
+[07:50] [scene:talk]
+VISUAL: 
+AUDIO: 'identity consistency. Let\'s try a style transfer test next. For this test, I\'ve switched the workflow to style transfer mode and supplied this hand-drawn sketch as the style reference. I\'ll be using'
+
+[08:02] [scene:talk]
+VISUAL: 
+AUDIO: 'one of the detailed prompt from one of our previous tests so that we can clearly see how much influence the reference image has on the final output. Let\'s take a look at the result. As you can see, with both enhancement options disabled, Crea 2 struggles with this'
+
+[08:15] [scene:talk]
+VISUAL: 
+AUDIO: 'example. While it successfully captures the artistic style of the reference sketch, it doesn\'t follow the prompt very well. For example, instead of generating a reflection on the ground as described in the prompt, it produces two separate women in the scene.'
+
+[08:28] [scene:talk]
+VISUAL: 
+AUDIO: 'The results improve significantly once either of the enhancements is enabled. The model not only preserves the hand-drawn pencil sketch aesthetic with its fine line work, shading, and textured appearance, but also follows'
+
+[08:41] [scene:talk]
+VISUAL: 
+AUDIO: 'the prompt much more accurately, producing an image that is much closer to the intended composition. I also ran several more style transfer tests using different artistic styles while keeping the prompt exactly the same. Here are'
+
+[08:54] [scene:talk]
+VISUAL: 
+AUDIO: 'the results. The outputs are consistently impressive, demonstrating that Crea 2 can effectively transfer a wide variety of artistic styles while still preserving the composition and details described in the prompt. This'
+
+[09:06] [scene:talk]
+VISUAL: 
+AUDIO: 'makes style transfer a great option when you want to achieve a specific visual aesthetic without relying on a dedicated Laura. Finally, let\'s test the compositor mode. For this example, I\'m using four source images. The first'
+
+[09:19] [scene:talk]
+VISUAL: 
+AUDIO: 'image will serve as the background for the scene, while the remaining images will be positioned on top of it to build the composition we want to generate. Let\'s hit run. The first time you execute the workflow with compositor'
+
+[09:31] [scene:talk]
+VISUAL: 
+AUDIO: 'mode enabled, the loaded images are automatically imported into the compositor node and the workflow pauses. This gives you the opportunity to arrange the layers exactly how you want, moving, resizing, rotating, and ordering'
+
+[09:44] [scene:talk]
+VISUAL: 
+AUDIO: 'them to create a draft version of the scene. Once you\'re happy with the layout, simply run the workflow again. It will continue from that point using the composited scene as the input latent and generating the final image based on'
+
+[09:58] [scene:talk]
+VISUAL: 
+AUDIO: 'both your composition and prompt. Here\'s the final result. As you can see, it turned out really well. The generated image closely follows the draft composition while naturally blending all of the individual elements into a'
+
+[10:11] [scene:talk]
+VISUAL: 
+AUDIO: 'cohesive scene. This makes compositor mode a powerful way to guide Crea 2 when you have a specific layout or scene composition in mind. And that\'s a look at how reference image conditioning works with Crea 2 in ComfyUI. While it'
+
+[10:23] [scene:talk]
+VISUAL: 
+AUDIO: 'isn\'t an image editing or identity consistent model, this workflow does a great job of using multiple reference images to guide composition, style, and character placement. Combined with the'
+
+[10:35] [scene:talk]
+VISUAL: 
+AUDIO: 'conditioning optimizer and prompt adherence enhancements, it can produce some impressive results. You can find the workflow and all the resources mentioned in this video linked in the description below. If you found this video helpful, please leave a like,'
+
+[10:48] [scene:talk]
+VISUAL: 
+AUDIO: 'subscribe to the channel, and let me know in the comments what you\'d like to see next. Thanks for watching and I\'ll see you in the next one.'

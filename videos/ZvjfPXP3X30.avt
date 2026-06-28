@@ -1,0 +1,296 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Block Web Attacks Live: Open-Source WAF with Automatic HTTPS
+channel: @octopusinc_
+duration: 15:11
+source: https://www.youtube.com/watch?v=ZvjfPXP3X30
+upload_date: 20260624
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'Hey defenders, welcome back. In this video, I\'m going to introduce you guys to the Sock Fortress web application firewall that you can put in front of your application to provide a full self-hosted WAF solution all within 10 minutes. So, stick around and we\'ll jump into it. So, putting a'
+
+[00:14] [scene:talk]
+VISUAL: 
+AUDIO: 'web application firewall in front of your app usually means wrestling certificates, cryptic rules, and potentially a big bill. And this open-source self-hosted helps to fix that with automated TLS, OWASP rules'
+
+[00:26] [scene:talk]
+VISUAL: 
+AUDIO: 'built in, and a friendly admin UI that you can use to configure and manage your WAF. So, three things are combined in one Docker Compose stack. Caddy for the proxy and automatic TLS,'
+
+[00:38] [scene:talk]
+VISUAL: 
+AUDIO: 'Coraza running Core Rule Set version 4 for detection, and a Fast API plus React UI so you can manage it by clicking and not editing config files via the CLI. Traffic is going to come'
+
+[00:51] [scene:talk]
+VISUAL: 
+AUDIO: 'over HTTPS. It will hit the WAF. Every request is inspected. Clean traffic is then proxied to your back-end application, which stays private, only reachable through your WAF, and'
+
+[01:03] [scene:talk]
+VISUAL: 
+AUDIO: 'attackers never make it to the back end. So, we have a public repository that we have put together for you guys that will enable you to deploy the Sock Fortress WAF solution. So, let\'s go ahead and'
+
+[01:15] [scene:talk]
+VISUAL: 
+AUDIO: 'jump into it. And link down into the GitHub repository is in the description below. All right, so after accessing the repository, I\'m going to copy the URL to the clipboard and go on to my This is just a Debian 13'
+
+[01:29] [scene:talk]
+VISUAL: 
+AUDIO: 'host here. I have already CD\'d into the opt directory. I\'ve also already installed Git and also Docker, so make sure you do that for prior to attempting to run the application for the first'
+
+[01:42] [scene:talk]
+VISUAL: 
+AUDIO: 'time. And the public images are hosted within our GitHub container registry, so no need for you guys to have to build from source. And so, let\'s CD into the WAF plat-'
+
+[01:55] [scene:talk]
+VISUAL: 
+AUDIO: 'public directory. And you\'ll also notice that I have this demo file. So, if you don\'t already have If you just want to see this web application at work and want to host it with just a basic application and forward traffic to it just a demo web application, I\'ve put'
+
+[02:08] [scene:talk]
+VISUAL: 
+AUDIO: 'together this demo directory to do just that. So, we can invoke the install nginx Debian 13 .sh script and what this is going to do is install nginx and just serve a basic web application which will'
+
+[02:21] [scene:talk]
+VISUAL: 
+AUDIO: 'will connect to here in a sec. But, we\'re going to use this demo site behind our WAF so we can actually see the WAF at work. So, if you already have a web application that you\'re looking to host'
+
+[02:33] [scene:talk]
+VISUAL: 
+AUDIO: 'behind the WAF, then uh no need to go through this demo deployment, but if you are interested in testing it out yourself, then you can run this demo uh install nginx Debian script to get yourself a website up and then what I'
+
+[02:46] [scene:talk]
+VISUAL: 
+AUDIO: 'should see if I do a netstat, I do see that the box is listening on port 8088 which is what uh nginx is serving here. And so, with that listening, let\'s go ahead and now start up the WAF application. So, we\'ll first need to'
+
+[02:58] [scene:talk]
+VISUAL: 
+AUDIO: 'copy the .env example into a .env uh within our WAF directory here. Now, I\'ll go ahead and modify this er open up this .env and you can go ahead'
+
+[03:11] [scene:talk]
+VISUAL: 
+AUDIO: 'and modify and change any of the secrets or user accounts. Uh I\'m just going to leave the defaults for here. There\'s a few other settings you can set for SMTP, for example, if you want to send emails'
+
+[03:23] [scene:talk]
+VISUAL: 
+AUDIO: 'out. And you can also change the bootstrap admin URL and password which these will be the credentials that we\'ll use to log in to the admin web UI of the WAF. I\'m just going to leave these all at the default for now.'
+
+[03:35] [scene:talk]
+VISUAL: 
+AUDIO: 'It\'s part of the demo and I\'m going to go ahead and run a docker compose up -d. What this is going to do is pull the application and go ahead and start the WAF for us. All right. So, with that started up, what I\'ll now be able to do'
+
+[03:49] [scene:talk]
+VISUAL: 
+AUDIO: 'is access the admin UI here on port 8443. So, the admin UI will be exposed on this port. I don\'t recommend exposing this port publicly. Keep this internally to'
+
+[04:02] [scene:talk]
+VISUAL: 
+AUDIO: 'yourself. As really 443 would be the only port that we\'ll want to allow access to the internet cuz that\'s what the WAF is going to serve our web application through. So, I\'ve already created a public domain for my WAF'
+
+[04:16] [scene:talk]
+VISUAL: 
+AUDIO: 'application here. So, I\'m going to go ahead and visit this website. And here you\'ll see that we\'re prompted to log in via the admin credentials. And these will, again, be what is reflected within the .env, these two values here.'
+
+[04:30] [scene:talk]
+VISUAL: 
+AUDIO: 'So, I\'ll go ahead and log in with these two values. And once I\'ve logged in, we\'ve now verified that we can access the web UI of the WAF. So, this is great. But, let\'s go ahead and now'
+
+[04:42] [scene:talk]
+VISUAL: 
+AUDIO: 'configure our first site because the WAF really isn\'t serving anything at this time. What we want it to do is to serve our Engine X web app that we just spun up. So, let\'s go ahead and go into'
+
+[04:54] [scene:talk]
+VISUAL: 
+AUDIO: 'sites. And actually, before we do that, let\'s go ahead and go into settings. And let\'s enable the GeoIP database. So, under settings, we can enable the GeoIP database where we use the MaxMind, which'
+
+[05:07] [scene:talk]
+VISUAL: 
+AUDIO: 'you can sign up for a free license key directly from their website. So, I recommend you guys doing this. This isn\'t a requirement, but this does give us nice GeoIP information, which we can use to not only enrich our logs with,'
+
+[05:20] [scene:talk]
+VISUAL: 
+AUDIO: 'but also add geo-blocking as well. So, with my license key, I\'ll go ahead and paste that value into there. I\'ll go ahead and run save. Now, after saving, you\'ll see that it says configured. But,'
+
+[05:32] [scene:talk]
+VISUAL: 
+AUDIO: 'let\'s go ahead and also update as well. And what we should see is that the database has been updated successfully, and we see data has been loaded in. So, now let\'s go go and configure our first'
+
+[05:44] [scene:talk]
+VISUAL: 
+AUDIO: 'site. So, under site here, I\'m going to go ahead and select add site and uh I\'m just going to call it threat demo. This can be of course whatever site name you want. Then, I\'m going to specify the address that clients will type in within'
+
+[05:58] [scene:talk]
+VISUAL: 
+AUDIO: 'their browser. So, I\'m still just going to host this behind WAF -demo.stackpath.co. I\'m going to go ahead and use Let\'s Encrypt for certificate verification. And this is also nice because Caddy will'
+
+[06:12] [scene:talk]
+VISUAL: 
+AUDIO: 'also automatically renew these certificates as well. So, Let\'s Encrypt by default, I think it\'s 80 days or 90 days of certificate expiration time. So, what\'s actually what the WAF now is'
+
+[06:25] [scene:talk]
+VISUAL: 
+AUDIO: 'going to do is actually automate the renewal of that certificate for us. So, a nice built-in feature there. And here I\'m going to point to the back-end URL, which this will be the address that my web app is'
+
+[06:38] [scene:talk]
+VISUAL: 
+AUDIO: 'running on, right? Which since I\'m running this on the same host as the WAF, I\'m just going to point it back to the local host. So, I\'m going to set that here, but you would point to whatever like internal either host name'
+
+[06:51] [scene:talk]
+VISUAL: 
+AUDIO: 'or directly to an IP address that your web application that you\'re wanting to protect behind the WAF is actually running on. Uh I\'m going to leave these unchecked because I don\'t want just detection'
+
+[07:03] [scene:talk]
+VISUAL: 
+AUDIO: 'mode. I want blocking mode to also be enabled. So, we want our WAF to actually enable protection. Otherwise, you can go just in a detection-only mode, which can be helpful if you\'re troubleshooting and'
+
+[07:15] [scene:talk]
+VISUAL: 
+AUDIO: 'needing to write exclusion rules because that is one caveat that can be challenging with WAFs is that they can sometimes become so overprotective that they actually break your application and'
+
+[07:27] [scene:talk]
+VISUAL: 
+AUDIO: 'your end-user clients actually trying to perform legitimate actions against your web application. But, we\'ll take a look at how we can create exclusion rules here here in a bit. So, let\'s go ahead and save this value off.'
+
+[07:40] [scene:talk]
+VISUAL: 
+AUDIO: 'And you can see that our site is created and the WAF has also created the certificate in the back end. So, now let\'s actually go ahead and try to access our website here, which will also now be protected by the WAF. You\'ll see'
+
+[07:54] [scene:talk]
+VISUAL: 
+AUDIO: 'notice I\'m going over HTTPS on 443. So, if I access that within my browser, here we can actually see our demo web application here here at work. And if I back into our dashboard, we can see that'
+
+[08:07] [scene:talk]
+VISUAL: 
+AUDIO: 'it has accepted two requests. I imagine since I have this hosted publicly, I\'ll start to receive a lot of requests, but for now, here we can see our two two requests. So, we can see the action that was taken, we see the IP address, we see'
+
+[08:20] [scene:talk]
+VISUAL: 
+AUDIO: 'our geo IP filtering being applied here. If I want to block a specific geo IP, I could search by a country code. Let\'s say I wanted to block, I don\'t know, Russia'
+
+[08:33] [scene:talk]
+VISUAL: 
+AUDIO: 'for example, I could add that here and select block that country. And this will automatically reload the WAF engine in the background all while still continuing to serve your web application. And here we can already see'
+
+[08:45] [scene:talk]
+VISUAL: 
+AUDIO: 'things on the internet start to access my web application. But, all good. Uh so, let\'s go ahead. So, with our site now created, let\'s let\'s actually start to simulate some attacks and start to see the WAF at work'
+
+[08:58] [scene:talk]
+VISUAL: 
+AUDIO: 'here. So, if we open up the attack console, let me just run like a basic SQL injection here. And running this will simulate it against our WAF. So, we actually see that one was blocked and one request was sent. So, if I actually'
+
+[09:12] [scene:talk]
+VISUAL: 
+AUDIO: 'now go into our WAF logs, sure enough, here we see my request with an action of being blocked and matched against the core set rule of the SQL injection attack uh lib injection. So, we\'re also seeing all of our core rule set rules,'
+
+[09:25] [scene:talk]
+VISUAL: 
+AUDIO: 'uh which is a phenomenal uh kind of WAF rule set database that we\'re using to populate the WAF rules on the back end here. We can also view the details of these and we also have the'
+
+[09:37] [scene:talk]
+VISUAL: 
+AUDIO: 'ability to disable these one at a time if one is just breaking your application too much. You can also write method exceptions and then we can also take a look at custom'
+
+[09:49] [scene:talk]
+VISUAL: 
+AUDIO: 'rules. So, we see some attacks coming through. Let\'s simulate a few more. Let\'s run a legitimate traffic search so we can see that this indeed was allowed. If we go back into our WAF, we can also enable this live feed here and sure'
+
+[10:02] [scene:talk]
+VISUAL: 
+AUDIO: 'enough we see that this action was passed. I\'ll simulate just a few other run all these attacks and we see these getting blocked and sent. If we go back to our WAF, sure enough we see all of our traffic here being blocked. Now,'
+
+[10:15] [scene:talk]
+VISUAL: 
+AUDIO: 'another really cool feature about the WAF is that we can go into threat intel here and let\'s go ahead and select refresh now and here we can see what IP addresses have been creating the most malicious kind of activity towards our'
+
+[10:28] [scene:talk]
+VISUAL: 
+AUDIO: 'WAF and sure enough here we see my public IP address has a score of 91 and that\'s because well, I\'ve triggered a lot of blocks within the last few minutes here. And what\'s really cool too is I can actually block this IP'
+
+[10:41] [scene:talk]
+VISUAL: 
+AUDIO: 'permanently. So, what this will do is create a WAF rule that blocks this IP address from being able to send logs permanently into your web applications that you\'re protecting. I\'m not going to do that in'
+
+[10:53] [scene:talk]
+VISUAL: 
+AUDIO: 'this instance because that will break my demo that I\'m showing here. But, let\'s let this run for a few minutes and I imagine we\'ll start to probably pick up some nasty activity from just bots and scripts that are running to see what'
+
+[11:06] [scene:talk]
+VISUAL: 
+AUDIO: 'they can get into. We also have a full user guide built into the application itself within the web UI. So, for any of the settings that we won\'t cover within this video such as the API gateways, you'
+
+[11:18] [scene:talk]
+VISUAL: 
+AUDIO: 'guys can see the documentation built directly into the application itself. Uh, but let\'s go ahead and actually look at creating a custom rule. So, here we can create custom rules'
+
+[11:31] [scene:talk]
+VISUAL: 
+AUDIO: 'which still follow the core rule set syntax here. And let\'s say for example, I want to add a rule that will allow all traffic from my IP address. Let\'s say for example, I know that maybe this is a'
+
+[11:44] [scene:talk]
+VISUAL: 
+AUDIO: 'client IP that\'s totally trusted, although I\'d still be hesitant to just blanket whitelist a IP address from the WAF, but this is to serve as an example within this demonstration and'
+
+[11:56] [scene:talk]
+VISUAL: 
+AUDIO: 'how to create exclusion rules. We can go ahead and come into custom rules. We can select add custom rule. Let\'s go ahead and select add custom rule. And here I\'m going to do a raw and advanced. You can also have it and put it out to make it a'
+
+[12:08] [scene:talk]
+VISUAL: 
+AUDIO: 'little more user-friendly, but I personally like to use the raw advanced. So, here for example, I\'m going to define a rule that allows my IP address 104.10. 84.23.'
+
+[12:22] [scene:talk]
+VISUAL: 
+AUDIO: 'And you\'ll notice that what is it doing? It\'s turning the rule engine off. So, this is going to bypass all WAF rules. So, when the WAF sees that this is my IP address, it is going to turn the detection engine off.'
+
+[12:36] [scene:talk]
+VISUAL: 
+AUDIO: 'Um so, here I could say trusted collector IP. I\'ll just call it Taylor. And I can go ahead and save this. Uh you\'ll notice that the the ID is set to auto. So, the WAF is going to auto increment the rule ID. Um core rule set'
+
+[12:50] [scene:talk]
+VISUAL: 
+AUDIO: 'can be sensitive about the rule IDs, but we go ahead and take care that and auto increment that for you. So, you don\'t have to worry about keeping track of that. So, a little more user-friendly there as well. Let\'s go back into our WAF here'
+
+[13:03] [scene:talk]
+VISUAL: 
+AUDIO: 'and let\'s just run our SQL injection. And you\'ll notice that our SQL injection attack has now just been allowed. I refresh this page here. So, our attack which previously was blocked is now being allowed because of that exclusion'
+
+[13:16] [scene:talk]
+VISUAL: 
+AUDIO: 'rule that we set. So, you guys also have the ability to add exclusion rules. And then of course, these can be deleted and cleaned up. So, now if I delete that, and if I simulate our SQL injection attack again, we now see that that attack has now been back to a'
+
+[13:29] [scene:talk]
+VISUAL: 
+AUDIO: 'blocked state. And of course, you can add multiple sites to this. It doesn\'t just have to protect one applications. You can add your multiple sites there. We also do support log forwarding as well, so you can send directly to a'
+
+[13:42] [scene:talk]
+VISUAL: 
+AUDIO: 'syslog input. For example, you could have graylog. You could create a new input in graylog to ingest your WAF logs and do a lot more capabilities within that when it comes to data visualization, logging them into your'
+
+[13:54] [scene:talk]
+VISUAL: 
+AUDIO: 'seam, maybe doing some automation by permanently blocking IP addresses on a firewall that have been triggering WAF blocks or some more advanced anomaly anomaly'
+
+[14:06] [scene:talk]
+VISUAL: 
+AUDIO: 'detection. There\'s a lot of capabilities you can do. And so we also support that log forwarding here. Or you can just send out to an HTTP endpoint as well. Also, the dashboard overview here will give you a just a high-level overview of'
+
+[14:18] [scene:talk]
+VISUAL: 
+AUDIO: 'attacks that have been blocked, uh number of requests, ingestion rate. So yeah, we\'re really excited to provide a WAF tool out to the open source community that hopefully makes self-hosting, uh automated TLS, using'
+
+[14:31] [scene:talk]
+VISUAL: 
+AUDIO: 'the OWASP core rule set, and full visibility into your web application firewall hopefully a lot easier for you guys to one set up and end deploy and also manage permanently as your'
+
+[14:43] [scene:talk]
+VISUAL: 
+AUDIO: 'infrastructure grows. So again, the link to the repository is down in the description below. If you are also interested in our professional services where we build a full-fledged seam stack to fit your'
+
+[14:57] [scene:talk]
+VISUAL: 
+AUDIO: 'environment, goals, and objectives, I\'ll also link down to where you can reach out to us in the description below. And I appreciate your time, and I will see you in the next one.'

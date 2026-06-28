@@ -1,0 +1,148 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: iroh 1.0: dial keys, not IPs (skip the server)
+channel: @octopusinc_
+duration: 07:28
+source: https://www.youtube.com/watch?v=NqelM_VSZw0
+upload_date: 20260627
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'Almost everything you do online runs through somebody else\'s server sitting in the middle. A small team just shipped the thing that deletes the middle. The project is called Iro and the whole pitch fits on a bumper sticker, dial keys, not IP addresses. Normally, you'
+
+[00:13] [scene:talk]
+VISUAL: 
+AUDIO: 'reach a device through its IP address, which changes the moment it hops from Wi-Fi to cellular. Iro lets you connect to its public key instead and it quietly works out the'
+
+[00:25] [scene:talk]
+VISUAL: 
+AUDIO: 'fastest way to actually reach it wherever it went. The company behind it, called N0, just tagged version 1.0 after more than four years of work. It\'s open source under both MIT and Apache,'
+
+[00:38] [scene:talk]
+VISUAL: 
+AUDIO: 'sitting at around 11,000 stars. And the part that got me, it\'s already running under real products, including the networks people rent to train AI models across different clouds.'
+
+[00:51] [scene:talk]
+VISUAL: 
+AUDIO: 'Enjoying this so far? Subscribe to the YouTube channel and grab the free daily newsletter at indiehacker.news. New deep dive every weekday. Scroll through the readme and the'
+
+[01:03] [scene:talk]
+VISUAL: 
+AUDIO: 'philosophy is right there at the top. You grab an endpoint, you call connect with a key, and you get back an encrypted two-way stream. That\'s basically the whole surface area. Underneath, it first tries to hole punch'
+
+[01:15] [scene:talk]
+VISUAL: 
+AUDIO: 'a direct connection between the two devices and only if that fails does it bounce through a public relay server, so a firewall never fully traps you. The transport underneath is quick, which'
+
+[01:27] [scene:talk]
+VISUAL: 
+AUDIO: 'hands you encryption and several streams without the stop and wait problem you\'d hit over plain TCP. Keep going and you reach the part that makes it genuinely useful, a set of ready-made protocols'
+
+[01:39] [scene:talk]
+VISUAL: 
+AUDIO: 'built on top. One for moving files from a few kilobytes all the way to terabytes, one for group messaging light enough that a phone can keep up, and one for syncing a shared store of data.'
+
+[01:51] [scene:talk]
+VISUAL: 
+AUDIO: 'Iro is not the first to chase this. Peer-to-peer has a graveyard. There\'s libp2p, the stack that grew out of the IPFS project, which is powerful but heavy enough that dropping it into a'
+
+[02:04] [scene:talk]
+VISUAL: 
+AUDIO: 'normal app is its own project. There\'s WebRTC, which does give browsers direct connections, except you still have to run your own signaling server, and it gets unhappy the moment you step outside'
+
+[02:16] [scene:talk]
+VISUAL: 
+AUDIO: 'the browser. Tailscale nails device-to-device networking, but it\'s a whole VPN mesh you join, not a small library you reach for inside one app. And if you roll your own, you sign up to babysit firewall'
+
+[02:29] [scene:talk]
+VISUAL: 
+AUDIO: 'traversal, relays, and reconnection logic basically forever. Put the grind next to what this thing actually carries now. They cut 65 preview releases before they were'
+
+[02:42] [scene:talk]
+VISUAL: 
+AUDIO: 'willing to put a one in front of it, and the protocol they finally locked down is already moving 200 million connections every month. So, how does it actually make the connection? The headline move is hole'
+
+[02:54] [scene:talk]
+VISUAL: 
+AUDIO: 'punching. Iro pokes an opening through the firewalls on both ends, so the two devices get a straight line to each other, no traffic detouring through the cloud. When hole punching can\'t get there, it doesn\'t drop you, it quietly'
+
+[03:07] [scene:talk]
+VISUAL: 
+AUDIO: 'routes you through a relay instead, with the same end-to-end encryption either way, so the relay sees nothing. Connections also survive movement. You can pick up your phone and walk from'
+
+[03:19] [scene:talk]
+VISUAL: 
+AUDIO: 'Wi-Fi onto cellular, and instead of dying, the connection just rehomes itself onto the new path. And there\'s no separate handshake to set up trust because the address you dialed is already a public key. So, every link'
+
+[03:32] [scene:talk]
+VISUAL: 
+AUDIO: 'is authenticated and encrypted from the first byte. Want to be featured? Pitch your open-source repo at indiehacker.news/apply and get in front of thousands of'
+
+[03:44] [scene:talk]
+VISUAL: 
+AUDIO: 'builders. What you build on top is where it gets fun. The same connection layer works across your whole stack, from a back-end service down to a phone app, and it\'s lean enough that people are even running it on tiny ESP32 boards and Raspberry'
+
+[03:57] [scene:talk]
+VISUAL: 
+AUDIO: 'Pis. Above the raw connection sit a few ready-made protocols you can just adopt. The blobs one moves content-addressed files, anything from a few kilobytes up to full terabytes using Blake3 so the'
+
+[04:11] [scene:talk]
+VISUAL: 
+AUDIO: 'data verifies itself. Another, gossip, builds publish-subscribe groups that are light enough for a phone to be a real member instead of just a listener. And this isn\'t theoretical. Real products'
+
+[04:24] [scene:talk]
+VISUAL: 
+AUDIO: 'are already shipping on it, including file sync tools and chat apps you can go download today. Under the hood, Iro is deliberately not one big blob. It\'s a workspace of small crates you pull in piece by piece, the'
+
+[04:37] [scene:talk]
+VISUAL: 
+AUDIO: 'core connector, the relay, the shared types. The connection itself runs on quick, but not an off-the-shelf library. They built their own implementation called Knox so they control the entire'
+
+[04:50] [scene:talk]
+VISUAL: 
+AUDIO: 'path. Finding a peer is its own hard problem, so they run a lookup partly over DNS and partly decentralized. That turns a public key into wherever that device happens to be right now. And the whole thing is measured nonstop on a'
+
+[05:04] [scene:talk]
+VISUAL: 
+AUDIO: 'public performance dashboard, so if a change makes connections harder to land, it shows up in the numbers before it ever ships. Here\'s the part that actually wins developers over. Getting a connection is almost boring. You add a single crate,'
+
+[05:18] [scene:talk]
+VISUAL: 
+AUDIO: 'you bind an endpoint, and you call connect with the key you want to reach. What comes back is a normal-looking stream you read and write like any socket, except it\'s encrypted, it\'s authenticated, and it punched through'
+
+[05:32] [scene:talk]
+VISUAL: 
+AUDIO: 'both firewalls to get there, and none of that showed up in your code. The same shape works from the language bindings, too, so a Python script and a Rust service open the exact same kind of connection to each other.'
+
+[05:45] [scene:talk]
+VISUAL: 
+AUDIO: 'So, what does crossing into 1.0 actually buy you? The biggest thing isn\'t a feature, it\'s a promise the Wire protocol is frozen, so a client you build today will still talk to a server somebody builds years from now. The API'
+
+[05:58] [scene:talk]
+VISUAL: 
+AUDIO: 'is locked, too, which after that many preview releases is the entire point. They are done breaking your code on every update. The language bindings are back as first class. They had paused them while the design kept shifting, and'
+
+[06:12] [scene:talk]
+VISUAL: 
+AUDIO: 'now Python, Node, Swift, and Kotlin are supported targets again. And the relay servers picked up real access control in this release. You can gate one with a token without standing up a separate login service.'
+
+[06:25] [scene:talk]
+VISUAL: 
+AUDIO: 'So, where does this leave you? Iro is a primitive, not a finished app. It gets two machines talking and then hands everything else back to you. The syncing and the interface on top are still your code to write. And peer-to-peer is'
+
+[06:38] [scene:talk]
+VISUAL: 
+AUDIO: 'genuinely hard. There are still networks mean enough that the direct connection never lands, and you ride a relay the entire time. So, calling it serverless is a stretch. You\'ve really just shrunk the server down to a dumb pipe. But,'
+
+[06:51] [scene:talk]
+VISUAL: 
+AUDIO: 'that\'s the honest trade you\'re making here. For years, this kind of connectivity was a research project you\'d be brave to build a company on, and now it\'s a boring, stable dependency you add in one line.'
+
+[07:04] [scene:talk]
+VISUAL: 
+AUDIO: 'If you have ever hand-rolled firewall traversal at 2:00 in the morning, or paid every month for someone else to keep a connection alive, this is the release that quietly turns that into someone else\'s old problem.'
