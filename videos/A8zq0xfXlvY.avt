@@ -1,0 +1,100 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Tap to verify: No SMS, no Friction with Firebase Phone Number Verification
+channel: @octopusinc_
+duration: 05:00
+source: https://www.youtube.com/watch?v=A8zq0xfXlvY
+upload_date: 20260625
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:02] [scene:talk]
+VISUAL: 
+AUDIO: '[music] &gt;&gt; If you are still using SMS-based one-time passwords to verify your users, you\'re playing a very dangerous and very expensive game. SMS OTPs are slow, they fail to deliver when a low coverage area, and they leave'
+
+[00:16] [scene:talk]
+VISUAL: 
+AUDIO: 'your users wide open to fishing. Oh, and let\'s not forget about SMS pumping fraud where bot farms trigger thousands of OTP texts to high-cost countries, leaving you with a massive'
+
+[00:28] [scene:talk]
+VISUAL: 
+AUDIO: 'bill. But what if I told you that you could verify a phone number directly from the SIM card via the carrier with a single tap in under 2 seconds? Today, we\'re talking about Firebase phone number verification, the third'
+
+[00:41] [scene:talk]
+VISUAL: 
+AUDIO: 'generation of mobile verification. It works on Android 8 or later, so let\'s secure our apps with it. [music] So, how does this work without sending an actual text message?'
+
+[00:53] [scene:talk]
+VISUAL: 
+AUDIO: 'Unlike standard SMS, which only proves a user has access to a text stream, Firebase PNV asks a mobile network operator directly for the number assigned to the SIM card in the device.'
+
+[01:05] [scene:talk]
+VISUAL: 
+AUDIO: 'It is secure, it is seamless, and because there are no text messages sent, there are zero codes to intercept and zero opportunities for SMS toll fraud. Now, because PNV talks directly to'
+
+[01:19] [scene:talk]
+VISUAL: 
+AUDIO: 'mobile network carriers, it does require a billing account on the Blaze plan for production. Don\'t close your laptops just yet. During development, Firebase provides a seamless test mode that lets you build,'
+
+[01:33] [scene:talk]
+VISUAL: 
+AUDIO: 'test, and prototype your entire user experience without a billing account. Let\'s see how to wire this up. &gt;&gt; [music] &gt;&gt; First, let\'s open our build.gradle.kts file and add the Firebase PNV'
+
+[01:46] [scene:talk]
+VISUAL: 
+AUDIO: 'dependency. We\'ll use the BOM version 34.11.0 to keep everything compatible. Next, we go to the Firebase console, navigate to security, and choose phone verification.'
+
+[01:59] [scene:talk]
+VISUAL: 
+AUDIO: 'Under the testing tab, select your testing country code, and click generate token. Copy this temporary test token string. You can make a new one whenever you need to. Note that these test tokens have a 7-day'
+
+[02:11] [scene:talk]
+VISUAL: 
+AUDIO: 'expiration. They\'re perfect for CICD pipelines, local emulators, or physical test devices. To use this test token, open your code in Android Studio. Create an instance of the Firebase phone number verification'
+
+[02:25] [scene:talk]
+VISUAL: 
+AUDIO: 'class and call enable test session with your copied token. &gt;&gt; [music] &gt;&gt; Let\'s look at the implementation. Here, we instantiate the library. Before triggering any UI, it is a best practice to check if the user\'s SIM and'
+
+[02:38] [scene:talk]
+VISUAL: 
+AUDIO: 'carrier support Firebase PMV. We call get verification support info. If supported, we call get verified phone number. This triggers the Android credential manager to request user consent with a'
+
+[02:51] [scene:talk]
+VISUAL: 
+AUDIO: 'clean, native, single-tap bottom sheet. When the user taps consent, Google Play Services communicates with the carrier and returns a secure signed token result. Once verified, we extract the phone'
+
+[03:03] [scene:talk]
+VISUAL: 
+AUDIO: 'number and the signed token using result.getPhoneNumber and result.getToken. Now, security warning. Never trust the client alone. To prevent malicious actors from spoofing phone numbers, you must send'
+
+[03:16] [scene:talk]
+VISUAL: 
+AUDIO: 'the signed token to your back-end server and verify its signature against Google\'s public JWKS keys. On your server, you verify that the token\'s issuer matches your Firebase project number and that the token is not'
+
+[03:29] [scene:talk]
+VISUAL: 
+AUDIO: 'expired. Fortunately, the Firebase Admin SDK has a verify token call that does all this for us, available in Node, Java, Python, and Go. When the token verifies, you sign the user in.'
+
+[03:42] [scene:talk]
+VISUAL: 
+AUDIO: 'All we have to do is remove the one line activating seamless test mode, and we\'re ready for production. And that is it. With just a few lines of code, you will have unlocked an'
+
+[03:55] [scene:talk]
+VISUAL: 
+AUDIO: 'incredibly secure, frictionless phone verification flow. To keep tabs on your traffic, you can monitor the success rates and carrier availability in cloud monitoring. No more fished one-time passwords,'
+
+[04:10] [scene:talk]
+VISUAL: 
+AUDIO: 'no more painful manual SMS typing, and no more out of control bills from toll fraud bot farms. Just direct carrier-level trust, and it works on any internet connection.'
+
+[04:23] [scene:talk]
+VISUAL: 
+AUDIO: 'If you\'re ready to secure your onboarding, check out the documentation and sample links below to get started today. Leave a comment letting me know how you\'re using phone verification in your'
+
+[04:36] [scene:talk]
+VISUAL: 
+AUDIO: 'apps. Thanks for watching. Stay secure, and I\'ll see you in the next video. &gt;&gt; [music]'

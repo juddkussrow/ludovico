@@ -1,0 +1,216 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Build Your Own MCP Server!
+channel: @octopusinc_
+duration: 10:53
+source: https://www.youtube.com/watch?v=XHTsnDVWI40
+upload_date: 20260623
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'Right now, inside this Claude window, I\'m going to ask it the one thing it has no way to know, the live weather in Tokyo. Watch, it doesn\'t guess. It reaches out, calls a tool I wrote myself, and answers with real data. That tool is an MCP server. By the end of'
+
+[00:15] [scene:talk]
+VISUAL: 
+AUDIO: 'this video, you\'ll have built one from an empty folder to a working server any AI can use. Here\'s the problem MCP solves. Every AI app, Claude, Cursor, ChatGPT, needs to touch your stuff, your'
+
+[00:28] [scene:talk]
+VISUAL: 
+AUDIO: 'database, your files, your APIs. Before MCP, every one of those connections was a custom one-off integration. N apps times M tools is a tangle nobody can'
+
+[00:40] [scene:talk]
+VISUAL: 
+AUDIO: 'maintain. An MCP server cuts that knot. You build the tool once, and every client speaks to it the exact same way. So, what actually is an MCP server? Strip away the acronym, and it\'s almost'
+
+[00:52] [scene:talk]
+VISUAL: 
+AUDIO: 'boring. A small program that exposes some capabilities and answers messages over a standard protocol. The model sends a request. Call this tool with these arguments. Your server runs the code and sends the result back. That\'s'
+
+[01:05] [scene:talk]
+VISUAL: 
+AUDIO: 'the whole idea. Underneath, it\'s just JSON-RPC flowing over a pipe. Your server can expose three kinds of things. Tools, actions a model can take, like search orders or send an email.'
+
+[01:17] [scene:talk]
+VISUAL: 
+AUDIO: 'Resources, read-only data it can pull in, like a file or a record. And prompts, reusable templates a user can trigger. Tools are the headline. Most servers start with one good tool and'
+
+[01:29] [scene:talk]
+VISUAL: 
+AUDIO: 'grow from there. Step one is picking your language. There are official SDKs for Python, TypeScript, Go, Rust, and more. But in 2026, roughly 70% of the servers out there are built with FastMCP, the Python'
+
+[01:43] [scene:talk]
+VISUAL: 
+AUDIO: 'library bundled right into the official SDK. It\'s the fastest path from zero to running, so that\'s what we\'ll use. TypeScript is a first-class second choice. Let\'s build. New folder, fresh'
+
+[01:55] [scene:talk]
+VISUAL: 
+AUDIO: 'virtual environment, and one install, pip install MCP. That single package, named just MCP, gives you the server, the client, and fast MCP all at once.'
+
+[02:07] [scene:talk]
+VISUAL: 
+AUDIO: 'Then four lines of code, import fast MCP, and create a server with a name. That object is your whole server. Everything else hangs off it. Now the good part, your first tool. Write an'
+
+[02:19] [scene:talk]
+VISUAL: 
+AUDIO: 'ordinary Python function. Give its arguments real type hints, and write English docstring that says what it does. Then drop one decorator on top. @daymcp.tool. That is the entire ritual. You didn\'t'
+
+[02:33] [scene:talk]
+VISUAL: 
+AUDIO: 'write a schema. You didn\'t register anything by hand. The function is the tool. Here\'s the magic inside that decorator. Fast MCP reads your type hints and turns them into a JSON schema the model can trust.'
+
+[02:46] [scene:talk]
+VISUAL: 
+AUDIO: 'It reads your docstring and shows it to the model as the tool\'s description. So the words you write in that docstring are literally the instructions the AI uses to decide when to call you. Vague docstring, confused agent. Crisp one,'
+
+[02:58] [scene:talk]
+VISUAL: 
+AUDIO: 'clean calls. Two more lines bring it to life. If name equals main, then mcp.run. Run the file, and your server boots. Speaking over something called stdio,'
+
+[03:10] [scene:talk]
+VISUAL: 
+AUDIO: 'standard in, standard out. No port, no web server. It\'s a little program waiting on a pipe for messages. Your server is alive, but nothing is talking to it yet. Before you wire it into'
+
+[03:22] [scene:talk]
+VISUAL: 
+AUDIO: 'anything, test it in isolation. The MCP inspector connects straight to your server, and lets you list its tools, fill in arguments, and call them by hand. You see the exact request go out, and the exact result come back.'
+
+[03:36] [scene:talk]
+VISUAL: 
+AUDIO: 'If it works in the inspector, it\'ll work in Claude. Always debug here first. Now let\'s hand it to Claude. Claude desktop reads a config file, Claude desktop config.json. You add a few lines, a name'
+
+[03:48] [scene:talk]
+VISUAL: 
+AUDIO: 'for your server, and the command that launches it. Restart Claude, and there it is, your tool listed and ready. Ask a question that needs it, and the model calls your code. The loop is closed.'
+
+[04:00] [scene:talk]
+VISUAL: 
+AUDIO: 'What happens the instant they connect? A handshake. The client says initialize and list what it supports. Your server replies with its protocol version and its own capabilities. They agree on a common language. Then the client asks'
+
+[04:13] [scene:talk]
+VISUAL: 
+AUDIO: 'tools/list, and your server hands over every tool, its name, its arguments, and that all-important description. Discovery is automatic. Then comes a real call. The model decides it needs your tool and'
+
+[04:27] [scene:talk]
+VISUAL: 
+AUDIO: 'emits a tools/call message, the tool name, and a little JSON blob of arguments. Your server validates them, runs your function, and returns the result. The model reads that result and keeps going. Request, execute, respond.'
+
+[04:41] [scene:talk]
+VISUAL: 
+AUDIO: 'That tiny round trip, repeated, is the entire mechanism. A few rules separate a tool the model loves from one it avoids. Keep each tool small and single purpose.'
+
+[04:53] [scene:talk]
+VISUAL: 
+AUDIO: 'Name it like a verb. Describe exactly when to use it. Return clean, structured data, not a wall of text. And design the arguments so they\'re hard to get wrong. You\'re writing for a brand new teammate'
+
+[05:06] [scene:talk]
+VISUAL: 
+AUDIO: 'who only reads the doc string. Tools are actions. Resources are data. Same pattern, different decorator. @mcp.resource with a URI like weather: //forecast. The app or the model can read that'
+
+[05:21] [scene:talk]
+VISUAL: 
+AUDIO: 'resource to pull context in without taking an action. Use a tool when something should happen. Use a resource when you\'re simply exposing something to read. The third primitive is prompts, pre-written, reusable message templates'
+
+[05:35] [scene:talk]
+VISUAL: 
+AUDIO: 'your server offers up. Decorate a function with @mcp.prompt. Return the messages, and it appears in the client as a ready-made command the user can pick. Think of them as slash commands you ship alongside your tools.'
+
+[05:48] [scene:talk]
+VISUAL: 
+AUDIO: 'The same expert workflow one click away. Real tools fail. The API is down, the input was bad, the record doesn\'t exist. Don\'t crash and don\'t lie. Catch the error and return a clear message'
+
+[06:02] [scene:talk]
+VISUAL: 
+AUDIO: 'describing exactly what went wrong. The model is surprisingly good at reading those messages and recovering, retrying, asking the user, or trying another path. A good error is part of your tools'
+
+[06:14] [scene:talk]
+VISUAL: 
+AUDIO: 'contract. Now, where does your server live? Two transports. STDIO, what we\'ve used, launches your server as a local sub-process on the user\'s own machine. It\'s the simplest and the default for'
+
+[06:27] [scene:talk]
+VISUAL: 
+AUDIO: 'desktop tools. The other is streamable HTTP. Your server runs as a real web service that any number of clients reach over the network. Local versus remote, that\'s the whole choice. Going remote'
+
+[06:39] [scene:talk]
+VISUAL: 
+AUDIO: 'unlocks a lot. One server, many users, central updates, nothing to install. With FastMCP, you flip a single argument, run over HTTP instead of STDIO, and now you\'ve got one endpoint'
+
+[06:52] [scene:talk]
+VISUAL: 
+AUDIO: 'serving everyone. The 2025 spec folded all of this onto a single streamable HTTP endpoint, so there\'s no juggling separate connection types anymore. The moment your server is on the network, it'
+
+[07:05] [scene:talk]
+VISUAL: 
+AUDIO: 'needs a bouncer. MCP\'s answer is OAuth 2.1. The client gets a scope token, your server checks it on every request, and you grant only the narrow permissions a given user actually needs. Never ship a'
+
+[07:18] [scene:talk]
+VISUAL: 
+AUDIO: 'remote server that any anonymous caller can hit. Once you leave the desktop, auth is not optional. Security goes deeper than auth. Your tools are hands the model can use, so treat every argument as untrusted input. Validate'
+
+[07:31] [scene:talk]
+VISUAL: 
+AUDIO: 'it, sanitize it, scope it. Give each tool the least privilege it needs to do its job. And for anything destructive, deleting, paying, sending, put a human confirmation in the path.'
+
+[07:44] [scene:talk]
+VISUAL: 
+AUDIO: 'The model is powerful. Your guardrails keep it safe. Deploying a remote server is ordinary back-end work. Wrap it in a Docker container, pull your secrets and API keys from environment variables, never hardcode them, and ship it to any'
+
+[07:58] [scene:talk]
+VISUAL: 
+AUDIO: 'host that runs containers. Because it\'s just HTTP underneath, it scales the way every other web service you\'ve deployed does. Nothing exotic here. Before you call it done, harden it. Keep using the'
+
+[08:10] [scene:talk]
+VISUAL: 
+AUDIO: 'inspector as you add tools. Add logging so you can see what the model actually asked for, and write a few evals. Fixed inputs with known good outputs so you\'ll know the instant a change breaks a tool.'
+
+[08:22] [scene:talk]
+VISUAL: 
+AUDIO: 'Servers that get trusted are the servers that got tested. A quick word on versions, because MCP moves fast. The current stable specification is dated November 2025. The next release, landing in mid-2026, is a big one. A stateless'
+
+[08:37] [scene:talk]
+VISUAL: 
+AUDIO: 'core that scales on plain HTTP, an extensions framework, plus tasks for long-running jobs, and MCP apps for server-rendered UI. The SDKs track the spec, so keep yours current. Built'
+
+[08:50] [scene:talk]
+VISUAL: 
+AUDIO: 'something useful? Publish it. The official MCP registry is the central place servers get listed and discovered. Already over 10,000 public servers and climbing fast. You push your server\'s'
+
+[09:02] [scene:talk]
+VISUAL: 
+AUDIO: 'metadata, and clients and directories can find it. It\'s how your weekend project turns into something other people actually install. And here\'s the payoff for doing it the standard way. The exact same server you just built'
+
+[09:14] [scene:talk]
+VISUAL: 
+AUDIO: 'works, unchanged, in Claude, in Cursor, in ChatGPT, in your own custom agent, anything that speaks MCP. You wrote the integration once, and the whole ecosystem can use it. That is the entire'
+
+[09:27] [scene:talk]
+VISUAL: 
+AUDIO: 'promise of the protocol, delivered. And this isn\'t a single-vendor experiment. Anthropic open-sourced MCP, and at the end of 2025 it moved under the Linux Foundation, neutral, community-governed'
+
+[09:40] [scene:talk]
+VISUAL: 
+AUDIO: 'with a public roadmap. The protocol you\'re building on isn\'t going to vanish or get locked behind one company. It\'s quietly becoming the USB-C port for AI tools. A few traps to skip. Don\'t cram 20 actions into one mega'
+
+[09:54] [scene:talk]
+VISUAL: 
+AUDIO: 'tool. The model can\'t tell them apart. Don\'t return raw gigantic blobs, summarize. Don\'t skip the docstrings. They aren\'t optional comments, they\'re your interface. And don\'t expose a destructive tool with no confirmation.'
+
+[10:08] [scene:talk]
+VISUAL: 
+AUDIO: 'Dodge those four and you\'re already ahead of most servers out there. So, here\'s the whole build start to finish. Install the SDK, make a server, write a function, and decorate it as a tool. Run it over STDIO, test it in the'
+
+[10:21] [scene:talk]
+VISUAL: 
+AUDIO: 'inspector, connect it to Claude, then grow it. Resources, prompts, error handling, and when you\'re ready, go remote with auth. Eight steps from an empty folder to a tool any AI can use.'
+
+[10:34] [scene:talk]
+VISUAL: 
+AUDIO: 'That\'s how you build your own MCP server in 2026. And honestly, the hardest part is deciding what tool to build first. If this finally made the protocol click, subscribe to Claude Codes for more'
+
+[10:46] [scene:talk]
+VISUAL: 
+AUDIO: 'builds just like it. Now go expose something useful. I\'ll see you in the next one.'

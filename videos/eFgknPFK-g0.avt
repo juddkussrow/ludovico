@@ -1,0 +1,220 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: DeepSeek Just Made Every LLM Faster, For Free
+channel: @octopusinc_
+duration: 11:02
+source: https://www.youtube.com/watch?v=eFgknPFK-g0
+upload_date: 20260628
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'How much faster you can make a model without retraining or quantization? Well, DeepSeek just released DeepSpark, which really pushes the boundary of inference speed. We are talking about 50 to 400% on exactly the same model'
+
+[00:12] [scene:talk]
+VISUAL: 
+AUDIO: 'without any retraining. And this really shows why DeepSeek is one of the best open frontier labs at the moment. So, in this video I\'m going to show you how exactly they were able to achieve'
+
+[00:25] [scene:talk]
+VISUAL: 
+AUDIO: 'it. So, the technique is called DeepSpark. Now, in one sentence, it\'s a speculative decoding method where you have a small a fast draft model that does most of the'
+
+[00:37] [scene:talk]
+VISUAL: 
+AUDIO: 'generation, and the big target model just checks its work all in a single pass. Now, DeepSeek open-sources the whole thing in a repo called Deep Spex. This includes the training code, the'
+
+[00:52] [scene:talk]
+VISUAL: 
+AUDIO: 'draft checkpoints, and they are already running this with V4 flash and V4 Pro Pro in production. So, it\'s not just a research work, but actually production stack that they are using.'
+
+[01:06] [scene:talk]
+VISUAL: 
+AUDIO: 'But, the speculative decoding is an old idea. So, the real question is why theirs is faster than anyone else\'s. Now, in order to explain that, we need a map. Okay, so if you look at a large language'
+
+[01:18] [scene:talk]
+VISUAL: 
+AUDIO: 'model, usually people call them next token predictors, and they simply generate one token at a time, then feed that token back, and generate this again. So, if you\'re'
+
+[01:32] [scene:talk]
+VISUAL: 
+AUDIO: 'looking at a six-token sentence, basically you would need to have six forward passes through the network in order to generate them one after the other.'
+
+[01:45] [scene:talk]
+VISUAL: 
+AUDIO: 'And as you can imagine, the latency is going to grow linearly uh with the length of the answer, or the number of tokens that it has to generate. But, there\'s a much bigger problem. Decode what this generation process is'
+
+[01:57] [scene:talk]
+VISUAL: 
+AUDIO: 'memory bound. So, the GPU is going to mostly sit waiting doing one token at a time. And you probably have seen this when the model is generating long sequence,'
+
+[02:09] [scene:talk]
+VISUAL: 
+AUDIO: 'it\'s not really thinking harder. It\'s just waiting for the generation to complete. Now, the question is how do you stop doing them strictly one at a time? The trick researchers have come up'
+
+[02:21] [scene:talk]
+VISUAL: 
+AUDIO: 'with as that you bring a small fast draft model. So, it basically guesses the whole block of tokens ahead, say six in a single shot.'
+
+[02:33] [scene:talk]
+VISUAL: 
+AUDIO: 'And then you have a big target model which checks all six in a single forward pass. You don\'t need six passes anymore. Now, the way it works is that it\'s going to keep the longest correct prefix for free'
+
+[02:46] [scene:talk]
+VISUAL: 
+AUDIO: 'and stops at the first wrong guess. Now, in this case the target fills in the one correct token. Uh and then the next round is going to'
+
+[02:58] [scene:talk]
+VISUAL: 
+AUDIO: 'simply pick up from there. And the beauty is that the answer is identical byte-for-byte to what the big model would have produced alone. It\'s kind of lossless in that regard. All right. So, this can give you much'
+
+[03:11] [scene:talk]
+VISUAL: 
+AUDIO: 'faster responses. However, the question is going to be how good this these guesses can get from a smaller draft model. We\'re going to look at that, but in order to understand the time or latency equation,'
+
+[03:25] [scene:talk]
+VISUAL: 
+AUDIO: 'we need to look at multiple different components. So, your time per token is the draft time plus the verify time divided by how many tokens you accept per round. Now, as you can see, there are three'
+
+[03:38] [scene:talk]
+VISUAL: 
+AUDIO: 'different levers you can tune in order to reduce token or time per token in this case. Okay, so the first one is just use a faster drafting model, which is going to lower the draft time.'
+
+[03:51] [scene:talk]
+VISUAL: 
+AUDIO: 'The second one is you want to make sure that you draft better. So, this needs to be a good enough model, so you accept more per round. And the bigger model is making less corrections.'
+
+[04:05] [scene:talk]
+VISUAL: 
+AUDIO: 'And then verify smarter, which is going to reduce the verify time. But, the thing is to understand why this method is better than uh the previous methods, we need to look at some of the limitations of the prior methods.'
+
+[04:18] [scene:talk]
+VISUAL: 
+AUDIO: 'Okay. So, traditionally there are two different camps when it comes to building drafting models. Each one with their own weaknesses. So, the first one is auto regressive'
+
+[04:30] [scene:talk]
+VISUAL: 
+AUDIO: 'drafters like Eagle 3. Each guess waits for the last one since they are auto regressive. So, you get accurate responses, but they are slow and you can get stuck in tiny blocks. Now, the second one is parallel drafters'
+
+[04:44] [scene:talk]
+VISUAL: 
+AUDIO: 'like D Flash. The whole block is processed in a single shot, so you can do bigger blocks. Except that each guess ignores the others. So, the tail drifts and can get'
+
+[04:58] [scene:talk]
+VISUAL: 
+AUDIO: 'rejected. Now, they call this suffix decay. So, here is an image from the D Spark or Deep Specs'
+
+[05:10] [scene:talk]
+VISUAL: 
+AUDIO: 'paper. You can actually see the drift that is happening with Eagle 3 and D Flash as the drafting positions changes. D'
+
+[05:22] [scene:talk]
+VISUAL: 
+AUDIO: 'Spark seems to be pretty stable. All right. So, how do they overcome some of the limitations of the prior methods? We\'re going to look at two different approaches. One applies to the auto regressive ones'
+
+[05:34] [scene:talk]
+VISUAL: 
+AUDIO: 'and then the confidence scheduling verification. So, this image shows the decoding process or the actual decoding cycle. Now, in this case the have a draft backbone as they stay fully parallel.'
+
+[05:47] [scene:talk]
+VISUAL: 
+AUDIO: 'So, it\'s fast and produces every position all at once. This is very similar to D flash. But then, on top of this, they bolt on one lightweight serial head'
+
+[06:00] [scene:talk]
+VISUAL: 
+AUDIO: 'whose only job is to let each token peek at the one before it. This is aimed right at the suffix delay problem that we saw. And it works on Quant 3. These park'
+
+[06:13] [scene:talk]
+VISUAL: 
+AUDIO: 'accepts about 30% longer blocks than Eagle 3. And another 16 to 18% on top of D flash. So, you\'re generating more tokens per'
+
+[06:25] [scene:talk]
+VISUAL: 
+AUDIO: 'round. But there is a second quarter problem. And this is really related to serving users in productions. Because this is why speculative methods have hidden cost.'
+
+[06:38] [scene:talk]
+VISUAL: 
+AUDIO: 'So, when the target uh verifies a block, that\'s the bigger model, it works on all of it, even the tail tokens that are probably doomed and you don\'t want to'
+
+[06:51] [scene:talk]
+VISUAL: 
+AUDIO: 'waste your resources. Now, in order to address this wasted effort, D spark adds a confidence head that scores each token, basically guessing which will survive.'
+
+[07:03] [scene:talk]
+VISUAL: 
+AUDIO: 'Now, with this, the hardware aware scheduler reads how loaded the server is. If the load is light, it will verify the whole block.'
+
+[07:15] [scene:talk]
+VISUAL: 
+AUDIO: 'Now, if the server is loaded and slammed, it verifies only the confident prefix and skips the rest. That enables it to spend time on real users'
+
+[07:30] [scene:talk]
+VISUAL: 
+AUDIO: 'which need GPU resources. This really is the a smarter verification stamp. Okay. Now, the most important thing is that this is not a research project. Even though they released the research'
+
+[07:42] [scene:talk]
+VISUAL: 
+AUDIO: 'paper, they are using it in real production systems. So, at the same total throughput, each user uh got their token 57 to 85% faster with no extra hardware. And this is I think where'
+
+[07:58] [scene:talk]
+VISUAL: 
+AUDIO: 'DeepSeek is a really special place. They are not only doing these innovative things, but releasing them in open source, so other people can benefit from it.'
+
+[08:10] [scene:talk]
+VISUAL: 
+AUDIO: 'Now, the most important thing is that DeepSeek actually is able to hold a true for both V4 Flash and V4 Pro, where the other techniques simply fail. And I can actually see that you\'re going'
+
+[08:24] [scene:talk]
+VISUAL: 
+AUDIO: 'to see this technique being adopted by other frontier labs when they\'re doing inference provision. Now, the beauty is that this is a single head that you can attach to any model.'
+
+[08:36] [scene:talk]
+VISUAL: 
+AUDIO: 'It\'s not specific to DeepSeek models. So, for example, they have Qwen and Gemma 4. They are supported. It works for them if you have the proper hardware to support it. Right now, I am using my'
+
+[08:48] [scene:talk]
+VISUAL: 
+AUDIO: 'Mac M2 Max. Now, I tried to replicate this. Okay, so I\'m running this on a smaller 0.6 billion draft model with uh 8 billion target model.'
+
+[09:02] [scene:talk]
+VISUAL: 
+AUDIO: 'Now, the results are not spectacular there because I think there are a lot of holes in my own implementation, but I saw across four kinds of prompts, here are the numbers. Now, the interesting thing is that the'
+
+[09:14] [scene:talk]
+VISUAL: 
+AUDIO: 'draft six up then tracks the paper\'s pattern, which is high on code and reasoning, low on open chat. So, it is kind of lossless in a distributional sense. Three of the four matched by byte for'
+
+[09:26] [scene:talk]
+VISUAL: 
+AUDIO: 'byte. The open chat one flipped a near tie from the batched verify pass. Now, was it faster? Well, not really, right? So, it ran slower because the draft was only'
+
+[09:38] [scene:talk]
+VISUAL: 
+AUDIO: 'about three and a half times faster than target where you want it to be 10 to 30 times. But, the mechanism is actually real. The'
+
+[09:50] [scene:talk]
+VISUAL: 
+AUDIO: 'acceptance by the domain matches the paper. But, keep in mind, they actually have the trained draft head that you want to use. Okay, to just summarize it, you'
+
+[10:02] [scene:talk]
+VISUAL: 
+AUDIO: 'need to have a small a draft model that is going to propose a block and then a big model that is going to verify it in a single pass. Now, DSPARK fast path fix is a'
+
+[10:14] [scene:talk]
+VISUAL: 
+AUDIO: 'semi-autoregressive draft, which kills these suffix delay. So, you basically accept more. This is what I also saw in my case as well.'
+
+[10:27] [scene:talk]
+VISUAL: 
+AUDIO: 'And the second contribution is confidence scheduled verify that wastes less than the real load. Now, this is going to basically give you 50 to 80% faster speed in production. And it also works on Gwen and Gemma,'
+
+[10:41] [scene:talk]
+VISUAL: 
+AUDIO: 'too. Everything is open source. There is a GitHub repo. I highly recommend to check it out. Anyways, do let me know what you think. If you are finding these technical deep dives helpful, let me know. Anyways, I'
+
+[10:54] [scene:talk]
+VISUAL: 
+AUDIO: 'hope you found this video useful. Thanks for watching, and as always, see you in the next one.'

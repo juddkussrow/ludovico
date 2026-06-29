@@ -1,0 +1,572 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Wasm Beyond the Browser: Use Cases at Scale - Colin Murphy & Sean Isom, Adobe
+channel: @octopusinc_
+duration: 29:55
+source: https://www.youtube.com/watch?v=48ORmla7mak
+upload_date: 20220519
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'so um my name is colin murphy i work at adobe that\'s what i looked like before covet um this is a this is a customer story and uh it\'s it\'s a little different because'
+
+[00:12] [scene:talk]
+VISUAL: 
+AUDIO: 'i\'ve given this sort of talk to a lot of people at adobe and i have to kind of talk for 20 minutes about what web assembly is um and so kind of trying to invert it i\'ve also like been aggressively pruning as the'
+
+[00:25] [scene:talk]
+VISUAL: 
+AUDIO: 'day goes and people cover things that i would have covered i also want to set your expectations low and i don\'t want to do too good of a job because ranu he gets really stressed out so'
+
+[00:37] [scene:talk]
+VISUAL: 
+AUDIO: 'um you know don\'t want to set you guys up for failure um all right so so this is the this is the biggest hurdle is is just like well you know what\'s web'
+
+[00:49] [scene:talk]
+VISUAL: 
+AUDIO: 'assembly right and and you you kind of get you know adobe i don\'t know if all i\'m assuming you\'ve all heard of it it\'s a pretty big company it\'s not like you know microsoft or something but'
+
+[01:02] [scene:talk]
+VISUAL: 
+AUDIO: 'there\'s a lot of there\'s a lot to it and it\'s hard to kind of come at people with how application what application should look like how we\'re going to compose applications'
+
+[01:14] [scene:talk]
+VISUAL: 
+AUDIO: 'um because where they\'re where they\'re coming from if they\'re front end right then they\'re thinking oh i know web assembly and and they don\'t right not in the context of wazi and all that um their back end and they\'re like well i'
+
+[01:26] [scene:talk]
+VISUAL: 
+AUDIO: 'know docker and you know i don\'t want to you know don\'t don\'t bother me right um i just want to write my javascript my java my you know my spring boot apps um so it\'s kind of like docker and it\'s'
+
+[01:38] [scene:talk]
+VISUAL: 
+AUDIO: 'like it\'s not really like docker and then edge computes still really early on um and so but but i think that\'s kind of the whole point is that you have to kind of consider it as a way of composing an application really from beginning to'
+
+[01:52] [scene:talk]
+VISUAL: 
+AUDIO: 'end um so um yeah so let\'s let\'s keep going so so webassembly is already used quite a bit at adobe'
+
+[02:06] [scene:talk]
+VISUAL: 
+AUDIO: 'and um if any of the higher-ups at adobe ever learn about this thing called cncf and that there\'s this cubecon thing i\'m not really i\'m really going to kind of cover my tail here and i\'m not going to go into how we use webassembly too much'
+
+[02:18] [scene:talk]
+VISUAL: 
+AUDIO: 'so sorry if that\'s what you\'re here for and that\'s also because i i\'m not a c plus plus engineer i only recently became a front end engineer i actually was responsible for document'
+
+[02:31] [scene:talk]
+VISUAL: 
+AUDIO: 'clouds infrastructure and developer experience um for the microservices so adobe sign acrobat um kind of how kubernetes was laid out how people did see icd'
+
+[02:44] [scene:talk]
+VISUAL: 
+AUDIO: 'what their spring boot apps looked like all that kind of there was a lot to it um and i i recently switched over to creative cloud web um kind of a career limiting move perhaps'
+
+[02:56] [scene:talk]
+VISUAL: 
+AUDIO: 'um but i\'m i\'m now just like a sub average uh javascript developer um and uh um sorry so so there is a lot going on surplus plus there\'s there\'s there\'s'
+
+[03:09] [scene:talk]
+VISUAL: 
+AUDIO: 'we\'ve worked with the chrome team i\'m using we loosely there um there\'s actually some really great um great write-ups about this kind of stuff so there were dynamic threads'
+
+[03:22] [scene:talk]
+VISUAL: 
+AUDIO: 'dominic threads with p threads cmd instructions performance optimized storage from origin private file system there was a lot of work done in order to get photoshop working in the browser so i'
+
+[03:34] [scene:talk]
+VISUAL: 
+AUDIO: 'don\'t know if you all are aware but there\'s photoshop in the browser now acrobat um has if you use the web version of acrobat then uh you\'ll see there there\'s'
+
+[03:46] [scene:talk]
+VISUAL: 
+AUDIO: 'well you would there\'s a lot of web assembly there as well and but really the whole purpose of webassembly in the front end uh for adobe is we have a lot of c plus plus code we\'ve had a lot of c plus plus code for decades and we want to use that'
+
+[03:59] [scene:talk]
+VISUAL: 
+AUDIO: 'in the browser right we want to have good browser experiences but that\'s not really applicable because none of that stuff\'s going to work right you know in wazi none of that stuff\'s going to work without without that javascript'
+
+[04:12] [scene:talk]
+VISUAL: 
+AUDIO: 'uh calling the making the system calls um but kind of the nice thing is at adobe we have a really positive um appreciation for webassembly if you say webassembly you know that'
+
+[04:24] [scene:talk]
+VISUAL: 
+AUDIO: 'that gives really high high high marks people like like the term rates highly for server side everything\'s on kubernetes for better or worse um'
+
+[04:37] [scene:talk]
+VISUAL: 
+AUDIO: 'and and there\'s not a lot of kind of these big epic engineering challenges at least that at least that were enough to keep me interested um and so um'
+
+[04:49] [scene:talk]
+VISUAL: 
+AUDIO: 'so so now i\'m a javascript developer um so yeah so the story kind of where the story begins is adobe sign about a year ago i started really'
+
+[05:01] [scene:talk]
+VISUAL: 
+AUDIO: 'working in earnest on how we were going to do microservices in fedramp and that would probably be a great kubecon talk all in and of itself but the the right right before we started our real auditing'
+
+[05:15] [scene:talk]
+VISUAL: 
+AUDIO: 'of our application the fedramp standard changed and now any cve at all any of any rating had to be reported to our sponsor and so um i don\'t know if you don\'t know if'
+
+[05:27] [scene:talk]
+VISUAL: 
+AUDIO: 'anybody here\'s run kubernetes but you end up using a lot of third-party images and if you\'re fairly sophisticated you have lots of controllers and you know you\'ve you\'ve uh you think you\'ve done a great'
+
+[05:39] [scene:talk]
+VISUAL: 
+AUDIO: 'job covered all your bases and you end up with thousands of cves um and you\'ll have one lib c vulnerability from you know 2013 that nobody thinks is important that\'ll get flagged in uh ubuntu red hat and maybe'
+
+[05:51] [scene:talk]
+VISUAL: 
+AUDIO: 'alpine so they\'ve got that\'s three cvs right there that no one has ever any intention of ever fixing um so so you\'re going it\'s going to be difficult for you to get through a fedramp audit if you use lots of docker'
+
+[06:03] [scene:talk]
+VISUAL: 
+AUDIO: 'images you actually have three options one you can start paying people money so if you use istio you can start paying a solo i o a bunch of money um or maybe not too much but it can get pricey um and you can fork all of these'
+
+[06:16] [scene:talk]
+VISUAL: 
+AUDIO: 'third-party projects which is a lot of fun um or you can just cut them out all together and that\'s really what we\'re faced with and it was it was painful um and it\'s kind of still painful'
+
+[06:29] [scene:talk]
+VISUAL: 
+AUDIO: 'um so anyway i\'m you know we\'re kind of reaching the end of our challenges this cbe thing is terrible and so i\'m i\'m just kind of looking around and seeing like what\'s the what\'s the successor to docker'
+
+[06:41] [scene:talk]
+VISUAL: 
+AUDIO: 'what\'s the successor to kubernetes um and and so i kind of i started you know i got into web assembly uh started looking at'
+
+[06:54] [scene:talk]
+VISUAL: 
+AUDIO: 'webassembly and i kind i set out to say well could i take a microservice that\'s actually used in production a simple one um and could i make it into webassembly and'
+
+[07:07] [scene:talk]
+VISUAL: 
+AUDIO: 'could i deploy it on the client on the edge and the server and and i just kind of in this slide i added this like arrows like you know at this point everything\'s moving this way i\'m sure'
+
+[07:19] [scene:talk]
+VISUAL: 
+AUDIO: 'someday it\'ll move back or maybe it\'ll converge in the middle but we\'re trying to get a lot of functionality for that data locality bailey said it better whatever um it\'s good to have stuff here um'
+
+[07:31] [scene:talk]
+VISUAL: 
+AUDIO: 'so um and and you know this is kind of the problem we\'ve had i think we\'ve said it before i was talking about heroku earlier right is or'
+
+[07:43] [scene:talk]
+VISUAL: 
+AUDIO: 'java javascript unix wars right glib c right we want stuff that can be can be used in lots of different places um and that\'s that\'s like well this is kind of the ideal right'
+
+[07:56] [scene:talk]
+VISUAL: 
+AUDIO: 'software developers they write they understand the business logic and then they don\'t have to worry about how it gets deployed or what what all the all the things they don\'t have to care about right um'
+
+[08:09] [scene:talk]
+VISUAL: 
+AUDIO: 'that\'s kind of what we\'ve been doing here for platforms for a while um yeah so so this is kind of like so i\'ll get there i\'m going to demo that'
+
+[08:21] [scene:talk]
+VISUAL: 
+AUDIO: 'um but so what this is kind of my initial impression like okay web assembly so i don\'t have to have the um i don\'t have to have the operating'
+
+[08:33] [scene:talk]
+VISUAL: 
+AUDIO: 'system that\'s in docker right um i can have it be really fast it\'s going to be much better than i mean i\'m comparing it to the jvm i\'m comparing it to spring boot so it\'s it\'s a low bar right'
+
+[08:45] [scene:talk]
+VISUAL: 
+AUDIO: 'um in terms of startup time say or memory footprint um and also compliance is really big we\'re everything\'s you know we had a lot of hipaa fed ramp sock tube pci um'
+
+[08:57] [scene:talk]
+VISUAL: 
+AUDIO: 'so these were kind of like okay this is going to be great uh i\'m going to i\'m going to do this and maybe we can just run it you know like maybe we can start moving people over um and oh yeah and of course right is uh'
+
+[09:11] [scene:talk]
+VISUAL: 
+AUDIO: 'the spend so so we once again you know somebody adobe might find out about this conference and i\'m actually kind of like you know you like it\'s kind of tongue-in-cheek because we we do get a'
+
+[09:24] [scene:talk]
+VISUAL: 
+AUDIO: 'lot i do get that question fairly often what is cncf you know um so uh but it\'s a lot and i can\'t say how much it is but it\'s a lot um okay so this is what i did'
+
+[09:38] [scene:talk]
+VISUAL: 
+AUDIO: 'i uh we have this really simple javascript app that you give it an image and it removes the background um'
+
+[09:50] [scene:talk]
+VISUAL: 
+AUDIO: 'not too hard i\'m sure you guys could figure out how it\'s kind of done but um very trivial um and then uh and i just wanted to see if i could if i could run it uh i did i did fastly'
+
+[10:02] [scene:talk]
+VISUAL: 
+AUDIO: 'cloudflare uh browser and server side so time for demo uh so so actually at first i\'m just'
+
+[10:15] [scene:talk]
+VISUAL: 
+AUDIO: 'going to play a video because then because it\'s actually going to run it\'s actually going to run inside as i move'
+
+[10:27] [scene:talk]
+VISUAL: 
+AUDIO: 'it over oh here we go there we go all right didn\'t want and okay so'
+
+[10:39] [scene:talk]
+VISUAL: 
+AUDIO: 'mac what was that um that was awful what happened click click okay'
+
+[10:51] [scene:talk]
+VISUAL: 
+AUDIO: 'all right so so here we go um so this is actually going to run inside inside kubernetes which is pretty cool so this runs inside our actual like adobe kubernetes um so i\'ve i\'ve written i\'ve written out'
+
+[11:04] [scene:talk]
+VISUAL: 
+AUDIO: 'this business logic and i\'m just going to import it into wasmcloud i picked wasmcloud this was a year ago um it\'s been good um so yeah not'
+
+[11:17] [scene:talk]
+VISUAL: 
+AUDIO: 'pretty much i\'m just calling it and i\'m returning some html there\'s nothing it\'s kind of like how easy it is it actually was so overall really easy and then i did cloudflare and fastly'
+
+[11:31] [scene:talk]
+VISUAL: 
+AUDIO: 'they were also fairly easy just to import my rust having files to a wasm so fastly of course actually is wasm time cloudflare\'s v8 didn\'t really make much of a difference'
+
+[11:43] [scene:talk]
+VISUAL: 
+AUDIO: 'and it\'s kind of artifacty all right so let\'s see see if i actually start doing it now'
+
+[11:56] [scene:talk]
+VISUAL: 
+AUDIO: 'okay good all right so we had to pick a signature uh this is kind of a tradition as since we since this app was originally written that we pick a signature of sufficient complexity for the contour tracing um'
+
+[12:08] [scene:talk]
+VISUAL: 
+AUDIO: 'and so this one is actually running this is actually running live in uh in a in a kubernetes cluster used by adobe so that was actually it actually'
+
+[12:20] [scene:talk]
+VISUAL: 
+AUDIO: 'takes a lot of work and i\'ll show taylor\'s network diagram at some point how that works um so yeah and then uh now going on to'
+
+[12:32] [scene:talk]
+VISUAL: 
+AUDIO: 'cloudflare i believe i go into cloudflare pretty quickly i\'m not going to mess with it okay'
+
+[12:45] [scene:talk]
+VISUAL: 
+AUDIO: 'and then yeah all right that\'s cloudflare so this is cloudflare it\'s actually running i probably shouldn\'t have done this but'
+
+[12:57] [scene:talk]
+VISUAL: 
+AUDIO: 'this is actually running on cloudflare um same thing pick the image loaded it up and it\'s going to remove the background and'
+
+[13:13] [scene:talk]
+VISUAL: 
+AUDIO: 'yeah it\'s kind of slow is it like one and a half okay um so yeah so really not hard uh pretty easy once you get the once you write your app you can run it'
+
+[13:26] [scene:talk]
+VISUAL: 
+AUDIO: 'on wasm cloud in kubernetes you can run it on cloudflare and then um then actually that\'s the end and then i uh so so what actually what happened was this got put into the product and so'
+
+[13:39] [scene:talk]
+VISUAL: 
+AUDIO: 'like the next thing is showing the beta version of the product i can\'t show so um so i\'ll just i i will very quickly'
+
+[13:52] [scene:talk]
+VISUAL: 
+AUDIO: 'feels not very impressive it was it was impressive to some people let\'s just say um and so'
+
+[14:04] [scene:talk]
+VISUAL: 
+AUDIO: 'uh let\'s see i\'m gonna bring up my try to bring that terminal over'
+
+[14:16] [scene:talk]
+VISUAL: 
+AUDIO: 'um it might be small sorry um yes localhost 8000 localhost 2000.'
+
+[14:33] [scene:talk]
+VISUAL: 
+AUDIO: 'and sorry'
+
+[14:54] [scene:talk]
+VISUAL: 
+AUDIO: 'so it\'s gonna i\'m gonna drop it in i\'m gonna drop the image in okay'
+
+[15:16] [scene:talk]
+VISUAL: 
+AUDIO: 'all right see if i can drag and drop and i oh really it\'s not gonna let me do it'
+
+[15:28] [scene:talk]
+VISUAL: 
+AUDIO: 'okay i might have to not do this i don\'t understand mac oh os x is kind of or whatever mac os is kind of killing me here can\'t drag a drag a something into it well good thing this isn\'t a mac'
+
+[15:41] [scene:talk]
+VISUAL: 
+AUDIO: 'demo because it\'s failing um oh crying out loud really come on drag and drop drag'
+
+[15:53] [scene:talk]
+VISUAL: 
+AUDIO: 'and drop okay oh okay okay if you drag and drop you get the same response so it works in all three places really like i guess i need to bring a'
+
+[16:06] [scene:talk]
+VISUAL: 
+AUDIO: 'mouse next time thanks trackpad okay i don\'t know i don\'t know what to tell you if you could drag and drop in a ui then i could show you that i can drag and drop this file'
+
+[16:18] [scene:talk]
+VISUAL: 
+AUDIO: 'oh yeah thanks okay well you can\'t you can\'t because matt can\'t come i can\'t handle this this is good thanks thanks steve all right um so anyway'
+
+[16:30] [scene:talk]
+VISUAL: 
+AUDIO: 'um [Music] yeah if i could drag and drop it would do the same thing um and i i don\'t know what happened now okay so excessive memory okay'
+
+[16:42] [scene:talk]
+VISUAL: 
+AUDIO: 'all right um all right moving on so that\'s that\'s that\'s a demo and that was actually pretty cool and of course i showed this to people and they\'re like oh we can just run in the browser great and that\'s'
+
+[16:54] [scene:talk]
+VISUAL: 
+AUDIO: 'that\'s that\'s what most people took out of that um but um and it actually did it actually is going to be put into the product to replace something you\'ll never notice but so now that will be done in the browser um'
+
+[17:06] [scene:talk]
+VISUAL: 
+AUDIO: 'next demo next demo i was afraid this is going to be too short so that\'s where we are now it\'s excruciatingly long all right so next thing was um uh cloudflare has this thing this this'
+
+[17:21] [scene:talk]
+VISUAL: 
+AUDIO: 'kind of it\'s this cloudflare i was really impressed with uh this um was a uh'
+
+[17:33] [scene:talk]
+VISUAL: 
+AUDIO: 'it was hard to type up here all right local okay yeah all right um cloudflare'
+
+[17:46] [scene:talk]
+VISUAL: 
+AUDIO: 'oh wait um has cloudflare has durable objects and this was a big thing that i was interested in because when i was joining my team it was about you know collaborative editing and stuff like that and so i was like okay i\'m going to'
+
+[17:58] [scene:talk]
+VISUAL: 
+AUDIO: 'see what collaborative editing is editing is like and and so what you could do i thought this was really cool is you can they have these things called durable objects i don\'t know if you all know'
+
+[18:10] [scene:talk]
+VISUAL: 
+AUDIO: 'about this but you just instantiate a javascript class uh in cloudflare and it will hold on to the state of an object really super low latency and so um if i go over'
+
+[18:24] [scene:talk]
+VISUAL: 
+AUDIO: 'to safari which i had up five seconds ago uh then um so right'
+
+[18:36] [scene:talk]
+VISUAL: 
+AUDIO: 'so yeah okay so here we go two browsers and um i thought this was cool so if i open up this and and what\'s really cool right from a application perspective is'
+
+[18:50] [scene:talk]
+VISUAL: 
+AUDIO: 'that this is actually happening in valencia right so i i do something in one it affects the other um so it\'s web hooks i\'ve got a session with cloudflare i\'ve got web hooks'
+
+[19:03] [scene:talk]
+VISUAL: 
+AUDIO: 'sending down so you people can co-edit right i thought this was really powerful and this is really tiny and this is rust and web assembly so that was that was also really cool and um it was before i joined the team'
+
+[19:15] [scene:talk]
+VISUAL: 
+AUDIO: 'so it has no nothing to do with what adobe actually does i thought that was really cool and then um the last one is um christoph uh bruving'
+
+[19:28] [scene:talk]
+VISUAL: 
+AUDIO: 'he was here yesterday but he\'s from bmw and he came up with a wasm cloud onyx and uh tensorflow inference um and so that actually is something when i was going around i\'m not gonna um'
+
+[19:42] [scene:talk]
+VISUAL: 
+AUDIO: 'i was talking to people and they\'re like well you know we have this really heavy compute thing that sounds like it would be good for wasm right and it\'s like well you know actually multi-processing not so great'
+
+[19:54] [scene:talk]
+VISUAL: 
+AUDIO: 'in wasm so no and the other one was well we\'ve got these these all these machine learning models can we run them on the edge and like it\'s kind of the answer is no right um but but that\'s really compelling'
+
+[20:07] [scene:talk]
+VISUAL: 
+AUDIO: 'that\'s probably the most compelling use cases right here because let\'s say actually if you have um if you have acrobat on your phone and you open a pdf it will actually run and run it run it through a machine learning'
+
+[20:19] [scene:talk]
+VISUAL: 
+AUDIO: 'inference and it will reposition the text and images and it\'ll all show up nicely on your phone but the problem is that you need to have a nice phone for that to work for you and if you don\'t have a nice phone um hopefully this is okay'
+
+[20:32] [scene:talk]
+VISUAL: 
+AUDIO: 'to mention you know sometimes that has to be done somewhere else so that has to be done on server side so if you could run it all at the edge in all the major cities around the world that would be a big big uh win right and'
+
+[20:45] [scene:talk]
+VISUAL: 
+AUDIO: 'so um so uh so this is so i don\'t know bmw must need it for cars or something but'
+
+[20:57] [scene:talk]
+VISUAL: 
+AUDIO: 'we you know adobe and probably lots of people like adobe could really take advantage of this if that makes any sense and um okay'
+
+[21:12] [scene:talk]
+VISUAL: 
+AUDIO: 'so the the so this particular one is we we give it an image and uh it spits out a content authenticity fingerprint of an'
+
+[21:24] [scene:talk]
+VISUAL: 
+AUDIO: 'image so it\'s going to spin this up and i\'m going to give it an image and it\'s going to give me a fingerprint'
+
+[21:36] [scene:talk]
+VISUAL: 
+AUDIO: 'if everything goes well live demos okay'
+
+[21:50] [scene:talk]
+VISUAL: 
+AUDIO: 'yeah that\'s what it\'s going to give me hopefully all right there it goes okay cool so so there we go so that\'s actually running machine inference on my local host but'
+
+[22:02] [scene:talk]
+VISUAL: 
+AUDIO: 'that\'s that\'s the kind of thing we need is to be able to run onyx models or tensorflow models uh at the edge um of course it\'s not running at the edge it\'s running on my laptop but same idea so that that really the and'
+
+[22:15] [scene:talk]
+VISUAL: 
+AUDIO: 'the problem we\'re really trying to solve there is that uh you have an onyx model or tensorflow model it\'s too big for a good browser experience and there\'s too much latency if it goes all the way to a server'
+
+[22:28] [scene:talk]
+VISUAL: 
+AUDIO: 'halfway around the world so that\'s um so those are the demos i\'ll try to get powerpoint back up here let\'s see okay'
+
+[22:43] [scene:talk]
+VISUAL: 
+AUDIO: 'um so yeah and so that last one i i didn\'t have much to do with that was uh that was uh christopher bruving and uh steve schutler from steve schulte from cosmonaut who did most of that but that was a'
+
+[22:56] [scene:talk]
+VISUAL: 
+AUDIO: 'actual adobe use case um so yeah so so pretty quickly and this is something you know if you have customers if you\'re writing a platform and you have customers things to make sure they understand right so um'
+
+[23:10] [scene:talk]
+VISUAL: 
+AUDIO: 'if they\'ve got stuff working in v8 it doesn\'t it\'s not a it\'s not gonna necessarily it\'s probably not gonna work in wazi um and then there\'s all these things like oh here\'s an image here\'s some machine learning could you run that here\'s some'
+
+[23:23] [scene:talk]
+VISUAL: 
+AUDIO: 'here\'s uh just a simple um image manipulation tesseract library nope right no it doesn\'t work um the other big thing is uh there\'s no doubt right that wasn\'t that a wasi'
+
+[23:36] [scene:talk]
+VISUAL: 
+AUDIO: 'based workload is going to run much faster than java but you know what else runs much faster than java especially in starting up anything else and yet people use it right and'
+
+[23:48] [scene:talk]
+VISUAL: 
+AUDIO: 'right i mean people still use java in docker containers at a massive scale so the whole like well it\'s going to be faster and cheaper and you know you\'re going to save money doesn\'t for you know doesn\'t work it\'s not a valid argument'
+
+[24:00] [scene:talk]
+VISUAL: 
+AUDIO: 'um and so um so you have to kind of like next level right like well it\'s going to let you do things you couldn\'t do before because you know the thing is if you'
+
+[24:13] [scene:talk]
+VISUAL: 
+AUDIO: 'have hundreds of thousands of engineers and they all write java that\'s going to take a really it\'s going to you have to save a lot of money to make it worth retraining thousands of people um and you know and so so the whole single'
+
+[24:26] [scene:talk]
+VISUAL: 
+AUDIO: 'threaded single threaded wazi um not great like not uh i know that we kind of got it working in the browser with the dynamic threads but sooner the better on on how to kind of'
+
+[24:38] [scene:talk]
+VISUAL: 
+AUDIO: 'get around that problem um and also the other big thing is that it\'s it doesn\'t it\'s a major major shift in thinking so um and of course it has to work in'
+
+[24:50] [scene:talk]
+VISUAL: 
+AUDIO: 'kubernetes because that\'s what people run right um until you have something where where you know really next level where it\'s like well it\'s in the data center and it\'s everywhere right it\'s in your you know local cell tower um people are going to'
+
+[25:03] [scene:talk]
+VISUAL: 
+AUDIO: 'want it to run in kubernetes um and so this is from taylor i don\'t know if taylor\'s still here thanks taylor thanks for this diagram taylor um but it\'s hard it\'s it\'s a lot and um'
+
+[25:16] [scene:talk]
+VISUAL: 
+AUDIO: 'but actually what\'s really cool here in washington cloud if you notice um is that you can connect to aws resources um so that\'s that\'s another must-have right aws and azure microsoft people'
+
+[25:29] [scene:talk]
+VISUAL: 
+AUDIO: 'make sure that you know have some sort of identity uh system okay but you know the really compelling things again isolation of workloads'
+
+[25:41] [scene:talk]
+VISUAL: 
+AUDIO: 'no host operating system we\'re going to be running people are going to be running 100 you know we run hundreds of thousands of vms it has to run in corporate accounts right corporate data'
+
+[25:54] [scene:talk]
+VISUAL: 
+AUDIO: 'centers i uh aws azure has to have some sort of identity tie-in so we actually for um fedramp we had to use we we went with spiffy'
+
+[26:06] [scene:talk]
+VISUAL: 
+AUDIO: 'for certain identities um that kind of thing like people have spent a lot of time and money working on solving problems with this stuff so it has to still use this stuff'
+
+[26:18] [scene:talk]
+VISUAL: 
+AUDIO: 'and of course the machine learning super super important because companies have spent a lot of money on machine learning i don\'t know if you noticed you know there\'s there\'s a lot of a lot of work being'
+
+[26:31] [scene:talk]
+VISUAL: 
+AUDIO: 'done on machine learning and sometimes you know and sometimes it pays off um so they want to keep that stuff um and once again um i know bailey started us off with like people have this misconception about rust but he\'s like'
+
+[26:44] [scene:talk]
+VISUAL: 
+AUDIO: 'yeah if you\'re gonna start greenfield you should ride in rust um we obviously adobe uses cd plus plus for all of its web assembly but um and then the other thing is that for reasons that i don\'t really quite'
+
+[26:56] [scene:talk]
+VISUAL: 
+AUDIO: 'understand but i have pretty good ideas about um the large you know infrastructure as a service providers are are a little behind the eight ball on this stuff um'
+
+[27:08] [scene:talk]
+VISUAL: 
+AUDIO: 'i think it\'s because you have these different silos and you know going back to the first slide right it\'s a lot of stuff kind of converging in one place and so at these big you know what i mean these big cloud'
+
+[27:21] [scene:talk]
+VISUAL: 
+AUDIO: 'vendors they\'ve got lots of silos and it it\'s really well is it lambda ed edge right is it lambda is it the iot people right i don\'t know if they those people talk to each other but um so i'
+
+[27:33] [scene:talk]
+VISUAL: 
+AUDIO: 'think there\'s a real opportunity for a lot of you here to uh to challenge um you know to really carve a niche here um and uh and you know take care of that uh take advantage of the portability'
+
+[27:46] [scene:talk]
+VISUAL: 
+AUDIO: 'make something that\'s really um everywhere at one time um so um what time am i about done 5 15. um so so yeah so anyway to sum it up'
+
+[28:00] [scene:talk]
+VISUAL: 
+AUDIO: 'edge workers um i\'m i think this is really the time is now this stuff\'s really ready to go i think you\'re gonna see a lot of people using this enough very'
+
+[28:12] [scene:talk]
+VISUAL: 
+AUDIO: 'soon if you know they already are but um i think you\'re going to see it hit the top of the adoption curve um uh especially as they kind of turn up the compute right'
+
+[28:24] [scene:talk]
+VISUAL: 
+AUDIO: 'right now it\'s still pretty compute limited but they can once they can make it a little more powerful then there\'s going to be a lot of adoption i really like durable objects i know it\'s not going to work at an open source'
+
+[28:37] [scene:talk]
+VISUAL: 
+AUDIO: 'conference but i guess the way it would work is durable objects are good let\'s make an open source version of them how about that um uh server-side webassembly um i think i mean so so yeah so it works'
+
+[28:51] [scene:talk]
+VISUAL: 
+AUDIO: 'for the really trivial cases and it\'s kind of it\'s gonna work really soon for more complex cases but it\'s still um it\'s still kind of challenging um i think i think eventually it\'s going to'
+
+[29:03] [scene:talk]
+VISUAL: 
+AUDIO: 'be its own platform it\'s people aren\'t going to be running in kubernetes because as we as we all know it doesn\'t play well with kubernetes and you know i mean this was true a year ago it\'s it\'s less true now'
+
+[29:16] [scene:talk]
+VISUAL: 
+AUDIO: 'um but uh but i\'m really looking forward to the future of uh of kind of a seamless experience i think we the last talk kind of talked about that so'
+
+[29:29] [scene:talk]
+VISUAL: 
+AUDIO: 'and it\'s definitely going to be it\'s definitely going to be a thing um wasm will be a major player on the server side uh for what you know that\'s my two cents all right so that is all thank you very much all right'
+
+[29:47] [scene:talk]
+VISUAL: 
+AUDIO: 'i\'m off nevermind any questions no'

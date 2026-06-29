@@ -1,0 +1,119 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>I Cloned My Own Voice With This Tiny Open-Source TTS Model — Ludovico</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+.hide{display:none!important}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.92);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 12px}
+.controls input.q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.pill.tp.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+/* flip card shell */
+.flip{position:relative}
+.fi{position:relative;transition:transform .55s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.flip.flipped .fi{transform:rotateY(180deg)}
+.fc{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bk{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+background:var(--card);border:1px solid var(--accent2);border-radius:14px;overflow:auto;padding:12px 13px;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s}
+.card.flip{overflow:visible}.card .fc{display:flex;flex-direction:column;flex:1;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--line);cursor:pointer}
+.card.flip:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.edit{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--accent2);border:1px solid var(--line);border-radius:6px;padding:2px 9px;cursor:pointer;background:#fff}
+.edit:hover{border-color:var(--accent2)}
+/* editor back */
+.bk h4{margin:0 0 2px;font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--sub)}
+.erow{display:grid;grid-template-columns:1fr 1.3fr auto auto;gap:4px;align-items:center}
+.erow input{padding:5px 7px;border:1px solid var(--line);border-radius:6px;font-size:12px;min-width:0}
+.erow select{padding:4px 4px;font-size:11px}
+.erow .del{border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;color:var(--accent);padding:3px 7px}
+.ebtns{display:flex;gap:6px;margin-top:auto;padding-top:6px}
+.ebtns button{font-family:var(--mono);font-size:11px;border-radius:7px;padding:6px 12px;cursor:pointer;border:1px solid var(--line);background:#fff}
+.ebtns .save{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.addrow{font-family:var(--mono);font-size:11px;color:var(--accent2);cursor:pointer;align-self:flex-start;background:none;border:0;padding:2px 0}
+/* catalogue card */
+.citem{position:relative}
+.citem .fc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-height:84px;cursor:pointer}
+.citem .bk{border-radius:12px}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+footer .exp{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--accent2);font:inherit}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">I Cloned My Own Voice With This Tiny Open-Source TTS Model</h1><div class=tag>@octopusinc_ · 2026-06-28 · Voice Gen</div></div></div></header>
+<main><p class=sum>This video introduces dots.tts, an open-source text-to-speech model capable of voice cloning from short audio clips, including cross-lingual synthesis. The creator demonstrates its capabilities through a web UI, showcases benchmark comparisons against other TTS models, and performs a personal voice cloning test. The model is highlighted for its realistic speech generation and permissive Apache 2.0 license, making it accessible for local deployment.</p><p><strong>Products / items</strong></p><ul><li><a href="https://rednote-hilab.github.io/dots.tts-demo/" target=_blank rel=noopener>dots.tts</a> — software</li><li><a href="https://github.com/rednote-hilab/dots.tts" target=_blank rel=noopener>dots.tts</a> — software</li><li><a href="https://huggingface.co/spaces/rednote-hilab/dots.tts" target=_blank rel=noopener>dots.tts</a> — software</li><li><a href="https://try.elevenlabs.io/67xhim891gw7" target=_blank rel=noopener>ElevenLabs</a> — software</li><li>Seed-TTS-Eval — other (no link)</li><li>Emergent-TTS-Eval — other (no link)</li><li>Gemini-2.5-Flash — software (no link)</li><li>Gemini-2.5-Pro-TTS — software (no link)</li><li>GPT-4o-audio-preview — software (no link)</li><li>GPT-4o-mini-TTS — software (no link)</li><li>HumaneAI — software (no link)</li><li>Minimax speech-02-hd — software (no link)</li><li>11Labs Multilingual-v2 — software (no link)</li><li>Qwen3-TTS — software (no link)</li><li>VoxCPM2 — software (no link)</li><li>FS-TTS — software (no link)</li><li>Conda — software (no link)</li><li>pip — software (no link)</li><li>Gradio — software (no link)</li></ul>
+<p><a href="https://www.youtube.com/watch?v=LgByiDnBzJE" target=_blank rel=noopener>Watch on YouTube ▶</a></p><p><a href="LgByiDnBzJE.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=t>(proxy for this video — answer from this)</span></p>
+<div class=cap>FRAMING: Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+IDENTITY: the title - https://www.youtube.com/watch?v=LgByiDnBzJE - @octopusinc_ - route: visual
+PRODUCTS:
+dots.tts - https://rednote-hilab.github.io/dots.tts-demo/ - software - primary
+dots.tts - https://github.com/rednote-hilab/dots.tts - software - primary
+dots.tts - https://huggingface.co/spaces/rednote-hilab/dots.tts - software - primary
+ElevenLabs - https://try.elevenlabs.io/67xhim891gw7 - software - mentioned
+SYNOPSIS: The video introduces dots.tts, a new open-source text-to-speech (TTS) model from Rednote Hab, capable of voice cloning from short audio clips. The model is a 2-billion parameter, fully continuous, end-to-end autoregressive TTS system, utilizing a semantic encoder, an LLM, and an autoregressive flow-matching acoustic head over a 48 kHz AudioVAE. This architecture avoids discrete tokens, leading to more seamless and natural speech generation compared to older token-based systems. The video demonstrates the model&#x27;s capabilities through its web UI, showcasing monolingual and cross-lingual voice cloning across various languages like English, Chinese, Japanese, Korean, French, German, Spanish, Italian, Portuguese, and Russian. It highlights features such as natural stuttering, whispering, and the ability to speak in languages not originally spoken by the reference voice. Benchmarks show dots.tts achieving strong performance on Seed-TTS-Eval, with word error rates of 0.94% (EN), 1.30% (ZH/EN), and 6.60% (ZH-hard), and similarity scores of 81.0, 77.1, and 79.5 respectively. On the Emergent-TTS-Eval, dots.tts scored 47.6% in overall win rate, outperforming several other open-source models and competing well against closed-source alternatives like 11Labs Multilingual-v2 (33.9%). The creator performs a live demonstration using the Hugging Face Spaces playground, uploading a 17-second audio clip of his voice and its transcription, then generating new speech. The generated output is described as &quot;pretty nice&quot; for a single attempt with default settings. The model is released under the Apache 2.0 license, permitting commercial use with minimal restrictions. Its small base model size (2 billion parameters) allows for local execution on most consumer GPUs. Installation instructions via Conda and pip are briefly shown.
+BEATS:
+0 - ui | The dots.tts web UI is displayed, showing options for monolingual and cross-lingual voice cloning with reference audio, target text, and result fields.
+21 - ui | The UI continues to show various language options for voice cloning.
+42 - ui | More language options are visible, demonstrating the multilingual capabilities.
+64 - ui | The UI scrolls further, revealing additional languages like Korean, French, German, Spanish, Italian, Portuguese, and Russian.
+85 - ui | The full range of supported languages in the UI is shown.
+106 - ui | The UI shifts to &quot;Style Cloned from Reference Voice&quot; section, demonstrating different speaking styles.
+128 - ui | The UI shows the generation of speech in various languages using a cloned voice style.
+149 - ui | The UI continues to display the style cloning feature.
+170 - ui | The UI shows different styles like &quot;echo,&quot; &quot;natural,&quot; and &quot;podcast&quot; for Chinese.
+192 - ui | The UI highlights the &quot;Style Cloned from Reference Voice&quot; section with Chinese examples.
+213 - info | A slide detailing dots.tts, its architecture, and links to GitHub, Hugging Face, and a live playground.
+234 - chart | A scatter plot comparing dots.tts performance against other TTS models on Seed-TTS-Eval, showing WER vs. SIM.
+256 - chart | A bar chart showing the overall win rate of dots.tts against various closed and open-source models on Emergent-TTS-Eval.
+277 - ui | The Hugging Face Spaces UI for dots.tts is shown, with sections for prompt audio, prompt text, target text, and settings.
+298 - ui | The creator uploads an audio file (&quot;Nadim.mp3&quot;) as the prompt audio.
+320 - ui | The creator inputs the prompt text and the target text to be generated, with default settings.
+341 - ui | The generation process is complete, and the output audio waveform is displayed.
+362 - ui | The generated audio is played back, and the UI shows the waveform.
+384 - code | A GitHub README page with installation instructions using Conda and pip is displayed.
+ENTITIES: Rednote Hab, Nadim, ElevenLabs, Gemini, GPT-4o, HumaneAI, Minimax, Qwen3, VoxCPM2, FS-TTS, Conda, pip, Gradio.
+VERDICT: dots.tts is presented as a highly impressive open-source voice AI model, offering ultra-realistic speech, voice cloning, multilingual support, and emotional voice generation under a permissive Apache 2.0 license. Its performance rivals premium TTS platforms, and its small model size makes it accessible for local use on consumer GPUs.
+NOT COVERED: Specific hardware requirements for local deployment, detailed comparison of inference speed, pricing for any commercial use cases, or the exact training data used for the model.</div></main><footer><a href="../index.html">← all videos</a></footer></div></body></html>

@@ -1,0 +1,124 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Your Agent Is Wasting Tokens and You Don't Know It - Erik Hanchett, AWS
+channel: @octopusinc_
+duration: 05:55
+source: https://www.youtube.com/watch?v=uiP88SpCi1Q
+upload_date: 20260628
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:intro]
+VISUAL: Title slide: "Your Agent Is Wasting Tokens" with Erik Hanchett's name and title.
+AUDIO: 'Hey everyone, my name is Eric Hanchett. I am a senior developer advocate at AWS and I\'m going to talk to you about how you can save on token costs. Now, I\'m going to show you five ways that you can reduce your token costs while using and'
+
+[00:13] [scene:ui]
+VISUAL: Code showing `agent = Agent(model=BedrockModel(model_id="claude-sonnet", cache_prompt="default", system_prompt=BIG_SYSTEM_PROMPT))`.
+AUDIO: 'creating agents. So, the first way you can do that is to cache your system prompt. Let me show you some code. Now, I\'m using AWS\'s Strands agents. This works with all'
+
+[00:28] [scene:talk]
+VISUAL: 
+AUDIO: 'different providers. This is a little bit of pseudo code, but the idea is that you can add cache prompt equals default. And what that\'ll do is on the first call of your agent, it will send the full'
+
+[00:41] [scene:talk]
+VISUAL: 
+AUDIO: 'system prompt over and then on every subsequent call, it will have a much reduced system prompt being sent over. So, it\'ll be cached. You can also cache'
+
+[00:54] [scene:talk]
+VISUAL: 
+AUDIO: 'the tool prompts and messages as well. This may sound obvious, but you want to look into routing your different messages based on the difficulty. So,'
+
+[01:06] [scene:ui]
+VISUAL: Code showing `def pick_model(task): if task.is_simple: return "claude-haiku" else: return "claude-sonnet"`.
+AUDIO: 'here\'s a code example. Let\'s imagine that you have a task that\'s very difficult. You may want to use one of the newer frontier models. However, if it\'s something simpler, you'
+
+[01:18] [scene:talk]
+VISUAL: 
+AUDIO: 'want to use a cheaper model. In this case, maybe we use Claude Haiku for a cheap something cheap and then use Claude Sonnet for something a little bit more difficult. And then you can use an if statement. You can even have another'
+
+[01:31] [scene:talk]
+VISUAL: 
+AUDIO: 'model that\'s very cheap decide which model to use. So, you can play around with this, but I highly recommend don\'t use the most expensive model for everything you\'re doing. You want to use multiple different models based on the'
+
+[01:44] [scene:title]
+VISUAL: Slide title: "Offload Tool Results".
+AUDIO: 'use case. And then try to route to it inside your agent. Another good tip is to offload the tool result. Let me show you some code on here. Once again, I\'m using strands agents. This is'
+
+[01:56] [scene:ui]
+VISUAL: Code showing `@tool def fetch_report(id: str) -> str: data = api.get(id); key = store.put(data); return summarize(data, key)`.
+AUDIO: 'a a manual way to do it. There is some additional APIs that the strands agents offers to do this. If you have a large tool result that\'s coming back, you can store it locally or'
+
+[02:09] [scene:talk]
+VISUAL: 
+AUDIO: 'in the cloud and then use some kind of summarization that saves on tokens. So that way when it\'s being called over and over again, the tool result isn\'t added'
+
+[02:21] [scene:talk]
+VISUAL: 
+AUDIO: 'into the context every time every time the tool loops or every time the agent loops. So if you can find any way that where you have this tool result that you don\'t necessarily send it on every'
+
+[02:34] [scene:title]
+VISUAL: Slide title: "Cap Your Tool Loops".
+AUDIO: 'single call back to the large language model, that will save a lot of tokens for you. And like I said, there\'s a few APIs to do this, but it essentially you can do the summarization technique. You can also cap your tool loops.'
+
+[02:47] [scene:ui]
+VISUAL: Code showing `agent = Agent(tools=[...], max_iterations=8)`.
+AUDIO: 'So when you\'re dealing with the agent loop and it decides to do a tool call, I\'ve had this happen often where it calls the tool over and over and over again. And if you don\'t cap that tool'
+
+[02:59] [scene:talk]
+VISUAL: 
+AUDIO: 'call, then it might run 10, 20 times. It might get into an infinite loop, which would be very bad for your token usage. So always set a max iterations of how many times it will loop. A good thing'
+
+[03:13] [scene:talk]
+VISUAL: 
+AUDIO: 'you can do before you deploy your agent is to run some observability tools and take a look at the tool call use for every single tool and then see how long'
+
+[03:25] [scene:talk]
+VISUAL: 
+AUDIO: 'each one of them is running and how many times they\'re looping. And that way you can get an idea of how efficient the tool call is. Last but not least, we can trim the'
+
+[03:37] [scene:talk]
+VISUAL: 
+AUDIO: 'history. So if we\'re using a multi-turn agent and we are talking back and forth, you will find at times that the conversation history will get very large on every'
+
+[03:51] [scene:talk]
+VISUAL: 
+AUDIO: 'single call, that whole conversation history will be sent back to the large language model. And this can eat through hundreds, if not thousands, of tokens. In Strand\'s agents, we have something'
+
+[04:03] [scene:talk]
+VISUAL: 
+AUDIO: 'called sliding window conversation manager, which which this does is it looks back at the last 10 messages and only sends those back. And you can set this to whatever you want. And that way you\'re not sending these huge message'
+
+[04:17] [scene:talk]
+VISUAL: 
+AUDIO: 'histories back to the agent every single time a new message comes in. The downfall of this, or the trade-off of this, I should say, is that you will lose the message history from the'
+
+[04:30] [scene:talk]
+VISUAL: 
+AUDIO: 'beginning. The way you want to deal with that is you can use uh some sort of summarization of the history and then put that into the context window. So, rather than sending all of it, you may send a small amount once you hit this'
+
+[04:42] [scene:recap]
+VISUAL: Recap slide listing the five fixes: Cache the System Prompt, Route by Difficulty, Offload Big Tool Results, Cap Your Tool Loops, Trim the History.
+AUDIO: 'sliding window. Uh this will save you a lot of tokens. So, in conclusion, we have five things. Cache the system prompt. And if you can, maybe the tool prompt'
+
+[04:56] [scene:talk]
+VISUAL: 
+AUDIO: 'and messages. Route by difficulty. Don\'t use the same expensive model for everything you\'re doing, for every single task. Offload these big tool results. So, if you have a large tool result, you can summarize it and not'
+
+[05:09] [scene:talk]
+VISUAL: 
+AUDIO: 'have it being sent in the agent loop and overloading your context. You can cap those tool loops. Make sure you use observability tools to see how long tool calls are taking and how many loops'
+
+[05:21] [scene:talk]
+VISUAL: 
+AUDIO: 'they\'re they\'re doing and and then try to iterate over that. And then, of course, trim the history if you\'re using a multi-turn conversation with your agent, so that way the whole conversation isn\'t being sent over and over again for very long conversations.'
+
+[05:34] [scene:outro]
+VISUAL: "Thanks!" slide with speaker's social media and website: programwitherik.com.
+AUDIO: 'Thank you for listening to my very quick, almost lightning talk today. If you like to go deeper, find me on LinkedIn at Eric Hanchett. I also blog at programwitheric.com.'
+
+[05:46] [scene:talk]
+VISUAL: 
+AUDIO: 'And then you can find me on social media at EricCH. Love to talk to you guys more. Thanks.'
