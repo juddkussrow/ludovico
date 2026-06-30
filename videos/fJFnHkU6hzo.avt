@@ -1,0 +1,472 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Build a ComfyUI Inpainting Workflow and Actually Understand It | Build With Me [EP. 3]
+channel: @octopusinc_
+duration: 24:19
+source: https://www.youtube.com/watch?v=fJFnHkU6hzo
+upload_date: 20260623
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'What\'s up everybody? Lurk Tech here and welcome back to build with me episode 3. If you\'d followed along since episode 1, you already know the drill. We\'re not copying templates here. We\'re building node by node, so you actually understand what\'s happening under the hood. And today we\'re doing something a lot of you'
+
+[00:13] [scene:talk]
+VISUAL: 
+AUDIO: 'have been asking about, in-painting. Specifically, editing one part of a photo, like swapping out an outfit for example, without touching at the rest of the image. And without manually painting a mask yourself, because that gets tedious and annoying sometimes. We\'re'
+
+[00:25] [scene:talk]
+VISUAL: 
+AUDIO: 'going to let a model called SAM 3 read a text prompt and generate that mask automatically. It does a very, very good job at painting a detailed mask with just a very, very simple prompt, such as'
+
+[00:38] [scene:talk]
+VISUAL: 
+AUDIO: 'person or face or shirt. If you\'re brand new to ComfyUI, go watch episode 1 and 2 first. It covers the absolute basics. If you already got a basic build down, you\'re in the right place.'
+
+[00:50] [scene:talk]
+VISUAL: 
+AUDIO: 'Here\'s the full workflow we\'re building today, top to bottom. Don\'t worry about all 19 nodes right now. We\'re going to go through this one, one piece at a time, as it is a little bit more of an advanced workflow'
+
+[01:02] [scene:talk]
+VISUAL: 
+AUDIO: 'compared to what we have done the first few. I\'m going to leave this on screen for you guys to view over real quick, but before we get into it, if you\'re getting value out of this series, a like and a subscribe genuinely helps the channel grow so much, you guys don\'t even'
+
+[01:14] [scene:talk]
+VISUAL: 
+AUDIO: 'understand. So, if you haven\'t already, go ahead and do that, please and thank you. Also, this isn\'t the only workflows that I have. I\'ve got more advanced builds on my Discord, completely free to download, and there\'s no catch to it. Just join'
+
+[01:27] [scene:talk]
+VISUAL: 
+AUDIO: 'the Discord and get involved with the community. Workflows are in the free workflow section there. Link is in the description of my Discord. Go ahead and grab them, guys. And one more quick thing while I\'ve got you. Inside that same Discord, I also offer one-on-one'
+
+[01:40] [scene:talk]
+VISUAL: 
+AUDIO: 'guidance if you want personalized help. That covers pretty much anything ComfyUI or AI influencer-related. I\'ve helped people with a wide variety of things, going from workflow troubleshooting to model selection to training high-quality'
+
+[01:53] [scene:talk]
+VISUAL: 
+AUDIO: 'LoRAs, and even social media strategy and building accounts if you\'re trying to actually grow an AI influencer account. If you\'ve been stuck on something and you need some help, feel free to go over to my Discord and reach out to me. Just submit a ticket there.'
+
+[02:05] [scene:talk]
+VISUAL: 
+AUDIO: 'Quick heads-up before we start dropping nodes onto the canvas. This is actually the first build with me episode where we\'re using custom node packs. Episode 1 and 2 were both built entirely out of nodes that ship with ComfyUI by default, and this one isn\'t. If you\'ve never'
+
+[02:18] [scene:talk]
+VISUAL: 
+AUDIO: 'installed a custom node pack before, here\'s the short version. Open the ComfyUI Manager. That\'s the little puzzle piece icon that says manager on it up there. Now, you\'ll see a few different options here when it comes to custom nodes. So, if you are loading up a workflow that has custom nodes that'
+
+[02:31] [scene:talk]
+VISUAL: 
+AUDIO: 'you\'re missing, obviously, you just go to the install missing custom nodes option here, and that will populate a list of nodes that are in the workflow that you don\'t have. But, for this, since we\'re creating the workflow as we go along, you\'re going to open the'
+
+[02:43] [scene:talk]
+VISUAL: 
+AUDIO: 'custom nodes manager. Now, within the custom nodes manager, you\'ll notice that there\'s almost 6,500 custom node packs that you can download that will help aid and improve your workflows. There\'s tons of things and tools that people have'
+
+[02:57] [scene:talk]
+VISUAL: 
+AUDIO: 'made here, and they\'re all available to you for free. But, for this workflow, we only need a few custom node packs. So, the first one is going to be ComfyUI Inpaint Crop. So, you can just search that at the search bar up top there. Go ahead and install that. Wait for that to'
+
+[03:10] [scene:talk]
+VISUAL: 
+AUDIO: 'install, and then you\'re going to search ComfyUI Essentials. Install that. Wait for that one to install, cuz they need to install one by one. Next one is going to be ComfyUI'
+
+[03:23] [scene:talk]
+VISUAL: 
+AUDIO: 'Workflow Encrypt. Install that. Wait for that to install, and the final node pack that we\'re going to need is ComfyUI KJ Nodes. Install that. Wait for that last node'
+
+[03:38] [scene:talk]
+VISUAL: 
+AUDIO: 'pack to install, and then you\'re going to navigate back to the ComfyUI Manager main page and click the restart button here to hard restart your ComfyUI. Anytime that you install custom nodes, you need to hard restart ComfyUI for them to be loadable and readable by'
+
+[03:51] [scene:talk]
+VISUAL: 
+AUDIO: 'comfy UI. So, when building bigger workflows, I like to section out parts of the workflow to make it easier for me to understand how to build it. And I\'m going to do the same thing with you guys today. So, we\'re going to start at the'
+
+[04:03] [scene:talk]
+VISUAL: 
+AUDIO: 'top, kind of just how we started in the past two videos as well. We\'re going to start by adding some model loader nodes. So, we need our load diffusion model node. We need our load clip node.'
+
+[04:19] [scene:talk]
+VISUAL: 
+AUDIO: 'And finally, we need our load VAE node. Now, once you have those dragged and'
+
+[04:32] [scene:talk]
+VISUAL: 
+AUDIO: 'dropped onto your canvas, make sure that you\'re selecting the proper models. Today, we are using Z Image Turbo again, just as we have in the past two videos. And with Z Image Turbo, the corresponding text encoder is Qwen 3 4'
+
+[04:44] [scene:talk]
+VISUAL: 
+AUDIO: 'billion parameters. And the corresponding VAE that I use is the AE VAE. Moving right on, similar to the last few videos, we are now going to add our positive and negative prompt nodes.'
+
+[04:58] [scene:talk]
+VISUAL: 
+AUDIO: 'So, you can either search clip text encode on the left-hand side in the node section, or you can just drag the clip wiring from load clip onto the canvas somewhere, and you\'ll see clip text encode is probably the first option'
+
+[05:11] [scene:talk]
+VISUAL: 
+AUDIO: 'available. I\'m going to make this a bit smaller. For our negative prompt, as we have established in the previous videos, Z Image Turbo does not read negative prompting. So, we\'re just going to drag'
+
+[05:23] [scene:talk]
+VISUAL: 
+AUDIO: 'the conditioning wiring from our positive prompt onto the canvas somewhere, and we\'re going to search zero, and select conditioning zero out, which will basically just add an empty string value for our negative prompt. Now, this'
+
+[05:36] [scene:talk]
+VISUAL: 
+AUDIO: 'is where we slightly deviate from our first few videos. Next, we are going to add an inpaint model conditioning node. We can just place that under our'
+
+[05:50] [scene:talk]
+VISUAL: 
+AUDIO: 'prompts for now. We\'re going to drag the conditioning from our positive prompt into the in paint model conditioning and we\'re going to drag the conditioning from our negative condition zero out into the negative section.'
+
+[06:04] [scene:talk]
+VISUAL: 
+AUDIO: 'Now, we need to wire the VAE model into the in paint model conditioning as well. So, now that we have that wired up, we\'re going to move on from this node, but we will be adding more to it later.'
+
+[06:16] [scene:talk]
+VISUAL: 
+AUDIO: 'Next up is going to be our K sampler. So, I\'m just going to search K sampler here. I\'m going to use the K sampler efficient. I\'ll put that there. Now, I\'m going to'
+
+[06:28] [scene:talk]
+VISUAL: 
+AUDIO: 'take the positive wiring from our in paint model conditioning and obviously wire that to the positive in our K sampler and same with the negative. And finally for our in paint model conditioning output, we\'re going to drag'
+
+[06:41] [scene:talk]
+VISUAL: 
+AUDIO: 'the latent output into our latent image input in our K sampler. Now, for the K sampler, we also need to wire up the model. So, we\'re going to drag wiring from our load diffusion model node into the K'
+
+[06:55] [scene:talk]
+VISUAL: 
+AUDIO: 'sampler. And we\'re going to do the same thing for the VAE. Even though it says optional VAE, I always prefer to wire that up. We\'re going to circle back to the K sampler towards the end of the workflow, but for now I\'m just going to'
+
+[07:08] [scene:talk]
+VISUAL: 
+AUDIO: 'leave all the settings there the same and we\'re going to move on to our VAE decode node. So, we\'re going to drag our latent output from the K sampler onto the canvas'
+
+[07:20] [scene:talk]
+VISUAL: 
+AUDIO: 'and you\'ll see VAE decode should be near the top there. I\'m going to take the VAE output from our K sampler since we did wire up that optional VAE input here. It will just take that VAE and continue and extend it'
+
+[07:33] [scene:talk]
+VISUAL: 
+AUDIO: 'onto our VAE decode. You can also take it from the load VAE node, but it\'s not necessary if you did that way. Now, just a quick side note, you may notice that the K sampler efficient has a VAE decode option here,'
+
+[07:47] [scene:talk]
+VISUAL: 
+AUDIO: 'and it is set to true. So, I\'m just going to turn that to false because we are decoding via an external node here. I always prefer to do this. So, normally we would just take the image output of our VAE decode node and put that into a'
+
+[07:59] [scene:talk]
+VISUAL: 
+AUDIO: 'preview or save image node, but we\'re not quite done here with the image yet. So, we\'re going to drag the image output onto the canvas, and we\'re going to look for a node called inpaint stitch.'
+
+[08:11] [scene:talk]
+VISUAL: 
+AUDIO: 'You\'ll see that there\'s a stitcher input option here, which we will be wiring up in just a little bit, but we\'re going to leave that there for now until we'
+
+[08:24] [scene:talk]
+VISUAL: 
+AUDIO: 'configure our inpaint and mask detection part of the workflow. However, what we will do is drag the image output from our inpaint stitch node onto our canvas, and'
+
+[08:37] [scene:talk]
+VISUAL: 
+AUDIO: 'click the save image node. Now, moving on to load image. Since we are inpainting, that means that we need an image to inpaint. So, I\'m going to select the load image'
+
+[08:52] [scene:talk]
+VISUAL: 
+AUDIO: 'node and just drag that near our save image node. I\'ll keep those there for now. So, before we move on to explain a little bit more about what inpainting actually is and what it does, I\'m going to show you guys how you'
+
+[09:04] [scene:talk]
+VISUAL: 
+AUDIO: 'can natively inpaint in ComfyUI real quick, even though we won\'t be doing this because there\'s more efficient ways, but I just want to show you exactly what it does because some people may not understand it entirely. So, I\'m'
+
+[09:17] [scene:talk]
+VISUAL: 
+AUDIO: 'going to right-click our image in our load image node, and you\'ll see an option open in mask editor. So, if we select that option, you\'ll notice that a mask editor with some paint brushes that we can change the thickness, opacity,'
+
+[09:30] [scene:talk]
+VISUAL: 
+AUDIO: 'hardness, and so on with. But, by default, you\'ll see that the mask editor is selected at the top left here. That\'s what we want to be in. So, I\'m going to turn the thickness up of our brush real quick and show you how to inpaint. So,'
+
+[09:42] [scene:talk]
+VISUAL: 
+AUDIO: 'let\'s say that I wanted to inpaint the face of this person here. So, that our generation model reimagines the face and recreates it and just puts it on top of this image. Well, all I\'d have to do is'
+
+[09:56] [scene:talk]
+VISUAL: 
+AUDIO: 'select the face region, draw over it with our brush, fill it in, and that is the face in painted. But, we\'re not going to be doing that today.'
+
+[10:09] [scene:talk]
+VISUAL: 
+AUDIO: 'What we\'re going to be doing instead is using a segment anything model or SAM 3, and that is going to select our inpaint region with very, very precise inpainting based off of whatever we type'
+
+[10:22] [scene:talk]
+VISUAL: 
+AUDIO: 'inside of a separate prompt box. So, we have our positive prompt up here, and we\'re not going to type what we want to inpaint in that box. Instead, we\'re going to create a new prompt box, which'
+
+[10:34] [scene:talk]
+VISUAL: 
+AUDIO: 'I will show you how to do and where to put it right now. Just before we do that, let\'s continue the pipeline with our load image node. After we add our load image node, we\'re going to take the image output, drag it onto the canvas, and we\'re going to search for a node'
+
+[10:47] [scene:talk]
+VISUAL: 
+AUDIO: 'called resize image by longer edge. I always recommend when using resize image nodes, you use something like resize image by longer edge because this'
+
+[10:59] [scene:talk]
+VISUAL: 
+AUDIO: 'keeps the aspect ratio of your photo. So, we\'re going to move on with the pipeline of loading and resizing our image and what we do with it. But, first we need to add our detection model or segment model, which is our SAM model.'
+
+[11:11] [scene:talk]
+VISUAL: 
+AUDIO: 'So, I\'m just going to move save image up there for now. And we\'re going to search for a node called load checkpoints. You\'re going to drag and drop that on'
+
+[11:24] [scene:talk]
+VISUAL: 
+AUDIO: 'the canvas. Now, this is a model in which you will have to install into the checkpoints folder in your comfy UI directory. It\'s not a large model. I think it\'s only 1.5 GB or maybe 2 GB. Um and there will be a'
+
+[11:37] [scene:talk]
+VISUAL: 
+AUDIO: 'download link that you can either click and drag and drop that into your directory in the description or there will be a W get command which you can just copy and paste into your terminal to get this as well. So, I\'m just going'
+
+[11:50] [scene:talk]
+VISUAL: 
+AUDIO: 'to put that load checkpoint down here for now so I can show you guys how we configure it. So, first things first, now that we have our segment model, we\'re going to take the clip output, drag it onto the canvas, and select clip'
+
+[12:02] [scene:talk]
+VISUAL: 
+AUDIO: 'text encode or prompt box. I\'m sure as you can put together now, this is our prompt box in which we describe what we are segmenting. So, we\'ll fill that out a little bit later. Next up is our SAM 3 detect node. So, let\'s search for that.'
+
+[12:16] [scene:talk]
+VISUAL: 
+AUDIO: 'Drag and drop it onto the canvas here. And you\'ll see that it has quite a bit of wiring input. So, the first things first, we\'re going to take the output of'
+
+[12:28] [scene:talk]
+VISUAL: 
+AUDIO: 'our load checkpoint, drag that into the model section, and as I\'m sure you could have guessed, we are going to take the images output of our resize by longer edge node and put that into images. And for the conditioning, we are going to'
+
+[12:40] [scene:talk]
+VISUAL: 
+AUDIO: 'connect our prompt box. You don\'t need to worry about these three wiring inputs here. So far, what this pipeline is doing is loading an image, resizing it, putting it into the SAM 3 detect model.'
+
+[12:52] [scene:talk]
+VISUAL: 
+AUDIO: 'We load our model. We load our prompt to condition the mask. And as you\'ll see here, the SAM 3 detect node has a masks output, which is going to output our'
+
+[13:04] [scene:talk]
+VISUAL: 
+AUDIO: 'mask. So, we\'re just going to drag and drop that mask output onto the canvas and search for a node called grow mask. And we\'re going to select grow mask with blur. And what this does is obviously grows'
+
+[13:17] [scene:talk]
+VISUAL: 
+AUDIO: 'the mask a little bit with a bit of blur on the outside edges of the mask so that way the edges of our mask aren\'t too sharp or looks like it was placed right on top of the image and it kind of'
+
+[13:31] [scene:talk]
+VISUAL: 
+AUDIO: 'feathers and pads itself in properly to our reference image. Before we move on with the mask pipeline, I\'m going to have you take another images wiring output from our resize image by longer side node, drop that onto the canvas'
+
+[13:44] [scene:talk]
+VISUAL: 
+AUDIO: 'and search for get image size. We\'re going to just place that right down here for now and we are going to now continue with the mask pipeline. So, we\'re going to take the mask output from'
+
+[13:56] [scene:talk]
+VISUAL: 
+AUDIO: 'our blurred mask and we\'re going to search for a node called in paint crop. We can drag and drop that onto the canvas. And you\'ll see that there\'s also an'
+
+[14:08] [scene:talk]
+VISUAL: 
+AUDIO: 'image input that we need to drag and drop into the in paint crop. So, again, what we\'re going to do is take the images output from resize image by longer side and drag that into the in paint crop node. So, what this does is'
+
+[14:21] [scene:talk]
+VISUAL: 
+AUDIO: 'it takes our original reference photo before there\'s any masking done to it, feeds it into this in paint crop and then takes our mask that we have just created, puts it into this in paint crop'
+
+[14:33] [scene:talk]
+VISUAL: 
+AUDIO: 'and obviously crops it on top of our original reference photo. For the get image size node that I just had you add to our canvas as well, we\'re going to take the width output from this and we\'re going to drag that into the output'
+
+[14:47] [scene:talk]
+VISUAL: 
+AUDIO: 'target width section towards the bottom of our in paint crop node. And we\'re going to do the same thing for the height output, we\'re just going to drag that into the output target height section as well. Now, what that does is'
+
+[14:59] [scene:talk]
+VISUAL: 
+AUDIO: 'resizes our target height and width from our cropped image once it\'s done and sets it to the same size that our original reference photo is. So, that way there is no image on top of another'
+
+[15:12] [scene:talk]
+VISUAL: 
+AUDIO: 'image clipping through or anything like that. As you can see, there is a ton of variables in which we can change within these nodes, but there\'s only a few that you really have to worry about. So, I\'m going to show you guys what to change right now. So, first things first, our'
+
+[15:25] [scene:talk]
+VISUAL: 
+AUDIO: 'resize image, you can set this to any value that you\'d like. I\'m just going to set mine to 1280 so that it takes the longest side and resizes it by 1280 and scales the other side according to the'
+
+[15:37] [scene:talk]
+VISUAL: 
+AUDIO: 'aspect ratio. Our clip text encode here is where we need to describe what we want to mask. So, let\'s say that you are wanting to mask an entire person for example. I\'m just going to type in person. Moving on, we can leave SAM 3'
+
+[15:49] [scene:talk]
+VISUAL: 
+AUDIO: 'detect variables the same, but for grow mask with blur, we want to expand our mask just a tiny bit. So, I\'m going to set this value to six here. And for the blur radius, I\'m going to set that value'
+
+[16:02] [scene:talk]
+VISUAL: 
+AUDIO: 'to five. Moving on to the in paint crop node, there\'s a few things we need to change here as well. We don\'t want to expand the mask by any amount of pixels here cuz we\'ve already done that and our grow mask with blur, but we do want to blend'
+
+[16:14] [scene:talk]
+VISUAL: 
+AUDIO: 'the pixels as much as we possibly can. So, I\'m just going to turn that value all the way up to 64 so that we get a nice seamless looking pixel blend. Moving down, the context from mask extend factor, we want to change down to'
+
+[16:28] [scene:talk]
+VISUAL: 
+AUDIO: 'one cuz we don\'t want to extend our mask any more than we already have. We\'ve already done that a little bit. And the output padding, I like to have it either 128 or 256. I will select 256 for this example.'
+
+[16:41] [scene:talk]
+VISUAL: 
+AUDIO: 'And the rest can be left pretty much alone for this section here. Now, we are going to circle back to that in paint model conditioning node that we added towards the beginning of the'
+
+[16:53] [scene:talk]
+VISUAL: 
+AUDIO: 'workflow. That is where the cropped image output from in paint crop is going to be placed into just right in the pixel section. And same with cropped mask, that\'s going into go into the mask section in in'
+
+[17:07] [scene:talk]
+VISUAL: 
+AUDIO: 'paint model conditioning. Now, after we do that, this is an optional step, but you can do it and I like to do it just to see exactly what is being masked through the workflow. So, I\'m going to take the output of cropped mask again from in paint crop,'
+
+[17:19] [scene:talk]
+VISUAL: 
+AUDIO: 'drag it onto the canvas, and I\'m going to select mask preview. I\'m just going to make that a little bit bigger there. So, that will give us an image every time that we run the workflow of exactly'
+
+[17:31] [scene:talk]
+VISUAL: 
+AUDIO: 'what is being masked. Okay, so bringing your attention back to our in paint stitch node. As you recall, we took our VAE decode image output and drag that into the in paint stitch, but we never attached the'
+
+[17:43] [scene:talk]
+VISUAL: 
+AUDIO: 'stitcher. Now is our time to do that. So, we\'re going to take the stitcher output from in paint crop and drop that into the input there. And finally, we now have everything wired up properly. We just'
+
+[17:55] [scene:talk]
+VISUAL: 
+AUDIO: 'need to change the settings in our case sampler. So, by default it should be set to 20 steps, a CFG of seven, and the D noise value at one. We\'re going to change the steps down to nine. You can go from'
+
+[18:08] [scene:talk]
+VISUAL: 
+AUDIO: 'anywhere from nine to 12 to 15 with Z image turbo, but the perks of using Z image turbo is it\'s a turbo model. So, what that means is that you can generate'
+
+[18:21] [scene:talk]
+VISUAL: 
+AUDIO: 'images at full quality with a lot less steps, whereas Z image base would require anywhere from 30 to 50 steps per generation. So, we\'re going to use nine steps for this example.'
+
+[18:33] [scene:talk]
+VISUAL: 
+AUDIO: 'CFG is set to one, and the D noise value, again, if you remember from our previous videos, this is the control that basically determines how much the Z image turbo model is going to reimagine'
+
+[18:47] [scene:talk]
+VISUAL: 
+AUDIO: 'whatever we are generating. So, in our case, we are just generating whatever we have masked, which is a person. So, if we have the D noise value set at one, it\'s going to completely stray away from'
+
+[18:59] [scene:talk]
+VISUAL: 
+AUDIO: 'the original mask entirely. We don\'t want that. I\'m going to set the D noise value to 0.75, but you can do anything from 0.6 if you\'re getting good results with that,'
+
+[19:13] [scene:talk]
+VISUAL: 
+AUDIO: 'all the way up to 0.8 is about where I stop because it starts to stray a little bit too far away from the original reference image. So once we have these settings configured within our case sampler, we are ready to generate, but'
+
+[19:26] [scene:talk]
+VISUAL: 
+AUDIO: 'first I\'m going to change our reference photo. So for my reference photo, I\'ve selected a photo of a woman who is walking her dog. So that way you can see that it actually properly masks only the person'
+
+[19:39] [scene:talk]
+VISUAL: 
+AUDIO: 'here and doesn\'t pick up things like other animals or anything that\'s not a person. This is the woman that is going to be masked and replaced. And now we need to describe what we want the person'
+
+[19:51] [scene:talk]
+VISUAL: 
+AUDIO: 'to look like that is going to replace her. And that goes in our text encode node or our positive prompt box that is connected to the case sampler here. So I just came up with a short'
+
+[20:03] [scene:talk]
+VISUAL: 
+AUDIO: 'concise prompt here. A young Italian woman with platinum silver hair wearing a yoga outfit. If you do have a Laura character file and you want to just plug that into this workflow, you don\'t really need to prompt anything here if'
+
+[20:15] [scene:talk]
+VISUAL: 
+AUDIO: 'you do. The only difference that you would do to change this workflow is take the model output wiring from load diffusion model, put in a load Laura node here, and then take that model output and put'
+
+[20:28] [scene:talk]
+VISUAL: 
+AUDIO: 'that back into the case sampler there. That\'s the only thing that you would do to add your own Laura character file and that will replace the person in the image that we are cropping and masking with our character Laura file. But I\'m'
+
+[20:40] [scene:talk]
+VISUAL: 
+AUDIO: 'not going to do that. I\'m just going to use the prompt for this example. I\'m going to run this workflow. So the workflow is ran and as you can see, the person has been replaced with the character that we described in our prompting. One thing about in painting'
+
+[20:52] [scene:talk]
+VISUAL: 
+AUDIO: 'is that sometimes the masking is just not perfect. So we can see here the preview of our mask. Yes, it has detected and masked the character that we are selecting, but it looks like it kind of had trouble when detecting the'
+
+[21:06] [scene:talk]
+VISUAL: 
+AUDIO: 'hands, which may be an issue with the reference photo or it may be an issue with our mask or it may be an issue with the D noise value in our case sampler and you\'re just going to have to'
+
+[21:18] [scene:talk]
+VISUAL: 
+AUDIO: 'experiment with these things until you get something that works for you. I\'m going to change the D noise value down just a little bit in our case sampler and I\'m also going to reduce the blur radius in our grow mask with blur.'
+
+[21:30] [scene:talk]
+VISUAL: 
+AUDIO: 'And I\'m going to run this again and we\'re going to see if that has any effect on our image. So after changing around a few of the settings and trying to get better output, my belief is that the culprit is the reference photo and'
+
+[21:43] [scene:talk]
+VISUAL: 
+AUDIO: 'not actually our settings at all, which typically is the case because the settings that I have provided for you are pretty optimized. One thing that I would like to point out is that obviously as as you can notice here, the none of the image around our mask has'
+
+[21:56] [scene:talk]
+VISUAL: 
+AUDIO: 'changed at all. It preserves the rest of the image perfectly, which is why in painting is so important with AI generation because if you\'re just doing image to image, yes, you can get good results, but a lot of the stuff around'
+
+[22:09] [scene:talk]
+VISUAL: 
+AUDIO: 'the person or whatever it is that you\'re generating might be AI slop and you really don\'t have much control over whether that happens or it does not happen. I\'m going to select another reference photo and we are going to test'
+
+[22:22] [scene:talk]
+VISUAL: 
+AUDIO: 'out this workflow a bit further. For legal and copyright purposes, the reference image that I\'m using, which I just dragged on our workflow up to our next to our preview image node here, so'
+
+[22:34] [scene:talk]
+VISUAL: 
+AUDIO: 'you guys can see a little bit better. This person is AI generated and so is the person on the right, which obviously is the outcome of our workflow. And you can see that this image worked a lot'
+
+[22:47] [scene:talk]
+VISUAL: 
+AUDIO: 'better and typically higher quality images with the person in plain view where there\'s not a lot going on with the person themselves typically works better.'
+
+[22:59] [scene:talk]
+VISUAL: 
+AUDIO: 'Just for example purposes one more time, I\'m going to change the prompt of our mask segmentation prompt here. So, I\'m going to change this to face for example. I\'m also going to type in'
+
+[23:11] [scene:talk]
+VISUAL: 
+AUDIO: 'eyes, lips, nose. And we\'ll leave it at that. So, based on this prompting, we should expect that our mask is only going to select the face, which I can\'t really'
+
+[23:23] [scene:talk]
+VISUAL: 
+AUDIO: 'tell based on that mask preview. And if we take a look at the results here, we can see that obviously the face was changed. I don\'t think that person is Italian, but I\'m not a scientist. Anyway, guys, that is going to conclude Build With Me'
+
+[23:35] [scene:talk]
+VISUAL: 
+AUDIO: 'episode 3. Thank you guys for taking the time to watch this series if you have. If you\'re enjoying it, please subscribe. We\'re going to be doing a lot more with this series. We\'re going to be going a lot more in-depth with it as well. This was kind of the first dip into the more'
+
+[23:48] [scene:talk]
+VISUAL: 
+AUDIO: 'advanced side of what you can do with workflows. We introduced a bunch of new things today with this workflow including segmentation models, masking, inpainting, stitching together images,'
+
+[24:02] [scene:talk]
+VISUAL: 
+AUDIO: 'and so on. And we\'re going to get even more advanced in the following couple weeks that are upcoming. So, please stay tuned, guys, and remember to like, comment, subscribe, and join the'
+
+[24:14] [scene:talk]
+VISUAL: 
+AUDIO: 'Discord. Peace out.'

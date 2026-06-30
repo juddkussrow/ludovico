@@ -1,0 +1,134 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>I Made 5 Digital Products With Claude in 28 Minutes — Ludovico</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+.hide{display:none!important}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.92);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 12px}
+.controls input.q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.pill.tp.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+/* flip card shell */
+.flip{position:relative}
+.fi{position:relative;transition:transform .55s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.flip.flipped .fi{transform:rotateY(180deg)}
+.fc{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bk{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+background:var(--card);border:1px solid var(--accent2);border-radius:14px;overflow:auto;padding:12px 13px;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s}
+.card.flip{overflow:visible}.card .fc{display:flex;flex-direction:column;flex:1;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--line);cursor:pointer}
+.card.flip:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.edit{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--accent2);border:1px solid var(--line);border-radius:6px;padding:2px 9px;cursor:pointer;background:#fff}
+.edit:hover{border-color:var(--accent2)}
+/* editor back */
+.bk h4{margin:0 0 2px;font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--sub)}
+.erow{display:grid;grid-template-columns:1fr 1.3fr auto auto;gap:4px;align-items:center}
+.erow input{padding:5px 7px;border:1px solid var(--line);border-radius:6px;font-size:12px;min-width:0}
+.erow select{padding:4px 4px;font-size:11px}
+.erow .del{border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;color:var(--accent);padding:3px 7px}
+.ebtns{display:flex;gap:6px;margin-top:auto;padding-top:6px}
+.ebtns button{font-family:var(--mono);font-size:11px;border-radius:7px;padding:6px 12px;cursor:pointer;border:1px solid var(--line);background:#fff}
+.ebtns .save{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.addrow{font-family:var(--mono);font-size:11px;color:var(--accent2);cursor:pointer;align-self:flex-start;background:none;border:0;padding:2px 0}
+/* catalogue card */
+.citem{position:relative}
+.citem .fc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-height:84px;cursor:pointer}
+.citem .bk{border-radius:12px}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+footer .exp{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--accent2);font:inherit}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">I Made 5 Digital Products With Claude in 28 Minutes</h1><div class=tag>@octopusinc_ · 2026-06-30 · Favorites, Tutorial, Up Next</div></div></div></header>
+<main><p class=sum>This video demonstrates how to create five different digital products using AI tools: Shopify templates, Notion templates, custom fonts, Photoshop/Procreate brushes, and brand kits. The creator uses various AI platforms like Claude, Google Flow with Nano Banana Pro, and Lovart to generate and refine these products, emphasizing the &quot;Find, Assemble, Brand&quot; (FAB) framework for successful digital product creation. The video highlights the potential for significant passive income by leveraging AI to streamline product development.</p><p><strong>Products / items</strong></p><ul><li>Claude — software (no link)</li><li>Google Flow — software (no link)</li><li>Nano Banana Pro — software (no link)</li><li><a href="https://lovart.ai/?source_id=902331&amp;promoter_id=14793924&amp;promoter_name=Samson+Vowles&amp;campaign_id=41499&amp;campaign_name=Lovart+Influencer+Affiliate+Program&amp;promo_code=&amp;utm_source=firstpromoter&amp;utm_campaign=41499&amp;utm_medium=14793924&amp;fpr=samson88" target=_blank rel=noopener>Lovart</a> — software</li><li>Shopify — software (no link)</li><li>Creative Market — software (no link)</li><li>Theme Forest — software (no link)</li><li>Invato — software (no link)</li><li>Woo Commerce — software (no link)</li><li>Wix — software (no link)</li><li>Squarespace — software (no link)</li><li>Notion — software (no link)</li><li>Figma — software (no link)</li><li>Procreate — software (no link)</li><li>Photoshop — software (no link)</li><li>Illustrator — software (no link)</li><li>Affinity — software (no link)</li><li>GPT images — software (no link)</li></ul>
+<p><a href="https://www.youtube.com/watch?v=S5C-9K2509w" target=_blank rel=noopener>Watch on YouTube ▶</a></p><p><a href="S5C-9K2509w.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=t>(proxy for this video — answer from this)</span></p>
+<div class=cap>FRAMING: Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+IDENTITY: I Made 5 Digital Products With Claude in 28 Minutes - https://www.youtube.com/watch?v=S5C-9K2509w - @octopusinc_ - route: visual
+PRODUCTS:
+Claude - no reliable link - software - primary
+Google Flow - no reliable link - software - primary
+Nano Banana Pro - no reliable link - software - primary
+Lovart - https://lovart.ai/?source_id=902331&amp;promoter_id=14793924&amp;promoter_name=Samson+Vowles&amp;campaign_id=41499&amp;campaign_name=Lovart+Influencer+Affiliate+Program&amp;promo_code=&amp;utm_source=firstpromoter&amp;utm_campaign=41499&amp;utm_medium=14793924&amp;fpr=samson88 - software - primary
+Shopify - no reliable link - software - mentioned
+Creative Market - no reliable link - software - mentioned
+Theme Forest - no reliable link - software - mentioned
+Invato - no reliable link - software - mentioned
+Woo Commerce - no reliable link - software - mentioned
+Wix - no reliable link - software - mentioned
+Squarespace - no reliable link - software - mentioned
+Notion - no reliable link - software - primary
+Figma - no reliable link - software - mentioned
+Procreate - no reliable link - software - mentioned
+Photoshop - no reliable link - software - mentioned
+Illustrator - no reliable link - software - mentioned
+Affinity - no reliable link - software - mentioned
+GPT images - no reliable link - software - mentioned
+SYNOPSIS: The video demonstrates how to create five different digital products using AI tools, following a &quot;Find, Assemble, Brand&quot; (FAB) framework. For Shopify templates, the creator uses Google Flow with Nano Banana Pro to generate website visuals from a detailed prompt, then Claude Design to convert the image into a usable Shopify template. The template can be sold on marketplaces like Creative Market or Theme Forest, or a self-hosted Shopify store, with pricing starting at $100. For Notion templates, the video highlights Thomas Frank&#x27;s success ($1M revenue) and shows how Notion&#x27;s AI agent can create templates from a prompt, such as an &quot;ultimate productivity OS template.&quot; The creator notes that people will pay for templates that save time and improve productivity. Custom fonts are created using Nano Banana Pro in Google Flow to generate font designs from prompts, then Claude to convert them into TTF font files. The process also shows drawing characters by hand, photographing them, and using them as an ingredient in Google Flow to generate a full font face. Fonts can be priced from $30 for a single style, with increased pricing for bundles and different licensing tiers (e.g., app usage for $150+). For Photoshop and Procreate brushes, Nano Banana Pro is used to create patterns, which are then converted into brush files by Claude. The example given is a &quot;Manga Procreate Brushes &amp; Anime Pens&quot; kit that made over $20,000. Finally, for AI brand kits, the sponsored tool Lovart is used. Lovart, a professional design agent, helps create complex brand systems by defining brand elements in its brand kit area and then generating various assets like websites, Instagram posts, and PowerPoint presentations while maintaining brand consistency. Lovart allows active text editing and uses models like Nano Banana Pro and GPT images. Lovart&#x27;s pricing starts at $19/month for 100 daily credits and 2 concurrent tasks. The video emphasizes that AI makes product creation easier, shifting the focus to effective branding and marketing.
+BEATS:
+00:00 | intro | The creator introduces the video&#x27;s topic: making digital products with AI.
+01:33 | explanation | The creator discusses the profitability of Shopify templates, referencing Booster Theme&#x27;s success.
+03:06 | ui | The creator demonstrates using Google Flow and Claude to design a Shopify template for a lingerie clothing brand.
+04:39 | explanation | The creator explains selling strategies for Shopify templates, including marketplaces and pricing.
+06:12 | ui | The creator shows how Notion&#x27;s AI agent can generate a productivity OS template from a prompt.
+07:45 | result | A UI kit product on Creative Market is shown, having generated over $12,000.
+09:18 | explanation | The creator discusses marketing Notion templates, referencing Thomas Frank&#x27;s YouTube strategy.
+10:51 | ui | The creator uses Nano Banana Pro in Google Flow to generate custom font designs from a prompt.
+12:24 | ui | The creator demonstrates converting a hand-drawn font sketch into a full font face using Google Flow and Claude.
+13:57 | explanation | The creator explains font pricing strategies based on styles and licensing.
+15:31 | result | A Procreate brush kit is shown, having generated over $6,000 on one platform.
+17:04 | ui | The creator uses Nano Banana Pro to generate patterns for Photoshop/Procreate brushes.
+18:37 | explanation | The creator introduces Lovart for creating AI brand kits.
+20:10 | explanation | The creator explains the value of comprehensive brand guidelines.
+21:43 | ui | Lovart&#x27;s pricing plans are displayed, starting at $19/month.
+23:16 | ui | Lovart is used to generate a website design as part of a brand kit, demonstrating text editing capabilities.
+24:49 | ui | Lovart&#x27;s interface shows various design assets created by &quot;Lovarters.&quot;
+26:22 | explanation | A graphic summarizes the five digital products covered: Shopify Templates, Notion Systems, Brand Kit, Fonts, and Photoshop Brushes.
+27:55 | conclusion | The creator discusses the benefits of bundling digital products.
+29:28 | conclusion | The creator provides final thoughts on selling AI prompts.
+ENTITIES: Samson Vowles, Thomas Frank, Nikki Latz.
+VERDICT: The creator highly recommends leveraging AI tools to create digital products, emphasizing that the barrier to creation is gone and the focus should be on finding what sells, assembling a better version, and branding it effectively. The potential for significant passive income is highlighted.
+NOT COVERED: Specific technical details of prompt engineering for each AI tool, the exact time investment for each product, detailed marketing strategies beyond general advice, or the legal implications of selling AI-generated content.</div></main><footer><a href="../index.html">← all videos</a></footer></div></body></html>

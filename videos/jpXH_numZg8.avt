@@ -1,0 +1,244 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Create Full Instagram Carousels From 1 Photo With This ComfyUI Workflow (It's Free)
+channel: @octopusinc_
+duration: 12:13
+source: https://www.youtube.com/watch?v=jpXH_numZg8
+upload_date: 20260629
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'What\'s up, everyone? Laura Tate here with an update to the Instagram Carousel workflow I posted a few months back, which a lot of you have asked about and used. There are quite a few changes to the workflow for better quality, overall quality of life enhancements, and ease of use. First and foremost, we hit 1,000'
+
+[00:12] [scene:talk]
+VISUAL: 
+AUDIO: 'subscribers. By the time this video goes out, I think we will be there for sure. So, I just want to say thank you to every one of you who has subscribed so far, watched the tutorial, joined the Discord, grabbed your free workflow, or'
+
+[00:25] [scene:talk]
+VISUAL: 
+AUDIO: 'sent feedback. You guys got us here, and without you, I wouldn\'t be so motivated to pump out workflows and tutorials for y\'all. So, it truly means a lot to see people enjoy what I put out into the void. So, thank you all again. Just a'
+
+[00:37] [scene:talk]
+VISUAL: 
+AUDIO: 'quick shameless plug before we get into it, since that\'s really the only way that I\'m able to afford the cost and upkeep of making these videos for you guys. I do one-on-one coaching through Discord. If you want help getting your'
+
+[00:49] [scene:talk]
+VISUAL: 
+AUDIO: 'own ComfyUI and RunPod set up, building and understanding workflows, training your own LoRAs, or figuring out how to actually grow an AI influencer account instead of just generating images into a folder nobody sees. That\'s what the sessions are for, and the pricing is'
+
+[01:02] [scene:talk]
+VISUAL: 
+AUDIO: 'consultation-based, so it\'s built around what you actually need, not a flat package. I\'m not just charging you a one-time fee and giving you a video showing you how to set things up. I\'m actually guiding you through Discord one-on-one live as you share your screen'
+
+[01:15] [scene:talk]
+VISUAL: 
+AUDIO: 'and provide any concerns that you may have regarding what it is that you\'re wanting to learn. So, the details are in the Discord. If you want to look into it, I really appreciate it. If you\'re not ready for that or you don\'t need it, the free stuff isn\'t going anywhere.'
+
+[01:28] [scene:talk]
+VISUAL: 
+AUDIO: 'Workflows, tutorials, all of it stays free in the server. Either way, if this channel\'s been useful, please, I just ask that you guys hit like and subscribe, maybe even leave a comment. If you have any constructive criticism or just want to say thank you, it\'s the'
+
+[01:40] [scene:talk]
+VISUAL: 
+AUDIO: 'easiest and freest way to help the channel grow, and it costs you nothing. So, today we\'re breaking down my version two of my Instagram Carousel maker. So, what it does, how it\'s built, what each section is actually doing. The full'
+
+[01:53] [scene:talk]
+VISUAL: 
+AUDIO: 'workflow is public. Version two is already sitting in the free workflows channel in the Discord by the time this video goes live. Link to my Discord is in the description. Grab it, follow along while we go through it. There is some important information that I think'
+
+[02:05] [scene:talk]
+VISUAL: 
+AUDIO: 'that you guys should know. So, the core concept of the workflow is that you drop in one reference photo, and then you get back 10 unique carousel images that same person, same clothes, same background, same identity, just different poses and angles and expressions. And there\'s no'
+
+[02:19] [scene:talk]
+VISUAL: 
+AUDIO: 'manual prompt writing for each slide anymore. I completely got rid of that and I use Gemma 4 to write prompts for us, all natively inside of this ComfyUI workflow. So, no outsourcing your prompting to third-party LLMs like'
+
+[02:32] [scene:talk]
+VISUAL: 
+AUDIO: 'ChatGPT, Claude, whatever it may be. Everything is inside of this workflow and you don\'t have to type a single prompt. Moving right into a brief node overview, there are three loaders that set the foundation as there always is in'
+
+[02:44] [scene:talk]
+VISUAL: 
+AUDIO: 'workflows like this. I\'m using Flux 2 Klein, the 9 billion parameter model, and the corresponding text encoder Klein 3, 8 billion parameter model, and the Flux 2 VAE. Pretty much your standard run-of-the-mill Flux 2 loadout. There\'s'
+
+[02:57] [scene:talk]
+VISUAL: 
+AUDIO: 'nothing exotic here. The interesting part starts actually in the next group. So, this right here is the section to pay attention to. Without it, make 10 carousel images means writing 10 pose descriptions by hand, and the easy way'
+
+[03:09] [scene:talk]
+VISUAL: 
+AUDIO: 'to mess that up is writing 10 prompts that don\'t look like they came from the same photo shoot. Gemma 4 is Google\'s multimodal model built right into ComfyUI through the text generate node. We load it through a clip loader, same as the text encoder, except this one'
+
+[03:22] [scene:talk]
+VISUAL: 
+AUDIO: 'actually reads images or videos, not just text. So, we feed this text generate node the reference photo directly, plus the system prompt that does three things. First, it classifies the shot type, whether it\'s a face'
+
+[03:34] [scene:talk]
+VISUAL: 
+AUDIO: 'selfie, mirror selfie, full body POV, whatever it may be, based on what it sees in the photo. Is a phone visible? Is there a mirror? How much of the body is in frame? It takes all that into consideration. Second, it classifies the'
+
+[03:46] [scene:talk]
+VISUAL: 
+AUDIO: 'body position, whether the person is standing, sitting, kneeling, leaning, lying down. And then third, it generates 10 variations that stay inside the same shot type and body position. Different'
+
+[03:58] [scene:talk]
+VISUAL: 
+AUDIO: 'camera angle, different phone height, different facial expression, different energy. It just outputs one prompt per line and feeds it into this prompt list, which is the comfy roll custom node for prompt list. Basically, every prompt is'
+
+[04:11] [scene:talk]
+VISUAL: 
+AUDIO: 'just separated by an individual line break, no line spacing in between. Why this section matters so much is that the model looks at the actual before deciding what\'s plausible. It won\'t hand you a kneeling pose if the reference was'
+
+[04:23] [scene:talk]
+VISUAL: 
+AUDIO: 'standing. It won\'t put a phone in frame if the reference was a face selfie with no mirror in sight. 10 lines come out and the CR prompt list node right after queues all 10 automatically. Before moving on with the node overview, I just'
+
+[04:36] [scene:talk]
+VISUAL: 
+AUDIO: 'want to point out that the system prompt for Gemma is actually right here in this giant markdown node. So, if you\'re not getting results that you\'re happy with, all you have to do is really edit this system prompt list and then paste it into the text generate'
+
+[04:50] [scene:talk]
+VISUAL: 
+AUDIO: 'section where there is a text box input here. This is basically the system prompt that tells Gemma how to operate and tells it how to output and format our prompts. If you guys don\'t want to'
+
+[05:02] [scene:talk]
+VISUAL: 
+AUDIO: 'look at this giant system prompt here for Gemma, you can just delete the markdown node. But, the reason I put it here is because obviously I cover a very broad span of images that Gemma may detect that you may be feeding through'
+
+[05:16] [scene:talk]
+VISUAL: 
+AUDIO: 'the prompt generator section of this workflow. But, I can\'t cover all niches. If I did or even if I tried to, this system prompt would be literally 10 miles long and I also don\'t have the time for that. So, if you guys want to'
+
+[05:28] [scene:talk]
+VISUAL: 
+AUDIO: 'add to the system prompt, by all means, feel free. Add whatever you want. If you have a certain niche that is not really being justified by this system prompt, you can go ahead and edit it or completely rewrite it for all I care.'
+
+[05:40] [scene:talk]
+VISUAL: 
+AUDIO: 'That is up to you. Now, without boring you guys to death, I just want to point out that the image resizing and fitting section is here. The only value that you really need to worry about here is the resize images by longer edge node. If you want to change the total pixels of'
+
+[05:53] [scene:talk]
+VISUAL: 
+AUDIO: 'the image, you just type in whatever value you want to put in here. I recommend doing consistent values that you would see in something like a 9 by 16 image as that is typically what iPhone photos consist of. So, if you\'re'
+
+[06:07] [scene:talk]
+VISUAL: 
+AUDIO: 'going for that iPhone style carousel look that you would see on Instagram, you want to resize the image and you want to keep the original image\'s aspect ratio as to make sure that you\'re not accidentally cropping or morphing the'
+
+[06:20] [scene:talk]
+VISUAL: 
+AUDIO: 'image by specifying a height and width that will compress the image. Just a few more things to point out before we actually go ahead and test this workflow. I have a markdown note that explains kind of what this node here'
+
+[06:32] [scene:talk]
+VISUAL: 
+AUDIO: 'does, the flux 2 client identity feature transfer. So, I\'ll read it out for you guys. The flux 2 client identity transfer node is experimental. I recommend trying the workflow with it disabled and then if you want stronger consistency and you\'re not getting'
+
+[06:45] [scene:talk]
+VISUAL: 
+AUDIO: 'results that you favor, turn it on with soft lock and go up in presets if you really need it. Just a side note, this can and will cause facial morphing and artifacting if not used properly or if the settings are tuned up a little bit too much. Moving right over to the next'
+
+[06:58] [scene:talk]
+VISUAL: 
+AUDIO: 'markdown note I have here, there is a face and eye detailer pass at the end of the workflow that will, you guessed it, detail the face and detail the eye slightly. I recommend only using the detailer section if you have a character'
+
+[07:10] [scene:talk]
+VISUAL: 
+AUDIO: 'Laura attached to the workflow so that way there is a hard locked reference being passed through the workflow on what the face and eye should actually look like. Otherwise, it\'s almost impossible to prevent facial drifting.'
+
+[07:22] [scene:talk]
+VISUAL: 
+AUDIO: 'This is because without a Laura, if these denoise values are set to anything above 0.00, what\'s going to happen is it\'s going to slightly reimagine the original face and'
+
+[07:34] [scene:talk]
+VISUAL: 
+AUDIO: 'eyes. And obviously, as we are creating a carousel probably of the same person just in different poses and different facial expressions, you\'re going to want the same face throughout all of those'
+
+[07:46] [scene:talk]
+VISUAL: 
+AUDIO: 'images. So, when it gets reimagined too much without a LoRA attached to the workflow, you can imagine what\'s going to happen. I\'m going to run the workflow using this as our reference photo. This is just an image that I created with the'
+
+[07:58] [scene:talk]
+VISUAL: 
+AUDIO: 'image turbo using just basic prompting. So, we\'re going to use this obviously to compare to our output once we get it. What\'s going to happen is you\'ll see that once the workflow starts running, we will load up Gemma 4 and then it will'
+
+[08:10] [scene:talk]
+VISUAL: 
+AUDIO: 'output our prompts into this previous text box here. So, we can see here all of the prompts that it has output based on the POV and style of our original reference photo. And I will show you'
+
+[08:23] [scene:talk]
+VISUAL: 
+AUDIO: 'guys all of our images that the workflow has generated, which will appear here in our saved image node as soon as the workflow\'s done running. We have our 10 generated images now, as you guys can see. I\'m going to click on these and go through them. You can see that they all'
+
+[08:36] [scene:talk]
+VISUAL: 
+AUDIO: 'vary slightly in pose, facial expression, etc. What you\'ll notice as well is that the background, clothing, the person stays very, very consistent with our original reference photo. So, I\'m just going to go through these.'
+
+[08:48] [scene:talk]
+VISUAL: 
+AUDIO: 'You can see that Gemma does exceptionally well at maintaining and preserving our original reference photo and person, background, clothing, etc.'
+
+[09:00] [scene:talk]
+VISUAL: 
+AUDIO: 'while giving us that Instagram style feel for carousels that you would see, you know, just on a normal day scrolling through Instagram. All right, so up next for another example is a very similar-looking'
+
+[09:12] [scene:talk]
+VISUAL: 
+AUDIO: 'person. It\'s not quite the same person, but that\'s to be expected. I just used the image turbo to generate this person, described a few features there, and that\'s about it. So, we\'re going to run this. You\'ll notice here that these are the prompts that we had for our first'
+
+[09:25] [scene:talk]
+VISUAL: 
+AUDIO: 'run, which were obviously face selfies or front camera selfies, however you want to describe it. But, as soon as Gemma is done running here for this run of the workflow, which it should be done in just a second. Okay, so you can see'
+
+[09:38] [scene:talk]
+VISUAL: 
+AUDIO: 'that obviously Gemma has detected, thanks to our system prompt, that this is now a full body POV and we are shifting angles and POVs slightly just to get that natural Instagram carousel'
+
+[09:50] [scene:talk]
+VISUAL: 
+AUDIO: 'feel. All right, so the results of this run of the workflow with this reference photo are here. One thing I want to point out that I love is how consistent clothing, especially writing and stuff'
+
+[10:02] [scene:talk]
+VISUAL: 
+AUDIO: 'like that, stays throughout runs with this workflow. It just preserves it perfectly, honestly. Scrolling through these, you can see we have plenty of different'
+
+[10:14] [scene:talk]
+VISUAL: 
+AUDIO: 'POVs and styles and some body horror. Uh that\'s not my fault. Yell at Black Forest Labs if you have a problem with that, take it up with them. For our'
+
+[10:26] [scene:talk]
+VISUAL: 
+AUDIO: 'final demonstration for this video, I\'m going to use a picture that has a shirt where her hair is kind of partially like covering the graphic of the T-shirt. I just want to see how well it contextualizes based on things that it'
+
+[10:39] [scene:talk]
+VISUAL: 
+AUDIO: 'can\'t actually see, but can see partially. Results are in for the final demonstration of this video. Just going to flick through these quickly. They look pretty good. That one was a'
+
+[10:53] [scene:talk]
+VISUAL: 
+AUDIO: 'little bit scary. Hold on, let\'s go back to that. I keep skipping over it. Where is it? Just a little bit. I mean Yeah, no, that\'s pretty scary. So, as far as this workflow goes, it goes'
+
+[11:06] [scene:talk]
+VISUAL: 
+AUDIO: 'without saying, obviously, that having a Flux 2 LoRA trained on your character or whoever it is that you are using as a reference photo. If you do have a LoRA, it will always help with the consistency, but nonetheless, we can definitely see here that it does just'
+
+[11:20] [scene:talk]
+VISUAL: 
+AUDIO: 'fine without it. And using Gemma for prompting is super cool. Since discovering local LLMs inside of ComfyUI, the quality of life throughout my workflows and just figuring out what'
+
+[11:32] [scene:talk]
+VISUAL: 
+AUDIO: 'I\'m going to do as far as prompting has become so much better. I cannot express how much I love using them. I\'m going to implement them into all of my workflows eventually. Take my word on it. I just want to thank all of you guys again for'
+
+[11:45] [scene:talk]
+VISUAL: 
+AUDIO: 'watching and supporting and letting me know that people enjoy what I\'m putting out. So, if you do enjoy what I\'m putting out and you did enjoy this video, please like it, subscribe, completely free, takes'
+
+[11:58] [scene:talk]
+VISUAL: 
+AUDIO: 'less than 2 seconds. I bet you can do it in less than 2 seconds. I I dare you. I dare you to do it in less than 2 seconds right now. Go ahead, do it. Thank you guys for watching and I\'ll catch you guys in the next one. Peace.'
