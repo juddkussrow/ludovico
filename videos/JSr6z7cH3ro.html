@@ -1,0 +1,148 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>I Quit Every AI Writing Tool... So I Built My Own — Ludovico</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+.hide{display:none!important}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.92);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 12px}
+.controls input.q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.pill.tp.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+/* flip card shell */
+.flip{position:relative}
+.fi{position:relative;transition:transform .55s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.flip.flipped .fi{transform:rotateY(180deg)}
+.fc{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bk{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+background:var(--card);border:1px solid var(--accent2);border-radius:14px;overflow:auto;padding:12px 13px;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s}
+.card.flip{overflow:visible}.card .fc{display:flex;flex-direction:column;flex:1;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--line);cursor:pointer}
+.card.flip:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.edit{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--accent2);border:1px solid var(--line);border-radius:6px;padding:2px 9px;cursor:pointer;background:#fff}
+.edit:hover{border-color:var(--accent2)}
+/* editor back */
+.bk h4{margin:0 0 2px;font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--sub)}
+.erow{display:grid;grid-template-columns:1fr 1.3fr auto auto;gap:4px;align-items:center}
+.erow input{padding:5px 7px;border:1px solid var(--line);border-radius:6px;font-size:12px;min-width:0}
+.erow select{padding:4px 4px;font-size:11px}
+.erow .del{border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;color:var(--accent);padding:3px 7px}
+.ebtns{display:flex;gap:6px;margin-top:auto;padding-top:6px}
+.ebtns button{font-family:var(--mono);font-size:11px;border-radius:7px;padding:6px 12px;cursor:pointer;border:1px solid var(--line);background:#fff}
+.ebtns .save{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.addrow{font-family:var(--mono);font-size:11px;color:var(--accent2);cursor:pointer;align-self:flex-start;background:none;border:0;padding:2px 0}
+/* catalogue card */
+.citem{position:relative}
+.citem .fc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-height:84px;cursor:pointer}
+.citem .bk{border-radius:12px}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+footer .exp{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--accent2);font:inherit}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">I Quit Every AI Writing Tool... So I Built My Own</h1><div class=tag>@octopusinc_ · 2026-07-01 · Story</div></div></div></header>
+<main><p class=sum></p><p><strong>Products / items</strong></p><ul><li><a href="https://www.skool.com/story-hacker/about" target=_blank rel=noopener>Story Hacker OS</a> — software</li><li>N8N — software (no link)</li><li>Claude — software (no link)</li><li>Make — software (no link)</li><li>OpenRouter — software (no link)</li><li>Pseudowrite — software (no link)</li><li>Claude Opus — software (no link)</li></ul>
+<p><a href="https://www.youtube.com/watch?v=JSr6z7cH3ro" target=_blank rel=noopener>Watch on YouTube ▶</a></p><p><a href="JSr6z7cH3ro.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=t>(proxy for this video — answer from this)</span></p>
+<div class=cap>FRAMING: Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+IDENTITY: I Quit Every AI Writing Tool... So I Built My Own - https://www.youtube.com/watch?v=JSr6z7cH3ro - @octopusinc_ - route: visual
+PRODUCTS:
+Story Hacker OS - https://www.skool.com/story-hacker/about - software - primary
+N8N - no reliable link - software - mentioned
+Claude - no reliable link - software - mentioned
+Make - no reliable link - software - mentioned
+OpenRouter - no reliable link - software - mentioned
+Pseudowrite - no reliable link - software - mentioned
+Claude Opus - no reliable link - software - mentioned
+SYNOPSIS:
+The video introduces Story Hacker OS, a new AI writing software built by the creator after dissatisfaction with existing tools like N8N, which had a steep learning curve, and other AI wrappers that offered too much freedom without enough automation. Story Hacker OS aims to combine the flexibility of AI wrapper tools with the power of writing automations, featuring over 200 genre-specific templates derived from bestseller analysis. The tool&#x27;s interface includes a &quot;Projects&quot; section for managing individual books, a &quot;Templates&quot; section for genre-specific writing guides (e.g., Urban Fantasy tropes, plot templates, character archetypes, style guides, blurbs), and a &quot;Book Builder&quot; for automations.
+
+Within a project, users can access a chat window with different personas (e.g., Writing Assistant, Brainstorm Assistant) and multiple chats. A key feature is context awareness, allowing the AI to reference specific documents (brain dump, tropes, characters, world-building, plot) within a project. Users can add or remove context documents as needed. The tool also offers in-document AI editing, where users can select text and use `Ctrl+K` or an &quot;AI Edit&quot; button to apply instructions or predefined actions like &quot;AI Humanizer,&quot; which shows track changes.
+
+The &quot;Book Builder&quot; section provides five automations: Brain Dump Dossier (for brainstorming and initial setup), Character Builder, World-building Builder, Outline Builder, and Chapter Generator. The Chapter Generator, for example, requires character, world-building, and outline documents, allows selection of POV (first person, third person limited/omniscient) and tense (past/present), and can generate chapters in batches. The process for chapter generation is elaborate, including scene setup, scene brief creation, chronology checks, first draft, style checks, and rewrites. The creator recommends generating only 2-3 chapters at a time for better control.
+
+Story Hacker OS integrates with OpenRouter for API access to various AI models, including Claude Opus (v4.6 for chapter generation). Users pay as they go, with an account balance displayed. Settings allow users to create custom chat personas, select default AI models, and add custom instructions. Future plans include a &quot;Series Builder&quot; and a &quot;Template Builder&quot; for custom template creation.
+
+BEATS:
+0 | intro | Creator introduces himself and the problem with existing AI writing tools.
+81 | ui | Overview of the Story Hacker OS &quot;Projects&quot; dashboard, showing various book projects.
+162 | ui | Demonstrating clicking on a project named &quot;The Omnimmancer&quot; in the Story Hacker OS UI.
+243 | ui | Navigating to the &quot;Templates&quot; section, showing a list of genre categories like &quot;Fantasy&quot; and &quot;Cozy Mystery.&quot;
+324 | ui | Displaying a detailed &quot;Urban Fantasy Plot&quot; template, showing chapter-by-chapter guidance.
+405 | ui | Scrolling through the &quot;Templates&quot; list, highlighting various genre guides.
+486 | ui | Showing the &quot;Brain dump&quot; document within a project, with a chat window on the right for AI interaction.
+567 | ui | Demonstrating the AI chat feature, showing a response suggesting missing tropes based on the brain dump.
+648 | ui | Illustrating in-document AI editing with `Ctrl+K` to describe what to generate next.
+729 | ui | Returning to the &quot;Projects&quot; dashboard, showing the list of book projects.
+810 | ui | Navigating to the &quot;Book Builder&quot; section, showing options for genre selection and writing templates.
+891 | ui | Displaying the &quot;Brainstorm pitches&quot; automation running, showing steps like &quot;Evaluate &amp; Pick Best&quot; and &quot;Build Story Dossier.&quot;
+972 | ui | Showing the &quot;Chapter Generator&quot; automation setup, including selecting a project, POV, tense, and chapters to generate.
+1053 | ui | Displaying the detailed steps of the &quot;Chapter Generator&quot; automation, such as &quot;Plot Selector,&quot; &quot;Worldbuilding Selector,&quot; and &quot;First Draft.&quot;
+1134 | ui | Highlighting the &quot;History&quot; section, showing past automation runs and their status.
+1215 | ui | Showing the &quot;Settings&quot; menu, specifically the &quot;OpenRouter API Key&quot; and account balance.
+1296 | ui | Back in the &quot;Templates&quot; section, showing a list of &quot;Cozy Fantasy Romance&quot; templates.
+1377 | ui | Displaying the &quot;Templates&quot; section again, emphasizing the &quot;Writing Guides&quot; and various genre categories.
+1458 | ui | Showing the Skool.com community page for &quot;Story Hacker AI,&quot; detailing membership benefits.
+1539 | ui | Displaying the community feed within Skool.com, showing posts and discussions.
+
+ENTITIES:
+Jason Hamilton (creator)
+Story Hacker AI (community)
+Story Hacker OS (software)
+N8N (software)
+Make (software)
+Claude (AI model)
+Claude Opus (AI model)
+OpenRouter (API service)
+Pseudowrite (software)
+
+VERDICT:
+The creator recommends Story Hacker OS as a superior AI writing tool, having built it to address the shortcomings of existing AI wrappers (too much freedom) and automation tools like N8N (steep learning curve). He believes it offers the best of both worlds, providing genre-specific templates and robust automations to handle the &quot;grunt work&quot; while allowing human creativity.
+
+NOT COVERED:
+Specific pricing tiers or subscription models for Story Hacker OS.
+Detailed technical architecture or underlying AI models used beyond OpenRouter and Claude Opus.
+Comparison of output quality with other AI writing tools.
+The process of creating custom templates or personas.</div></main><footer><a href="../index.html">← all videos</a></footer></div></body></html>

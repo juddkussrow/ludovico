@@ -1,0 +1,204 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Dspark + Claude Code Is INSANE (85% Faster + Open Source)
+channel: @octopusinc_
+duration: 09:59
+source: https://www.youtube.com/watch?v=ydDJc2AJCoY
+upload_date: 20260701
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:intro]
+VISUAL: "Same agent. 85% faster." text on screen, showing a Claude Code terminal outputting code blocks.
+AUDIO: 'Here is Claude code, mid task. You gave it a real job. Refactor a file, run the test, fix what breaks, and now you are watching a spinner, token by token, while the model crawls. Now, flip on DeepSeek\'s new trick. Same model, same'
+
+[00:12] [scene:talk]
+VISUAL: 
+AUDIO: 'weights, the exact same Claude code, and suddenly the output pours out in blocks, up to 85% faster. And here is the twist. DeepSeek did not ship a new model. They shipped a way to speed up the one you'
+
+[00:25] [scene:intro]
+VISUAL: "Free, and fully open. DeepSpec" text on screen, with logos for Qwen and Gemma.
+AUDIO: 'already run. Meet DeepSpark, open source, MIT licensed, completely free, a speculative decoding framework from DeepSeek and Peking University. And it does not touch the answer. Same code, same tokens, character for character,'
+
+[00:38] [scene:talk]
+VISUAL: 
+AUDIO: 'just delivered in half the time. It is lossless. It is also free in the way that actually matters. They open source the entire training stack, too, so anyone can build their own version. And it plugs into the tools you already use.'
+
+[00:51] [scene:intro]
+VISUAL: "A faster agent, on your machine. FREE OPEN 85% FASTER" text on screen, with DSpark and Claude Code logos.
+AUDIO: 'Claude code, open code, any agent that speaks the same API. Point it at a faster server, and nothing else changes, which means your agent finishes a long task in half the time. Same servers, same bill, same output, just done'
+
+[01:05] [scene:talk]
+VISUAL: 
+AUDIO: 'sooner. That is the whole promise of this video, a free open accelerator that makes your coding agent up to 85% faster running on your own machine. So, let us take it apart. How it gets fast, how you'
+
+[01:17] [scene:talk]
+VISUAL: 
+AUDIO: 'wire it into Claude code, and whether the speed up actually holds up. Quick rounding on the model itself. DeepSeek V4 landed in April, open weights, a 1.6 trillion parameter pro model with 49'
+
+[01:29] [scene:explanation]
+VISUAL: "One word. One full pass." text on screen, illustrating 1.6T parameters for one token and ~50% GPU utilization.
+AUDIO: 'billion active, a linear flash version, and a million token context by default. On quality, it already trades blows with the closed labs. DeepSpark is the layer that makes it genuinely cheap to run at'
+
+[01:41] [scene:talk]
+VISUAL: 
+AUDIO: 'speed. So, start with why agents feel slow. To write a single token, a large model fires a full pass through every parameter. For V4 Pro, that is 1.6 trillion of them for one word. At scale,'
+
+[01:53] [scene:explanation]
+VISUAL: "Guess a block. Verify it once." text on screen, showing a draft model proposing tokens and V4 verifying.
+AUDIO: 'the GPU spends more time shuffling memory than doing math. So, the chip sits half idle just waiting for the next token to fall out. Speculative decoding breaks that pattern. A small, fast draft model guesses a whole block of tokens'
+
+[02:06] [scene:talk]
+VISUAL: 
+AUDIO: 'ahead. Then, the big model checks the entire block in a single pass, verifying five guesses for nearly the cost of one. Every guess it accepts is a token you got almost for free. And none of this is brand new, by the way. Google and'
+
+[02:19] [scene:explanation]
+VISUAL: "Wrong guesses, thrown out." text on screen, demonstrating accepted and rejected tokens in a code snippet.
+AUDIO: 'DeepMind published speculative decoding back in 2023. And every big lab quietly runs some version of it. What is new is DeepSeek shipping a production-grade one out in the open with acceptance rates that blow past those first attempts. And'
+
+[02:32] [scene:talk]
+VISUAL: 
+AUDIO: 'it cannot quietly lower your quality. The verifier uses rejection sampling, which keeps the final output mathematically identical to normal decoding. Wrong guesses are thrown away. You only ever keep the tokens the real'
+
+[02:44] [scene:talk]
+VISUAL: 
+AUDIO: 'model would have written anyway. You just get them sooner. It all reduces to one equation. Latency equals draft time plus verify time divided by how many tokens you accept each cycle. So, there are exactly three ways to win. Draft'
+
+[02:57] [scene:explanation]
+VISUAL: "Two old tricks, one flaw each." text on screen, comparing Eagle (autoregressive) and DFlash (parallel) methods.
+AUDIO: 'faster, draft better, or verify smarter. DeepSpark, unusually, pulls all three levers at once. Older methods could only pull one. Autoregressive drafters, like Eagle, guess accurately but slow down as the'
+
+[03:10] [scene:talk]
+VISUAL: 
+AUDIO: 'block grows. Parallel drafters, like Flash, are cheap, but they guess every token blind to its neighbors. So, the back of the block rots and gets rejected. They call it suffix decay. DeepSpark\'s first move is to take both'
+
+[03:23] [scene:explanation]
+VISUAL: "One nudge, holds the block." text on screen, illustrating DSpark's Markov head improving acceptance rates.
+AUDIO: 'sides. A fast parallel backbone proposes the whole block at once. Then, a tiny sequential head, low-rank Markov, adds one quick correction, nudging each token based on the one right before it. Cheap'
+
+[03:35] [scene:talk]
+VISUAL: 
+AUDIO: 'like parallel, accurate like sequential. Picture it midline. The block proposes the word return, and the little head instantly boosts result while pushing down problem. That single nudge keeps acceptance high all the way to the end'
+
+[03:48] [scene:explanation]
+VISUAL: "The scheduler is free." text on screen, showing GPU verify blocks and scheduler predictions.
+AUDIO: 'of the block, exactly where the older methods used to bleed their speed. The second move stops wasted work. A confidence head scores how likely each guess is to survive, and a hardware-aware scheduler reads the GPU'
+
+[04:00] [scene:talk]
+VISUAL: 
+AUDIO: 'load. When the chips are idle, verify more tokens. When they are slammed, trim down to only the confident ones. Speed that bends to the moment. The third move makes the scheduler itself free. Zero-overhead scheduling runs a step'
+
+[04:13] [scene:talk]
+VISUAL: 
+AUDIO: 'ahead using the last couple of rounds to predict the right block length before it is needed. The GPU never stalls waiting on a decision, so the clever part adds no time of its own. Put it together and you get the ship setting DeepSpark 5, a'
+
+[04:25] [scene:explanation]
+VISUAL: "Code is predictable." text on screen, displaying a code snippet (auth.ts) and highlighting predictable elements.
+AUDIO: 'five-token draft block, the Markov head, and the confidence scheduler. That exact configuration is the one now running inside DeepSeek\'s production servers. Now, here is why this matters so much for coding. Speculative decoding wins'
+
+[04:38] [scene:talk]
+VISUAL: 
+AUDIO: 'when the next tokens are predictable, and code is the most predictable text there is. Closing brackets, import lines, boilerplate, repeated patterns. The little draft model nails them block after block. The numbers show it. With'
+
+[04:51] [scene:explanation]
+VISUAL: "Agents are the perfect workload." text on screen, listing agent tasks and showing a 10-minute run reduced to 5 minutes.
+AUDIO: 'confidence filtering on, chat acceptance jumps from 46 to 96% and structured reasoning from 77 to 93. Predictable, structured text flies. Messy, open chat'
+
+[05:03] [scene:talk]
+VISUAL: 
+AUDIO: 'gets trimmed safely instead of stalling, and agents are the perfect workload. A coding agent does not write one sentence. It writes files, runs commands, reads the output, and writes more for minutes at a time. Every one of'
+
+[05:16] [scene:talk]
+VISUAL: 
+AUDIO: 'those tokens rides the speed up, so the win compounds across the whole task. A 10-minute agent run becomes five. Now, the genuinely generous part. DeepSeek did not just publish results, they open-sourced the full stack called'
+
+[05:29] [scene:explanation]
+VISUAL: "Not locked to DeepSeek." text on screen, listing DSpark, DFlash, Eagle and showing Qwen and Gemma targets.
+AUDIO: 'DeepSpec under MIT. Not a demo, the real pipeline. Prepare the data, train the draft model across GPUs, and evaluate it end to end, and it is not locked to DeepSeek. DeepSpec ships three drafting'
+
+[05:41] [scene:talk]
+VISUAL: 
+AUDIO: 'algorithms and targets Qwen and Gemma out of the box, so you can train a custom drafter tuned to your own prompts and hardware. Unsloth team already confirmed it trains cleanly on both. Be honest about the floor, though. Training'
+
+[05:54] [scene:explanation]
+VISUAL: "Everyone else kept it closed." text on screen, comparing OpenAI/Anthropic (closed) with DeepSpec (open).
+AUDIO: 'your own drafter from scratch wants a multi-GPU node and terabytes of cache. That is a data center job. But just running the pre-trained checkpoints in vLLM or SG Lang, that part is genuinely easy. And here is why it lands. Open AI'
+
+[06:07] [scene:talk]
+VISUAL: 
+AUDIO: 'and Anthropic both run speculative decoding inside their own servers, but neither has ever shipped the tool chain. Deep Seek hands a reproducible, audible version to everyone at once. It quietly'
+
+[06:19] [scene:tutorial]
+VISUAL: "Step 2 — a thin proxy." text on screen, showing a flow from Claude Code to Proxy/Adapter to DSpark/vLLM.
+AUDIO: 'raises the floor for all open inference. So, let us actually wire it up. Step one, serve the model on your own machine. One command in vLLM loads Deep Seek v4 with a Deep Seek draft module and exposes it as an OpenAI compatible'
+
+[06:33] [scene:talk]
+VISUAL: 
+AUDIO: 'endpoint on localhost. Step two, a thin proxy. Claude Code speaks Anthropic\'s message format. Your local server speaks OpenAI\'s. A small open-source adapter sits between them and maps one to the'
+
+[06:46] [scene:talk]
+VISUAL: 
+AUDIO: 'other, both directions. Step three, point Claude Code at it. Export the base URL and the model name, run the same Claude command you always do, and the harness you know now drives a local model that decodes 85% faster, and the'
+
+[06:59] [scene:demo]
+VISUAL: "And the loop just runs." text on screen, showing a Claude Code terminal with a task and an "Approve" prompt.
+AUDIO: 'loop just runs. Claude Code plans, edits files, runs your tests, and pauses for approval, exactly as before. The only difference is speed. The agent that used to make you wait now keeps pace with'
+
+[07:12] [scene:talk]
+VISUAL: 
+AUDIO: 'your thinking. Give it a real job. Fix the failing test. It reads the error, patches the function, and reruns the suite to green. The same behavior you trust in roughly half the wall clock time. That is the whole pitch, on your'
+
+[07:24] [scene:results]
+VISUAL: "In production — up to 85%." text on screen, highlighting +85% on V4-FLASH.
+AUDIO: 'own hardware. About those numbers, offline, Deep Seek accepts 26 to 31% more tokens per cycle than Eagle, and 16 to 18% more than Deep Flash. A two-layer Deep Seek even beats a five-layer Deep'
+
+[07:37] [scene:talk]
+VISUAL: 
+AUDIO: 'Flash, better guessing from a smaller, cheaper drafter. In live production, the payoff is the headline. Her user generation runs 60 to 85% faster on V4 flash and 57 to 78% faster on V4 Pro at'
+
+[07:49] [scene:results]
+VISUAL: "The race is money." text on screen, partially obscured.
+AUDIO: 'the same total throughput. Same hardware, nearly double the speed. And speed here is money. Roughly half the wall clock time per task means about half the GPU seconds you actually pay'
+
+[08:02] [scene:talk]
+VISUAL: 
+AUDIO: 'for or twice the work out of the same rented box. For a team running agents all day long, that is a real recurring line on the cloud bill deleted for free. And step back because this reframes the whole race. For 2 years, it was a'
+
+[08:16] [scene:talk]
+VISUAL: 
+AUDIO: 'benchmark contest, whose model is smartest. Those scores have bunched together. Deloitte projects that just running models will be about 2/3 of all AI compute this year. When most of the bill is serving, a free 85% speed up is'
+
+[08:28] [scene:caveats]
+VISUAL: "Two honest cautions." text on screen, detailing "Faster, not smarter" and "Self-reported".
+AUDIO: 'not a footnote. It is the game. Two honest cautions before you get carried away. Lossless means faster, not smarter. DeepSpark does not raise the model\'s intelligence by a single point.'
+
+[08:40] [scene:talk]
+VISUAL: 
+AUDIO: 'And every speed figure here is DeepSeek\'s own. On DeepSeek\'s own servers against their own baseline. No outside lab has verified it yet. And the biggest numbers are peak load best cases. And mind where your code goes. Use DeepSeek\'s hosted API and your data'
+
+[08:54] [scene:summary]
+VISUAL: "Who should care?" text on screen, listing conditions like self-hosting models, data privacy, and high agent volume.
+AUDIO: 'routes to servers in China under laws that compel cooperation with the state. The clean path is the open weights. Self-host them on your own machines and that whole problem simply disappears. So, who should care about this right'
+
+[09:07] [scene:talk]
+VISUAL: 
+AUDIO: 'now? If you self-host your own models, if your code simply cannot leave the building, or if you run coding agents at real volume, this is a free speed upgrade with essentially no downside. If you only chat casually with a hosted'
+
+[09:19] [scene:summary]
+VISUAL: "The takeaway." text on screen, summarizing DSpark, DeepSpec, and Claude Code benefits.
+AUDIO: 'model, you already benefit and never even notice it. So, here is the takeaway. DeepSpark makes your model up to 85% faster for free with no new model to download and no quality lost.'
+
+[09:31] [scene:talk]
+VISUAL: 
+AUDIO: 'DeepSpec is the open toolkit to build and run it yourself on Q1 and Gemma 2. And it drops straight into Cloud Code, the exact agent you already use, just a whole lot quicker.'
+
+[09:43] [scene:talk]
+VISUAL: 
+AUDIO: 'The lesson is bigger than any one release. The model stopped being the whole story, and the speed of serving it became the edge. If this is the kind of breakdown you want every week, subscribe to Cloud Code\'s Build, Solve, Deploy, and I will'
+
+[09:55] [scene:talk]
+VISUAL: 
+AUDIO: 'see you in the next'

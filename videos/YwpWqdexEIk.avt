@@ -1,0 +1,512 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: The Best Docker Manager I’ve Seen! // Arcane Tutorial
+channel: @octopusinc_
+duration: 26:44
+source: https://www.youtube.com/watch?v=YwpWqdexEIk
+upload_date: 20260630
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'Hey guys. So, I think I may have found the best Docker manager that is out there right now. And I know that\'s a pretty bold statement, but I\'ve tested quite a few Docker managers in my home lab already, such as Portainer, Dohand, Koolify, Docky, and while all of them'
+
+[00:15] [scene:talk]
+VISUAL: 
+AUDIO: 'are great, they seem to be built for just one specific use case and miss features many of the other tools have. But Arcane feels different. This is a free and open-source Docker manager that'
+
+[00:28] [scene:talk]
+VISUAL: 
+AUDIO: 'just looks incredibly polished and it has all of the features, trust me guys, all of the features you need in a home lab that you usually miss in the other tools. It has Docker Swarm support like'
+
+[00:40] [scene:talk]
+VISUAL: 
+AUDIO: 'Portainer. It can do image builds like Dock Ploy and Coolify. It has update checks and vulnerability scanning like Docand has and even comes with other cool features on top of that such as'
+
+[00:53] [scene:talk]
+VISUAL: 
+AUDIO: 'monitoring, volume backups, notifications, GitHubs, web hooks. And it has honestly one of the nicest Docker network and port overviews that I have seen so far. And I also love the angle'
+
+[01:05] [scene:talk]
+VISUAL: 
+AUDIO: 'behind it because Arcane does not feel like a tool that tries to become an enterprise platform for container orchestration. It feels like someone just looked at the daily Docker tasks we actually try to solve in our home apps'
+
+[01:19] [scene:talk]
+VISUAL: 
+AUDIO: 'and then built a really clean and powerful system for that. Now, before we start with that, I also like to talk about another thing that gets messy real quickly when you\'re managing containers, apps, and servers. Secrets. So, I\'m'
+
+[01:31] [scene:talk]
+VISUAL: 
+AUDIO: 'talking about API keys, database credentials, tokens, files. So, all the stuff we are fiddling around when managing containers. And at first it usually feels manageable, but once you'
+
+[01:43] [scene:talk]
+VISUAL: 
+AUDIO: 'start adding CI/CD or add more environments, maybe more hosts, those same secrets can end up in multiple places like compost files, envy files, GitHub actions, CI/CD variables, and a'
+
+[01:57] [scene:talk]
+VISUAL: 
+AUDIO: 'few other places where they definitely should not belong. And this is where Infysical, the sponsor of today\'s video, comes in because Infysical is an open-source platform for managing secrets, certificates, and privileged'
+
+[02:09] [scene:talk]
+VISUAL: 
+AUDIO: 'access. And it gives you a central place to manage all your application and deployment secrets across all your different environments. The cool thing about Infysical is that it integrates with many of the platforms and tools you'
+
+[02:22] [scene:talk]
+VISUAL: 
+AUDIO: 'probably already use. For example, it has a docker and docker compos workflow where your containers can fetch secrets through in physical CLI using a secure machine identity. So instead of baking'
+
+[02:35] [scene:talk]
+VISUAL: 
+AUDIO: 'secrets into images or hard- coding them in config files or compost or adding files everywhere, you can just manage them centrally and inject them when the container starts. And the same is also'
+
+[02:48] [scene:talk]
+VISUAL: 
+AUDIO: 'true for many other platforms and integrations. It also supports secret versioning, audit logs, approval workflows, dynamic secrets, and secret scanning to help you detect hard-coded credentials in your repositories. I'
+
+[03:01] [scene:talk]
+VISUAL: 
+AUDIO: 'actually just deployed in physical in my home lab. And it was really easy to get started. Of course, I\'m also already working on a dedicated video tutorial for you guys, so stay tuned. And if you want to check it out yourself, then head'
+
+[03:13] [scene:talk]
+VISUAL: 
+AUDIO: 'over to infysical.com. You can use the community self-hosted version completely for free. And if you want to evaluate it for your team or enterprise environment, then just book a demo using the link in the description box down below.'
+
+[03:25] [scene:talk]
+VISUAL: 
+AUDIO: 'All right guys, so now let\'s get started with the installation of Arcane. So this is really super simple to set up. You just need to head over to the website get arcane.app. I will link you that in the description. And then the official'
+
+[03:38] [scene:talk]
+VISUAL: 
+AUDIO: 'path is just a normal Docker compos deployment. So you already run Docker in your home app. That\'s that\'s the reason why you want to use Arcane to manage it. So, it should feel pretty familiar. By the way, the full compost file you can'
+
+[03:51] [scene:talk]
+VISUAL: 
+AUDIO: 'find in the documentation. There\'s also a compose file generator that\'s pretty useful. By the way, I will also show you an alternative tool later in a few minutes. But you should definitely check out the installation documentation'
+
+[04:04] [scene:talk]
+VISUAL: 
+AUDIO: 'because there are a few critical steps that you should be aware of such as the encryption key and the JWT secret that you should generate for your setup and put into the environment variables and'
+
+[04:16] [scene:talk]
+VISUAL: 
+AUDIO: 'some of the directories as well as the docker socket that you need to mount into the container. Probably know this from other tools like Portainer and so on. This way Arcane can control Docker on the host it\'s running on. But you can'
+
+[04:29] [scene:talk]
+VISUAL: 
+AUDIO: 'also later add multiple environments using the arcane agent. I will show you that as well. And second, you can also add a mount path where your projects and compos files are stored on the host. So that means when you already have'
+
+[04:43] [scene:talk]
+VISUAL: 
+AUDIO: 'existing projects and you mount the path where the project lies into the containers file system, Arcane can detect these. It also detects subdirectories as well. And then you can also manage your existing projects with'
+
+[04:55] [scene:talk]
+VISUAL: 
+AUDIO: 'Arcane. Super easy and straightforward. Third, for image builds and backups, Arcane can also use dedicated directories. So /builds for the build workspace and /backups for exported'
+
+[05:07] [scene:talk]
+VISUAL: 
+AUDIO: 'volume backups. That is a pretty cool feature because this is missing in most of the other Docker managers. So they don\'t have a way to back up container volumes. We will later take a look at that. And builds might be interesting'
+
+[05:19] [scene:talk]
+VISUAL: 
+AUDIO: 'for those of you who like to build their own customizations into images like Docky or Koolifi support. So um then you can also add this directory and if you want to harden your setup a little more then aren also documents a docker socket'
+
+[05:32] [scene:talk]
+VISUAL: 
+AUDIO: 'proxy setup just to let you know I\'m not going into too much detail here but the idea is interesting so instead of mounting the docker socket directly into the arcane container you can put a proxy'
+
+[05:44] [scene:talk]
+VISUAL: 
+AUDIO: 'in between and only allow arcane to manage certain docker API areas note this does not magically make the docker socket access harm armless, but this is a better pattern, especially on SE Linux'
+
+[05:58] [scene:talk]
+VISUAL: 
+AUDIO: 'systems where you want a more controlled setup. There are also documentation for Potman and alex container setup. Just one important thing is Arcane expects a Docker compatible socket. So with'
+
+[06:11] [scene:talk]
+VISUAL: 
+AUDIO: 'Potman, you basically just point the mount to the Potman socket. And with Alexe, the interesting part here is mostly whether your container has enough visibility and permissions to see the host metrics in the Docker socket'
+
+[06:23] [scene:talk]
+VISUAL: 
+AUDIO: 'correctly. But again, I\'m also not going into this setup. If you want to check it out, go to the documentation. For this video, I\'ll just keep it simple and I just use my server test one behind a traffic reverse proxy with TLS'
+
+[06:36] [scene:talk]
+VISUAL: 
+AUDIO: 'certificates. So, just like most of my other tutorials, so we have a trusted and secured setup of Arcane. And by the way, if you want to use ready templates for this, you can use the Docker Compose builder on the Arcane\'s website. Or what'
+
+[06:48] [scene:talk]
+VISUAL: 
+AUDIO: 'you can also do is you can use my boiler plates tool to generate one of the templates that I\'ve built. By the way, you can find these templates on my boiler plates library repository. So here I\'ve just recently updated the'
+
+[07:02] [scene:talk]
+VISUAL: 
+AUDIO: 'compose files. I\'ve created an arcane template as well as an arcane agent template. So this is what you can use to add multiple environments. For this demo, I will just use the boilerplate CLI tool. I will first of all update the'
+
+[07:15] [scene:talk]
+VISUAL: 
+AUDIO: 'repository with the latest updates on the arcane compos files. So here you can see that just run a boiler plates compose show arcane. So that gives you all of the details of the variables.'
+
+[07:29] [scene:talk]
+VISUAL: 
+AUDIO: 'Again of course I have already added autogenerated secrets for the encryption key and JWT secret. Also advanced settings for mounting project paths. Also adding traffic labels if you want'
+
+[07:41] [scene:talk]
+VISUAL: 
+AUDIO: 'to use traffic reverse proxy. And by the way, you can also protect arcane behind authentic or athelia with single sign on. So then you can also use these variables as presets. More about that in the specific documentation of course.'
+
+[07:54] [scene:talk]
+VISUAL: 
+AUDIO: 'All right. But I want to generate a super simple setup for arcane. Um then it will ask me to customize any settings. Yes. Um here you can add a specific service name, container name. I'
+
+[08:06] [scene:talk]
+VISUAL: 
+AUDIO: 'think we don\'t need this. And then you need to add an application URL. So here you need to add the final URL. Of course, this is not local host. I will run this behind uh trusted TLSerts on my server test one. CC crave.de. That'
+
+[08:19] [scene:talk]
+VISUAL: 
+AUDIO: 'should work. Container time zone. Set this restart policy you prefer. And then you can also add the user and the group ID if that is relevant to you. And you can also change the Docker socket path.'
+
+[08:33] [scene:talk]
+VISUAL: 
+AUDIO: 'By default, you can just confirm these default values that should work in most environment setups. Enable analytics. I will also just leave that out and then um add a mount path. So um you can use'
+
+[08:45] [scene:talk]
+VISUAL: 
+AUDIO: 'the current directory of where the container will be deployed or just use a specific path on the host. I think I will just use arcane test projects or so I think that should be fine. Your builds'
+
+[09:00] [scene:talk]
+VISUAL: 
+AUDIO: 'path I don\'t need this for this demo so I will leave it out as well as the backup or maybe the backup path should be interesting. So arcane test backups. All right. And then you can define if'
+
+[09:12] [scene:talk]
+VISUAL: 
+AUDIO: 'you want to add the storage volume to your local host mode or NFS. Local is fine. The HTTP uh port that is when you\'re not using trusted TLS certificates. Um this is how you open the Arcane web UI later. But if you want'
+
+[09:24] [scene:talk]
+VISUAL: 
+AUDIO: 'to use traffic can also allow or enable traffic labels. Of course, this needs to match the URL then. So the host part will be arcane.server server test one and the domain part that is by default'
+
+[09:37] [scene:talk]
+VISUAL: 
+AUDIO: 'set to my home lab DNS zone that I\'m using home.cravede Let\'s see. Crave. So that should be fine. The entry point is web network is proxy TLS. Yes. Uh let\'s enable TLS. Why not? Web secure'
+
+[09:49] [scene:talk]
+VISUAL: 
+AUDIO: 'cloudflare and single sign on. For now I will not activate. So now I want to store this template on a remote server and I\'m just saying server test one. Craft.de'
+
+[10:02] [scene:talk]
+VISUAL: 
+AUDIO: 'directory is my user directory /cane. I think that is fine. and let the boilerplates CLI tool generate the template and upload it to my remote server. So if that worked, we should see'
+
+[10:14] [scene:talk]
+VISUAL: 
+AUDIO: 'boiler plates uploaded successfully. So we can just go to this machine. We should see the directory here. So uh let\'s go into this directory and then'
+
+[10:26] [scene:talk]
+VISUAL: 
+AUDIO: 'you should see the compose.l file. So this is the generated file as well as the envy file that contain the arcane encryption and JWT secret values. So now I think I can open a new browser window'
+
+[10:40] [scene:talk]
+VISUAL: 
+AUDIO: 'and then just open the web interface with the URL you have configured. All right. So now we can log into Arcane. Now the username is Arcane and the password is Arcane-admin.'
+
+[10:52] [scene:talk]
+VISUAL: 
+AUDIO: 'And then we are prompted to change the default password. And then we are locked in to the docker manager. All right. So now on my test setup there are not so'
+
+[11:04] [scene:talk]
+VISUAL: 
+AUDIO: 'many containers up and running. As you can see there\'s just traffic and arcane itself running and a stopped container. So I can better demonstrate this to you on my production instance. So let\'s quickly switch to that. Here you can'
+
+[11:17] [scene:talk]
+VISUAL: 
+AUDIO: 'also see I\'ve connected this to my authentic single sign on platform. So here I can just uh log in with my pass key from iCloud and then we are logged into my production instance of arcane.'
+
+[11:29] [scene:talk]
+VISUAL: 
+AUDIO: 'So here you can see I\'ve already connected my server pro one and server pro two where many containers are running and I can better demonstrate to you when we\'re going through these amazing features step by step why I love this docker manager so much. All right'
+
+[11:43] [scene:talk]
+VISUAL: 
+AUDIO: 'so first of all let us go to projects. This is probably one of the most important places in Arcane because here I can see all of my Docker projects at a glance including the status if something'
+
+[11:55] [scene:talk]
+VISUAL: 
+AUDIO: 'is running, if something is stopped or if the images have updates that I can easily check from here and later also can run an update. And of course I can also create new projects from here. By'
+
+[12:08] [scene:talk]
+VISUAL: 
+AUDIO: 'the way, Arcane has also a really nice Docker compos file editor where you can easily create and manage the files. On the right side, you have your EMV files where you can add your secrets or other'
+
+[12:20] [scene:talk]
+VISUAL: 
+AUDIO: 'variables in here. And when you switch to the workplace view, you also have some kind of VS code editor style view where you can create new folders, new files here, and even upload files to that project directory. And of course,'
+
+[12:34] [scene:talk]
+VISUAL: 
+AUDIO: 'you can also go in here and edit or change or configure existing setups as well. That\'s pretty cool. One thing that I also absolutely love uh and that might help you to manage certain environments'
+
+[12:47] [scene:talk]
+VISUAL: 
+AUDIO: 'variables is under customization the section variables. So here you can add global environment variables and that is really practical because there are always values that you want to reuse in'
+
+[13:01] [scene:talk]
+VISUAL: 
+AUDIO: 'multiple projects like domains, paths, maybe network names or registry settings, things like that. And instead of just repeating the same values in every single project, you can just manage them here centrally and keep your'
+
+[13:13] [scene:talk]
+VISUAL: 
+AUDIO: 'projects config cleaner. So then we also have environments. This is where you can add all your Docker host and manage them from the same interface. So you deploy Arcane on one of your servers and then'
+
+[13:25] [scene:talk]
+VISUAL: 
+AUDIO: 'you can use the Arcane agent to connect other servers as well. And when you want to add a newer environment, you can choose between direct and att. So these are two modes for connecting agents. The'
+
+[13:38] [scene:talk]
+VISUAL: 
+AUDIO: 'direct mode just connects from the arcane manager to the agent. So the agent needs to have a port open and requires the agent or the host where the agent is running to accept that inbound'
+
+[13:50] [scene:talk]
+VISUAL: 
+AUDIO: 'connection. The edge agent. So that can work when the remote environment is maybe behind a firewall or behind a dynamic IP address but uh you want to initiate the connection from the arcane'
+
+[14:03] [scene:talk]
+VISUAL: 
+AUDIO: 'agent to your environment. So then the arcane manager has to accept that inbound connection and then there\'s also um git synchronization in the environments. You can add a git'
+
+[14:15] [scene:talk]
+VISUAL: 
+AUDIO: 'repository in customization. So just add your credentials here and then when you go to environment get synchronization as you can see I\'ve currently not used this because I use my boiler plates mostly to'
+
+[14:27] [scene:talk]
+VISUAL: 
+AUDIO: 'deploy stuff but um here you can also add a synchronization to synchronize files. So compose files from a git repository automatically to arcane to um deploy your projects or your compost'
+
+[14:41] [scene:talk]
+VISUAL: 
+AUDIO: 'stacks. That allows you to do some kind of githops. also really useful if you\'re managing all your configs or your compost stacks in git. All right, so um that\'s it about uh the environments. Of course, in the dashboard, you can jump'
+
+[14:55] [scene:talk]
+VISUAL: 
+AUDIO: 'into another server. You can also see all the running containers, images. You can see the CPU, memory, and disk usage and get more insights about your environments and how much storage your images or or volumes are consuming.'
+
+[15:08] [scene:talk]
+VISUAL: 
+AUDIO: 'Let\'s go to resources. Here you can get insight into containers, images, builds, networks and stuff like that. Here you can also see all the actual containers running on your hosts. Of course, you'
+
+[15:21] [scene:talk]
+VISUAL: 
+AUDIO: 'can stop them, you can restart them, you can also see the updates. You can also get insight into the CPU usage, the memory usage, the stats, and the internal IP address as well as the ports that are exposed by these applications.'
+
+[15:35] [scene:talk]
+VISUAL: 
+AUDIO: 'Get a great overview of your whole environment. You can also jump in here, inspect the logs, the matrix. You can also open a shell inside the container, do a health check. You can also see some'
+
+[15:49] [scene:talk]
+VISUAL: 
+AUDIO: 'recent probes to the health check endpoint in the container. And of course, create new ones. If you don\'t want to manage them through a compos file, you just quickly want to run a container with a graphical interface,'
+
+[16:01] [scene:talk]
+VISUAL: 
+AUDIO: 'then you can also do it this way. Also, images. This is pretty cool. Here you can see all your used and unused images. And there are really practical functions in here. For example, you can see'
+
+[16:14] [scene:talk]
+VISUAL: 
+AUDIO: 'there\'s a custom image that I\'ve built. Currently the latest version is in use, but all these other versions are still consuming disk space. So then I can easily remove these selected images. I can also run prune unset images. So this'
+
+[16:26] [scene:talk]
+VISUAL: 
+AUDIO: 'will clear all the unused images to reclaim disk space. You can also run a check update on all these container images. So that will check if there is a'
+
+[16:38] [scene:talk]
+VISUAL: 
+AUDIO: 'new version that can be pulled down and uh be used to redeploy the container. So you have a full update management for these images as well. And for those of you wanting features for building images'
+
+[16:50] [scene:talk]
+VISUAL: 
+AUDIO: 'like something we\'ve done with Docky or Koolifi, you can also jump in here image builds. So here you can manage the build workspace, add a remote git repository, add build configuration so that you can'
+
+[17:03] [scene:talk]
+VISUAL: 
+AUDIO: 'also customize your docker images. For example, if you want to add a new dependency or if you have software projects, whatever where you need to build these containers, then we also'
+
+[17:15] [scene:talk]
+VISUAL: 
+AUDIO: 'have a cool feature that I\'ve only seen in dohand that finds security vulnerabilities across all your images in the environment. Again, this is also one of those features where I have a slightly two-sided opinion on because vulnerability scans, of course, they'
+
+[17:28] [scene:talk]
+VISUAL: 
+AUDIO: 'sound great as a feature. They can be very helpful because you can see your base image dependencies, whether they have known issues or things that might be worth taking a closer look. For example, here you can see there are a'
+
+[17:41] [scene:talk]
+VISUAL: 
+AUDIO: 'lot of vulnerability issues on the N8N. So, maybe I need to pull down a new version or report some of the vulnerability issues here. If you are a developer, this might be super useful um to get insight into okay, my image has a problem here, maybe I need to fix it and'
+
+[17:55] [scene:talk]
+VISUAL: 
+AUDIO: 'so on. For a pure homelab setup, when you\'re mostly just using third party images, it can be useful as a signal, but at the end of the day, it also creates a lot of noise you\'re not responsible for. So, um I would not'
+
+[18:08] [scene:talk]
+VISUAL: 
+AUDIO: 'treat this as the perfect security truth machine for your home lab. Yeah, I would treat it as another data point that helps you to decide whether the one or another container image needs attention.'
+
+[18:20] [scene:talk]
+VISUAL: 
+AUDIO: 'For example, if there\'s a container image that was not updated a few weeks ago and pops up in the security review, then you might have to rebuild. But at the end of the day, when you scan all the images, you will have hundreds of'
+
+[18:33] [scene:talk]
+VISUAL: 
+AUDIO: 'critical high or medium issues and that might be, I don\'t know, more or less useful for you. Anyways, I think it is still great that it\'s there. Let\'s explore some of the other areas like okay I think updates is pretty'
+
+[18:47] [scene:talk]
+VISUAL: 
+AUDIO: 'self-explanable. I don\'t need to go through this but here you can easily just pull down updates for your latest docker image. It\'s pretty cool. Now one thing that I absolutely love in Arcane and I think this is so much better than in other Docker managers is the network'
+
+[18:59] [scene:talk]
+VISUAL: 
+AUDIO: 'setup. This is really nice uh because you can see at a glance all your networks running on all of your hosts. Whether this is a local scope or a docker swarm scope, whether this is a bridge, an overlay network, a host'
+
+[19:12] [scene:talk]
+VISUAL: 
+AUDIO: 'network or anything else like a MAC VLAN or so. You also have a topology overview. Now, I\'m not really heavily segregating or separating my Docker network environments. As you can see, I mostly have like a few internal networks'
+
+[19:25] [scene:talk]
+VISUAL: 
+AUDIO: 'and then I have a proxy overlay network where almost all containers are connected to. So therefore, this generated view might be not so useful. But anyways, could be great to have a visual representation of your Docker'
+
+[19:38] [scene:talk]
+VISUAL: 
+AUDIO: 'network setup. What I really love in Arcane is the ports overview. This is absolutely amazing because here you can see all of the host ports and the container ports. So the port mappings that are currently used. For example, I'
+
+[19:52] [scene:talk]
+VISUAL: 
+AUDIO: 'can directly see if I have any containers that accept inbound connections for SSH. Now, this is of course something that I would pay uh close attention to, but also DNS. can see those port mapping for both TCP and'
+
+[20:06] [scene:talk]
+VISUAL: 
+AUDIO: 'UDP on my technium DNS container. That is really useful. Of course, there are also many other internal ports that are not published. But yeah, this is in my opinion one of the coolest'
+
+[20:18] [scene:talk]
+VISUAL: 
+AUDIO: 'differentiators that you have a good overview of the network topology and port exposure setup. Next, you also have a good overview of all your volumes as well as the consumed disk space. And you can easily filter based on volumes in'
+
+[20:32] [scene:talk]
+VISUAL: 
+AUDIO: 'use or if you have any unused volumes that you might want to delete to reclaim disk space. One thing that is really special and also unique in this environment is if you have an important volume for example one of my databases'
+
+[20:44] [scene:talk]
+VISUAL: 
+AUDIO: 'here I can jump into this volume to get more details about this when this was created what is the scope if it is in use and what is the container that currently has this volume attached. And'
+
+[20:56] [scene:talk]
+VISUAL: 
+AUDIO: 'also I can easily open a browser to see the files inside the docker volume. You can delete files. You can create and upload new files into that docker volume'
+
+[21:09] [scene:talk]
+VISUAL: 
+AUDIO: 'while this is in use or not in use. And one thing that makes Arcane very unique is backups. Yeah, currently I have not mounted a backups directory in the Arcane containers. Again in the documentation when we go to the'
+
+[21:22] [scene:talk]
+VISUAL: 
+AUDIO: 'installation this is this directory here that you can use then because then you can easily take a backup so create a new backup then it\'s doing something like a copy of the files inside the docker'
+
+[21:34] [scene:talk]
+VISUAL: 
+AUDIO: 'volume storing it in this table. I\'m honestly not really sure if this is like a snapshot or if it\'s basically just a copy. I probably should ask a developer of Arcane or go into the documentation. Maybe it is described here. But um here'
+
+[21:47] [scene:talk]
+VISUAL: 
+AUDIO: 'you can restore the volume, restore individual files from that volume and even download this backup to your local device. And I think this alone makes Arcane really unique because I\'ve not'
+
+[22:00] [scene:talk]
+VISUAL: 
+AUDIO: 'seen many Docker Managers dealing with volume backups. This is something where you usually would use an external platform or custom scripts or anything like this, but this is absolutely cool. One downside of this feature is that'
+
+[22:12] [scene:talk]
+VISUAL: 
+AUDIO: 'I\'ve not really seen an automated backup. Yeah. So you cannot create a scheduled job unfortunately. There are a few scheduled jobs in the settings. So here you can do things like monitoring, health checks, maintenance, event'
+
+[22:24] [scene:talk]
+VISUAL: 
+AUDIO: 'cleanup, schedule, prune, vulnerability scans, auto updates, and image pulling. But I\'ve unfortunately not seen something like backup. I think this could be a great new feature where you can say, "Okay, please back up this and'
+
+[22:38] [scene:talk]
+VISUAL: 
+AUDIO: 'that volume every day or something like this." I think this is really still missing here, but I think the foundation is already there. So, uh probably shouldn\'t take long to create such a feature. And these features alone in my'
+
+[22:51] [scene:talk]
+VISUAL: 
+AUDIO: 'opinion make Arcane super useful and practical for smaller home labs. It has a great UI, great overview. You can directly see all the important data without too much noise or any features behind the license or anything like'
+
+[23:04] [scene:talk]
+VISUAL: 
+AUDIO: 'this. Really cool. I love the design of it, honestly. but also the great features to manage a smaller home apps and environments. Still, I think it has many many powerful features like adding multiple environments and having a'
+
+[23:19] [scene:talk]
+VISUAL: 
+AUDIO: 'direct or an edge agent connection. And one thing that I also want to take a look at, I do not want to dive too deep into this because not so many people are using that in their home labs, but still a few of you guys might be using Docker'
+
+[23:32] [scene:talk]
+VISUAL: 
+AUDIO: 'Swarm. And this was one of the major downsides of most of these other tools that we\'ve covered recently like Dochand for example or or do they don\'t really support Docker Swarm and I know it is'
+
+[23:44] [scene:talk]
+VISUAL: 
+AUDIO: 'not the most hyped orchestration platform anymore. Docker Swarm is still around and for smaller setups it can make a lot of sense. I\'m also using this for a couple of workloads but of course if you want container orchestration most'
+
+[23:56] [scene:talk]
+VISUAL: 
+AUDIO: 'people are preferring Kubernetes. This is something that Arcane unfortunately does not yet support but maybe in the future we will see. Anyways, still you can easily manage your existing Docker Swarm services or can see the individual'
+
+[24:10] [scene:talk]
+VISUAL: 
+AUDIO: 'services here if they are replicated, how many replicas they have on what nodes they\'re running and so on. Also, the port exposure is pretty cool. You can also see the stacks here and also see the notes. Now, currently I have one'
+
+[24:24] [scene:talk]
+VISUAL: 
+AUDIO: 'problem with my setup. I\'m not really having a separated Docker Swarm setup. That\'s why server port one and two are Docker Swarm nodes, but they also have standalone projects which is something'
+
+[24:36] [scene:talk]
+VISUAL: 
+AUDIO: 'that is not really recommended. And that way you can see that some of the swarm services are missing. That\'s a bit weird because I have deployed the Arcane agent on server pro 2 because I want to manage it as a standalone environment. But this'
+
+[24:48] [scene:talk]
+VISUAL: 
+AUDIO: 'is somehow missing. Maybe I\'ve done something wrong, but um yeah, this is a weird message here. Anyways, I still can manage and see all the important stuff from my Docker Swarm nodes. I can also manage the cluster. I could easily uh'
+
+[25:02] [scene:talk]
+VISUAL: 
+AUDIO: 'retrieve join tokens to add more nodes to this cluster. Um I can also inspect config files inside Docker Swarm or the secrets also pretty cool. Note this of course need to be redeployed when you\'re'
+
+[25:16] [scene:talk]
+VISUAL: 
+AUDIO: 'making a change. So swarm configs are immutable. You have to create a new config and update the service if you want to change anything inside here. Again, Docker Swarm is not really the best container orchestration platform,'
+
+[25:28] [scene:talk]
+VISUAL: 
+AUDIO: 'but it is nice for this one or another workload and the fact that you can manage and see those type of services in Arcane as well as the standalone containers. Before we wrap up, I also want to quickly show you the settings.'
+
+[25:41] [scene:talk]
+VISUAL: 
+AUDIO: 'And when you go to appearance, so here you can change the look and feel of Arcane. So you can give it different themes. You can also change the accent color here a bit. I think this is pretty cool. But yeah, again, in my opinion,'
+
+[25:54] [scene:talk]
+VISUAL: 
+AUDIO: 'this is really the best docker manager I\'ve seen so far. Of course, we have not covered each and every feature in detail. There are a few more, but I think I\'ve shown you enough to get you excited about it, and you can start'
+
+[26:06] [scene:talk]
+VISUAL: 
+AUDIO: 'exploring it yourself. It\'s really super easy to get started and then just start using this in your day-to-day home work. But yeah, now you can tell me your opinion. Do you like Arcane? Do you like what you\'ve seen so far? Maybe you\'re'
+
+[26:19] [scene:talk]
+VISUAL: 
+AUDIO: 'already using it or you are excited to try it out. Please leave me comments and what else you want to see on this channel. If you like this video, give it a thumbs up. Subscribe to the channel if you want to get more tutorials about IT, infrastructure, and home labs. And of'
+
+[26:32] [scene:talk]
+VISUAL: 
+AUDIO: 'course, thank you so much for watching. A big thanks goes out to all of my supporters. You guys are really amazing. And of course, I\'m going to catch you in the next video. Take care. Bye-bye.'

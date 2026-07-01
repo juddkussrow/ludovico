@@ -1,0 +1,244 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: LTX Director 2.0 Workflow: End Frames, IC LoRA, and Retake
+channel: @octopusinc_
+duration: 12:26
+source: https://www.youtube.com/watch?v=sWHSPJrtO7E
+upload_date: 20260701
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:ui]
+VISUAL: A slide titled "Add Edit Anything LoRA" with an image of a girl on a cloud holding a blue balloon.
+AUDIO: 'Today let’s take a look at LTX Director two point zero This time it’s not a small update It feels more like LTX two point three has been given a small editing desk You can add a starting frame add an ending frame'
+
+[00:12] [scene:talk]
+VISUAL: 
+AUDIO: 'drag a video in and continue extending it use IC LoRA for video editing and there’s also something called Retake Mode which means you only reshoot a small section in the middle of the video Let’s look at a few results first'
+
+[00:25] [scene:talk]
+VISUAL: 
+AUDIO: 'In the first example a glass fishbowl is filled with colorful candy At the beginning it sits normally on the table By the final frame the glass fishbowl is completely shattered Take a look at the process in between'
+
+[00:39] [scene:talk]
+VISUAL: 
+AUDIO: 'The model handles it really well In the second example the original video shows a girl riding a horse from the side If we simply add a prompt afterward and try to change the camera angle you’ll notice that this kind of perspective shift is not ideal'
+
+[00:52] [scene:talk]
+VISUAL: 
+AUDIO: 'Sometimes it may not work at all But if we give it an ending frame from a back-view angle and use the same prompt the result becomes completely different'
+
+[01:04] [scene:visual]
+VISUAL: A girl on a cloud holding a red balloon, looking up and smiling.
+AUDIO: 'For the third example let’s look at video editing In the original video the girl is sitting on a cloud and holding a red balloon I can change the balloon to blue This sounds very simple but if you only use IC LoRA for editing'
+
+[01:16] [scene:talk]
+VISUAL: 
+AUDIO: 'you’ll find that the result is unstable At this point we have a small processing trick: add an Edit Anything LoRA Now let’s look at the result again The last one is Retake Mode It’s still the same video of the girl sitting on a cloud'
+
+[01:29] [scene:talk]
+VISUAL: 
+AUDIO: 'We don’t edit the entire video Instead we only edit a few seconds in the middle and make a giant whale swim past behind the girl You’ll notice that the whale appears beautifully and in the final frame'
+
+[01:42] [scene:ui]
+VISUAL: A slide titled "From Timeline Entry to Workstation" showing the LTX Director 2.0 UI within ComfyUI.
+AUDIO: 'the image returns to the original video state That is what we call Retake Mode After seeing these demos my conclusion is that LTX Director two point zero itself is indeed quite powerful But if you want to use it well'
+
+[01:55] [scene:talk]
+VISUAL: 
+AUDIO: 'you can’t just know how to drag in materials You also need to know what kind of method can actually achieve the final video generation effect Next let’s look at what exactly has been updated in LTX Director two point zero compared with version one point zero First'
+
+[02:12] [scene:talk]
+VISUAL: 
+AUDIO: 'you can only use LTX Director two point zero after installing this extension If version one point zero was more like a timeline entry point for video generation then version two point zero feels more like a small video workstation I think its core changes mainly come down to four things'
+
+[02:27] [scene:ui]
+VISUAL: The LTX Director 2.0 UI is shown with a video file "dog.mp4" being imported, demonstrating IC-LoRA support.
+AUDIO: 'The first change is that the video timeline is more complete You can place images, videos and prompts on the same timeline You can trim, stretch place keyframes at specific time points'
+
+[02:40] [scene:talk]
+VISUAL: 
+AUDIO: 'and convert a certain keyframe into the final frame The second change is that the IC LoRA track has been added or strengthened The value of this track is that on one hand'
+
+[02:52] [scene:talk]
+VISUAL: 
+AUDIO: 'it can help keep a character or object consistent and on the other hand it can also be used for video editing Later we’ll go through a series of test examples Another change is the Retake Mode we just mentioned'
+
+[03:04] [scene:visual]
+VISUAL: Two video frames of a woman holding an umbrella, with on-screen text describing different actions.
+AUDIO: 'We can call this feature local reshooting In the past if there were two seconds in the middle of a video that failed we could only regenerate the whole thing But now you can use AI to regenerate just those two seconds'
+
+[03:16] [scene:talk]
+VISUAL: 
+AUDIO: 'while the other parts remain unaffected The fourth change is project saving and UI interaction It feels more like editing software now For example'
+
+[03:28] [scene:talk]
+VISUAL: 
+AUDIO: 'the entire project can be saved as JSON and in an empty project we can directly load it back in All right now let’s look at the workflow For easier demonstration I also built the workflow on RunningHub In the ComfyUI field'
+
+[03:41] [scene:ui]
+VISUAL: A ComfyUI workflow is displayed, focusing on "Models + Preview" nodes, including "Load Diffusion Model" (ltx-2.3-22b-distilled-1.1_transformer_o) and "Tiny VAELoader KJ" (taeltx2_3.safetensors).
+AUDIO: 'RunningHub is a very good online workflow platform because whenever a new model or new extension appears it follows up right away The core structure of this workflow is not complicated We can divide it into five parts'
+
+[03:54] [scene:talk]
+VISUAL: 
+AUDIO: 'The first part is model loading Here we use the LTX two point three distilled one point one model Under that we have the text encoder Gemma three then the video VAE and the audio VAE In addition'
+
+[04:07] [scene:talk]
+VISUAL: 
+AUDIO: 'we also have something called tiny VAE It is mainly used for node previews When you actually run this workflow you’ll find that the preview node provided by Kijai lets you see the rough shape of the video fairly early This helps you judge in advance whether your edit is actually taking effect'
+
+[04:21] [scene:ui]
+VISUAL: A broader view of the ComfyUI workflow, showing "Stage #2 Upscale" and "LTX Director Guide" nodes.
+AUDIO: 'The second part is the main LTX Director node Inside this node there is frame rate width and height, timeline data the global prompt, local prompts and also our Retake settings'
+
+[04:34] [scene:talk]
+VISUAL: 
+AUDIO: 'The third part is LTX Director Guide This is very important because when you use Director you are actually generating some raw materials If this information is going to truly affect sampling then we need to use the node we just mentioned'
+
+[04:48] [scene:ui]
+VISUAL: A close-up of the ComfyUI workflow, showing "LTX Director Guide" and "RandomNoise" nodes.
+AUDIO: 'Director Guide We can inject it into the later sampling process and the latent Inside this workflow we mainly use two Director Guides The first one is for the generation stage and the second one is for the upscale stage'
+
+[05:01] [scene:talk]
+VISUAL: 
+AUDIO: 'Here, we use scale_by Pay attention: inside Director we can set the width and height of the entire video That is the final generated video resolution In the first stage'
+
+[05:13] [scene:talk]
+VISUAL: 
+AUDIO: 'we first scale it down to zero point five times Then after the second stage upscale we make it match the resolution we set The fourth part is the two-stage sampling we’ve talked about many times We use an Euler sampler'
+
+[05:27] [scene:ui]
+VISUAL: A video preview within ComfyUI showing a glass bowl shattering and candies spilling out.
+AUDIO: 'The scheduler here is a little special Then in the second stage it’s also an Euler sampler Pay attention here: the denoise value in the second stage is not one It is zero point four two Some people may think this workflow is a bit complicated'
+
+[05:40] [scene:talk]
+VISUAL: 
+AUDIO: 'but the thing you really need to understand is just one sentence: LTX Director handles the front-end timeline Director Guide turns that timeline into sampling guidance Two-stage sampling takes the video from structure to detail'
+
+[05:53] [scene:talk]
+VISUAL: 
+AUDIO: 'Then you save it, and that’s it Next is the testing stage that everyone cares about At the beginning we already briefly introduced these examples In this section we’ll explain in detail how each one is done'
+
+[06:05] [scene:ui]
+VISUAL: The LTX Director 2.0 timeline UI is shown, with an image of a glass bowl at the start and end, and a prompt in the middle.
+AUDIO: 'Let’s start with the first case This is a start-frame and end-frame example going from a complete fishbowl to a broken fishbowl At the very beginning of the timeline we place the first frame'
+
+[06:18] [scene:talk]
+VISUAL: 
+AUDIO: 'which is the glass bowl filled with colorful candy At the end of the timeline we place the final frame which is the broken state after it shatters In the middle, we write a prompt Translated'
+
+[06:30] [scene:talk]
+VISUAL: 
+AUDIO: 'it means a slow-motion close-up where the glass bowl suddenly breaks and the candy spills out Now let’s look at the generated result Pay attention to the process in the middle It is not simply blending two images together In the middle, there is a hand'
+
+[06:44] [scene:ui]
+VISUAL: A slide titled "Case 02 Goal" with an image of a girl riding a horse, explaining the goal to extend the clip and change camera perspective.
+AUDIO: 'and there is an action and that action causes the whole fishbowl to break For a video of around five seconds I think this is already very interesting So the first trick is: if you know what state the video should end in'
+
+[06:56] [scene:talk]
+VISUAL: 
+AUDIO: 'you should definitely use an End Frame Don’t expect the prompt alone to solve the entire direction of the video If you don’t believe it let’s keep going The second case is video extension There are also two ways to extend a video'
+
+[07:09] [scene:talk]
+VISUAL: 
+AUDIO: 'For example with the video below this is a video of a beautiful girl riding a horse Our goal is very simple We want the video to continue forward and then we want the camera to become a back view of the girl riding the horse'
+
+[07:21] [scene:visual]
+VISUAL: A girl riding a white horse next to a river, viewed from the side.
+AUDIO: 'As we mentioned earlier there are two ways to do it The first is the most direct method: use a prompt In the prompt we emphasize “from back view girl riding a horse away from camera'
+
+[07:34] [scene:talk]
+VISUAL: 
+AUDIO: '” which means we want it to become a back-view angle So how is the result? You’ll notice that the video does get extended but the problem is that the back-view angle does not appear So in this situation'
+
+[07:47] [scene:talk]
+VISUAL: 
+AUDIO: 'you can see that the guiding ability of the prompt is not enough What should we do then? We need to add a fake frame which is the End Frame Actually this trick is the same as the start-frame and end-frame method we mentioned earlier Now we use the same prompt and look at the final generated result'
+
+[08:00] [scene:visual]
+VISUAL: A girl riding a white horse next to a river, viewed from the side.
+AUDIO: 'You’ll notice that this time the effect is obviously much better The camera direction the character’s orientation and the horse’s direction are all closer to the extension we wanted The core here is not how advanced the term “fake frame” sounds'
+
+[08:15] [scene:talk]
+VISUAL: 
+AUDIO: 'The real point is that you need to give the model a visual anchor It needs a reference point and only then will the generation be more stable For the third case'
+
+[08:27] [scene:talk]
+VISUAL: 
+AUDIO: 'let’s look at video editing Video editing is probably the most anticipated part of LTX Director two point zero Our input video is a girl sitting on a cloud holding a red balloon in her hand First, let’s do a simple edit:'
+
+[08:41] [scene:visual]
+VISUAL: A girl on a cloud holding a red balloon, looking up and smiling.
+AUDIO: 'change the red balloon to blue This sounds very easy Let’s actually try it You’ll find that this is actually a little difficult Our prompt is “change the red balloon to blue ” The result is not very ideal'
+
+[08:53] [scene:talk]
+VISUAL: 
+AUDIO: 'The balloon color does not really change This is exactly why many people say LTX Director two point zero is not easy to use If you use it only like this then yes'
+
+[09:05] [scene:talk]
+VISUAL: 
+AUDIO: 'video editing is not easy to achieve My solution is to add an Edit Anything LoRA For this LoRA we use the nine-thousand-step version because in a previous video we specifically talked about this LoRA If you’re not familiar with it'
+
+[09:18] [scene:visual]
+VISUAL: A girl on a cloud holding a red balloon, looking up and smiling, with a wider shot showing more clouds.
+AUDIO: 'you can go watch that video We add it in and set the weight to one point zero first At this point you’ll notice that the color of the balloon clearly changes Next'
+
+[09:30] [scene:talk]
+VISUAL: 
+AUDIO: 'let’s look at a more interesting example Suppose I want a small cat to appear on the girl’s shoulder The prompt is also very simple: “a small cat appear on her shoulder ” If we use a normal weight which is one point zero'
+
+[09:43] [scene:talk]
+VISUAL: 
+AUDIO: 'the generated result looks like this Look carefully There is indeed a little hint of a cat on her shoulder but it is not obvious The reason is that the shoulder area is too small It’s hard for the model to generate a clear small animal from scratch in such a tiny pixel area'
+
+[09:56] [scene:ui]
+VISUAL: A slide titled "Small Objects Need Weight" comparing two images of a girl on a cloud, one with a subtle cat on her shoulder (low weight) and one with a clearer cat but distorted face (high weight).
+AUDIO: 'So if we want the cat to be more obvious what should we do? You can increase the weight of the Edit Anything LoRA for example to one point five or two point zero Now let’s look at the generated result again'
+
+[10:10] [scene:talk]
+VISUAL: 
+AUDIO: 'This time the cat is indeed much more obvious but the cost also appears: the character’s face and some local structures start to be affected Finally let’s look at Retake Mode This is not global editing'
+
+[10:23] [scene:ui]
+VISUAL: The LTX Director 2.0 UI is shown with a video preview and a "RETAKE PROMPT" input field containing "A huge whale flew past the woman from behind."
+AUDIO: 'As we said earlier it is called reshooting mode Our original video is still the video of the girl sitting on a cloud We can click Retake Mode Once we enter this mode you’ll notice that the timeline becomes much simpler'
+
+[10:36] [scene:talk]
+VISUAL: 
+AUDIO: 'We drag the video in and then we need to set the start frame and the end frame which define the range we want to modify Here I set it from two seconds to six seconds Then my prompt is written like this:'
+
+[10:49] [scene:talk]
+VISUAL: 
+AUDIO: 'a giant whale swims past behind the beautiful girl Pay attention to this result There are two key points First, the whale does appear And the whale’s size, motion and integration with the image are all very interesting'
+
+[11:01] [scene:visual]
+VISUAL: A girl on a cloud holding a red balloon, looking up and smiling.
+AUDIO: 'It’s not simply a pasted image It really forms a new subject with motion and a new event Second many people have probably noticed that at the end of the video the whale disappears'
+
+[11:14] [scene:talk]
+VISUAL: 
+AUDIO: 'That’s because this is called Retake Mode In other words it needs to respect the front and back boundaries of the original video It will try to reshoot within the area you selected but when it reaches the ending boundary'
+
+[11:26] [scene:talk]
+VISUAL: 
+AUDIO: 'it has to return to the original video state That is why it is called Retake not Edit Whole Video To summarize the value of LTX Director two point zero is not that it suddenly turns LTX two point three into a completely different model Its real value is that it turns the whole operation process into a director’s desk'
+
+[11:43] [scene:visual]
+VISUAL: A street scene at night with people walking and brightly lit buildings, with text "IC-LoRA: Edit Anything by Alissonerdx".
+AUDIO: 'It becomes easier to control more visual and more concrete and perceivable In version two point zero I suggest you pay attention to three things'
+
+[11:55] [scene:talk]
+VISUAL: 
+AUDIO: 'The first is video editing which generally uses IC LoRA The second is Retake Mode which is the reshooting mode There is also one thing I did not test which is the audio part'
+
+[12:07] [scene:talk]
+VISUAL: 
+AUDIO: 'You’ll notice that in video extension the audio results are also pretty good But I have always believed that audio processing is still a weakness of LTX two point three All right, that’s all for today What are you waiting for?'
+
+[12:19] [scene:talk]
+VISUAL: 
+AUDIO: 'Go try it yourself Follow me and become someone who truly understands AI'

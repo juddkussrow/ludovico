@@ -1,0 +1,588 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Introducing Bare: A Fast, Lightweight Runtime for Modular JavaScript Apps
+channel: @octopusinc_
+duration: 30:43
+source: https://www.youtube.com/watch?v=Cc8vGBztvec
+upload_date: 20250402
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'we just did plan B yep that\'s awesome yeah um I think one I went to a bunch of talks at Plan B obviously mhm uh and uh there\'s this animal that kept coming coming up and in in various talks'
+
+[00:13] [scene:talk]
+VISUAL: 
+AUDIO: 'incling my own um the bear and um it\'s not even spelled that way well yeah that\'s a reoccurring theme I in our stuff um I think we should talk about'
+
+[00:27] [scene:talk]
+VISUAL: 
+AUDIO: 'yeah yeah cuz we mostly talk about peir which is on top of bear yeah or or bear is part of peir sometimes they talk about hair um somebody was telling me we'
+
+[00:40] [scene:talk]
+VISUAL: 
+AUDIO: 'should make some partol Fair that\'s for later uh so yeah so you know got Casper here Casper actually made there uh we\'re just taking credit'
+
+[00:54] [scene:talk]
+VISUAL: 
+AUDIO: 'um as usual but um I think like people probably saw that and there\'s going to be videos out obviously also those talks and I think people see that and they\'re like that'
+
+[01:06] [scene:talk]
+VISUAL: 
+AUDIO: 'sounds freaking amazing right uh and I think you know just hearing the story because I was thinking yeah the story is so cool about just how that happen and what it is and stuff yeah that we should probably just we should we should we'
+
+[01:18] [scene:talk]
+VISUAL: 
+AUDIO: 'should record that and share that with the world totally before we forget so should we start with pair and then go into bear or should we start with maybe we should just start a quick overview what bear is what is there what is be Casper in your'
+
+[01:31] [scene:talk]
+VISUAL: 
+AUDIO: 'opinion what no TS will say is supposed to be oh um how do you mean well just the JavaScript R time read yeah uh with without any sort of standard library but'
+
+[01:45] [scene:talk]
+VISUAL: 
+AUDIO: 'all of that we built on top um so it\'s basically you know the underlying JavaScript engine plus just the bits you need to get all of the usine modules going m because we already have that we'
+
+[01:58] [scene:talk]
+VISUAL: 
+AUDIO: 'already have our own networking stack we already have um you know all the P2P Primitives you need uh to build all the things you do on top of pair M uh all'
+
+[02:10] [scene:talk]
+VISUAL: 
+AUDIO: 'the standard Library stuff that no GS brings along is it\'s fluff it\'s not it\'s not necessary necessary and it gets in the way as well cuz like mattius and I we were like in in node like very early'
+
+[02:22] [scene:talk]
+VISUAL: 
+AUDIO: 'days and we were sort of part of that that that whole kind of curve and one of and one of the things that was quite um often talked about in those days was how do we get it to run a'
+
+[02:34] [scene:talk]
+VISUAL: 
+AUDIO: 'mobile yeah and that was never really someone achieved it at some point but like it wasn\'t maintained and then it fell out and didn\'t work uh but like uh be runs on mobile no problem as a first'
+
+[02:47] [scene:talk]
+VISUAL: 
+AUDIO: 'class Citizen and I think that\'s huge yeah it\'s actually so true uh and I think we talked about this obviously also the past but like when you hear the marketing about all the Js cuzz is like a universal language it\'s always about'
+
+[03:00] [scene:talk]
+VISUAL: 
+AUDIO: 'running everywhere um and then you kind of realize it actually doesn\'t need Run Anywhere before we made Bear right is that it\'s I find it really interesting'
+
+[03:12] [scene:talk]
+VISUAL: 
+AUDIO: 'how the JavaScript Community just some we just blocking out phones yeah it feels a little bit like that you know what I mean outside like react native and things like that but but it\'s systemic isn\'t it like they block them out because they don\'t have the option to do'
+
+[03:25] [scene:talk]
+VISUAL: 
+AUDIO: 'it and the option was taken away quite a long time ago yeah but it\'s real right cuz kind of like what is it I don\'t know the stats but like you know normal people useage it\'s probably like 90 something per phones I\'m guessing some insane St like that and'
+
+[03:39] [scene:talk]
+VISUAL: 
+AUDIO: 'we\'re like well that\'s not JavaScript until now it\'s almost like it\'s almost like a planned strategy to eliminate JavaScript from for business profit'
+
+[03:51] [scene:talk]
+VISUAL: 
+AUDIO: 'that\'s almost like that so like it\'s good that\'s great leaves a massive Gap and we can fill that with Bear yeah for sure um we should dive into that I think'
+
+[04:04] [scene:talk]
+VISUAL: 
+AUDIO: 'that\'s great um before that I think it\'s actually because I was thinking about just the story of bear and how it happened in the company um because we\'re just'
+
+[04:17] [scene:talk]
+VISUAL: 
+AUDIO: 'hackers um open source hackers I think I think it it just tells a good story of why you should make minimal things why you should iterate a lot and how things just kind of happen when you don\'t plan too much right like good ideas when you'
+
+[04:29] [scene:talk]
+VISUAL: 
+AUDIO: 'cross them if you\'re iterative enough if you\'re like have to write open source hacker mentality need to think because I often think about how be you know why hasn\'t it happened earlier and I don\'t know the'
+
+[04:44] [scene:talk]
+VISUAL: 
+AUDIO: 'answer because it\'s an insane project it\'s the kind of project that any kind of PM or any kind of any kind of guy in charge we just we\'re not doing that y uh and and uh we just did it yeah it was'
+
+[04:56] [scene:talk]
+VISUAL: 
+AUDIO: 'not that hard yeah hard little hard well the initial of the sign phase was I think the hardest thing was deciding just to not do a lot of stuff yeah right sign to keep that was really'
+
+[05:09] [scene:talk]
+VISUAL: 
+AUDIO: 'the most difficult chice there was actually a moment in the development of bear wasn\'t there where you realized oh actually we can we can pull even more we can pull the process out cuz it was it was initially just like the built around'
+
+[05:22] [scene:talk]
+VISUAL: 
+AUDIO: 'a process object like node is and then you like wait we don\'t need that we had some like a few we pulled all of that out just deciding to go like fully minimal so be is the only module in be is the module module'
+
+[05:36] [scene:talk]
+VISUAL: 
+AUDIO: 'right no even not even the module module anymore wow it\'s all gone wow amazing uh so like for context so anybody watching this I guess it\'s kind of like so obviously we\'re building Heat at whole punch right and like d was was hinting'
+
+[05:48] [scene:talk]
+VISUAL: 
+AUDIO: 'at we were uh we actually made a think the first protype was a desktop at so long ago I can\'t remember yeah the first one was a desktop with much stress ago yeah and obviously we wanted to make'
+
+[06:01] [scene:talk]
+VISUAL: 
+AUDIO: 'this app work on mobile we\'re JavaScript guys um we have a b p St that\'s JavaScript uh and we were like you know let\'s let\'s freaking just just deploy for mobile we made a react native that'
+
+[06:14] [scene:talk]
+VISUAL: 
+AUDIO: 'um cool technology but we couldn\'t basically get our peerto peer sture on because like you said the all duct tape that\'s five years ago yeah um and we decided to just kind of like he let\'s'
+
+[06:28] [scene:talk]
+VISUAL: 
+AUDIO: 'just freaking prototype how hard can it be because we we\'ve been working on this kind of stuff for a long time Casper is very good at compiling things Tiner with things getting into work and it\'s like is that like you know a moment where'
+
+[06:40] [scene:talk]
+VISUAL: 
+AUDIO: 'just hackers me and they\'re like isn\'t it just like V8 J engine and then some stuff how hard is the stuff right um when you say hackers of course you\'re not talking about like infiltration hacking you\'re talking about the'
+
+[06:53] [scene:talk]
+VISUAL: 
+AUDIO: 'original meaning of hacking which is like hacking things together like like tinkering tinkering really yeah uh hacker is a better yeah of course it\'s cooler um so we\'re like you'
+
+[07:06] [scene:talk]
+VISUAL: 
+AUDIO: 'know let\'s freaking make that work right so it\'s like let\'s just make a JavaScript engine no ja killer to some degree I think uh that\'s just like has nothing built in because then it can run everywhere by actually having nothing'
+
+[07:19] [scene:talk]
+VISUAL: 
+AUDIO: 'built in it runs everywhere runs on mobile runs on desktop runs on a server even anywhere really and then just like embedded to Ed it if if you know given the right circumstance because it\'s so'
+
+[07:31] [scene:talk]
+VISUAL: 
+AUDIO: 'it\'s such a low footprint yeah like it\'s like the portability aspect is so cool just nail that um and we actually did that just for key because we were like you know we making the app and then at some point we realized I guess um it\'s'
+
+[07:43] [scene:talk]
+VISUAL: 
+AUDIO: 'actually not that hard to to just make this a separate thing we can use everywhere um and then we put our name on it was SP it\'s so cool yeah and we we were building pair at the time time as'
+
+[07:58] [scene:talk]
+VISUAL: 
+AUDIO: 'well yeah and then as soon as that happened then bear just automatically became part of peir yeah I remember yeah and we had like and that that unlocked pair terminal apps and that unlocked a huge amount of things in the future yeah'
+
+[08:10] [scene:talk]
+VISUAL: 
+AUDIO: 'Al just portability remember we we said and we were like uh let\'s just make this code run easier everywhere I was kind of like oh well now we just embed the run time so minimal and it just was so so easy yeah totally it\'s kind of like one'
+
+[08:24] [scene:talk]
+VISUAL: 
+AUDIO: 'of those things where like we spent a couple of days to just undo two months of work totally and this this whole approach of like super minimal core and then building the essentially what what is the equivalent of the standard node'
+
+[08:36] [scene:talk]
+VISUAL: 
+AUDIO: 'library in the ecosystem it just it\'s so powerful and so optimal for for things like mobile and embedded and things like that because you you just use what you need to use it literally is the original'
+
+[08:48] [scene:talk]
+VISUAL: 
+AUDIO: 'vision of node which is batteries not included but batteries available everywhere you know actually I hate that I hate that metaphor better batteries included s the wrong signal it\'s not about batteries included it\'s more like'
+
+[09:01] [scene:talk]
+VISUAL: 
+AUDIO: 'going buying a car and getting a k so in my opinion it\'s kind like maybe I like it but it\'s kind of like it\'s not the essentials no what is the you always got to boil your problems down to what is the essentials um so bear basically'
+
+[09:13] [scene:talk]
+VISUAL: 
+AUDIO: 'gives you nothing except like this essential runtime mhm and um Casper and the team then this was actually really fun for me because I remember we we just released a very minimal run time and we'
+
+[09:26] [scene:talk]
+VISUAL: 
+AUDIO: 'started talking about it for the first time and people immediately people were like uh yeah but what about HTP these libraries that NOS has built in and they\'re like you know you\'re never going to get parody yada y y y it\'s such an'
+
+[09:38] [scene:talk]
+VISUAL: 
+AUDIO: 'undertaking and then the guys just you know what four months later five months later I can\'t remember yeah it was on and off it was like focused for exactly just kind like they had a list yeah and'
+
+[09:51] [scene:talk]
+VISUAL: 
+AUDIO: 'do we have full support now or are we like 99% or most of it is done yeah yeah wow definitely 90s cuz that\'s the thing that maybe people don\'t realize as well is that bear is this very minimal runtime but also you can run it in a'
+
+[10:04] [scene:talk]
+VISUAL: 
+AUDIO: 'node compatible way yeah cuz you have all the modules kind like you install them yourself instead of them being delivered to you yeah um the guys just did it that\'s kind of like again like it doesn\'t have to be that hard sometimes I feel no no not at all how did you make'
+
+[10:17] [scene:talk]
+VISUAL: 
+AUDIO: 'it so that it was so much faster than node on the init time because that blows my mind do less it\'s just about doing less that\'s all it\'s about just about doing less yeah sometimes that\'s simple it really is and'
+
+[10:30] [scene:talk]
+VISUAL: 
+AUDIO: 'that\'s that\'s like kind of a prevailing philosophy within H punch is like how can we how can we bore this down to like the most elegant simple thing and remove the complexity yeah I find it really fascinating also when we talked about'
+
+[10:42] [scene:talk]
+VISUAL: 
+AUDIO: 'this at the conference because they had this uh you know with whole pun also with the tether Group which we\'re working with a lot where we just started sharing these these ideas internally and because there\'s a lot of smart people also working in our group they\'re'
+
+[10:54] [scene:talk]
+VISUAL: 
+AUDIO: 'immediately caught up and they\'re like oh holy like you know this idea I can just write a little program on desktop I can deploy it on my phone or on the server so cool and they were doing some AI stuff and immediately they were like wow we can actually use this'
+
+[11:06] [scene:talk]
+VISUAL: 
+AUDIO: 'to actually just supercharge deployment of AI models yeah um this is where it gets crazy now and I I love that because uh you know AI is a boss word obviously uh and and it\'s really hard and technology behind is really hard but'
+
+[11:19] [scene:talk]
+VISUAL: 
+AUDIO: 'actually if you try to play a lot with like just the different things the deployment aspect of it is actually really really hard which is always frustrating to me like you know you have these artificial networks but actually running them is hard because they\'re made for you know some native thing you'
+
+[11:32] [scene:talk]
+VISUAL: 
+AUDIO: 'got to do a ton of stuff um got to Target different environments and then all of a sudden these guys were like actually if we just make a run on bear then Casper already figured out how to run it everywhere and'
+
+[11:44] [scene:talk]
+VISUAL: 
+AUDIO: 'we just have to do the job once which is kind of like that sounds almost too good to be true right but but the secret source is like you said just just do less right so yeah I think that\'s right right and with um with bear and pear'
+
+[11:58] [scene:talk]
+VISUAL: 
+AUDIO: 'together you you you almost have this like new kind of container model in a way yeah because with peir you can obviously Run apps peer-to-peer so'
+
+[12:10] [scene:talk]
+VISUAL: 
+AUDIO: 'remotely but you\'re running bear and Bear runs everywhere so it I don\'t know it\'s just mind-blowingly powerful it\'s just mind-blowingly powerful and I think one of these'
+
+[12:23] [scene:talk]
+VISUAL: 
+AUDIO: 'some one of I think one of our biggest challenges uh in terms of everything we\'re doing in terms of like trying to make things both elegant but also sit at an intersection where where it sort of meets multiple'
+
+[12:38] [scene:talk]
+VISUAL: 
+AUDIO: 'objectives at once is actually communicating like oh by the way you can like this can do this in a way like it it\'s not one thing you know what I mean'
+
+[12:51] [scene:talk]
+VISUAL: 
+AUDIO: 'like a lot of a lot of uh products are just like one thing here\'s here\'s what it is and this is what it\'s for this thing is like for so many things it\'s so adaptable because it\'s it\'s almost like'
+
+[13:05] [scene:talk]
+VISUAL: 
+AUDIO: 'uh a sort of uh everything we do we focus on Primitives all the way up and down and it\'s a primitive that can then be just reused in so many context that it\'s actually overwhelming to try'
+
+[13:17] [scene:talk]
+VISUAL: 
+AUDIO: 'to list them all yeah for sure it\'s kind of funny how minimal you can do anything it\'s kind of like it\'s people when they just hear it probably think the opposite it\'s like oh what can I use it for but'
+
+[13:29] [scene:talk]
+VISUAL: 
+AUDIO: 'it\'s like you can use it for anything mhm which sounds like nonsense yeah it sounds like I mean but it\'s not it\'s not as so powerful um and um yeah just often think I used to work on no GS you did a ton of stuff'
+
+[13:43] [scene:talk]
+VISUAL: 
+AUDIO: 'on nodejs also I\'m still a big fan of NOS in general but U I did a lot of work just on like on streams in in nodejs and I just remember how hard that work was because you had to think about all the'
+
+[13:55] [scene:talk]
+VISUAL: 
+AUDIO: 'old versions of streams CU they were all bundled cuz they didn\'t do this minimal thing and you have to be truly minimal mhm and it just kills Innovation locks it up it locks it up and I think actually already with Caster'
+
+[14:09] [scene:talk]
+VISUAL: 
+AUDIO: 'stuff because the one thing I\'ve noticed about the you know just the modules REM remain how many majors have we released now I think the biggest one like five or six yeah so like five or six big breaking changes'
+
+[14:22] [scene:talk]
+VISUAL: 
+AUDIO: 'but just on modules right so we\'ve had so the runtime stays the same it\'s still verion W you yeah um so we\'ve had like keepy deployer running on this obviously before we fully open sourced um bear'
+
+[14:35] [scene:talk]
+VISUAL: 
+AUDIO: 'which we just did pretty recently uh as we\'re reiterating and uh we had breaking changes left and right but the app just kept on running because the modules it was using was just the previous one'
+
+[14:47] [scene:talk]
+VISUAL: 
+AUDIO: 'that\'s fine they work and then you know the teams updated at their own pace MH peace meal ones and looking at that at somebody who Lov the code uh but now does less coding and more like looking'
+
+[14:59] [scene:talk]
+VISUAL: 
+AUDIO: 'at how other people code uh it\'s really really insane to me right because we all been in these projects where we had these big migrations M that was like oh my God kill me I remember just working for for people on on Nots and being like'
+
+[15:11] [scene:talk]
+VISUAL: 
+AUDIO: 'Oh we want to upgrade from 10 to 12 right and they\'re like is that going to work and I\'m like maybe mhm I\'m a consultant so you should pay me a ton of money to figure out mhm and that\'s kind of like a'
+
+[15:23] [scene:talk]
+VISUAL: 
+AUDIO: 'job like what value are you providing to do that mhm and with with be just in our own cases we have the opposite it\'s like yeah there is no upgrade you\'re just like you know just in your own time when you\'re ready your own time take a little'
+
+[15:36] [scene:talk]
+VISUAL: 
+AUDIO: 'bit a little bit there you can have multiple versions of the file system running absolutely we can we can you know develop and test stuff outside of the core without ever fting Coe I can test the module system as an external dependency it\'s so amazing that the'
+
+[15:49] [scene:talk]
+VISUAL: 
+AUDIO: 'module system is not even in the runtime yeah is so amazing and uh I think I had this on my slide and also this is also where this is always a mind Bing um stat for me but like the team is basically'
+
+[16:03] [scene:talk]
+VISUAL: 
+AUDIO: 'Casper yeah uh and then we added y recently two people right and like it\'s a two person team making this same project like not compatible yeah and I\'m always thinking about just how many'
+
+[16:18] [scene:talk]
+VISUAL: 
+AUDIO: 'people are working on just something like no which is even like pretty pretty well run yeah um it\'s it\'s a substantial project probably as well Run As It Gets Source right and just how many people working on it how much money that goes'
+
+[16:30] [scene:talk]
+VISUAL: 
+AUDIO: 'into that not even enough right for sustainability and how two guys can make something like there and it\'s like it\'s all about the design decisions exactly it\'s exactly that it\'s not even like'
+
+[16:42] [scene:talk]
+VISUAL: 
+AUDIO: 'it\'s no secret Source it\'s not like Casper is fast than everybody but even discounting that even discounting that right it\'s kind of like it\'s just like no it turns out just by doing way less mhm and decoupling it as'
+
+[16:55] [scene:talk]
+VISUAL: 
+AUDIO: 'much as possible you can do way more uh which is uh yeah so simple mhm so that\'s yeah nice job Casper yeah hold on'
+
+[17:08] [scene:talk]
+VISUAL: 
+AUDIO: 'um I think for people listening to this watching us um there\'ll probably be like uh how do I get started maybe check it out well you get bear with P so like if you\'re into'
+
+[17:21] [scene:talk]
+VISUAL: 
+AUDIO: 'using peir you can just use bear because you\'re using peir um it\'s all and to to upgrade pair you use pair that because pair auto updates to get the new pair'
+
+[17:33] [scene:talk]
+VISUAL: 
+AUDIO: 'exactly PA pair pair auto updates P2P yeah so you get bear with pair the latest bear with the latest pair at anytime uh at any moment I think that it up yeah'
+
+[17:47] [scene:talk]
+VISUAL: 
+AUDIO: 'clear uh but then there\'s um you know in terms of like mobile development we probably got some more we we definitely have more to do there with peir for sure um but like you exactly for sure but you know at the end'
+
+[18:00] [scene:talk]
+VISUAL: 
+AUDIO: 'of the day it\'s ultimately just going to be bar running on mobile like uh the should we talk about the worker not the worker thing but whatever we want to call it yeah because basically uh did we kit weit yeah D yeah there so what is be'
+
+[18:14] [scene:talk]
+VISUAL: 
+AUDIO: 'kit so yeah you want to see like wet workers on top of beer yeah so you can run like a bear worker next to your'
+
+[18:28] [scene:talk]
+VISUAL: 
+AUDIO: 'mobile UI desktop UI thread but what does bear kit do exactly uh so it actually manages a separate be process or multiple of them if you if you want it on the phone on phones on the phones'
+
+[18:40] [scene:talk]
+VISUAL: 
+AUDIO: 'and desktop um basically any any system you want to integrate with that sort of runs the own thing uh next to bear like a native Mac OS app or a native IOS app would react need to that um so all the'
+
+[18:52] [scene:talk]
+VISUAL: 
+AUDIO: 'apps basically all the apps yeah uh any sort of gole thing you have running uh like in the front uh you will then be running or can run uh this be work using be kits behind the scenes um that\'s'
+
+[19:07] [scene:talk]
+VISUAL: 
+AUDIO: 'where you put all your your business logic you run all the PTP Primitives there and then you\'d you know do your gooey thing in the in the gooey thread and the and the worker code because I\'ve written a couple of these it\'s fun it\'s'
+
+[19:19] [scene:talk]
+VISUAL: 
+AUDIO: 'a lot of fun uh it\'s actually exactly the same on desktop mobile mhm yeah you name it even if we deplo on watch um or in the brain in the future with braen'
+
+[19:31] [scene:talk]
+VISUAL: 
+AUDIO: 'chips MH uh which is pretty cool right uh and very scary also but I mean the brain the brain chip things really wild and it\'s so crazy we start off talking about oh this is little pet project this'
+
+[19:43] [scene:talk]
+VISUAL: 
+AUDIO: 'runtime pet project and now we\'re talking about brain chips you know what I mean right yeah because of the because that\'s what we\'re say that\'s what really the point I\'m making is like because it works in any situation it works in any situation and it works on embedded as'
+
+[19:55] [scene:talk]
+VISUAL: 
+AUDIO: 'well and so we\'re you know we\'re at a point where um you know this this sort of many years ago there was a big push for like what was it right once run every run anywhere and'
+
+[20:08] [scene:talk]
+VISUAL: 
+AUDIO: 'that was never really fulfilled and it sort of went by the wayside as a sort of like almost like a myth almost like a fallacy but this is the the I don\'t know if the we keep calling them workers and I think that can be confusing for people'
+
+[20:21] [scene:talk]
+VISUAL: 
+AUDIO: 'we\'re not talking about web workers or anything like that we\'re talk and and we can\'t call it a backend because it\'s peerto peer there is no backend so I like to think of it as the pair iting thanks teed it up uh but the but the you'
+
+[20:33] [scene:talk]
+VISUAL: 
+AUDIO: 'know this this sort of pair end idea that will you you you implement your your business logic your your pair end logic and then you just have uis or and a UI what is that a user interface it'
+
+[20:48] [scene:talk]
+VISUAL: 
+AUDIO: 'doesn\'t even need to be a graphical user interface no it can be like you say like it can it can really get to the point of uh an I interface or or a brain communication interface um and that is'
+
+[21:00] [scene:talk]
+VISUAL: 
+AUDIO: 'uh and you can reuse that same logic between all of your devices and then you put pair on top of that where pair can run that uh pair can execute that code from a remote location'
+
+[21:15] [scene:talk]
+VISUAL: 
+AUDIO: 'P2P it\'s gamechanging it\'s so gamechanging and and it\'s so nent that the the industry and the world they\'re not ready for it right they\'re not and'
+
+[21:27] [scene:talk]
+VISUAL: 
+AUDIO: 'and the thing is this is good um like the we we say brain chips and it\'s like what the whoa like that\'s kind of scary but at the same time that\'s what the C'
+
+[21:41] [scene:talk]
+VISUAL: 
+AUDIO: 'like the majority of like the centralized industry is going towards and you don\'t want you don\'t want Ai and you don\'t want brain chips uh controlled with a central point of failure for a'
+
+[21:55] [scene:talk]
+VISUAL: 
+AUDIO: 'start everyone who\'s in technology knows you don\'t want a central point of failure so why would why would you do that with brain chips yeah totally so we want to do that in a PTP'
+
+[22:07] [scene:talk]
+VISUAL: 
+AUDIO: 'way before it happens yeah I also think um because obviously we talk big talk we talk about bear and these things right and we\'re also just very concrete developers and the reason why we\'re'
+
+[22:19] [scene:talk]
+VISUAL: 
+AUDIO: 'comfortable talking big talk because obviously we\'re not running it on a brain brain is under development right but it\'s just an embedded device at the end of day it\'s just an embeded device and we know the design because bear is like just designed to be minimal MH by'
+
+[22:31] [scene:talk]
+VISUAL: 
+AUDIO: 'itself that design can run anywhere mhm because that\'s what minimalism is sure there work to do like we need to probably make more bindings yeah uh we bind we have a beautiful design that'
+
+[22:43] [scene:talk]
+VISUAL: 
+AUDIO: 'binds to any kind of JS engine Casper made lip JS it\'s called yeah now I said the word lip I\'m GNA check if anybody um um which is really really cool so you can actually make running in actually'
+
+[22:57] [scene:talk]
+VISUAL: 
+AUDIO: 'really low resource environment with a little bit of work but like with the same codes to um so I think that\'s actually one of the things that makes me so exciting about the future because it\'s one of those designs where you can just see where are we right now and'
+
+[23:09] [scene:talk]
+VISUAL: 
+AUDIO: 'where can we go and there\'s actually very few unknowns between there do actually you know this work does always work but like the design is just so good yeah and you don\'t you don\'t see that often I don\'t think um not seen it for'
+
+[23:23] [scene:talk]
+VISUAL: 
+AUDIO: 'years no and we just because we go we we go back uh with JavaScript we talked about this kind of design for ages right um even even the node community in the early days talked about this kind of design uh'
+
+[23:36] [scene:talk]
+VISUAL: 
+AUDIO: 'and then I met Casper at whole punch which is awesome uh and uh Casper talked about the same things also which is kind of like it\'s always interesting when you need somebody who talks about the same thing and then unlike you and me Casper just did'
+
+[23:49] [scene:talk]
+VISUAL: 
+AUDIO: 'it you actually s just fun weekend project yeah exactly was it just a curiosity thing or what was it can can it be done see if it could be done yeah yeah fantastic we should that\'s that\'s'
+
+[24:01] [scene:talk]
+VISUAL: 
+AUDIO: 'how these things go isn\'t it that\'s so awesome uh and I love that and um yeah I love that about just like having this also like a you know work environment where we have that kind of Freedom um to'
+
+[24:13] [scene:talk]
+VISUAL: 
+AUDIO: 'to think about how to solve these hard problems well that\'s actually another interesting thing because like there\'s this sort of like interaction between how whole punches run and the tech that we\'re building you know AKA Conway\'s law'
+
+[24:26] [scene:talk]
+VISUAL: 
+AUDIO: 'etc etc look it up if you don\'t know um but the the thing is is that like that high autonomy for like individuals within the organization like there\'s'
+
+[24:38] [scene:talk]
+VISUAL: 
+AUDIO: 'goal setting and stuff but then it\'s like okay now you go figure that out this uh this sort of way that whole punch is run fully remote and all that fully peer-to-peer like our technology and the way we organize ourselves is'
+
+[24:50] [scene:talk]
+VISUAL: 
+AUDIO: 'interacting in a way that leads to like unbelievably compelling result and it\'s kind of like how have we not as a well the fact is as a species we have been working like that for thousands of years'
+
+[25:03] [scene:talk]
+VISUAL: 
+AUDIO: 'until like the recent like information era yeah right where it was middleman out like and and now I mean I I don\'t know about you but the world feels uncomfortable in that state to meally'
+
+[25:15] [scene:talk]
+VISUAL: 
+AUDIO: 'and so much more so now being part of this organization that\'s very like has a very sort of decentralized approach to to work like we were talking about um'
+
+[25:29] [scene:talk]
+VISUAL: 
+AUDIO: 'stress last night and how the the worst stress is the one where you don\'t feel in control of your life like other types of stress are actually healthy and like you sort of that that type of stress is'
+
+[25:41] [scene:talk]
+VISUAL: 
+AUDIO: 'there to help you like output right and so if you have something to do and you feel like oh I need to I need to like get rid of this stress you can just do that but if you can\'t control it then it gets overwhelming and you get like health issues and all sorts of things'
+
+[25:54] [scene:talk]
+VISUAL: 
+AUDIO: 'and so like that that seems to happen more in in sort of centralized organizations from my experience but within whole punch like it\'s the right kind that you don\'t feel out of control'
+
+[26:07] [scene:talk]
+VISUAL: 
+AUDIO: 'you feel like I\'m I\'m in control of this and I can do something about it and that\'s um extremely powerful for like productivity yeah it\'s a and life just good life it\'s good to it\'s good to have'
+
+[26:20] [scene:talk]
+VISUAL: 
+AUDIO: 'uh smart people that that can that canate things yeah absolutely really fast uh um so so yeah that\'s awesome and the the iteration thing also there\'s no like there\'s no problem if you don\'t get'
+
+[26:33] [scene:talk]
+VISUAL: 
+AUDIO: 'it right because that\'s part of the process right sure and sometimes we think we\'ve got it right and then we go this isn\'t quite right but yeah uh yeah'
+
+[26:45] [scene:talk]
+VISUAL: 
+AUDIO: 'totally and that\'s also I think that\'s reflecting in how we we Mak we Mak make bar made the software it\'s like um really powerful iterative engine took us like five versions or something to get'
+
+[26:58] [scene:talk]
+VISUAL: 
+AUDIO: 'right I think you know small at the very Le stage this was been we\'ve been iterating really heavily and now we\'re just ready to run it everywhere and people should check it out and run it everywhere um because it\'s really fun uh it\'s very easy to work with it\'s very'
+
+[27:13] [scene:talk]
+VISUAL: 
+AUDIO: 'you know I\'m just sitting here thinking there\'s so much stuff we haven\'t talked about that I don\'t even want to talk about because you know it turned into a lecture yeah we\'re trying to talk about bear and I\'m talking about organizational complex uh because kind of like always obvious because committed'
+
+[27:26] [scene:talk]
+VISUAL: 
+AUDIO: 'people and it fits together but I\'m just thinking like you know bear has a freaking killer module system for loading any kind of add-on that\'s insane by itself means you can you know integrate any kind of native thing very'
+
+[27:39] [scene:talk]
+VISUAL: 
+AUDIO: 'easily it\'s not just javascripts you can run your whole freaking thing it\'s almost like an OS I don\'t want to say that it\'s colel andos almost that\'s insane MH boom check right the whole'
+
+[27:51] [scene:talk]
+VISUAL: 
+AUDIO: 'thing where I can use any JS engine underneath like you know sorry interpreter underneath yeah not question of if you can do it it\'s you know a question of which ones should I use for this purpose because node is locked into'
+
+[28:04] [scene:talk]
+VISUAL: 
+AUDIO: 'V8 and V8 is quite like quite a big JavaScript Eng Amazing Project but it\'s not the I don\'t think you can run that on brain chip for no exactly uh but then and then there\'s other projects like Bon or whatever that uses different ones'
+
+[28:17] [scene:talk]
+VISUAL: 
+AUDIO: 'like JS core use different ones and and Casper just decided just how how how does that work though because like it it\'s like super simple right to switch out the JavaScript'
+
+[28:29] [scene:talk]
+VISUAL: 
+AUDIO: 'engine whereas in other projects a little bit more complicated yeah simple in the sense that there\'s an interface between uh you know BS at JavaScript runtime and the underlying JavaScript engine and and so you basically just Implement that interface the underlying'
+
+[28:42] [scene:talk]
+VISUAL: 
+AUDIO: 'engine and we have three implementations already one for B8 which is what we ship in B itself right then we have one for JavaScript core which took a weekend simplement we have one for quick JS as well and quick JS is for like embedded'
+
+[28:54] [scene:talk]
+VISUAL: 
+AUDIO: 'devices and like that we\'re just talking at the conference to somebody about you know running JS in Hardware there there\'s a j interpreter for that yeah oh it\'s like Bings my Bing for that yeah couple of days it\'s kind of like that\'s'
+
+[29:07] [scene:talk]
+VISUAL: 
+AUDIO: 'kind of like the crazy onl where you can just you can just deploy this thing everywhere right and that\'s why we actually are deploying it everywhere uh already even though it\'s a really really new project so we\'re going really crazy it sort of escaped the cage hasn\'t it'
+
+[29:19] [scene:talk]
+VISUAL: 
+AUDIO: 'yeah like going back in the Box yeah it\'s too late and when people learn more about I think they\'re going to be INR to try it and see that it\'s a real thing it\'s not just hype it\'s actually a real thing it\'s a really real thing it\'s is'
+
+[29:31] [scene:talk]
+VISUAL: 
+AUDIO: 'the work probably like the realest of the things we do almost um it\'s G it\'s G to be scary I like to use that word now in a good way in a good way or depends on your perspective and who'
+
+[29:44] [scene:talk]
+VISUAL: 
+AUDIO: 'you are so so yeah it\'s awesome yeah so I think yeah maybe we should end there yeah uh use bear use there\'s going to be documentations in pair pair.com for Bear we\'re to have'
+
+[29:57] [scene:talk]
+VISUAL: 
+AUDIO: 'bear. bears.com was part of fun um it\'s b a r e by the way not b e a r not like ra like like'
+
+[30:09] [scene:talk]
+VISUAL: 
+AUDIO: 'nude bear but the logo is going to be a bear just to make it more fun yeah to make it more fun and confusing for everyone part of it modularity uh how do you do your straty'
+
+[30:23] [scene:talk]
+VISUAL: 
+AUDIO: 'memes uh a lot of word play so that\'s great yeah check it out it\'s really awesome uh I have a lot of fun as a developer doing it actually everybody we talked to had a lot of fun working with it and everybody'
+
+[30:35] [scene:talk]
+VISUAL: 
+AUDIO: 'started using it so it has that secret s so that\'s awesome yeah'
