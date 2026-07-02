@@ -1,0 +1,272 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Krea 2 Image-to-Image Explained | Why It Isn't an Edit Model + Better ComfyUI Workflows
+channel: @octopusinc_
+duration: 15:31
+source: https://www.youtube.com/watch?v=iYuVZqEVUPQ
+upload_date: 20260702
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'It has been a week since Krea 2, a text-to-image&nbsp; model, was released, and I\'ve often seen people&nbsp;&nbsp; trying to use it in an image-to-image workflow. But you can\'t turn Krea 2 into a true&nbsp;&nbsp; image-editing model just by adding a&nbsp; ComfyUI node. The model\'s architecture&nbsp;&nbsp; simply doesn\'t have the pathway required to&nbsp; preserve and modify an existing image. So,&nbsp;&nbsp;'
+
+[00:16] [scene:talk]
+VISUAL: 
+AUDIO: 'no matter what wrapper you build around it, it&nbsp; won\'t function as a real image-editing model.&nbsp; This video is for beginners, and we\'ll look at a&nbsp; few examples of using Krea 2 in an image-to-image&nbsp;&nbsp; workflow to understand what it can actually do&nbsp; and what the best possible results look like.&nbsp;'
+
+[00:32] [scene:talk]
+VISUAL: 
+AUDIO: 'This is the basic text-to-image workflow.&nbsp; The default prompt generates an image that&nbsp;&nbsp; isn\'t really suitable for a YouTube&nbsp; tutorial. This one looks much better.&nbsp;&nbsp; I will use the same image as an example. Now, here\'s a simple image-to-image workflow&nbsp;&nbsp;'
+
+[00:50] [scene:talk]
+VISUAL: 
+AUDIO: 'for the Turbo model. Instead of feeding an empty&nbsp; latent into the KSampler, I first encode the input&nbsp;&nbsp; image using the VAE and then pass that encoded&nbsp; latent to the KSampler as the latent image.&nbsp;'
+
+[01:02] [scene:talk]
+VISUAL: 
+AUDIO: 'My prompt is simple: "She is cooking&nbsp; in the kitchen, anime movie style."&nbsp; The generated image shows a woman cooking in&nbsp; an anime style. However, the character looks&nbsp;&nbsp;'
+
+[01:18] [scene:talk]
+VISUAL: 
+AUDIO: 'different because the model has complete freedom&nbsp; to modify the input latent image. This freedom&nbsp;&nbsp; is controlled by the denoising value. Lowering the denoising value limits how&nbsp;&nbsp; much the model can alter the image, making the&nbsp; result closer to the original input. Even then,&nbsp;&nbsp;'
+
+[01:33] [scene:talk]
+VISUAL: 
+AUDIO: 'our character still isn\'t actually cooking. I tried a few more times with different seed&nbsp;&nbsp; values, and eventually I got a result that was&nbsp; much closer to what I described in the prompt.&nbsp;&nbsp; There are still noticeable&nbsp; differences, but this is about&nbsp;&nbsp;'
+
+[01:50] [scene:talk]
+VISUAL: 
+AUDIO: 'the best you can achieve with this technique. You can also experiment with different styles,&nbsp;&nbsp; such as this stencil style&nbsp; or this paper-craft style.&nbsp; From my testing, the denoising value&nbsp; that works best is between point 6 and&nbsp;&nbsp;'
+
+[02:02] [scene:talk]
+VISUAL: 
+AUDIO: 'point 8. Going above point 8 usually causes the&nbsp; result to drift too far from the original image.&nbsp; Another image-to-image trick I found&nbsp; online uses the Qwen-Image-Edit-Plus node.&nbsp;'
+
+[02:15] [scene:talk]
+VISUAL: 
+AUDIO: 'You can either use the input image encoded as&nbsp; a latent or simply provide an empty latent.&nbsp; In this workflow, the input image&nbsp; is connected to the Edit-Plus node&nbsp;&nbsp; along with the VAE. This means the image is&nbsp; first encoded and then used to influence the&nbsp;&nbsp;'
+
+[02:29] [scene:talk]
+VISUAL: 
+AUDIO: 'generation process by acting as an additional&nbsp; conditioning input alongside the text prompt. I\'ll use the same prompt and run the workflow. The generated image is almost identical to the&nbsp;&nbsp;'
+
+[02:41] [scene:talk]
+VISUAL: 
+AUDIO: 'input image. In this case, the generation is&nbsp; heavily constrained by the reference image.&nbsp; It\'s actually better to provide an empty&nbsp; latent and let the model generate freely&nbsp;&nbsp;'
+
+[02:53] [scene:talk]
+VISUAL: 
+AUDIO: 'while keeping the denoising value at 1.0. With this approach, I get a slight paper-craft&nbsp;&nbsp; effect along with a few other changes. Notice&nbsp; that I never asked the character to put her&nbsp;&nbsp;'
+
+[03:06] [scene:talk]
+VISUAL: 
+AUDIO: 'finger near her chin, yet that detail was carried&nbsp; over from the reference image. On the other hand,&nbsp;&nbsp; I did ask for a paper-craft style in the&nbsp; prompt, but it only had a subtle influence.&nbsp;'
+
+[03:18] [scene:talk]
+VISUAL: 
+AUDIO: 'Now, if I replace the reference image with the&nbsp; paper-craft style image that I generated earlier&nbsp;&nbsp; and remove the "paper-craft style" part from&nbsp; the prompt, the output changes significantly.&nbsp;&nbsp; The difference is much larger, and the&nbsp; finger-near-the-chin pose is no longer present.&nbsp;'
+
+[03:36] [scene:talk]
+VISUAL: 
+AUDIO: 'By looking at this workflow, we can see that the&nbsp; prompt, the reference image, and the VAE-encoded&nbsp;&nbsp; latent are all sent to the KSampler. However,&nbsp; Krea 2 completely ignores the VAE latent.&nbsp;'
+
+[03:48] [scene:talk]
+VISUAL: 
+AUDIO: 'Krea\'s DIT only accepts the text tokens and the&nbsp; noisy image patches. The noisy image patches can&nbsp;&nbsp; come from either the encoded image or an&nbsp; empty latent, depending on the workflow.&nbsp;&nbsp;'
+
+[04:00] [scene:talk]
+VISUAL: 
+AUDIO: 'There is no pathway for a reference latent.&nbsp; So, even if a node outputs a reference latent,&nbsp;&nbsp; Krea simply ignores it because the model&nbsp; was never designed to perform image editing.&nbsp; We did observe the effect of providing a reference&nbsp; image, but we should also look at the model loaded&nbsp;&nbsp;'
+
+[04:16] [scene:talk]
+VISUAL: 
+AUDIO: 'by the CLIP Loader. The file being loaded&nbsp; is actually a Vision Language Model (VLM).&nbsp; The reference image is passed through the VLM,&nbsp; which generates a description similar to this:&nbsp; "Portrait of an anime schoolgirl with long dark&nbsp; hair, wearing a white shirt, a dark blue dress,&nbsp;&nbsp;'
+
+[04:32] [scene:talk]
+VISUAL: 
+AUDIO: 'and a red ribbon, touching her lips with one&nbsp; finger against a simple white background."&nbsp; This generated description is then&nbsp; combined with your text prompt.&nbsp; So, the process works something&nbsp; like this: the reference image is&nbsp;&nbsp;'
+
+[04:47] [scene:talk]
+VISUAL: 
+AUDIO: 'analyzed by the Vision Language Model,&nbsp; which produces a text description.&nbsp;&nbsp; That description is combined with your prompt,&nbsp; and Krea 2 then generates an entirely new image.&nbsp; That\'s why my prompt asking for a paper-craft&nbsp; style had less influence than the VLM\'s&nbsp;&nbsp;'
+
+[05:01] [scene:talk]
+VISUAL: 
+AUDIO: 'description mentioning "touching her&nbsp; lips with one finger." The model is&nbsp;&nbsp; following the combined text description&nbsp; rather than editing the original image.&nbsp; In this workflow, the VAE isn\'t responsible&nbsp; for preserving the reference image. It doesn\'t&nbsp;&nbsp;'
+
+[05:16] [scene:talk]
+VISUAL: 
+AUDIO: 'contribute to the image-editing behavior,&nbsp; and its presence can give the misleading&nbsp;&nbsp; impression that Krea 2 is performing true&nbsp; image-to-image editing when it actually isn\'t.&nbsp; I came across a couple of custom nodes that are&nbsp; designed to address this limitation. Instead of&nbsp;&nbsp;'
+
+[05:33] [scene:talk]
+VISUAL: 
+AUDIO: 'trying to perform true image editing, they&nbsp; make better use of the Vision Language Model&nbsp;&nbsp; by converting the reference image into&nbsp; text-like conditioning. This allows Krea&nbsp;&nbsp; 2 to generate a new image that is inspired by&nbsp; the reference rather than directly editing it.&nbsp;'
+
+[05:50] [scene:talk]
+VISUAL: 
+AUDIO: 'I installed both custom nodes using the git&nbsp; clone command to see how well they work.&nbsp; I\'ll replace the Qwen-Edit-Plus node&nbsp; with the Krea-2-Text-Encoder node.&nbsp;&nbsp;'
+
+[06:03] [scene:talk]
+VISUAL: 
+AUDIO: 'There\'s also an option to provide a mask,&nbsp; which we\'ll look at later in the video.&nbsp; Now I\'ll use the same prompt&nbsp; and see what result we get.&nbsp;'
+
+[06:16] [scene:talk]
+VISUAL: 
+AUDIO: 'The generated image is quite similar&nbsp; to the previous result, and the reason&nbsp;&nbsp; could be this Vision Megapixels setting. The Vision Megapixels value limits the size&nbsp;&nbsp; of the input image before it\'s passed to the&nbsp; Vision Language Model for image description.&nbsp;'
+
+[06:30] [scene:talk]
+VISUAL: 
+AUDIO: 'When the input image is large, it dominates&nbsp; the text conditioning. Internally, the VLM&nbsp;&nbsp; may generate a very detailed description of the&nbsp; image, in comparison to my prompt shown below.&nbsp; Because the visual description is so rich,&nbsp; it can easily overpower the text prompt.&nbsp;'
+
+[06:47] [scene:talk]
+VISUAL: 
+AUDIO: 'I\'ll reduce the Vision Megapixels value as&nbsp; much as possible and run the workflow again.&nbsp; Now the generated image is much more acceptable. We\'ll come back to the Mask&nbsp;&nbsp;'
+
+[06:59] [scene:talk]
+VISUAL: 
+AUDIO: 'Padding option later in the video. Below that is the Vision Position setting,&nbsp;&nbsp; it controls how the original prompt&nbsp; and the VLM-generated description&nbsp;&nbsp; are arranged before being sent to the model. The last option is for printing the prompt to the&nbsp;&nbsp;'
+
+[07:13] [scene:talk]
+VISUAL: 
+AUDIO: 'program\'s console, which is useful for debugging&nbsp; and shouldn\'t affect the generation process.&nbsp; The Vision Position setting, however, has&nbsp; a noticeable impact on the generated image,&nbsp;&nbsp;'
+
+[07:28] [scene:talk]
+VISUAL: 
+AUDIO: 'so I recommend trying both options to see&nbsp; which one works better for your use case.&nbsp; Now let\'s take a quick look at the Mask feature. I\'ll select only the character\'s face. This should&nbsp;&nbsp; allow the Vision Language Model to extract&nbsp; details about the subject, such as the fact&nbsp;&nbsp;'
+
+[07:43] [scene:talk]
+VISUAL: 
+AUDIO: 'that it\'s an anime character with dark hair&nbsp; who is touching her lips with one finger.&nbsp; I\'ll save the mask, add the Preview Mask node,&nbsp; connect everything, and run the workflow.&nbsp; The newly generated image is based on the&nbsp; information extracted from the selected region.&nbsp;&nbsp;'
+
+[08:02] [scene:talk]
+VISUAL: 
+AUDIO: 'So, this isn\'t inpainting—it\'s simply using&nbsp; the masked area as the source of visual&nbsp;&nbsp; information for the Vision Language Model. If I increase the Mask Padding value,&nbsp;&nbsp; the area around the mask is also included,&nbsp; allowing the Vision Language Model to extract&nbsp;&nbsp;'
+
+[08:16] [scene:talk]
+VISUAL: 
+AUDIO: 'more information about the subject. A padding value of 0.30 was too large,&nbsp;&nbsp; so I experimented with a few different values. At 0.07, the model is able to capture details like&nbsp;&nbsp;'
+
+[08:28] [scene:talk]
+VISUAL: 
+AUDIO: 'the red ribbon and the dark blue school uniform. There\'s also an optional node that can be&nbsp;&nbsp; used with the Krea-2-Text-Encoder. This node lets you provide your own&nbsp;&nbsp;'
+
+[08:40] [scene:talk]
+VISUAL: 
+AUDIO: 'instruction, overriding the default instruction&nbsp; that\'s sent to the Vision Language Model.&nbsp; The second custom node I mentioned&nbsp; earlier is Conditioning Rebalance.&nbsp;'
+
+[08:53] [scene:talk]
+VISUAL: 
+AUDIO: 'You can download the workflow&nbsp; directly from its repository.&nbsp; This is the same workflow you just saw. It looks a&nbsp; little different because I\'ve opened the subgraph.&nbsp; I tested it with three reference&nbsp; images, and in my experience,&nbsp;&nbsp;'
+
+[09:08] [scene:talk]
+VISUAL: 
+AUDIO: 'using two images produced better results. I also added a background removal node&nbsp;&nbsp; because the other reference image&nbsp; has a plain white background.&nbsp; The character\'s identity still&nbsp; won\'t remain perfectly consistent,&nbsp;&nbsp;'
+
+[09:22] [scene:talk]
+VISUAL: 
+AUDIO: 'but if you describe the body and clothing&nbsp; clearly in the text prompt, those attributes&nbsp;&nbsp; can be preserved much more reliably. Overall, this node did a good job of&nbsp;&nbsp; preserving the character\'s identity—I\'d estimate&nbsp; it was around 75% consistent with the reference.&nbsp;'
+
+[09:35] [scene:talk]
+VISUAL: 
+AUDIO: 'Now let\'s look at what else can be done to gain&nbsp; more control over this text-to-image model. The current pipeline works roughly like this:&nbsp;&nbsp;'
+
+[09:47] [scene:talk]
+VISUAL: 
+AUDIO: 'the prompt is processed by the Qwen3-VL Text&nbsp; Encoder, which produces the text embeddings.&nbsp;&nbsp; Those embeddings are then passed to the DIT&nbsp; denoiser, which generates the final image. Another possibility is to provide an additional&nbsp; conditioning signal during every denoising step.'
+
+[10:03] [scene:talk]
+VISUAL: 
+AUDIO: 'For example, instead of only guiding the model&nbsp; with the prompt, "a woman wearing a red jacket,"&nbsp;&nbsp; we could also provide a ControlNet that says,&nbsp; "Follow this pose," or "Use this DW Pose." Now the question is: Can Krea 2 use a ControlNet?'
+
+[10:20] [scene:talk]
+VISUAL: 
+AUDIO: 'In principle, yes—but only if a ControlNet&nbsp; were trained specifically for Krea 2. If such a model were developed, it&nbsp; would also need to be integrated&nbsp;&nbsp; into Krea 2\'s inference pipeline. During sampling,&nbsp;&nbsp;'
+
+[10:32] [scene:talk]
+VISUAL: 
+AUDIO: 'the DIT denoiser would have to consume the&nbsp; ControlNet features at every denoising step,&nbsp;&nbsp; allowing the additional conditioning to guide the&nbsp; image generation throughout the entire process. The workflow we\'re using for the Krea 2 model uses&nbsp; the Qwen-Image VAE, for encoding and decoding.'
+
+[10:47] [scene:talk]
+VISUAL: 
+AUDIO: 'And qwen has released multiple&nbsp; ControlNet models in the past,&nbsp;&nbsp; so I decided to try a few of the workflows&nbsp; available in the Comfy UI templates. This Qwen-Image InstantX ControlNet Union&nbsp; supports several conditioning types,&nbsp;&nbsp;'
+
+[11:03] [scene:talk]
+VISUAL: 
+AUDIO: 'including Depth Map, DW Pose,&nbsp; Canny Edge, and a few others. Let\'s try adding it on top of&nbsp; the default Krea 2 workflow.&nbsp;&nbsp; I\'ll organize the nodes first&nbsp; and then run the workflow.'
+
+[11:15] [scene:talk]
+VISUAL: 
+AUDIO: 'This is where the ControlNet is&nbsp; inserted into the pipeline. It&nbsp;&nbsp; becomes an additional conditioning input after&nbsp; the positive and negative prompt conditioning. On the left, the InstantX ControlNet&nbsp; safetensors model is loaded,&nbsp;&nbsp;'
+
+[11:28] [scene:talk]
+VISUAL: 
+AUDIO: 'along with the Qwen-Image VAE, which&nbsp; is used to encode the DW Pose input. I\'m also using the 4-step Lightning LoRA,&nbsp; which speeds up image generation considerably. The generated image is larger than 1024 pixels,&nbsp;&nbsp;'
+
+[11:44] [scene:talk]
+VISUAL: 
+AUDIO: 'but that\'s not a problem because Krea 2 can&nbsp; handle resolutions higher than 1024 pixels. To keep it simple, I\'ll use the same&nbsp;&nbsp; default prompt provided in the&nbsp; template for both workflows.'
+
+[11:57] [scene:talk]
+VISUAL: 
+AUDIO: 'Now I\'ll replace the standard KSampler&nbsp; with the KSampler Advanced node,&nbsp;&nbsp; which we previously used&nbsp; with the Wan video models. The idea is to split the total inference&nbsp; steps between the two workflows. I\'ll let&nbsp;&nbsp; the Qwen workflow perform the first&nbsp; few denoising steps and then pass&nbsp;&nbsp;'
+
+[12:14] [scene:talk]
+VISUAL: 
+AUDIO: 'the partially denoised latent image to the&nbsp; Krea 2 workflow to finish the generation. Krea 2 normally uses 8 inference steps, so&nbsp; I\'ll stop the Qwen workflow after 2 steps. I\'ll make the connections quickly and preview the&nbsp; partially denoised latent after those two steps.'
+
+[12:30] [scene:talk]
+VISUAL: 
+AUDIO: 'That same latent will then be&nbsp; passed to the workflow below. Krea 2 will perform the remaining inference&nbsp; steps, and once the denoising is complete,&nbsp;&nbsp; the final latent will be decoded in the&nbsp; second workflow. That\'s all there is to it.'
+
+[12:46] [scene:talk]
+VISUAL: 
+AUDIO: 'First, I\'ll run the Qwen workflow&nbsp; for 2 steps, and this is the result. In the second workflow, the&nbsp; total number of steps is still 8.&nbsp;&nbsp;'
+
+[12:58] [scene:talk]
+VISUAL: 
+AUDIO: 'The KSampler Advanced begins from step 2 and&nbsp; continues until all 8 steps are completed. That means Krea 2 is now performing&nbsp; the remaining 6 denoising steps. And this is the final result.'
+
+[13:13] [scene:talk]
+VISUAL: 
+AUDIO: 'The character is still pointing&nbsp; her finger at her lips,&nbsp;&nbsp; but overall the result is somewhat acceptable. Next, I downloaded a different pose from&nbsp; the internet and tried the workflow again. The image generated by Krea 2&nbsp; didn\'t follow the pose very well.'
+
+[13:31] [scene:talk]
+VISUAL: 
+AUDIO: 'I\'ll increase the number of inference&nbsp; steps performed by the Qwen model to 3,&nbsp;&nbsp; leaving the remaining 5 steps for Krea 2. It looks like the additional Qwen step pushed&nbsp; the generation closer to the desired pose,&nbsp;&nbsp;'
+
+[13:50] [scene:talk]
+VISUAL: 
+AUDIO: 'but Krea 2 still insisted on bringing back the&nbsp; finger-pointing pose from its own interpretation. I decided to replace the **Krea-2-Text-Encoder**&nbsp; with the **Conditioning Rebalance** node because,&nbsp;&nbsp;'
+
+[14:03] [scene:talk]
+VISUAL: 
+AUDIO: 'as we saw earlier, it offers a few advantages. I also wrote a more detailed&nbsp; prompt describing our subject,&nbsp;&nbsp; while keeping the **image token** value low.'
+
+[14:16] [scene:talk]
+VISUAL: 
+AUDIO: 'I will make the connection&nbsp; quickly and then run the workflow. The generated image is much&nbsp; closer to what I expected,&nbsp;&nbsp; and I think the result is quite acceptable.'
+
+[14:28] [scene:talk]
+VISUAL: 
+AUDIO: 'With this type of workflow, the character\'s&nbsp; body pose becomes much easier to control,&nbsp;&nbsp; provided you describe it clearly in the prompt. This approach lets you take&nbsp; advantage of Krea 2\'s image quality,&nbsp;&nbsp; but maintaining a consistent character from a&nbsp;&nbsp;'
+
+[14:42] [scene:talk]
+VISUAL: 
+AUDIO: 'single reference image still doesn\'t seem&nbsp; possible unless you use a character LoRA. You can also use the **Qwen-Image&nbsp; Edit Plus** text encoder in the first&nbsp;&nbsp; workflow to combine the character\'s&nbsp; identity and the desired pose. Then,&nbsp;&nbsp;'
+
+[14:55] [scene:talk]
+VISUAL: 
+AUDIO: 'pass the partially denoised latent into the&nbsp; second workflow so Krea 2 can preserve the&nbsp;&nbsp; lighting, composition, and overall visual&nbsp; quality while completing the generation. So, that\'s it for this video.'
+
+[15:11] [scene:talk]
+VISUAL: 
+AUDIO: 'Let me know in the comments if you found&nbsp; this video interesting or informative. If&nbsp;&nbsp; you have any questions or if you\'ve discovered&nbsp; a better workflow, I\'d love to hear about it. You\'ll find all of the workflows used&nbsp; in this video in the description below.'
+
+[15:23] [scene:talk]
+VISUAL: 
+AUDIO: 'Thanks for watching, and I&nbsp; wish you an excellent day!'

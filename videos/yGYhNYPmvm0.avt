@@ -1,0 +1,320 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: This Workflow Puts Your AI Influencer in Real Life Locations With No "AI Slop"
+channel: @octopusinc_
+duration: 16:10
+source: https://www.youtube.com/watch?v=yGYhNYPmvm0
+upload_date: 20260618
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'What\'s up, everybody? Lorteach here with another video for you guys. I spent the last 2 days creating and refining this in-painting workflow you see on screen here, and it\'s finally perfect. We\'re talking automatic masking, face and eye detail passes, and optional'
+
+[00:14] [scene:talk]
+VISUAL: 
+AUDIO: 'enhancement step that cleans up the seams, feathers our in-painted masks, and makes our final product look completely seamless. I\'m going to quickly walk you through grabbing the models, then break down'
+
+[00:26] [scene:talk]
+VISUAL: 
+AUDIO: 'exactly what every node is doing. Well, not every node, but most of the nodes, the important ones at least. And which settings to touch if your results don\'t match mine. So, let\'s get right into it. If you\'re wondering where you can find'
+
+[00:39] [scene:talk]
+VISUAL: 
+AUDIO: 'this workflow, it is available in my Discord for completely free in the free workflow section. So, just head to the description of this video and join my Discord, and you\'ll be able to find this workflow and a bunch more that I have'
+
+[00:51] [scene:talk]
+VISUAL: 
+AUDIO: 'made for my community there. While we\'re at it, I am going to humbly ask all of you to please, if you like the video, like the video, and if you want, subscribe to my channel because I'
+
+[01:04] [scene:talk]
+VISUAL: 
+AUDIO: 'release videos like this all the time. I\'m also doing a series currently where I teach people how to create workflows from scratch and explain every process and node addition as we go along. It\'s called Build With Me. You can find it on'
+
+[01:18] [scene:talk]
+VISUAL: 
+AUDIO: 'my YouTube channel. Go check it out if you\'re interested. All right, before we touch a single node, let\'s get the models sorted. I split the downloads into three notes that are embedded in the workflow, so you\'re not stuck scrolling through one giant wall of'
+
+[01:31] [scene:talk]
+VISUAL: 
+AUDIO: 'links. If you\'re comfortable in a terminal, every node has a Wget command that you can copy and paste straight in, and it\'ll grab the file for you. But if you\'d rather not touch the command line'
+
+[01:43] [scene:talk]
+VISUAL: 
+AUDIO: 'at all, every model name is also a clickable link right above the code block. All you got to do is click it, your browser will download it normally, and you just drag the file right into ComfyUI\'s model folder yourself. Both'
+
+[01:56] [scene:talk]
+VISUAL: 
+AUDIO: 'ways, you get the same file, so whichever you\'re comfortable with. So, note one covers the core Z image turbo stuff. So, you\'ll notice here, there\'s a clickable link, which is the download'
+
+[02:09] [scene:talk]
+VISUAL: 
+AUDIO: 'link if you want to manually add them to your ComfyUI directory folders yourself. It also has the directory here if you\'re doing that. And if you just want to use the terminal, here are the Wget commands that you can just paste into your'
+
+[02:22] [scene:talk]
+VISUAL: 
+AUDIO: 'terminal and it will navigate to the directory and download each of these models for you. There\'s the diffusion model, its text encoder, the VAE, plus the SAM model, and detector that'
+
+[02:34] [scene:talk]
+VISUAL: 
+AUDIO: 'handle the masking. On the other side of the workflow, there\'s note two. This is just the detailer models, the face detector, the eye detector, and the SAM model they share. Make sure you get these. If you don\'t'
+
+[02:47] [scene:talk]
+VISUAL: 
+AUDIO: 'want to download these, this is this is optional, but I do I do recommend it. But if you don\'t want to, you can just control drag and bypass these with control B on your keyboard if you if you don\'t want these. Now, to the bottom left of the'
+
+[03:00] [scene:talk]
+VISUAL: 
+AUDIO: 'workflow, there is note three, which covers the optional flux two client mask enhancement pass at the end. There\'s the diffusion model, text encoder, and VAE. This is also optional and it\'s bypassed'
+
+[03:12] [scene:talk]
+VISUAL: 
+AUDIO: 'by default when you will be loading this workflow up for the first time. But, I heavily heavily recommend grabbing these and running this mask enhancement. The pass makes a real'
+
+[03:24] [scene:talk]
+VISUAL: 
+AUDIO: 'difference in cleaning up the final result. Just a quick side note, if you\'re not familiar with fluxes models, uh flux models are gated on Hugging Face, so you\'ll need a free Hugging Face account. You need to accept the license'
+
+[03:38] [scene:talk]
+VISUAL: 
+AUDIO: 'on the model page. You\'ll have to navigate to your settings and generate your own access token after granting access to the model. And one last thing on the gated model specifically, if you look at the Wget command for it, you\'ll'
+
+[03:50] [scene:talk]
+VISUAL: 
+AUDIO: 'notice it\'s got a placeholder built into it. Where your hugging face token, which is highlighted on screen, will just have to be replaced with your token once you allow access to the'
+
+[04:02] [scene:talk]
+VISUAL: 
+AUDIO: 'model. So, you just delete the placeholder text, your HF token, and paste your real hugging face token in its place. Make sure that you keep it inside of the quotes right after bearer. After installing all of the models, if you'
+
+[04:15] [scene:talk]
+VISUAL: 
+AUDIO: 'didn\'t have all of them installed already before watching this video, just make sure that you go through the model loading section and have all of the proper models that you see on screen here selected within each of their'
+
+[04:27] [scene:talk]
+VISUAL: 
+AUDIO: 'respective nodes. So, this is the core workflow. All you really have to do is put in a reference photo in the load image node in the middle of the screen here, and it\'ll mask the person by default, but you can use other detector'
+
+[04:40] [scene:talk]
+VISUAL: 
+AUDIO: 'models to mask other areas of a person such as hair, face, eyes, and so on if that\'s the only thing that you are wanting to mask. But, by default, I use a person detector, so it just detects'
+
+[04:55] [scene:talk]
+VISUAL: 
+AUDIO: 'one person, and then after masking and replacing the person that is selected by the detector model, it will replace it with either a Laura that you have selected'
+
+[05:08] [scene:talk]
+VISUAL: 
+AUDIO: 'from the load Laura node here, or if you don\'t have a Laura, you will just need to prompt. You\'ll see here I just have a little note. Prompting is not very necessary for this workflow if you use a'
+
+[05:20] [scene:talk]
+VISUAL: 
+AUDIO: 'Laura, but if it struggles to generate your person properly, you can describe as much as you\'d like from physical attributes to props and attire. If you do not use a Laura, you will need to prompt how the person looks at the very least.'
+
+[05:33] [scene:talk]
+VISUAL: 
+AUDIO: 'Otherwise, it will just mask the person that is in the original reference photo and just create any random person that it thinks up because you\'re not really describing'
+
+[05:45] [scene:talk]
+VISUAL: 
+AUDIO: 'anything or guiding the workflow in any specific way. You can guide the size of the image with this node on screen that I\'m hovering with my cursor right now. This resizes images by the longer side.'
+
+[05:57] [scene:talk]
+VISUAL: 
+AUDIO: 'So, let\'s say that you have an image, a base reference photo, that is 1080 pixels as the longer side. So, let\'s say height, for example. This will keep the same exact aspect ratio of the original'
+
+[06:09] [scene:talk]
+VISUAL: 
+AUDIO: 'photo, but it will upscale it to 1600 pixels instead of 1080. It\'s very important that you keep the original aspect ratio that your reference photo uses. Otherwise, the'
+
+[06:22] [scene:talk]
+VISUAL: 
+AUDIO: 'mask will not properly be stitched onto the reference photo. So, all that really happens after running the workflow is the YOLO detector model will find a bounding box'
+
+[06:35] [scene:talk]
+VISUAL: 
+AUDIO: 'around anything labeled person. That detection gets run through this node right here. I have it minimized by default, but I\'m just going to open it.'
+
+[06:47] [scene:talk]
+VISUAL: 
+AUDIO: 'If it will let me. I think it\'s because it\'s pinned. Yeah. So, all of these nodes here, for the most part, you really don\'t need to'
+
+[06:59] [scene:talk]
+VISUAL: 
+AUDIO: 'worry about. I have tweaked and fine-tuned the settings in all of them to the most ideal settings for almost every situation. But, if you\'re using a reference photo where the person is really, really small, like very far in'
+
+[07:12] [scene:talk]
+VISUAL: 
+AUDIO: 'the background or something like that, you\'ll have to change the minimum value in this node right here to zero. The reason that I have it set to 150,000 right now is because let\'s say you have'
+
+[07:25] [scene:talk]
+VISUAL: 
+AUDIO: 'a reference photo of somebody in a crowded area. There\'s a bunch of people behind them, right? Well, if you have this value set to zero, it will detect every single person'
+
+[07:37] [scene:talk]
+VISUAL: 
+AUDIO: 'within that image. And you don\'t want to do that because then everybody will be getting replaced with whatever you prompt or whatever Laura you have selected. When you set the value to 150,000,'
+
+[07:49] [scene:talk]
+VISUAL: 
+AUDIO: 'it selects the person that is the most close to the camera or center focused. So, that way you\'re only detecting one person. Aside from this node though, there\'s not much to worry about here. Moving over to'
+
+[08:02] [scene:talk]
+VISUAL: 
+AUDIO: 'the in paint crop and K sampler section here, by default I have it set to six steps, a CFG of one, and res 2S is the sampler.'
+
+[08:14] [scene:talk]
+VISUAL: 
+AUDIO: 'The denoise value I use around 0.6 to 0.7. That denoise value is your main creative dial. If you lower it too much, the original image will barely be changed. But if you raise it or keep it'
+
+[08:27] [scene:talk]
+VISUAL: 
+AUDIO: 'around where I have it currently, it will replace the in painted person with your Laura or whatever you have prompted. If you go too high, it will'
+
+[08:39] [scene:talk]
+VISUAL: 
+AUDIO: 'still replace the person in the original reference photo, but it will probably imagine a bit too much and put them in clothes that don\'t resemble the original reference photo at all.'
+
+[08:52] [scene:talk]
+VISUAL: 
+AUDIO: 'Or something like that. After the workflow runs through the K sampler, it then in paints, it crops, it stitches to the original reference photo\'s background, and then it just runs through the face detailer and the'
+
+[09:04] [scene:talk]
+VISUAL: 
+AUDIO: 'eye detailer, and you get your output. So, I would like to bring your attention towards this reference photo that I\'m going to be using. Normally, if I were to run this'
+
+[09:16] [scene:talk]
+VISUAL: 
+AUDIO: 'reference photo through a image to image workflow, it would probably give me a decent result, but the reason that in painting is so valuable is because there are sometimes where you don\'t want to change the'
+
+[09:29] [scene:talk]
+VISUAL: 
+AUDIO: 'entire photo. For example, if I run this through an image to image workflow, it will probably just replace the word Coca-Cola with gibberish and the word Fanta with gibberish and all of these brands and'
+
+[09:42] [scene:talk]
+VISUAL: 
+AUDIO: 'logos and fonts will just get reimagined to the point where it just looks like AI slop. So, when there are people in the background that you want to keep because it looks natural and not AI-like'
+
+[09:56] [scene:talk]
+VISUAL: 
+AUDIO: 'or there\'s brands, logos, text, signs, or whatever it may be that you\'re wishing to preserve, that is where this workflow is great. So, I\'ve just ran the workflow using our reference photo and a'
+
+[10:10] [scene:talk]
+VISUAL: 
+AUDIO: 'Laura that that I have selected. It\'s just a random Laura that I downloaded from Civit AI, but it gets the point across. And you\'ll see here that we have an output.'
+
+[10:23] [scene:talk]
+VISUAL: 
+AUDIO: 'Looks pretty good. The character has been replaced. The inpaint did very good at preserving detail with the edges being very crisp. But you\'ll notice that sometimes there'
+
+[10:36] [scene:talk]
+VISUAL: 
+AUDIO: 'will be things like the artifacting with clothing where maybe it\'s very jagged or a little bit see-through, but I will get into the enhancement part of the workflow that I recommended earlier,'
+
+[10:48] [scene:talk]
+VISUAL: 
+AUDIO: 'which is here, just bypassed, if you look down here, and that fixes most all of those things. There\'s also a mask preview here so that you can see exactly what is'
+
+[11:00] [scene:talk]
+VISUAL: 
+AUDIO: 'getting inpainted. Let\'s move down to the flux mask enhancement. I highly highly recommend that you enable these nodes and download the models and use this. I\'m going to show you guys a few'
+
+[11:14] [scene:talk]
+VISUAL: 
+AUDIO: 'more examples using different reference photos with this workflow, but first let\'s go through the flux mask enhancement. So, I am just going to control drag and control B'
+
+[11:27] [scene:talk]
+VISUAL: 
+AUDIO: 'and un-bypass all these nodes. So, the structure of the flux mask enhancement is pretty straightforward. The main driving force of this portion of the workflow is the prompting, though. I\'m going to expand this prompt node'
+
+[11:39] [scene:talk]
+VISUAL: 
+AUDIO: 'momentarily, so that we can analyze the prompt. So, you\'ll notice that there is a lot of preservation here. So, we\'re keeping the subject pose, background, composition, and colors'
+
+[11:52] [scene:talk]
+VISUAL: 
+AUDIO: 'exactly the same as the original image, but we are blending the edges of the in-painted person into the surrounding background. So, we\'re softening any hard or rough boundary lines, matching the color'
+
+[12:05] [scene:talk]
+VISUAL: 
+AUDIO: 'temperature, and so on. You guys get the point. So, after running the workflow with the flux mask enhancer enabled, you\'ll see that all of the edges are a lot cleaner, the quality of the photo is'
+
+[12:17] [scene:talk]
+VISUAL: 
+AUDIO: 'a lot better, it has less of that grainy look that it had originally, and it just cleans up the edges and pixels a lot better. So, here\'s an example that I\'m going to use for a second generation'
+
+[12:30] [scene:talk]
+VISUAL: 
+AUDIO: 'test. In this image, you\'ll notice things like there\'s a 43 on the car there. I\'m not sure why, but um I\'m guessing this is some sort of like Ferrari car show. Another thing that'
+
+[12:42] [scene:talk]
+VISUAL: 
+AUDIO: 'you\'ll notice here is the license plate clearly has actual numbers and letters, and we want all of that to be maintained throughout our generation, whereas if we'
+
+[12:54] [scene:talk]
+VISUAL: 
+AUDIO: 'use an image-to-image workflow, the background will get regenerated, and most likely in busy situations like this in a reference photo, things are going to become AI slopified.'
+
+[13:07] [scene:talk]
+VISUAL: 
+AUDIO: 'So, like people in the background will start to look weird, their faces will get all morphed, and you name it. Stuff like that. So, I\'m going to run this, and we\'re going to see how it looks. So, the generation is finished, and it'
+
+[13:20] [scene:talk]
+VISUAL: 
+AUDIO: 'actually gives me a few good examples of things that I can use to call back to what I mentioned previously. So, first things first, you\'ll notice that there\'s like 20 people in the background here, but the mask preview is showing that'
+
+[13:34] [scene:talk]
+VISUAL: 
+AUDIO: 'it\'s only masked our our targeted character, right? So, that\'s exactly what we want. We don\'t want everybody in the background to be getting masked. Now, another thing is that the woman in the reference photo has very bright'
+
+[13:46] [scene:talk]
+VISUAL: 
+AUDIO: 'blonde hair. So, what happened was, and this is before the flux enhancement, so I will show you that in a minute, but just looking at the base Z image turbo generation, what happened was obviously,'
+
+[13:59] [scene:talk]
+VISUAL: 
+AUDIO: 'since she has very bright blonde hair, it kind of made our Laura have blonde hair as well. But, that can be influenced by changing the D noise value in our K sampler. If'
+
+[14:11] [scene:talk]
+VISUAL: 
+AUDIO: 'we go up in D noise in the K sampler, then the results will obviously sway more towards our Laura and prompt. But, since I had to D noise at 0.63, I guess that\'s a bit too low when trying to make'
+
+[14:23] [scene:talk]
+VISUAL: 
+AUDIO: 'drastic changes, like going from bright blonde hair to dark brown or black. But, let\'s go down to our finished product with the flux enhancement. So, on the left-hand side here is the pre-processed'
+
+[14:37] [scene:talk]
+VISUAL: 
+AUDIO: 'image that Z image turbo came up with, which looks good, but you\'ll notice with the flux enhancement, things like her dress strap here, they\'re slightly'
+
+[14:49] [scene:talk]
+VISUAL: 
+AUDIO: 'pixelated with jagged edges from the Z image turbo output, but with the flux enhancement, it fixes all of that. Also, pay attention to the side of her arm here where there\'s kind of like a almost'
+
+[15:01] [scene:talk]
+VISUAL: 
+AUDIO: 'invisible looking aspect to it, artifacting going on there. That gets fixed as well, and you\'ll notice things like that get fixed with this flux enhancement add-on here. So, that\'s why'
+
+[15:14] [scene:talk]
+VISUAL: 
+AUDIO: 'I recommend it so heavily, and it just creates a slightly better quality overall with the image, kind of cleans up the pixels in the background a lot as well, which is built in the prompt. And I\'m sure it goes without mentioning, but'
+
+[15:27] [scene:talk]
+VISUAL: 
+AUDIO: 'obviously, you know, our license plate number has remained the same. The 43 on the car did not get changed or anything like that. And everything in the background is the same as the reference photo. All right, guys. Well, that pretty much wraps up this video. If you'
+
+[15:39] [scene:talk]
+VISUAL: 
+AUDIO: 'are interested in this workflow, like I said, link to my Discord is available in the description. Just head over there and you\'ll be able to find the workflow in the free workflow section in the Discord. I also offer help to people in'
+
+[15:51] [scene:talk]
+VISUAL: 
+AUDIO: 'my Discord. Tons of people come in, ask questions. If you have any yourself, come in and I will assist you the best I can. If you like the video, like the video, subscribe, and I will see you'
+
+[16:03] [scene:talk]
+VISUAL: 
+AUDIO: 'guys next time. Build With Me episode 3 coming out in a couple days. Peace.'
