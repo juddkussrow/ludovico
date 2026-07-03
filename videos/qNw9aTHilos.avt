@@ -1,0 +1,208 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: I’m Running Docker Apps Differently Now
+channel: @octopusinc_
+duration: 11:53
+source: https://www.youtube.com/watch?v=qNw9aTHilos
+upload_date: 20260702
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:ui]
+VISUAL: Tailscale documentation page showing "Tailscale Services" setup.
+AUDIO: 'Late last year we released Tailscale Services, a way to give logical resources in your network their own virtual Tailscale IP and port. That meant a service was no longer tied to just one machine. It could now point at one node or multiple nodes or even move between nodes over time without changing the MagicDNS name that your clients had to use. Now if that sounds a little bit like a'
+
+[00:17] [scene:talk]
+VISUAL: 
+AUDIO: 'load balancer you\'re kind of sort of in the right ballpark because in practice Tailscale Services can replace a lot of the traditional or cloud load balancer infrastructure that people normally reach for especially inside your private tailnet network in the original announcement video though I promised'
+
+[00:33] [scene:ui]
+VISUAL: DockTail documentation page, specifically the "Installation" section with Docker commands.
+AUDIO: 'a follow-up on using Tailscale Services with Docker and this video is that follow-up. Today I\'m going to show you DockTail. This is a community project I\'ve been using a lot recently. Now DockTail watches'
+
+[00:47] [scene:talk]
+VISUAL: 
+AUDIO: 'your Docker containers, it has to mount the Docker socket to do that, it reads the labels you apply to them and then uses those labels to automatically expose matching containers as native Tailscale'
+
+[00:59] [scene:talk]
+VISUAL: 
+AUDIO: 'Services. It\'s kind of a bit like what Traefik does in the Docker ecosystem, if you\'re familiar with that. But the nice bit about DockTail is your app containers don\'t need to publish ports on the'
+
+[01:11] [scene:speaker]
+VISUAL: Alex from Tailscale introducing the video topic.
+AUDIO: 'host anymore, and DockTail can just proxy straight into their Docker network IPs. And this gives each app a clean and stable Tailscale service address even if the container underneath moves to a'
+
+[01:23] [scene:talk]
+VISUAL: 
+AUDIO: 'different host later on. So I know some of you are excited already at the prospect of no more sidecars needed. The basic idea is quite simple though: Docker labels in and Tailscale Services out.'
+
+[01:36] [scene:speaker]
+VISUAL: Alex discussing DockTail and comparing it to TSDProxy, with a thumbnail for a TSDProxy video.
+AUDIO: 'As I said in the intro, DockTail is a community application and I\'ll put a link to it in the description down below. Now one thing I want to draw your attention to is this helpful comparison'
+
+[01:48] [scene:talk]
+VISUAL: 
+AUDIO: 'table they have in their README description. It kind of compares DockTail to TSDProxy and several of the other options available in this space. In fact, I put a link to the video I made about TSDProxy last year up in that corner for you. But the main thing really is that DockTail supports'
+
+[02:03] [scene:talk]
+VISUAL: 
+AUDIO: 'Tailscale Services natively, which is a bit of a departure from the other options. Now, along with that link to the project\'s GitHub, I\'m also going to put a link to my GitHub or the tailscale-dev GitHub here with all of the resources and kind of code snippets that'
+
+[02:17] [scene:ui]
+VISUAL: VS Code showing a `docker-compose.yaml` file with DockTail service definition and labels for `it-tools`.
+AUDIO: 'we use in all of these videos. Essentially today we\'re going to use one big Docker Compose file to spin up three applications and then also configure our ACLs. It\'s pretty straightforward to configure but we are going to have to generate a couple of secrets. In terms of prerequisites for'
+
+[02:33] [scene:talk]
+VISUAL: 
+AUDIO: 'today\'s video you\'re going to want some kind of a probably a Linux host running Docker and Tailscale. I already have one set up over here that\'s got Docker installed along with Tailscale So if I do a tailscale status, you can see this node, the actual host, the VM host, is already logged into my tailnet.'
+
+[02:48] [scene:ui]
+VISUAL: VS Code showing a `docker-compose.yaml` file with definitions for `it-tools`, `stirling-pdf`, and `filebrowser` services, including DockTail labels.
+AUDIO: 'And I\'ve also got Docker installed as well. So with that out of the way, it\'s really straightforward. I\'m going to do a mkdir and then containers and change into that directory.'
+
+[03:01] [scene:talk]
+VISUAL: 
+AUDIO: 'And then create a compose.yaml file, into which I am simply going to paste the contents of this file right here. And there we go.'
+
+[03:16] [scene:talk]
+VISUAL: 
+AUDIO: 'Now, a couple of things to be aware of. We have to create a couple of environment variable secrets in order for DockTail to have the permissions to do what it needs to do and create the things it needs to create. So what we need to do now is create a .env file. So we\'re, again, we\'re in the same directory'
+
+[03:31] [scene:ui]
+VISUAL: Tailscale admin console, "New credential" page, showing options for scopes including "Services" and "Devices".
+AUDIO: 'as the compose.yaml file on the remote virtual machine, and we\'ll do .env. Then you\'ll want to head over to settings in your admin console and click on Trust credentials and generate a new credential.'
+
+[03:43] [scene:talk]
+VISUAL: 
+AUDIO: 'This is where we\'re going to generate the permission for DockTail to read and write Tailscale Services and modify their properties. Now, in order to do this, we actually have to add a tag, which we haven\'t yet done. So in our code snippets here, you\'ll see this file called ACLservices.json.'
+
+[03:57] [scene:talk]
+VISUAL: 
+AUDIO: 'We have to add a couple of things into our Tailscale policy file in order for this to work. So first of all, let\'s copy these four lines here called tagOwners of docktail-host and docktail-service and go back to our admin console, go to access controls, find a suitable spot in'
+
+[04:14] [scene:talk]
+VISUAL: 
+AUDIO: 'your JSON file and add that there. Now, whilst we\'re in this file, every car guy\'s worst sentence, isn\'t it? While I\'m in there, we\'re also going to add autoApprovers as well. And I like to,'
+
+[04:28] [scene:talk]
+VISUAL: 
+AUDIO: 'for some reason, I just put this at the end. I don\'t really know why I put things in this order, but over time I\'ve kind of developed this way of working. So anyway, copy and paste these couple things into your ACLs file and you\'ll notice the autoApprovers. This is going to be really slick'
+
+[04:42] [scene:ui]
+VISUAL: Tailscale admin console, "Access controls" page, showing the JSON editor for ACLs with `tagOwners` and `autoApprovers`.
+AUDIO: 'in a minute this is going to allow it so that we don\'t have to manually approve everything that DockTail is doing. It just automatically creates and manages the services for us and then the tags are how we assign ownership to these various nodes within our tailnet. So with that done we can now'
+
+[04:58] [scene:talk]
+VISUAL: 
+AUDIO: 'generate our credential, our Trust credential, so we can go over here, click on new credential, click on continue, and we will give it the Services scope and we can give it the docktail-service tag. So in other words every service that gets created by this token will automatically have that docktail-service'
+
+[05:14] [scene:ui]
+VISUAL: Tailscale admin console, "Credential created" pop-up, displaying client ID and client secret.
+AUDIO: 'tag applied to it. It\'s an arbitrary name we gave it. I mean you can call it whatever you want but I wanted to make it obvious for this video what we wanted to do. And then the other thing we\'ve got to do is give it under devices we\'ve got to give it read and write scope for'
+
+[05:28] [scene:talk]
+VISUAL: 
+AUDIO: 'core devices as well. So let\'s generate that credential and you\'ll see we get two things here. We get the client ID and the client secret. Now back in our .env file from a couple of minutes ago, so just to remind you, we have the compose.yaml file right here and we have the .env file. So we'
+
+[05:45] [scene:terminal]
+VISUAL: Terminal window showing an empty `.env` file being edited.
+AUDIO: 'have to create a .env file in this directory basically containing these secret values here. So we don\'t store the secrets in clear text in the compose file.'
+
+[06:00] [scene:talk]
+VISUAL: 
+AUDIO: 'We store them in the .env file next to the compose file. I hope you\'re as confused as I am whilst I\'m explaining that. But essentially, it looks like this. We create the .env file.'
+
+[06:13] [scene:talk]
+VISUAL: 
+AUDIO: 'We paste this in. We get the value from over here. We paste it in. I know I\'m going quickly, but, you know, it\'s one of those things. And then what we can do is we can do a YYP to yank, yank, pull. And then we can change this to secret.'
+
+[06:27] [scene:terminal]
+VISUAL: Terminal window showing `ls -la` and `cat .env` commands, revealing the `.env` file with `TAILSCALE_OAUTH_CLIENT_ID` and `TAILSCALE_OAUTH_CLIENT_SECRET`.
+AUDIO: 'and then we can get the secret value from over here. And that really is it. So by the end of it, you should have a .env file. In fact, let me list the files out this way.'
+
+[06:39] [scene:talk]
+VISUAL: 
+AUDIO: 'You should have two files in this directory. You should have a .env file, and you should have a compose.yaml file in this directory. The .env file should contain two values only, and these are like a username and password.'
+
+[06:51] [scene:talk]
+VISUAL: 
+AUDIO: 'Treat them with care. Treat them with respect. Don\'t post them or commit them to Git or anything like that. Although if you do, GitHub secret scanning will pick up that it\'s a known token and revoke them for you and stuff like that. I have a video about that up here somewhere, I think, as well.'
+
+[07:06] [scene:terminal]
+VISUAL: Terminal window showing `docker compose up -d` command output, indicating images being pulled and containers started.
+AUDIO: 'Essentially, treat them like a username and password. Don\'t hand them out like candy. But essentially, we should now just be able to do a docker compose up. And it will pull down the images that we want. And it will create the services.'
+
+[07:18] [scene:talk]
+VISUAL: 
+AUDIO: 'And if we\'ve done everything right, it\'ll just work. Famous last words for a demo, I know. But then to monitor the logs, I\'ll do a docker compose logs -f. We\'ll see a bunch of stuff scrolling by but the important thing is now if we go back to our admin console and look for services we should see any moment that the services have been added to our'
+
+[07:35] [scene:ui]
+VISUAL: Tailscale admin console, "Machines" page, showing a list of machines and a dropdown menu for "Edit ACL tags".
+AUDIO: 'admin console except they haven\'t because we\'ve missed one very important step our node in fact if we look at the logs here in DockTail it tells us look our Tailscale node is not tagged and Tailscale Services requires the host node to be tagged as well so that\'s an easy fix we can go back to our'
+
+[07:52] [scene:talk]
+VISUAL: 
+AUDIO: 'admin console and we click on the three-dot menu and edit ACL tags in the drop-down. We now select docktail-host. Then we go back to... I\'ve just broken my SSH in the process, which means I need to update'
+
+[08:04] [scene:talk]
+VISUAL: 
+AUDIO: 'my ACLs. You see how all this stuff just happens in real time. So the destination, I now have a new tag here of tag:docktail-host because the ownership, so to explain what happened there, the'
+
+[08:18] [scene:ui]
+VISUAL: Tailscale admin console, "Access controls" page, showing the JSON editor for ACLs with updated `grants` to include `tag:docktail-host`.
+AUDIO: 'ownership of the node changed from being owned by my user to now being owned by that tag and the SSH policy meant that that was no longer allowed within policy, so it revoked my access, look, in real time'
+
+[08:33] [scene:talk]
+VISUAL: 
+AUDIO: 'via SSH because I was logged in through Tailscale SSH. So if you update your policy in real time it will lock you out of where you are and now if I do ssh fake-nas, because I\'ve updated the policy,'
+
+[08:46] [scene:ui]
+VISUAL: Tailscale admin console, "Services" page, showing "files", "pdf", and "tools" services advertised.
+AUDIO: 'we should be good to go. So we\'ve changed back into my containers directory and I\'ll do a docker compose restart so in theory now this is uh tempting fate isn\'t it but uh in theory now we should be able to go back to our services page and see that some of the services are indeed now coming online'
+
+[09:05] [scene:talk]
+VISUAL: 
+AUDIO: 'files is there, PDFs is there, tools is there, and so if we visit this URL now, remember the first time when you visit a new URL because we\'re talking to Let\'s Encrypt in the backend.'
+
+[09:18] [scene:talk]
+VISUAL: 
+AUDIO: 'It can take 30 seconds for that kind of ACME client stuff to happen behind the scenes. So you might want to just hit the URL once, close the tab, wait a second, whilst that Let\'s Encrypt dance happens, and then load the page.'
+
+[09:34] [scene:talk]
+VISUAL: 
+AUDIO: 'Otherwise, you might end up with a TLS certificate error. But essentially, that\'s it, right? We\'ve just managed to use DockTail to configure a native Tailscale Service. Lots of stuff going on behind the scenes, so let\'s do a quick recap of all the little bits that we needed here.'
+
+[09:48] [scene:talk]
+VISUAL: 
+AUDIO: 'So under settings, we had to create a trust credential with the following scopes. Click on edit for the token that we generated, and I want to show you that. It was services, read and write, and remember we had to have a specific tag, the service tag, not the host tag.'
+
+[10:02] [scene:ui]
+VISUAL: VS Code showing the `docker-compose.yaml` file, highlighting the environment variables for DockTail.
+AUDIO: 'And then under devices, we had to have the read and write scope as well. Then you\'ve also got a couple of things in your ACL files to look for as well. So we added these tagOwners right here, these four lines.'
+
+[10:17] [scene:talk]
+VISUAL: 
+AUDIO: 'And again, this is all in the code snippets, right? So this is all in GitHub for you. Just a couple of copy and pastes, hopefully. We had to enable tagOwners. We also had to make sure that the Docker host,'
+
+[10:30] [scene:ui]
+VISUAL: Browser showing a DuckDuckGo search page, demonstrating access to a service (implied to be `pdf.velociraptor-noodlefish.ts.net`).
+AUDIO: 'the VM or whatever you\'re using to run DockTail on, is also a tagged Tailscale node. And remember, I locked myself out of SSH. So I had to add this tag here for docktail-host as well. And then auto-approvers means I\'m not manually approving services'
+
+[10:45] [scene:talk]
+VISUAL: 
+AUDIO: 'as they get added to the admin console. And then essentially, I can now have, I can move this PDF container to a completely different host, and it will just keep working until the end of time.'
+
+[10:58] [scene:talk]
+VISUAL: 
+AUDIO: 'Of course, it\'s doing the Let\'s Encrypt thing right now, where it\'s having a little think about the world. But hopefully today\'s video gives you a little taste of what Tailscale Services can do for you, and specifically what DockTail can do for you.'
+
+[11:10] [scene:speaker]
+VISUAL: Alex from Tailscale concluding the video and summarizing the setup.
+AUDIO: 'For those of you that have been wanting to use Tailscale Services with Docker for some time now, this is the way to do it. I know it\'s a community project. It\'s not officially a Tailscale product, blah, blah, blah. Products would be very upset with me if I said it was,'
+
+[11:25] [scene:talk]
+VISUAL: 
+AUDIO: 'but it\'s a wonderful, DockTail is a wonderful implementation, and I\'m really glad that we were able to feature it on the channel today. All that\'s left for me to say is thank you very much for watching. Until next time, I\'ve been Alex from Tailscale.'
