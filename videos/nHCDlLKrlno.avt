@@ -1,0 +1,204 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Google's WebMCP: Why Every Website Will Need This by 2027
+channel: @octopusinc_
+duration: 10:07
+source: https://www.youtube.com/watch?v=nHCDlLKrlno
+upload_date: 20260703
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:problem]
+VISUAL: "It just sees a picture of pixels." with "1,743 tokens per glance"
+AUDIO: 'Watch an AI agent try to use a website. It opens the page, takes a screenshot, and starts guessing. Which box is the search? Which button actually submits? It is squinting at pixels hoping it picked right. That is how almost every agent works today. It cannot really see'
+
+[00:13] [scene:talk]
+VISUAL: 
+AUDIO: 'your buttons. It sees a flat picture of pixels and just hopes it clicks the right one. Now, watch the new way. The website simply hands the agent the controls. One clean typed call and the task is done. No squinting, no guessing,'
+
+[00:27] [scene:solution]
+VISUAL: "A menu of actions to call."
+AUDIO: 'no second screenshot. This is Web MCP, the Web Model Context Protocol. A way for any website to speak straight to AI agents built right into the browser itself. And the whole idea fits in three'
+
+[00:39] [scene:talk]
+VISUAL: 
+AUDIO: 'words: publish tools, not pixels. Your site stops being a wall of buttons an agent has to decode and becomes a clean menu of actions it can simply call by name. It is the same model context protocol behind today\'s AI tools, but'
+
+[00:52] [scene:benefit]
+VISUAL: "The agent picks the site it can use." showing "your-site.com" as "agent-ready" and "rival.com" as "no tools"
+AUDIO: 'instead of a separate server, your page itself becomes the server right inside the tab. And it is dramatically leaner. Reading a page as a screenshot can burn 2,000 tokens. A structured tool call costs around 50. Here is why it matters'
+
+[01:05] [scene:talk]
+VISUAL: 
+AUDIO: 'by 2027. If an agent can finish the job on your site, but fumbles on your rivals, the agent sends every user straight to you. Built by Google and Microsoft together through the W3C and shipping in Chrome'
+
+[01:18] [scene:talk]
+VISUAL: 
+AUDIO: 'right now. So, let us take it apart. Start with the problem. For 30 years we have built the web for human eyes. Color, layout, icons, buttons you understand the instant you see them. All'
+
+[01:30] [scene:problem]
+VISUAL: "How agents browse today." listing "Mouse automation", "DOM scraping", and "Screenshots" as "brittle in production"
+AUDIO: 'of that meaning lives in the visuals and a person fills in the rest without even thinking about it. So, how do agents browse it all today? Mostly by brute force. Computer use models and automation frameworks that move a'
+
+[01:42] [scene:talk]
+VISUAL: 
+AUDIO: 'virtual mouse, read the raw page structure, or snap screenshots and reason over them. It looks brilliant in a demo. In the real world, it is fragile because that whole approach is a guessing loop. People call it actuation. Grab a screenshot, find a likely pixel,'
+
+[01:56] [scene:problem]
+VISUAL: "One redesign, and it shatters." showing a "task failed" message on a checkout page
+AUDIO: 'click it, grab another screenshot, and check whether anything changed. The agent is reading your interface the way you would read a foreign newspaper through frosted glass, and it is painfully brittle. Move one'
+
+[02:08] [scene:talk]
+VISUAL: 
+AUDIO: 'button, rename a label, ship a small redesign, and the agent\'s carefully learned script just shatters. It clicks where the button used to be, hits empty space, and the whole task silently fails. No error, no recovery, it simply'
+
+[02:20] [scene:solution]
+VISUAL: "Your page becomes a tool server." with an AI agent interacting with `searchFlights()`, `addToCart()`, `fileTicket()`
+AUDIO: 'stops working. It is also slow and expensive. Every single step is a fresh full-page image and another round trip to the model. Multiply that across a checkout or a booking flow, and you get'
+
+[02:32] [scene:talk]
+VISUAL: 
+AUDIO: 'something costly, sluggish, and almost impossible to trust in production. Web MCP flips the whole relationship around. Instead of the agent reverse engineering your screen, your website turns into a tiny tool server running right there in'
+
+[02:45] [scene:talk]
+VISUAL: 
+AUDIO: 'the browser tab. No extra back end to deploy, no new API to host. The page you already ship simply announces what it can do. If you have heard of MCP, this clicks fast. Regular MCP live'
+
+[02:57] [scene:implementation]
+VISUAL: "Step one — register." showing `navigator.modelContext.provideContext({ tools })`
+AUDIO: 'server-side, you stand up a separate service that speaks a protocol connecting an AI to your back end. Web MCP takes that exact idea and moves it into the browser. No new server, no extra plumbing. The page in the tab is'
+
+[03:10] [scene:talk]
+VISUAL: 
+AUDIO: 'the provider. It runs in four clean steps. First, register. When the page loads, it tells the browser which tools it offers through a new object called navigator.modelContext. Things like search flights, add to cart,'
+
+[03:23] [scene:implementation]
+VISUAL: "Step three — invoke." showing `searchFlights(from: "SFO", to: "JFK", date: "Fri")`
+AUDIO: 'or file a ticket. Each one declared upfront, ready to be called. Second, discover. When an agent lands on the page, it does not stare at pixels anymore. It asks the browser one simple question, "What can I do here?" and gets'
+
+[03:36] [scene:talk]
+VISUAL: 
+AUDIO: 'back a structured list of every tool, each with a plain language description of exactly what it does. Third, invoke. The agent picks the right tool and calls it with typed parameters, the the way it'
+
+[03:48] [scene:talk]
+VISUAL: 
+AUDIO: 'would call any function. An origin, a destination, a date. No hunting for a button, no fragile click, no second screenshot just to confirm something happened. Fourth, respond. Your own code runs the action and hands back'
+
+[04:02] [scene:implementation]
+VISUAL: "A tool is just four fields." listing name, description, inputSchema, execute
+AUDIO: 'structured data the model can read directly. The search results, a confirmation, an order number. The model reads it, decides the next move, and the loop continues cleanly until the job is finished, and a tool is not some heavy'
+
+[04:14] [scene:talk]
+VISUAL: 
+AUDIO: 'new framework. It is just four small things. A name, a description in plain English, an input schema that defines the parameters, and an execute function that actually does the work. That is the entire contract. If you have ever'
+
+[04:27] [scene:implementation]
+VISUAL: "Two attributes, and it is a tool." showing HTML form with `toolname` and `tooldescription`
+AUDIO: 'defined a function, you already know this. There are two ways to add these tools, and the first is almost too easy. It is called the declarative API, and it works on plain HTML forms, no JavaScript at all. You take a form you already have'
+
+[04:41] [scene:talk]
+VISUAL: 
+AUDIO: 'on the page, and you simply annotate it. You add two attributes, a tool name and a tool description. That is genuinely it. The browser reads the form, turns its fields into a structured schema, and'
+
+[04:53] [scene:implementation]
+VISUAL: "Or build it in JavaScript." showing `navigator.modelContext.`
+AUDIO: 'offers it to agents automatically. As one engineer put it, "If your forms are already clean, you are 80% of the way there." And here\'s a neat touch. When an agent submits one of those forms, your code receives a flag, agent invoked,'
+
+[05:05] [scene:talk]
+VISUAL: 
+AUDIO: 'that tells you a machine did it, not a human. You can even respond with a structured result straight back to the model. One form quietly serves both a person and an agent. The second way is the imperative API. Pure JavaScript for'
+
+[05:18] [scene:talk]
+VISUAL: 
+AUDIO: 'richer, dynamic tools. You call register tool, hand it a schema and a function, and you can build anything. A live pricing lookup, a multi-step booking, a product filter. There is even a method'
+
+[05:30] [scene:result]
+VISUAL: "It tells the agent what went wrong." showing error handling for `bookFlight`
+AUDIO: 'to swap the whole tool set as your app changes state. And it is a real two-way conversation. Your tool can return a clean result or a clear, descriptive error. Wrong date, sold out, missing field? The agent reads that error,'
+
+[05:44] [scene:talk]
+VISUAL: 
+AUDIO: 'understands what went wrong, and corrects itself instead of blindly clicking the same broken thing again and again. A few habits make tools that agents love. Name them with precise verbs, so create event is never confused with'
+
+[05:57] [scene:benefit]
+VISUAL: "A contract, not a guess." showing a redesigned page still working with `bookFlight()`
+AUDIO: 'start event creation. Keep schema simple, accept a plain time string, do not make the model do math, validate strictly in your code, and return clear errors. Do that, and the agent rarely needs a second try. So, why is this so'
+
+[06:10] [scene:talk]
+VISUAL: 
+AUDIO: 'much better? Because a tool is a contract, not a guess. You can redesign your entire page, move every button, change the whole layout overnight, and as long as the tool still exists, the agent keeps working perfectly. The'
+
+[06:23] [scene:control]
+VISUAL: "You stay in control." showing browser permission prompt for `pay($212)`
+AUDIO: 'interface and the capability are finally separated. It is also far faster and far cheaper. Around 50 tokens for a precise tool call instead of 2,000 for a screenshot the model still has to decode. Analysts put it near a 90% cut'
+
+[06:36] [scene:talk]
+VISUAL: 
+AUDIO: 'in tokens and close to 98% task accuracy. Faster, cheaper, and it actually finishes, and you stay in control. Everything is locked to your own origin, the browser acts as a'
+
+[06:48] [scene:talk]
+VISUAL: 
+AUDIO: 'gatekeeper, and the user is asked to confirm before anything sensitive runs. A payment, a delete, a booking. You decide exactly which actions you expose to agents and absolutely nothing more. There is even a quiet bonus. The very'
+
+[07:00] [scene:use cases]
+VISUAL: "What it unlocks." listing Customer support, Ecommerce, Travel
+AUDIO: 'same tools you publish for AI agents also give a clean, reliable surface to screen readers and assistive technology. Build one structured layer, and you end up serving humans and machines at the very same time. What does this unlock in'
+
+[07:13] [scene:talk]
+VISUAL: 
+AUDIO: 'practice? Google\'s own previews point at three. Customer support, where an agent files a detailed ticket with every technical field already filled in. E-commerce, where it finds the right product, configures the options, and'
+
+[07:25] [scene:collaboration]
+VISUAL: "Not one vendor — a shared standard." showing Google and Microsoft logos with W3C
+AUDIO: 'walks the checkout. And travel, where it searches, filters, and books the exact flight you wanted. And this is not one company\'s land grab. Google and Microsoft authored Web MCP together inside the W3C, the body that governs'
+
+[07:39] [scene:talk]
+VISUAL: 
+AUDIO: 'the open web. Engineers from both companies share the specification, which is exactly what you want from something that every site on Earth might one day adopt. It is also shipping right now, not someday. Web MCP is an early preview'
+
+[07:52] [scene:talk]
+VISUAL: 
+AUDIO: 'in Chrome 146, behind a flag you flip on for testing, with a stable release expected around this spring. The agentic web is being wired up quietly as we speak. And a small ecosystem is already'
+
+[08:05] [scene:trend]
+VISUAL: "Agentic browsing is exploding"
+AUDIO: 'forming around it. An inspector extension to see and test a pages tools, an open SDK built on the official protocol, and a community shipping live demos from flight search to full checkout. The tooling is arriving fast.'
+
+[08:18] [scene:talk]
+VISUAL: 
+AUDIO: 'Now zoom out because the timing is the real story. Agentic browsing is exploding. The amount of agent traffic on the web has been doubling in a single month. More and more, the first visitor to your site is not a person at all. It'
+
+[08:30] [scene:prediction]
+VISUAL: "By 2027, it is table stakes." comparing "agent-ready site" with "everyone else"
+AUDIO: 'is a model acting on someone\'s behalf. Which quietly splits the web into two jobs at once. Pages that read well for people and tools that run well for agents. The sites that win the next few years will not just have the prettiest'
+
+[08:43] [scene:talk]
+VISUAL: 
+AUDIO: 'interface. They will have the clearest set of actions an agent can actually call. And that is the case for the title. By 2027, an agent ready site quietly closes the sale, books the trip, files the ticket, while the rest go invisible in'
+
+[08:56] [scene:challenge]
+VISUAL: "But the standard exists now." showing "sites wait for agents" and "agents wait for sites"
+AUDIO: 'the one moment that decides it. Being callable stops being a nice to have and becomes simple table stakes. Now the honest part. This is not magic and it is not finished. It is still a preview, there is no headless mode yet, and your'
+
+[09:09] [scene:talk]
+VISUAL: 
+AUDIO: 'interface has to stay in sync whether a human or an agent is driving it. Real apps will need real work to expose clean, well-designed tools. And there is a classic chicken and egg catch. Sites wait for agents to matter. Agents wait'
+
+[09:22] [scene:talk]
+VISUAL: 
+AUDIO: 'for sites to support them, and nobody has fully solved how an agent even discovers which sites offer tools. But with Google, Microsoft, and the W3C behind one shared standard, that stalemate finally has a way to break.'
+
+[09:35] [scene:summary]
+VISUAL: "WebMCP, in one breath." listing key benefits
+AUDIO: 'So, here is the recap. Publish tools, not pixels. Two ways to add them, declarative forms and imperative JavaScript. Reliable because a tool is a contract. Fast and cheap because it skips the screenshots. Under your'
+
+[09:48] [scene:talk]
+VISUAL: 
+AUDIO: 'control because you choose what to expose. And very soon, simply expected. That is Web MCP, the quiet upgrade that turns every website into something agents can actually use. If this finally made the agentic web click for you,'
+
+[10:02] [scene:talk]
+VISUAL: 
+AUDIO: 'subscribe to Cloud Codes and I will see you in the next one.'
