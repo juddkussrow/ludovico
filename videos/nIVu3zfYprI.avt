@@ -1,0 +1,132 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Introducing OpenWiki, an open source agent for repo documentation
+channel: @octopusinc_
+duration: 06:18
+source: https://www.youtube.com/watch?v=nIVu3zfYprI
+upload_date: 20260701
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:01] [scene:talk]
+VISUAL: 
+AUDIO: 'What\'s up, everyone? It\'s Brace from LangChain, and today I\'m really excited to tell you all about Open Wiki, the newest open source agent from LangChain. Open Wiki is the easiest way to generate and maintain documentation for your code base built specifically for agents. To get started, it\'s as simple as'
+
+[00:15] [scene:ui]
+VISUAL: Terminal showing `npm install -g openwiki` command and `openwiki init` output.
+AUDIO: 'running one command. So, the first thing I\'ll do is install it on my local machine through NPM. Once it\'s installed, all I need to do is run open wiki init. This will first take me through an onboarding process where I get to pick my model provider. As you can see here,'
+
+[00:27] [scene:ui]
+VISUAL: Terminal showing model provider selection prompt, including OpenRouter, Anthropic, Fireworks, Google, OpenAI.
+AUDIO: 'we support not just open source, but also close source model providers. I\'ll start with open router. It\'ll then ask me for an API key. I\'ll paste that in. And then pick my model. So, we have a few predefined models set here which you'
+
+[00:39] [scene:talk]
+VISUAL: 
+AUDIO: 'can pick from, but of course, if there\'s a model you want to run which we don\'t have set here, you can set a custom model ID. And Open Wiki\'s open source, so if there\'s a provider or model you want set in the pre-built settings, put up a PR and we can get it added to the'
+
+[00:53] [scene:ui]
+VISUAL: Terminal showing prompt for LangSmith API key, indicating it's optional.
+AUDIO: 'actual package. So, I\'ll select GLM 5.2. And then next, it\'s going to ask me for my LangSmith API key. This is optional, but because Open Wiki is built on Deep Agents and LangSmith, you can set an API key here to trace every single action and run Open Wiki takes to a tracing'
+
+[01:07] [scene:ui]
+VISUAL: Terminal showing `openwiki init` running, with "Agent running" and "Working openwiki chat - streaming" messages.
+AUDIO: 'project so you can always see exactly how it\'s running under the hood. For now, I\'ll skip that. When I hit enter, because I ran the init command, it\'s going to immediately jump in and start generating documentation for this repository. So, while this runs, let\'s'
+
+[01:19] [scene:talk]
+VISUAL: 
+AUDIO: 'go look at what these docs actually look like in a repo. All right, so I\'m in the Open Wiki repository itself, and of course, we have Open Wiki docs generated for this repo. You can see a directory named Open Wiki, and within that, there\'s a few'
+
+[01:32] [scene:ui]
+VISUAL: VS Code showing the generated `quickstart.md` file within the `openwiki` directory.
+AUDIO: 'subdirectories and a file called quickstart.md. This quickstart file is the index for the Open Wiki docs. So, it contains a high level of what the actual repo is, what it does, and some important files. It also links out or'
+
+[01:44] [scene:ui]
+VISUAL: VS Code showing the `quickstart.md` file, highlighting its role as an index for the documentation.
+AUDIO: 'acts as an index for the rest of the Open Wiki docs, so we can see it references the other directories we have here. And then also, actual files within the code base. This is the first file that your coding agent will inspect when it\'s trying to'
+
+[01:57] [scene:talk]
+VISUAL: 
+AUDIO: 'gather documentation for the repo. So, it acts not just as a high-level description of the repo itself, but also as an easy reference to quickly find things within the repository. If we expand these directories, we can see there\'s sub files, which contain'
+
+[02:10] [scene:ui]
+VISUAL: VS Code showing `agent-docs-workflow.md` file, detailing the agent's workflow.
+AUDIO: 'documentation for different aspects of the repo. So, for Open Wiki, there\'s the actual agent itself, there\'s the architecture of the agent, the CLI, different operations within that CLI, and then a few more files for uh tracking the updates that Wiki has made.'
+
+[02:24] [scene:ui]
+VISUAL: VS Code showing `agent-docs-workflow.md` file, emphasizing the importance of business logic in documentation.
+AUDIO: 'These files include not just technical documentation, but also high-level business logic about the different aspects of the repository. These are all important to the agent\'s context as it doesn\'t not need to just know how the code works, but also why things were'
+
+[02:37] [scene:talk]
+VISUAL: 
+AUDIO: 'implemented as they are. It can see how the code works from just reading the code, but through looking at Git commits, the history of Git commits, comments, and so on, Open Wiki can generate uh documentation documenting'
+
+[02:49] [scene:ui]
+VISUAL: VS Code showing `agent-docs-workflow.md` file, explaining how OpenWiki uses Git history for updates.
+AUDIO: 'the business logic and decisions behind different changes so that your agent can have the best context when it\'s actually writing code in your repository. So, that\'s what the actual documentation looks like and how to generate initial file. To keep this up to date, you don\'t'
+
+[03:02] [scene:ui]
+VISUAL: VS Code showing `openwiki-update.yml` GitHub Action configuration.
+AUDIO: 'really want to have to maintain or make these changes manually. So, we have a GitHub action you can copy, which will run once a day and automatically update your openwiki.docs uh for you. As you can see here, it runs the Open Wiki'
+
+[03:15] [scene:talk]
+VISUAL: 
+AUDIO: 'update command. Right, first we ran a knit. The update command is just update. This will run once a day and put up a pull request in your repository automatically updating documentation. The way it updates these docs is primarily through using Git. So, it\'ll'
+
+[03:28] [scene:talk]
+VISUAL: 
+AUDIO: 'track the last commit hash which was checked in before the docs were last updated. It\'ll then look at every commit which was merged after that, inspect every change that was made, PR descriptions, comments, and so on, and use that to potentially make updates if'
+
+[03:41] [scene:ui]
+VISUAL: VS Code showing the `openwiki-update.yml` file, explaining how the GitHub Action uses Git to track changes.
+AUDIO: 'necessary to the docs so that your docs always stay up to date. If you have a repo which you don\'t update as frequently, you can change this to run, say, once a week. or if you have a repo which has hundreds or'
+
+[03:53] [scene:talk]
+VISUAL: 
+AUDIO: 'thousands of commits getting merged in every day, you could have this run once every 4 hours, 6 hours, or whatever you\'d like. The schedule is completely independent of the agent because the agent works on any time frame. Cuz all it does is look'
+
+[04:05] [scene:ui]
+VISUAL: VS Code showing the `openwiki-update.yml` file, discussing schedule customization for updates.
+AUDIO: 'at the Git history, and based on those commits, update the documentation itself. Now, OpenWiki doesn\'t just have two commands for running and updating. You can also chat with the agent directly. Let\'s see what that looks like. So, to'
+
+[04:17] [scene:ui]
+VISUAL: Terminal showing `openwiki` command initiating a chat interface.
+AUDIO: 'chat with OpenWiki, all you need to do is run OpenWiki. In here, it\'ll spin up a chat interface where you can do things like customize the model provider, you can update or clear the docs, and so on. You can also chat with the agent. So, I can ask it'
+
+[04:29] [scene:talk]
+VISUAL: 
+AUDIO: 'something like, "What can you do?" As we can see here, OpenWiki doesn\'t just generate documentation, but it\'s also a chatbot. So, I can use it to ask questions about my repo, about my docs, search through the docs it wrote, uh and'
+
+[04:42] [scene:ui]
+VISUAL: Terminal showing the OpenWiki chat interface, with the agent's response to "What can you do?".
+AUDIO: 'so on. You can use this to manage your OpenWiki documentation, and also to make targeted changes to the docs. Now, we have our documentation, but how does the coding agent actually use it? Your coding agents are made aware of'
+
+[04:54] [scene:ui]
+VISUAL: VS Code showing `AGENTS.md` file with a reference to OpenWiki documentation.
+AUDIO: 'OpenWiki through an agents.md or claude.md if you\'re using Claude code file. OpenWiki will automatically update these files or create them if they don\'t exist to include a reference to OpenWiki and instruct the coding agent how, where,'
+
+[05:06] [scene:talk]
+VISUAL: 
+AUDIO: 'and when to use the OpenWiki documentation, aka anytime it needs context about the code base. Because OpenWiki automatically makes these changes to your agents.md, you never really need to think about'
+
+[05:18] [scene:ui]
+VISUAL: VS Code showing `AGENTS.md` file, explaining how it instructs coding agents to use OpenWiki.
+AUDIO: 'OpenWiki after you set it up initially. You run the init command to generate your initial docs. You then add the GitHub action to automatically update the docs as changes are made to your repo. And OpenWiki adds this section to your agents.md. That means your agents'
+
+[05:30] [scene:ui]
+VISUAL: VS Code showing `AGENTS.md` file, reiterating the automation of documentation updates.
+AUDIO: 'are always keeping your docs up-to-date for you in the background. All you need to do is merge the pull requests as they put them up. And anytime you run a coding agent in your repo, it\'ll automatically pick up your agents.md file, thus picking up the section on'
+
+[05:43] [scene:talk]
+VISUAL: 
+AUDIO: 'OpenWiki, and therefore it\'ll be instructed on how to use OpenWiki, when to reference those docs. And that way your agents can always have full context into your repository without you needing to add extra prompting or references'
+
+[05:55] [scene:ui]
+VISUAL: VS Code showing `AGENTS.md` file, concluding the explanation of OpenWiki's integration with coding agents.
+AUDIO: 'every single time. All right, that\'s how OpenWiki works at a high level. Right now, it\'s just for coding agents and it\'s fairly simple, but we\'re just getting started with this Wiki idea and we\'re going to do a lot more. So, if you have feature requests or suggestions or want to contribute,'
+
+[06:07] [scene:talk]
+VISUAL: 
+AUDIO: 'please go to the OpenWiki repository, which we\'ll have linked in the description, put up a PR or create an issue with a feature request. I\'m looking forward to hear from you guys soon.'
