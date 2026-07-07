@@ -1,0 +1,216 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Master Pro Camera Control: Transfer 3D Motions to LTX 2.3
+channel: @octopusinc_
+duration: 11:10
+source: https://www.youtube.com/watch?v=KDOy3Naz328
+upload_date: 20260706
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'Recently there’s a video generation method that has become very popular The idea is to first use Blender or another three-D tool to create a rough control video Then you let the video model follow the camera movement inside that three-D video keep the spatial relationships and character positions'
+
+[00:14] [scene:talk]
+VISUAL: 
+AUDIO: 'and generate the final image Let’s look at a few examples first These control videos themselves don’t necessarily have to be very polished As long as the camera movement is clear Seedance two point zero can turn them into a very natural video'
+
+[00:27] [scene:talk]
+VISUAL: 
+AUDIO: 'The problem is Seedance two point zero does have excellent results but the cost is not low So can the open-source LTX two point three do something similar? Let’s look at this result first'
+
+[00:40] [scene:talk]
+VISUAL: 
+AUDIO: 'This is the three-D driving video and this is a result generated with LTX two point three plus Cameraman v two Below there is also a video of a wolf pack and here we have an excavator and an airplane In these examples'
+
+[00:53] [scene:talk]
+VISUAL: 
+AUDIO: 'the camera movement can basically be transferred and the composition also follows the driving video But there is one issue you must pay attention to: if the action becomes very complex problems appear immediately'
+
+[01:06] [scene:talk]
+VISUAL: 
+AUDIO: 'For example here I have a control video like this It is an exploration video inside a mysterious space When we use this control video to generate the final result the output is obviously much less stable The character starts drifting'
+
+[01:20] [scene:talk]
+VISUAL: 
+AUDIO: 'and complex actions like crossing obstacles are not really generated So in this video I’ll introduce a workflow: how to use LTX two point three to transfer the camera movement from a three-D control video into a realistic video For easier demonstration'
+
+[01:36] [scene:talk]
+VISUAL: 
+AUDIO: 'I also built the workflow on RunningHub In the ComfyUI space RunningHub is a very solid online workflow platform because whenever a new model or new extension appears it follows up right away'
+
+[01:50] [scene:talk]
+VISUAL: 
+AUDIO: 'Today we’ll use a LoRA called Cameraman and this is version two When many people see this LoRA they may think it is a style-transfer LoRA that turns a three-D model into a realistic video Actually, it is not'
+
+[02:05] [scene:talk]
+VISUAL: 
+AUDIO: 'It is a camera-transfer LoRA We have actually talked about the first version before and the official explanation is also very direct It is an IC-LoRA made for LTX-Video two point three The training purpose is to copy the camera movements inside the reference video'
+
+[02:17] [scene:talk]
+VISUAL: 
+AUDIO: 'The workflow I’m showing you is not simply a ComfyUI workflow It requires at least three steps First you need a three-D driving video'
+
+[02:29] [scene:talk]
+VISUAL: 
+AUDIO: 'Second you need to create a high-quality reference image that aligns with the first frame of the driving video Third you send the reference image and the driving video together into the Cameraman v two workflow The easiest step to overlook is the second one:'
+
+[02:44] [scene:talk]
+VISUAL: 
+AUDIO: 'the first frame must be aligned For example, in this case this is the first frame of our driving video and this is the reference image we generated The character position camera angle'
+
+[02:56] [scene:talk]
+VISUAL: 
+AUDIO: 'and subject pose basically match This way LTX two point three knows that what we want to generate is a realistic girl and that she needs to follow this three-D driving video So first-frame alignment is actually very important'
+
+[03:08] [scene:talk]
+VISUAL: 
+AUDIO: 'Now the question is: how do we make this reference image? There are actually two methods The first method is to use a commercial model Since commercial models have very strong generation ability'
+
+[03:21] [scene:talk]
+VISUAL: 
+AUDIO: 'you can throw the first frame of the three-D video into it and it can directly generate an image with a realistic look Take a look at this image I generated it with ChatGPT Image Two and the overall texture is excellent'
+
+[03:35] [scene:talk]
+VISUAL: 
+AUDIO: 'Of course, this costs money Some people may say they don’t want to pay That’s fine we also have an open-source process The second method is to use a ComfyUI route We split it into two steps'
+
+[03:47] [scene:talk]
+VISUAL: 
+AUDIO: 'First we use Qwen Image Edit to build the basic composition Then we use Krea Two to improve the texture Let’s look at the first step Actually we have two choices here The first is Boogu Edit'
+
+[03:59] [scene:talk]
+VISUAL: 
+AUDIO: 'and the second is Qwen Image Edit The reason we choose these two is that they must support reference-based generation because we need to reference our first frame Now look at the final generated result'
+
+[04:11] [scene:talk]
+VISUAL: 
+AUDIO: 'The effect is pretty obvious so we chose Qwen Image Edit This workflow itself is not complicated The input is the first frame of the three-D video and the prompt asks it to generate a realistic-style singing girl But you’ll notice that the image from Qwen has no major issue in overall composition'
+
+[04:26] [scene:talk]
+VISUAL: 
+AUDIO: 'but the texture is not strong enough So in the second step we need to enhance its texture We’ll use a Krea Two workflow This workflow is basically a Turbo workflow'
+
+[04:39] [scene:talk]
+VISUAL: 
+AUDIO: 'but it needs to have some editing effect First, add a realistic LoRA Then we take the result generated by Qwen encode it with VAE and use it as the initial latent Here comes the key part'
+
+[04:52] [scene:talk]
+VISUAL: 
+AUDIO: 'We set the denoise value to around zero point seven five In other words I’m not doing a full denoise I’m preserving part of the latent content At the same time I turn on Prompt Enhancer mainly to make prompt writing easier'
+
+[05:05] [scene:talk]
+VISUAL: 
+AUDIO: 'Now take a look at the result Although it is not quite as good as the commercial model it is not far behind The basic texture and overall style are both very good Next, we enter the key part'
+
+[05:18] [scene:talk]
+VISUAL: 
+AUDIO: 'which is the video generation workflow This is actually very simple It is an LTX two point three IC-LoRA workflow Most of the nodes should already be familiar so I’ll only explain the important parts'
+
+[05:30] [scene:talk]
+VISUAL: 
+AUDIO: 'First is the main model We use the one point one version In my experience the one point zero version seems to perform a little worse Also, you must add this IC-LoRA which is the Cameraman LoRA we mentioned'
+
+[05:43] [scene:talk]
+VISUAL: 
+AUDIO: 'and use the v two version For the weight just set it directly to one point zero Then we need to put both the reference image and the driving video into the sampling conditions So our reference image needs to go through this node called LTXV Img To Video Condition Only'
+
+[05:55] [scene:talk]
+VISUAL: 
+AUDIO: 'For its strength I use zero point seven here because the official recommendation is that if you want more motion you can try zero point five to zero point seven'
+
+[06:09] [scene:talk]
+VISUAL: 
+AUDIO: 'For the driving video, of course we use LTX Add Video IC LoRA Guide This is what drives the camera transfer There is one very important setting here and that is resolution'
+
+[06:22] [scene:talk]
+VISUAL: 
+AUDIO: 'The official recommendation is that the first stage should not be lower than nine hundred sixty by five hundred twelve So in my workflow I use twelve hundred eighty by seven hundred twenty This involves the structure of our workflow'
+
+[06:35] [scene:talk]
+VISUAL: 
+AUDIO: 'We all know LTX can use a two-stage workflow: one stage for generation and one stage for upscaling But here we run into a bit of a dilemma We cannot use two-stage sampling'
+
+[06:48] [scene:talk]
+VISUAL: 
+AUDIO: 'Why? Two-stage sampling usually gives better image quality because it first generates at a lower resolution and then performs latent upscale The image is indeed more detailed'
+
+[07:00] [scene:talk]
+VISUAL: 
+AUDIO: 'and there is less facial flickering But the camera movement inside the driving video is not fully expressed The reason is very straightforward If we use two-stage sampling then the resolution of the first stage will definitely be lower than nine hundred sixty by five hundred twelve'
+
+[07:12] [scene:talk]
+VISUAL: 
+AUDIO: 'But if we set the first-stage resolution to nine hundred sixty by five hundred twelve and then do a two-times upscale an ordinary GPU will have a hard time handling it'
+
+[07:24] [scene:talk]
+VISUAL: 
+AUDIO: 'So I recommend using one-stage sampling for this workflow If you feel the image quality is not enough you can process it separately with another workflow Now let’s look at the results from the same driving video using two reference image routes'
+
+[07:37] [scene:talk]
+VISUAL: 
+AUDIO: 'The first one uses a reference image generated by Image Two the commercial model The second one uses a reference image generated with Qwen Image Edit plus Krea Two The final videos from both routes perform well'
+
+[07:53] [scene:talk]
+VISUAL: 
+AUDIO: 'and their alignment with the driving video is also very good Next, let’s talk about prompts Cameraman v two has an important official reminder: prompts can affect camera movement'
+
+[08:06] [scene:talk]
+VISUAL: 
+AUDIO: 'So if you find that the output video does not follow the reference camera you can try leaving the prompt blank or changing the seed In general, we leave it blank If your prompt contains too much information and if that information conflicts with the camera guidance'
+
+[08:20] [scene:talk]
+VISUAL: 
+AUDIO: 'it may limit the overall performance But I also ran into another situation When the model cannot understand the subject the prompt becomes very important Let’s look at the wolf pack case'
+
+[08:32] [scene:talk]
+VISUAL: 
+AUDIO: 'The driving video looks like this The overall motion is still okay But you’ll notice that after the camera turns around the shape of the wolf becomes a bit larger and it starts to look like it is turning into a horse So in this case'
+
+[08:45] [scene:talk]
+VISUAL: 
+AUDIO: 'we cannot leave the prompt blank We need to clearly tell the model that this is a running wolf pack After correction the result looks like this You’ll notice that the subject is much more stable this time Finally'
+
+[08:58] [scene:talk]
+VISUAL: 
+AUDIO: 'let’s talk about some problems with this model Don’t assume that just because something can be made in Blender LTX two point three can definitely reproduce it Cameraman v two is still a camera-transfer LoRA So when the rhythm is too intense'
+
+[09:11] [scene:talk]
+VISUAL: 
+AUDIO: 'or the action range is too large it can no longer represent it properly For example, in this case the character explores a mysterious space and needs to cross obstacles that suddenly appear This is the reference image we generated'
+
+[09:26] [scene:talk]
+VISUAL: 
+AUDIO: 'and the quality is also very high These are several versions of the result I generated many versions and tried all kinds of adjustments But you’ll notice that not a single version meets the requirement The model can indeed track a little bit of the spatial change'
+
+[09:40] [scene:talk]
+VISUAL: 
+AUDIO: 'but the complex actions never really come out The relationship with the obstacles is also not very stable So this workflow is not very suitable for extremely complex actions large-range movements'
+
+[09:54] [scene:talk]
+VISUAL: 
+AUDIO: 'or very intense camera motion Finally let’s summarize the whole process again First create a simple driving video Second, align the first frame You can use a commercial model or you can use an open-source model'
+
+[10:06] [scene:talk]
+VISUAL: 
+AUDIO: 'If you use an open-source model and feel that the texture is not strong enough you can enhance it with Krea Two Then use the IC-LoRA workflow to generate the corresponding video Here'
+
+[10:20] [scene:talk]
+VISUAL: 
+AUDIO: 'let me emphasize the settings again: set the LoRA strength to one point zero set image strength to zero point seven make sure the resolution is not lower than nine hundred sixty by five hundred twelve and leave the prompt blank at first'
+
+[10:33] [scene:talk]
+VISUAL: 
+AUDIO: 'That is the method we’re covering today The value of this workflow is actually very clear You give it a three-D driving video and then give it an aligned high-quality first-frame reference image Then it has a chance to turn the camera rhythm of the three-D video into a realistic style'
+
+[10:46] [scene:talk]
+VISUAL: 
+AUDIO: 'The key part, in my opinion is the creation of that first-frame image If you want to use open-source models to make controllable AI videos you can try the workflow we covered today'
+
+[11:02] [scene:talk]
+VISUAL: 
+AUDIO: 'All right, that’s all for today Follow me and become someone who truly understands AI'

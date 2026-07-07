@@ -1,0 +1,192 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: OpenCV 5 Is Here - The Biggest Update Since 2018 (We Tested It)
+channel: @octopusinc_
+duration: 09:42
+source: https://www.youtube.com/watch?v=piHpZWcgQyc
+upload_date: 20260705
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'So we all know OpenCV, right? It is the ultimate computer vision library everyone\'s been using for resizing images, detecting objects, and performing all sorts of computer vision tasks. And it just got the first major'
+
+[00:12] [scene:talk]
+VISUAL: 
+AUDIO: 'release update since 2018. And this is a big one. OpenCV 5 has a brand new deep learning engine that can run YOLO. It can also do stable diffusion-style inpainting and even run a full vision'
+
+[00:26] [scene:talk]
+VISUAL: 
+AUDIO: 'language model all natively with no PyTorch, no ONNX runtime, and nothing else bolted on it. So in today\'s video, we\'ll break down what\'s actually new in OpenCV 5, and then we\'ll test out the'
+
+[00:39] [scene:talk]
+VISUAL: 
+AUDIO: 'new features ourselves with some cool demos running locally on my own machine. It\'s going to be a lot of fun, so let\'s dive into it. So first off, here\'s why this update is'
+
+[00:53] [scene:talk]
+VISUAL: 
+AUDIO: 'a big deal. OpenCV is everywhere. It has more than 86,000 GitHub stars, over a million installs a day, and for two decades it\'s been the foundation for'
+
+[01:05] [scene:talk]
+VISUAL: 
+AUDIO: 'robotics and AR and medical engineering, industrial inspection, basically any software that has some computer vision aspect attached to it. And for the last 8 years, everyone\'s been building on the'
+
+[01:18] [scene:talk]
+VISUAL: 
+AUDIO: 'same version 4 line. So a major version bump here is genuinely a huge deal. And the headline feature of this new version is a complete rewrite of the DNN module, and that\'s the part of OpenCV that runs'
+
+[01:32] [scene:talk]
+VISUAL: 
+AUDIO: 'neural networks. So here\'s the most important number to pay attention to. In OpenCV 4, the DNN engine supported only about 22% of ONNX operators. ONNX is the standard format you export a model to'
+
+[01:47] [scene:talk]
+VISUAL: 
+AUDIO: 'when you want to run it somewhere other than the framework you trained it on. And 22% coverage meant that more often than not, you\'d grab a modern model, try to load it, and immediately hit a wall.'
+
+[02:00] [scene:talk]
+VISUAL: 
+AUDIO: 'Some operator wasn\'t supported, so you were stuck. But, OpenCV 5 brings that coverage up to 80%. So, now this library runs most of these models out of the box. And the reason it jumped so much is'
+
+[02:13] [scene:talk]
+VISUAL: 
+AUDIO: 'because of how they rebuilt it. The old engine processed networks layer by layer. The new one is built around a typed operation graph. So, it looks at the whole network as a graph first, and'
+
+[02:26] [scene:talk]
+VISUAL: 
+AUDIO: 'then does proper shape inference, constant folding, and operator fusion before it actually runs anything. So, in plain terms, it understands the entire model before executing it, so it can'
+
+[02:38] [scene:talk]
+VISUAL: 
+AUDIO: 'handle dynamic shapes and modern transformer architectures that the old engine just couldn\'t handle. And here\'s the impressive part. With these new changes, not only is it more compatible, but it\'s also very fast. OpenCV'
+
+[02:52] [scene:talk]
+VISUAL: 
+AUDIO: 'benchmarked their new engine against Microsoft\'s ONNX engine, and on a CPU, OpenCV 5 matched or even beat it on real models. So, it was 11.5%'
+
+[03:04] [scene:talk]
+VISUAL: 
+AUDIO: 'faster than YOLO version 8, almost 37% faster than OWL version 2, and 30% faster than XFeat. Now, those are OpenCV\'s own self-reported numbers, so take them with the usual grain of salt'
+
+[03:18] [scene:talk]
+VISUAL: 
+AUDIO: 'and benchmark your own workload. But, if they are true, that is pretty impressive. And there are more cool stuff in this new release, like native FP16 and BF16 data types, real N-dimensional array support in CV Mat, a'
+
+[03:33] [scene:talk]
+VISUAL: 
+AUDIO: 'Python-first core, and the legacy C API is gone and replaced with the C++ 17 now being the baseline. And one important catch you need to know about up front,'
+
+[03:45] [scene:talk]
+VISUAL: 
+AUDIO: 'the new engine is CPU only at the moment. GPU support is coming later in the version 5 cycle. So, if you need GPU inference today, you will fall back to the classic engine, which still has CUDA'
+
+[03:59] [scene:talk]
+VISUAL: 
+AUDIO: 'and OpenVINO support. So, everything I\'m about to show you on this new version 5 runs on a CPU. So, the biggest feature of this new version is the new DNN engine. So, we\'ll test out some of the'
+
+[04:12] [scene:talk]
+VISUAL: 
+AUDIO: 'examples and see how it performs. All right, let\'s start with a fun example. So, OpenCV ships a colorization example where you can take a black and white image and it predicts the color. And on a side note, I\'ve been watching'
+
+[04:25] [scene:talk]
+VISUAL: 
+AUDIO: 'Spider-Noir lately and it\'s a pretty cool show. And it\'s also in black and white, so I thought it might be fun to colorize a shot from this show and see how it looks. So, I\'m going to take this image and run the colorization example,'
+
+[04:38] [scene:talk]
+VISUAL: 
+AUDIO: 'which is using the new DNN engine, and boom, here it is. Look how fast that was. As far as the output goes, it\'s not perfect. We still see that it got the sky somewhat correct, but it failed to'
+
+[04:51] [scene:talk]
+VISUAL: 
+AUDIO: 'colorize some other parts of the image. And keep in mind that this is using an older colorization model, which plays it safe with the muted tones. But the point here isn\'t the model, it is the engine.'
+
+[05:04] [scene:talk]
+VISUAL: 
+AUDIO: 'So, what I wanted to show you here that this image was produced using the native OpenCV neural network with zero extra dependencies, which is quite cool. Now, let\'s try their object detection sample.'
+
+[05:16] [scene:talk]
+VISUAL: 
+AUDIO: 'And again, since we\'re on the Spider-Noir theme, I\'m going to be using a clip from the show and run it through the pipeline and see how it performs. And when I launch the script, look at that. It\'s doing object detection in'
+
+[05:29] [scene:talk]
+VISUAL: 
+AUDIO: 'real time running on the CPU through the new DNN engine. And remember that benchmark from earlier? This is the kind of model where OpenCV is actually faster than the ONNX runtime. So, So, not'
+
+[05:43] [scene:talk]
+VISUAL: 
+AUDIO: 'trading performance for convenience, you\'re getting both in this particular scenario. And you don\'t need to install PyTorch for this or a separate runtime, and there\'s no GPU required. This is all'
+
+[05:55] [scene:talk]
+VISUAL: 
+AUDIO: 'running in plain OpenCV. All right, now let\'s try their LDM in-painting example. So, LDM stands for latent diffusion, and OpenCV 5 ships a latent diffusion in-painting example here. So, let\'s see'
+
+[06:09] [scene:talk]
+VISUAL: 
+AUDIO: 'how that works. So, let\'s load up the same Spider-Man image we used earlier, and now I can paint over something I want to be removed from the image. It can be a person, an object, whatever.'
+
+[06:21] [scene:talk]
+VISUAL: 
+AUDIO: 'And the diffusion model fills in the blank space. And this is a bit slower to run because OpenCV\'s classic in-painting uses a single forward pass, which is instant,'
+
+[06:33] [scene:talk]
+VISUAL: 
+AUDIO: 'but the LDM uses diffusion, which is iterative. So, it starts from noise, and then it denoises it step by step. So, it\'s running this model multiple steps in a row. And because we\'re doing this'
+
+[06:46] [scene:talk]
+VISUAL: 
+AUDIO: 'on a CPU, it\'s even slower because diffusion is a task more suited for a GPU. But, nonetheless, here is the result I got when running it on just a few steps.'
+
+[06:58] [scene:talk]
+VISUAL: 
+AUDIO: 'And I\'d say it\'s done a pretty decent job. It\'s not perfect. We can still clearly see some diffusion artifacts, but this can be solved by increasing the step count or using a different diffusion model. And lastly, I want to'
+
+[07:10] [scene:talk]
+VISUAL: 
+AUDIO: 'show you the VLM inference example, which shows you how you can use vision-language models or LLMs natively inside OpenCV to do things like image captioning or other sorts of things.'
+
+[07:23] [scene:talk]
+VISUAL: 
+AUDIO: 'Now, in this particular demo, we\'re using the PaLI Gemma model to caption this Spider-Man image. And as you can see, it\'s painfully slow, and the end result is also nothing spectacular. So,'
+
+[07:35] [scene:talk]
+VISUAL: 
+AUDIO: 'I would most definitely not use OpenCV for this. There are far better options for image captioning. For example, you can run a 12 billion Gemma 4 model locally on OMLX and get a 100 times'
+
+[07:48] [scene:talk]
+VISUAL: 
+AUDIO: 'faster output than this. I showed that particular example in one of my previous videos about the 12 billion Gemma 4 model, so check that out if you\'re interested. But the point of this demo'
+
+[08:00] [scene:talk]
+VISUAL: 
+AUDIO: 'is to showcase that OpenCV now has all the pieces you need to run LLMs. The tokenizer, the attention layers, and the KV cache, all built in. And the fact that it works at all on a separate'
+
+[08:13] [scene:talk]
+VISUAL: 
+AUDIO: 'runtime is genuinely signaling where this library is heading. It\'s going to have vision and language bundled all in one place. And once they ship the GPU update, it\'s going to be even better and'
+
+[08:25] [scene:talk]
+VISUAL: 
+AUDIO: 'even faster. So there you have it, folks. That is the new OpenCV version 5 in a nutshell. One library running on the CPU with no extra dependencies, and we used it for colorization, real-time'
+
+[08:38] [scene:talk]
+VISUAL: 
+AUDIO: 'object detection, diffusion in-painting, and image captioning. Now you\'re still going to have to train your models on something like a PyTorch. That\'s not something OpenCV is designed to do, but'
+
+[08:50] [scene:talk]
+VISUAL: 
+AUDIO: 'when it comes to actually running those models inside the vision pipeline, OpenCV 5 is a great choice and a massive leap from where it was just a month ago with their new DNN engine. So what do'
+
+[09:04] [scene:talk]
+VISUAL: 
+AUDIO: 'you think about the new OpenCV 5? Are you going to use it in your projects? Let us know in the comment section down below. And folks, if you like these types of technical breakdowns, please let me know by smashing that like button'
+
+[09:16] [scene:talk]
+VISUAL: 
+AUDIO: 'underneath the video. And also, don\'t forget to subscribe to our channel. This has been Andress from Better Stack, and I will see you in the next videos. &gt;&gt; [music]'
+
+[09:28] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; Mhm.'
