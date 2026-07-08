@@ -1,0 +1,156 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Krea 2 Control LoRA in Comfy UI | Depth Control Tutorial & Workflow Explained
+channel: @octopusinc_
+duration: 08:13
+source: https://www.youtube.com/watch?v=oK8XC4tXRsE
+upload_date: 20260705
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'Krea 2 finally has ControlNet&nbsp; support... well, sort of. This isn\'t an official release&nbsp; from the Krea team. Instead,&nbsp;&nbsp; it was developed by this open-source contributor. The demo images on GitHub look promising,&nbsp;&nbsp;'
+
+[00:15] [scene:talk]
+VISUAL: 
+AUDIO: 'and here\'s the Depth Control LoRA&nbsp; file. It\'s less than 1 GB in size. The repository also includes a standalone setup&nbsp; with launch flags for both Turbo and RAW models. The requirements mention that&nbsp; you\'ll need around 48 GB of VRAM,&nbsp;&nbsp;'
+
+[00:29] [scene:talk]
+VISUAL: 
+AUDIO: 'but that\'s for the BF16 model&nbsp; running outside of Comfy UI. In this video, I\'ll be using the MXFP8&nbsp; model, although the regular FP8 model&nbsp;&nbsp; should work as well. If you have a&nbsp; 24 GB GPU and 64 GB of system RAM,&nbsp;&nbsp;'
+
+[00:41] [scene:talk]
+VISUAL: 
+AUDIO: 'you should also be able to run the BF16 version. The Depth Control LoRA is&nbsp; available on Hugging Face,&nbsp;&nbsp; and there\'s also an active Hugging&nbsp; Face Space where you can try it online.'
+
+[00:54] [scene:talk]
+VISUAL: 
+AUDIO: 'Let\'s load one of the examples. The prompt describes an astronaut on the&nbsp; Moon. The generated image looks good,&nbsp;&nbsp; and below it you can see the depth map&nbsp; that was extracted from the original image.'
+
+[01:08] [scene:talk]
+VISUAL: 
+AUDIO: 'Now, download the Depth Control LoRA and place&nbsp; it inside your Comfy UI/models/loras folder. You\'ll also need this custom node from GitHub,&nbsp;&nbsp;'
+
+[01:22] [scene:talk]
+VISUAL: 
+AUDIO: 'which adds support for using the&nbsp; Control LoRA inside Comfy UI. The repository was updated just a couple of&nbsp; hours ago, so I\'ll update my local copy as well. If you\'re installing it for the first time, clone&nbsp; the repository into your custom-nodes folder.'
+
+[01:34] [scene:talk]
+VISUAL: 
+AUDIO: 'In my case, I already have the custom node&nbsp; project, so I will enter in the project folder,&nbsp;&nbsp; run git pull to download the latest&nbsp; changes, and then restart Comfy UI. This is the basic workflow&nbsp; for the Krea 2 Turbo model,&nbsp;&nbsp;'
+
+[01:51] [scene:talk]
+VISUAL: 
+AUDIO: 'and after installing the custom node,&nbsp; you\'ll have these three new nodes. Place the Control LoRA Loader, and make&nbsp; the connection with the model. You can&nbsp;&nbsp; also have the style lora placed&nbsp; in between if you are using any.'
+
+[02:04] [scene:talk]
+VISUAL: 
+AUDIO: 'Then add the Control Apply node, which&nbsp; connects directly to the KSampler. Next, we\'ll load the reference image with the&nbsp; resize-image node to keep the image size in&nbsp;&nbsp;'
+
+[02:17] [scene:talk]
+VISUAL: 
+AUDIO: 'check and have the resolution details&nbsp; which can be useful in this workflow. I\'m also using the AIO AUX Preprocessor node&nbsp; to generate the depth map. This comes from a&nbsp;&nbsp; different custom node, which you can&nbsp; install through the ComfyUI Manager.'
+
+[02:32] [scene:talk]
+VISUAL: 
+AUDIO: 'The generated depth map is connected&nbsp; to the Control Image Encode node. Its output is then connected to&nbsp; the Control Apply node above,&nbsp;&nbsp; which is connected to the Krea 2 Diffusion&nbsp; Transformer model, also known as a DiT model.'
+
+[02:45] [scene:talk]
+VISUAL: 
+AUDIO: 'In my previous video, I explained&nbsp; the traditional ControlNet approach,&nbsp;&nbsp; where a separate neural network&nbsp; guides the denoising process. This workflow works differently.'
+
+[02:59] [scene:talk]
+VISUAL: 
+AUDIO: 'The custom node first encodes&nbsp; the depth map and attaches it&nbsp;&nbsp; to the model using the Depth Control&nbsp; LoRA, before image generation begins. There isn\'t a separate ControlNet&nbsp; network involved. Instead,&nbsp;&nbsp; when the KSampler starts sampling,&nbsp; the Krea 2 model reads the attached&nbsp;&nbsp;'
+
+[03:13] [scene:talk]
+VISUAL: 
+AUDIO: 'depth information along with the normal&nbsp; image tokens inside its Transformer. You can think of it like asking ChatGPT&nbsp; to write a story about a dragon. Now imagine asking it to&nbsp; write a story about a dragon,&nbsp;&nbsp;'
+
+[03:27] [scene:talk]
+VISUAL: 
+AUDIO: 'but this time you also attach a sketch,&nbsp; a floor plan, or a pose reference. The AI doesn\'t need a second brain&nbsp; to understand that information. It&nbsp;&nbsp; simply receives additional context&nbsp; as part of the same conversation.'
+
+[03:40] [scene:talk]
+VISUAL: 
+AUDIO: 'So why use this approach instead&nbsp; of a traditional ControlNet? Traditional ControlNet was designed for&nbsp; U-Net-based diffusion models just like&nbsp;&nbsp; the Control-Net workflows many of us&nbsp; have been using with Stable Diffusion.&nbsp;'
+
+[03:53] [scene:talk]
+VISUAL: 
+AUDIO: 'Instead of modifying the original U-Net directly,&nbsp;&nbsp; it uses a separate ControlNet neural network that&nbsp; processes the depth-map, or the control image. The features produced by this network are&nbsp;&nbsp;'
+
+[04:07] [scene:talk]
+VISUAL: 
+AUDIO: 'then injected into the denoising&nbsp; U-Net to guide image generation. Krea 2, however, is a Transformer-based&nbsp; model. Instead of adding another network,&nbsp;&nbsp; the custom node uses the Depth Control&nbsp; LoRA to inject the control information&nbsp;&nbsp;'
+
+[04:19] [scene:talk]
+VISUAL: 
+AUDIO: 'into the Krea 2 Transformer&nbsp; before the sampling process. The controlled latent generated above&nbsp; can also be decoded using the VAE,&nbsp;&nbsp; so we can see exactly what\'s happening.'
+
+[04:31] [scene:talk]
+VISUAL: 
+AUDIO: 'I forgot to make this connection.&nbsp; To make it work, we first need to&nbsp;&nbsp; encode the original image with the VAE, and&nbsp; this latent connection is also required. Notice that the depth map&nbsp; is resized to 1024 pixels,&nbsp;&nbsp;'
+
+[04:44] [scene:talk]
+VISUAL: 
+AUDIO: 'even though the original image is only 512 pixels. This happens because of the Resize&nbsp; option, which matches the control&nbsp;&nbsp; image to the resolution of the Empty&nbsp; Latent that is passed to the KSampler.'
+
+[04:57] [scene:talk]
+VISUAL: 
+AUDIO: 'The other option is to keep the original image&nbsp; size, but I recommend matching it to the Empty&nbsp;&nbsp; Latent resolution. Since this control&nbsp; information is attached to the model,&nbsp;&nbsp; using the final output resolution&nbsp; gives the model control data at&nbsp;&nbsp;'
+
+[05:12] [scene:talk]
+VISUAL: 
+AUDIO: 'the same size as the image it will&nbsp; generate—in this example, 1024 pixels. The Upscale Method and Crop options work just&nbsp; like they do in the standard Resize Image node. The Channel Mode setting depends on&nbsp; the type of control image you\'re using.'
+
+[05:30] [scene:talk]
+VISUAL: 
+AUDIO: 'For depth maps, the color doesn\'t matter—the&nbsp; useful information is stored in the brightness&nbsp;&nbsp; values. Selecting Grayscale removes unnecessary&nbsp; color information while preserving the depth. However, for controls such as OpenPose,&nbsp; Canny, and Normal Maps, you should use RGB,&nbsp;&nbsp;'
+
+[05:44] [scene:talk]
+VISUAL: 
+AUDIO: 'because those control images were&nbsp; designed and trained in that format. The Normalize option is set to None by default,&nbsp;&nbsp; and that\'s the correct choice for&nbsp; controls like OpenPose, Canny,&nbsp;&nbsp;'
+
+[05:57] [scene:talk]
+VISUAL: 
+AUDIO: 'and Line Art, since those images are already&nbsp; in the format that the Control LoRA expects. Depth maps are a little different.&nbsp; Some of them have very little contrast,&nbsp;&nbsp; making nearby and distant&nbsp; objects appear too similar.'
+
+[06:11] [scene:talk]
+VISUAL: 
+AUDIO: 'The Per Image Min-Max option&nbsp; stretches the brightness values&nbsp;&nbsp; so that the darkest pixel becomes black&nbsp; and the brightest pixel becomes white. This increases the contrast of the depth map,&nbsp;&nbsp;'
+
+[06:23] [scene:talk]
+VISUAL: 
+AUDIO: 'giving the Depth Control LoRA a cleaner and&nbsp; more consistent representation of the scene. The Invert option is self-explanatory,&nbsp; so I won\'t spend any time on it. The Batch Mode option lets you process&nbsp; either a single image or multiple frames,&nbsp;&nbsp;'
+
+[06:38] [scene:talk]
+VISUAL: 
+AUDIO: 'which is useful when you\'re working with videos. And that\'s it—these were the&nbsp; settings in this custom node. As you\'ve seen, this Control LoRA&nbsp; doesn\'t work like the traditional&nbsp;&nbsp; Stable Diffusion ControlNet that&nbsp; most people are familiar with.'
+
+[06:53] [scene:talk]
+VISUAL: 
+AUDIO: 'Instead of using a separate ControlNet network,&nbsp; this custom node injects the control information&nbsp;&nbsp; directly into the Krea 2 Transformer model.&nbsp; That\'s why we needed these additional nodes,&nbsp;&nbsp; and hopefully you now have a better understanding&nbsp; of what\'s happening behind the scenes.&nbsp;'
+
+[07:08] [scene:talk]
+VISUAL: 
+AUDIO: 'Make these connections so&nbsp; you do not have to adjust&nbsp;&nbsp; the latent size manually for different images. I\'ve been using this Control LoRA,&nbsp;&nbsp; and occasionally it may not follow the pose&nbsp; as expected, like it did in this example.'
+
+[07:21] [scene:talk]
+VISUAL: 
+AUDIO: 'In this case, changing the&nbsp; prompt solved the problem. If you run into this issue, try&nbsp; encoding the reference image with&nbsp;&nbsp; the VAE and connect the resulting latent&nbsp; to the KSampler as the latent image.'
+
+[07:33] [scene:talk]
+VISUAL: 
+AUDIO: 'You can also reduce the denoise value slightly.&nbsp;&nbsp; This helps preserve more of the original&nbsp; structure and often improves pose consistency. You can even use simple drawings or&nbsp; rough sketches to generate a depth map,&nbsp;&nbsp;'
+
+[07:48] [scene:talk]
+VISUAL: 
+AUDIO: 'and the results are surprisingly good. In fact, even a quick sketch made in Microsoft&nbsp; Paint works well and can produce a decent image. So, that\'s it for this quick video.'
+
+[08:01] [scene:talk]
+VISUAL: 
+AUDIO: 'Let me know in the comments if you found&nbsp; it interesting or learned something new. Thanks for watching, and I&nbsp; wish you an excellent day!'

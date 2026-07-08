@@ -1,0 +1,120 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: 77 MB vs 248 MB: Why Deno Desktop Is Crushing Electron
+channel: @octopusinc_
+duration: 05:33
+source: https://www.youtube.com/watch?v=yLe2pwIFC-s
+upload_date: 20260705
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:intro]
+VISUAL: "248 MB — to show a to-do list?" text on screen, comparing Electron (248 MB) and Deno (21 MB) app sizes.
+AUDIO: '248 megabytes. An Electron app just to show a to-do list. This one does the same job in 21. No Chromium. Pure TypeScript. Every Electron app you\'ve ever installed ships an entire copy of Chromium. About 180 megabytes of'
+
+[00:13] [scene:explanation]
+VISUAL: Visual comparison of Electron app (code + Chromium ~180 MB) vs Deno app (code + borrowed OS web view).
+AUDIO: 'browser before you write a single line of code. Deno 2.9 just shipped a fix. One command, Deno desktop, turns a TypeScript file into a native app that'
+
+[00:25] [scene:explanation]
+VISUAL: Visual comparison of Electron app (code + Chromium ~180 MB) vs Deno app (code + borrowed OS web view), with "The catch the demos skip" highlighted.
+AUDIO: 'borrows the webview already sitting in your operating system. No bundled browser. I built a real one to test it, and the size drop is genuinely absurd. But two things nag at me.'
+
+[00:38] [scene:explanation]
+VISUAL: Diagram showing Electron shipping Chromium inside every app vs Deno borrowing the OS web view.
+AUDIO: 'There\'s a catch that demos don\'t mention. And Deno isn\'t actually the smallest option in this race. Let\'s get into it. Here\'s the whole idea. A desktop app is just a window showing a web page, plus code that can touch the'
+
+[00:51] [scene:talk]
+VISUAL: 
+AUDIO: 'machine. Electron gives you that window by shipping Chromium inside every app. Deno\'s that is simpler. Your operating system already has a browser engine. Webview 2 on Windows, WebKit on Mac and'
+
+[01:04] [scene:explanation]
+VISUAL: Diagram detailing Deno's approach: `deno desktop app.ts` serves UI to web view, backend runs in Deno, using WebView2 on Windows and WebKit on Mac/Linux.
+AUDIO: 'Linux. So, use that. You point Deno desktop at a TypeScript file. And it serves your interface into that built-in webview while your back end runs in Deno.'
+
+[01:17] [scene:explanation]
+VISUAL: Diagram showing Deno's front-end/back-end binding in the same process, contrasting with Electron's IPC channel.
+AUDIO: 'The two talk through a binding. You call a function on the front end, it runs on the back end in the same process. Electron needs a separate channel for that, called IPC. Deno skips it. And if you don\'t trust every operating'
+
+[01:30] [scene:demo]
+VISUAL: A "Deno System Monitor" app UI showing CPU and Memory usage in a native window.
+AUDIO: 'system to render the same, one flag bundles a real Chromium anyway. Consistent everywhere, bigger file. Your call. So, I built one. A system monitor, real-time CPU and'
+
+[01:42] [scene:talk]
+VISUAL: 
+AUDIO: 'memory in a native window, pure TypeScript. The whole app is one file. Some HTML for the gauges, a function that pulls the machine stats, and one line to hand that function to the'
+
+[01:56] [scene:code]
+VISUAL: Code snippet for the Deno System Monitor, showing `Deno.serve`, `Deno.BrowserWindow`, and `win.bind` in `main.ts`.
+AUDIO: 'window. Then, deno desktop output main.ts. One command. A minute later, I had a single binary. No installer wizard, no node modules folder, no chromium download.'
+
+[02:08] [scene:ui]
+VISUAL: Command `deno desktop --output DenoSysMon main.ts` shown, with "permission at build time" and `--allow-sys` note.
+AUDIO: 'I double-clicked it and there it is. A real desktop window CPU and memory updating every second. Two things bit me while building. First, sampling the CPU needs a permission.'
+
+[02:21] [scene:ui]
+VISUAL: "the node_modules trap" with `nodeModulesDir:none` fix for Deno scanning home directory.
+AUDIO: 'Deno makes you grant system access at build time on purpose. Second, deno hunts for a node modules folder up the tree. It found a stray one in my home directory and stalled for minutes.'
+
+[02:33] [scene:talk]
+VISUAL: 
+AUDIO: 'One line of config fixed it. Small app, real app. Now the number that matters. Here\'s the receipt. That same monitor as a deno binary, about 77 megabytes. Compress it, one flag, and it drops to'
+
+[02:47] [scene:talk]
+VISUAL: 
+AUDIO: '20 win. Better stack built the identical node app in both electron and deno. Electron came out at 248 megabytes, deno at 70. The entire gap is chromium. The browser'
+
+[03:00] [scene:comparison]
+VISUAL: Cold start times for Electron (364 ms) and Deno (375 ms) are shown as a tie, indicating similar launch speeds despite size differences.
+AUDIO: 'electron ships and deno borrows. But before you crown it, look at startup. They clocked both apps launching and it was a tie. Around 370 milliseconds each.'
+
+[03:12] [scene:features]
+VISUAL: Title card "Batteries Included: Not just a window".
+AUDIO: 'Smaller on disk, same speed to open. So, the win is size and memory, not raw launch speed. Good to know before you believe a thumbnail. And it\'s not just a window.'
+
+[03:25] [scene:features]
+VISUAL: "Batteries Included" features: System Tray API, Native Notifications, and Auto-update (shipping tiny binary-diff patches).
+AUDIO: 'Deno desktop ships the boring production stuff you\'d normally bolt on yourself. A system tray API for icons and menus. Native notifications and dialogues. Auto update built in.'
+
+[03:37] [scene:talk]
+VISUAL: 
+AUDIO: 'It ships tiny binary diff patches, so users download a few kilobytes, not the whole app again. And cross compile. From one machine, you target Mac, Windows, and Linux. App and DMG on Mac and EXE or MSI'
+
+[03:51] [scene:features]
+VISUAL: Cross-compile capabilities: macOS (.app, .dmg), Windows (.exe, .msi), Linux (AppImage, .deb, .rpm) from one machine.
+AUDIO: 'installer on Windows, app image, deb, and RPM on Linux, all with one flag. The Windows and Linux installers are written in pure Rust, which is why any'
+
+[04:03] [scene:comparison]
+VISUAL: Title card "Deno is small — not the smallest".
+AUDIO: 'machine can produce them without that platform\'s own tooling. For an experimental feature, that\'s a lot in the box. Now, the thing most Deno videos skip. Deno is small, but it\'s not the'
+
+[04:15] [scene:comparison]
+VISUAL: Comparison table of Deno vs Electrobun: Runtime (Deno vs Bun), Stable Since (2026 newer vs Feb 2026), Starter App (~40 MB vs ~14 MB).
+AUDIO: 'smallest. Meet Electron. Same core idea, use the system web view, skip Chromium, but built on Bun instead, and it went stable in February, 4 months before Deno\'s version.'
+
+[04:27] [scene:talk]
+VISUAL: 
+AUDIO: 'Its numbers are sharper. Its author clocks a starter app around 14 megabytes against Deno\'s roughly 60 for the same shape. And update patches measured in single kilobytes. So, why isn\'t everyone on it?'
+
+[04:40] [scene:comparison]
+VISUAL: Comparison table extended with Update Patches (~KB vs single KB), Backing (funded runtime vs one-person project), Windows + Cross-compile (yes vs Mac + Linux only).
+AUDIO: 'Trade-offs. Electron is one person\'s project, and today it\'s Mac and Linux only. No Windows yet. Deno gives you Windows cross-compile and the weight of a funded runtime behind'
+
+[04:52] [scene:caveat]
+VISUAL: "EXPERIMENTAL" stamp, noting APIs and flags shift release to release, and framework auto-detect vs explicit entrypoint for single files.
+AUDIO: 'it. Smaller isn\'t automatically better. It depends which corner you\'re painting into. And the catch the demos gloss over, Deno desktop is experimental. The auto detect finds nine web'
+
+[05:04] [scene:talk]
+VISUAL: 
+AUDIO: 'frameworks. But point it at a raw single file app, and you name the entry point yourself. On Windows, you inherit web view tools quirks. It\'s genuinely enough to build with, but it\'s version one, not a finished'
+
+[05:17] [scene:talk]
+VISUAL: 
+AUDIO: 'platform. So, Deno desktop or Electron? Which tiny app stack are you actually shipping in 2026? Pick one and tell me why in the comments.'
+
+[05:29] [scene:talk]
+VISUAL: 
+AUDIO: 'Subscribe for more honest hands-on developer tooling.'
