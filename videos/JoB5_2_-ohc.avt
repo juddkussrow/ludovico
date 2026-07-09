@@ -1,0 +1,200 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Krea 2 Image Editing Workflow | ComfyUI Tutorial
+channel: @octopusinc_
+duration: 10:02
+source: https://www.youtube.com/watch?v=JoB5_2_-ohc
+upload_date: 20260708
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'Hey guys, in this video, let\'s test a Laura that can help us edit images using the Crea 2 model. The Laura is called Crea 2 identity edit. The download link for the Laura is available in the description. So, let\'s get started. Open the link for the Crea 2 identity Laura'
+
+[00:13] [scene:talk]
+VISUAL: 
+AUDIO: 'and you will see a page like this. Here, there is a lot of information regarding the Laura. To make the Laura work, we need a custom node pack to be installed in ComfyUI. Later, we will see how to install that'
+
+[00:26] [scene:talk]
+VISUAL: 
+AUDIO: 'custom node pack. Scrolling down further, we can find a lot of other important information. Here, the Laura developer recommends using the turbo model when it comes to image editing tasks like adding, recoloring,'
+
+[00:38] [scene:talk]
+VISUAL: 
+AUDIO: 'restyling, or restaging images. When you want to remove objects, use the raw model. However, my experiments show that the turbo model can also do object removal in some cases. Another thing is'
+
+[00:50] [scene:talk]
+VISUAL: 
+AUDIO: 'to use an output resolution of 2 megapixels or lower. There are also some limitations the developer listed here. So, let\'s skip that and take a look at downloading the Laura.'
+
+[01:02] [scene:talk]
+VISUAL: 
+AUDIO: 'Scroll up and click on files and versions. This is the Laura we need to download, which is named Crea 2 identity edit v1.safetensors. Download the file and put it inside the Laura\'s folder of ComfyUI. Now, let\'s'
+
+[01:14] [scene:talk]
+VISUAL: 
+AUDIO: 'focus on installing the custom node pack we need for this Laura. Here is the custom node pack, which is called ComfyUI-Crea2-Edit. Currently, it is not available in'
+
+[01:26] [scene:talk]
+VISUAL: 
+AUDIO: 'ComfyUI Manager, so we have to install it manually. I already made a video on installing custom nodes on ComfyUI. If you have not watched it, I recommend watching that video. Still, let\'s take a quick look at installing the custom node pack. We need'
+
+[01:40] [scene:talk]
+VISUAL: 
+AUDIO: 'to open the custom nodes folder of ComfyUI, then run this git clone command. Let\'s copy this command and run it. Let\'s open the custom node folder of ComfyUI. In here, let\'s open the terminal. paste'
+
+[01:56] [scene:talk]
+VISUAL: 
+AUDIO: 'the command, and then press enter. In my case, the folder is already there. That\'s it. This custom node pack right now doesn\'t need any extra dependencies, so let\'s close the terminal. If you are'
+
+[02:08] [scene:talk]
+VISUAL: 
+AUDIO: 'currently running ComfyUI, just restart it after downloading the custom node pack. Now, let\'s switch to ComfyUI. As always, I already built a workflow, which you can download from the'
+
+[02:21] [scene:talk]
+VISUAL: 
+AUDIO: 'description. I assume you already know how to use the Crea 2 model, so let\'s focus only on the major differences in this workflow compared to a normal text-to-image workflow. In here, I am using the Turbo BF16 model.'
+
+[02:33] [scene:talk]
+VISUAL: 
+AUDIO: 'In the Load LoRA node, I have selected Crea 2 Identity Edit V1 with a strength of 1.0. Then in the Load Clip node, I will be using the text encoder Kwen 3 VL4BFP8'
+
+[02:46] [scene:talk]
+VISUAL: 
+AUDIO: 'Scaled. Now, let\'s focus on the groups that have the image loaders. The first group is called Image 1, and then we have the Image 2 group. Here\'s the thing, right now you can use up to two reference images for editing, but I'
+
+[02:59] [scene:talk]
+VISUAL: 
+AUDIO: 'found that using two has a lot of issues, so it\'s better to stick with just one image input for editing. So, in the Image 1 group, I\'ve loaded an image for editing. Then we scale the image to 1 megapixel'
+
+[03:11] [scene:talk]
+VISUAL: 
+AUDIO: 'using a Resize Image or Mask node. You can also use 2 megapixels if you want. After that, we use another Resize Image or Mask node to make sure the resolution of the scaled image is a multiple of'
+
+[03:24] [scene:talk]
+VISUAL: 
+AUDIO: 'eight. From there, the image is sent to multiple nodes. First, the VAE Encode node converts the image into a latent. That latent is then connected to the Crea 2 Edit Source Patch node, which comes from the custom node pack we just'
+
+[03:37] [scene:talk]
+VISUAL: 
+AUDIO: 'talked about. This node sits between the diffusion model node and the K Sampler. Its job is to give the model access to the original image during editing. This allows the model to use the original image as a visual reference while'
+
+[03:49] [scene:talk]
+VISUAL: 
+AUDIO: 'generating edit, helping keep the overall appearance consistent. If you\'re using a second reference image, it\'s latent is connected to the source latent B input, allowing the model to use both reference images during editing. For'
+
+[04:02] [scene:talk]
+VISUAL: 
+AUDIO: 'prompting, we use the Cre A 2 edit grounded encode node from the same custom node pack as before. This node also has two image inputs. The first image goes into the image input,'
+
+[04:14] [scene:talk]
+VISUAL: 
+AUDIO: 'and if we\'re using a second reference image, it goes into image B. Simply put, this node doesn\'t just take our editing instructions, it also reads the input images and sends a semantic understanding of them to the Cre A 2'
+
+[04:27] [scene:talk]
+VISUAL: 
+AUDIO: 'model, so the model knows what is actually inside the image it is about to edit. One more setting worth mentioning here is grounding px. This controls the resolution of the image that\'s sent to'
+
+[04:39] [scene:talk]
+VISUAL: 
+AUDIO: 'the vision model for semantic understanding. Lower values make the edit follow your instructions more strongly, while higher values preserve more of the original identity. So, increase it for better facial identity preservation, or lower'
+
+[04:52] [scene:talk]
+VISUAL: 
+AUDIO: 'it if an edit is not good enough or isn\'t following your instructions. So, yeah, the image isn\'t just fed in as a latent, it\'s also read by the Qwen 3 VL 4B model to generate that semantic understanding. And because right now I'
+
+[05:06] [scene:talk]
+VISUAL: 
+AUDIO: 'am using the turbo model, I don\'t need to type anything inside the negative prompt. But we will need it if we are using the raw model. Next, let\'s look at the K Sampler. I will be using the same settings I used in my other Cre A 2'
+
+[05:20] [scene:talk]
+VISUAL: 
+AUDIO: 'video, but let\'s also set the seed change to randomize. The output resolution will be decided based on the scaled first image, and that\'s why we have this get image size node. Also, as an extra addition, I added this prompt enhance group. So, if'
+
+[05:34] [scene:talk]
+VISUAL: 
+AUDIO: 'you want to enhance your prompt, just type it here and run the group. For prompt enhancing, the subgraph node uses Qwen 3 8B. If you want to change it, just enter the subgraph node and change'
+
+[05:46] [scene:talk]
+VISUAL: 
+AUDIO: 'the text encoder in the load clip node. Well, we don\'t need to enter the subgraph node every time to change the text encoder. Let\'s right-click and click on the promote widget clip name. Then exit the'
+
+[05:58] [scene:talk]
+VISUAL: 
+AUDIO: 'subgraph and rescale the subgraph. Let\'s put the group in un-bypass mode. Now we are ready to change the text encoder right from here. Anyway, for this video, I won\'t be using it. So'
+
+[06:10] [scene:talk]
+VISUAL: 
+AUDIO: 'let\'s put the group in bypass mode. Now, let\'s start editing the image we loaded. I\'m going to convert this image into anime art. For that, I wrote, "Convert the image to an anime art style'
+
+[06:22] [scene:talk]
+VISUAL: 
+AUDIO: 'while preserving the original composition, etc." Now let\'s run the workflow and see the result. So here is the result we got. Well, it\'s a nice result, but it does not completely match up with the'
+
+[06:35] [scene:talk]
+VISUAL: 
+AUDIO: 'original. In the original image, the woman is looking far away into the distance, and she is wearing white shoes. So what can we do to fix this? Well, we can try increasing the grounding PX value. Let\'s'
+
+[06:47] [scene:talk]
+VISUAL: 
+AUDIO: 'try that. I am going to use 1024. We can also try another seed. Anyway, let\'s run the workflow again and see the result. Okay, here is the result. Well, this time the edit improved, but the woman\'s'
+
+[07:01] [scene:talk]
+VISUAL: 
+AUDIO: 'head is looking sideways rather than looking far into the distance. Still, it is better than the previous one. Now, let\'s try editing another image. I am going to choose this photo. This time I am going to change her suit into a'
+
+[07:14] [scene:talk]
+VISUAL: 
+AUDIO: 'T-shirt. So in the prompt, let\'s type, "Replace the woman\'s suit with a yellow T-shirt." This time, I will also put the model sampling Aura Flow node into bypass mode. Sometimes it provides better results.'
+
+[07:26] [scene:talk]
+VISUAL: 
+AUDIO: 'For now, let\'s keep it in bypass mode. Now let\'s run the workflow. Okay, here is the result we got, and it\'s not good. So what can we do in this case? Well, we can try another seed'
+
+[07:38] [scene:talk]
+VISUAL: 
+AUDIO: 'because our seed changes automatically for every generation. Let\'s just run the generation again and see if we get a better result. Here we go again. The result is not good. So, what can we do in this case? Let\'s lower the ground px'
+
+[07:52] [scene:talk]
+VISUAL: 
+AUDIO: 'to see if that solves the problem. So, I\'m going to use 768 and let\'s hit the generation. Okay, here is the result and this time it looks good. But as you can see here, there is a slight pose change,'
+
+[08:04] [scene:talk]
+VISUAL: 
+AUDIO: 'too. I think lowering the grounding px solved the problem. Now, what if we want to edit this output image? To load the current output image, we can use another node called load image from outputs.'
+
+[08:17] [scene:talk]
+VISUAL: 
+AUDIO: 'Here is the node. Now, let\'s connect it to the resize image or mask node of the first image loader group. Let\'s add a baseball hat to her head. So, in the positive prompt, let\'s type add a white'
+
+[08:29] [scene:talk]
+VISUAL: 
+AUDIO: 'baseball hat on the woman\'s head. Now, let\'s run the workflow. And here we go. Now, she is wearing a hat. The result is good, but there are still some problems, like her body size changed. Now, let\'s'
+
+[08:43] [scene:talk]
+VISUAL: 
+AUDIO: 'see if we can make her smile. So, in the load image from outputs node, let\'s click on the refresh button. Then, in the positive prompt, let\'s type make her smile naturally. Now, let\'s run the'
+
+[08:55] [scene:talk]
+VISUAL: 
+AUDIO: 'workflow. So, here is the result. She is smiling and I think it\'s a good result, though there is a slight change in her body proportions.'
+
+[09:07] [scene:talk]
+VISUAL: 
+AUDIO: 'Now, let\'s load another image and try replacing the background. So, I will choose this image. Let\'s change the studio setting to a beach. So, in the positive prompt, let\'s type replace the background with a beach at'
+
+[09:21] [scene:talk]
+VISUAL: 
+AUDIO: 'sunset. Now, let\'s hit the generation and here is the result. I think it\'s a good result, although the woman\'s position has changed. So, I think it\'s time to wrap things up. In my opinion, I don\'t think this method of'
+
+[09:35] [scene:talk]
+VISUAL: 
+AUDIO: 'image editing can beat the flux two Klein 9B model nor the QN image edit models, but it\'s fun to test this method. And in the case of text rendering, it was not good in most tests I ran.'
+
+[09:48] [scene:talk]
+VISUAL: 
+AUDIO: 'Also, even the raw model was struggling with the text editing. So guys, that\'s it for this video. Test this Laura method of image editing and let me know what you think. Thanks for watching and I will see you soon with another video.'

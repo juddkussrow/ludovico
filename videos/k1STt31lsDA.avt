@@ -1,0 +1,372 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Build a ComfyUI Image Edit Workflow and Actually Understand It | Build With Me [EP. 4]
+channel: @octopusinc_
+duration: 18:54
+source: https://www.youtube.com/watch?v=k1STt31lsDA
+upload_date: 20260708
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'What\'s going on guys? LoreTech here, and welcome back to build with me. A comfy UI series where I walk you through how to build workflows from scratch so that you understand exactly what\'s going on under the hood to expand your understanding of AI image generation and video generation. Same rules as always'
+
+[00:13] [scene:talk]
+VISUAL: 
+AUDIO: 'applies. We start with blank canvas, no templates, no imported JSON. We build it from the ground up and I explain teach you information that typically people charge hundreds for and I\'m giving it away to you guys for free. Just a quick'
+
+[00:25] [scene:talk]
+VISUAL: 
+AUDIO: 'shameless plug before we get into it. Since that\'s really the only way that I\'m able to afford the cost and upkeep of making these videos for you guys. I do one-on-one coaching through Discord. If you want help getting your own comfy UI and runpod setup, building and'
+
+[00:38] [scene:talk]
+VISUAL: 
+AUDIO: 'understanding workflows, training your own LORAs, editing workflows, or creating workflows from scratch, figuring out how to actually grow an AI influencer account instead of putting in effort just to get banned on your socials or not seeing the growth that'
+
+[00:50] [scene:talk]
+VISUAL: 
+AUDIO: 'you actually deserve. That\'s what these sessions are for. The pricing is consultation based, so it\'s built around what you actually need, not a flat package. I\'m not charging you with a one-time fee and giving you just a video showing you how to set things up and'
+
+[01:02] [scene:talk]
+VISUAL: 
+AUDIO: 'then sending you off on your own. I\'m actually guiding you through on Discord one-on-one live as you share your screen and provide any concerns that you may have regarding what it is that you\'re wanting to learn. So, if you\'re interested in that or you just want to join my Discord to be involved with the'
+
+[01:15] [scene:talk]
+VISUAL: 
+AUDIO: 'community, the details are in the description for the Discord. You can find a link there to join it and I really appreciate it. There\'s also a ton of free workflows in the Discord as well. But, either way, if this channel has been useful, please I just ask that'
+
+[01:28] [scene:talk]
+VISUAL: 
+AUDIO: 'you guys hit like and subscribe. Turn on the bell notifications and maybe even leave a comment if you have any constructive criticism or just want to say thank you. It\'s truly the easiest and freest way to help the channel grow and it costs you nothing. So, thanks'
+
+[01:40] [scene:talk]
+VISUAL: 
+AUDIO: 'guys. So, today\'s build is an edit workflow. In the first three episodes, we used Z image turbo as our base model, but Z image turbo was not trained on image editing. So, this won\'t work with that base model. Today, we are using'
+
+[01:52] [scene:talk]
+VISUAL: 
+AUDIO: 'flux 2 client and its corresponding text encoder and VAE models. The core foundation of the workflow is that you give it two photos. Photo one can be a subject or a person, and photo two is an optional addition that you can combine'
+
+[02:06] [scene:talk]
+VISUAL: 
+AUDIO: 'or mix into image one. You type one sentence describing the result, and Flux 2 client generates a brand new image that pulls from both of your reference photos. Before we place a single node, here\'s the whole thing. And the graphic reads in build order. So, top row, left'
+
+[02:19] [scene:talk]
+VISUAL: 
+AUDIO: 'to right, we have our three loaders, exactly like every other episode. Then two load image nodes for your reference photos. Then the first of two scale nodes that shrink those photos to a size that Flux 2 client likes. Sneaking down'
+
+[02:32] [scene:talk]
+VISUAL: 
+AUDIO: 'to the middle row, running right to left, the second scale node, a VAE encode for each photo reference, your positive and negative prompts, and then the reference latent node. And the last one is the star of this episode. Bottom'
+
+[02:45] [scene:talk]
+VISUAL: 
+AUDIO: 'row, left to right. The second reference latent, an empty latent canvas, then the finish you already know from episodes one, two, and three. We have our K sampler, our VAE decode, and our preview image. The big difference about edit'
+
+[02:57] [scene:talk]
+VISUAL: 
+AUDIO: 'workflows and using edit models like Flux 2 client, and I feel like I should point this out now, is that in image to image, your photo became the starting latent, and the sampler denoised on top of it. Here, both photos travel inside'
+
+[03:09] [scene:talk]
+VISUAL: 
+AUDIO: 'the conditioning next to your text prompt. That\'s what those two reference latent nodes do in the middle of the graphic. The sampler starts from a blank canvas and treats your photo as instructions. Moving right over to ComfyUI, let\'s open up a blank canvas,'
+
+[03:22] [scene:talk]
+VISUAL: 
+AUDIO: 'and let\'s start building. So, right off the bat, we obviously need our three loaders. So, I\'m going to type in load here. And I\'m going to drag and drop our diffusion model loader.'
+
+[03:34] [scene:talk]
+VISUAL: 
+AUDIO: 'Search for a clip loader. Drag and drop that there. And then search for a VAE loader, and drag and drop that there. Now, we have'
+
+[03:49] [scene:talk]
+VISUAL: 
+AUDIO: 'our three loaders. We need to select our models. So, obviously, we will be using a Flux 2 Klein, the 9 billion parameter model today. And the corresponding text encoder that works with Flux 2 Klein is going to be the Qwen 3 8 billion'
+
+[04:03] [scene:talk]
+VISUAL: 
+AUDIO: 'parameter text encoder and the Flux 2 VAE. If you guys don\'t know how to install models, I recommend that you either circle back to episode 1 if you haven\'t watched it or just search up a quick video on how to install models to'
+
+[04:15] [scene:talk]
+VISUAL: 
+AUDIO: 'your ComfyUI build, whether you\'re using RunPod or local. It\'s pretty easy, pretty straightforward. You can get terminal commands to install your models or you can download them directly and drag and drop them into their'
+
+[04:27] [scene:talk]
+VISUAL: 
+AUDIO: 'corresponding folders in your ComfyUI directory. But, assuming you know how to do that, just get these models installed because, in my opinion, this is the best edit model that is out right now. I\'ve tried Qwen Image Edit 2511, which is'
+
+[04:39] [scene:talk]
+VISUAL: 
+AUDIO: 'their most recent release of their image edit model, and I just get better quality, better-looking results from Flux 2 Klein, honestly. And it generates these higher-quality results in like 1/5 of the steps that Qwen Image Edit'
+
+[04:53] [scene:talk]
+VISUAL: 
+AUDIO: 'requires. Qwen Image Edit typically requires anywhere from 30 to 50 steps, and Flux 2 Klein can work with as low as six steps. Moving on to our image loading pipeline, we now need two load image nodes. So, let\'s search for load'
+
+[05:06] [scene:talk]
+VISUAL: 
+AUDIO: 'image on our node section on the left-hand side here. And let\'s get two of those. I\'m just going to put those right there for now. So, branching off from the load image node, we\'re going to be adding our first node set that is new to this'
+
+[05:19] [scene:talk]
+VISUAL: 
+AUDIO: 'series. So, I\'m going to drag and drop from the image output and load image onto my canvas. And I\'m going to search for image scale to total pixels. There it is.'
+
+[05:32] [scene:talk]
+VISUAL: 
+AUDIO: 'Drag and drop that next to our first load image node and do the same thing for our second. Drag and drop onto the canvas. Search for image scale and do the same. So, I\'m I\'m to close my node finder on'
+
+[05:44] [scene:talk]
+VISUAL: 
+AUDIO: 'the left-hand side there and I\'m going to change the value in both of these nodes in megapixels to 1.2. So, in the image scale to total pixel node, megapixels set to 1.2 in both of these. So, why does this node exist? Client'
+
+[05:58] [scene:talk]
+VISUAL: 
+AUDIO: 'doesn\'t look at your photo directly. It converts the photo into a grid of tokens and the bigger the image, the more tokens. So, if you feed it a raw 4,000 by 3,000 phone photo and you\'re paying it for a massive token count in VRAM,'
+
+[06:10] [scene:talk]
+VISUAL: 
+AUDIO: 'it\'s going to up your generation time, it\'s going to draw more heat to your graphics card, and the output\'s not going to look that great because this image model was never trained to read at that size. So, this node normalizes'
+
+[06:23] [scene:talk]
+VISUAL: 
+AUDIO: 'whatever you throw at it down to roughly 1.2 megapixels while keeping the aspect ratio. So, it\'s predictable size in and you get a customizable speed and quality output, which I will show you guys how to modify. Continuing right on with our'
+
+[06:36] [scene:talk]
+VISUAL: 
+AUDIO: 'image pipelines, we need to drag and drop from our image output in the image scale to total pixels node. Drag and drop onto the canvas and we\'re going to search for VAE encode nodes.'
+
+[06:49] [scene:talk]
+VISUAL: 
+AUDIO: 'We\'re just going to do two of those. Obviously, one for each image scale to total pixels node. And there we go.'
+
+[07:01] [scene:talk]
+VISUAL: 
+AUDIO: 'Don\'t forget, we need to also wire in a VAE input to these VAE encode nodes. So, we\'re just going to take the VAE output from our loader and drag and drop that into both VAE encode nodes. So, now that'
+
+[07:14] [scene:talk]
+VISUAL: 
+AUDIO: 'we\'ve converted the pixels into compressed formats the model actually works in, we now have two latents. So, now for the interesting part, we are going to drag our latent output from both of these VAE encode nodes into a'
+
+[07:26] [scene:talk]
+VISUAL: 
+AUDIO: 'node that is new to the series called a reference latent. I\'m just going to drag and drop that right under our VAE encode for both of'
+
+[07:39] [scene:talk]
+VISUAL: 
+AUDIO: 'them. And Again, reference latent under our VAE encode for our second load image, and there we go. Getting the wiring here is very important, so follow along closely.'
+
+[07:52] [scene:talk]
+VISUAL: 
+AUDIO: 'This pretty much establishes both of our image loading pipelines, but before we move on to the next section, which is going to be prompting, I am going to take the conditioning output from our first reference latent on top and drag'
+
+[08:04] [scene:talk]
+VISUAL: 
+AUDIO: 'that into the conditioning input in our second reference latent, just like that. Now that we have our reference latents properly combined, we are going to move on to the prompting section.'
+
+[08:16] [scene:talk]
+VISUAL: 
+AUDIO: 'So, I need a clip text encode node, which is literally just a prompt box. So, this is going to be our positive prompt here. What I need to do is take the output of our clip loader or our text encoder'
+
+[08:30] [scene:talk]
+VISUAL: 
+AUDIO: 'loader and drag that into the clip input in the positive prompt box, and I\'m going to close my node library and rename this to positive to avoid confusion going forward. Now,'
+
+[08:42] [scene:talk]
+VISUAL: 
+AUDIO: 'I\'m going to take the conditioning output from my positive prompt box, drag and drop that onto my canvas, and search for a node called conditioning zero out. And what this does is basically creates'
+
+[08:54] [scene:talk]
+VISUAL: 
+AUDIO: 'our negative prompt, but we don\'t actually need to use a negative prompt. It works just fine without one, and I honestly think negative prompts are a myth. So, all we\'re going to do is basically just zero out our negative'
+
+[09:06] [scene:talk]
+VISUAL: 
+AUDIO: 'prompt so that it returns an empty string from this conditioning output, and that will go into our negative prompt input, which I will show you guys how to do in just a second here. But, this isn\'t the only thing that we are'
+
+[09:18] [scene:talk]
+VISUAL: 
+AUDIO: 'wiring up from our positive prompt box. We also need to take another conditioning output from the positive prompt and put it into our first reference latent. And I think it\'s important for me to tell you guys'
+
+[09:30] [scene:talk]
+VISUAL: 
+AUDIO: 'about this. Prompting changes in the network flow, and this is worth pausing on because you\'re not just describing a scene for nothing anymore. You\'re giving instructions about the photos. What to take from each one, what changes, and'
+
+[09:42] [scene:talk]
+VISUAL: 
+AUDIO: 'what stays. ComfyUI text encoder handles plain sentences, so write it like you\'d explain the edit to a person. Reference the images directly. Use phrases like the woman in image one, the background in image two, and just be very concise'
+
+[09:55] [scene:talk]
+VISUAL: 
+AUDIO: 'and straightforward. So, let\'s recap what we just built. It\'s basically just a double image loading chain. Our prompt goes in, it picks up photo one, picks up photo two, and then comes out the other side as one combined conditioning'
+
+[10:07] [scene:talk]
+VISUAL: 
+AUDIO: 'signal. Your text and both images are now a single set of instructions. That\'s the entire mechanism behind edit workflows. The model can resolve whatever it is that you\'re wanting to edit because both photos are sitting right there in the conditioning in order. If you want a third reference,'
+
+[10:19] [scene:talk]
+VISUAL: 
+AUDIO: 'you can just chain this again. But, I think that two is more than enough, and I\'ll even show you guys how to bypass this second image input if you\'re only wanting to just edit one photo and describe changes via prompting without a second reference photo. We\'re almost'
+
+[10:32] [scene:talk]
+VISUAL: 
+AUDIO: 'done with the workflow now. Just a few more nodes and a little bit of configuration, and we should have a running workflow. So, I\'m going to go and open up my node library on the left-hand side here again. I\'m going to search for a node called empty flux two'
+
+[10:44] [scene:talk]
+VISUAL: 
+AUDIO: 'latent. Drag and drop that onto the canvas here. I will just put that over here for now and move over on my canvas a little bit. I\'ll explain exactly what this empty latent does in a second here, but first'
+
+[10:56] [scene:talk]
+VISUAL: 
+AUDIO: 'let\'s get our K sampler placed on our canvas. By now you guys know what a K sampler is. I\'m going to use the K sampler efficient as I normally do. I\'m going to put that right above our'
+
+[11:11] [scene:talk]
+VISUAL: 
+AUDIO: 'empty flux two latent. And now we need to wire this up. So, let me close my node library. I\'m going to take the latent output from empty flux two latent here and wire that into our latent image to start out with the wiring for our K'
+
+[11:24] [scene:talk]
+VISUAL: 
+AUDIO: 'sampler. And you may be thinking, wait, our previous episodes replaced the empty latent with the encoded photo our VAE encode. As you see, VAE encode has our latent output. But, our photos aren\'t the'
+
+[11:36] [scene:talk]
+VISUAL: 
+AUDIO: 'starting point anymore. They\'re running along in the conditioning. So, our generation starts from scratch, which is exactly why the output is a new image instead of a filtered copy of your reference.'
+
+[11:48] [scene:talk]
+VISUAL: 
+AUDIO: 'It also means output size is yours to set. So, if you want 9 by 16 for Instagram style photos, then change it here in empty flux to latent. So, for example, we can do 1280 for our height and 720'
+
+[12:00] [scene:talk]
+VISUAL: 
+AUDIO: 'for our width, and that would be an example of a 9 by 16 iPhone style photo. Okay, we have a few more things here that we need to wire up to our case'
+
+[12:12] [scene:talk]
+VISUAL: 
+AUDIO: 'sampler. So, we\'re going to take the model output from our load diffusion model and drag and drop that all the way into our case sampler there. Now, for the positive and negative in our case sampler, we\'re going to take the reference latent output from our'
+
+[12:25] [scene:talk]
+VISUAL: 
+AUDIO: 'second reference latent down here, take the conditioning and drag that into our positive. And then for our negative prompt, we\'re simply going to take the conditioning output from our conditioning zero out'
+
+[12:37] [scene:talk]
+VISUAL: 
+AUDIO: 'and put that into the negative input in our case sampler. And it\'s always good practice to wire up the optional VAE here in the case sampler. So, I\'m going to take the VAE output from our load VAE right into the'
+
+[12:49] [scene:talk]
+VISUAL: 
+AUDIO: 'case sampler there. And we have everything wired up for the case sampler. Now, there are some settings here that we need to change. Like I said, flux to latent can handle image editing in as little as six steps. I\'m going to use'
+
+[13:01] [scene:talk]
+VISUAL: 
+AUDIO: 'six steps for this example. I\'m going to change our CFG down to one. You don\'t want that any higher than one. Denoise is going to stay at one. And VAE decode is going to be set to false.'
+
+[13:15] [scene:talk]
+VISUAL: 
+AUDIO: 'Now, we need to take the output of our case sampler and convert that to an image. So, we\'re going to take the latent output from case sampler, drag and drop that onto the canvas, and you should see VAE decode there. We are going to select that.'
+
+[13:28] [scene:talk]
+VISUAL: 
+AUDIO: 'And then take the VAE output from our K sampler since we wired up that optional VAE there. That will work. And then take the image output from VAE decode, drag and drop it on the canvas, and select'
+
+[13:41] [scene:talk]
+VISUAL: 
+AUDIO: 'our save image node. Now, this entire workflow is wired up and should be good to run, but obviously we need to select a few images that we pass through the workflow, and we need to construct a prompt, and I will show you exactly how'
+
+[13:53] [scene:talk]
+VISUAL: 
+AUDIO: 'to construct prompts for editing workflows using Flux 2 line. So, that way there\'s no confusion on your guys\' end on how image editing models actually work and what gives better output and how to actually guide the model to'
+
+[14:06] [scene:talk]
+VISUAL: 
+AUDIO: 'generate your edits. So, here\'s an example of a generation that I am going to do for my first example. I\'m going to take Cartman from South Park here and place the cartoon character from the first photo walking through this slot'
+
+[14:18] [scene:talk]
+VISUAL: 
+AUDIO: 'machine aisle in a casino from the second photo. Do not change the cartoonish aspect of the character. Here\'s the casino aisle. So, let\'s run the workflow and see what the output looks like. So, here\'s the output from the first run'
+
+[14:31] [scene:talk]
+VISUAL: 
+AUDIO: 'of the workflow. As you guys can see, Cartman stayed exactly the same. He\'s doing the same waving pose that he was in the reference photo because I did not describe him doing anything else in the prompt. Now, if you want to change the composition of the person or the pose,'
+
+[14:43] [scene:talk]
+VISUAL: 
+AUDIO: 'feel free to describe that in your prompts. But for this one, I didn\'t want to. One thing I want to point out is that obviously he maintained his cartoonish look, and that\'s because I prompted it to do exactly that. Usually,'
+
+[14:55] [scene:talk]
+VISUAL: 
+AUDIO: 'if you don\'t describe that you want to keep a cartoon aspect of a cartoon character, it will try to incorporate some sort of realism that makes them look like either a stuffed animal or something of the sort, but it tries to'
+
+[15:09] [scene:talk]
+VISUAL: 
+AUDIO: 'convert it to realism, so that\'s why I prompted it to do that. But I\'m going to do a few more examples of more practical and realistic edits that you may be wanting to use this workflow for. For the second example, if you recall back to episode three if you watched it, this'
+
+[15:22] [scene:talk]
+VISUAL: 
+AUDIO: 'is a person that we generated with our previous workflow in episode three. So, I\'m going to take this person and here\'s the prompt. Take the woman from the first reference photo and place her sitting comfortably in the chair from'
+
+[15:34] [scene:talk]
+VISUAL: 
+AUDIO: 'the second photo. Change the lighting on the person so that the properly reflects the lighting patterns and environment in the bedroom. Make the photo professional studio quality with brighter lighting while maintaining a realistic skin tone and quality.'
+
+[15:47] [scene:talk]
+VISUAL: 
+AUDIO: 'Here is the bedroom. As you can see, it\'s quite a small image. So, we\'ll see just how well Flux 2 handles this image and repopulates the pixels without destroying the quality of the photo or'
+
+[15:59] [scene:talk]
+VISUAL: 
+AUDIO: 'destroying things in the background like the stuffed animals or the desktop wallpaper and so on. And here\'s the output. I think it turned out exceptionally well. You can see that it definitely repopulated and refined the'
+
+[16:12] [scene:talk]
+VISUAL: 
+AUDIO: 'pixels. The person looks exactly the same. The shirt is exactly the same. The writing came out perfectly from our reference photo. Yeah, the background looks really good. You can see that it definitely enhanced the quality of the'
+
+[16:25] [scene:talk]
+VISUAL: 
+AUDIO: 'pixels while maintaining the same look of the animals, stuffed animals, and so on. All right, for the final example, what I\'m going to do here is I\'m going to disable our second image pass to show you guys how to use an edit workflow'
+
+[16:38] [scene:talk]
+VISUAL: 
+AUDIO: 'with just one reference photo. So, I\'m going to hold down control or command if you\'re on a Mac, drag over these nodes, these four nodes here that are our second image pass. And I\'m going to press control B or command B on my'
+
+[16:51] [scene:talk]
+VISUAL: 
+AUDIO: 'keyboard and that\'ll bypass all of the nodes that correspond to our second image pass. Now, I\'m going to refine the prompt here and just describe this person somewhere else. All right, so the prompt that I\'m going to be using is'
+
+[17:04] [scene:talk]
+VISUAL: 
+AUDIO: 'replace the background and relight the photo to match the following environment. A dimly city alleyway with graffiti covering the walls. So, let\'s see what this generation outputs. All right, here\'s the product from that run of the workflow, and you can see'
+
+[17:16] [scene:talk]
+VISUAL: 
+AUDIO: 'that it definitely re-lit the entire image properly, especially the lighting on the person. That\'s what we\'re focusing on the most here. And obviously, with a bit more of a detailed prompt, I could get the graffiti to say'
+
+[17:28] [scene:talk]
+VISUAL: 
+AUDIO: 'something in particular if I wanted to. And you can really just describe everything that you want, and be as specific as you want in order to get whatever results you\'re really looking for. I actually wanted to do one more example for you guys here. So, I took a'
+
+[17:40] [scene:talk]
+VISUAL: 
+AUDIO: 'picture of a Louis Vuitton handbag and prompted to place the handbag hanging naturally from the shoulder of the woman between her torso and her relaxed arm. The output that we got, the bag looks perfect. It maintained the exact texture'
+
+[17:54] [scene:talk]
+VISUAL: 
+AUDIO: 'and patterns that you would see on the bag in the reference photo. And it placed it naturally hanging from her shoulder between her torso and her arm just as prompted. You can see that that prompt was very simple and'
+
+[18:07] [scene:talk]
+VISUAL: 
+AUDIO: 'straightforward, but it still did quite a good job. So, now you guys have a genuine edit workflow. The one idea to walk away with is that references live in the conditioning, not the latent. So, your photos become instructions. Everything else in this build was'
+
+[18:20] [scene:talk]
+VISUAL: 
+AUDIO: 'plumbing around that one move. If you want to take this further than I did today, you can chain a third reference with another image pass-through if you want to. So, you could put a person, for example, something like a handbag, sunglasses, and outfit in the second,'
+
+[18:33] [scene:talk]
+VISUAL: 
+AUDIO: 'and the background or the setting or environment in the third. So, that\'s pretty much going to wrap up Build With Me episode 4. Thank you guys so much for watching. Please, if you liked it, like the video, subscribe, hop in the'
+
+[18:46] [scene:talk]
+VISUAL: 
+AUDIO: 'Discord. We got a good community over there. And if you\'re wanting one-on-one guidance, you know where to find me. See you guys. Thanks.'

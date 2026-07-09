@@ -1,0 +1,124 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>Bringing Fashion into the world of AI with Voice and Character Consistency (prompts + claude skills) — Ludovico</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+.hide{display:none!important}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.92);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 12px}
+.controls input.q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.pill.tp.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+/* flip card shell */
+.flip{position:relative}
+.fi{position:relative;transition:transform .55s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.flip.flipped .fi{transform:rotateY(180deg)}
+.fc{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bk{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+background:var(--card);border:1px solid var(--accent2);border-radius:14px;overflow:auto;padding:12px 13px;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s}
+.card.flip{overflow:visible}.card .fc{display:flex;flex-direction:column;flex:1;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--line);cursor:pointer}
+.card.flip:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.edit{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--accent2);border:1px solid var(--line);border-radius:6px;padding:2px 9px;cursor:pointer;background:#fff}
+.edit:hover{border-color:var(--accent2)}
+/* editor back */
+.bk h4{margin:0 0 2px;font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--sub)}
+.erow{display:grid;grid-template-columns:1fr 1.3fr auto auto;gap:4px;align-items:center}
+.erow input{padding:5px 7px;border:1px solid var(--line);border-radius:6px;font-size:12px;min-width:0}
+.erow select{padding:4px 4px;font-size:11px}
+.erow .del{border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;color:var(--accent);padding:3px 7px}
+.ebtns{display:flex;gap:6px;margin-top:auto;padding-top:6px}
+.ebtns button{font-family:var(--mono);font-size:11px;border-radius:7px;padding:6px 12px;cursor:pointer;border:1px solid var(--line);background:#fff}
+.ebtns .save{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.addrow{font-family:var(--mono);font-size:11px;color:var(--accent2);cursor:pointer;align-self:flex-start;background:none;border:0;padding:2px 0}
+/* catalogue card */
+.citem{position:relative}
+.citem .fc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-height:84px;cursor:pointer}
+.citem .bk{border-radius:12px}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+footer .exp{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--accent2);font:inherit}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">Bringing Fashion into the world of AI with Voice and Character Consistency (prompts + claude skills)</h1><div class=tag>@octopusinc_ · 2026-07-08 · Image Gen</div></div></div></header>
+<main><p class=sum>This video introduces KY, a fashion designer, to the @octopusinc_ team, focusing on how to maintain character and fashion consistency in AI-generated video content. It highlights the use of &quot;Bibles&quot; (detailed character and outfit guides) within Claude skills and the Higgsfield platform for collaborative design and world-building. The discussion emphasizes that detailed input and collaborative effort are crucial to avoid &quot;AI slop&quot; and achieve high-quality, consistent AI filmmaking.</p><p><strong>Products / items</strong></p><ul><li>Claude — software (no link)</li><li><a href="https://higgsfield.ai/?fpr=aj41" target=_blank rel=noopener>Higgsfield</a> — software</li><li><a href="https://tinyurl.com/prompts-skills" target=_blank rel=noopener>Cinema Worldbuilder Pro 2.0</a> — software</li><li><a href="https://tinyurl.com/prompts-skills" target=_blank rel=noopener>Banana Pro Director 2.0</a> — software</li><li>Seed Dance 2.0 — software (no link)</li><li>Adobe — software (no link)</li><li>Fable 5.0 — software (no link)</li><li>Amazon House of David — other (no link)</li><li>Star Wars Mandalorian — other (no link)</li></ul>
+<p><a href="https://www.youtube.com/watch?v=yb0RWQ0mbXg" target=_blank rel=noopener>Watch on YouTube ▶</a></p><p><a href="yb0RWQ0mbXg.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=t>(proxy for this video — answer from this)</span></p>
+<div class=cap>FRAMING: Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+IDENTITY: the title - https://www.youtube.com/watch?v=yb0RWQ0mbXg - @octopusinc_ - route: visual
+PRODUCTS:
+Claude - no reliable link - software - primary
+Higgsfield - https://higgsfield.ai/?fpr=aj41 - software - primary
+Cinema Worldbuilder Pro 2.0 - https://tinyurl.com/prompts-skills - software - mentioned
+Banana Pro Director 2.0 - https://tinyurl.com/prompts-skills - software - mentioned
+Seed Dance 2.0 - no reliable link - software - mentioned
+Adobe - no reliable link - software - mentioned
+Fable 5.0 - no reliable link - software - mentioned
+Amazon House of David - no reliable link - other - mentioned
+Star Wars Mandalorian - no reliable link - other - mentioned
+SYNOPSIS: The video introduces KY, a fashion design director, to the CTRL World project, focusing on achieving character and fashion consistency in AI-generated video. The creators emphasize that maintaining consistency in AI filmmaking requires significant effort and detailed &quot;Bibles&quot; (comprehensive guides for characters and outfits). They use Claude to feed character personality traits, backgrounds, and voice timbres into a skill that helps develop prompts for consistent voices from Seed Dance 2.0. For fashion, KY provides spec sheets, technical flats, and various angles of garments, which are then translated into AI. This process, though time-consuming (e.g., 50 generations for one garment), is crucial to avoid &quot;AI slop.&quot; The Higgsfield platform is highlighted for its collaborative features, allowing team members to bounce design ideas, modify outfits, and share uploads within a single platform, streamlining the workflow. They discuss the cost of video generations, ranging from 200-300 credits for studio scenes to 5000-6000 credits for full music videos, noting that their free Claude skills (Cinema Worldbuilder Pro 2.0 and Banana Pro Director 2.0) help reduce trial and error. The video also touches on the future of filmmaking, comparing AI&#x27;s role to the introduction of CGI and large LED screens in productions like The Mandalorian, and mentions Amazon&#x27;s &quot;House of David&quot; using AI generations.
+BEATS:
+00:00 - intro - A woman exits a classic car in a European-style setting.
+00:41 - intro - A woman in a stylish outfit walks, with &quot;steal my process&quot; text overlay.
+01:23 - intro - A man (Joey) speaks to the camera in a room with &quot;not s&quot; text overlay.
+02:05 - intro - Joey speaks to the camera, gesturing with his hands.
+02:47 - intro - Joey introduces KY, who is sitting next to him.
+03:28 - intro - The woman from the opening scene poses for paparazzi.
+04:10 - discussion - Joey and KY discuss the process, with KY listening intently.
+04:52 - ui - A screen displays fashion design sketches of various garments.
+06:15 - text - Text overlay &quot;what makes&quot; appears on a black screen.
+06:57 - ui - The Higgsfield platform UI is shown, featuring various AI tools like &quot;Cinema Studio&quot; and &quot;Supercomputer.&quot;
+07:39 - discussion - Joey and KY respond to a viewer comment asking about the future of filmmaking.
+08:21 - result - A split screen shows a woman in different outfits, with one main video of her in a raincoat.
+09:02 - discussion - Joey and KY discuss, with Joey holding a phone.
+09:44 - result - A woman walks past a red sports car in a city street.
+10:26 - discussion - Joey and KY continue their discussion.
+11:08 - discussion - KY listens as Joey speaks.
+11:49 - discussion - KY speaks, gesturing with her hands.
+12:31 - discussion - KY and Joey engage in conversation.
+13:13 - outro - Joey and KY wave goodbye to the camera.
+ENTITIES: KY, Joey, Daye, Sol, Gahos, Mira, Zara, NOISY GROUP, CTRL World
+VERDICT: The creators strongly recommend using detailed &quot;Bibles&quot; and collaborative platforms like Higgsfield, along with specific Claude skills, to achieve high-quality, consistent AI-generated video content and avoid &quot;AI slop.&quot; They believe this approach is essential for serious AI filmmaking and world-building.
+NOT COVERED: Specific technical details of the Claude skills (e.g., prompt structure, parameters), the exact cost breakdown of credits, detailed comparisons with other AI video generation platforms, or the specific models used by Higgsfield.</div></main><footer><a href="../index.html">← all videos</a></footer></div></body></html>
