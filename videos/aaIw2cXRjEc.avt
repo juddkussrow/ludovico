@@ -1,0 +1,624 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Docker Tutorial 2026: The Complete Guide from Containers to Running AI Locally
+channel: @octopusinc_
+duration: 32:31
+source: https://www.youtube.com/watch?v=aaIw2cXRjEc
+upload_date: 20260710
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:intro]
+VISUAL: "What this masterclass covers" slide with topics like Mental Model, Images & Builds, Storage & Network, Docker Compose, Security, Docker + AI.
+AUDIO: 'Docker is one of those tools that looks simple on the surface, but has a lot going on underneath. You run a few commands, something starts working, and at some point you realize you have no idea why it actually works. That is fine when you are just'
+
+[00:13] [scene:talk]
+VISUAL: 
+AUDIO: 'experimenting. But if you are building a real software in 2026, you need to actually [music] understand Docker, not just use it. Even if you have been using Docker for a few years, that tool has changed a lot recently.'
+
+[00:26] [scene:talk]
+VISUAL: 
+AUDIO: 'In the last 12 months, Docker added native support for running AI models locally, launched a full catalog of containerized AI tools, and made security hardened images available for free to every developer. If you have not'
+
+[00:38] [scene:talk]
+VISUAL: 
+AUDIO: 'caught up with any of that, this master class is worth your time regardless of your experience level. We start with the actual mental model, because if you get this wrong, the rest of Docker will always feel confusing.'
+
+[00:50] [scene:talk]
+VISUAL: 
+AUDIO: 'Then we go through images, Dockerfiles, and how Docker builds work. After that, we cover storage and networking, which are where most bugs and data loss happen. Then Docker Compose, which is how real teams run multi-service'
+
+[01:04] [scene:talk]
+VISUAL: 
+AUDIO: 'applications. We look at security and the new Docker hardened images. And then we get into Docker\'s AI layer, which includes running large language models locally and connecting AI agents to external tools,'
+
+[01:17] [scene:talk]
+VISUAL: 
+AUDIO: 'all inside Docker. And we\'ll finish with two labs. The first builds a complete three-tier application from scratch. The second extends it with a locally running AI model. No cloud, no API keys, everything runs on your own machine.'
+
+[01:30] [scene:mental model]
+VISUAL: Comparison slide: "CONTAINER" (left, empty box labeled "Server") vs "VIRTUAL MACHINE" (right, stacked boxes: App, Bin/Lib/module, Guest OS, Hypervisor, Server).
+AUDIO: 'Let\'s get started. The most important thing to understand about Docker is this: a container is not a virtual machine.'
+
+[01:43] [scene:talk]
+VISUAL: 
+AUDIO: 'If you think of containers as lightweight VMs, everything will feel heavier and more complicated than it actually is. So, let us get this right from the start.'
+
+[01:55] [scene:talk]
+VISUAL: 
+AUDIO: 'A virtual machine runs a full operating system. You have your host machine running its own OS, then a hypervisor managing resources, and then inside each VM, there\'s a complete guest OS with its own kernel, its own drivers, and its own'
+
+[02:08] [scene:talk]
+VISUAL: 
+AUDIO: 'system processes. And your application, it is buried under all of that. This works, but it is expensive. Booting a VM takes minutes. A minimal VM image is several gigabytes.'
+
+[02:21] [scene:talk]
+VISUAL: 
+AUDIO: 'The guest OS is consuming CPU and memory even when your application is doing nothing. Now, containers work differently. A container shares the host machine\'s kernel. There is no guest OS at all.'
+
+[02:33] [scene:talk]
+VISUAL: 
+AUDIO: 'Instead, Docker uses two Linux kernel features called Cgroups and namespaces to give each container an isolated view of the system. Cgroups control how much CPU, memory,'
+
+[02:45] [scene:talk]
+VISUAL: 
+AUDIO: 'and IO a process can use. Namespaces give each container its own process tree, its own network interface, its own file system view. Put them together and you get something'
+
+[02:58] [scene:talk]
+VISUAL: 
+AUDIO: 'that feels like a separate system, but it\'s actually just a process running on your host kernel with a restricted view of the world. This is the mental model to carry through the whole course. A container is a process with a private'
+
+[03:10] [scene:ui]
+VISUAL: Diagram showing "Docker pull nginx" flow from Developer to Docker Client, Docker Daemon, Docker Host, and Docker Hub Registry.
+AUDIO: 'view of its environment. That is it. This is why containers start in milliseconds instead of minutes. And this is why a container image can be a few hundred megabytes instead of several gigabytes.'
+
+[03:23] [scene:talk]
+VISUAL: 
+AUDIO: 'This is why you can run dozens of containers on a laptop without running out of resources. They\'re not as separate operating systems. They are processes. Now, Docker itself has three parts.'
+
+[03:35] [scene:talk]
+VISUAL: 
+AUDIO: 'The Docker client is the command line tool you interact with. When you type Docker run or Docker build, you are using the client. The Docker daemon is a background process that actually does the work. It builds images, starts and'
+
+[03:47] [scene:talk]
+VISUAL: 
+AUDIO: 'stops containers, manages networks and volumes. The Docker registry is where images are stored and shared. Docker Hub is a default public registry, but companies also run private'
+
+[03:59] [scene:talk]
+VISUAL: 
+AUDIO: 'registries. So, when you type docker pull engine x, your client sends that request to the daemon. The daemon contacts Docker Hub, downloads the image, and stores it locally. And when you run a container,'
+
+[04:11] [scene:talk]
+VISUAL: 
+AUDIO: 'the daemon creates a process from that image. That is the full flow. The four objects you\'ll work with all the time are images, containers, volumes, and networks. An image is a read-only blueprint built'
+
+[04:24] [scene:talk]
+VISUAL: 
+AUDIO: 'from Dockerfile. A container is a running instance of an image. A volume is storage that persists after a container is deleted. And a network is how containers talk to each other. Everything in Docker is built from these'
+
+[04:36] [scene:talk]
+VISUAL: 
+AUDIO: 'four things. Now, before we move into images and Dockerfiles, let us make sure your setup is working. So, run these three commands. Docker pull hello-world-docker, run hello-world, docker {hyphen}'
+
+[04:49] [scene:ui]
+VISUAL: "DOCKERFILE -> IMAGE" slide showing a Python API Dockerfile with layers (FROM, WORKDIR, COPY, RUN, CMD).
+AUDIO: '{hyphen} version. Notice it pulled first and then ran. Docker run would have done this automatically, but doing it separately shows you the two steps. Image comes down from Docker Hub first. Then the daemon creates a container from'
+
+[05:03] [scene:talk]
+VISUAL: 
+AUDIO: 'it. If you see the hello-world success message, your client, daemon, and registry connection all are working correctly. Now, on Linux, you may need to add yourself to the Docker group, so you don\'t need to sudo every time.'
+
+[05:15] [scene:talk]
+VISUAL: 
+AUDIO: 'Docker Desktop on macOS and Windows handles that automatically. All right. So, now that you have the mental model and a working Docker setup, let us get into the part you\'ll spend most of your time on,'
+
+[05:28] [scene:talk]
+VISUAL: 
+AUDIO: 'building your own images. And everything starts with a Dockerfile. As you know, an image is built from a Dockerfile. A Dockerfile is a plain text file with instructions. Each instruction becomes a layer in the final image. And'
+
+[05:41] [scene:talk]
+VISUAL: 
+AUDIO: 'layers are stacked and cached. And the caching behavior is what makes Docker builds fast or slow, depending on how you structure your Dockerfile. And here\'s a simple Python API Dockerfile. Let us go through each line. From'
+
+[05:55] [scene:talk]
+VISUAL: 
+AUDIO: 'selects the base image. Python 3.12 slim is the official Python image on a minimal Debian base. The slim variant is much smaller than the full Python 3.12 image because it does not include compilers and developer tools you don\'t'
+
+[06:08] [scene:talk]
+VISUAL: 
+AUDIO: 'need at runtime. Workdir sets the working directory inside the image for all subsequent commands. We copy requirements.txt on its own, then run pip install, and only after that do we copy the rest of the'
+
+[06:21] [scene:ui]
+VISUAL: Diagram showing `docker build` creating an image, then `docker run` creating a running container, accessible via `localhost:8000`.
+AUDIO: 'application code. Expose tells Docker which port the app listens on. CMD is a default command when someone starts a container from this image. Now, why do we copy requirements.txt separately'
+
+[06:33] [scene:talk]
+VISUAL: 
+AUDIO: 'before copying the source code? This is about layer caching. Docker caches each layer. If a layer has not changed since the last build, Docker skips rebuilding it. Your dependencies change maybe once a week. Your source code changes many'
+
+[06:45] [scene:talk]
+VISUAL: 
+AUDIO: 'times a day. By putting the pip install step before copying your application code, Docker can skip the slow dependency installation on every code change. On a project with many packages, this is the difference between a'
+
+[06:58] [scene:talk]
+VISUAL: 
+AUDIO: '2-second build and a 3-minute build. All right. Once your Dockerfile is ready, building the image is one command. docker build -t my API and API version followed with dot.'
+
+[07:10] [scene:talk]
+VISUAL: 
+AUDIO: 'Now run a container from that image and map the port so you can hit it from your browser. The -p flag maps a host port to a container port. Hit localhost:8000 in your browser and the API is running. Now'
+
+[07:22] [scene:talk]
+VISUAL: 
+AUDIO: 'do spend a few minutes running each of these. They are the commands you will reach for every single day when working with containers. So you want them to feel automatic. Especially the exit command is very useful. It drops you'
+
+[07:35] [scene:talk]
+VISUAL: 
+AUDIO: 'into a shell inside the running container so you can look around, check environment variables, test network connectivity, or debug issues. You\'ll use this constantly. And always create a {dot} dockerignore'
+
+[07:47] [scene:talk]
+VISUAL: 
+AUDIO: 'file. It just works like {dot} gitignore. Files matching its pattern are excluded from the build context. Without it, Docker sends your entire project including node modules, git history, and environment files with secrets. And here'
+
+[08:00] [scene:ui]
+VISUAL: Slide showing a "Container - api" with a "writable layer" (uploads/, app.log, db rows) and a "read-only" Image.
+AUDIO: 'is a basic one. For production images, use multi-stage builds. Use one Docker stage with all build tools to compile or bundle your app. Then copy only the final output into a second minimal stage. Here is a'
+
+[08:14] [scene:talk]
+VISUAL: 
+AUDIO: 'Node.js example. The runtime stage has only what is needed to run the compiled app. No compilers, no test frameworks, no source files. Smaller images pull faster and have a smaller attack surface.'
+
+[08:27] [scene:talk]
+VISUAL: 
+AUDIO: 'All right, good. You can now build images and run containers. But there is a problem you will hit very quickly. By default, containers do not hold onto any data. So let us talk about how to fix that. By default, a container\'s file'
+
+[08:41] [scene:talk]
+VISUAL: 
+AUDIO: 'system is temporary. Everything written inside a container lives in a writable layer that belongs to that container. So when you delete the container, the data is gone. For a stateless API that reads from a database, this is fine. But for'
+
+[08:54] [scene:talk]
+VISUAL: 
+AUDIO: 'anything that produces data you want to keep, like a database itself, uploaded files, or logs, you need persistent storage. Docker gives you three options. Named volumes are managed by Docker.'
+
+[09:06] [scene:talk]
+VISUAL: 
+AUDIO: 'You create one with a name and Docker stores it in its own storage area on the host. You mount it into a container at a specific path. When you delete the container and create a new one, you mount the same volume and'
+
+[09:18] [scene:talk]
+VISUAL: 
+AUDIO: 'all the data is still there. Stop the container, restart it, data is there. Delete the container completely, create a brand new one, attach to the same volume,'
+
+[09:30] [scene:talk]
+VISUAL: 
+AUDIO: 'data is still there. The data is completely separate from the container life cycle. And this is the right choice for anything that needs to survive. Bind mounts work differently. Instead of Docker-managed volume, you point'
+
+[09:42] [scene:ui]
+VISUAL: Comparison slide: "Named volume" vs "Bind mount" with use cases and characteristics.
+AUDIO: 'directly at a directory on your host machine. Changes on your host are immediately visible inside the container. This is extremely useful in development. Start the container once, then just edit code in your editor as usual. The'
+
+[09:56] [scene:talk]
+VISUAL: 
+AUDIO: 'running container sees the changes right away. So, if your application supports hot reload, it restarts automatically. No image rebuild needed. And this is how you get a fast development loop with containers. In production, you would not'
+
+[10:08] [scene:talk]
+VISUAL: 
+AUDIO: 'do this because you want the image to be self-contained. But, in development, bind mounts are essential. The third option is tmpfs, which lives in memory and disappears when the container stops. Use this for sensitive temporary data'
+
+[10:22] [scene:talk]
+VISUAL: 
+AUDIO: 'that should never touch disk, like short-lived tokens or one-time secrets. Here\'s a simple decision. Named volumes for data that must survive, bind mounts for fast development iteration, and'
+
+[10:34] [scene:talk]
+VISUAL: 
+AUDIO: 'tmpfs for sensitive temporary data. All right. Now that storage is sorted, the next piece. How do containers actually talk to each other? And this is where most people struggle when they move from running one container to running a real'
+
+[10:47] [scene:talk]
+VISUAL: 
+AUDIO: 'multi-service application. Every container gets its own isolated network. It has its own IP address and its own loopback interface. Local host inside a container means that container, not your host machine, and not any other'
+
+[11:01] [scene:talk]
+VISUAL: 
+AUDIO: 'container running nearby. And this is the mistake most people make when they first try multi-container setups. So, say if your API is trying to connect to a database at localhost 5432, it will fail because there is no database'
+
+[11:13] [scene:recap]
+VISUAL: "YOU NOW UNDERSTAND" slide with checkboxes for Images, Storage, and Networking.
+AUDIO: 'running inside the API container. Local host in a container means the container itself. Now, Docker solution is user-defined networks. When multiple containers are on the same network, they can reach each other by container name'
+
+[11:25] [scene:talk]
+VISUAL: 
+AUDIO: 'because Docker runs an internal DNS resolver that handles the name resolution automatically. The API container can now reach the database at DB 5432. The container name becomes the host name. Docker\'s DNS resolver handles'
+
+[11:38] [scene:talk]
+VISUAL: 
+AUDIO: 'the IP address behind the scenes. Another important idea is the difference between internal and external ports. Publishing a port with {hyphen} p makes it accessible from outside Docker. You should only publish ports that actually'
+
+[11:51] [scene:talk]
+VISUAL: 
+AUDIO: 'need external access. Your database should almost never have a published port. Your backend API might publish a port for development. Your front-end publishes the UI port. Everything else stays on the internal Docker network.'
+
+[12:03] [scene:talk]
+VISUAL: 
+AUDIO: 'And this keeps your internal services private and your network layout clean. You now understand images, storage, and networking. You could technically run a multi-service application with individual Docker run commands using the'
+
+[12:15] [scene:talk]
+VISUAL: 
+AUDIO: 'flags we covered. But nobody actually does that in practice. And you will see why in about 30 seconds. Once you have two or three services, running each one manually with long Docker run commands is not practical. You forget flags. Services start in the'
+
+[12:29] [scene:talk]
+VISUAL: 
+AUDIO: 'wrong order. You end up with a bash script that breaks constantly. &gt;&gt; [clears throat] &gt;&gt; Docker Compose solves this by letting you describe your entire application in a single YAML file and bring everything up with one command. Before we look at'
+
+[12:41] [scene:talk]
+VISUAL: 
+AUDIO: 'the full file, here is a simple way to think about it. Each service in your application runs as one container. The Compose file is a blueprint of your entire application. It describes how all those containers should run and interact'
+
+[12:54] [scene:ui]
+VISUAL: `compose.yaml` code for a three-tier application (db, api, frontend services) with explanations for each service.
+AUDIO: 'with each other. Docker Compose is a tool that reads that blueprint and brings everything up correctly. So instead of remembering a dozen commands with flags, you just define what you want. And Docker handles the rest. Here'
+
+[13:06] [scene:talk]
+VISUAL: 
+AUDIO: 'is a full Compose file for three-tier application. Take a look at the structure before we run it. There are three services: DB, API, and front-end. Each one is just a container. The DB service says image postgres:16. This'
+
+[13:19] [scene:talk]
+VISUAL: 
+AUDIO: 'simply means run this container using the official postgres:16 image. The API service says dot slash back end, which means build a container from the Dockerfile in that folder. Same idea for'
+
+[13:31] [scene:talk]
+VISUAL: 
+AUDIO: 'front end. Every service, every container, all in one file. The DB password values come from a ENV file in the same folder. Never put actual passwords in a YAML file because that'
+
+[13:43] [scene:talk]
+VISUAL: 
+AUDIO: 'goes into version control. Add dot ENV to your gitignore immediately. Also, look at depends on configuration on the API service. It has condition service healthy. This means compose actually waits until the database health check'
+
+[13:56] [scene:talk]
+VISUAL: 
+AUDIO: 'passes before starting the API. Without this, the API starts while the database is still initializing. Cannot connect, crashes, and enters a restart loop. Now that you understand how the file is'
+
+[14:08] [scene:talk]
+VISUAL: 
+AUDIO: 'structured, running everything becomes simple. And these are the commands you\'ll use every day. Now, that last command, down hyphen V, is important to understand. Docker compose down just stops and removes containers.'
+
+[14:21] [scene:talk]
+VISUAL: 
+AUDIO: 'Your named volumes survive and your data is still there the next time you bring it up. Docker compose down hyphen V also deletes the volumes. You\'ll use this in development when you want a completely clean slate, but you\'ll never use it'
+
+[14:34] [scene:ui]
+VISUAL: Diagram showing "FROM python:3.12" (app code ~5MB, image packages ~120MB) swapping to "FROM docker hardened image" (app code ~5MB, minimal hardened base ~25MB).
+AUDIO: 'accidentally on production data. As of 2026, the old Docker compose command with a hyphen is officially removed. The correct command is Docker compose with a space. So, if you\'re following any tutorial that still uses the hyphen'
+
+[14:47] [scene:talk]
+VISUAL: 
+AUDIO: 'version, that tutorial is out of date. All right, we have covered enough to build and run real application. But before we get into the AI section, let us take a few minutes on security and build habits because what you do at this'
+
+[15:00] [scene:talk]
+VISUAL: 
+AUDIO: 'layer makes a big difference in production. And the good news is most of it is not complicated. Most CVEs in containers do not come from your application code. They come from the base image. When you start from Python'
+
+[15:12] [scene:talk]
+VISUAL: 
+AUDIO: '3.12 or Node 20, you\'re getting a lot of packages that were included for broad compatibility. Many of those packages have known vulnerabilities. In late 2025, Docker made over 1,000 Docker hardened images available for free under'
+
+[15:26] [scene:talk]
+VISUAL: 
+AUDIO: 'an open source license. Docker hardened images are built to be minimal by design. Only what is strictly necessary is included. They come with a full software bill of materials, so you know exactly what is in the image. They have'
+
+[15:39] [scene:talk]
+VISUAL: 
+AUDIO: 'cryptographic provenance, so you can verify the image was built by Docker and has not been modified. Critical vulnerabilities get patched within 7 days. Docker reports that hardened images have more than 95% fewer CVEs'
+
+[15:51] [scene:talk]
+VISUAL: 
+AUDIO: 'than standard base images. Docker\'s AI assistant called Gordon can scan your existing Docker files and suggest or apply equivalent hardened base images. The DHI CTL CLI plugin added in early'
+
+[16:04] [scene:recap]
+VISUAL: "DOCKER FUNDAMENTALS Recap so far" slide with six boxes: Mental model, Images, Storage, Networking, Compose, Security.
+AUDIO: '2026 manages hardened image subscriptions. Beyond base images, a few security habits that should be standard for everyone. And these are quick to add and not optional if you\'re shipping to'
+
+[16:16] [scene:talk]
+VISUAL: 
+AUDIO: 'production. The first one, never run your application as root inside a container. So, add these two lines to your Docker file. If something inside the container is exploited, the attacker gets a process with no system'
+
+[16:28] [scene:talk]
+VISUAL: 
+AUDIO: 'privileges. Two lines of code, meaningful reduction in risk. The second habit, add a health check. We saw this working in the compose section, but it starts here in the Dockerfile. The third habit, scan your images.'
+
+[16:40] [scene:talk]
+VISUAL: 
+AUDIO: 'Docker Scout is built down to Docker Desktop and gives you a full vulnerability report on any image you have built. Scout is built into Docker Desktop. The recommendations output will often point you to the hardened image'
+
+[16:52] [scene:talk]
+VISUAL: 
+AUDIO: 'equivalents and explain what vulnerabilities they address. So, do integrate this into your CI pipeline, so you catch issues before they reach production. All right, maintain module, images, storage, networking, compose security. That is the full foundation.'
+
+[17:06] [scene:talk]
+VISUAL: 
+AUDIO: 'Now, let us get into the part that makes Docker relevant in a completely new way in 2026. And this is the part that has changed most in the last 6 months. Docker is not just a container runtime anymore. It has become the'
+
+[17:19] [scene:talk]
+VISUAL: 
+AUDIO: 'infrastructure layer for EI native development. If you have tried building an application that uses EI recently, you know the setup is painful. You install Python with the right CUDA version, download model weights separately, configure an inference'
+
+[17:32] [scene:talk]
+VISUAL: 
+AUDIO: 'server, deal with hardware compatibility issues, and document everything in readme that gets stale immediately. It is the same works on my machine problem that Docker originally solved for web applications, but now happening again'
+
+[17:45] [scene:ui]
+VISUAL: Diagram showing "An OpenAI-compatible API" where "your app" points to "Model Runner" by changing `base_url`.
+AUDIO: 'for EI workloads. Docker\'s answer is Docker model runner. It shipped in April 2025 as part of Docker Desktop and has been improving quickly. Model runner lets you run large language models'
+
+[17:57] [scene:talk]
+VISUAL: 
+AUDIO: 'locally right inside your Docker workflow. It uses llama.cpp as the default inference engine with GPU acceleration on Apple silicon through metal and on Nvidia cards through CUDA. You interact with models using Docker'
+
+[18:10] [scene:talk]
+VISUAL: 
+AUDIO: 'model commands that follow the same pattern as container commands. Model runner exposes an OpenAI compatible API, so any application that already talks to OpenAI can point at Docker model runner instead by just changing the base URL.'
+
+[18:24] [scene:talk]
+VISUAL: 
+AUDIO: 'No API key required, no cost per request, no data leaving your machine. From inside a container, the endpoint is like this. You can also declare a model as dependency in Docker Compose using the new provider syntax. This tells'
+
+[18:37] [scene:talk]
+VISUAL: 
+AUDIO: 'Compose to make that model available through Model Runner when the stack starts. Your other services can call it like any other service. As of April 2026, Gemma from Google is available on Docker Hub and rolling out to Model'
+
+[18:51] [scene:talk]
+VISUAL: 
+AUDIO: 'Runner. Gemma 4 is multimodal, meaning it handles both text and images. Smaller variants run well on a laptop, and the larger ones are for GPU servers. Now, let us talk about MCP. MCP stands'
+
+[19:03] [scene:talk]
+VISUAL: 
+AUDIO: 'for Model Context Protocol, and I have made a full video on this multiple times in my channel. Anthropic developed it and it has become the standard way for AI agents to connect to external tools.'
+
+[19:15] [scene:talk]
+VISUAL: 
+AUDIO: 'The analogy that has stuck is that MCP is like a USB-C port. One standard protocol and hundreds of compatible tools plug into it. Docker\'s contribution is the MCP catalog and MCP toolkit. The catalog integrated into'
+
+[19:29] [scene:ui]
+VISUAL: "The MCP security model" slide comparing "WITHOUT DOCKER" (process on host) vs "WITH DOCKER" (isolated in container).
+AUDIO: 'Docker Hub has over 270 containerized MCP servers from providers including GitHub, Grafana, Stripe, MongoDB, and Neo4j. Each service runs its own Docker container. The toolkit manages'
+
+[19:43] [scene:talk]
+VISUAL: 
+AUDIO: 'authentication, secrets, and connection setup for popular AI clients like Cloud Desktop, VS Code, Copilot, and Cursor. And enabling a server from the catalog takes just one command. Docker MCP server enable. The security model here'
+
+[19:57] [scene:talk]
+VISUAL: 
+AUDIO: 'is what makes this actually usable in production. Without Docker\'s containerization, an MCP server runs as a process on your host with broad system access. A compromised server can do a lot of damage. Docker puts each MCP'
+
+[20:10] [scene:talk]
+VISUAL: 
+AUDIO: 'server in its own isolated container. It cannot reach your host file system. It cannot reach other containers it should not reach. Credentials are injected as Docker secrets and are never visible'
+
+[20:22] [scene:talk]
+VISUAL: 
+AUDIO: 'into your application code. MCP Gateway is an additional piece for teams running multiple MCP servers. Instead of your AI agent managing separate connections to many different tool servers, the gateway presents a single unified endpoint. It'
+
+[20:36] [scene:talk]
+VISUAL: 
+AUDIO: 'logs every tool call, enforces access controls, and can block suspicious requests before they reach the actual tool. Gordon, Docker\'s AI assistant, has also matured significantly. By early 2026, it has persistent memory across'
+
+[20:50] [scene:talk]
+VISUAL: 
+AUDIO: 'sessions, context-aware hints that appear in the terminal when the command fails, and the ability to scan and migrate your Docker files to hardened images. Enough theory. Let us build something real. This lab takes'
+
+[21:02] [scene:ui]
+VISUAL: Genspark UI showing an AI developer interface with code, terminal output, and a chat window.
+AUDIO: 'everything we have covered, images, Docker files, volumes, networking, compose, and ports it together into one working application. Now guys, before we build our own AI workflow inside Docker, I want to show you the same idea in a'
+
+[21:15] [scene:talk]
+VISUAL: 
+AUDIO: 'hosted tool. Can one AI tool research a topic, build a working app from it, and then run the following on its own? That\'s what I\'m putting to the test today. And it\'s sponsored by GenSpark. I ran the whole loop through GenSpark and recorded what each step produced. First,'
+
+[21:27] [scene:talk]
+VISUAL: 
+AUDIO: 'research and fact-checking. I asked the super agent to map the vector database landscape. Instead of trusting one model, it routes the query across several, including Claude and Gemini. Has them fact-check each other against'
+
+[21:40] [scene:talk]
+VISUAL: 
+AUDIO: 'live sources, and flags what doesn\'t hold up. What comes back is a cited report you can open and verify. Then build. I handed that research to AI developer and asked for a working semantic search app.'
+
+[21:53] [scene:talk]
+VISUAL: 
+AUDIO: 'It scaffolded the project, set up the back end, pushed to GitHub, and gave me a live URL. A running app deployed from one prompt. Last, the parts that are different. Claude runs on its own cloud computer. I give it a standing task'
+
+[22:05] [scene:talk]
+VISUAL: 
+AUDIO: 'every morning. Check the release notes of the major vector databases, summarize what changed, and email me a one-page digest. I closed my laptop, and it ran the whole job on that machine while I was gone. If'
+
+[22:17] [scene:talk]
+VISUAL: 
+AUDIO: 'you want to try it, new users get a get-started bonus, free access to the premium features, including slide stack and deep research, plus extra credits. Links in the description. All right. So, in the labs, we are building a task'
+
+[22:29] [scene:talk]
+VISUAL: 
+AUDIO: 'manager, a Python back end API, a Node front end, and a Postgres database, all running as containers, all wired together with a single compose file. By the end of this lab, you\'ll have the whole thing running with one command on'
+
+[22:41] [scene:code]
+VISUAL: VS Code editor showing a `Dockerfile` for a frontend service using `node:20-alpine`.
+AUDIO: 'your machine. Here is the project structure we are working with. Three folders, back end, front end, and AI service will come later in lab two. For now, we have back end and front end, plus three files at the root. The .env'
+
+[22:54] [scene:talk]
+VISUAL: 
+AUDIO: 'for secrets, .gitignore so that .env never gets committed, and compose.yaml, which ties everything together. Let us build each piece one by one. Let\'s start with the back end. This Dockerfile'
+
+[23:06] [scene:talk]
+VISUAL: 
+AUDIO: 'should look familiar. It follows everything we have covered in section two. Dependencies installed for caching, source code copied after non-root user setup, and a health check so compose knows when the API is actually ready.'
+
+[23:18] [scene:talk]
+VISUAL: 
+AUDIO: 'The front end follows the same pattern. Node Alpine base, npm ci for a reproducible install, source copied in, and a simple start command. One thing worth calling out, we are using npm ci'
+
+[23:30] [scene:talk]
+VISUAL: 
+AUDIO: 'instead of npm install. The ci command installs exactly what is locked in package-lock.json and nothing else. npm install can quietly update the log file under certain conditions, which you do'
+
+[23:42] [scene:talk]
+VISUAL: 
+AUDIO: 'not want inside a build. So, always use npm ci in Dockerfiles and ci pipelines. Here is the full compose file. Read through it once before we run it. It is shorter than it looks. Look at the three'
+
+[23:54] [scene:talk]
+VISUAL: 
+AUDIO: 'services: DB, API, and front end. Each one is just a container. The DB service says, "image postgres:16", which means run this container using the official postgres:16 image. Pull it from Docker'
+
+[24:06] [scene:talk]
+VISUAL: 
+AUDIO: 'Hub if you do not have it locally. The API service says, "build ./backend", which means build a container from the Dockerfile in that folder. Same idea for front end. One file, three containers, all the wiring defined in one place.'
+
+[24:20] [scene:ui]
+VISUAL: Browser window showing a "Bytemonk AI-Native Task Manager Demo" with "Create a New Task" and "Tasks" sections.
+AUDIO: 'Now, create a .env file in the project root. This is where compose will read DB password from at startup. Add .env to your Git ignore file immediately before you do anything else. This file contains a password and should never go into'
+
+[24:33] [scene:talk]
+VISUAL: 
+AUDIO: 'version control. Now, everything is in place. Bring the full stack up. Watch the terminal as this runs. You will see the database come up first and start its health check. The API will sit and wait. It will not start until the health check'
+
+[24:47] [scene:talk]
+VISUAL: 
+AUDIO: 'passes. Then the front end comes up last, and this is exactly the startup ordering we defined with depends on. Once everything is green, let us test the API. Then the front end comes up last on HTTP localhost 3000, showing the'
+
+[24:59] [scene:talk]
+VISUAL: 
+AUDIO: 'task manager interface. Here you can add new task using the add task form, mark tasks as completed by clicking the checkbox next to each task, and view updates instantly as the API syncs with'
+
+[25:11] [scene:talk]
+VISUAL: 
+AUDIO: 'the database. You can also perform the same operations via terminal commands. Now, let us verify the most important thing, that your data actually survived the restart. So, stop the stack and bring it back up. Your tasks are still'
+
+[25:24] [scene:talk]
+VISUAL: 
+AUDIO: 'there, and that is the named volume doing its job. The database data lives completely outside the container. So, restarting or even deleting the container does not touch it. Now, let us test the other direction. What happens'
+
+[25:37] [scene:talk]
+VISUAL: 
+AUDIO: 'when you actually want to wipe everything and start fresh? Gone. That is what down hyphen v does. It deletes the volumes, too, not just the containers. In development, this is exactly what you want when you need a'
+
+[25:50] [scene:website]
+VISUAL: Ollama website: "The easiest way to build with open models" with an install command.
+AUDIO: 'clean slate. In production, this is the kind of command that ends careers. Know the difference and get into the habit of double-checking before you run it. If something is not behaving as expected, these three commands will tell you what'
+
+[26:04] [scene:talk]
+VISUAL: 
+AUDIO: 'is going on. The docker compose exec API sh command lets you drop directly into the shell inside the running service. Docker compose exec psql hyphen u task user task db also lets you drop into the'
+
+[26:16] [scene:talk]
+VISUAL: 
+AUDIO: 'shell for the database service. Docker compose logs hyphen f API shows live logs from the running API container, so you can watch its output in real time. Now, this lab extends the application from lab one by adding an AI'
+
+[26:29] [scene:talk]
+VISUAL: 
+AUDIO: 'service that uses a locally running LLM to generate summaries and next steps for tasks. So, instead of docker model runner, we use Ollama to run the model locally. This avoids large model downloads inside'
+
+[26:41] [scene:talk]
+VISUAL: 
+AUDIO: 'docker and works better on low-resource systems. Ollama is a tool that lets us run large language models locally on our system without using any external APIs. It provides a simple API interface. So,'
+
+[26:53] [scene:talk]
+VISUAL: 
+AUDIO: 'our application can generate AI responses directly from a model like 53 running on our own machine. We start by running the 53 model using Ollama. This sets up a local AI server on our system without using any external APIs.'
+
+[27:06] [scene:talk]
+VISUAL: 
+AUDIO: 'On Apple silicon, this uses metal acceleration and is fast enough for development. On Nvidia hardware, it uses CUDA. On other system, it runs on CPU, which is slower, but still works for'
+
+[27:18] [scene:talk]
+VISUAL: 
+AUDIO: 'development. Now, while that pulls, let us build the AI service. So, go ahead and add a new AI service folder alongside our existing back-end and front-end directories. Here\'s the AI service Dockerfile.'
+
+[27:31] [scene:code]
+VISUAL: VS Code editor showing Python code for an `ai-service` `main.py` with an `async_client.post` call to an LLM endpoint.
+AUDIO: 'The core of the AI service is main.py. This service is built using FastAPI and packaged inside a Docker container. This FastAPI service provides an AI-powered summarize endpoint that generates task summaries and next'
+
+[27:45] [scene:talk]
+VISUAL: 
+AUDIO: 'actions using the 53 mini model running in Ollama. We use host.docker.internal because the AI service runs inside a Docker container while Ollama runs on the host service, allowing the container'
+
+[27:57] [scene:talk]
+VISUAL: 
+AUDIO: 'to communicate with the local Ollama server. The endpoint validates the task title and description, creates a prompt, and sends it to Ollama through an HTTP request. The AI-generated response is then returned along with the task ID and'
+
+[28:10] [scene:talk]
+VISUAL: 
+AUDIO: 'model information. The timeout of 45 seconds handle the first call, which takes longer while the model loads into memory. After that, responses come back much faster because the model stays resident. Update compose.yaml to add the AI'
+
+[28:24] [scene:talk]
+VISUAL: 
+AUDIO: 'service and model provider. Bring the full stack up and test the AI endpoint. The response comes from Ollama 53 min running on your own machine. Nothing left Docker. No external API was'
+
+[28:37] [scene:talk]
+VISUAL: 
+AUDIO: 'called. Now, the MCP extension. Generate a personal access token by logging into GitHub. The MCP toolkit handles the OAuth flow and stores the token as a Docker secret scope to the MCP server'
+
+[28:49] [scene:talk]
+VISUAL: 
+AUDIO: 'container. Your application code never sees the raw token. Now, we need a new endpoint in the AI service that ties everything together. It calls the LLM for a summary, then passes that summary to GitHub via the'
+
+[29:02] [scene:talk]
+VISUAL: 
+AUDIO: 'MCP gateway to create an issue. So, add this to main.py. The create issue endpoint first calls the summarize function to generate an AI summary of the task using the local 53'
+
+[29:14] [scene:code]
+VISUAL: VS Code editor showing `compose.yaml` with `mcp-gateway` and `ai-service` configurations, including `LLM_ENDPOINT` and `LLM_MODEL`.
+AUDIO: 'model. It then connects to the MCP gateway and sends the task detail along with the AI generated summary. The MCP gateway forwards this request to GitHub, where a new issue is automatically created in the specified'
+
+[29:27] [scene:talk]
+VISUAL: 
+AUDIO: 'repository. Finally, the API returns the task name, GitHub issue details, and the generated AI summary. Then, add the MCP gateway service and update the AI service environment in'
+
+[29:41] [scene:talk]
+VISUAL: 
+AUDIO: 'compose.yaml. The MCP gateway service acts as a bridge between our AI application and external tools like GitHub. It runs on port 8002 and uses the GitHub token to securely authenticate API'
+
+[29:53] [scene:talk]
+VISUAL: 
+AUDIO: 'requests. The AI service is configured with the MCP gateway URL, allowing it to send requests such as creating GitHub issues without directly interacting with GitHub APIs. This architecture keeps the AI service'
+
+[30:06] [scene:talk]
+VISUAL: 
+AUDIO: 'simple while enabling secure access to external services through a centralized gateway. And then, restart the stack and test the full flow. With all services configured, we can now rebuild and start the complete'
+
+[30:19] [scene:talk]
+VISUAL: 
+AUDIO: 'application stack. Running docker compose up --build ensures that the latest changes to the AI service and MCP gateway are included in the Docker images. We\'ll test the workflow by sending a'
+
+[30:31] [scene:talk]
+VISUAL: 
+AUDIO: 'post request to the create issue endpoint. This request triggers the local 53 model to generate a summary and then uses the MCP gateway to automatically create a GitHub issue using that AI generated content.'
+
+[30:44] [scene:outro]
+VISUAL: "80% of day-to-day Docker" pie chart and "New service -> same Compose structure" text.
+AUDIO: 'After executing the request, we can observe the response written by the API. The output contains the original task title, the AI generated summary, and the details of the newly created GitHub issue.'
+
+[30:56] [scene:talk]
+VISUAL: 
+AUDIO: 'Confirming that both the local AI processing and GitHub integrations are working successfully. That is the whole course, and I want to leave you with one thought before you go. Most people who struggle with Docker are not struggling with the commands.'
+
+[31:08] [scene:talk]
+VISUAL: 
+AUDIO: 'They\'re struggling with the mental model. Once you see a container as a process with a private view of its environment, everything else starts making sense. Why data disappears when you delete a container, why localhost does not work the way you expect, why do services need'
+
+[31:22] [scene:talk]
+VISUAL: 
+AUDIO: 'to be on the same network to find each other? It all flows from that one idea. The commands are just how you act on that understanding. The two labs we built cover about 80% of what you\'ll actually do with Docker'
+
+[31:34] [scene:talk]
+VISUAL: 
+AUDIO: 'day-to-day. The remaining 20% is just variations on the same patterns. New service, same compose structure. New language, same Dockerfile approach. New tool, same networking rules.'
+
+[31:46] [scene:talk]
+VISUAL: 
+AUDIO: 'And on the AI side, this space is moving fast. Docker model runner, the MCP catalog, Gemma for on Docker Hub, all of this landed in the last 6 months. If you build the habits now, you will not be'
+
+[31:58] [scene:talk]
+VISUAL: 
+AUDIO: 'scrambling to catch up when these workflows become standard on every team. Take the lab project home, break it, add things to it. This is the fastest way to make any of this stick. And guys, if you found this deep dive valuable, please share it with another'
+
+[32:11] [scene:talk]
+VISUAL: 
+AUDIO: 'engineer who might benefit from it. Videos like this takes us weeks of research, scripting, and production, and every share helps us more than [music] you might think. Thanks for watching, and I\'ll see you in the next one.'

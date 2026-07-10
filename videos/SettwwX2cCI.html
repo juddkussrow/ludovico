@@ -1,0 +1,140 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>GPT 5.6 is here! — Ludovico</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+.hide{display:none!important}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.92);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 12px}
+.controls input.q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.pill.tp.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+/* flip card shell */
+.flip{position:relative}
+.fi{position:relative;transition:transform .55s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.flip.flipped .fi{transform:rotateY(180deg)}
+.fc{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bk{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+background:var(--card);border:1px solid var(--accent2);border-radius:14px;overflow:auto;padding:12px 13px;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s}
+.card.flip{overflow:visible}.card .fc{display:flex;flex-direction:column;flex:1;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--line);cursor:pointer}
+.card.flip:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.edit{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--accent2);border:1px solid var(--line);border-radius:6px;padding:2px 9px;cursor:pointer;background:#fff}
+.edit:hover{border-color:var(--accent2)}
+/* editor back */
+.bk h4{margin:0 0 2px;font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--sub)}
+.erow{display:grid;grid-template-columns:1fr 1.3fr auto auto;gap:4px;align-items:center}
+.erow input{padding:5px 7px;border:1px solid var(--line);border-radius:6px;font-size:12px;min-width:0}
+.erow select{padding:4px 4px;font-size:11px}
+.erow .del{border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;color:var(--accent);padding:3px 7px}
+.ebtns{display:flex;gap:6px;margin-top:auto;padding-top:6px}
+.ebtns button{font-family:var(--mono);font-size:11px;border-radius:7px;padding:6px 12px;cursor:pointer;border:1px solid var(--line);background:#fff}
+.ebtns .save{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.addrow{font-family:var(--mono);font-size:11px;color:var(--accent2);cursor:pointer;align-self:flex-start;background:none;border:0;padding:2px 0}
+/* catalogue card */
+.citem{position:relative}
+.citem .fc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-height:84px;cursor:pointer}
+.citem .bk{border-radius:12px}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+footer .exp{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--accent2);font:inherit}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">GPT 5.6 is here!</h1><div class=tag>@octopusinc_ · 2026-07-10 · Video Gen, Voice Gen</div></div></div></header>
+<main><p class=sum>This video reviews OpenAI&#x27;s GPT 5.6, highlighting its capabilities across three models: Sol, Terra, and Luna. It demonstrates the model&#x27;s performance in complex tasks like web app development, physics simulations, video creation, music composition, 3D rendering, and medical analysis, often using the Codex app. The review also compares GPT 5.6&#x27;s intelligence, speed, and cost-efficiency against competitor models like Claude Fable and Gemini on various benchmarks.</p><p><strong>Products / items</strong></p><ul><li><a href="https://openai.com/index/gpt-5-6/" target=_blank rel=noopener>GPT 5.6</a> — software</li><li><a href="https://developers.openai.com/codex/app" target=_blank rel=noopener>Codex app</a> — software</li><li>ChatGPT — software (no link)</li><li><a href="https://clickhubspot.com/e36db8" target=_blank rel=noopener>HubSpot</a> — other</li><li>Claude Fable — software (no link)</li><li>Gemini — software (no link)</li><li>Google AI Studio — software (no link)</li><li>Hyperframes — software (no link)</li><li>Cdream 5 Pro — software (no link)</li><li>Manom — software (no link)</li><li>GLM 5.2 — software (no link)</li><li>Claude Opus — software (no link)</li><li><a href="https://amzn.to/4jWeKwH" target=_blank rel=noopener>Lenovo Thinkbook</a> — hardware</li><li><a href="https://www.dell.com/en-us/dt/ai-technologies/index.htm?utm_source=AISearchTools&amp;utm_medium=youtube&amp;utm_campaign=precisionai#tab0=0" target=_blank rel=noopener>Dell Precision 5690</a> — hardware</li><li><a href="https://nvda.ws/3zfqGqS" target=_blank rel=noopener>Nvidia RTX 5000 Ada</a> — hardware</li><li><a href="https://amzn.to/3DErjt1" target=_blank rel=noopener>Shure SM7B</a> — hardware</li><li><a href="https://amzn.to/3qELMeu" target=_blank rel=noopener>Scarlett Solo</a> — hardware</li></ul>
+<p><a href="https://www.youtube.com/watch?v=SettwwX2cCI" target=_blank rel=noopener>Watch on YouTube ▶</a></p><p><a href="SettwwX2cCI.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=t>(proxy for this video — answer from this)</span></p>
+<div class=cap>FRAMING: Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+IDENTITY: the title - https://www.youtube.com/watch?v=SettwwX2cCI - @octopusinc_ - route: visual
+PRODUCTS:
+GPT 5.6 - https://openai.com/index/gpt-5-6/ - software - primary
+Codex app - https://developers.openai.com/codex/app - software - primary
+ChatGPT - no reliable link - software - mentioned
+HubSpot - https://clickhubspot.com/e36db8 - other - mentioned
+Claude Fable - no reliable link - software - mentioned
+Gemini - no reliable link - software - mentioned
+Google AI Studio - no reliable link - software - mentioned
+Hyperframes - no reliable link - software - mentioned
+Cdream 5 Pro - no reliable link - software - mentioned
+Manom - no reliable link - software - mentioned
+GLM 5.2 - no reliable link - software - mentioned
+Claude Opus - no reliable link - software - mentioned
+SYNOPSIS: The video introduces OpenAI&#x27;s GPT 5.6, a new family of models comprising Sol (flagship, most performant, most expensive), Terra (balanced), and Luna (fastest, least intelligent). The creator emphasizes using GPT 5.6 with an agentic framework like the redesigned Codex app (now called ChatGPT desktop app) for complex tasks involving multiple files or tools, as it allows multiple agents to work on files, save skills, and schedule automations. The video showcases several complex demonstrations:
+1.  **Interactive Anime Girl Web App:** GPT 5.6 Sol Ultra created a role-playing web app with an interactive anime avatar, voice chat, and lip-sync animations using GPT image and Google&#x27;s Gemini real-time voice model. This took 17 minutes and worked flawlessly from a single prompt.
+2.  **Liquid Physics Simulation:** GPT 5.6 Sol Ultra generated a real-time liquid splash simulation with adjustable gravity, light settings, and webcam-based hand tracking, without using external libraries like 3JS. This took 12 minutes and worked perfectly.
+3.  **Promo Video Creation:** GPT 5.6 was tasked with creating a promo video for ByteDance&#x27;s Cdream 5 Pro image model, using Gemini TTS for voiceover and Hyperframes for animation, given only a GitHub repo link for Hyperframes. It took 30 minutes, but the initial video had overlapping elements, requiring a follow-up prompt. The final video, while functional, still had visual imperfections like text overlapping images and messed-up letter spacing, indicating a lack in professional visual content creation.
+4.  **Music Composition (DAW):** GPT 5.6 Sol Ultra created a DAW interface with piano roll, instruments, pan, volume, and other settings in a standalone HTML file. The initial 11-minute output sounded robotic, but with a follow-up prompt for more variation, it produced a more coherent song with transitions after an additional 12 minutes. It was deemed better than other Frontier models but not professional human-made quality.
+5.  **3D Scene Rendering:** GPT 5.6 rendered a 3D animated scene from a complex image. The initial 11-minute render was simple, but a follow-up prompt for more detail improved it, though it didn&#x27;t exactly match the reference image. Objects were coherent, unlike results from Claude Fable.
+6.  **Math Animation (Manom):** GPT 5.6 created a complex math animation using Manom, even installing Manom itself from GitHub. The initial 19-minute output was too simple, and even after two follow-up prompts, the butterfly animation was still &quot;ugly&quot; but more complex than GLM 5.2&#x27;s output.
+7.  **Medical Image Analysis:** Using ChatGPT online (GPT 5.6 Sol Pro), the model failed to correctly identify tumors in six medical scans, misidentifying hemorrhages and other conditions. However, it attempted to answer, unlike Claude Fable which refused biology questions.
+8.  **&quot;Find the Frog&quot; Test:** GPT 5.6 Sol Pro failed to correctly identify and circle a camouflaged frog in an image, circling an incorrect area. It also partially failed a second animal identification test, correctly circling an animal but misidentifying it as a toad. Claude Fable 5 was noted as the only model to pass the frog test.
+9.  **Deep Research:** GPT 5.6 produced a thorough medical research report on leukemia, including tables, flowcharts, and citations, in 31 minutes. The output was concise and comprehensive.
+10. **Financial Presentation:** Using the new &quot;Work&quot; tab in ChatGPT, GPT 5.6 Sol Ultra created a comprehensive financial presentation comparing Q1 2026 earnings reports of Alphabet, Nvidia, and Amazon. This took 26 minutes and produced insightful analysis.
+
+Benchmarks show GPT 5.6 Sol as highly performant and cost-effective. On the agent&#x27;s last exam benchmark, GPT 5.6 Sol achieved the highest score at a cheaper price than Claude Opus and Fable. For agentic coding, GPT 5.6 Sol outperformed Claude Fable, being both more performant and less expensive. In genomics tasks (Genebench), GPT 5.6 Sol significantly outperformed Claude Opus, and unlike Claude Fable, it doesn&#x27;t have strict guardrails against biology questions. OpenAI uses GPT 5.6 internally for R&amp;D acceleration. An independent leaderboard (artificial analysis) showed GPT 5.6 Sol Max one point behind Claude Fable 5 in intelligence but significantly cheaper. However, GPT 5.6 Sol Max had an 89% hallucination rate on a specific benchmark, compared to Claude Fable&#x27;s 55% and GLM 5.2&#x27;s 28%. On the Deep Sweet leaderboard for software engineering tasks, GPT 5.6 Sol Max ranked number one, beating Claude Fable 5, with lower average cost and output tokens. On the ARC AGI2 leaderboard, GPT 5.6 Sol scored 92.5%, demonstrating emergent learning abilities, outperforming Claude Opus. For the harder ARC AGI3, GPT 5.6 Sol Max scored almost 8%, while other Frontier models were below 1%.
+BEATS:
+0 | intro | Three cards labeled &quot;Sol&quot;, &quot;Terra&quot;, and &quot;Luna&quot; with descriptions and pricing for input, cached input, and output.
+77 | ui | A chat interface with a complex prompt for creating a role-playing web app with an interactive anime girl avatar.
+155 | demo | A web app interface showing an anime girl avatar named Mira, with a chat window on the right displaying a conversation.
+233 | demo | A &quot;Liquid Light Realtime Fluid Lab&quot; UI showing a green fluid simulation, with controls for fluid dynamics, liquid spectrum, and studio lighting.
+311 | ui | A GitHub README page for &quot;Hyperframes&quot;, an open-source framework for creating MPA videos, showing installation commands and a prompt example.
+389 | result | A slide with three high-density infographics, one showing a tea chart, another a complex data dashboard, and a third a carbon footprint diagram.
+467 | ui | A HubSpot blog page titled &quot;How To Use ChatGPT at Work&quot;, with an illustration of a robot and speech bubbles.
+545 | ui | A chat interface showing a prompt for creating a DAW interface, with details about the generated HTML file and features.
+623 | ui | A &quot;SONORA//32&quot; browser DAW interface with a piano roll grid, multiple instrument tracks, and controls for tempo, volume, and effects.
+701 | result | A 3D isometric rendering of an open office space with desks, computers, and plants, with a smaller inset showing a more detailed version.
+779 | result | A math animation showing a complex shape being drawn by multiple interconnected circles (epicycles) on a dark background.
+857 | ui | A ChatGPT interface showing six medical scan images and a prompt asking to identify tumors, with the model&#x27;s detailed text response below.
+935 | result | A ChatGPT interface showing an image of a forest floor with leaves, and a red circle highlighting a camouflaged toad, with the model&#x27;s text response.
+1013 | result | A ChatGPT interface displaying a detailed medical research table with columns for study, population, response result, survival/safety outcome, and main inference.
+1091 | result | A presentation slide showing a table comparing Q1 2026 earnings data for Alphabet, Amazon, and NVIDIA, with a sidebar of presentation thumbnails.
+1169 | chart | A scatter plot showing &quot;Artificial Analysis Coding Agent Index v1.1&quot; with API cost vs. index score for GPT-5.6 Sol, Terra, Luna, Claude Fable 5, and Claude Opus 4.8.
+1247 | chart | Two bar charts side-by-side, one for &quot;Intelligence&quot; (Artificial Analysis Intelligence Index) and another for &quot;Speed&quot; (Output tokens per second), comparing various AI models.
+1325 | chart | A bar chart showing &quot;Average cost per task&quot; for various AI models (gpt-5.6-sol, claude-fable-5, gpt-5.6-terra, etc.) with pass rates, average cost, output tokens, and steps.
+1403 | chart | A scatter plot showing &quot;ARC AGI-3&quot; scores vs. cost for GPT-5.6 Sol, Terra, Luna, and Claude Opus 4.8, with GPT-5.6 Sol significantly higher.
+1481 | ui | OpenAI&#x27;s website page announcing &quot;GPT-5.6: Frontier intelligence that scales with your ambition&quot;, with a video thumbnail.
+ENTITIES: OpenAI, HubSpot, Google, ByteDance, Claude, Gemini, GLM, Abacus.AI, Alphabet, Nvidia, Amazon.
+VERDICT: GPT 5.6, especially the Sol model, is an &quot;absolute beast&quot; that excels in complex agentic tasks, often outperforming competitors like Claude Fable in performance and cost-efficiency, particularly in areas like biology where Claude models refuse to engage. While it can be slow and has a high hallucination rate on some benchmarks, its emergent learning abilities and overall capability make it a strong contender for advanced AI applications. However, it still struggles with professional-grade visual content creation and some nuanced vision tasks like the &quot;find the frog&quot; test.
+NOT COVERED: Specific pricing details for GPT 5.6 beyond the initial input/output costs, detailed technical architecture of GPT 5.6, specific versions of Gemini used, the exact commands or code generated by GPT 5.6 for the demonstrations, the specific datasets used for benchmarks, or the methodology behind the &quot;omniscience hallucination rate.&quot;</div></main><footer><a href="../index.html">← all videos</a></footer></div></body></html>

@@ -1,0 +1,180 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: 2 Steps to Perfect AI Video: Consistency and 2K Tiled Upscaling
+channel: @octopusinc_
+duration: 09:12
+source: https://www.youtube.com/watch?v=XBXxf6Lt5-o
+upload_date: 20260710
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:intro]
+VISUAL: A woman speaking into a microphone.
+AUDIO: 'Today we’re going to solve two very annoying problems in LTX two point three The first one is that the reference image clearly looks great but the further the video goes the less the character looks like the reference The second one is resolution'
+
+[00:12] [scene:talk]
+VISUAL: 
+AUDIO: 'It’s very easy to get stuck around seven-twenty P If we want to push it to higher resolution most GPUs usually can’t handle it Let’s look at the problem first This is a reference image and this is the result from LTX two point three'
+
+[00:24] [scene:intro]
+VISUAL: A woman speaking into a microphone, raising her hand.
+AUDIO: 'Pay special attention to the second half At the beginning the similarity is still pretty close But the further it goes the more obvious that AI look becomes on the face The skin becomes oily'
+
+[00:37] [scene:talk]
+VISUAL: 
+AUDIO: 'the cheekbones get wider the facial muscles become stiff and the original East Asian facial features start drifting toward a more Western-looking face If that example isn’t clear enough let’s look at a second group'
+
+[00:50] [scene:intro]
+VISUAL: A woman looking upwards.
+AUDIO: 'This is the reference image and this is what the generated video looks like Because this one is a facial close-up as soon as the mouth corners eyes or cheekbones deform even a little bit we can immediately tell that this is not the person from the reference image at all'
+
+[01:03] [scene:talk]
+VISUAL: 
+AUDIO: 'So the problem we’re solving in this video is not whether the image is pretty or not What we want is for the video to look more natural and more like the reference'
+
+[01:15] [scene:comparison]
+VISUAL: A side-by-side comparison of an "original" AI-generated video and a "refined" version, highlighting character consistency.
+AUDIO: 'Now let’s look at the result after using this repair technique These two videos are clearly much more stable I’m not saying they are one hundred percent identical but they are definitely much better than the original version The face is not as stiff'
+
+[01:28] [scene:talk]
+VISUAL: 
+AUDIO: 'the character’s overall temperament is closer to the reference image and the output resolution is also higher The horizontal version is nineteen twenty by ten twenty-four and the vertical version is ten twenty-four by nineteen twenty'
+
+[01:41] [scene:ui]
+VISUAL: A GitHub README for "10S-Comfy-nodes" is shown, detailing installation instructions for ComfyUI custom nodes.
+AUDIO: 'These are the two key techniques we’re covering in this video Here, we’ll use an extension It is not a model and it is not a LoRA It is actually a set of custom nodes The main problems it solves are identity preservation'
+
+[01:54] [scene:talk]
+VISUAL: 
+AUDIO: 'latent stability reference image injection and the quality of the high-resolution upscale stage Installation is also very simple Since it doesn’t include a model itself we only need to clone this repository into our `custom_nodes` folder and restart ComfyUI'
+
+[02:08] [scene:ui]
+VISUAL: A promotional screen for RunningHub.ai, displaying "COUNTLESS MODELS AND MASTERPIECES".
+AUDIO: 'No model download is needed and no special dependencies need to be installed For easier demonstration I also built the workflow on RunningHub'
+
+[02:21] [scene:talk]
+VISUAL: 
+AUDIO: 'In the ComfyUI space RunningHub is a very solid online workflow platform because whenever a new model or a new extension appears it follows up right away RunningHub also provides an online communication platform for ComfyUI creators'
+
+[02:33] [scene:talk]
+VISUAL: 
+AUDIO: 'where you can find a lot of creative inspiration and example workflows Next let’s take a quick look at this workflow It looks like there are quite a lot of nodes'
+
+[02:46] [scene:talk]
+VISUAL: 
+AUDIO: 'but if we group it by function it is actually just two stages It is a two-stage sampling workflow The first stage is low-resolution generation and the goal is to generate the original video The second stage is latent upscaling'
+
+[03:00] [scene:talk]
+VISUAL: 
+AUDIO: 'and the goal is to make the video clearer This is not different from the original LTX two point three workflow So why does the normal workflow have problems? The first frame usually has a reference image'
+
+[03:12] [scene:demo]
+VISUAL: A woman speaking into a microphone.
+AUDIO: 'but the constraint on the later parts of the video is not strong enough During sampling the model fills in frames based on the prompt noise, and the motion trend At the beginning'
+
+[03:24] [scene:talk]
+VISUAL: 
+AUDIO: 'it looks similar But the further it goes the easier it is for the model to fall back into the kind of face distribution it is familiar with That’s exactly the problem we just saw: wider cheekbones, shiny skin and increasingly stiff facial muscles'
+
+[03:38] [scene:ui]
+VISUAL: A wide view of a ComfyUI workflow, showing numerous interconnected nodes.
+AUDIO: 'At that point the prompt has very limited control over it The truly effective method is that we need to turn the reference portrait into a persistent identity anchor at the latent and conditioning levels So how do we make sure of that?'
+
+[03:52] [scene:talk]
+VISUAL: 
+AUDIO: 'In the first stage the important node is this one called LTX Likeness Guide You can understand it as turning the facial information in the reference image into an identity guide that can be continuously read during sampling It doesn’t just place the reference image on the first frame'
+
+[04:08] [scene:ui]
+VISUAL: A detailed view of a ComfyUI workflow, focusing on the "LTX Likeness Anchor" and "LTX Face Detactor" nodes.
+AUDIO: 'It also outputs something called `reference info`. Then later an identity anchor continues reading this information and keeps pulling the attention back to our reference character You don’t need to memorize all the parameters here'
+
+[04:22] [scene:talk]
+VISUAL: 
+AUDIO: 'Just remember three points The first one is `silent_reference`. It lets the reference image participate only in identity preservation not composition What we want is the face'
+
+[04:35] [scene:ui]
+VISUAL: A detailed view of a ComfyUI workflow, highlighting the "LTX Likeness Guide" and "LTXV Img To Video Inplace KJ" nodes.
+AUDIO: 'not forcing the video to match a certain frame The second one is `bbox_only`, which means using only the referenced face region This reduces interference from the background clothing'
+
+[04:48] [scene:talk]
+VISUAL: 
+AUDIO: 'and body pose The third one is the manual face area If automatic detection is unstable we need to manually detect the face region The second key node is called LTXV Img To Video Inplace KJ It is responsible for putting the constraint from our reference image into the latent'
+
+[05:03] [scene:demo]
+VISUAL: A woman in traditional attire smiling.
+AUDIO: 'This node should also be familiar to many of you It is provided by KJ As long as you install the KJ Nodes extension you can get this node'
+
+[05:16] [scene:talk]
+VISUAL: 
+AUDIO: 'You can understand it like this: Likeness Guide mainly defines the identity condition while Img To Video Inplace mainly defines the starting point of the latent One lets the model remember this face at the conditioning level The other lets the latent start from a state related to the reference image'
+
+[05:30] [scene:ui]
+VISUAL: A detailed view of a ComfyUI workflow, showing the "LTX Likeness Guide" node with "silent_reference" and "bbox_only" parameters.
+AUDIO: 'This is why the latent we use here is not an empty latent but the latent output from the Likeness Guide This is also an important method for keeping the character consistent After the identity constraint is set'
+
+[05:46] [scene:talk]
+VISUAL: 
+AUDIO: 'we enter the first-stage sampling Here there are also two key parts The first is the generation of the guider The guider here actually uses a fairly complex process but we can understand it simply'
+
+[05:58] [scene:ui]
+VISUAL: A detailed view of a ComfyUI workflow, focusing on the "Sigmas First Pass" and "Sigmas Easing (cubic, sine, quad)" nodes.
+AUDIO: 'If Likeness Guide tells the model who to reference then this Anchor and guider keep reminding the model during sampling: don’t drift too far The other part is the Sigmas Easing node This node mainly adjusts the rhythm of how the sampling noise decreases'
+
+[06:12] [scene:talk]
+VISUAL: 
+AUDIO: 'You’ll notice that the official workflow even tells you not to change this part casually which means this node has been carefully tuned At this point'
+
+[06:25] [scene:ui]
+VISUAL: A detailed view of a ComfyUI workflow, showing the "Generate High Resolution" section with "LTX Latent Upsampler (Tiled)" and "LTX Tiled Sampler" nodes.
+AUDIO: 'the first stage is complete In the second stage we mainly solve the high-resolution upscale problem Normal LTX two point three has a hard time going directly to high resolution The key is that here we use a special node called LTX Latent Upsampler Tiled'
+
+[06:37] [scene:talk]
+VISUAL: 
+AUDIO: 'It uses tiled mode First, make this clear: it is not upscaling the video in pixel space It is upscaling the video in latent space It also uses a tile mechanism'
+
+[06:50] [scene:ui]
+VISUAL: A detailed view of the "LTX Latent Upsampler (Tiled)" node in ComfyUI, showing its parameters like tile_size and overlap.
+AUDIO: 'which means we cut the latent into many small blocks process each small block separately and then stitch them back together with overlapping blending There are two benefits'
+
+[07:02] [scene:talk]
+VISUAL: 
+AUDIO: 'First, it saves VRAM Second it is more stable for vertical videos large sizes and extreme aspect ratios This is why the repaired videos you see can reach nineteen twenty by ten twenty-four or ten twenty-four by nineteen twenty'
+
+[07:17] [scene:ui]
+VISUAL: A detailed view of the "LTX Tiled Sampler" node in ComfyUI, showing its parameters like tile_axis and n_tiles.
+AUDIO: 'instead of the traditional twelve eighty by seven-twenty After this upscale we still need to run sampling once Here, we also use Tiled Sampler This is a sampler that also supports tiled mode'
+
+[07:29] [scene:talk]
+VISUAL: 
+AUDIO: 'As an optimization mode it will not heavily rewrite the character’s identity and it will not completely overturn the motion structure It tries to preserve the consistency of the character and the action Now let’s compare again'
+
+[07:43] [scene:comparison]
+VISUAL: A side-by-side comparison of an "original" AI-generated video and a "refined" version, focusing on facial consistency.
+AUDIO: 'This is the first group This is the result from normal generation The main problem with the normal version appears in the second half where it increasingly looks like the model’s default AI face After the repair'
+
+[07:55] [scene:talk]
+VISUAL: 
+AUDIO: 'the face is not as stiff and the facial features are also more consistent with the reference image The second one has the same problem This is a close-up so the comparison is even more obvious In the normal version'
+
+[08:07] [scene:demo]
+VISUAL: A woman in traditional attire smiling and moving.
+AUDIO: 'the expression muscles easily become stiff The repaired version still has some traces of AI video but overall I think the face shape and temperament are already much better Next, let’s briefly summarize If you want to reproduce this workflow'
+
+[08:20] [scene:talk]
+VISUAL: 
+AUDIO: 'follow this order First, install the extension Second, prepare the main model Let me emphasize this: for both the main model and the upscale model try to use version one point one'
+
+[08:33] [scene:outro]
+VISUAL: A woman speaking into a microphone.
+AUDIO: 'Don’t use version one point zero Version one point one gives a much more obvious improvement Third use the default parameters as much as possible to get the whole workflow running first There are a few parts you should not change'
+
+[08:47] [scene:talk]
+VISUAL: 
+AUDIO: 'especially the sigmas This video mainly solves two problems The first is that the second half of an LTX two point three video becomes less and less like the reference The second is high-resolution upscaling'
+
+[09:00] [scene:talk]
+VISUAL: 
+AUDIO: 'I think both of these problems are very important So what are you waiting for? Go try it yourself Follow me and become someone who truly understands AI'
