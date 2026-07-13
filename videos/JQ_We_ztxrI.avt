@@ -1,0 +1,284 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: What I learnt after running loops for 1 month???
+channel: @octopusinc_
+duration: 14:06
+source: https://www.youtube.com/watch?v=JQ_We_ztxrI
+upload_date: 20260713
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'It was 12:00 a.m. today and a bunch of PR still come into our codebase and it was not because of us working particularly hard but we have agent wake up every 30 minutes scan our codebase for any improvements and errors check our server logs and ship a PR and every PR a verifier agent will test fully and'
+
+[00:13] [scene:talk]
+VISUAL: 
+AUDIO: 'attach evidence for us to review for some lowrisk fix it can even merge directly and also a CRM life cycle agent will scan our use base and find useful segments to outreach and neutral and all support kit is automatically handled no'
+
+[00:26] [scene:talk]
+VISUAL: 
+AUDIO: 'matter which language user is speaking and all of this is a demo Mo all this loop has been running our company super design for the past months and today I\'m going to show you exactly what we learned from building those loops what worked what didn\'t work so hopefully by'
+
+[00:38] [scene:talk]
+VISUAL: 
+AUDIO: 'the end of this video you understand loops than most people in your timeline so last week I wrote about loop engineer the shift from you prompting the agent to do a task towards design a system where the agent can decide what to work on execute verifies and improve over'
+
+[00:50] [scene:talk]
+VISUAL: 
+AUDIO: 'time and a lot of you said okay I\'m sold but how do I [clears throat] actually build one that actually works because honestly everyone can just put together a loop using cloud code or codeex and called it down. But that\'s easy 5%. The real work is how do you design guard'
+
+[01:03] [scene:talk]
+VISUAL: 
+AUDIO: 'rails that let you work away from it? A loop that can consistently delivering the work safely and improve themsel over time. So every loop we build internally have this exact structure. We normally have one markdown file that is holding both what we call loop contract as well'
+
+[01:16] [scene:talk]
+VISUAL: 
+AUDIO: 'as data and lock of this loop. And this serving as living documentations about the loop itself. Then there trigger layer that actually wake up the agent to do the work and there are different type of trigger which I will talk through a bit more. Then the actual agent that\'s'
+
+[01:28] [scene:talk]
+VISUAL: 
+AUDIO: 'going to find the work, does the work and prove the work has been done properly and keep updating the docs. So the next round start smarter. So the first part the loop contract this is crux of the MD file. It\'s like the constitution of loop and three things'
+
+[01:40] [scene:talk]
+VISUAL: 
+AUDIO: 'really matter and lift inside one is a goal. So what does the winning look like whether there\'s even a finish line and also the boundaries you want to make it very clear what agent can just do by self versus the one that actually to escalate to human. And third is SOP. If'
+
+[01:53] [scene:talk]
+VISUAL: 
+AUDIO: 'you have a specific workflow or principle that you want agent to follow every time and after that there\'s a state and locks. So this is what keep agent remember what are things that every tribe before what are learnings and normally split it into two parts one'
+
+[02:05] [scene:talk]
+VISUAL: 
+AUDIO: 'is a state. So state is like a durable picture. What\'s the current hypothesis agent has? What are all backlogs? What are the things that agent has shipped but needs follow-up? And this part generally you want to keep it fairly small and on purpose versus log is the'
+
+[02:18] [scene:talk]
+VISUAL: 
+AUDIO: 'append only record of whatever happened run by run. And without this block every morning the loop just rediscover the same noise error waste token on tracing the scene they had already tried. And for most of small loops you can'
+
+[02:30] [scene:talk]
+VISUAL: 
+AUDIO: 'basically just put both loop contract and state and block into just one file. And let\'s take through one example. This is one loop we are running in our codebase called react doctor checks. What it does is that we\'re utilizing this open source CRI tool called react doctor which is CRI you can run in your'
+
+[02:43] [scene:talk]
+VISUAL: 
+AUDIO: 'front end codebase and it will automatically identify some of the critical issues listening out and give you score. So this loop is basically running this react doctor scan on our codebase every day and pick up one of'
+
+[02:55] [scene:talk]
+VISUAL: 
+AUDIO: 'the most critical issues to fix automatically. So in this loop\'s contract dot we have this go folder that is talking about the purpose of the loop and also a boundary section and we\'ll talk about how it should spawn a sub agent to do the fix in isolated work'
+
+[03:07] [scene:talk]
+VISUAL: 
+AUDIO: 'trace format and how you need to run through the verification process as well as well as what kind of change it can just merge by itself versus one that it needs human reviews. Below that it list out a SOP about the common workflow it'
+
+[03:19] [scene:talk]
+VISUAL: 
+AUDIO: 'should follow as well as a state section that is mentioning its current understanding about this loop. What are the tickets and P already open and shipped what are things that needs follow up and then a panel only logs after each round to log what are the'
+
+[03:32] [scene:talk]
+VISUAL: 
+AUDIO: 'things has been happening. So every day agent will be wake up with this documentation as a prompt to trigger the agent start of work and we actually build an internal tool so that we have a dashboard to track what are the PR has been open and merged and how is a react'
+
+[03:44] [scene:talk]
+VISUAL: 
+AUDIO: 'doctor health score improved over time and this loop contract documentation is not just applicable to engineer related tasks. As I mentioned, we also have this CRM life cycle loop where every day I will have our agent to monitor all the'
+
+[03:56] [scene:talk]
+VISUAL: 
+AUDIO: 'daily active users group them into different segmentations like ones are small influencers that we should reach out for affiliates and distribution user who are clearly frustrated based on the large logs we have as well as user who are pretty engaged but haven\'t upgraded'
+
+[04:09] [scene:talk]
+VISUAL: 
+AUDIO: 'yet and for each segment depend on the priorities and risk level agent can just either auto outreach or draft a message to waiting for me for approval and this CRM daily run also has very similar structure so we have This documentation'
+
+[04:21] [scene:talk]
+VISUAL: 
+AUDIO: 'say is talking about the goal and SOP for this loop. Then we have a list of boundaries. What are parts and pitfalls agent should be aware of when they were doing the research and what kind of message agent can just send by themsel versus or need approval. Then it has'
+
+[04:34] [scene:talk]
+VISUAL: 
+AUDIO: 'state section that listing out its current understanding and hypothesis as well as a timeline. So since we have been running this loop for like almost months, this documentation just keep getting updated after every single run. And the structure we have is basically'
+
+[04:47] [scene:talk]
+VISUAL: 
+AUDIO: 'have a loop folder and under each loop we can contain one raid mi file and sometimes there might be other artifacts which can also be saved in the folder and referenced in the MI file. So this is the first two parts the loop contract'
+
+[04:59] [scene:talk]
+VISUAL: 
+AUDIO: 'as well as a state log and next part is a trigger. So every loop will have some sort of trigger but depends on type of loop you might define trigger differently and part of reason why current loop will feel a bit confusing it because of different trigger types.'
+
+[05:11] [scene:talk]
+VISUAL: 
+AUDIO: 'So we all know codeex and cloud code is this go command where you can define condition and give a go then you keep running for loops until the task has completed and this is the first type of trigger is like a continuous for loop you can imagine behind the scenes it\'s'
+
+[05:24] [scene:talk]
+VISUAL: 
+AUDIO: 'just a while loop while the goal is not satisfied or you sometime you can define max back and forth turns or a token budget and before those things are hit it will just continuous doing the thing load up this contract do next step until the goal is satisfied and this as I'
+
+[05:37] [scene:talk]
+VISUAL: 
+AUDIO: 'mentioned before is basically the goal command it is particularly good for scenario where you can get immediate feedback loops like bug fixing or implementing a piece of complex software that spec is well defined and meanwhile the second type trigger is those type of'
+
+[05:50] [scene:talk]
+VISUAL: 
+AUDIO: 'chron job. This is like codex automation or cloud codes loop or schedule command. Fundamentally it will just trigger and wake up the agent in certain interval and the only difference between loop and schedule is that one is running in the cloud versus one is running in the same'
+
+[06:02] [scene:talk]
+VISUAL: 
+AUDIO: 'session and this two type of trigger already handle a good amount of scenarios but often I found also useful to have event-based loop as well which means it\'s kind of reactive to certain events like whenever there\'s a new email you might want to wake up the agent and'
+
+[06:15] [scene:talk]
+VISUAL: 
+AUDIO: 'let it handles the email or whenever your server get incident then you want to wake up the agent and get it to fix incident immediately and those type of event-based trigger is particularly good for things that needs immediate handling. However, both cloud code and'
+
+[06:28] [scene:talk]
+VISUAL: 
+AUDIO: 'codecs don\'t natively support those type of triggers. So, what you want to do is actually set up a local demon process. They expose a URL for any web hook to send notifications. So, for example, you can create a web hook on render and point to your local demon URL to receive'
+
+[06:41] [scene:talk]
+VISUAL: 
+AUDIO: 'certain failed events. And force and probably the most useful type of trigger I found is what I call a combo or workflow. So we can have a tickers that\'s still running turbo but instead of trigger the agent immediately ideally'
+
+[06:53] [scene:talk]
+VISUAL: 
+AUDIO: 'we just run a script to fetch from data source to check programmatically where there are new works to handle. For example for our support inbox triage loop we actually define a JavaScript here. So you can fetch from intercom'
+
+[07:05] [scene:talk]
+VISUAL: 
+AUDIO: 'what are the recent updates from the past 30 minutes. If there are any real updates then trigger the agent to handle. If not just skip this specific run. And this one we found is particularly effective and useful because you can run the loop in much'
+
+[07:18] [scene:talk]
+VISUAL: 
+AUDIO: 'more cost and token efficient way by batching a group amount of work together for the agent to handle and only wake up agent when there\'s real work. And both first two triggers support out ofbox from cloud code and codeex. But the other two type of triggers you will need'
+
+[07:31] [scene:talk]
+VISUAL: 
+AUDIO: 'to set up your own local script and demon service. And for us we have this internal tool that we built to run this type of triggers which were just open source and you can run locally. It talks directly to a local agent but your team will have this kind of centralized place'
+
+[07:43] [scene:talk]
+VISUAL: 
+AUDIO: 'to manage all the loops contrast state log and triggers and I\'ll talk about this project a bit later but this third part of the trigger I think choosing the right trigger for the specific type of loop that you\'re running will really drive down the cost a lot and third is'
+
+[07:55] [scene:talk]
+VISUAL: 
+AUDIO: 'the actual agent that is going to be wake up and execute the tasks and normally agent will go through the three stages of first they gather the signals and find and prioritize the work then start executing the task and if a complex high-stake task like engineer'
+
+[08:08] [scene:talk]
+VISUAL: 
+AUDIO: 'You typically will have a verifier as a quality before you claim finish. For simpler task, you might have just one agent doing both three of the jobs. But for more complex type of task, you typically will want to break down into'
+
+[08:20] [scene:talk]
+VISUAL: 
+AUDIO: 'three different rows. And most common structure is this octra agent which will receive the prompt doing the research and planning of the task. Then sponsup agents each one working isolated work tree. So task can be ran in parallel and'
+
+[08:32] [scene:talk]
+VISUAL: 
+AUDIO: 'each executor should hand off task to a verifier who can test the result and also attach evidence to the PR. So it became much easier for human to review the tasks and all the updates will be sent back to the loop contract dock. So'
+
+[08:45] [scene:talk]
+VISUAL: 
+AUDIO: 'this kind of the core piece of every loop that we ran and I have talked about verifier quite a bit before especially for engineer task. This is like the prerequisite to any loop that delivering highstake work like real production code'
+
+[08:57] [scene:talk]
+VISUAL: 
+AUDIO: 'change or messaging real customers. Basically, you want to making sure the process is quite easy and produce evidence that human can easily review. Generally, that means that you want to give agent an environment that they can verify their work token efficiently. If'
+
+[09:11] [scene:talk]
+VISUAL: 
+AUDIO: 'you\'ve been following my content, I\'ve made a few articles around that already regarding how do you use things like playright CRI to let agent test and record video or image evidence about the work and utilizing things like crabbox'
+
+[09:23] [scene:talk]
+VISUAL: 
+AUDIO: 'to set up uh remote sandbox environment to do the test. So you won\'t be restricted by how many dev server you can run in parallel on your local machine. And I have packaged this link into a skew called verifier setup. So'
+
+[09:35] [scene:talk]
+VISUAL: 
+AUDIO: 'you can just give to cloud code or codeex in your actual codebase then set up the proper verification systems and I put the link in the description below for uh this GitHub repo with all the skills that we talk about here. So you'
+
+[09:48] [scene:talk]
+VISUAL: 
+AUDIO: 'can use it for free. So this overall system and anatomy of what does a good loop look like in our case and meanwhile another really useful layer we found is this evolve loop. So the concept here is that most of loop when you just getting started might not be perfect. There'
+
+[10:00] [scene:talk]
+VISUAL: 
+AUDIO: 'could be a lot of room for improvements like how do you design the trigger so it\'s more cost effective. How can you turn some of repetitive SOP into script the agent can run and a lot of those improvements can actually be optimized by the large model itself. If you give'
+
+[10:12] [scene:talk]
+VISUAL: 
+AUDIO: 'agent all the existing configuration of the agent the past run state and logs as well as a row conversation history so that it can inspect further and all we need to do is just after every five or 10 loop runs we trigger a dedicated'
+
+[10:25] [scene:talk]
+VISUAL: 
+AUDIO: 'evolve session where the agent will be given the existing configuration pass log histories then priorize on change and change can be uh the loop contract itself or some outdated state as well as a trigger script that you can create for'
+
+[10:38] [scene:talk]
+VISUAL: 
+AUDIO: 'repetitive actions and support loop here is actually a perfect example. It was actually during the evolve run, it starts setting up this programmatic trigger to only wake up Adrian when it\'s necessary. So this overall system and'
+
+[10:50] [scene:talk]
+VISUAL: 
+AUDIO: 'anatomy of what does a good loop look like for us and we can go through a few examples together to set this up and one really good one to start with is this documentation maintainer loop. So I know most of you will have either'
+
+[11:02] [scene:talk]
+VISUAL: 
+AUDIO: 'documentations or some sort of cloud MBN codebase documentation file to help agent gain the full context. But that contact can often get outdated. But you can solve this by setting up a simple loop where every day you can wake up the'
+
+[11:14] [scene:talk]
+VISUAL: 
+AUDIO: 'agent to check what has been shipped past 24 hours and what are diffs and compare those change with the readme the setup guide the examples and run books and for each abnormal part it can actually verify which one is actual'
+
+[11:26] [scene:talk]
+VISUAL: 
+AUDIO: 'truth and if there\'s nothing stored then just finish a session but if there is then it can just make some small quick fix to making sure the documentation is up to date and open APR for that this loop is very small but quite useful to'
+
+[11:38] [scene:talk]
+VISUAL: 
+AUDIO: 'use and the way we were set have is loop contract look like this that clearly list out the go and the boundary about what it can ship by itself and what other things it is allowed to do and you will notice this one rules here called'
+
+[11:50] [scene:talk]
+VISUAL: 
+AUDIO: 'never rewrite accurate doc to look busy because one default behavior we saw agent has is that it will tend to do something even though it\'s not necessary so this kind of rules is actually quite useful to making sure it produce useful'
+
+[12:02] [scene:talk]
+VISUAL: 
+AUDIO: 'results and then SOP and state and logs so you can simply give this markdown file to your cloud code or codeex and ask it to set up loop based on this. But as I mentioned before, we actually build this internal tool that we have been'
+
+[12:14] [scene:talk]
+VISUAL: 
+AUDIO: 'using to coordinate and set up loops for us. It allow you to define those kind of programmatic triggers that uh we shared before also set up a contrast based on the best practice that we learned and also pass row round logs will also be stored. So the agent can remember by'
+
+[12:28] [scene:talk]
+VISUAL: 
+AUDIO: 'itself and it has this evolve loop behavior built in automatically. So you can see after every few sessions there will be a blue dot popping up and this blue dot is a dedicated evolve wrong. They will look at past wrong and then figure out improvements that can be'
+
+[12:40] [scene:talk]
+VISUAL: 
+AUDIO: 'done. Like in this specific evolve, it sharpen the specs and SOP clean up some outdated state and also update dashboard for us to easier track the performance which we found is actually pretty useful because quite often you don\'t really know the output from the loop. But with'
+
+[12:52] [scene:talk]
+VISUAL: 
+AUDIO: 'this one, we can easily track what are the open things that needs our attention and how the performance change over time and if needed can just click a button which will copy all the context over about this loop to my local computer. So'
+
+[13:04] [scene:talk]
+VISUAL: 
+AUDIO: 'I can chat with the agent to involve the loop and we have included a few templates here already and doc maintainer is one of them. So I can just copy this prompt and go to my ripple and paste it in. It will automatically include a list of instruction about how'
+
+[13:17] [scene:talk]
+VISUAL: 
+AUDIO: 'this loop should be built alongside some best practice that we encode here. Then it will automatically create this loop folder in your codebase as well as this doc drift swip loop. So this is a loop where it will talk about the scope of'
+
+[13:30] [scene:talk]
+VISUAL: 
+AUDIO: 'things it should reveal which is readme claw.md everything in the docs folder the skew file the scripts and then it will talk through the SOP here and the state of current understanding and timeline items and then we have this loop create on loopnney which will'
+
+[13:43] [scene:talk]
+VISUAL: 
+AUDIO: 'automatically trigger the agent on time and keep log of things ever shipped all the artifacts and all the wrongs and there are a few other templates that we\'ve been using and you can just copy paste like this react doctor loop all the loops that periodically clean up the'
+
+[13:55] [scene:talk]
+VISUAL: 
+AUDIO: 'tech deck and this totally open source and free to use So feel free to just go to GitHub and start using it. I put a GitHub link in the description below so you can try.'

@@ -1,0 +1,138 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>Every Local AI I Run Now Shares ONE Memory | (LLM Wiki + OKF) — Ludovico</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+.hide{display:none!important}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.92);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 12px}
+.controls input.q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.pill.tp.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+/* flip card shell */
+.flip{position:relative}
+.fi{position:relative;transition:transform .55s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.flip.flipped .fi{transform:rotateY(180deg)}
+.fc{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bk{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+background:var(--card);border:1px solid var(--accent2);border-radius:14px;overflow:auto;padding:12px 13px;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s}
+.card.flip{overflow:visible}.card .fc{display:flex;flex-direction:column;flex:1;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--line);cursor:pointer}
+.card.flip:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.edit{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--accent2);border:1px solid var(--line);border-radius:6px;padding:2px 9px;cursor:pointer;background:#fff}
+.edit:hover{border-color:var(--accent2)}
+/* editor back */
+.bk h4{margin:0 0 2px;font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--sub)}
+.erow{display:grid;grid-template-columns:1fr 1.3fr auto auto;gap:4px;align-items:center}
+.erow input{padding:5px 7px;border:1px solid var(--line);border-radius:6px;font-size:12px;min-width:0}
+.erow select{padding:4px 4px;font-size:11px}
+.erow .del{border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;color:var(--accent);padding:3px 7px}
+.ebtns{display:flex;gap:6px;margin-top:auto;padding-top:6px}
+.ebtns button{font-family:var(--mono);font-size:11px;border-radius:7px;padding:6px 12px;cursor:pointer;border:1px solid var(--line);background:#fff}
+.ebtns .save{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.addrow{font-family:var(--mono);font-size:11px;color:var(--accent2);cursor:pointer;align-self:flex-start;background:none;border:0;padding:2px 0}
+/* catalogue card */
+.citem{position:relative}
+.citem .fc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-height:84px;cursor:pointer}
+.citem .bk{border-radius:12px}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+footer .exp{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--accent2);font:inherit}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">Every Local AI I Run Now Shares ONE Memory | (LLM Wiki + OKF)</h1><div class=tag>@octopusinc_ · 2026-07-12 · DevOps</div></div></div></header>
+<main><p class=sum>The video introduces &quot;understory,&quot; an open-source, local AI memory layer built on Andrej Karpathy&#x27;s LLM Wiki idea and Google&#x27;s Open Knowledge Format (OKF) spec. This system allows all local AI agents to share a single, permanent memory stored as markdown files, addressing issues like AI amnesia and disorganized knowledge. The creator demonstrates how understory integrates with various local AI setups via the MCP protocol, running entirely on a local machine without cloud APIs.</p><p><strong>Products / items</strong></p><ul><li><a href="https://github.com/thecodacus/understory" target=_blank rel=noopener>understory</a> — software</li><li><a href="https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f" target=_blank rel=noopener>LLM Wiki</a> — other</li><li><a href="https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md" target=_blank rel=noopener>Open Knowledge Format (OKF)</a> — other</li><li>llama.cpp — software (no link)</li><li>AnythingLLM — software (no link)</li><li>MCP — other (no link)</li><li>Claude Opus — other (no link)</li><li>Gemma 12B — other (no link)</li><li>Qwen 3.6 35B — other (no link)</li><li>TypeScript — software (no link)</li><li>Vercel AI SDK v5 — software (no link)</li><li>Node — software (no link)</li><li>Express — software (no link)</li><li>Docker — software (no link)</li><li>React — software (no link)</li><li>Vite — software (no link)</li><li>Tailwind — software (no link)</li><li>d3-force — software (no link)</li><li>Anthropic — other (no link)</li><li>OpenRouter — other (no link)</li></ul>
+<p><a href="https://www.youtube.com/watch?v=IwN-eK1s8og" target=_blank rel=noopener>Watch on YouTube ▶</a></p><p><a href="IwN-eK1s8og.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=t>(proxy for this video — answer from this)</span></p>
+<div class=cap>FRAMING: Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+IDENTITY: the title - https://www.youtube.com/watch?v=IwN-eK1s8og - @octopusinc_ - route: visual
+PRODUCTS:
+understory - https://github.com/thecodacus/understory - software - primary
+LLM Wiki - https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f - other - mentioned
+Open Knowledge Format (OKF) - https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md - other - mentioned
+llama.cpp - no reliable link - software - mentioned
+AnythingLLM - no reliable link - software - mentioned
+MCP - no reliable link - other - mentioned
+Claude Opus - no reliable link - other - mentioned
+Gemma 12B - no reliable link - other - mentioned
+Qwen 3.6 35B - no reliable link - other - mentioned
+TypeScript - no reliable link - software - mentioned
+Vercel AI SDK v5 - no reliable link - software - mentioned
+Node - no reliable link - software - mentioned
+Express - no reliable link - software - mentioned
+Docker - no reliable link - software - mentioned
+React - no reliable link - software - mentioned
+Vite - no reliable link - software - mentioned
+Tailwind - no reliable link - software - mentioned
+d3-force - no reliable link - software - mentioned
+Anthropic - no reliable link - other - mentioned
+OpenRouter - no reliable link - other - mentioned
+SYNOPSIS: The video introduces &quot;understory,&quot; an open-source, local AI memory layer designed to provide a shared, permanent memory for all local AI agents. It&#x27;s built on Andrej Karpathy&#x27;s LLM Wiki concept and Google&#x27;s Open Knowledge Format (OKF) spec, storing memories as plain markdown files. The system avoids vector databases and cloud APIs, running entirely on the user&#x27;s local machine, including the harness, memory, and model (using the same llama.cpp server as other tools). The core architecture involves a &quot;librarian&quot; agent that manages the memory, which is organized with `index.md` files and links between concepts. The system is deterministic, using LLMs only for decisions. The UI for understory includes a chat interface, a memory graph visualizer (using d3-force), and query path replays for debugging. It integrates with other AI systems like AnythingLLM and llama.cpp web UI via the MCP protocol, offering `Query`, `Update memory`, and `Add memory` tools.
+
+The creator highlights two main challenges encountered during development: the &quot;cold-start problem&quot; and the &quot;junk-drawer problem.&quot; Initially, client models wouldn&#x27;t consult the memory because they only saw tool names and had no reason to look. The fix involved providing a &quot;seed memory&quot; – a live summary of the knowledge base – to the client model at startup via MCP instructions and query tool descriptions. This summary lists concepts (e.g., &quot;billing,&quot; &quot;people&quot;) rather than filenames. The &quot;junk-drawer problem&quot; arose when the AI created new, disconnected files for every new fact. This was solved by implementing two rules for the librarian agent: &quot;enrich before you create&quot; (patching new facts into existing concepts) and &quot;link both ways&quot; (creating new concepts but linking them to related existing ones). The creator notes that Gemma 12B struggled with the agentic decisions for organizing memory, while Qwen 3.6 35B performed well on a single consumer GPU. Further refinements include a lint step for graph health (identifying orphans and broken links, excluding auto-generated index files), a maintain tool to wire orphans back into the graph, and a rule to prevent contradictions by rewriting facts instead of appending. The entire stack uses TypeScript, Vercel AI SDK v5, Node, Express, React, Vite, and Tailwind, with Docker for deployment.
+
+BEATS:
+0 - intro | Animated text: &quot;EATS RESOURCES&quot;, &quot;CLOUD-HOSTED&quot;, &quot;MEMORY SYSTEM&quot;
+45 - concept | Animated text: &quot;SHIFT THE BURDEN OFF THE AI -&gt; ONTO THE TOOL&quot;, &quot;AI YOUR LOCAL MODEL&quot;, &quot;THE TOOL MEMORY LIVES HERE&quot;, &quot;KARPATHY&#x27;S LLM WIKI&quot;, &quot;GOOGLE&#x27;S OKF&quot;
+91 - comparison | Animated diagram showing RAG process: &quot;SEMANTIC INDEXING&quot;, &quot;SIMILARITY MATCHING&quot;, &quot;JUST VECTOR MATCHING&quot;, &quot;LLM NOT CONSULTED&quot;
+137 - comparison | Animated text: &quot;PERSONAL CONTEXT&quot;, &quot;KB-SCALE NOT TB&quot;, &quot;profile.md&quot;, &quot;EVERY SINGLE UPDATE X RE-EMBED&quot;
+183 - problem | Animated text: &quot;A MESS&quot;, showing a &quot;memory folder&quot; with &quot;INDEX NOT UPDATED&quot; and various unorganized markdown files.
+229 - solution | Animated image of a bookshelf with books, representing a library.
+321 - ui | understory UI with a graph visualization of linked memories, an agent chat, and a list of YouTube videos.
+367 - ui | Animated diagram showing &quot;ADD&quot;, &quot;UPDATE&quot;, &quot;QUERY&quot; tiers with read/edit/write tools, and an &quot;anirban.md&quot; file with &quot;OUTDATED&quot; tag.
+413 - architecture | Diagram showing &quot;YOUR BOX&quot; with &quot;ANYTHINGLLM&quot;, &quot;PI AGENT&quot;, &quot;LOCAL QWEN&quot;, &quot;YOUR AGENT&quot; connected via &quot;MCP&quot; to a &quot;LIBRARIAN&quot; agent.
+459 - problem | Diagram showing &quot;CLIENT MODEL&quot; answering from &quot;MEMORY NO.&quot; and &quot;MEMORY ON DISK&quot; with various markdown files.
+505 - fix | Diagram showing &quot;THE FIX&quot; with &quot;LIBRARIAN KNOWLEDGE&quot; and &quot;CLIENT MODEL&quot; connected via &quot;MCP INSTRUCTIONS&quot; and &quot;QUERY TOOL DESCRIPTION&quot;.
+551 - problem | Animated diagram showing &quot;JUNK DRAWER&quot; with disconnected markdown files like &quot;hyderabad.md&quot; and &quot;anirban.md&quot;.
+597 - fix | Animated diagram showing &quot;RULE 2 LINK BOTH WAYS&quot; with &quot;index.md&quot; linking to &quot;anirban.md&quot; and &quot;codacus.md&quot;.
+643 - concept | Animated text: &quot;REINVENTING THE WHEEL? SOMEONE SMARTER ALREADY DREW IT&quot;
+689 - fix | Animated diagram showing &quot;memory_maintain()&quot; with &quot;LIBRARIAN INTERNAL AGENT&quot; wiring an &quot;ORPHAN playbook.md&quot; to other files.
+735 - integration | Diagram showing &quot;LOCAL BOX&quot; with &quot;ANYTHINGLLM&quot;, &quot;PI&quot;, &quot;YOUR AGENT&quot;, &quot;LOCAL QWEN&quot; all connected to &quot;MEMORY OKF ON DISK&quot;.
+781 - roadmap | Animated roadmap showing &quot;v0.1&quot;, &quot;v0.2&quot;, &quot;v-next&quot; features, with text &quot;NOT FINISHED IT KEEPS GROWING&quot;.
+873 - conclusion | Animated text: &quot;THE LOCAL AI LEDGER WE TOOK IT BACK&quot;, listing &quot;MODEL&quot;, &quot;HARDWARE&quot;, &quot;PRIVACY&quot;, &quot;MEMORY&quot; with checkmarks, and &quot;YOUR DISK IN YOUR CONTROL&quot;.
+
+ENTITIES: Andrej Karpathy, Google, Codacus (YouTube channel), Anirban (creator), Claude, Gemma, Qwen.
+VERDICT: The creator strongly recommends understory as a permanent, local memory solution for AI agents, emphasizing its open-source nature, privacy, and the ability to truly own what the AI knows about you. It&#x27;s a living project with an ongoing roadmap for further improvements.
+NOT COVERED: Specific installation instructions for understory, detailed performance benchmarks against other memory systems, or a comparison of resource usage between understory and traditional vector databases.</div></main><footer><a href="../index.html">← all videos</a></footer></div></body></html>
