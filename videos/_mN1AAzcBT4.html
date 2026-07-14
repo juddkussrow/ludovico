@@ -1,0 +1,128 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>How to Create an AI OFM Model from scratch Without Training a LoRA — Ludovico</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+.hide{display:none!important}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.92);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 12px}
+.controls input.q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.pill.tp.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+/* flip card shell */
+.flip{position:relative}
+.fi{position:relative;transition:transform .55s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.flip.flipped .fi{transform:rotateY(180deg)}
+.fc{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bk{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+background:var(--card);border:1px solid var(--accent2);border-radius:14px;overflow:auto;padding:12px 13px;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s}
+.card.flip{overflow:visible}.card .fc{display:flex;flex-direction:column;flex:1;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--line);cursor:pointer}
+.card.flip:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.edit{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--accent2);border:1px solid var(--line);border-radius:6px;padding:2px 9px;cursor:pointer;background:#fff}
+.edit:hover{border-color:var(--accent2)}
+/* editor back */
+.bk h4{margin:0 0 2px;font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--sub)}
+.erow{display:grid;grid-template-columns:1fr 1.3fr auto auto;gap:4px;align-items:center}
+.erow input{padding:5px 7px;border:1px solid var(--line);border-radius:6px;font-size:12px;min-width:0}
+.erow select{padding:4px 4px;font-size:11px}
+.erow .del{border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;color:var(--accent);padding:3px 7px}
+.ebtns{display:flex;gap:6px;margin-top:auto;padding-top:6px}
+.ebtns button{font-family:var(--mono);font-size:11px;border-radius:7px;padding:6px 12px;cursor:pointer;border:1px solid var(--line);background:#fff}
+.ebtns .save{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.addrow{font-family:var(--mono);font-size:11px;color:var(--accent2);cursor:pointer;align-self:flex-start;background:none;border:0;padding:2px 0}
+/* catalogue card */
+.citem{position:relative}
+.citem .fc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-height:84px;cursor:pointer}
+.citem .bk{border-radius:12px}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+footer .exp{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--accent2);font:inherit}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">How to Create an AI OFM Model from scratch Without Training a LoRA</h1><div class=tag>@octopusinc_ · 2026-05-22 · Image Gen</div></div></div></header>
+<main><p class=sum>This video demonstrates a workflow for creating a consistent AI influencer model without immediate LoRA training, using ComfyUI and custom nodes. It emphasizes starting with a clear visual direction from reference images, testing identity consistency across generations, and building a clean dataset before considering LoRA training. The process involves face merging, identity swapping, and generating diverse images with a prompt stack.</p><p><strong>Products / items</strong></p><ul><li>ComfyUI — software (no link)</li><li><a href="https://www.pinterest.com" target=_blank rel=noopener>Pinterest</a> — software</li><li>Nano Banana — software (no link)</li><li>Nano Banana Pro — software (no link)</li><li>ChatGPT Image 2 — software (no link)</li><li>Cream 4.5 — software (no link)</li><li><a href="https://www.skool.com/matrix-lab-6660/about" target=_blank rel=noopener>Matrix Lab</a> — other</li><li>Matrix Image Edit Node — software (no link)</li><li>Matrix Identity Swap Node — software (no link)</li><li>Matrix Prompt Stack Data Node — software (no link)</li><li>Set Image Turbo — software (no link)</li><li>Flux 2 — software (no link)</li><li>Quen 2.2 — software (no link)</li></ul>
+<p><a href="https://www.youtube.com/watch?v=_mN1AAzcBT4" target=_blank rel=noopener>Watch on YouTube ▶</a></p><p><a href="_mN1AAzcBT4.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=t>(proxy for this video — answer from this)</span></p>
+<div class=cap>FRAMING: Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+IDENTITY: How to Create an AI OFM Model from scratch Without Training a LoRA - https://www.youtube.com/watch?v=_mN1AAzcBT4 - @octopusinc_ - route: visual
+PRODUCTS:
+ComfyUI - no reliable link - software - primary
+Pinterest - https://www.pinterest.com - software - mentioned
+Nano Banana - no reliable link - software - mentioned
+Nano Banana Pro - no reliable link - software - mentioned
+ChatGPT Image 2 - no reliable link - software - mentioned
+Cream 4.5 - no reliable link - software - mentioned
+Matrix Lab - https://www.skool.com/matrix-lab-6660/about - other - mentioned
+Matrix Image Edit Node - no reliable link - software - mentioned
+Matrix Identity Swap Node - no reliable link - software - mentioned
+Matrix Prompt Stack Data Node - no reliable link - software - mentioned
+Set Image Turbo - no reliable link - software - mentioned
+Flux 2 - no reliable link - software - mentioned
+Quen 2.2 - no reliable link - software - mentioned
+SYNOPSIS: The video demonstrates a workflow within ComfyUI for creating a consistent AI influencer model without immediately training a LoRA. The process begins by establishing a clear visual direction using Pinterest to gather reference images, focusing on a consistent &quot;creator type&quot; rather than individual beauty. These references are then fed into a &quot;face merge workflow&quot; in ComfyUI, utilizing custom nodes from the &quot;Matrix Lab pack.&quot; The creator uses ChatGPT Image 2 for this step, noting it provides a slightly more realistic look for faces and details compared to Nano Banana 2 and Nano Banana Pro. The &quot;Matrix Image Edit Node&quot; is used with API keys, generating 2-4 images at 4K resolution with a 3:4 aspect ratio to ensure high quality and prevent character drift. After generating a base identity, an &quot;identity swap workflow&quot; is employed to test the consistency of the face across different target images, again using 4K resolution for quality assessment. The final stage involves a &quot;data set workflow&quot; with a &quot;Prompt Stack Data Node&quot; to generate a diverse set of images (different poses, outfits, lighting, styles) that maintain the established identity. This clean dataset is presented as the true asset, enabling LoRA training on various models like Set Image Turbo, Flux 2, or Quen 2.2, or direct use with API models for SFW and NSFW content. The video emphasizes that building a consistent identity is more challenging and crucial than LoRA training itself.
+BEATS:
+0 - ui | The video opens with a ComfyUI workflow showing multiple image inputs and interconnected nodes, suggesting a face merge or identity swap operation.
+24 - ui | A close-up of a generated AI face is displayed, highlighting the detail and realism achieved.
+49 - ui | The ComfyUI interface is shown again, focusing on the &quot;Load Image&quot; nodes where reference images are input.
+74 - ui | A text editor displaying a &quot;Prompt Library&quot; for a &quot;Matrix Dataset Builder&quot; is shown, detailing various prompts for different body types and styles.
+99 - ui | A Pinterest board filled with images of blonde models and selfies is displayed, illustrating the initial step of gathering visual references.
+124 - ui | A file explorer window shows a folder named &quot;model-references&quot; containing several reference images, ready for import into the workflow.
+149 - ui | The ComfyUI workflow for &quot;matrix-face-merge-v1&quot; is visible, with settings for &quot;Nano Banana Pro&quot; and &quot;ChatGPT Image 2&quot; models.
+173 - ui | A section of the ComfyUI workflow, specifically the &quot;MATRIX - ChatGPT Image 2 Edit&quot; node, is highlighted, showing generation settings like resolution (4K) and aspect ratio (2:3).
+198 - ui | The ComfyUI interface shows the &quot;MATRIX - ChatGPT Image 2 Edit&quot; node processing, with a progress bar indicating image generation.
+223 - result | A high-quality generated AI face is displayed, showcasing the output of the face merge process.
+248 - ui | A close-up of a generated AI face is shown within an image viewer, demonstrating the &quot;identity swap&quot; functionality.
+273 - ui | Another Pinterest board is shown, this time with images of different girls, serving as target images for the identity swap.
+298 - ui | The &quot;MATRIX - Identity Swap&quot; node in ComfyUI is shown, with options to select different models like &quot;Nano Banana Pro&quot; and &quot;Nano Banana 2&quot;.
+323 - ui | The ComfyUI workflow for identity swap is displayed, showing the base AI face and a target image being processed.
+347 - ui | The &quot;data-set-v1&quot; workflow in ComfyUI is shown, with multiple generated images of the AI influencer in different poses and outfits.
+372 - ui | A wider view of the &quot;data-set-v1&quot; workflow, emphasizing the multiple image inputs and the subsequent processing nodes.
+397 - ui | The &quot;MATRIX - Prompt Stack Data Node&quot; is highlighted within the ComfyUI workflow, showing its role in generating diverse dataset images.
+422 - result | A generated image of the AI influencer is displayed, with a right-click context menu showing options like &quot;Open Image&quot; and &quot;Save Image&quot;.
+447 - result | A generated image of the AI influencer in a different pose and outfit is shown, demonstrating the diversity of the dataset.
+472 - result | Another generated image of the AI influencer, this time in a car setting, further illustrating the varied scenarios created for the dataset.
+VERDICT: The creator recommends building a strong, consistent AI identity and a clean dataset first, before engaging in LoRA training, as this foundational work is the true asset for creating a successful AI influencer.
+NOT COVERED: Specific API keys or pricing for Nano Banana, ChatGPT Image 2, or Cream 4.5 are not covered. The exact technical details of the custom Matrix nodes are not explained beyond their function. The video does not delve into the specifics of LoRA training itself, only when it makes sense in the workflow.</div></main><footer><a href="../index.html">← all videos</a></footer></div></body></html>

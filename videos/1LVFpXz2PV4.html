@@ -1,0 +1,133 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>ComfyUI Krea 2 ControlNet: Fix Colours &amp; Auto-Prompt (Free Workflow) — Ludovico</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+.hide{display:none!important}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.92);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 12px}
+.controls input.q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.pill.tp.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+/* flip card shell */
+.flip{position:relative}
+.fi{position:relative;transition:transform .55s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.flip.flipped .fi{transform:rotateY(180deg)}
+.fc{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bk{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+background:var(--card);border:1px solid var(--accent2);border-radius:14px;overflow:auto;padding:12px 13px;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s}
+.card.flip{overflow:visible}.card .fc{display:flex;flex-direction:column;flex:1;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--line);cursor:pointer}
+.card.flip:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.edit{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--accent2);border:1px solid var(--line);border-radius:6px;padding:2px 9px;cursor:pointer;background:#fff}
+.edit:hover{border-color:var(--accent2)}
+/* editor back */
+.bk h4{margin:0 0 2px;font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--sub)}
+.erow{display:grid;grid-template-columns:1fr 1.3fr auto auto;gap:4px;align-items:center}
+.erow input{padding:5px 7px;border:1px solid var(--line);border-radius:6px;font-size:12px;min-width:0}
+.erow select{padding:4px 4px;font-size:11px}
+.erow .del{border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;color:var(--accent);padding:3px 7px}
+.ebtns{display:flex;gap:6px;margin-top:auto;padding-top:6px}
+.ebtns button{font-family:var(--mono);font-size:11px;border-radius:7px;padding:6px 12px;cursor:pointer;border:1px solid var(--line);background:#fff}
+.ebtns .save{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.addrow{font-family:var(--mono);font-size:11px;color:var(--accent2);cursor:pointer;align-self:flex-start;background:none;border:0;padding:2px 0}
+/* catalogue card */
+.citem{position:relative}
+.citem .fc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-height:84px;cursor:pointer}
+.citem .bk{border-radius:12px}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+footer .exp{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--accent2);font:inherit}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">ComfyUI Krea 2 ControlNet: Fix Colours &amp; Auto-Prompt (Free Workflow)</h1><div class=tag>@octopusinc_ · 2026-07-12 · Image Gen</div></div></div></header>
+<main><p class=sum>This video demonstrates how to set up and use the Krea 2 ControlNet custom node within ComfyUI to generate realistic AI images with correct posture and natural skin textures. It covers manual installation of the custom node and associated LoRA files, configuring the workflow with Depth Anything V3, and optimizing settings like channel mode and normalization for improved results. The tutorial emphasizes prompt engineering and specific ControlNet node settings to overcome common issues like artificial-looking skin and blurry images.</p><p><strong>Products / items</strong></p><ul><li><a href="https://github.com/facok/comfyui-krea2-controlnet" target=_blank rel=noopener>facok/comfyui-krea2-controlnet</a> — software</li><li>ComfyUI — software (no link)</li><li><a href="https://github.com/PozzettiAndrea/ComfyUI-DepthAnythingV3" target=_blank rel=noopener>PozzettiAndrea/ComfyUI-DepthAnythingV3</a> — software</li><li><a href="https://huggingface.co/Patil/Krea-2-depth-controlnet" target=_blank rel=noopener>Patil/Krea-2-depth-controlnet</a> — software</li><li><a href="https://huggingface.co/Comfy-Org/Krea-2/resolve/main/diffusion_models/krea2_turbo_fp8_scaled.safetensors" target=_blank rel=noopener>krea2_turbo_fp8_scaled.safetensors</a> — software</li><li><a href="https://huggingface.co/Comfy-Org/Krea-2/resolve/main/text_encoders/qwen3vl_4b_fp8_scaled.safetensors" target=_blank rel=noopener>qwen3vl_4b_fp8_scaled.safetensors</a> — software</li><li><a href="https://huggingface.co/Comfy-Org/Krea-2/resolve/main/vae/qwen_image_vae.safetensors" target=_blank rel=noopener>qwen_image_vae.safetensors</a> — software</li><li><a href="https://huggingface.co/collections/krea/krea-2-loras" target=_blank rel=noopener>Krea 2 LoRAs</a> — software</li><li><a href="https://aistudynow.com/how-to-set-up-krea-2-controlnet-in-comfyui-perfect-pose-transfer/" target=_blank rel=noopener>aistudynow.com</a> — other</li><li>Krea 2 Control LoRA Loader — software (no link)</li><li>Krea 2 Control Apply — software (no link)</li><li>Krea 2 Control Image Encode — software (no link)</li><li>Depth Anything V3 — software (no link)</li><li>K Sampler — software (no link)</li><li>CLIP Text Encode (Prompt) — software (no link)</li><li>Generate Text — software (no link)</li><li>Gamma 4 — software (no link)</li></ul>
+<p><a href="https://www.youtube.com/watch?v=1LVFpXz2PV4" target=_blank rel=noopener>Watch on YouTube ▶</a></p><p><a href="1LVFpXz2PV4.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=t>(proxy for this video — answer from this)</span></p>
+<div class=cap>FRAMING: Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+IDENTITY: ComfyUI Krea 2 ControlNet: Fix Colours &amp; Auto-Prompt (Free Workflow) - https://www.youtube.com/watch?v=1LVFpXz2PV4 - @octopusinc_ - route: visual
+PRODUCTS:
+facok/comfyui-krea2-controlnet - https://github.com/facok/comfyui-krea2-controlnet - software - primary
+ComfyUI - no reliable link - software - primary
+PozzettiAndrea/ComfyUI-DepthAnythingV3 - https://github.com/PozzettiAndrea/ComfyUI-DepthAnythingV3 - software - mentioned
+Patil/Krea-2-depth-controlnet - https://huggingface.co/Patil/Krea-2-depth-controlnet - software - primary
+krea2_turbo_fp8_scaled.safetensors - https://huggingface.co/Comfy-Org/Krea-2/resolve/main/diffusion_models/krea2_turbo_fp8_scaled.safetensors - software - mentioned
+qwen3vl_4b_fp8_scaled.safetensors - https://huggingface.co/Comfy-Org/Krea-2/resolve/main/text_encoders/qwen3vl_4b_fp8_scaled.safetensors - software - mentioned
+qwen_image_vae.safetensors - https://huggingface.co/Comfy-Org/Krea-2/resolve/main/vae/qwen_image_vae.safetensors - software - mentioned
+Krea 2 LoRAs - https://huggingface.co/collections/krea/krea-2-loras - software - mentioned
+aistudynow.com - https://aistudynow.com/how-to-set-up-krea-2-controlnet-in-comfyui-perfect-pose-transfer/ - other - mentioned
+Krea 2 Control LoRA Loader - no reliable link - software - mentioned
+Krea 2 Control Apply - no reliable link - software - mentioned
+Krea 2 Control Image Encode - no reliable link - software - mentioned
+Depth Anything V3 - no reliable link - software - mentioned
+K Sampler - no reliable link - software - mentioned
+CLIP Text Encode (Prompt) - no reliable link - software - mentioned
+Generate Text - no reliable link - software - mentioned
+Gamma 4 - no reliable link - software - mentioned
+SYNOPSIS: The video demonstrates how to install and configure the Krea 2 ControlNet custom node in ComfyUI to achieve realistic AI image generation, focusing on correct posture and natural skin. The process begins with manually installing the `facok/comfyui-krea2-controlnet` GitHub repository by cloning it into the ComfyUI custom nodes folder. Next, the `Krea-2-depth-controlnet` LoRA file is downloaded from Hugging Face and saved into ComfyUI&#x27;s LoRAs folder. The ComfyUI workflow involves adding &quot;Krea 2 Control LoRA Loader,&quot; &quot;Krea 2 Control Apply,&quot; and &quot;Krea 2 Control Image Encode&quot; nodes. The &quot;Krea 2 Control Image Encode&quot; node is connected to &quot;Depth Anything V3,&quot; for which the small model is recommended to save VRAM. The entire ControlNet workflow is then connected to a &quot;K Sampler.&quot; An initial test with a simple prompt like &quot;a man singing a song&quot; and a reference image of a woman singing results in an image with correct pose but artificial-looking skin, duplicate characters, and blurriness. To fix this, a &quot;Generate Text&quot; node, which uses Gamma 4, is introduced to automatically create detailed prompts. This improves the realism and allows for background changes. To address plastic-looking skin and oversaturated colors, the &quot;Krea 2 Control Image Encode&quot; node&#x27;s channel mode is changed from RGB to grayscale, and normalization is set to &quot;per image min max.&quot; This ensures the model focuses on depth and composition, leading to cleaner depth details, more natural colors, and improved background separation. The video shows a comparison where the grayscale setting yields a significantly better, more realistic result.
+BEATS:
+00:00 - github - The video starts by showing the GitHub repository for `facok/comfyui-krea2-controlnet`.
+00:25 - terminal - The user navigates to the ComfyUI custom nodes folder in a command prompt and uses `git clone` to install the custom node.
+00:50 - ui - The user downloads the `Krea-2-depth-controlnet` LoRA file from Hugging Face and saves it into the ComfyUI LoRAs folder.
+01:16 - ui - The &quot;Krea 2 Control LoRA Loader&quot; node is added in ComfyUI, with `depth-control-lora.safetensors` selected.
+01:41 - ui - The &quot;DownloadAndLoadDepthAnythingV3Model&quot; node is shown, with `da3_small.safetensors` selected for the model.
+02:07 - ui - A full ComfyUI workflow is displayed, connecting the Krea 2 ControlNet nodes to the K Sampler.
+02:32 - ui - The &quot;Krea2 Control Image Encode&quot; node is shown, with `channel_mode` set to `rgb`.
+02:58 - ui - The &quot;CLIP Text Encode (Prompt)&quot; node shows the prompt &quot;men singing the song&quot;.
+03:23 - result - An initial generated image of a man singing is displayed, showing issues like artificial skin and blurriness.
+03:49 - ui - The &quot;Generate Text&quot; node is introduced, showing a detailed prompt generated by Gamma 4.
+04:14 - result - A new generated image with improved realism and pose transfer is shown after using the detailed prompt.
+04:39 - ui - The workflow is shown again, highlighting the &quot;Load Image&quot; node for a new reference image.
+05:05 - ui - A new reference image of a woman is loaded into the &quot;Load Image&quot; node.
+05:30 - result - A generated image of a woman wearing a red t-shirt is shown, demonstrating good pose transfer but plastic-looking skin.
+05:56 - ui - The &quot;Krea2 Control Image Encode&quot; node is modified, changing `channel_mode` to `grayscale`.
+06:21 - ui - The &quot;Preview Image&quot; node shows the grayscale depth map generated by Depth Anything V3.
+06:47 - result - A side-by-side comparison of two generated images, one with RGB and one with grayscale channel mode, showing the improvement.
+07:12 - result - The final improved generated image with natural skin and background separation is displayed.
+07:38 - ui - The &quot;Krea2 Control Image Encode&quot; node is shown with `channel_mode` set to `grayscale` and `normalization` set to `per_image_minmax`.
+08:03 - result - A final example image of a woman with realistic skin and natural details is shown.
+ENTITIES: facok, ComfyUI, PozzettiAndrea, Patil, Krea, Gamma 4
+VERDICT: The creator recommends using the Krea 2 ControlNet custom node with specific settings: channel mode set to grayscale and normalization set to per image min max in the Krea 2 Control Image Encode node, combined with detailed prompt engineering, to achieve realistic AI images with correct posture, natural skin, and good background separation.
+NOT COVERED: The video does not cover the specific hardware requirements for running ComfyUI with Krea 2 ControlNet, the exact computational cost or time taken for image generation, or advanced troubleshooting beyond Depth Anything V3 reinstallation. It also doesn&#x27;t delve into the technical details of how Krea 2 or ControlNet models work internally.</div></main><footer><a href="../index.html">← all videos</a></footer></div></body></html>

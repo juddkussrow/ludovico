@@ -1,0 +1,248 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Krea 2 Identity Edit in ComfyUI | True AI Image Editing? Identity Preserving Edits/Replacements
+channel: @octopusinc_
+duration: 12:35
+source: https://www.youtube.com/watch?v=8bcQKvcwbKc
+upload_date: 20260713
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:05] [scene:talk]
+VISUAL: 
+AUDIO: 'Welcome back to Vantage with AI. I\'ve been a bit preoccupied over the last week, and just when I was about to finish the next video I\'ve been working on, one of my viewers pointed me toward this little nugget in the Creal 2 ecosystem. So, I thought, why not do a quick addendum to the series and cover'
+
+[00:17] [scene:talk]
+VISUAL: 
+AUDIO: 'this instead? A big thank you to AI Infictados for bringing it to my attention. If you\'ve been following this series, you\'ll know that one of Creal 2\'s biggest limitations has been image editing. While the workflow we covered in the previous video could use multiple'
+
+[00:30] [scene:talk]
+VISUAL: 
+AUDIO: 'reference images to guide generation, it wasn\'t a true image editing solution and couldn\'t reliably preserve a person\'s identity. That changes with today\'s project. We\'re taking a look at Creal 2 Identity Edit, a community-developed'
+
+[00:43] [scene:talk]
+VISUAL: 
+AUDIO: 'Laura that adds instruction-based image editing to Creal 2. Instead of simply using reference images as guidance, this Laura lets you provide an image along with an editing instruction and attempts to modify only the parts you\'ve asked'
+
+[00:56] [scene:talk]
+VISUAL: 
+AUDIO: 'for while preserving everything else. What\'s even more interesting is that the project is evolving very quickly. The V1 release came out just a few days ago, and they have already released V1.1, which is now the recommended version.'
+
+[01:09] [scene:talk]
+VISUAL: 
+AUDIO: 'According to the release notes, it brings significant improvements to face likeness, object removal and replacement, outfit changes, and handling multiple people. The only notable regression is that person replacement edits, such as replacing a'
+
+[01:22] [scene:talk]
+VISUAL: 
+AUDIO: 'person with an animal, currently work better with the original V1 Laura. So, we\'ll be testing both versions where appropriate. Now, before we get too excited, it\'s important to remember that this is not an official Creal AI'
+
+[01:34] [scene:talk]
+VISUAL: 
+AUDIO: 'release. It\'s a community-fine-tuned built on top of Creal 2, and because it\'s trained using a dual conditioning approach, it requires the custom ComfyUI Creal 2 Edit node. In today\'s video, we\'ll set up the workflow, explain the'
+
+[01:48] [scene:talk]
+VISUAL: 
+AUDIO: 'recommended settings, and then put this Laura through a variety of real-world editing tests. We\'ll see how well it preserves identity, performs local edits, changes clothing, removes and replaces objects, restyles images, and'
+
+[02:00] [scene:talk]
+VISUAL: 
+AUDIO: 'ultimately answer the question, can Craya 2 finally be used as a practical image editing model? So, let\'s jump into ComfyUI and find out. The workflow is very similar to the original Craya 2'
+
+[02:12] [scene:talk]
+VISUAL: 
+AUDIO: 'workflow that we covered earlier in the series. It uses the same model, the same text encoder, and the same VAE. The only new addition is the identity edit LoRA. In addition [snorts] to that, this'
+
+[02:25] [scene:talk]
+VISUAL: 
+AUDIO: 'workflow also includes an extra input section where you can load up to two reference images for identity and conditioning purposes. To make this workflow function correctly, you will also need a custom node called ComfyUI Craya 2 edit, which can be installed'
+
+[02:37] [scene:talk]
+VISUAL: 
+AUDIO: 'from its GitHub repository. The link to the repository is provided within the workflow itself, as well as in the description below, along with all the required model download links. This custom node introduces two important components: a custom text encoder node'
+
+[02:50] [scene:talk]
+VISUAL: 
+AUDIO: 'that supports image conditioning, a source patch node, which patches the model to enable conditioning and allows the use of input reference latents for identity preservation and local edits. While you\'re checking out the links in'
+
+[03:03] [scene:talk]
+VISUAL: 
+AUDIO: 'the description, please take a moment to like, comment, and subscribe to the channel if you haven\'t already. It really helps support the channel and allows us to keep bringing more content your way. The project currently offers two versions of the LoRA, V1 and the'
+
+[03:16] [scene:talk]
+VISUAL: 
+AUDIO: 'V1.1, which is the version recommended by the developer. For most editing tasks, such as identity preserving edits, scene changes, object addition or removal, outfit modifications, and general image editing, V1.1 is the'
+
+[03:29] [scene:talk]
+VISUAL: 
+AUDIO: 'better choice. It offers noticeably improved face likeness, better image quality, stronger edit locality, and more reliable handling of multiple subjects. However, if your goal is person replacement, such as replacing a'
+
+[03:42] [scene:talk]
+VISUAL: 
+AUDIO: 'person with an animal or another completely different subject, the original V1 currently performs better. This is a known limitation of V1.1 and the developer has mentioned that it will be addressed in a future release. For'
+
+[03:55] [scene:talk]
+VISUAL: 
+AUDIO: 'the majority of today\'s tests, I\'ll be using V1.1 and I\'ll switch to V1 only for the person replacement examples where it currently has an advantage. For our first test, we\'ll start with a simple edit. We\'ll use this image with'
+
+[04:08] [scene:talk]
+VISUAL: 
+AUDIO: 'the prompt change the color of the shirt to red. I\'m using the turbo model with the V1.1 identity edit Laura at 10 steps and CFG1, which is the recommended setup. The result is quite good. The'
+
+[04:20] [scene:talk]
+VISUAL: 
+AUDIO: 'shirt color changes correctly while the person\'s identity, face, pose, and overall composition remains well preserved. However, there\'s a slight drop in image quality. The output looks a bit softer with some loss of'
+
+[04:32] [scene:talk]
+VISUAL: 
+AUDIO: 'sharpness, especially in the background which appears slightly hazy compared to the original. Now, let\'s run the same test using the raw model. For this run, I\'m switching to 20 sampling steps with a CFG of three, which is the recommended'
+
+[04:44] [scene:talk]
+VISUAL: 
+AUDIO: 'configuration for the raw model. Here\'s the result. As you can see, the output is very similar to what we obtained with the turbo model. The shirt color is changed successfully, the subject\'s identity is preserved well, and the'
+
+[04:56] [scene:talk]
+VISUAL: 
+AUDIO: 'overall composition remains intact. That said, the same limitations are still present. There is a slight reduction in image sharpness compared to the original image. Overall, I don\'t see a significant improvement that would'
+
+[05:09] [scene:talk]
+VISUAL: 
+AUDIO: 'justify the extra computation time. So, for simple editing tasks like this, the turbo model appears to be the more practical choice. Next, let\'s use the same source image and try adding new objects to the scene. For this test, we\'ll use the prompt the man is wearing'
+
+[05:22] [scene:talk]
+VISUAL: 
+AUDIO: 'a baseball cap and is wearing a baseball glove on his right hand. I ran this prompt through both the turbo and raw models using the recommended settings. Here are the results. Both models successfully add the requested baseball'
+
+[05:34] [scene:talk]
+VISUAL: 
+AUDIO: 'cap and glove while preserving the subject\'s identity quite well. Comparing the two outputs, the turbo model produces a slightly softer image with a small drop in overall detail. The raw model, on the other hand, generates a'
+
+[05:46] [scene:talk]
+VISUAL: 
+AUDIO: 'cleaner and sharper result. Interestingly, it also smooths out most of the wrinkles in the shirt, making it appear almost freshly ironed, even though that wasn\'t part of the prompt. That said, I\'m not particularly'
+
+[05:58] [scene:talk]
+VISUAL: 
+AUDIO: 'impressed with the overall quality of the edits here. While the additions are technically correct, they don\'t always feel fully natural or seamlessly integrated into the scene. Hopefully, this is something that will improve in'
+
+[06:10] [scene:talk]
+VISUAL: 
+AUDIO: 'future updates, especially with the upcoming V1.2 of Valora. Overall, both models handle object addition reasonably well, with the raw model having a slight edge in image quality, while the turbo'
+
+[06:22] [scene:talk]
+VISUAL: 
+AUDIO: 'model remains considerably faster to generate. For our next test, let\'s see how well Valora handles a complete scene change while preserving the subject\'s identity. We\'ll use the same reference image along with the following prompt.'
+
+[06:34] [scene:talk]
+VISUAL: 
+AUDIO: 'Create a photo of him dressed in a T-shirt and jeans. He is on a sandy beach and looks happy. He is holding a can of Coca-Cola in his hand and leaning against a hot dog stand. It is sunny and bright weather. Candid snapshot. Amateur'
+
+[06:47] [scene:talk]
+VISUAL: 
+AUDIO: 'smartphone photo. As before, I ran this prompt using both the turbo and raw models. Here are the results. I have to say, this one turned out surprisingly well. Both models successfully placed'
+
+[07:00] [scene:talk]
+VISUAL: 
+AUDIO: 'the subject into an entirely new environment while maintaining a convincing resemblance to the original person. The beach setting, hot dog stand, Coca-Cola can, and overall candid smartphone aesthetic are all reproduced'
+
+[07:12] [scene:talk]
+VISUAL: 
+AUDIO: 'very accurately. However, there are some notable differences between the two outputs. The turbo model follows the prompt more closely in this case. It correctly shows the subject wearing a T-shirt and jeans, and the facial'
+
+[07:24] [scene:talk]
+VISUAL: 
+AUDIO: 'identity is also a closer match to the original image. The raw model, on the other hand, produces a sharper and cleaner image overall. However, it deviates slightly from the prompt. The subject is wearing a shirt instead of a'
+
+[07:36] [scene:talk]
+VISUAL: 
+AUDIO: 'T-shirt, and there is a bit more identity drift compared to the turbo result. Overall, this is still one of the strongest results so far and demonstrates that the Laura performs very well when creating entirely new'
+
+[07:48] [scene:talk]
+VISUAL: 
+AUDIO: 'scenes, even if there are some tradeoffs between prompted here and an image quality depending on the model used. For our next test, we\'ll use the image generated in the previous test with the'
+
+[08:00] [scene:talk]
+VISUAL: 
+AUDIO: 'turbo model as our base image along with this reference image of the woman. We\'ll use the following prompt. The woman is standing behind the man with her hand on his shoulder. As before, I ran the test using both the turbo and raw models.'
+
+[08:14] [scene:talk]
+VISUAL: 
+AUDIO: 'Here are the results. Overall, the edit works quite well. The woman is inserted naturally into the scene. Her pose matches the prompt and her identity is reproduced quite convincingly. She also appears sharp and'
+
+[08:26] [scene:talk]
+VISUAL: 
+AUDIO: 'well integrated into the image. However, adding a second person introduces a small tradeoff. The original male character shows a slight loss in image quality with a bit of softness and blur'
+
+[08:38] [scene:talk]
+VISUAL: 
+AUDIO: 'compared to the source image. This is similar to what we observed in the earlier editing and object addition tests where the edited portions look good, but the original image lost a little sharpness during the generation'
+
+[08:50] [scene:talk]
+VISUAL: 
+AUDIO: 'process. Let\'s try one more test using the same input images, but this time we\'ll regenerate the entire scene instead of making a local edit to see if the results improve. We\'ll use the following prompt. The man and woman are'
+
+[09:02] [scene:talk]
+VISUAL: 
+AUDIO: 'holding hands on the beach. The sun can be seen setting behind them on the horizon. Candid snapshot. Amateur smartphone photo. These outputs are noticeably better. Both models preserve the identities of the man and the woman'
+
+[09:15] [scene:talk]
+VISUAL: 
+AUDIO: 'much more convincingly while generating a completely new scene. The sunset lighting, beach environment, and candid smartphone look are all reproduced very naturally and the couple blends seamlessly into the new composition.'
+
+[09:27] [scene:talk]
+VISUAL: 
+AUDIO: 'This reinforces something we\'ve been seeing throughout these tests. The identity edit Laura performs best when it\'s allowed to generate a new scene around the reference identities. In contrast, highly localized edits tend to introduce a slight loss of detail and a'
+
+[09:41] [scene:talk]
+VISUAL: 
+AUDIO: 'bit of softness in the original subject. So, at least in its current state, this Laura seems to be better suited for identity preserving scene generation than for precise local image editing. Hopefully, future releases will continue'
+
+[09:55] [scene:talk]
+VISUAL: 
+AUDIO: 'improving the quality of localized edits as well. For our final test, let\'s try one of the features the developer specifically recommends using V14, character replacement. As mentioned earlier, this capability is currently stronger in V1,'
+
+[10:08] [scene:talk]
+VISUAL: 
+AUDIO: 'so for this test I\'ve switched to V1. According to the developer, this should remain the preferred version for character replacement until V1.2 is released. We\'ll use the same beach image from our previous test along with the'
+
+[10:21] [scene:talk]
+VISUAL: 
+AUDIO: 'following prompt, "Replace the man with a gorilla wearing a t-shirt and jeans and holding a Coke can." I ran the prompt using both the turbo and raw models. Here are the results. The difference between the two models is'
+
+[10:34] [scene:talk]
+VISUAL: 
+AUDIO: 'quite noticeable this time. The turbo model produces a much more convincing and realistic-looking gorilla. The character blends naturally into the scene and the overall image looks believable. However, it doesn\'t fully follow the prompt. It misses the t-shirt'
+
+[10:47] [scene:talk]
+VISUAL: 
+AUDIO: 'and also fails to place the Coke can in the gorilla\'s hand. The raw model, on the other hand, does manage to include the Coke can, but the generated gorilla looks much more artificial and less photorealistic. The anatomy and overall'
+
+[10:59] [scene:talk]
+VISUAL: 
+AUDIO: 'appearance feel noticeably weaker compared to the turbo result. So, while V1 is definitely capable of character replacement, the results are still somewhat inconsistent. Between the'
+
+[11:11] [scene:talk]
+VISUAL: 
+AUDIO: 'two models, I would choose the turbo output here because it produces a far more realistic image, even if it sacrifices some prompt adherence. So, what do I think about CreAi2 identity edit? For a community project'
+
+[11:24] [scene:talk]
+VISUAL: 
+AUDIO: 'that\'s only been around for a few days, I\'m impressed. While it\'s not a perfect image editor yet, it\'s a very promising first step. From my testing, the Laura performs best when generating entirely new scenes while preserving a person\'s'
+
+[11:37] [scene:talk]
+VISUAL: 
+AUDIO: 'identity. Local edits, such as changing clothing or adding objects, still tend to introduce a bit of softness and quality loss, and some prompt details can occasionally be missed. Character replacement also shows promise, although'
+
+[11:50] [scene:talk]
+VISUAL: 
+AUDIO: 'it still has room for improvement. The good news is that development is moving incredibly fast. We\'ve already seen a major improvement from V1 to V1.1 in just a couple of days, so I\'m looking forward to seeing what V1.2 brings. As'
+
+[12:03] [scene:talk]
+VISUAL: 
+AUDIO: 'always, you\'ll find links to the workflow, the custom nodes, the Laura, and all the resources used in this video in the description below. If you found this video helpful, please consider giving it a thumbs-up, subscribing to'
+
+[12:15] [scene:talk]
+VISUAL: 
+AUDIO: 'the channel, and leaving a comment with the kinds of edits you\'d like me to test next. Your feedback really helps shape future videos.'

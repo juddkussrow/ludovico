@@ -1,0 +1,284 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Graphify vs GitNexus vs CodeGraph — Which Code Knowledge Graph Should You Use?
+channel: @octopusinc_
+duration: 14:23
+source: https://www.youtube.com/watch?v=-Fb1SBC_nmg
+upload_date: 20260706
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'Grapha agent actually understand your code base. Let\'s find out which one fits your'
+
+[00:13] [scene:talk]
+VISUAL: 
+AUDIO: 'workflow. Here\'s the number that got my attention. 58% fewer tool calls. That\'s what published benchmarks show across seven real-world code bases when agents use a'
+
+[00:25] [scene:talk]
+VISUAL: 
+AUDIO: 'code knowledge graph. Without a graph, your agent makes 15 or more tool calls per query, reading file after file, burning tokens, and still missing connections. With a graph, it makes one call and gets the full answer.'
+
+[00:39] [scene:talk]
+VISUAL: 
+AUDIO: 'Three tools promise this kind of improvement. Let\'s compare them head-to-head and figure out which one actually delivers. Your AI agent is flying blind. Ask it something like, "How does the auth'
+
+[00:52] [scene:talk]
+VISUAL: 
+AUDIO: 'middleware connect to the database pool in a 200-file project?" and watch what happens. It runs grep for auth, gets 40 matches across 15 files, opens five of them, scanning for definitions, follows'
+
+[01:04] [scene:talk]
+VISUAL: 
+AUDIO: 'an import, reads another file, loses the thread, greps again for database, reads three more files trying to reconstruct call paths. After 15 or more tool calls and 4,000 tokens of source'
+
+[01:17] [scene:talk]
+VISUAL: 
+AUDIO: 'code loaded into context, it delivers a partial answer, missing the callback that actually wires everything together. The root cause is that agents have no structural awareness. They see'
+
+[01:31] [scene:talk]
+VISUAL: 
+AUDIO: 'individual files, but not the web of connections between them. And the critical patterns, callbacks, event emitters, framework routing, are completely invisible to text search. A code knowledge graph is actually'
+
+[01:44] [scene:talk]
+VISUAL: 
+AUDIO: 'pretty straightforward. Nodes represent your functions, classes, and modules. Edges represent their relationships, calls, imports, extends, implements. The graph is the complete map of how everything connects.'
+
+[01:57] [scene:talk]
+VISUAL: 
+AUDIO: 'Instead of reading 20 files to trace a call chain, the agent queries the graph and gets the full path in one call. Instead of grepping and hoping, it sees actual structure. Three tools build this graph differently. Let\'s see how they'
+
+[02:10] [scene:talk]
+VISUAL: 
+AUDIO: 'compare. Here are the three contenders. Graphify is the multimodal knowledge builder. It\'s a Python-based tool that indexes code, docs, PDFs, images, and even video into a single unified graph using'
+
+[02:24] [scene:talk]
+VISUAL: 
+AUDIO: 'tree-sitter for code and LLM calls for non-code content. It supports 36 languages and is MIT licensed. Git Nexus is the precomputed architecture engine. It\'s a Node.js tool that runs 15 or more'
+
+[02:36] [scene:talk]
+VISUAL: 
+AUDIO: 'analysis phases to build a knowledge graph, then exposes it through 17 specialized MCP tools. MCP stands for model context protocol. It\'s the standard way AI agents talk to external'
+
+[02:48] [scene:talk]
+VISUAL: 
+AUDIO: 'tools. It supports 14 languages with full import and export resolution. And Code Graph is the zero-maintenance accelerator. It ships as a standalone binary that watches your file system and auto-syncs in 2 seconds.'
+
+[03:02] [scene:talk]
+VISUAL: 
+AUDIO: 'It exposes a single tool designed around how agents actually pick tools. One question in, full answer out. It supports 20 or more languages and is also MIT licensed. Now, let\'s compare them across several'
+
+[03:15] [scene:talk]
+VISUAL: 
+AUDIO: 'different angles to see which one fits your workflow best. Round one, keeping the index fresh. When you edit a file, how quickly does the graph reflect the change? Graphify requires a manual update command or Git'
+
+[03:28] [scene:talk]
+VISUAL: 
+AUDIO: 'hooks. The syntax tree rebuild on commit is free, but semantic nodes need an explicit rerun. Git Nexus also requires a manual rerun with Git Nexus analyze, though it\'s fast and incremental.'
+
+[03:41] [scene:talk]
+VISUAL: 
+AUDIO: 'It has post-tool use hooks that detect staleness and prompt the agent to re-index. Code Graph uses native OS file watching, FS events on Mac, and auto file on Linux with a 2-second debounce. The index is always within seconds of'
+
+[03:54] [scene:talk]
+VISUAL: 
+AUDIO: 'your latest edit. No commands to remember, no hooks to install. The winner here is Code Graph. Edit a file, immediately query, the index catches it. Truly set and forget. Round two, what can it index? GraphiCode'
+
+[04:07] [scene:talk]
+VISUAL: 
+AUDIO: 'supports 36 languages via tree-sitter and indexes far more than just code. Docs, PDFs, images, video, audio, YouTube URLs, even Google Workspace files.'
+
+[04:19] [scene:talk]
+VISUAL: 
+AUDIO: 'Git Nexus supports 14 languages and handles code plus markdown sections with specialized detection for API routes, database models, and dependency injection patterns. Code Graph supports 20 or more languages, but focuses purely'
+
+[04:31] [scene:talk]
+VISUAL: 
+AUDIO: 'on code. However, it understands framework routing for Express, Django, and others and traces callbacks and events that grep simply cannot follow. The winner for content breadth is'
+
+[04:43] [scene:talk]
+VISUAL: 
+AUDIO: 'GraphiCode. Nothing else touches PDFs, images, and video. But for code depth, Code Graph\'s dynamic dispatch synthesis covers patterns the others miss entirely. Round three, understanding dynamic code.'
+
+[04:55] [scene:talk]
+VISUAL: 
+AUDIO: 'Most code connections are static. You can see them by reading an import or a direct function call, but many real-world flows are dynamic. Can each tool trace these? For callbacks, where a'
+
+[05:07] [scene:talk]
+VISUAL: 
+AUDIO: 'function registers a handler that another function invokes later, only Code Graph handles this. For event emitters, where dot on and dot emit are connected by a string key, again, only Code Graph.'
+
+[05:19] [scene:talk]
+VISUAL: 
+AUDIO: 'React set state triggering a re-render that reaches a child component, only Code Graph. For interface and abstract dispatch, Git Nexus handles this with confidence scoring. Framework routing like Express and Django, both Git Nexus'
+
+[05:32] [scene:talk]
+VISUAL: 
+AUDIO: 'and Code Graph cover it. Dependency injection resolution, only Git Nexus. And C function pointer dispatch, only Code Graph. The winner by a wide margin is Code Graph. It\'s dedicated synthesizer layer'
+
+[05:45] [scene:talk]
+VISUAL: 
+AUDIO: 'bridges code flows that the other tools simply cannot see. The philosophy is only synthesize an edge when the full flow can be closed end to end. Partial coverage would be worse than none because it would reveal'
+
+[05:58] [scene:talk]
+VISUAL: 
+AUDIO: 'a hop that the agent then drills into with more file reads, creating more work instead of less. Round four, query power and agent experience. Graphifi exposes seven MCP tools, query graph, get node, get'
+
+[06:12] [scene:talk]
+VISUAL: 
+AUDIO: 'neighbors, shortest path, plus three PR related tools. It supports natural language queries with graph traversal. Good, but the agent needs to know about multiple commands. Get Nexus exposes 17 MCP tools, impact analysis, trace,'
+
+[06:25] [scene:talk]
+VISUAL: 
+AUDIO: 'context, change detection, rename, cipher queries, route mapping, and more. Maximum granularity, every architecture question has a dedicated tool. Code graph exposes just one tool, Code graph'
+
+[06:37] [scene:talk]
+VISUAL: 
+AUDIO: 'explorer. One question in, full answer out. Source code, call paths, and blast radius together. The winner depends on your use case. For agent simplicity, Code graph wins. When agents see a long'
+
+[06:50] [scene:talk]
+VISUAL: 
+AUDIO: 'list of tools, they often ignore most of them. One tool means it\'s always used, and benchmarks show 58% fewer tool calls as a result. For power users, Get Nexus gives you precise, specialized queries'
+
+[07:02] [scene:talk]
+VISUAL: 
+AUDIO: 'for any structural question. For mixed content queries spanning code and docs, Graphifi is your best bet. Round five, multi-repo and team use. The key question here is, if I change this'
+
+[07:15] [scene:talk]
+VISUAL: 
+AUDIO: 'function in service A, what breaks in service B? Graphifi has a global graph registry. You can merge multiple project graphs and clone remote repos. For sharing, you commit the Graphifi out'
+
+[07:27] [scene:talk]
+VISUAL: 
+AUDIO: 'folder to get, and your whole team gets instant graph access. Get Nexus has repository groups with a contract registry, cross-repo impact analysis, and group mode queries that stitch paths across service boundaries. Each repo has'
+
+[07:40] [scene:talk]
+VISUAL: 
+AUDIO: 'a dot GitNexus folder with a global registry for group sync. Code graph is single project only with no cross repo support and no team sharing features. The winner is GitNexus. If you work'
+
+[07:53] [scene:talk]
+VISUAL: 
+AUDIO: 'across multiple services, microservices, mono repos with separate packages, nothing else lets you trace impacts across repository boundaries. This is where GitNexus really shines. Round six, visualization and human'
+
+[08:06] [scene:talk]
+VISUAL: 
+AUDIO: 'exploration. Graphifi offers the most options, interactive HTML graphs, collapsible tree views, SVG export, Obsidian vaults, Neo4j Cypher, GraphML for tools like Gephi or Yed, and'
+
+[08:18] [scene:talk]
+VISUAL: 
+AUDIO: 'markdown wikis. That\'s seven different ways to visualize your architecture. GitNexus provides a WebGL powered web UI, Cypher queries, and wiki generation, three solid options. Code graph has CLI only. No visualization at all. It\'s'
+
+[08:31] [scene:talk]
+VISUAL: 
+AUDIO: 'designed purely for agents, not humans. The winner is Graphifi. Most export formats, most visual options. If you want to see your architecture or export it to tools like Obsidian or Neo4j, Graphifi is the clear choice.'
+
+[08:45] [scene:talk]
+VISUAL: 
+AUDIO: 'Let\'s look under the hood at how each system is designed. Graphifi uses a linear pipeline with seven stages. Source files go through tree sitter for free syntax tree extraction, then an'
+
+[08:57] [scene:talk]
+VISUAL: 
+AUDIO: 'optional LLM pass for docs and PDFs, all merged into a networkx graph, and finally clustered using the Leiden algorithm to group related code. GitNexus uses a DAG pipeline with 15 or more phases that run in dependency'
+
+[09:11] [scene:talk]
+VISUAL: 
+AUDIO: 'order. It resolves cross-file references, stores everything in Ladybug DB, an embedded graph database with vector support, and exposes the results through 17 MCP tools. Code graph uses a layered'
+
+[09:23] [scene:talk]
+VISUAL: 
+AUDIO: 'stack with five layers. A native file watcher feeds into tree sitter extraction, then a synthesis layer handles dynamic dispatch stored in SQLite with write-ahead logging and full-text search and served through a'
+
+[09:36] [scene:talk]
+VISUAL: 
+AUDIO: 'single demon process. All three share common traits. They use tree-sitter for parsing, content caching for performance, and MCP for agent communication.'
+
+[09:48] [scene:talk]
+VISUAL: 
+AUDIO: 'Despite their different architectures, all three tools converge on the same design patterns. Patterns worth understanding if you build developer tools for the AI era. First, tree-sitter as the universal parser. It\'s fast, runs'
+
+[10:00] [scene:talk]
+VISUAL: 
+AUDIO: 'locally, handles syntax errors gracefully, and supports 20 or more languages through one interface. Second, content-addressed caching. Each file is fingerprinted with a SHA-256'
+
+[10:12] [scene:talk]
+VISUAL: 
+AUDIO: 'hash, so unchanged files are skipped entirely on reruns. Third, MCP as the agent protocol. All three expose their tools via model context protocol, the emerging standard for AI agents. Fourth, confidence'
+
+[10:25] [scene:talk]
+VISUAL: 
+AUDIO: 'tracking on every edge. Each relationship is tagged as found directly in source, heuristically inferred, or LLM guessed. Fifth, index once, query many. The expensive parsing and'
+
+[10:37] [scene:talk]
+VISUAL: 
+AUDIO: 'resolution happens once at build time. Every subsequent query is just a cheap graph lookup. And sixth, ignore file hygiene. All respect .gitignore and exclude noise like node_modules and dist folders.'
+
+[10:49] [scene:talk]
+VISUAL: 
+AUDIO: 'Let\'s look at the scoreboard. Index freshness goes to Code Graph with its auto-sync and 2-second debouncing. Content breadth goes to Graphify for handling PDFs, images, video, and audio. Dynamic dispatch goes to Code Graph. Its'
+
+[11:02] [scene:talk]
+VISUAL: 
+AUDIO: 'synthesizer bridges invisible code flows. Query power goes to GitNexus with 17 specialized tools. Multi-repo support goes to GitNexus for cross-repo impact analysis. And visualization goes to'
+
+[11:14] [scene:talk]
+VISUAL: 
+AUDIO: 'Graphify. The result? Each tool wins exactly two rounds. There\'s no universal winner. Each has a clear sweet spot. Before you rush to install any of these, here\'s what none of them can solve.'
+
+[11:27] [scene:talk]
+VISUAL: 
+AUDIO: 'First, no runtime behavior. These tools analyze source code as written, not what happens when it runs. For race conditions or performance issues, you still need a debugger or profiler. Second, small projects don\'t benefit.'
+
+[11:40] [scene:talk]
+VISUAL: 
+AUDIO: 'Under about 20 files, your agent can just read everything directly. The graph adds overhead with no payoff. Third, language coverage has gaps. Haskell, OCaml, F#, and Clojure aren\'t'
+
+[11:52] [scene:talk]
+VISUAL: 
+AUDIO: 'supported by any of the three yet. Fourth, correctness isn\'t guaranteed. Knowing the blast radius doesn\'t tell you if your change is correct, you still need tests.'
+
+[12:04] [scene:talk]
+VISUAL: 
+AUDIO: 'Fifth, the initial build takes time. First indexing is 1 to 5 minutes depending on project size, though after that it\'s fast. And sixth, there\'s a static analysis ceiling. Reflection, eval, and dynamically'
+
+[12:16] [scene:talk]
+VISUAL: 
+AUDIO: 'computed file paths remain invisible to all three tools. So, which one is right for you? Follow this decision tree. First question, do you have docs, PDFs, research papers, or architecture diagrams that should'
+
+[12:30] [scene:talk]
+VISUAL: 
+AUDIO: 'connect to your code? If yes, choose Graphify. It\'s the only tool that links non-code knowledge to your code graph, and it\'s MIT licensed free for commercial use. If no, next question, do you work across'
+
+[12:42] [scene:talk]
+VISUAL: 
+AUDIO: 'multiple repos or services? If yes, choose Git Nexus. Repository groups, contract registries, and cross repo blast radius analysis. Note that it uses a PolyForm non-commercial license, so you\'ll need a commercial license for'
+
+[12:56] [scene:talk]
+VISUAL: 
+AUDIO: 'business use. If you don\'t need multi-repo support, and you want zero maintenance with maximum agent speed, choose Code Graph. Auto sync, dynamic dispatch tracing, and also MIT licensed.'
+
+[13:08] [scene:talk]
+VISUAL: 
+AUDIO: 'Here\'s the final verdict. There\'s no universal winner. The right choice depends on your workflow. Pick Code Graph if you want zero maintenance and deep code understanding. It auto syncs in seconds, traces dynamic'
+
+[13:21] [scene:talk]
+VISUAL: 
+AUDIO: 'dispatch patterns the others can\'t see, and requires no manual commands after install. Pick Git Nexus if you work across multiple repositories or need precomputed architecture intelligence, cross repo tracing, contract registries,'
+
+[13:35] [scene:talk]
+VISUAL: 
+AUDIO: 'and a rich set of specialized MCP tools for every structural question. Pick Graphifi if your project lives beyond code, research papers, design docs, video walkthroughs. It\'s the only tool that connects all of that into one'
+
+[13:49] [scene:talk]
+VISUAL: 
+AUDIO: 'unified knowledge graph. And the good news? They don\'t conflict. You can run more than one. Why is your AI agent still flying blind? Try one of these tools today. For zero maintenance and auto sync, run code'
+
+[14:02] [scene:talk]
+VISUAL: 
+AUDIO: 'graph init. For cross repo tracing and contract registries, run NPX Git Nexus analyze. For docs, PDFs, and videos all in one graph, run UV tool install graphifi why. Thanks for watching, and if you found'
+
+[14:16] [scene:talk]
+VISUAL: 
+AUDIO: 'this comparison helpful, hit subscribe for more deep dives into AI coding tools.'

@@ -1,0 +1,184 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: LingBot Video: 30B + 1.3B | LOW VRAM Workflow
+channel: @octopusinc_
+duration: 09:10
+source: https://www.youtube.com/watch?v=tWZ_9yaIKzg
+upload_date: 20260712
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:01] [scene:talk]
+VISUAL: 
+AUDIO: '[music] &gt;&gt; All right, YouTube. What is good? It\'s your boy Rebel back with another video. And today we are taking a look at the being Ling Bot 30B with 3 billion active'
+
+[00:14] [scene:talk]
+VISUAL: 
+AUDIO: 'and the Ling Bot 1.3 billion model. I also do have the Ling Bot world model available in Guff format, but this is not a true live frame generation model.'
+
+[00:27] [scene:ui]
+VISUAL: Hugging Face model card for LingBot-World-V2-14B.
+AUDIO: 'This is just an action control model for better camera and motion control, but it is just retrained with this Ling Bot model. However, we will not be taking a look at this model today. We will be'
+
+[00:39] [scene:talk]
+VISUAL: 
+AUDIO: 'looking at the other two. So, Ling Bot video 30B is the first open source large-scale mixture of experts video generation model dedicated to embodied intelligence. As a top-tier video model,'
+
+[00:51] [scene:ui]
+VISUAL: Hugging Face model card for LingBot-Video, showing key highlights.
+AUDIO: 'Ling Bot video is designed to bridge the gap between video synthesis and physical world understanding. Some key highlights for the model. It has an efficient mixture of experts architecture. It is scaled from scratch and balanced between'
+
+[01:04] [scene:talk]
+VISUAL: 
+AUDIO: 'capacity and costs for 3x faster inference speeds. It is trained on massive web videos integrated with 70,000 hours of embodied data, and it has a multi-reward system. So, it'
+
+[01:17] [scene:ui]
+VISUAL: Hugging Face model card for LingBot-Video-MoE-30B-A3B.
+AUDIO: 'rewards high aesthetics, physical rationality, and task completion very well, meaning this model rewards itself for a good generation. We will also be taking a look at the 1.3 billion dense model. The highlights and keynotes on'
+
+[01:31] [scene:talk]
+VISUAL: 
+AUDIO: 'the model are exactly the same. So, per usual, I have Guff models for both the 30B and the 1.3B. If you are going to download the 30 billion parameter model,'
+
+[01:43] [scene:ui]
+VISUAL: GitHub repository for ComfyUI_Rebels_LingBot custom nodes.
+AUDIO: 'you are going to want to go to the 1.3B model anyways as the text encoder and the VAE are exactly the same for both models. So, you will need to download these two files as well, regardless if'
+
+[01:56] [scene:talk]
+VISUAL: 
+AUDIO: 'you don\'t want the 1.3 billion. I have also curated a set of custom nodes to run in ComfyUI. So, this custom node set works for both model variants. So, you will only need to install this singular'
+
+[02:09] [scene:ui]
+VISUAL: ComfyUI workflow for LingBot T2V, showing a generated video of a fox.
+AUDIO: 'custom node set and the workflow for both is in the repo. So, I\'m not going to get into how to install these as this is pretty self-explanatory at this point. After you install the custom'
+
+[02:21] [scene:talk]
+VISUAL: 
+AUDIO: 'nodes, you can grab the workflow and your models and head into Comfy. So, our first workflow we will take a look at is the 30 billion parameter model. Now, this workflow is pretty much identical.'
+
+[02:33] [scene:talk]
+VISUAL: 
+AUDIO: 'Um there there\'s no variance between the two only because the node set is the same and the architecture to run the pipeline is exactly the same. Um you are running the same step count, the same guidance, the same shift. Everything will be identical. The only thing you'
+
+[02:47] [scene:talk]
+VISUAL: 
+AUDIO: 'will want to change is your DIT guff if you are using the 1.3 or the 30 I would like to state that inside of the custom node set, there is this JSON restructuring prompt node. What this'
+
+[03:00] [scene:talk]
+VISUAL: 
+AUDIO: 'does is it breaks down the JSON caption into natural language, so you can fill out everything that you need and then it will auto prompt in JSON format into this display text node and you\'ll just'
+
+[03:13] [scene:talk]
+VISUAL: 
+AUDIO: 'feed the prompt string into your prompt box and it will gray out and that\'s how you know this has been activated. So, you\'re just essentially pulling it to the corner of your box and then your JSON prompt will feed into your text and'
+
+[03:26] [scene:talk]
+VISUAL: 
+AUDIO: 'code node. Otherwise, you will have to construct a very very depthy prompt as this model requires a very specific format of JSON prompting. It is not a standard JSON prompt. And I\'ll show you'
+
+[03:39] [scene:ui]
+VISUAL: ComfyUI workflow, showing the input image and prompt nodes.
+AUDIO: 'the difference between the two, prompting with normal JSON structure and then prompting with what I like to call the Ling Bot JSON structure. It\'s very in-depth. It\'s very descriptive and everything is broken down with tags.'
+
+[03:52] [scene:talk]
+VISUAL: 
+AUDIO: 'With that being said, we will get back into the 30B workflow. So, starting on the left here, we have our GUFF loader node hosting our DIT GUFF and our VAE running on our GPU. Underneath that, we'
+
+[04:04] [scene:ui]
+VISUAL: ComfyUI workflow, focusing on the LingBot Sampler and video output.
+AUDIO: 'have our text and code node with our encoder hosted inside. You have a positive and a negative prompt. For the 1 billion distilled model, you will not use a negative prompt as it will just'
+
+[04:17] [scene:talk]
+VISUAL: 
+AUDIO: 'cancel out and it won\'t matter. Underneath that, we have our resolution nodes. Um this model uses a forced resolution of 480 by 832. So, your width always needs to be 832 and your height always needs to be 480. This is not'
+
+[04:30] [scene:ui]
+VISUAL: ComfyUI workflow, showing sampler parameters and VRAM cleaning nodes.
+AUDIO: 'changeable. Moving over, we have our sampler node. So, in our sampler, I\'m only running 21 frames to, you know, speed up the gen time and just showcase the examples for you guys. This will run'
+
+[04:42] [scene:talk]
+VISUAL: 
+AUDIO: 'a maximum frame count of 81 frames, which is 5 seconds. Uh we are running a step count of 20 with a guidance of three. This is your CFG. You have a shift of three and then you have your'
+
+[04:54] [scene:ui]
+VISUAL: ComfyUI workflow, highlighting the Create Video and Save Video nodes.
+AUDIO: 'seed and your control for the seed. You have an offloading for your VRAM if you need to offload your VAE. And then, we have tiled or non-tiled decoding based on your VRAM. And then, on both sides of'
+
+[05:07] [scene:talk]
+VISUAL: 
+AUDIO: 'the sampler, we have clean VRAM and clean cache nodes. You will need the ComfyUI Easy Use nodes, um which is a custom node set. You can get it in your manager. And what this does is it cleans out your VRAM and cache before moving to'
+
+[05:20] [scene:ui]
+VISUAL: ComfyUI workflow, showing the frame interpolation setup.
+AUDIO: 'the next stage in the pipeline. So, it is after your model loader and after your sampler. And then, we have a frame interpolation setup, but not running the Comfy interpolation as I realized that'
+
+[05:33] [scene:talk]
+VISUAL: 
+AUDIO: 'that that was causing issues with rerunning your step counts. So, don\'t use the Comfy\'s version of this interpolation, like the subgraph version. Just use this cuz it\'s the same thing and you will need the FilmNet FP16'
+
+[05:46] [scene:ui]
+VISUAL: ComfyUI workflow, showing the full graph.
+AUDIO: 'to run that. And then we have our create video node feeding into our save video node. 1.3 billion is pretty much identical. The only real difference being obviously in this specific'
+
+[05:59] [scene:talk]
+VISUAL: 
+AUDIO: 'workflow, the JSON capturer and the 1.3 billion transformer that we are now using. Other than that, the workflows are completely identical. And with that being said, that accounts for both of them. So, I do have a few examples for'
+
+[06:11] [scene:talk]
+VISUAL: 
+AUDIO: 'you guys today and we will take a look at those now. So, for the first example, I just wanted to show you guys the difference between the bad structure of JSON prompting and the LangBot structure of JSON prompting. So, this is the exact'
+
+[06:24] [scene:result]
+VISUAL: Comparison of two generated videos of a fox, demonstrating different JSON prompting structures.
+AUDIO: 'same prompt. Now, what you\'ll see is this regular structure of JSON prompting does not help the model adhere at all to what you are trying to do. Like certain things like the scene obviously and the'
+
+[06:36] [scene:talk]
+VISUAL: 
+AUDIO: 'coat on the fox is evident, but it is obviously not as coherent as this video. So, we will take a look at both. As you can see, there\'s a ton of'
+
+[06:51] [scene:result]
+VISUAL: Close-up comparison of the two fox videos, highlighting differences in coherence.
+AUDIO: 'hallucination going on. And the head is just completely morphed and destroyed on this version. And then on this one, it is completely coherent. Everything is adhered, even the camera movement. Everything is'
+
+[07:03] [scene:talk]
+VISUAL: 
+AUDIO: 'perfect. So, this is a good example to showcase the difference between bad structure of JSON and my example prompt. This first example is just a fox walking in a snow-covered forest. So, this is the difference between the 1.3 billion'
+
+[07:16] [scene:result]
+VISUAL: Another comparison of the two fox videos, showing the improved coherence with LingBot JSON structure.
+AUDIO: 'parameter on the left and the 30 billion parameter model on the right. Both are good. There\'s obviously exponentially more detail on the 30 billion parameter and that is due to, of course, the'
+
+[07:28] [scene:talk]
+VISUAL: 
+AUDIO: 'amount of parameters in the model. The 1.3 billion is lacking detail, but I do think that this is a great foundational model to iterate and, you you decide what you want in your video before'
+
+[07:40] [scene:ui]
+VISUAL: Hugging Face model card for LingBot-Video-MoE-30B-A3B.
+AUDIO: 'bringing it to your 30 billion for a final output. And here we have a young man holding a fireball in between his hands. This was done with the 1.3 billion model. All right, guys. That\'s all I\'m going to'
+
+[07:52] [scene:talk]
+VISUAL: 
+AUDIO: 'have for you today. Just wanted to, you know, get this family of models to you guys and let you know that I had brought them into Comfy as I know as I know people are currently waiting on this model to get into Comfy and mess around with it. So, just thought I would get it'
+
+[08:05] [scene:ui]
+VISUAL: Hugging Face model card for LingBot-Video-MoE-30B-A3B.
+AUDIO: 'there as quickly as possible as I could for you guys. There will be more Gufs uploading. Um I\'m currently uploading them on my other monitor as we speak. They\'re just They take forever for some reason to fully upload. So, please be'
+
+[08:17] [scene:talk]
+VISUAL: 
+AUDIO: 'patient. There will be a Q3 all the way up to a Q8. But if you enjoyed what you saw today, please consider subscribing to the channel and leaving me a comment on the video to let me know how I did. You can also like the video. It genuinely helps the channel'
+
+[08:30] [scene:talk]
+VISUAL: 
+AUDIO: 'tremendously. So, go ahead and download this 30 billion parameter and the 1.3 billion parameter if you would like. Get my custom nodes running and enjoy the Lingbot family of models. I am currently'
+
+[08:44] [scene:talk]
+VISUAL: 
+AUDIO: 'working on the world model to perfect a lot of the errors and issues that are in the outputs that I\'m getting currently, but they are live on Hugging Face and the nodes are actually on my GitHub repo as well. Um this is experimental and'
+
+[08:58] [scene:talk]
+VISUAL: 
+AUDIO: 'does not run perfectly, but it will run. It\'s up to you if you\'d like to try it out. I\'m not going to link them until I drop the video, but you\'re welcome to test them as well. But all right, guys. Thank you. Have a nice day. Bye.'

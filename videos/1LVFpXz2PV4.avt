@@ -1,0 +1,172 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: ComfyUI Krea 2 ControlNet: Fix Colours & Auto-Prompt (Free Workflow)
+channel: @octopusinc_
+duration: 08:29
+source: https://www.youtube.com/watch?v=1LVFpXz2PV4
+upload_date: 20260712
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'In this video, I\'ll show you the best settings to get correct posture, fix plastic-looking skin, and set up Cread to ControlNet in ComfyUI for realistic results. And for that, first, you need to install'
+
+[00:12] [scene:talk]
+VISUAL: 
+AUDIO: 'a custom node. And let me tell you, this is a third-party custom node created by a community developer. You might not find it if you search inside the ComfyUI manager.'
+
+[00:25] [scene:talk]
+VISUAL: 
+AUDIO: 'Therefore, you have to download and install it manually. And to do this, copy the GitHub repository link, open your ComfyUI custom nodes folder in your command'
+
+[00:37] [scene:talk]
+VISUAL: 
+AUDIO: 'prompt, and type git clone. Paste the link and press enter. This creates a new folder named ComfyUI Cread to ControlNet.'
+
+[00:49] [scene:talk]
+VISUAL: 
+AUDIO: 'Now, just restart your ComfyUI. Next, we need the LoRA file. Here, download the Cread to Depth Control LoRA, and save this file inside'
+
+[01:02] [scene:talk]
+VISUAL: 
+AUDIO: 'your ComfyUI LoRAs folder. So, these are the main models we need to run this ControlNet workflow in ComfyUI. Now, let\'s set up our workflow in'
+
+[01:14] [scene:talk]
+VISUAL: 
+AUDIO: 'ComfyUI. First, add a new node called Cread to Control LoRA Loader. Inside this node, choose the Cread to Depth Control LoRA we downloaded'
+
+[01:26] [scene:talk]
+VISUAL: 
+AUDIO: 'earlier. Next, add two more new nodes. One is Cread to Control Apply, and another one is Cread to Control Image Encode. Connect the Cread to Control Image'
+
+[01:40] [scene:talk]
+VISUAL: 
+AUDIO: 'Encode node to Depth Anything. Then, connect your reference image to the Control Image workflow. For Depth Anything, I used the small model instead of the large one.'
+
+[01:53] [scene:talk]
+VISUAL: 
+AUDIO: 'You can use the large model if you want, but I suggest using the depth anything V3 small model to save your VRAM. Now, connect this entire ControlNet'
+
+[02:05] [scene:talk]
+VISUAL: 
+AUDIO: 'workflow to your K sampler. This is our complete clear to ControlNet workflow and we are ready to test it. Here, let me tell you my experience.'
+
+[02:17] [scene:talk]
+VISUAL: 
+AUDIO: 'When I ran this setup for the first time, I got a frustrating error. And what did I do to fix that? I had to update the requirements for Depth Anything.'
+
+[02:30] [scene:talk]
+VISUAL: 
+AUDIO: 'I removed all of my old Depth Anything installation completely and installed the newest version. After that, the workflow worked very well. If you get any error with Depth Anything'
+
+[02:43] [scene:talk]
+VISUAL: 
+AUDIO: 'V3, just reinstall or update it. Now, our setup is ready to go. Now that our workflow is ready, let\'s run our very first test. And for this'
+
+[02:56] [scene:talk]
+VISUAL: 
+AUDIO: 'test, I loaded a reference image of a woman standing in front of a microphone. Here, in my prompt, I simply wrote a man singing a song.'
+
+[03:10] [scene:talk]
+VISUAL: 
+AUDIO: 'I used this basic prompt just to check if our ControlNet setup was working correctly. Now, let\'s look at the result. The workflow successfully captured the exact'
+
+[03:23] [scene:talk]
+VISUAL: 
+AUDIO: 'pose and composition from our reference image. But here, we still have some major problems. The generated image looks very'
+
+[03:36] [scene:talk]
+VISUAL: 
+AUDIO: 'artificial. There is a weird duplicate character and some areas are way too blurry. And to fix this, write a much better prompt, I added the text generate node.'
+
+[03:51] [scene:talk]
+VISUAL: 
+AUDIO: 'This node automatically writes detailed prompts for me using Gamma 4. And in this node, I write my basic instruction first. In the next section, I explain what kind'
+
+[04:03] [scene:talk]
+VISUAL: 
+AUDIO: 'of image I want. I told the AI to keep the composition and pose similar to our reference image, but to replace the woman with a man singing into the microphone.'
+
+[04:17] [scene:talk]
+VISUAL: 
+AUDIO: 'Now, let\'s run the workflow again. Now, you can see this new result matches our reference image much better. It keeps the original pose and'
+
+[04:31] [scene:talk]
+VISUAL: 
+AUDIO: 'composition, but successfully replaces the woman with a man. You can also change the background easily using your prompt. For example, when I only wrote a man singing a song,'
+
+[04:44] [scene:talk]
+VISUAL: 
+AUDIO: 'the background looked very similar to our reference image. But when I added the background is blue, the background changed to solid blue while still following the original pose.'
+
+[04:58] [scene:talk]
+VISUAL: 
+AUDIO: 'So, here you can write your basic instructions and let the AI help you generate a highly detailed prompt. Now, let\'s look at another example.'
+
+[05:10] [scene:talk]
+VISUAL: 
+AUDIO: 'I loaded an image of a woman. Then, I asked the model to create a woman wearing a red t-shirt. You can see how well it copied the pose'
+
+[05:22] [scene:talk]
+VISUAL: 
+AUDIO: 'and structure from our reference image. But here, I noticed a problem. The generated image looked plastic and not very realistic.'
+
+[05:34] [scene:talk]
+VISUAL: 
+AUDIO: 'The colors were also too strong and oversaturated. So, at first, I used RGB as a channel mode. RGB carries the color details from your reference image and sometimes this'
+
+[05:49] [scene:talk]
+VISUAL: 
+AUDIO: 'adds too much color and makes the final image look fake. And to fix this, go to the create to control image and code node. Change the channel mode from RGB to gray'
+
+[06:01] [scene:talk]
+VISUAL: 
+AUDIO: 'scale. Here, gray scale removes the color information from control image. And this allows the model to focus only on depth, pose, and composition.'
+
+[06:13] [scene:talk]
+VISUAL: 
+AUDIO: 'Next, change your normalization setting to per image min max. This setting makes the closest areas of the depth map brighter and the distant areas darker.'
+
+[06:27] [scene:talk]
+VISUAL: 
+AUDIO: 'This gives the model a clear understanding of what is close and what is far away. If you don\'t normalize your depth map correctly, the AI can easily get confused.'
+
+[06:39] [scene:talk]
+VISUAL: 
+AUDIO: 'So, let\'s run the workflow again with these new settings. When you compare both images, the gray scale version looks much better. And if you zoom in, the background looks'
+
+[06:52] [scene:talk]
+VISUAL: 
+AUDIO: 'correct now. So, here I highly suggest using these settings to get the best results. The question arises, can we make it even more realistic?'
+
+[07:05] [scene:talk]
+VISUAL: 
+AUDIO: 'And to improve the realism, I changed the prompt slightly and I added more natural details to it. So, here this new prompt gave me a better result than the basic prompt. You'
+
+[07:17] [scene:talk]
+VISUAL: 
+AUDIO: 'can also use your prompt to make small changes to the character\'s posture and this keeps the overall structure of your reference image. Now, look at the skin.'
+
+[07:29] [scene:talk]
+VISUAL: 
+AUDIO: 'When you compare it with our previous result, it looks much more natural and realistic. This shows that a better prompt can fix plastic-looking skin. It improves realism and lets you make'
+
+[07:42] [scene:talk]
+VISUAL: 
+AUDIO: 'small changes to the character\'s pose. So, these are the best settings for the Creado Control Image and code node. Set the channel mode to grayscale. Use per image min-max for your normalization'
+
+[07:55] [scene:talk]
+VISUAL: 
+AUDIO: 'method. This setup gives you cleaner depth details and more natural colors. It also improves your background separation for a realistic final image. Now, that\'s all for Control Net with'
+
+[08:08] [scene:talk]
+VISUAL: 
+AUDIO: 'Creado. You know how to use it. You can try this workflow yourself. Test it out with different reference images, prompts, and control settings. That\'s all for today\'s video. If this'
+
+[08:20] [scene:talk]
+VISUAL: 
+AUDIO: 'guide was helpful to you, please subscribe to the channel for more content like this. Thank you. Bye-bye.'
