@@ -1,0 +1,156 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Git Can’t Handle Games… So Epic Built Lore
+channel: @octopusinc_
+duration: 07:43
+source: https://www.youtube.com/watch?v=i66Bsnv12ZA
+upload_date: 20260714
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'Epic Games built its own version control system all because it got fed up with Git. They built it in Rust and then released it for free. It\'s called Lore. So, yeah, the company behind Fortnite built a Git alternative. But, Git is still great, obviously. But, Git was'
+
+[00:14] [scene:talk]
+VISUAL: 
+AUDIO: 'built for code. Mostly text files, lots of small files, changes that are usually a few lines at a time. Games are basically the opposite of that. So, how does Lore compare to Git and how do we'
+
+[00:26] [scene:talk]
+VISUAL: 
+AUDIO: 'even work with it? Let\'s find out. Now, at this point, we\'ve got massive textures, audio files, videos, 3D models, and all kinds of binary assets'
+
+[00:40] [scene:talk]
+VISUAL: 
+AUDIO: 'that can be hundreds of megabytes or even several gigabytes each. And once those files start changing, things get really messy. Your repository grows, clones get slower, history becomes huge,'
+
+[00:52] [scene:talk]
+VISUAL: 
+AUDIO: 'and eventually someone says, "Okay, maybe we should use Git LFS." Git LFS helps, but it also feels like a workaround added to a system that was never designed for this kind of data.'
+
+[01:04] [scene:talk]
+VISUAL: 
+AUDIO: 'Then, you\'ve got quotas, bandwidth limits, and old assets hanging around in history. So, a lot of studios use Perforce. And to be fair, Perforce works. There\'s a reason so many game'
+
+[01:16] [scene:talk]
+VISUAL: 
+AUDIO: 'studios use it. But, it\'s expensive. It can get complicated. And once your setup gets big enough, somebody usually ends up becoming the person who keeps it all alive. This is the thing that Lore was sort of designed to fix. If you enjoy'
+
+[01:30] [scene:talk]
+VISUAL: 
+AUDIO: 'coding tools to speed up your workflow, be sure to subscribe. We have videos coming out all the time. All right. Now, instead of just talking about Lore, it\'s cool. Let me get it running. Let me show you how it works. The demo starts with one install command and a demo flag,'
+
+[01:43] [scene:talk]
+VISUAL: 
+AUDIO: 'which we\'re going to run right here. And that\'s it. A couple of seconds later, I\'ve got a Lore server running locally. No cloud account, no key, no cert setup. It\'s running here on these ports. And just to'
+
+[01:57] [scene:talk]
+VISUAL: 
+AUDIO: 'prove it\'s actually alive, I can just hit the health endpoint right here, and I\'m going to do that over in this terminal, and there we go. It is alive, it is running. There are no background services I need to manually hook'
+
+[02:10] [scene:talk]
+VISUAL: 
+AUDIO: 'together, no off token to generate, there\'s no setup wizard. It just starts. Now, let me create a repository. So, I\'m going to create a folder, right? And we are going to create this repository. And'
+
+[02:23] [scene:talk]
+VISUAL: 
+AUDIO: 'now I\'m going to create a large binary file and commit it. Right, this is just a dummy file, right? But let\'s create a larger file. I\'m running DD here for data duplication. Now, instead of treating that 100 MB file as one huge'
+
+[02:36] [scene:talk]
+VISUAL: 
+AUDIO: 'object, Lore breaks it into smaller chunks. Those chunks are hashed, compressed with Zstandard, and stored in a content-addressed Merkle tree. If most of the file stays the same, Lore doesn\'t'
+
+[02:49] [scene:talk]
+VISUAL: 
+AUDIO: 'need to save another full copy of the whole thing. It can reuse the chunks it already has, and only store the parts that changed. That\'s a much better fit for a large binary asset. Right after the commit finishes, you can see the'
+
+[03:02] [scene:talk]
+VISUAL: 
+AUDIO: 'local state that was created on disk. There\'s now a Lore directory here with the config and the metadata. All right, now that we have that, let\'s make a branch. Okay, I can run Lore branch create name the branch. It works pretty'
+
+[03:16] [scene:talk]
+VISUAL: 
+AUDIO: 'much like Git, so let\'s switch to it. Let\'s actually make a small change here. I\'ll create a quick text file and commit it to this branch. So, I modify, then we can stage it, and then we can commit it.'
+
+[03:30] [scene:talk]
+VISUAL: 
+AUDIO: 'Right, this same flow is roughly the same as Git. Now, I\'m going to switch back. And that was basically instant. The other important thing is that none of that required a trip to any server.'
+
+[03:43] [scene:talk]
+VISUAL: 
+AUDIO: 'Staging, committing, branching, switching, diffing, all of that happens locally. So, even though Lore has a server, your normal day-to-day work still feels fast and you can keep working offline. It just makes it feel'
+
+[03:56] [scene:talk]
+VISUAL: 
+AUDIO: 'all lightweight. Now, the question becomes, okay, where is all the data going? In this demo here, everything is temporary. So, when I stop the server, the data disappears. That\'s because I\'m'
+
+[04:08] [scene:talk]
+VISUAL: 
+AUDIO: 'just using demo mode. In a real setup, you would run LOR server with a config file and persistent storage. The same CLI commands and local workflow stay the exact same. You\'re just pointing the'
+
+[04:21] [scene:talk]
+VISUAL: 
+AUDIO: 'server at real directories or object storage instead of throwing away that temporary folder. Now, with Git, Git gives you a history of project snapshots. Although internally, it does a lot of clever'
+
+[04:33] [scene:talk]
+VISUAL: 
+AUDIO: 'optimization, LOR is designed around chunking and deduplication from the get-go. So, for a large asset-heavy project, it doesn\'t have to treat every new version of the file as a completely'
+
+[04:45] [scene:talk]
+VISUAL: 
+AUDIO: 'separate giant object. LOR can also hydrate files on demand, so you can work with a repository containing a huge amount of data without downloading every single asset from day one. You pull down'
+
+[04:57] [scene:talk]
+VISUAL: 
+AUDIO: 'what you actually need for the part of the project you\'re working on. Now, one thing that\'s a tad bit confusing here when LOR launched was whether it\'s centralized or distributed. It\'s centralized. There is one server of'
+
+[05:10] [scene:talk]
+VISUAL: 
+AUDIO: 'record, but most of the work that we\'re doing is happening locally. So, in practice, it sits somewhere between Perforce and Git. You get central control and access management, but local operations still feel quick and don\'t'
+
+[05:24] [scene:talk]
+VISUAL: 
+AUDIO: 'depend on the server being available every single second. There are some nice differences, too. LOR is MIT licensed, the protocol is open source, and there are SDKs for multiple languages, which makes it much easier to script and build'
+
+[05:37] [scene:talk]
+VISUAL: 
+AUDIO: 'tooling around. Now, it\'s probably a good point to be realistic here. LOR is not something I would replace a production per force setup tomorrow with is still pre 1.0. Epic Games says the APIs may change before the first stable'
+
+[05:51] [scene:talk]
+VISUAL: 
+AUDIO: 'release and the project is clearly still evolving. There\'s also no get interoperability right now and you can\'t just point Lore at an existing get repository and bring the full history across. It\'s self-hosted, too. There'
+
+[06:04] [scene:talk]
+VISUAL: 
+AUDIO: 'isn\'t a hosted service where you create an account, push your repo and you\'re done. And the desktop app you may see floating around isn\'t included in the open source release. What you get is the core library, the server, the CLI, and'
+
+[06:17] [scene:talk]
+VISUAL: 
+AUDIO: 'the SDKs. The GUI is not a part of it. Then, of course, performance. How does this perform? Epic says Lore can handle huge repositories without slowing down the way other systems do. And Epic'
+
+[06:30] [scene:talk]
+VISUAL: 
+AUDIO: 'obviously has experience with some very large projects, but right now most of those claims are coming from Epic themselves. There isn\'t really solid independent benchmarks yet. So, performance looks promising, but until'
+
+[06:42] [scene:talk]
+VISUAL: 
+AUDIO: 'we really start testing this out, it\'s hard to see how this performs. Should you use it? Well, it\'s fun to play around with. Are you making games? Are you building massive projects? Okay, for a new project, maybe. If you just want'
+
+[06:54] [scene:talk]
+VISUAL: 
+AUDIO: 'to see where version control for large binary assets could be going, it\'s worth a try. Test it on something non-critical, play around with it, see how it performs, see how the flow is. The bigger point here isn\'t whether Lore'
+
+[07:07] [scene:talk]
+VISUAL: 
+AUDIO: 'replaces Git or Perforce anytime soon. The bigger point is that version control stopped being a solved problem once projects started shipping with huge amounts of binary data. Git won for'
+
+[07:19] [scene:talk]
+VISUAL: 
+AUDIO: 'text, smaller files. Lore is trying to solve something that comes after that. And honestly, whether it wins, whether it doesn\'t, it\'s still a really cool direction. If you enjoy coding tips and'
+
+[07:31] [scene:talk]
+VISUAL: 
+AUDIO: 'tricks like this, be sure to subscribe to the Better Stack channel. We\'ll see you in another video. &gt;&gt; [music]'

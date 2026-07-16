@@ -1,0 +1,144 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: This 4,500-Star Rust Hook Stops AI Agents Deleting Your Code
+channel: @octopusinc_
+duration: 06:53
+source: https://www.youtube.com/watch?v=fco8k7zu76A
+upload_date: 20260715
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'Picture this. Your AI coding agent is deep in a task, moving fast, and it decides the quickest way forward is to run arma RF on your source folder. In a normal terminal, that command is final. There\'s no recycle bin, no undo, and hours of uncommitted work are gone in a'
+
+[00:13] [scene:talk]
+VISUAL: 
+AUDIO: 'fraction of a second. It\'s one of the most common ways an autonomous agent turns a great session into a disaster. But watch this terminal. The command gets typed, the agent tries to run it, and destructive command guard blocks it'
+
+[00:25] [scene:talk]
+VISUAL: 
+AUDIO: 'before a single file is touched. It\'s a 4,500 star Rust tool that sits in front of every command your agent runs. And there\'s one destructive command it deliberately lets through. Stick around because that choice is the clever part.'
+
+[00:37] [scene:talk]
+VISUAL: 
+AUDIO: 'Let\'s look at it on GitHub, right from a phone. DCG, short for destructive command guard, describes itself as a high-performance safety hook for AI coding agents. And the list of agents it supports is basically all of them.'
+
+[00:50] [scene:talk]
+VISUAL: 
+AUDIO: 'Claude Code, Codex CLI, Gemini CLI, GitHub Copilot, and Cursor. The problem it solves is specific and painful. These agents are brilliant, but every so often'
+
+[01:02] [scene:talk]
+VISUAL: 
+AUDIO: 'one fires off something catastrophic. A git reset hard that erases your uncommitted changes. A git push force that rewrites shared history. A database drop that takes production with it. DCG'
+
+[01:14] [scene:talk]
+VISUAL: 
+AUDIO: 'registers itself as a pre-tool use hook, which means before the agent is allowed to actually run a command, DCG sees it first, evaluates it in under a millisecond, and blocks only the genuinely dangerous ones. And the'
+
+[01:27] [scene:talk]
+VISUAL: 
+AUDIO: 'community clearly wants this. 4 and 1/2 thousand stars, 169 forks, and it\'s written entirely in Rust under a custom license. That language choice matters more than it looks. This isn\'t a fragile'
+
+[01:39] [scene:talk]
+VISUAL: 
+AUDIO: 'shell script you copy paste and hope for the best. It\'s a compiled binary engineered for speed and correctness. Because think about the incentives. A safety tool that\'s slow, or one that cries wolf and blocks commands you'
+
+[01:52] [scene:talk]
+VISUAL: 
+AUDIO: 'actually wanted, is a safety tool you will absolutely rip out within a day. DCG is built specifically to avoid both failure modes, and 4 and 1/2 thousand stars is real adoption. These are developers running this on their daily'
+
+[02:05] [scene:talk]
+VISUAL: 
+AUDIO: 'machines, in front of agents they\'ve handed genuine autonomy to. When a guard earns that kind of trust, it\'s usually because it stays completely out of your way right up until the exact moment it\'s needed. The best part is you can try it'
+
+[02:17] [scene:talk]
+VISUAL: 
+AUDIO: 'yourself, no agent required. Run DCG test, pass a command in quotes, and it tells you exactly what would happen without executing anything. rm -rf on your build directory, blocked with a'
+
+[02:29] [scene:talk]
+VISUAL: 
+AUDIO: 'clear reason. Now, the same shape of command, but pointed at a temp directory, allowed. That\'s not luck. DCG checks known safe patterns before it checks destructive ones, so cleaning a temp folder never gets caught in the net'
+
+[02:42] [scene:talk]
+VISUAL: 
+AUDIO: 'meant for your project. And when something is blocked, you\'re not left guessing. DCG explains spells out the reason, get reset, hard destroys uncommitted changes, and even suggests a safer path, like running git stash'
+
+[02:54] [scene:talk]
+VISUAL: 
+AUDIO: 'first. It\'s a guardrail that teaches, not just one that says no. So, how does it stay this fast while being this careful? Every command runs through a four-stage pipeline. Stage one parses the JSON payload the agent sends in on'
+
+[03:07] [scene:talk]
+VISUAL: 
+AUDIO: 'standard input, handling the slightly different formats each agent uses. Stage two normalizes the command, stripping absolute paths so nothing sneaks past by spelling itself differently. Stage three'
+
+[03:19] [scene:talk]
+VISUAL: 
+AUDIO: 'is a quick substring filter that lets 99% of ordinary commands through instantly without any heavy work. And only the small fraction that looks suspicious reach stage four, the full regex engines, where safe patterns are'
+
+[03:32] [scene:talk]
+VISUAL: 
+AUDIO: 'matched first and destructive patterns second. That ordering is the whole trick. By confirming a command is explicitly safe before it ever asks whether it might be dangerous, DCG avoids the classic false positive that'
+
+[03:45] [scene:talk]
+VISUAL: 
+AUDIO: 'gets these tools uninstalled. It\'s fast because it\'s lazy in exactly the right way, and it does the expensive thinking only when it actually has to. Wiring it into Claude code is almost anticlimactic. Four lines.'
+
+[03:57] [scene:talk]
+VISUAL: 
+AUDIO: 'In your settings file, you add a pre-tool use hook, set the matcher to bash, and point it at the DCG binary. That\'s the whole integration. From that moment on, every single shell command your agent proposes is screened before'
+
+[04:10] [scene:talk]
+VISUAL: 
+AUDIO: 'it\'s ever allowed to touch your disk. No plugin marketplace, no demon, no background service. Just a hook and a fast binary doing one job and because the same binary understands the hook formats for Codex, Gemini,'
+
+[04:22] [scene:talk]
+VISUAL: 
+AUDIO: 'Cursor, and Copilot, the setup looks almost identical no matter which agent you run. You install it once, point each agent\'s hook at it, and every one of them inherits the same guardrails. And none of this slows you down. The latency'
+
+[04:35] [scene:talk]
+VISUAL: 
+AUDIO: 'is sub-millisecond thanks to SIMD accelerated filtering that most tools never bother with. There are over 50 modular security packs covering databases, Kubernetes, AWS, Terraform, containers, CI/CD,'
+
+[04:48] [scene:talk]
+VISUAL: 
+AUDIO: 'even secrets and payment systems, and you enable only the ones you need. Meanwhile, 99% of the commands you run every day never even reach the expensive matcher. They\'re recognized as safe and pass straight through instantly. Now,'
+
+[05:02] [scene:talk]
+VISUAL: 
+AUDIO: 'that design choice I promised you. DCG is fail open. If it hits a timeout or genuinely can\'t parse a command safely, it does not block. It lets the command run. For a security tool, that sounds'
+
+[05:14] [scene:talk]
+VISUAL: 
+AUDIO: 'completely backwards, but think about the alternative. A guard that freezes or blocks every time it\'s unsure will train you to disable it within an hour. Fail open keeps DCG invisible when it\'s uncertain and loud only when it\'s'
+
+[05:26] [scene:talk]
+VISUAL: 
+AUDIO: 'confident something is destructive. It\'s a deliberate bet that a guard you actually keep is worth more than a guard that\'s paranoid. And if you disagree, one environment variable, DCG fail closed set to one, flips it into strict'
+
+[05:38] [scene:talk]
+VISUAL: 
+AUDIO: 'mode instantly. Back on the phone, scrolling the docs shows how deep this goes. Those 50 plus packs can be toggled per project, so a Kubernetes repo and a plain Python script get different levels'
+
+[05:50] [scene:talk]
+VISUAL: 
+AUDIO: 'of protection. There\'s a full allow list system for the exceptions you genuinely trust, permanent rules, or one-time allow codes with a time limit. And there\'s a scan mode that runs in your CI, checking committed files, Dockerfiles, GitHub Actions workflows,'
+
+[06:04] [scene:talk]
+VISUAL: 
+AUDIO: 'Makefiles, and shell scripts for destructive patterns before they ever get merged into your main branch. All of this comes from one developer, Jeff Emanuel, who ships under the handle Dicklesworth Stone. Nearly 3,000'
+
+[06:17] [scene:talk]
+VISUAL: 
+AUDIO: 'followers on GitHub and 188 public repositories. DCG is just one of them. It\'s the kind of tool that only gets built by someone who has clearly felt the pain firsthand and thought carefully'
+
+[06:29] [scene:talk]
+VISUAL: 
+AUDIO: 'about how humans and AI agents can share a terminal without one of them setting it on fire. And it\'s actively maintained on version 0.6.7 as of this recording, with new security packs landing as'
+
+[06:41] [scene:talk]
+VISUAL: 
+AUDIO: 'people discover fresh ways for an agent to hurt itself. Give your coding agent a seatbelt. The link is in the description. Tell me which command has burned you before. This is Prism Labs.'

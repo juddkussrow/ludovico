@@ -1,0 +1,608 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Better HomeLab Secret Management // Infisical Tutorial
+channel: @octopusinc_
+duration: 31:47
+source: https://www.youtube.com/watch?v=kGKQ-j4jTg0
+upload_date: 20260714
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'This is Infracode. It\'s an open-source platform where you can manage secrets, environment variables, certificates, access controls, and a lot more in one central place. And I think this is absolutely amazing because it solves one'
+
+[00:12] [scene:talk]
+VISUAL: 
+AUDIO: 'of the biggest problems we have in IT, managing and securing the most critical values in our infrastructure, such as passwords, API keys, database credentials, and access tokens. Because one thing is clear, you frequently have'
+
+[00:26] [scene:talk]
+VISUAL: 
+AUDIO: 'to use them in all different kinds of environments, such as your Git platforms, running them in CI/CD pipelines, or injecting them into different application deployments. And Infracode helps you to define who has'
+
+[00:38] [scene:talk]
+VISUAL: 
+AUDIO: 'access, which environment a secret belongs to, and how those values are securely delivered to the system that actually needs them. So, in this video, we\'ll take a look at Infracode and how you can easily run this in your own'
+
+[00:51] [scene:talk]
+VISUAL: 
+AUDIO: 'self-hosted environment using Docker Compose, and we\'ll create a simple demo project where I can show you how to inject secrets using the Infracode CLI in Docker Compose stacks, so that you don\'t have to use .env files on all of'
+
+[01:05] [scene:talk]
+VISUAL: 
+AUDIO: 'your Home Lab servers. Before we jump right into this, though, I quickly want to talk about secure access to your environment because secret management is only one part of keeping your infrastructure safe. Of course, you also'
+
+[01:17] [scene:talk]
+VISUAL: 
+AUDIO: 'need a secure way to reach your servers, your admin dashboards, and internal tools without exposing them directly to the public internet. And for that, my first choice is Twingate, the sponsor of today\'s video. Twingate is what we call'
+
+[01:30] [scene:talk]
+VISUAL: 
+AUDIO: 'a ZTNA in tech, a zero-trust network access platform. And that means instead of opening ports or setting up a traditional VPN, Twingate creates secure connections between all of your devices'
+
+[01:43] [scene:talk]
+VISUAL: 
+AUDIO: 'and your private resources, and every request has to be verified and authorized before it can go through. That makes it super useful for your Home Lab, but also enterprise workflows because you can easily log into your'
+
+[01:56] [scene:talk]
+VISUAL: 
+AUDIO: 'servers over SSH or reach your internal dashboards, your Kubernetes or databases management tools, and this even works through NAT devices and firewalls without any port forwardings or firewall exceptions. So, you can securely access'
+
+[02:09] [scene:talk]
+VISUAL: 
+AUDIO: 'all of your systems no matter where you are or where you\'re connecting from. If you would like to try it out, then check out my tutorials on how to install TwinGate in your network and how to integrate this into Docker, Kubernetes,'
+
+[02:21] [scene:talk]
+VISUAL: 
+AUDIO: 'or your DevOps environments using Terraform. It is also free for up to five users and connects to 10 different remote networks, which is already a great fit for many home lab setups. So, start making your network more secure'
+
+[02:34] [scene:talk]
+VISUAL: 
+AUDIO: 'and accessible with TwinGate. Of course, I\'ll leave you a link to their website in the description box down below. All right, guys. So, now let\'s get started with Infracloud, the all-in-one platform for securely manage your app'
+
+[02:47] [scene:talk]
+VISUAL: 
+AUDIO: 'secrets, certificates, SSH keys, or control privileged access to your entire infrastructure. I\'m sorry for the light mode website because for whatever reason Infracloud doesn\'t have a dark mode'
+
+[02:59] [scene:talk]
+VISUAL: 
+AUDIO: 'website and dark reader unfortunately did not work great on this. So, I\'m sorry for this, but as you can see, this is a pretty big and sophisticated application that is used and trusted by many big enterprise companies. You can'
+
+[03:12] [scene:talk]
+VISUAL: 
+AUDIO: 'see some impressive names here like Nvidia, Volkswagen, LG, and many, many more. And it has a vast feature set across secret management, secret scanning, synchronization, and so many'
+
+[03:24] [scene:talk]
+VISUAL: 
+AUDIO: 'more. But it is not only useful for these enterprise companies because you can find the source code of the open source version here on GitHub. You can also very easily self-host this on your home lab environment without any costs'
+
+[03:37] [scene:talk]
+VISUAL: 
+AUDIO: 'at all. And you can securely store all of your critical secrets on your own controlled on-prem environment. I think this is pretty cool. You can also find more about that in the official documentation. So, this tells you'
+
+[03:49] [scene:talk]
+VISUAL: 
+AUDIO: 'everything. This is the CLI reference, the API reference, SDKs. Now, we want to go here to the self-host in physical section. You can install the in physical platform using a variety of different'
+
+[04:01] [scene:talk]
+VISUAL: 
+AUDIO: 'deployment options such as running this in a container on Docker Kubernetes or using Docker Compose on AWS, GCP, and a simple Linux package if you prefer that. Of course, as you might know, I\'m a big'
+
+[04:13] [scene:talk]
+VISUAL: 
+AUDIO: 'fan of Docker Compose, so we\'ll use that. Uh but, I can also tell you in my own environment, I\'m actually running this in my Kubernetes cluster. So, this is also pretty easy. You just have to'
+
+[04:25] [scene:talk]
+VISUAL: 
+AUDIO: 'follow a couple of installation steps, install the Helm repository, and then it\'s basically setting up everything completely for you. The Docker Compose section, that is what we\'re using for this quick demo, and I think that\'s the easier way to quickly get an in physical'
+
+[04:38] [scene:talk]
+VISUAL: 
+AUDIO: 'setup up and running so you can test it in your own environment and find out whether this is something for you. So, you just need a Linux server or a Mac a Windows machine with Docker Desktop,'
+
+[04:50] [scene:talk]
+VISUAL: 
+AUDIO: 'Docker Engine, Docker Compose. I think that should be clear, and the system requirements are also quite low. So, it\'s running a database, it\'s running a Redis container. So, that of course needs a few resources, but it\'s not really hungry. This is a version that'
+
+[05:03] [scene:talk]
+VISUAL: 
+AUDIO: 'I\'ve used to create my own boilerplate template for the in physical setup on Docker Compose, which you can also find in the description of this video. I will link this. So, let\'s just go to my terminal, and let\'s quickly set this up.'
+
+[05:15] [scene:talk]
+VISUAL: 
+AUDIO: 'First of all, I want to run a repository update so I get the latest version from my Git repository for the templates, and then let\'s take a look at the Compose in physical template. So, here you can configure this service name, um the site'
+
+[05:28] [scene:talk]
+VISUAL: 
+AUDIO: 'URL. This is quite important. If you\'re not using a correct site URL, in physical will not start. Make sure that this should start with HTTPS or HTTP, depending on what you\'re using. You need'
+
+[05:40] [scene:talk]
+VISUAL: 
+AUDIO: 'of course an encryption key. This is quite important because this is a secure key to encrypt all of the secrets. Of course, these secrets are not stored in clear text and you also need an auth secret for the authentication. And what'
+
+[05:53] [scene:talk]
+VISUAL: 
+AUDIO: 'is also quite important there\'s a setting for synchronizing the secrets to your Git platform. And I had the problem that I was running a self-hosted GitLab platform. By default, this is not'
+
+[06:05] [scene:talk]
+VISUAL: 
+AUDIO: 'allowed, so you need to add an environment variable to your Docker Compose stack. I have by default enabled this for you, so when you\'re using my Boilerplates templates, you can also synchronize In Physical to your self-hosted GitLab platform that is running in your own home lab'
+
+[06:18] [scene:talk]
+VISUAL: 
+AUDIO: 'environment. And of course, I\'ve also added variables to configure Traefik for running this behind a secure reverse proxy with trusted TLS certificates and you can also use it to set up your email'
+
+[06:30] [scene:talk]
+VISUAL: 
+AUDIO: 'account. All right, so now that we know all the variables, I want to create a new Boilerplates Compose In Physical template. First of all, I want to set the In Physical site URL and I want to'
+
+[06:42] [scene:talk]
+VISUAL: 
+AUDIO: 'run this on my server test1.home.secreative.ee. Then, I also want to enable Traefik, of course, so we got trusted TLS certificates. Therefore, I will also'
+
+[06:54] [scene:talk]
+VISUAL: 
+AUDIO: 'enable the TLS variables and I think I need to set the host. Yeah, this is currently set to just In Physical. Of course, I need to set the host to In Physical server test one. All these'
+
+[07:08] [scene:talk]
+VISUAL: 
+AUDIO: 'other default values should be fine. So, let us just generate this and no, I don\'t want to customize any settings. And yep, just store this here in that directory. So, now we should see a new'
+
+[07:22] [scene:talk]
+VISUAL: 
+AUDIO: 'compose.yaml file that has been generated by my Boilerplates tool. You can see all the correct Traefik labels are added in here. There\'s a PostgreSQL database container with a health check, the Redis container with a health check,'
+
+[07:36] [scene:talk]
+VISUAL: 
+AUDIO: 'a network, and this is connected to my proxy network where traffic is running. The volumes are created correctly and of course you can see the environment variables, the site URL, encryption key, and all of that stuff. Of course, I\'ve'
+
+[07:49] [scene:talk]
+VISUAL: 
+AUDIO: 'also created a .env file, so here I\'ve auto-generated a secure password for all of these um database credentials and the encryption and the authorization key.'
+
+[08:01] [scene:talk]
+VISUAL: 
+AUDIO: 'Make sure to securely store these values and do not show them to anyone because with the encryption key someone can easily decrypt information from the database. So, that is quite important. Again, if you\'re using this for'
+
+[08:14] [scene:talk]
+VISUAL: 
+AUDIO: 'production, I probably would use my boilerplate\'s template for the Helm deployment on Kubernetes. Basically, a quite similar template, but that of course creates a Helm release with proper values. You can use the secrets'
+
+[08:26] [scene:talk]
+VISUAL: 
+AUDIO: 'being secured in the Kubernetes etcd database. All right. So, but we\'ll focus on Docker Compose. Let\'s quickly check what Docker context I\'m using because I want to run this on my test server one.'
+
+[08:39] [scene:talk]
+VISUAL: 
+AUDIO: 'Oh, yeah, that\'s right. So, we should now go into this directory and simply just run a Docker Compose up -d, which will pull the image on the uh external'
+
+[08:51] [scene:talk]
+VISUAL: 
+AUDIO: 'Docker context and start up the container. Now, this can take a while up to a few minutes, so don\'t be worried because InfluxDB needs to populate the database and create the Redis and'
+
+[09:04] [scene:talk]
+VISUAL: 
+AUDIO: 'Postgres containers and seed them with the credentials and tables and stuff like that. That usually takes quite a long time actually. In my environment, it took up to six or seven minutes for the first startup. So, you\'ll have to be'
+
+[09:17] [scene:talk]
+VISUAL: 
+AUDIO: 'a bit patient with that. By the way, some of you might wonder what application I\'m currently using to run the terminal and open the files. I\'m not using Warp Terminal as you might have seen. In the next video, I\'m going to show you this tool in a lot more detail.'
+
+[09:30] [scene:talk]
+VISUAL: 
+AUDIO: 'So, stay tuned. All right, so now InfluxDB is healthy after 7 minutes. So, yeah, Took quite a long time opening new browser window and head over to in physical.server.test.one.'
+
+[09:42] [scene:talk]
+VISUAL: 
+AUDIO: 'First of all, we need to add our credentials here and create an admin account. I\'m just quickly doing this. All right, pick a secure password and continue. So, now this will lock you into the general server console. So,'
+
+[09:56] [scene:talk]
+VISUAL: 
+AUDIO: 'this is like an admin console where you first of all need to set up some general settings. For example, if you want to allow external users to sign up freely to your in physical instance. If you\'re'
+
+[10:08] [scene:talk]
+VISUAL: 
+AUDIO: 'using that in a company, yes, it might be useful to allow this to anyone, but restrict this by your secured company email domains. However, in a home lab, I certainly would disable this. You can control this and configure this'
+
+[10:21] [scene:talk]
+VISUAL: 
+AUDIO: 'according to your preferences. Here you can also set up a few other things. For example, the organization, because in physical supports multi-tenancy, so you can add multiple organizations. You can also use in physical with SSO from'
+
+[10:34] [scene:talk]
+VISUAL: 
+AUDIO: 'Google, GitHub, GitLab, and a couple of other SSO identities. However, I wanted to connect this to authentic, but this is, as you can probably guess, behind a paywall. So, I do not need any of these login methods'
+
+[10:47] [scene:talk]
+VISUAL: 
+AUDIO: 'except email, of course. So, just going to set this here. And then you can also integrate this into Slack, Microsoft Teams. Yeah, let\'s not mess around with that. So, now, let\'s go back to the organization. So, here on the top you'
+
+[11:01] [scene:talk]
+VISUAL: 
+AUDIO: 'can see the admin organization. If you want to return to the server console, you can find it here. But here we can make these general settings for the organization, like giving this a name, for example, see creative, the organization slug, and also manage user'
+
+[11:14] [scene:talk]
+VISUAL: 
+AUDIO: 'accounts, credentials, and other settings for this specific tenant. And also manage application connections. We\'ll talk about this later. First of all, I want to create a new project. And'
+
+[11:27] [scene:talk]
+VISUAL: 
+AUDIO: 'there are six types of projects. The first one is secrets management. So, this is the one I would certainly start with for a small home lab. It stores the application secrets like passwords, API keys, tokens, and stuff like that. And'
+
+[11:41] [scene:talk]
+VISUAL: 
+AUDIO: 'then you can use this in your application environments, CI/CD pipelines, whatever you\'re using. You can also create a certificate manager project. So, this is useful if you want Invidious to manage certificates. Of'
+
+[11:55] [scene:talk]
+VISUAL: 
+AUDIO: 'course, I wanted to know if you could also use this as a certificate manager with the ACME protocol for something like Traefik or cert-manager. However, there\'s one small caveat I need to tell you. Unfortunately, this only supports'
+
+[12:07] [scene:talk]
+VISUAL: 
+AUDIO: 'the HTTP one challenge and not DNS one. So, you cannot directly integrate this with your favorite DNS provider. It\'s not a direct drop-in replacement for something like cert-manager or also.'
+
+[12:19] [scene:talk]
+VISUAL: 
+AUDIO: 'But, you could technically also obtain certificates and manage them securely here, import your CA or your certificate, or use the ACME challenge with the HTTP protocol. That would also'
+
+[12:31] [scene:talk]
+VISUAL: 
+AUDIO: 'work. Now, you can also set up an KMS. This is central key management for encryption decryption. It\'s quite powerful in companies, I\'d say, but for home labs, I don\'t know if that\'s interesting. Also, secret scanning. That might be useful in bigger environments'
+
+[12:45] [scene:talk]
+VISUAL: 
+AUDIO: 'because that is used to catch leaked secrets in configs or code. So, if your developers for any reason put credentials in clear text in Docker Compose files or any other environment'
+
+[12:58] [scene:talk]
+VISUAL: 
+AUDIO: 'variables and upload them to Git repositories, the secret scanning will notify you about there is a problem and then you can easily react on this and properly store the secrets in Invidious.'
+
+[13:10] [scene:talk]
+VISUAL: 
+AUDIO: 'And then there\'s also PAM, privileged access management for sensitive systems like databases, servers, accounts. I think we don\'t mess around with this. And Agent Sentinel. This is governance for AI agents and MCP tools. Again,'
+
+[13:23] [scene:talk]
+VISUAL: 
+AUDIO: 'might also be an enterprise feature, not so interesting for us home lab people. So, let us start with creating a new project. I\'m just going to call this home lab secrets, for example. So, now you can see that we switch from the'
+
+[13:35] [scene:talk]
+VISUAL: 
+AUDIO: 'tenant in the actual project. If you\'re creating multiple projects within your tenant, you can easily switch between these projects here. However, I certainly would not in my own home lab create too many multiple projects, then'
+
+[13:47] [scene:talk]
+VISUAL: 
+AUDIO: 'it\'s making things more complicated because inside a project you can also manage certain settings and organize your secrets in different environments or different directories. For example, if you want to create a secret, you can'
+
+[14:00] [scene:talk]
+VISUAL: 
+AUDIO: 'create a new directory and call this, for example, I don\'t know, home lab, or you can create folders for certain applications and so on. Note, the folders are not security boundaries themselves. They are mostly'
+
+[14:14] [scene:talk]
+VISUAL: 
+AUDIO: 'just for organizing. So, access to the credentials is not managed in the directories. Uh make sure to keep that in mind. Now, here you can also go into this directory and create new secrets. You can manage'
+
+[14:26] [scene:talk]
+VISUAL: 
+AUDIO: 'three different environments. Development for, yeah, I\'d say local testing or throwaway test stacks, yeah. Staging, this is more close to production, but also for testing updates. Production is, of course, then'
+
+[14:39] [scene:talk]
+VISUAL: 
+AUDIO: 'used by your real production home lab or enterprise services. So, when you create a new secret, you can enable or disable this secret for these different environments as well. So, that\'s pretty'
+
+[14:51] [scene:talk]
+VISUAL: 
+AUDIO: 'cool. I will show you a couple of things here, for example, if you want to create a new application like Nextcloud, yeah. And Nextcloud needs a database and it needs an admin user that you can provision via environment variables.'
+
+[15:04] [scene:talk]
+VISUAL: 
+AUDIO: 'Then these secrets you do not want to store in your Git repository or in your application itself or using a .env file, you want to create them here in Infracloud. So, then you can start, for'
+
+[15:16] [scene:talk]
+VISUAL: 
+AUDIO: 'example, using database user and store this, for example this is going to be Nextcloud and I want to use this here not only for production but also for all the different environments I want to use'
+
+[15:30] [scene:talk]
+VISUAL: 
+AUDIO: 'that specific user here and you can see this directly in here. I think this is currently not created in this directory I suppose but you can of course edit the secret you can copy the secret if you select this you can'
+
+[15:44] [scene:talk]
+VISUAL: 
+AUDIO: 'also move this into a different location for example home lab I want to put this here. You can by the way also override existing secrets with the same name and then you can easily organize that as well. So now it\'s in the home lab'
+
+[15:57] [scene:talk]
+VISUAL: 
+AUDIO: 'directory and you can see that\'s enabled and present in all these environments. You can also reveal these specific values here and copy them edit them and delete them as well. All right, so let\'s'
+
+[16:10] [scene:talk]
+VISUAL: 
+AUDIO: 'add a new secret here for example if we have a database user we should also store a database password. So this one I want to generate with this button here you can create a secure credential for'
+
+[16:22] [scene:talk]
+VISUAL: 
+AUDIO: 'example 32 characters just random secure password and I want to enable this for the production environment only. Yeah, you can by the way then create other secrets for example a different'
+
+[16:35] [scene:talk]
+VISUAL: 
+AUDIO: 'credential but with the same name and use this for example for staging and development. Then you can see it\'s actually using the same name but when we go in here and reveal the values you can'
+
+[16:47] [scene:talk]
+VISUAL: 
+AUDIO: 'see it has different values for the different types of environments. All right, let\'s also create one or two more. I need a Nextcloud admin user that\'s going to be admin and that\'s'
+
+[16:59] [scene:talk]
+VISUAL: 
+AUDIO: 'enabled for all the three environments and I\'m going to create a new Nextcloud admin password. This of course I again generate and put this into the production'
+
+[17:12] [scene:talk]
+VISUAL: 
+AUDIO: 'environment only. And, yeah. So, that should be all. All right. So, now we have all the credentials stored. And of course, you can then also share these'
+
+[17:24] [scene:talk]
+VISUAL: 
+AUDIO: 'credentials with your team. You can manage approvals. You can synchronize them between different types of platforms, add new users to your project, and you can very specifically define what users and what groups should'
+
+[17:38] [scene:talk]
+VISUAL: 
+AUDIO: 'have access to what type of credentials or environments. also have audit logs here, which is unfortunately not part of the open source plan, but for enterprise companies might be useful to see who had'
+
+[17:50] [scene:talk]
+VISUAL: 
+AUDIO: 'retrieved what type of secret. I don\'t want to go through all of the different features. As you can imagine, this is a pretty powerful platform used by enterprise companies, and it has all the stuff like webhooks, API, and workflow'
+
+[18:02] [scene:talk]
+VISUAL: 
+AUDIO: 'integration, and whatnot. One thing that I for example want to implement in my home lab is a synchronization between GitHub and some other applications because currently, my secrets, I have'
+
+[18:14] [scene:talk]
+VISUAL: 
+AUDIO: 'stored them in a password manager, but when I\'m storing them in a password manager, I still need to add them to all the different environments, yeah? I need to add them to my local.env files on my Mac. I need to update them on.env files'
+
+[18:28] [scene:talk]
+VISUAL: 
+AUDIO: 'on my server production or my server test. And I also, if I want to use this in CICD pipelines for automated deployment and updating, I also need to store them in GitLab secrets or maybe'
+
+[18:42] [scene:talk]
+VISUAL: 
+AUDIO: 'GitHub. I\'m using both so currently my credential system is really fractured and I want to centralize this in a platform like Infracloud because this is much much better. I can better control and store'
+
+[18:55] [scene:talk]
+VISUAL: 
+AUDIO: 'this in a secure way, but I still need the credentials or access to these credentials of course in other platforms. What you can very easily do in Infracloud. This is a really amazing feature because you can have different'
+
+[19:08] [scene:talk]
+VISUAL: 
+AUDIO: 'types of integrations for secret synchronization and infrastructure integration. So, if you\'re using this in Docker, in Ansible, Kubernetes, Terraform, you can set up these infrastructure integrations. By'
+
+[19:21] [scene:talk]
+VISUAL: 
+AUDIO: 'the way, we will talk about Docker integration in a second. It\'s unfortunately not as easy as it sounds here. But, for Ansible, for example, this is quite interesting. There\'s an Ansible Galaxy collection to install the also test this out and show it to you in'
+
+[19:37] [scene:talk]
+VISUAL: 
+AUDIO: 'a future video. Maybe we\'ll second just for project or infrastructure integrations of Infisical. I think that might be useful. Let me quickly show you the secret synchronization. That\'s what I\'ve already tested and I certainly will'
+
+[19:50] [scene:talk]
+VISUAL: 
+AUDIO: 'adapt this to my workflow as well. If you\'re managing your credentials or secrets and you want to store them in one password or Cloudflare Pages, Cloudflare Workers, maybe Digital Ocean, or you want to synchronize them to your'
+
+[20:02] [scene:talk]
+VISUAL: 
+AUDIO: 'GitHub, your GitLab, and it supports also a couple of others. Yeah, Terraform Cloud is here. couple of other environments as well. But, I want to show you this here, GitLab secret. So, then you can synchronize one specific'
+
+[20:15] [scene:talk]
+VISUAL: 
+AUDIO: 'environment or maybe more. For example, I want to synchronize my production secrets of the homelab directory and I want to synchronize this to my self-hosted GitLab platform. First'
+
+[20:27] [scene:talk]
+VISUAL: 
+AUDIO: 'of all, I need to create a new connection and I\'m just going to call this self-hosted, for example. Yeah, I think that\'s fine. And then we need to add the URL git.home.secrecy. de and authenticate with a personal'
+
+[20:40] [scene:talk]
+VISUAL: 
+AUDIO: 'access token. And let\'s connect to GitLab. All right. So, now I can set a specific destination because maybe you want to synchronize this with just one repository or maybe a group of'
+
+[20:52] [scene:talk]
+VISUAL: 
+AUDIO: 'repositories. Here you can set the scope. For example, what might be pretty useful in my setup, I certainly will do this is synchronize this to my homelab group. So, there I\'ve added all the'
+
+[21:04] [scene:talk]
+VISUAL: 
+AUDIO: 'repositories. Oh, wait, I can show it to you. So, here this group Home Lab, there are all of my platforms like the GitLab platform, traffic, Proxmox, Open Sense. So, everywhere where I need my secrets,'
+
+[21:16] [scene:talk]
+VISUAL: 
+AUDIO: 'I can easily synchronize this to the entire group. Or what I\'m showing you in this demo environment, I\'m just going to synchronize this to an example repository. And here you can also set'
+
+[21:28] [scene:talk]
+VISUAL: 
+AUDIO: 'the GitLab environment scope if you need that. Mark secrets as protected, masked, or hidden. I\'m not going to use this right now, but you can certainly do this. And then you also should choose'
+
+[21:40] [scene:talk]
+VISUAL: 
+AUDIO: 'the synchronization behavior. So, if it should overwrite secrets or if it should have a prefix like in physical_secret_key. In my example, [snorts] I don\'t want this. So, secret_key alone should be'
+
+[21:52] [scene:talk]
+VISUAL: 
+AUDIO: 'enough. I don\'t want in physical_ because I\'m using the credentials already in my project, so that would require a huge renaming. And disable secret deletion. This will disable the'
+
+[22:05] [scene:talk]
+VISUAL: 
+AUDIO: 'override function of the secret. So, when the secret is already existing, it would be overwritten with a value that you have in in physical. And then you need to add a job name. I\'m just going to go with the default here. I think'
+
+[22:18] [scene:talk]
+VISUAL: 
+AUDIO: 'that\'s fine. Here you can see in the status it\'s actually syncing. So, let\'s go back to my GitLab platform and let\'s go to my example project. So, this should be in here personal example apps. All right. And then if we go to'
+
+[22:33] [scene:talk]
+VISUAL: 
+AUDIO: 'settings, CI/CD variables, the secrets arrived at the Git repository. And then you basically just have to add all of your integrations and you have distributed your secrets managed in in'
+
+[22:45] [scene:talk]
+VISUAL: 
+AUDIO: 'physical across all your platforms environments where you need them. That\'s pretty cool. All right. So, now the next step is how do you actually get access to these secrets? Because it\'s fine that we have them in the platform. That\'s the'
+
+[22:58] [scene:talk]
+VISUAL: 
+AUDIO: 'step one, but maybe you want to get your secrets from a machine like a server or maybe your workstation where you are running uh your application and you need the credentials from the InPhySec'
+
+[23:10] [scene:talk]
+VISUAL: 
+AUDIO: 'platform. Now, what you should use for this is the InPhySec CLI. You can install this on your Mac, on Windows, can use NPM, Alpine Linux distributions like Red Hat, Debian, Ubuntu, Arch Linux, and then log into your'
+
+[23:24] [scene:talk]
+VISUAL: 
+AUDIO: 'Self-Hosted platform. Let\'s just go through this process together. So, then I think you can better see how that\'s working. So, uh I should have access to InPhySec already, so now I just need to log in and then select Self-Hosted'
+
+[23:38] [scene:talk]
+VISUAL: 
+AUDIO: 'instance InPhySec server test one. Oh, yeah, I already have that. And this opens a browser window where we need to authenticate. And this should then show a token that we need to copy and go back'
+
+[23:51] [scene:talk]
+VISUAL: 
+AUDIO: 'to the terminal and paste here. So, now you should see browser successfully logged in. Now, we can start managing InPhySec through the CLI. And there are a couple of commands that you probably'
+
+[24:04] [scene:talk]
+VISUAL: 
+AUDIO: 'should know. First of all, if we want to inject secrets or get the values, we should initialize the local folder to the HomeLab project. For example, if we want to use the credentials to install a'
+
+[24:16] [scene:talk]
+VISUAL: 
+AUDIO: 'new Nextcloud container. Let\'s Let\'s do that together. So, first of all, I want to create a new directory called Nextcloud and CD into this. And then run InPhySec init. So, connect'
+
+[24:30] [scene:talk]
+VISUAL: 
+AUDIO: 'the local repository to the InPhySec platform. Now, we need to select the organization Seal Creative and the InPhySec project HomeLab Secrets. And now, we need to choose an environment'
+
+[24:44] [scene:talk]
+VISUAL: 
+AUDIO: 'here. So, environment is uh prod, I think. And the path is the directory. Note, this is case sensitive, so [snorts] that\'s quite important. And'
+
+[24:57] [scene:talk]
+VISUAL: 
+AUDIO: 'yeah, so this should retrieve all the secrets. You can see that you immediately see the secrets in here, but you can also get one specific secret. For example, if you want to only get the database password, then you can also use'
+
+[25:12] [scene:talk]
+VISUAL: 
+AUDIO: 'this and you get the single secret value. All right, so that\'s already great to get access to this, but how do you inject them into your application? Of course, you do not want to copy and'
+
+[25:24] [scene:talk]
+VISUAL: 
+AUDIO: 'paste them. In physical has a pretty cool command for this and this is called In physical run. This will run any command that you want and automatically inject them into environment variables. The path is again home lab and then dash'
+
+[25:38] [scene:talk]
+VISUAL: 
+AUDIO: 'dash and then we can run any command that we want. You can run any deploy script, you can run a docker compose up, you can run a docker command, you can run a an npm command. Now, of course,'
+
+[25:50] [scene:talk]
+VISUAL: 
+AUDIO: 'there\'s one caveat here that does not directly integrate this into docker management platforms. If you might be using Portainer or Dockhand or Arcane or something like this, this does not work'
+
+[26:02] [scene:talk]
+VISUAL: 
+AUDIO: 'because you cannot easily inject the secrets automatically in third-party applications. That\'s not possible. But just to demonstrate this quickly to you what would happen if we want to run a docker container for this, I\'m just going to use my boiler plates to quickly'
+
+[26:15] [scene:talk]
+VISUAL: 
+AUDIO: 'spin up a compose stack for Nextcloud, generate this with a database using a traffic host and all of that stuff. So, this will create a new directory. Okay, it created a subdirectory,'
+
+[26:28] [scene:talk]
+VISUAL: 
+AUDIO: 'unfortunately, but yeah, that\'s that\'s not really important. It can be in subdirectories as well. So, here you can see the compose file. It\'s using a couple of credentials here that are currently stored as .env file.'
+
+[26:42] [scene:talk]
+VISUAL: 
+AUDIO: 'You can see database user, database password, Nextcloud admin, Nextcloud admin password. These are currently auto-generated from the boiler plates project, but of course I do not want this in the future. I want to load them'
+
+[26:54] [scene:talk]
+VISUAL: 
+AUDIO: 'from in physical instead. So, I\'m just going to delete this environment variable file because we do not need this. Now, we need to run the same in physical run command with the production environment path home lab and now we'
+
+[27:06] [scene:talk]
+VISUAL: 
+AUDIO: 'just going to run docker compose up {dash} d. All right, that\'s it. Now, you can also see in the log it\'s injecting four in physical secrets into your application process and it\'s starting'
+
+[27:18] [scene:talk]
+VISUAL: 
+AUDIO: 'the container. It\'s currently using my server test one docker context. So, it\'s even not running on my local machine. All right, so yeah, Nextcloud was successfully installed. So, I think now it should be ready. Let\'s open a new'
+
+[27:30] [scene:talk]
+VISUAL: 
+AUDIO: 'browser tab and let\'s go to Nextcloud server test one and yeah, so that\'s it. Now, we can return back to the in physical secrets, go into home lab and'
+
+[27:43] [scene:talk]
+VISUAL: 
+AUDIO: 'the password for the production environment we\'ll just copy and go back here. Admin password. Log in and yeah, so that\'s it. We are logged into'
+
+[27:56] [scene:talk]
+VISUAL: 
+AUDIO: 'Nextcloud. And yeah, so this is basically how you can easily inject the secrets from in physical into docker compose. Of course, it works well for these simple commands, but as I\'ve told you it does not work with third-party'
+
+[28:10] [scene:talk]
+VISUAL: 
+AUDIO: 'applications like Portainer or so. But there is still a solution how you can make this possible. Let\'s go back to the in physical documentation because there is an integration to docker compose by injecting the in physical CLI into every'
+
+[28:23] [scene:talk]
+VISUAL: 
+AUDIO: 'service where you want to load the environment variables. So, you will have to update the docker file, modify the start command in your docker file, and then obtain an access token for the'
+
+[28:35] [scene:talk]
+VISUAL: 
+AUDIO: 'secure connection and feed the access token into the docker container, and then the docker container itself can retrieve the secure secrets from in physical. Now, of course, this is a little more complicated, yeah, and it'
+
+[28:48] [scene:talk]
+VISUAL: 
+AUDIO: 'can be usable for custom applications, but for running third-party applications, I know that you do not want to modify or rebuild the Docker image of the vendor. It is still possible, so maybe if you want to see'
+
+[29:00] [scene:talk]
+VISUAL: 
+AUDIO: 'that, I can make a tutorial about this, but this requires a couple of things in your setup like your CI/CD pipeline to automatically rebuild the Docker container with a specific command, so'
+
+[29:12] [scene:talk]
+VISUAL: 
+AUDIO: 'you can certainly automate this. But, it\'s a a little more complicated. Yeah, I don\'t know. I think the better way how I personally will use this in my home lab is when we return back to my Git platform, you can see that I\'m'
+
+[29:26] [scene:talk]
+VISUAL: 
+AUDIO: 'mostly managing my Docker containers or the Docker Compose stacks in GitLab CI/CD, at least right now. I will change that in future to another system as well, but we\'ll do a separate tutorial'
+
+[29:38] [scene:talk]
+VISUAL: 
+AUDIO: 'about this. But, currently, how I\'m for example deploying my Traefik container, I\'m running a CI/CD pipeline, and this CI/CD pipeline will run a Docker stack component or a Docker deploy component.'
+
+[29:52] [scene:talk]
+VISUAL: 
+AUDIO: 'To show you this, I need to go back. By the way, I\'ve done tutorials on this, so if you want to see the details how exactly that\'s working, I\'ll link you this in the description, but here you can see that is the automation pipeline'
+
+[30:04] [scene:talk]
+VISUAL: 
+AUDIO: 'that actually runs this. Yeah, so here in the templates, you can see deploy compose. So, here I\'ve created an automation pipeline that will basically pull the Docker Compose stack from my repository and then simply just run'
+
+[30:18] [scene:talk]
+VISUAL: 
+AUDIO: 'Docker Compose up. And now, I could technically just go in here, modify the component, and add in the in physical run command, yeah. So, then I could securely inject the in physical secrets'
+
+[30:32] [scene:talk]
+VISUAL: 
+AUDIO: 'into my CI/CD pipeline and automatically deploy or run container updates with this as well. So, yeah, it\'s maybe a bit more complicated, but it is certainly possible to automate this. Anyways, even'
+
+[30:46] [scene:talk]
+VISUAL: 
+AUDIO: 'with that limitation, I think In Physical is absolutely amazing, especially once you start using automation scripts, build scripts, deploy scripts, CI/CD, GitLab Runners, or repeatable deployment workflows.'
+
+[30:59] [scene:talk]
+VISUAL: 
+AUDIO: 'Again, I might probably follow up on this as well, because there are a few interesting ways how you can actually solve this. There are some nice alternatives as well to secret management, like we might have a look at'
+
+[31:11] [scene:talk]
+VISUAL: 
+AUDIO: 'the Open Bower project or stuff like that. So, if you want to follow this and if you\'re interested about secret management and DevOps processes, then please give this video thumbs up, subscribe to the channel. I\'ll do more'
+
+[31:23] [scene:talk]
+VISUAL: 
+AUDIO: 'videos about this. And please tell me your feedback. What do you think about In Physical? Do you already use it or another tool? Then please let me know in the comments. And as always, thank you so much for watching. A big thanks goes'
+
+[31:36] [scene:talk]
+VISUAL: 
+AUDIO: 'out to all of my supporters and members of my channel. You guys are really amazing. You make all of this possible. And of course, I\'m going to catch you in the next video. Take care. Bye-bye.'
