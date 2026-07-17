@@ -1,0 +1,252 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Open-Source Video Intelligence Just Got Way More Powerful
+channel: @octopusinc_
+duration: 12:50
+source: https://www.youtube.com/watch?v=Md5Xb4SGG5w
+upload_date: 20260716
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'We\'ve been on quite the run for the first half of 2026. Video.js got an upgrade and Mux Robots, the new video intelligence layer for videos on Mux, was just released. But there\'s one more project that I think is special and should get more attention, and that would be the Mux AI SDK.'
+
+[00:12] [scene:talk]
+VISUAL: 
+AUDIO: 'Mux Robots uses Mux AI under the hood. The difference is that Mux AI is an open source version where you bring your own API keys to access AI workflows with the use of your own subscriptions,'
+
+[00:25] [scene:talk]
+VISUAL: 
+AUDIO: 'like OpenAI, Anthropic, ElevenLabs, and more. Mux AI is really customizable and great for those projects that require a more nuanced experience. So that made me think, “Why not fine-tune my own model?"'
+
+[00:37] [scene:talk]
+VISUAL: 
+AUDIO: 'There are some benefits to using a fine-tuned model like privacy, control, and customization. So this is where it all clicked for me. If Mux AI is the open source older sibling of Mux Robots,'
+
+[00:49] [scene:talk]
+VISUAL: 
+AUDIO: 'that means I can just fork the repository and add any providers that I want? And as long as the providers allow me to make an OpenAI API-compatible endpoint I can use any multimodal model'
+
+[01:01] [scene:talk]
+VISUAL: 
+AUDIO: 'that I\'d like to use, right? So for my first round of experimentation, I decided to start with Ollama. Ollama is an open source'
+
+[01:13] [scene:talk]
+VISUAL: 
+AUDIO: 'inference provider that can run on your local machines. I enjoyed this for a little bit, but it just turns out that my GPU was the bottleneck. Even with smaller models. It just took a long time to actually process Mux AI jobs.'
+
+[01:25] [scene:talk]
+VISUAL: 
+AUDIO: 'Bummer. Even though I had this GPU bottleneck to deal with I still saw from the responses that the models were extremely capable. So I did a lot of searching, and I came across Baseten.'
+
+[01:38] [scene:talk]
+VISUAL: 
+AUDIO: 'Baseten gave me exactly what I needed. I got a dedicated GPU and also a way to fine-tune my model by using the same API. Having Baseten as a provider gave me access to a huge library'
+
+[01:51] [scene:talk]
+VISUAL: 
+AUDIO: 'of open source models. And Baseten also provides a new training SDK that allows you to fine-tune those models and then make a dedicated deployment of your fine-tuned model that hooks up to a GPU of your choice. That then pairs with an endpoint'
+
+[02:04] [scene:talk]
+VISUAL: 
+AUDIO: 'that gives you access to those models via an HTTP request. So when the dedicated deployment is up and running, you can just use the model’s name when configuring Mux AI in your code just like this. So let\'s continue on this first challenge'
+
+[02:21] [scene:talk]
+VISUAL: 
+AUDIO: 'of figuring out how I wanted to fine-tune this model. There are a ton of philosophies out there and techniques of how you can fine-tune or train a model. I chose LoRA. LoRA stands for Low-Rank Adaptation.'
+
+[02:33] [scene:talk]
+VISUAL: 
+AUDIO: 'It\'s a way to fine-tune a big model without updating all of the weights, which can save you a huge amount of compute, memory, and money. A good analogy for LoRA is like having an expensive camera,'
+
+[02:46] [scene:talk]
+VISUAL: 
+AUDIO: 'which would be the pre-trained model, and then adding a special macro lens to that camera to take a picture of an insect up close, which would be the LoRA adapter. That extra lens allows the camera'
+
+[02:58] [scene:talk]
+VISUAL: 
+AUDIO: 'to behave a bit differently. But the main function of taking a picture still stands. LoRA is affordable, flexible, and still allows the model to keep traits from its original pre-trained version'
+
+[03:10] [scene:talk]
+VISUAL: 
+AUDIO: 'in addition to some new behavioral adjustments. This is great because if you already have a model that is super capable in one modality and maybe needs a little bit of adjustments in another modality,'
+
+[03:23] [scene:talk]
+VISUAL: 
+AUDIO: 'you can still keep that same level and layer of intelligence and then add on to another layer of the intelligence or modality, just like a Lego block. Before we continue,'
+
+[03:35] [scene:talk]
+VISUAL: 
+AUDIO: 'let’s break down how LoRA fine-tuning works in four simple steps. Number one, you need to prepare your data set. So clean up all that data, get it right, because this is gonna help you get your expected output.'
+
+[03:47] [scene:talk]
+VISUAL: 
+AUDIO: 'Number two, prepare LoRA adapters. Number three, train the model. And then four, merge the model adapters into that pre-trained model and publish. Something to note, though.'
+
+[04:01] [scene:talk]
+VISUAL: 
+AUDIO: 'Mux AI and Mux Robots both operate using multimodal models only. So I needed to prepare a dataset for the text modality, and I chose JSONL because that\'s what LoRA likes. My data set was structured for'
+
+[04:14] [scene:talk]
+VISUAL: 
+AUDIO: 'training only transcript or text-driven Mux AI workflows. So that includes summarization, generating chapters, asking questions, translating captions, and also editing captions.'
+
+[04:26] [scene:talk]
+VISUAL: 
+AUDIO: 'The thing is, at first, I didn’t have enough organic data that I needed to make a sufficient fine-tuned model. So I decided to use Codex to generate 10,000 synthetic data points'
+
+[04:38] [scene:talk]
+VISUAL: 
+AUDIO: 'that covered a conversation with AI, so I can get a proper response with Mux AI. The goal was to make the model more reliable for Mux specific workflows. So that means that it had to return'
+
+[04:51] [scene:talk]
+VISUAL: 
+AUDIO: 'valid JSON, follow the expected schemas, handle the transcripts and captions, and also produce task specific outputs consistently. JSONL is powerful because it allows you to create JSON in one line, and this JSON'
+
+[05:04] [scene:talk]
+VISUAL: 
+AUDIO: 'was really just a conversational output format of working with an AI model. So you\'re talking to the assistant, the user, the system, you know the whole game. So the first model that I used'
+
+[05:19] [scene:talk]
+VISUAL: 
+AUDIO: 'was Mistral\'s 3.1 Small 24 billion parameter model. And this is a small enough model that I could use on a dedicated GPU that would work fast and also is just really compatible to use with LoRA.'
+
+[05:31] [scene:talk]
+VISUAL: 
+AUDIO: 'So let\'s dive into how I\'m using Baseten. So to kick off my training with Baseten, I need to work with four major files. I have this config.py, which is used for the runtime and compute.'
+
+[05:45] [scene:talk]
+VISUAL: 
+AUDIO: 'And then I have run.sh, which is just for installing dependencies. Then I have train.py, which is for loading the model, formatting the dataset, applying LoRA, and then saving the checkpoints.'
+
+[05:57] [scene:talk]
+VISUAL: 
+AUDIO: 'And then of course, just like a lot of other Python projects, we have requirements.txt, which is just, again, more dependencies for Python, like transformers, datasets, peft, trl, and any other things that you\'ll need.'
+
+[06:12] [scene:talk]
+VISUAL: 
+AUDIO: 'So here\'s my dataset. The dataset has over ten thousand points like I mentioned. And it was synthetically generated with GPT 5.5 and Codex as the harness. These are all different AI workflows'
+
+[06:24] [scene:talk]
+VISUAL: 
+AUDIO: 'that are provided by Mux AI. The purpose of this dataset is to improve the outputs from a model using Mux AI. So this is going to basically simulate a bunch of different conversations'
+
+[06:38] [scene:talk]
+VISUAL: 
+AUDIO: 'and how we want a model to respond based on the JSON format that Mux AI jobs will give you. Another interesting file is this manifest. It was also synthetically generated,'
+
+[06:50] [scene:talk]
+VISUAL: 
+AUDIO: 'and the manifest made it easy to sanity check the dataset before training. So it confirmed that it had ten thousand rows, split everything evenly across the five workflows, and allowed me to just do my thing. The config file is super important'
+
+[07:04] [scene:talk]
+VISUAL: 
+AUDIO: 'because it allowed me to define how the Baseten training job was going to work. So you can see here I used PyTorch and a CUDA image in order to enable the caching, the checkpointing, and then I added all these other hyperparameters'
+
+[07:17] [scene:talk]
+VISUAL: 
+AUDIO: 'and environment variables that I can just swap out easily in order to make sure that this training job actually went the way that I needed it to. To me, the most interesting work actually happened within the'
+
+[07:29] [scene:talk]
+VISUAL: 
+AUDIO: 'training script itself in train.py. This script loaded the JSONL dataset that was synthetically generated and checked that every row had a message array and converted each chat style example into one training string.'
+
+[07:43] [scene:talk]
+VISUAL: 
+AUDIO: 'And by myself, that would have taken forever. This script also checked if the tokenizer had a chat template. And if it did, it used the tokenizer template. Otherwise, it fell back to use Mistral style format'
+
+[07:56] [scene:talk]
+VISUAL: 
+AUDIO: 'with system, user, and assistant turns. Another important highlight is the get_lora_target_modules function that I created. This script is interesting because it split 5% of the data for validation and loaded'
+
+[08:08] [scene:talk]
+VISUAL: 
+AUDIO: 'the base model when CUDA was available. So for Mistral 3.1, I targeted the main attention and MLP project layers with LoRA. This is where the core benefit'
+
+[08:20] [scene:talk]
+VISUAL: 
+AUDIO: 'of LoRA comes into play. The training job did not retrain the full twenty-four billion parameter model. It just attached a small adapter, and it trained only those adapter\'s weights. Which made the job much more practical.'
+
+[08:33] [scene:talk]
+VISUAL: 
+AUDIO: 'And way more affordable. So I used supervise fine-tuning and PEFT to provide LoRA with the configuration that was needed. So that during the training job, we can mark down certain checkpoints'
+
+[08:45] [scene:talk]
+VISUAL: 
+AUDIO: 'and that Baseten can actually add them to the directory. This way, you can access those checkpoints within different deployments. At the end of the training job, I wrote the script to pretty much save everything.'
+
+[08:57] [scene:talk]
+VISUAL: 
+AUDIO: 'From the adapter, tokenizer, and even the small metadata. Launching my training job was really simple. I just used Truss, which just seems to be Baseten\'s CLI tool that gives you access to all their different APIs and SDKs.'
+
+[09:09] [scene:talk]
+VISUAL: 
+AUDIO: 'You could pretty much treat Truss as a vehicle to move things like your training code, dataset, dependencies, configs over to the H100 GPU or whatever GPU you choose.'
+
+[09:21] [scene:talk]
+VISUAL: 
+AUDIO: 'And this is how I was able to push everything onto a dedicated GPU that I use to actually host this model. After a while, the training finished, and Baseten saved the LoRA checkpoints.'
+
+[09:33] [scene:talk]
+VISUAL: 
+AUDIO: 'The deploy step was actually written here in this deploy config script that I wrote. Which just combines the original base model with the trained LoRA checkpoint and then produces a dedicated hosted'
+
+[09:46] [scene:talk]
+VISUAL: 
+AUDIO: 'endpoint with the fine-tuned behavior applied at inference time. Which pretty much means I can just bring my adapter anywhere that I can attach to a Mistral 3.1 Small model,'
+
+[09:59] [scene:talk]
+VISUAL: 
+AUDIO: 'which is pretty powerful. And once the model was deployed, all I needed to do was just take the base URL from Baseten and add it to Mux AI since Baseten is now a provider. And I was actually pretty'
+
+[10:12] [scene:talk]
+VISUAL: 
+AUDIO: 'happy with the results. So our model is completely active, and let\'s see how it responds from this dedicated deployment. If I go here to my terminal where I have my forked version of Mux AI,'
+
+[10:25] [scene:talk]
+VISUAL: 
+AUDIO: 'I can go and type in an NPM command to use Mux AI to generate chapters of a certain video asset that I have. So I change the provider to Baseten, and let\'s see how this works. And then boom.'
+
+[10:38] [scene:talk]
+VISUAL: 
+AUDIO: 'See? So this uses Baseten as a provider, and we\'re also using my Mux AI Mistral 3.1 Small model to get this response when it comes to making chapters. And I can do the same thing'
+
+[10:51] [scene:talk]
+VISUAL: 
+AUDIO: 'as well with summarizations. So if I go do NPM run example, and then summarizations on that same asset, let\'s get a summarization for it. So it includes my transcript.'
+
+[11:06] [scene:talk]
+VISUAL: 
+AUDIO: 'The tone, we\'re gonna start with neutral for this example. And I got my title that was generated from Mux AI and my Mistral Small model, and it\'s just going over this video of Darius, and he\'s going over Tailwind.'
+
+[11:20] [scene:talk]
+VISUAL: 
+AUDIO: 'Overall, I was happy with what 10,000 synthetically generated data points was even able to produce. I feel good about it, and I even integrated it into my own video streaming app called RoboTube.'
+
+[11:32] [scene:talk]
+VISUAL: 
+AUDIO: 'Hey, my own personal sentiment, I think that my fine-tuned model had a better response than some of the other big models out there. I mean, take a look at this summarization workflow that I used,'
+
+[11:44] [scene:talk]
+VISUAL: 
+AUDIO: 'one with Mux Robots and one with my fine-tuned model in Mux AI. The Mux Robots response is way more verbose in comparison. And this is just my own personal take, but I think a more concise'
+
+[11:57] [scene:talk]
+VISUAL: 
+AUDIO: 'and straight to the point response is actually way more useful and better for the user experience. But hold on, this doesn\'t mean Mux Robots isn\'t a good fit for your projects.'
+
+[12:09] [scene:talk]
+VISUAL: 
+AUDIO: 'In fact, it can be the right fit for your project, especially if you want to move fast and have all the model wiring in the backend completely done for you. Robots just takes care of that,'
+
+[12:22] [scene:talk]
+VISUAL: 
+AUDIO: 'and you can just handle it all from the Mux API and using one set of access keys and secrets. This was a great experiment, and Mux AI gave me the granular control that I was looking for. So if your team is looking for a'
+
+[12:35] [scene:talk]
+VISUAL: 
+AUDIO: 'more customized experience when it comes to video intelligence, then I think Mux AI is really worth a shot.'

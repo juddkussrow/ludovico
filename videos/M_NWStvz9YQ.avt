@@ -1,0 +1,240 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: ComfyUI Krea 2 Edit: New VAE Trick (+ Free Workflow)
+channel: @octopusinc_
+duration: 12:13
+source: https://www.youtube.com/watch?v=M_NWStvz9YQ
+upload_date: 20260714
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'in this video and I\'ll show you how to edit any image using the Creal 2 model. I\'ll also teach you a new trick to fix blurry images using the Wen 2.1 VAE upscaler. So, first we need to install a custom node for Creal 2 edit. And let me tell'
+
+[00:13] [scene:talk]
+VISUAL: 
+AUDIO: 'you, this is a third-party node and you can\'t find it in the ComfyUI library. Therefore, we must install it manually. And to do this, just follow my given'
+
+[00:25] [scene:talk]
+VISUAL: 
+AUDIO: 'steps and copy the repository URL. Go to the custom nodes folder inside ComfyUI and open that folder in your command prompt. Type git clone and paste the URL and'
+
+[00:37] [scene:talk]
+VISUAL: 
+AUDIO: 'just press enter. This will download the Creal 2 edit node and after that, you just restart your ComfyUI. That\'s it. Next, we need to download the LoRA file.'
+
+[00:50] [scene:talk]
+VISUAL: 
+AUDIO: 'So, here, please download version 1.1. Do not download version 1. Why? Because it\'s the older version and you do not need it.'
+
+[01:03] [scene:talk]
+VISUAL: 
+AUDIO: 'You will see two compressed versions of this file, rank 128 and rank 64. If you use the rank 128 version, you\'ll get about 94% of the quality of'
+
+[01:15] [scene:talk]
+VISUAL: 
+AUDIO: 'uncompressed version. Keep in mind that a lower rank means lower quality. So, if your computer has low VRAM, you should use the rank 128 version.'
+
+[01:27] [scene:talk]
+VISUAL: 
+AUDIO: 'Otherwise, you can download the standard version 1.1. After you download the file, save it inside your ComfyUI\'s models LoRAs folder.'
+
+[01:39] [scene:talk]
+VISUAL: 
+AUDIO: 'Now, let\'s set up our models in ComfyUI. For this workflow, load the Creal 2 Turbo FP8 model. In the LoRA loader, select the Creal 2'
+
+[01:51] [scene:talk]
+VISUAL: 
+AUDIO: 'identity edit LoRA. For the text encoder, you need Coin VL, and for the VAE, select the Coin image VAE. Once you install the custom node, you'
+
+[02:03] [scene:talk]
+VISUAL: 
+AUDIO: 'will find two new nodes on your screen. The first is Create to Edit Model Patch, and the second one is Create to Edit Grounded Encode. The model patch node has options for'
+
+[02:16] [scene:talk]
+VISUAL: 
+AUDIO: 'source latent and source latent B. The grounded encode node has options for image and image B. So, here, because we are editing only one image, connect your image to the'
+
+[02:28] [scene:talk]
+VISUAL: 
+AUDIO: 'first image and source latent inputs. You do not need the B inputs unless you want to edit using two reference images. Next, connect these nodes to your'
+
+[02:40] [scene:talk]
+VISUAL: 
+AUDIO: 'sampler, and now we are ready to test our workflow. Now, let\'s run our very first edit test. Load your starting image into the workflow.'
+
+[02:53] [scene:talk]
+VISUAL: 
+AUDIO: 'Here, I\'ll use a photo of a woman wearing gray shorts. So, before you type your prompt, I\'ll give you a helpful tip. Use clear action words like change, replace, add, or remove.'
+
+[03:06] [scene:talk]
+VISUAL: 
+AUDIO: 'Do not use vague words like transform. And for this test, let\'s use the prompt, "Change her gray shorts to bright red shorts." When you run this prompt, the model'
+
+[03:19] [scene:talk]
+VISUAL: 
+AUDIO: 'successfully changes her shorts to red. However, the final image might look blurry. And if you get a blurry image, the problem is usually your image'
+
+[03:31] [scene:talk]
+VISUAL: 
+AUDIO: 'resolution. If your image resolution is not divisible by eight, the output will look blurry. And to fix this, use the resize image and masking node to scale your image by'
+
+[03:44] [scene:talk]
+VISUAL: 
+AUDIO: 'a multiple of eight. Even with the correct resolution, the edit might make your image look a bit dark or lose some sharpness. And to fix this, lower your lower'
+
+[03:56] [scene:talk]
+VISUAL: 
+AUDIO: 'strength from one down to 0.75. This makes the image look sharper and keeps it closer to your original photo. Now, let\'s try a different edit.'
+
+[04:08] [scene:talk]
+VISUAL: 
+AUDIO: 'We\'ll add a pair of black designer sunglasses to her face. When you edit a face, I suggest increasing your grounding resolution to 1280.'
+
+[04:20] [scene:talk]
+VISUAL: 
+AUDIO: 'This higher setting helps the sunglasses blend into her face naturally. And if you want to give the AI more freedom to make changes, you can lower the grounding resolution to 512. If you do not want the original image to'
+
+[04:35] [scene:talk]
+VISUAL: 
+AUDIO: 'change too much, keep this value higher. What I love about this model is it adds the sunglasses without changing the woman\'s face at all. Now, let\'s try a harder test.'
+
+[04:50] [scene:talk]
+VISUAL: 
+AUDIO: 'We\'ll change the wooden floor in our image into a soft gray carpet. And for this edit, set your grounding resolution to 1024. And let\'s wait for the result.'
+
+[05:04] [scene:talk]
+VISUAL: 
+AUDIO: 'Now, we have got the result. Let\'s look at our first result. The model successfully replaced most of the wooden floor, but it completely missed the small'
+
+[05:16] [scene:talk]
+VISUAL: 
+AUDIO: 'wooden area behind the woman. So, here I tried changing the resolution and the lower strengths, but the prompt alone did not fix that missed area.'
+
+[05:28] [scene:talk]
+VISUAL: 
+AUDIO: 'However, here I found a helpful rule. When you change large textured areas like carpets or floors, use a lower strength of one.'
+
+[05:41] [scene:talk]
+VISUAL: 
+AUDIO: 'If you edit details on a face, keep the lower strength lower. Setting this LORA strength to one gives you a much better carpet texture. And to fix the missed area behind the'
+
+[05:53] [scene:talk]
+VISUAL: 
+AUDIO: 'woman, we do not need to use a manual mask. Instead, we can solve this simply by updating our prompt. So, here what have I done is I updated our prompt to be more'
+
+[06:06] [scene:talk]
+VISUAL: 
+AUDIO: 'specific. As you can see, the missing area is now completely fixed in our result. So, if the model misses a specific area, make sure to describe that area clearly'
+
+[06:19] [scene:talk]
+VISUAL: 
+AUDIO: 'in your prompt. This simple trick works well without needing extra masks. So, sometimes what happens is two images have the exact same resolution, but one'
+
+[06:32] [scene:talk]
+VISUAL: 
+AUDIO: 'still comes out blurry, while the other works very well. If you still get a blurry image, try manually changing the height of your image to 1280. And when I did this, the blur was mostly'
+
+[06:46] [scene:talk]
+VISUAL: 
+AUDIO: 'fixed, but the quality went down. And to improve the quality, I lowered the LORA strength to 0.75. I also tested the Create to Draw model'
+
+[06:58] [scene:talk]
+VISUAL: 
+AUDIO: 'using 30 steps and a CFG of three. To use the Draw model with a higher CFG, you need to duplicate the Create to Edit Grounded Encode node. Leave the second prompt empty, use the'
+
+[07:12] [scene:talk]
+VISUAL: 
+AUDIO: 'same source image, and connect it to the negative conditioning input. However, I still had quality issues. So, I went back to the Turbo model.'
+
+[07:24] [scene:talk]
+VISUAL: 
+AUDIO: 'And now, let me share another trick to improve your image quality. Instead of using the Coin Image VAE, you can use the When 2.1 VAE 2x upscaler. And to do this, you need the ComfyUI VAE'
+
+[07:40] [scene:talk]
+VISUAL: 
+AUDIO: 'Utils custom node. Add the Load VAE node and the VAE Decode node from the VAE Utils. This VAE upscales the image during decoding and makes the quality much'
+
+[07:53] [scene:talk]
+VISUAL: 
+AUDIO: 'better. Now, let\'s test if this model can remove objects from an image. Here, I want to remove the women from our scene. So, here I use the prompt remove the'
+
+[08:05] [scene:talk]
+VISUAL: 
+AUDIO: 'women, show only the empty hotel and balcony. And now, look at the result. The model removed her completely. It kept the original colors and the rest of the'
+
+[08:17] [scene:talk]
+VISUAL: 
+AUDIO: 'scene intact. Next, let\'s see how well this model blends text into the environment. And here, I typed this prompt add a neon sign to the wooden slats that says SPA.'
+
+[08:31] [scene:talk]
+VISUAL: 
+AUDIO: 'So, as a result, the model added the text onto the wooden slats. It looks very natural and blends into the background very well.'
+
+[08:44] [scene:talk]
+VISUAL: 
+AUDIO: 'When we use the VAE 2.1 VAE upscaler, we also get a larger, cleaner image. Keep in mind that the editing model can lose quality at high resolutions. The VAE upscaler helps fix the issue and'
+
+[08:58] [scene:talk]
+VISUAL: 
+AUDIO: 'improves your final decoded image in ComfyUI. Now, let\'s try another quick edit. I want to change the women\'s hair. So, here I typed this prompt change her'
+
+[09:12] [scene:talk]
+VISUAL: 
+AUDIO: 'straight dark hair to curly and frizzy hair. And you can see the result. The model changed her hair correctly while keeping her face and features the same.'
+
+[09:25] [scene:talk]
+VISUAL: 
+AUDIO: 'So, this is the quality of this model. You can try it yourself and let me know the results in comment section. And that\'s all about editing a single image. Now, moving on'
+
+[09:38] [scene:talk]
+VISUAL: 
+AUDIO: 'image to image B and use VAE encode to connect it to source latent B. Now, you have image A and image B. We will replace the woman in image A with the character from image B.'
+
+[09:52] [scene:talk]
+VISUAL: 
+AUDIO: 'Now, here I used this prompt. Place the woman wearing the red t-shirt and beige short from image B on the wooden edge of the circular jacuzzi in image A. Keep the balcony background and ocean'
+
+[10:06] [scene:talk]
+VISUAL: 
+AUDIO: 'view from image A exactly the same. And let me give you a heads-up. Remember to name image A and image B clearly inside your prompt. Now, let\'s check our result. The model'
+
+[10:20] [scene:talk]
+VISUAL: 
+AUDIO: 'successfully replaced the woman, but the result was not completely correct. The previous woman\'s leg was still visible and parts of the wine glass and bathrobe remained behind.'
+
+[10:33] [scene:talk]
+VISUAL: 
+AUDIO: 'However, this was a good first attempt because the model understood the instruction to replace her. And to fix this here I changed the prompt.'
+
+[10:45] [scene:talk]
+VISUAL: 
+AUDIO: 'And the prompt is completely replace the woman in white bathrobe and her wine glass from image A and this successfully replaced the woman.'
+
+[10:57] [scene:talk]
+VISUAL: 
+AUDIO: 'But, here we had a small problem. The woman had a shoe on only one foot. To fix this, I updated the prompt again and to state clearly that she should'
+
+[11:09] [scene:talk]
+VISUAL: 
+AUDIO: 'wear matching white shoes on both feet. Now, you can see the replacement looks much better. This is how you use two image editing to replace a character.'
+
+[11:22] [scene:talk]
+VISUAL: 
+AUDIO: 'Now, for our next test, I loaded a red dress as image B to replace the woman\'s white bathrobe in image A. And the model did a great job. It removed the bathrobe and replaced it'
+
+[11:36] [scene:talk]
+VISUAL: 
+AUDIO: 'with a red dress. Next, I tested a night sky with a moon as image B. And when I ran the workflow, the model replaced the daytime background in image'
+
+[11:48] [scene:talk]
+VISUAL: 
+AUDIO: 'A with this night scene. So, Crea 2 edit works very well for image editing. We got good results and passed several difficult tests. This is everything you need to know'
+
+[12:02] [scene:talk]
+VISUAL: 
+AUDIO: 'about editing images with Crea 2. And if this video was helpful to you, please subscribe to the channel for more content like this. Thank you. Bye-bye.'
