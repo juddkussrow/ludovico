@@ -1,0 +1,200 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: AI Video Can Now "Remember" Events! Testing MSR V2 Logic|Multi-Shot Character Recovery
+channel: @octopusinc_
+duration: 09:59
+source: https://www.youtube.com/watch?v=9jvT3HTcD6o
+upload_date: 20260717
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:intro]
+VISUAL: Two animated characters flank a growing plant in a pot.
+AUDIO: 'Now let’s look at a different kind of video In the reference images we only have a seed priestess and a palace made of glass But after generation you’ll notice that it doesn’t simply place a lotus flower into the frame It actually completes the full process:'
+
+[00:12] [scene:talk]
+VISUAL: 
+AUDIO: 'planting the seed sprouting, growing leaves and finally blooming And because we use reference images we can lock down every detail fairly tightly which makes the whole image extremely controllable'
+
+[00:25] [scene:ui]
+VISUAL: A web page titled "What's New in V2" for Licon MSR, detailing improvements in consistency, stability, and scene logic.
+AUDIO: 'Now let’s look at this video This is not a single continuous one-shot Even though the camera is cutting between shots you’ll notice that the character’s hairstyle clothing and identity are still preserved very well'
+
+[00:37] [scene:talk]
+VISUAL: 
+AUDIO: 'This is the new change brought by MSR V2 We already covered the first version of this technique before This technology can not only read multiple reference images at the same time but also organize the reference information into an event'
+
+[00:50] [scene:ui]
+VISUAL: ComfyUI workflow showing nodes for `Get_refimg`, `Licon MSR`, and `Video Combine`.
+AUDIO: 'or recover the character again after a shot change MSR stands for Multiple Subject Reference which means multi-subject reference Image one can be a character'
+
+[01:02] [scene:talk]
+VISUAL: 
+AUDIO: 'image two can be another character image three can be a prop and the background image is required LiconMSR is a special node It organizes these images into a reference sequence and then passes that sequence to LTX two point three to generate the video'
+
+[01:15] [scene:talk]
+VISUAL: 
+AUDIO: 'The overall installation is fairly simple Besides downloading this LoRA you need to install an extension called ComfyUI-Licon-MSR For easier demonstration'
+
+[01:27] [scene:promo]
+VISUAL: A promotional screen for RunningHub.ai with the text "COUNTLESS MODELS AND MASTERPIECES".
+AUDIO: 'I also built the workflow on RunningHub In the ComfyUI space RunningHub is a very solid online workflow platform because whenever a new model or a new extension appears it follows up right away'
+
+[01:40] [scene:talk]
+VISUAL: 
+AUDIO: 'RunningHub also provides an online communication platform for ComfyUI creators where you can find a lot of creative inspiration and example workflows There are quite a lot of nodes in this workflow but the parts that really matter are only three'
+
+[01:54] [scene:ui]
+VISUAL: ComfyUI workflow showing nodes for `Get_refimg`, `Licon MSR`, and `Video Combine`.
+AUDIO: 'The first part is the reference images In our example we reserve four image slots and one background You do not need to fill all of them Each image should have a clear responsibility'
+
+[02:06] [scene:talk]
+VISUAL: 
+AUDIO: 'If one slot is not needed just leave it empty The second part is the node we just mentioned LiconMSR It is responsible for generating the reference sequence Here'
+
+[02:19] [scene:ui]
+VISUAL: ComfyUI workflow showing nodes for `Prompt Relay Encode`, `Get_model`, `Get_clip`, `Get_empty_latent`, and `LTXVConditioning`.
+AUDIO: 'the reference sequence we use is sixty-five frames Pay attention: this is not the final video length Our final video length is two hundred forty-one frames which is about ten seconds This is the length of the reference sequence'
+
+[02:31] [scene:talk]
+VISUAL: 
+AUDIO: 'so don’t confuse the two The third part is called PromptRelayEncode This is a prompt encoder developed specifically for this model It should be using Prompt Relay technology Also'
+
+[02:44] [scene:talk]
+VISUAL: 
+AUDIO: 'pay attention to how the prompt is written First the prompt needs to explain each image: what each image is responsible for Then you write the actual video generation prompt Basically you can write it in this order: first, the initial image;'
+
+[02:57] [scene:result]
+VISUAL: A still image of a woman in a traditional white and gold gown, used as a reference image.
+AUDIO: 'second, the action process; third, the final state If needed you can also describe the camera and style This makes it easier for the model to understand and if something goes wrong we can also tell which step is causing the problem'
+
+[03:09] [scene:talk]
+VISUAL: 
+AUDIO: 'All right let’s start with a basic example Here we made a two-subject example There are two beautiful women one wearing a white gown and one wearing a green gown In the prompt'
+
+[03:22] [scene:result]
+VISUAL: A hand picking up a small, intricate object with tweezers from a tray.
+AUDIO: 'I originally wanted both of them to stand on the two sides of the jewelry table for the entire video But let’s look at the actual result It first shows the worktable then briefly shows an empty room and finally the two people enter the frame'
+
+[03:35] [scene:talk]
+VISUAL: 
+AUDIO: 'But you’ll notice that after the two characters appear their identities and clothing are still very clear They can be separated very easily And if you compare them with our reference images you’ll see that the overall consistency is still quite strong'
+
+[03:48] [scene:result]
+VISUAL: A woman in warrior attire standing in a luxurious train car with clouds visible outside the windows.
+AUDIO: 'A lot of people care about this question: how many reference images can it actually use and how many gives the best result? So let’s do a capacity test First let’s look at one character plus one background'
+
+[04:00] [scene:talk]
+VISUAL: 
+AUDIO: 'The character is an Eastern female swordswoman and the background is very interesting: a train speeding through the clouds Take a look The character appears in the corresponding scene and this is very stable'
+
+[04:12] [scene:talk]
+VISUAL: 
+AUDIO: 'Next, we add one more character One is wearing red clothing and one is wearing black clothing Again, look at the result There is no problem here either Then we continue adding characters At this point you’ll notice a small change'
+
+[04:24] [scene:result]
+VISUAL: Three women in different fantasy attires standing together in a luxurious setting.
+AUDIO: 'The third character does not appear from the very beginning She enters the frame somewhere in the middle In the end three people appear in the video at the same time When we reach four characters I originally thought the result might become worse but actually'
+
+[04:38] [scene:talk]
+VISUAL: 
+AUDIO: 'the quality is still very good The problem is that one character does not appear at all Of course this does not prove that it does not support four characters because we only ran one sample But we can still reach one conclusion:'
+
+[04:50] [scene:result]
+VISUAL: A detailed image of a transparent, ornate umbrella.
+AUDIO: 'if we provide too many reference images problems may appear and at that point you may need to generate multiple attempts Next let’s look at a special example This example is not about stuffing in more characters Instead'
+
+[05:04] [scene:talk]
+VISUAL: 
+AUDIO: 'it uses multiple images together to build one character The first image provides a face reference The second image provides a very beautiful gown The third image provides a transparent mechanical umbrella The background image is a futuristic Eastern opera house'
+
+[05:17] [scene:talk]
+VISUAL: 
+AUDIO: 'Now let’s look at how these four types of information are merged into the image First we can see that no second person appears And the clothing, face'
+
+[05:29] [scene:result]
+VISUAL: A woman in an elaborate black gown holding a transparent umbrella in a grand hall with rain effects.
+AUDIO: 'prop and background basically stay consistent with our reference images This means we can fix a character’s identity then change her clothing and even change the prop and the shooting space But there are still some details'
+
+[05:42] [scene:talk]
+VISUAL: 
+AUDIO: 'For example, in the prompt I wrote that the umbrella should rotate But in the video this effect is not very obvious So this result proves that attribute assembly works but it does not prove that complex motion will also work'
+
+[05:56] [scene:result]
+VISUAL: A hand using tweezers to place a glowing, geometric object onto a tray.
+AUDIO: 'All right, next let’s make the action design a little more complex The first scene is object handoff My prompt is very explicit There is a prop, which is a chip First, it is on a tray'
+
+[06:09] [scene:talk]
+VISUAL: 
+AUDIO: 'A person picks it up with tweezers Then a mechanical hand enters the scene and takes it Finally the chip belongs to the robot The result does complete the path of tray tweezers and mechanical hand However'
+
+[06:22] [scene:result]
+VISUAL: A plant in a pot, with a single flower blooming, set in a grand, ethereal glass structure.
+AUDIO: 'the prop keeps getting enlarged and its overall shape changes a little So I think detailed reproduction is still one area where the model needs improvement The second example is plant growth Our reference images are a seed'
+
+[06:34] [scene:talk]
+VISUAL: 
+AUDIO: 'a very beautiful priestess the final blooming state and a very beautiful glass house The video starts with the seed falling into the flowerpot then it sprouts, grows leaves'
+
+[06:46] [scene:talk]
+VISUAL: 
+AUDIO: 'and finally blooms into a blue and white lotus The beginning of the video the growth process and the final result are all very clear This shows that our reference images can provide a clear target state allowing the model to generate a complete event'
+
+[07:01] [scene:talk]
+VISUAL: 
+AUDIO: 'instead of simply placing several objects into the frame Next let’s look at two counterexamples meaning examples with problems In the first one we ask the woman in red and the woman in blue to approach from two sides cross paths'
+
+[07:17] [scene:talk]
+VISUAL: 
+AUDIO: 'and then swap positions As a result the two people do approach each other and their clothing does not obviously get swapped But in terms of action they never truly cross from beginning to end So we can only say that during close-range interaction'
+
+[07:29] [scene:result]
+VISUAL: A woman in a white, futuristic gown standing in a grand, ornate hall with a large spherical object behind her.
+AUDIO: 'the identities are preserved and the clothing does not get mixed but the position swap never actually happens Another failed test looks like this We wanted a large mechanical ring to occlude the character'
+
+[07:41] [scene:talk]
+VISUAL: 
+AUDIO: 'and then we wanted to check whether the character consistency could be maintained when the person appears again after being occluded We tested this several times but the occlusion state never really appeared'
+
+[07:53] [scene:result]
+VISUAL: A close-up of a woman's face, showing detailed features and expression.
+AUDIO: 'We can’t judge whether this is because the training set lacks this kind of content but when the model tries to represent occlusion the result is not especially good Finally'
+
+[08:05] [scene:talk]
+VISUAL: 
+AUDIO: 'let’s look at the multi-shot test The video starts with a medium shot of two characters then cuts to a close-up of character A then cuts to a close-up of character B and finally returns to an over-the-shoulder shot'
+
+[08:17] [scene:talk]
+VISUAL: 
+AUDIO: 'First we can see that all four shots are achieved After the characters re-enter the frame their clothing and identities are also preserved quite stably So this group gives us a clear conclusion:'
+
+[08:32] [scene:talk]
+VISUAL: 
+AUDIO: 'MSR V2 can recover the visual identities of two characters after multiple shot changes I think this is also where it is most suitable for narrative videos You don’t necessarily have to keep every character fixed inside one shot'
+
+[08:45] [scene:talk]
+VISUAL: 
+AUDIO: 'You can also try switching shots and make the whole narrative more coherent When actually using this model there are a few things to pay attention to First'
+
+[08:58] [scene:result]
+VISUAL: Three women in fantasy attire standing in a grand, open hall, with one holding a red staff.
+AUDIO: 'don’t provide too many reference images Start with two or three core references Also each image should have one main responsibility and that responsibility should be simple Don’t make one image responsible for this and that at the same time Prompt writing is also very important'
+
+[09:14] [scene:talk]
+VISUAL: 
+AUDIO: 'It has two parts First explain the reference images Then write the full video generation process We write the initial state first then the action process and then the final state For complex actions'
+
+[09:26] [scene:result]
+VISUAL: Two women in elaborate red and blue gowns standing face-to-face in a grand hall.
+AUDIO: 'make sure to clearly describe left and right positions the order of events and which object belongs to whom Also pay attention to the two counterexamples When actions like occlusion and position swapping appear you may need multiple attempts to get a better result'
+
+[09:40] [scene:talk]
+VISUAL: 
+AUDIO: 'So that is the MSR V2 model we’re introducing today Compared with the V1 model I think the overall result is much better What are you waiting for?'
+
+[09:52] [scene:talk]
+VISUAL: 
+AUDIO: 'Go try it yourself Follow me and become someone who truly understands AI'
