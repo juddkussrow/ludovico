@@ -1,0 +1,248 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: NEXT LEVEL Image Editing in ComfyUI — Full KREA2 EDIT Workflow
+channel: @octopusinc_
+duration: 12:53
+source: https://www.youtube.com/watch?v=PH0LxTkEXGg
+upload_date: 20260717
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'With one custom node, create two edit tens, create two from a text-to-image model into a full image editor, adding new objects into a scene, removing them completely, preserving a subject identity, and even full character'
+
+[00:12] [scene:talk]
+VISUAL: 
+AUDIO: 'replacement to see exactly where it holds up and where it breaks. So, in this video, we\'ll learn how to install a custom node and build a workflow from scratch using the Clown Shark sampler for far better quality, all from a'
+
+[00:25] [scene:talk]
+VISUAL: 
+AUDIO: 'simple basic workflow. So, let\'s start by getting the basic requirements. We first visit the page here on Hugging Face. You\'ll find the Laura model here, Crea Two Identity Edit. This is a'
+
+[00:38] [scene:talk]
+VISUAL: 
+AUDIO: 'trained Laura that gives Crea Two instructions for image-based editing. [music] So, on the page, we can find various versions of the model. If you are low on VRAM, you can download the'
+
+[00:50] [scene:talk]
+VISUAL: 
+AUDIO: 'lower rank versions, R128 or R64. However, this will not give you the highest quality. I\'m using a 3060 RTX with 12 gigs of VRAM, so I\'ll go ahead'
+
+[01:02] [scene:talk]
+VISUAL: 
+AUDIO: 'to download the V1.1 version, which is the recent update. Go ahead to click on the download icon. Inside your ComfyUI directory, go to models, find your Laura'
+
+[01:14] [scene:talk]
+VISUAL: 
+AUDIO: 'folder. I have created a folder here for Crea Two, and my model is saved here, as you guys can see. Next, we go onto the page here,'
+
+[01:26] [scene:talk]
+VISUAL: 
+AUDIO: 'then we need to install this custom node manually, Crea Two Edit. So, we go to the code, then copy the provided link here. After, go into your ComfyUI'
+
+[01:38] [scene:talk]
+VISUAL: 
+AUDIO: 'directory once again, find the custom node folder. Inside this folder, go to your directory path above. We click to highlight the path, type CMD, then hit enter. This opens the command terminal,'
+
+[01:52] [scene:talk]
+VISUAL: 
+AUDIO: 'and we type git clone. Now, paste the link we have copied earlier. Next, hit enter to clone the custom node. This is fast and quick, so you will see done once it\'s completed.'
+
+[02:06] [scene:talk]
+VISUAL: 
+AUDIO: 'From here, we can close the command terminal. Now, inside your folder, you will find a custom node in your directory Create 2 Edit. From this point, we can open Comfy UI or restart'
+
+[02:19] [scene:talk]
+VISUAL: 
+AUDIO: 'Comfy if you already have it opened. Once we are inside Comfy, we go to the manager custom nodes manager. Then, please make sure to install these'
+
+[02:31] [scene:talk]
+VISUAL: 
+AUDIO: 'custom nodes, which will be used in the workflow. RG3 Custom Node, Res for Life, then Use Everywhere Custom Node. After that, we close the manager and restart'
+
+[02:44] [scene:talk]
+VISUAL: 
+AUDIO: 'Comfy UI. On top of that, make sure you are using the most recent Comfy UI version. Now, let\'s begin with the workflow from scratch. We double-click on the canvas, then type Load Image.'
+
+[02:57] [scene:talk]
+VISUAL: 
+AUDIO: 'Select the native node here, then we make this bigger. Next, I\'ll drag and drop the image I\'d like to edit in here. Let\'s zoom closer onto the node, then we'
+
+[03:09] [scene:talk]
+VISUAL: 
+AUDIO: 'drag out the image, go to search, type Resize Image. Select the node here, Resize Image/Mask. This node helps us to preserve the aspect ratio of your image whilst'
+
+[03:22] [scene:talk]
+VISUAL: 
+AUDIO: 'providing multiple ways to determine the new size. So, I\'ll click on resize type, then choose from the various methods, Scale Shorter Dimension. This scales the image from shorter side, then the long'
+
+[03:35] [scene:talk]
+VISUAL: 
+AUDIO: 'side follows automatically. Next, we change the shorter size to be 1024 because Create 2 table runs best at 1024 or 2048 resolution, which is 1K or 2K.'
+
+[03:47] [scene:talk]
+VISUAL: 
+AUDIO: 'Next, click on scale method, we select Lanczos. This scaling method keeps your image details sharp. From here, we\'ll encode the image so the model'
+
+[03:59] [scene:talk]
+VISUAL: 
+AUDIO: 'understands the image as a latent or noise. &gt;&gt; [music] &gt;&gt; And the VAE encode node converts your pixels into latent. Now, let\'s get the new image dimensions after it has been resized. We use the node get image size.'
+
+[04:13] [scene:talk]
+VISUAL: 
+AUDIO: 'This node will extract the resized image dimensions. Now, we link the resized image node. I\'ll zoom out from here, then place these set of nodes into our'
+
+[04:25] [scene:talk]
+VISUAL: 
+AUDIO: 'first group. I\'ll move these nodes closer to the bottom of the group. I\'ll name this group load image. Now, let\'s move to the next workflow to load our models. If you don\'t already have these'
+
+[04:39] [scene:talk]
+VISUAL: 
+AUDIO: 'models, please watch my earlier video on how to begin using ComfyUI. I\'ll be loading the basic models here for this group. We double-click and search load diffusion model. Next, we double-click and search once'
+
+[04:53] [scene:talk]
+VISUAL: 
+AUDIO: 'again for load clip. After that, double-click and search for load VAE. These are the three basic components for'
+
+[05:05] [scene:talk]
+VISUAL: 
+AUDIO: 'almost every workflow. Now, let\'s load in the models. Click on unit name, select ComfyUI table FP8 scaled model. In the load clip, we click on clip name,'
+
+[05:17] [scene:talk]
+VISUAL: 
+AUDIO: 'we choose ComfyUI Under type, we choose ComfyUI. 2. After that, to load a VAE node, click on VAE name, we select ComfyUI image VAE.'
+
+[05:30] [scene:talk]
+VISUAL: 
+AUDIO: 'Now, let\'s connect these nodes for further processing. We drag out the model output, go to search, type power LoRA loader. This node will allow us to load the LoRA'
+
+[05:43] [scene:talk]
+VISUAL: 
+AUDIO: 'model which transforms Korea 2 into an edit model. Now, click on add Laura from your Laura list, select Korea 2 identity edit V1 which we have downloaded'
+
+[05:56] [scene:talk]
+VISUAL: 
+AUDIO: 'earlier. After that, drag out the clip output into the Laura input slot. Now, to connect the VAE, I\'ll right click, select add node. Find the custom node use everywhere. Then select anything'
+
+[06:10] [scene:talk]
+VISUAL: 
+AUDIO: 'everywhere. This node will simplify the spline connection so it auto connects to every VAE input later in the workflow. If you don\'t have this custom node, you'
+
+[06:22] [scene:talk]
+VISUAL: 
+AUDIO: 'can make the connections manually. So, let\'s highlight this set of nodes. We right click, select add group for selected nodes. Then, let\'s name this load models.'
+
+[06:34] [scene:talk]
+VISUAL: 
+AUDIO: 'After we have loaded our models, we need the conditioning nodes and a sampling node. So, double click on the canvas, then type Korea 2 edit. If you have installed a custom node in the'
+
+[06:47] [scene:talk]
+VISUAL: 
+AUDIO: 'beginning, you\'ll find this node Korea 2 grounded and cold. This node will function as our edit instructions on the source image. Now, make a copy of the node below. The above node will be the'
+
+[06:59] [scene:talk]
+VISUAL: 
+AUDIO: 'positive conditioning. The node below will be the negative conditioning. Now, we join the clip into the positive and down into the negative. After this, we need a sampler to process'
+
+[07:13] [scene:talk]
+VISUAL: 
+AUDIO: 'all this information from the nodes to see the output. I have tested the K sampler and clown sampler for the best results. So, for this workflow, I will use the clown shark sampler. Make sure'
+
+[07:26] [scene:talk]
+VISUAL: 
+AUDIO: 'you have installed a custom node res for life. And in my members video, I have explained the difference between the K sampler and using the clown shark sampler. So, let\'s make the input'
+
+[07:38] [scene:talk]
+VISUAL: 
+AUDIO: 'connections for the Clown Shark Sampler. We link the positive conditioning into the positive input slot. We match the negative conditioning as well into negative. Drag out the latent input'
+
+[07:51] [scene:talk]
+VISUAL: 
+AUDIO: 'slot. Go down, we select empty latent image. This node sets the image size. Now, to understand the model connection, I\'ll zoom out to see the other workflows. Double click on the canvas'
+
+[08:04] [scene:talk]
+VISUAL: 
+AUDIO: 'and once again, type Create 2 Edit. This time, we select the node Source Patch. This node gives the model the ability to edit an image you give it while keeping the original picture mostly the same.'
+
+[08:17] [scene:talk]
+VISUAL: 
+AUDIO: 'Now, drag the model from the Power LoRA Loader into the input model slot. Next, drag out the model from the Source Patch into the sampler node. Next is the'
+
+[08:29] [scene:talk]
+VISUAL: 
+AUDIO: 'Source latent input slot. We drag this from the Load Image VAE and code node into the input slot. Then, we can use the same size from the Get Image node to'
+
+[08:41] [scene:talk]
+VISUAL: 
+AUDIO: 'drive the resolution. We feed the width into the width and the height into the height. I\'ll go ahead to highlight all the nodes. We right-click, then we place them into our third group. We can name'
+
+[08:54] [scene:talk]
+VISUAL: 
+AUDIO: 'this conditioning and sampling. Moving on to see the final image, drag out the output. Go down, select VAE Decode. The VAE will be auto-connected using the'
+
+[09:07] [scene:talk]
+VISUAL: 
+AUDIO: 'Everywhere node, or you can manually drag this into the slot. Next, drag out the image. Go down, select Save Image. This node will save your generated image'
+
+[09:19] [scene:talk]
+VISUAL: 
+AUDIO: 'as a PNG file into your directory. After that, we connect the resized image into the positive prompt image. Then, we do the same into the negative prompt image. Once we have all the nodes connected,'
+
+[09:34] [scene:talk]
+VISUAL: 
+AUDIO: 'let\'s test the workflow using Creal 2 as an edit model. I\'ll zoom onto the positive edit node. I already have my prompt, so I\'ll paste it in here. This is to create a scene where the bathtub'
+
+[09:47] [scene:talk]
+VISUAL: 
+AUDIO: 'is filled with bananas overflowing onto the bathroom floor. I\'ll advise not just typing a short prompt, but rather making the prompt as detailed as possible. Now, let\'s update the Clown Shark sampler'
+
+[10:00] [scene:talk]
+VISUAL: 
+AUDIO: 'settings to get the best results. ETA, this controls the noise. A lower number is clean and sharp. A higher number adds noise back into the denoising process. Sometimes this is helpful, sometimes'
+
+[10:13] [scene:talk]
+VISUAL: 
+AUDIO: 'not. So, we set this to be zero. Sampler name is the method the model uses to clean the noise away. I\'ll select SDE {underscore} 2S DPM++ For the scheduler, I\'ll choose simple.'
+
+[10:27] [scene:talk]
+VISUAL: 
+AUDIO: 'Steps is the number of stages necessary to remove the noise. So, we\'ll decrease to eight steps for the table model. CFG is how strictly the model obeys your prompt, so we set this to be one. Seed'
+
+[10:40] [scene:talk]
+VISUAL: 
+AUDIO: 'is the starting point of the noise, so we can set this to be any number. Then, we change from random to be fixed to lock the seed noise. After that,'
+
+[10:52] [scene:talk]
+VISUAL: 
+AUDIO: 'everything else will be fine. Let\'s zoom out from here, then we see how Creal 2 performs as an edit model. We go up, then we hit run. All right, so this is all done, and'
+
+[11:05] [scene:talk]
+VISUAL: 
+AUDIO: 'let\'s zoom in closer to have a better view. The image quality is first of all decent below here at a 1K resolution, and considering what we have, leveraging an image model for editing, this is very'
+
+[11:19] [scene:talk]
+VISUAL: 
+AUDIO: 'impressive. The Laura keeps the true character of the scene, and the appearance realism is highly believable. If you want to push this for more detail in skin and some textures, you can test'
+
+[11:31] [scene:talk]
+VISUAL: 
+AUDIO: 'at a 1K resolution, then your final render can be at 2K. And to get maximum details, I included this additional workflow &gt;&gt; [music]'
+
+[11:43] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; using a one-step upscale process. You can explore fast, and then you grab as much detail as you can once you\'ve got the shot you want. [music] Now, I also tested the model with two image inputs. However, the results were not too'
+
+[11:56] [scene:talk]
+VISUAL: 
+AUDIO: 'convincing. The model struggles with a few tries before something decent. So, I would suggest using this model for a one image edit for the most efficient result. Hopefully, we\'ll have an official edit model using Creater 2. So,'
+
+[12:10] [scene:talk]
+VISUAL: 
+AUDIO: 'just to mention, this is the unofficial technique to use the model as an editing tool, and if you like to try this for yourself, you\'ll find the link to all the workflows in the description. If you'
+
+[12:23] [scene:talk]
+VISUAL: 
+AUDIO: 'enjoyed this video, do not forget to leave a like. And if you desire to get some of the best shocking images in AI generation, you can check out this video on your screen using Creater 2, and I\'ll see you all in the next video upload.'

@@ -1,0 +1,160 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Google Just Made TensorFlow.js Obsolete (LiteRT.js)
+channel: @octopusinc_
+duration: 08:09
+source: https://www.youtube.com/watch?v=8c68vFpT9Tk
+upload_date: 20260717
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:ui]
+VISUAL: Google for Developers blog post about LiteRT.js.
+AUDIO: 'Google just released a new runtime library that lets you run machine learning and AI models inside the browser at near native speeds. It\'s called light rt.js and it\'s super impressive. So, in this video, we\'ll take a look at light rt.js, see how it'
+
+[00:13] [scene:ui]
+VISUAL: Details about LiteRT.js being a JavaScript binding for LiteRT, using WebAssembly.
+AUDIO: 'works, and we\'re going to test it out by building a real-time 3D motion capture application running entirely in the browser. It\'s going to be a lot of fun, so let\'s dive into it.'
+
+[00:25] [scene:talk]
+VISUAL: 
+AUDIO: 'So, what exactly is light rt.js? Well, it\'s a JavaScript binding for light RT, their on-device inference runtime,'
+
+[00:37] [scene:ui]
+VISUAL: TensorFlow.js website, highlighting it as a JavaScript library for machine learning.
+AUDIO: 'that\'s been running models on Android, iOS, and embedded hardware for years now. But, light rt.js brings the same runtime into the browser via WebAssembly using the light rt.js core NPM package.'
+
+[00:50] [scene:talk]
+VISUAL: 
+AUDIO: 'And, here\'s what makes light rt.js different. So, Google already has a browser machine learning library. It\'s called tensorflow.js, and it\'s been around for years. But,'
+
+[01:02] [scene:ui]
+VISUAL: Diagram showing LiteRT.js using WebAssembly (WASM).
+AUDIO: 'tensorflow.js runs on JavaScript-based kernels, and that is a big bottleneck. You see, JavaScript kernels can\'t fully exploit CPU or GPU the way a native runtime can. So, tensorflow.js has'
+
+[01:15] [scene:talk]
+VISUAL: 
+AUDIO: 'always lagged behind native app performance. But, light rt.js uses WebAssembly, and it ships with its own optimized kernel. So, the same native runtime that powers Android and iOS'
+
+[01:28] [scene:ui]
+VISUAL: Diagram of LiteRT.js backend architecture: CPU (XNNPACK), GPU (ML Drift/WebGPU), NPU (WebNN Experimental).
+AUDIO: 'inference is compiled to WASM and then exposed to JS. So, you\'re not getting a web-flavored abstraction layer anymore, you\'re actually getting a truly optimized runtime engine. And, this also'
+
+[01:41] [scene:talk]
+VISUAL: 
+AUDIO: 'shows up in their back-end architecture. Light rt.js has three different tiers that allows it to perform well on CPUs, GPUs, and even NPUs. So, on the CPU side, it uses XNNPACK, Google\'s'
+
+[01:55] [scene:ui]
+VISUAL: Google for Developers blog post section on ML Drift for GPU acceleration.
+AUDIO: 'optimized CPU kernel library, which is multi-threaded with relaxed SIMD support. And this is your universal fallback that will run anywhere, no GPU required. But for GPUs, it uses ML Drift'
+
+[02:09] [scene:talk]
+VISUAL: 
+AUDIO: 'over WebGPU, and this is where the real performance lives. It utilizes native GPU kernels, so things like shaders are no longer rendered using some sort of JavaScript orchestration. And for MPUs,'
+
+[02:22] [scene:ui]
+VISUAL: Bar charts comparing LiteRT.js performance (CPU and WebGPU) against ONNX runtime for various models.
+AUDIO: 'it has WebNN, which is still experimental in Chrome and Edge, and it targets dedicated neural processing hardware for power efficient inference. And according to Google\'s own'
+
+[02:34] [scene:talk]
+VISUAL: 
+AUDIO: 'benchmarks, which they conducted on a 2024 MacBook Pro with M4 silicon, it appears to have a three times faster inference than other web runtimes on CPU and GPU across vision and audio models.'
+
+[02:48] [scene:ui]
+VISUAL: Table showing performance benchmarks (ms) and speedup factors for different tasks (Image Classification, Object Detection, ASR, Image Segmentation, Text Encoder) across WebGPU/CPU and WebNN/CPU.
+AUDIO: 'And when running workloads like object tracking, audio transcription, or image manipulation on the GPU or MPU, rather than on the CPU, we get performance boosts that jump from five times all the'
+
+[03:02] [scene:talk]
+VISUAL: 
+AUDIO: 'way to 60 times faster results, depending on the task. And it\'s worth mentioning that that is the best-case scenario, and Google also acknowledges this. So, your mileage may vary taking into consideration your specific GPU,'
+
+[03:16] [scene:talk]
+VISUAL: 
+AUDIO: 'thermal throttling, and driver quality. And there\'s one more thing that really matters for this runtime. If you already have models that you use to run on PyTorch or TensorFlow, if you\'ve got an existing TFLite file, light rt.js can'
+
+[03:29] [scene:ui]
+VISUAL: Demo of a real-time object detection application showing "Me" and "Me + Dog <3" with confidence scores.
+AUDIO: 'actually run it directly. And if you\'re on PyTorch, there\'s also light rt torch, a conversion path that takes your model straight to .tflite. Plus, there\'s also'
+
+[03:41] [scene:talk]
+VISUAL: 
+AUDIO: 'an AI Edge Quantizer for shrinking model sizes without a full rewrite. So, legacy workflows you\'ve been using on tensorflow.js can easily be ported to the new light rt.js which is super cool. But, what can'
+
+[03:54] [scene:ui]
+VISUAL: Demo of an ESRGAN Image Upscaler application in a web browser.
+AUDIO: 'you actually do with it? Well, Google has some pretty cool demos out there which give you a sense of the range. So, you can do real-time YOLO object detection, monocular depth estimation'
+
+[04:06] [scene:talk]
+VISUAL: 
+AUDIO: 'with the depth anything library that turns your webcam feed into a live 3D point cloud, and it can also do image upscaling with the real ESRGAN library. And all these demos are running'
+
+[04:20] [scene:ui]
+VISUAL: Google for Developers page mentioning LLM support with LiteRT-LM.js.
+AUDIO: 'completely client-side with no back-ends, no APIs, directly inside your browser. And they\'ve already announced what\'s coming next, light rt lm.js, and this is going to be for running full'
+
+[04:32] [scene:talk]
+VISUAL: 
+AUDIO: 'language models locally in the browser. So, this isn\'t just for computer vision, soon it will also offer local LLM inference, too. All right, that all sounds great, but I wanted to test it out on my own to see how powerful it'
+
+[04:45] [scene:demo]
+VISUAL: Real-time motion capture demo with a person on webcam and a 3D character, showing CPU (Wasm) backend, 37 FPS, 23.4 ms inference.
+AUDIO: 'actually is. So, for this demo, I decided to create a real motion capture application that uses your webcam for real-time pose estimation. And it also runs entirely on your browser,'
+
+[04:58] [scene:talk]
+VISUAL: 
+AUDIO: 'client-side, and offline with no strings attached. So, I live-coded this app on Cloud Code using the new Fable 5 model, and here\'s the end result. And by the way, if you want to download this repo'
+
+[05:10] [scene:demo]
+VISUAL: Full body pose estimation in the motion capture demo, still on CPU (Wasm).
+AUDIO: 'and play around with it yourself, I\'ve also added the link to the project in the description below. So, here light rt.js is running through the browser using a blaze pose model with 33 body landmarks driving a 3D character in'
+
+[05:24] [scene:talk]
+VISUAL: 
+AUDIO: 'real-time using 3.js. There\'s no back-end server, and everything you see is happening on this machine right now, completely offline. So, we can see here that on the CPU, we are averaging around'
+
+[05:37] [scene:demo]
+VISUAL: Motion capture demo switched to WebGPU backend, showing 120 FPS, 7.7 ms inference.
+AUDIO: '38 FPS with an inference of 23.3 milliseconds. And we can also see that the pose estimation is lagging behind a bit. But now, if we switch to the WebGPU version, we can see that we are now'
+
+[05:51] [scene:talk]
+VISUAL: 
+AUDIO: 'getting a solid 120 frames per second with an 8.4 ms inference, and the pose estimation is also a bit faster. And that\'s roughly a three times jump in frame rate and a 2.8 times drop in'
+
+[06:05] [scene:demo]
+VISUAL: Motion capture demo with a different 3D character (X Bot Mixamo rig) using WebGPU.
+AUDIO: 'inference time, which lines up with Google\'s own numbers, though it\'s on the modest end of what they published. But we have to take into consideration that Blaze Pose is generally a small model,'
+
+[06:17] [scene:talk]
+VISUAL: 
+AUDIO: 'so there\'s less raw compute for the GPU to chew through. But even with that, moving the tensor math off the CPU and on the WebGPU cuts the latency enough that the lag is significantly lower. And'
+
+[06:31] [scene:demo]
+VISUAL: User demonstrating motion capture and discussing exporting to Blender.
+AUDIO: 'I also added a feature where you can record your pose capture animation and export it as a JSON or as a Biovision motion capture file, and then open that in something like Blender and retarget'
+
+[06:43] [scene:talk]
+VISUAL: 
+AUDIO: 'that animation to your own custom character. And as you can see here, it\'s not perfect. The movements are not very detailed or refined, so this is still very much a work in progress, but it\'s super cool that I was able to get this'
+
+[06:57] [scene:talk]
+VISUAL: 
+AUDIO: 'initial version working in just 10 minutes using the new light rt.js. So there you have it, folks. That is light rt.js in a nutshell. It\'s honestly amazing to see how far WebAssembly has'
+
+[07:09] [scene:ui]
+VISUAL: Google for Developers page mentioning LLM support with LiteRT-LM.js.
+AUDIO: 'pushed the capabilities of running complex applications on the browser. And this new light rt.js library truly proves that sometimes JavaScript can be a real bottleneck for getting to those'
+
+[07:21] [scene:talk]
+VISUAL: 
+AUDIO: 'near native performance speeds. So I\'m super impressed with this library, and I can\'t wait to try out light rtlm.js when it finally ships later this year. But what do you think about light rt.js?'
+
+[07:34] [scene:ui]
+VISUAL: Better Stack advertisement.
+AUDIO: 'Have you tried it? Will you use it? Let us know in the comments down below. And folks, if you like these types of technical breakdowns, please let me know by smashing that like button underneath the video and also don\'t forget to subscribe to our channel. This has been'
+
+[07:48] [scene:talk]
+VISUAL: 
+AUDIO: 'Andres from Better Stack and I will see you in the next videos.'

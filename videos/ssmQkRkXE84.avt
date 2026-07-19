@@ -1,0 +1,280 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: How LoRa (ExpressLRS) Drone Receivers Work
+channel: @octopusinc_
+duration: 14:37
+source: https://www.youtube.com/watch?v=ssmQkRkXE84
+upload_date: 20260718
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'Okay, so I\'m about 4 km away from Thomas and there\'s a massive forest in the way, but these receivers are holding up just fine. All of them are still connected, which is crazy. There\'s a forest in the way. The point of these receivers are to'
+
+[00:12] [scene:talk]
+VISUAL: 
+AUDIO: 'receive information from your transmitter, namely the position of your sticks and your switches. But how can they go so far? And why does your Wi-Fi connection at the same frequency die at'
+
+[00:26] [scene:talk]
+VISUAL: 
+AUDIO: 'the end of your garden? These are Express LRS receivers. And since the code for them is open source, there\'s hundreds of different options for you to buy, but they are almost never open'
+
+[00:39] [scene:talk]
+VISUAL: 
+AUDIO: 'source. We\'re going to change that with these four receivers. Each one is unique in its own little way, and one even violates a general design rule. And I'
+
+[00:51] [scene:talk]
+VISUAL: 
+AUDIO: 'bet you can\'t tell which one it is. I\'m going to tell you a little bit about RF, about signal modulation, noise, and then finally, Laura. But first, let\'s go and do the range test. Let\'s'
+
+[01:04] [scene:talk]
+VISUAL: 
+AUDIO: 'go. Let\'s go. So, here\'s our plan. Thomas is going to stand on top of the big red structure with the transmitter to get some high ground. And then I\'m going to take the bike and the receivers and just keep biking until we lose'
+
+[01:17] [scene:talk]
+VISUAL: 
+AUDIO: 'connection. Uh, I don\'t think this is going to work. This is a radio frequency wave at 2.4 GHz, which sounds really high, but oh wait, let\'s zoom out.'
+
+[01:32] [scene:talk]
+VISUAL: 
+AUDIO: 'No, no, that was visual light. This is 2.4 GHz. As you can see, it is a much lower frequency, so it has a longer wavelength, which means it can do things'
+
+[01:45] [scene:talk]
+VISUAL: 
+AUDIO: 'that light can\'t, like go through things that would normally block light. Kind of like how higher frequency sounds can get blocked much more easily than lower frequency sounds. Okay, let\'s say that'
+
+[01:57] [scene:talk]
+VISUAL: 
+AUDIO: 'you want to use this 2.4 GHz wave to transmit information. How would you do that? The simplest way is the analog way with amplitude modulation and frequency'
+
+[02:10] [scene:talk]
+VISUAL: 
+AUDIO: 'modulation. With AM, we modulate the carrier wave by increasing or decreasing the amplitude based on the signal that we want to transfer. And with frequency'
+
+[02:22] [scene:talk]
+VISUAL: 
+AUDIO: 'modulation, we modulate the carrier wave to change in frequency based on the signal. This is how well radio works and your walkie-talkie. Now, what if we would want to send digital information'
+
+[02:35] [scene:talk]
+VISUAL: 
+AUDIO: 'instead of analog? Well, it\'s pretty similar. Amplitude shift keying is like AM modulation, but we modulate the amplitude in discrete steps. FSK is like'
+
+[02:47] [scene:talk]
+VISUAL: 
+AUDIO: 'FM modulation, but again with discrete frequency steps. We can have just two levels or four or eight. Having more discrete levels allows us to put more'
+
+[02:59] [scene:talk]
+VISUAL: 
+AUDIO: 'information in the same signal. FSK is actually how most digital systems work, like this Fly Sky system. But it\'s also the reason why this Fly Sky system tops out at a couple hundred meters and this'
+
+[03:12] [scene:talk]
+VISUAL: 
+AUDIO: 'Express LRS receiver can go like 100 km. Since this is digital, we can do some tricks that we can\'t do in analog. We can actually combine amplitude and phase information at the same time. This would'
+
+[03:26] [scene:talk]
+VISUAL: 
+AUDIO: 'be QAM or quadriure amplitude modulation. I chose this because if we visualize it in a plot, it becomes very clear that this dramatically increases the amount of unique combinations that'
+
+[03:39] [scene:talk]
+VISUAL: 
+AUDIO: 'we can make. And this is fundamentally what all modern high data rate wireless applications use like Starlink, Wi-Fi, 4G, 5G, you name it. But what if we don\'t want high data rates? What if we'
+
+[03:53] [scene:talk]
+VISUAL: 
+AUDIO: 'just want the most range? I sent some away to some place very far away over there. Um, and I sent him a a Google Maps location, but I think it\'s the'
+
+[04:05] [scene:talk]
+VISUAL: 
+AUDIO: 'wrong one. &gt;&gt; Let\'s not touch them. &gt;&gt; I can hear you. &gt;&gt; What? Oh So, you\'ve already seen this location right here. And this is'
+
+[04:18] [scene:talk]
+VISUAL: 
+AUDIO: 'where we got to about 3 km away. And since we still had good signal, we were just going to go farther away. But I\'ll let Thomas do the talking. &gt;&gt; There he is going all the way over there. Even further'
+
+[04:33] [scene:talk]
+VISUAL: 
+AUDIO: 'there &gt;&gt; should be about 6 km away. &gt;&gt; I need to tell you something about noise margins. Yay. Every receiver has a noise floor. It is the background hiss of the'
+
+[04:48] [scene:talk]
+VISUAL: 
+AUDIO: 'universe like thermal noise and also other signals leaking in from the outside like Wi-Fi. It gets a bit complicated, but let\'s just say that this floor sits at around'
+
+[05:00] [scene:talk]
+VISUAL: 
+AUDIO: 'minus 110 dpm for this receiver. For all of the techniques that I just listed, like FSK, ASK, or QAM, your incoming signal, which by the way gets weaker'
+
+[05:12] [scene:talk]
+VISUAL: 
+AUDIO: 'when you move away, it needs to be stronger than the noise floor to be decoded. How much stronger you may ask? Well, let\'s look back at the QAM plot. All of these dots, they represent a'
+
+[05:24] [scene:talk]
+VISUAL: 
+AUDIO: 'unique code and they are quite close to each other. If we then start to add some noise and, you know, move away from the transmitter, the neighboring signals, they start to overlap and we can\'t decode it anymore. If this was your'
+
+[05:38] [scene:talk]
+VISUAL: 
+AUDIO: 'Wi-Fi router, it\'ll have to fall back on a lower QAM, which is why your Wi-Fi speed goes down when you move away from the router. Cool, right? So, how do we go further? Here\'s the part that'
+
+[05:50] [scene:talk]
+VISUAL: 
+AUDIO: 'shouldn\'t even be physically possible. Laura can decode signals below the noise floor. Even if you cannot see the Laura signal, the receiver can still decode it. In fact, more than half of the'
+
+[06:03] [scene:talk]
+VISUAL: 
+AUDIO: 'signals that we got during our range test were received below the noise floor. This video is not sponsored, but we still need to find a way to keep our'
+
+[06:17] [scene:talk]
+VISUAL: 
+AUDIO: 'lights on. With a couple of friends, I\'ve now started a company and we want to start selling these FPV parts that I\'ve been developing in the last couple of videos. So, if this is something you\'re interested in, I would really appreciate it if you would go to the website and sign up for the newsletter'
+
+[06:30] [scene:talk]
+VISUAL: 
+AUDIO: 'to be notified when the products release. Back to the video. Okay, so how does Laura work? Well, it has two ingredients that make it work. Firstly, the chirp. Yeah, like like a bird. Instead of sending a flat tone'
+
+[06:43] [scene:talk]
+VISUAL: 
+AUDIO: 'frequency, Laura sends a frequency that does a continuous sweep, a chirp. The data is stored in where the chirp starts. So each Laura symbol therefore'
+
+[06:55] [scene:talk]
+VISUAL: 
+AUDIO: 'has a different starting point. Secondly, we need the fast 4year transform or FFTD. It takes a chunk of a signal and then extracts the frequency contents of said signal. It tells us'
+
+[07:09] [scene:talk]
+VISUAL: 
+AUDIO: 'what frequencies are there in the signal. All signals are just made up of a sum of different frequency signals. So here\'s the trick. The receiver takes the incoming noisy chirp and then multiplies'
+
+[07:23] [scene:talk]
+VISUAL: 
+AUDIO: 'it by its own internal reference chirp going the other way. We call that a d chirp, which is a really fitting name. The two sweeps, they cancel out and then'
+
+[07:35] [scene:talk]
+VISUAL: 
+AUDIO: 'they concentrate all of their energy into a single tone with a single frequency. You might be seeing where this is going because then you do an FFTD. The signal that you\'re trying to'
+
+[07:47] [scene:talk]
+VISUAL: 
+AUDIO: 'receive then collapses into a single FFTD bin. Since the background noise that we don\'t want to receive has no chirp shape, it scatters randomly across the other frequency bins. This is where'
+
+[08:01] [scene:talk]
+VISUAL: 
+AUDIO: 'Laura gets its range from because you\'ve probably heard of gain or amplifications in either antennas or design. Antennas have a gain, but doing this math gives'
+
+[08:14] [scene:talk]
+VISUAL: 
+AUDIO: 'us a processing gain. Basically, it\'s like the same effect as strapping a massive 24dB directional antenna on your receiver. 24 dB is a massive amount of'
+
+[08:26] [scene:talk]
+VISUAL: 
+AUDIO: 'gain. Okay, that\'s the protocol and the magic. But I also said that one of these is not like the other. So, why is this one different? These two smaller ones, they'
+
+[08:40] [scene:talk]
+VISUAL: 
+AUDIO: 'are identical other than the fact that one of them has a UFFL connector for an external antenna like this one, and one of them has a ceramic tower antenna on the PCB itself. So, you don\'t need to'
+
+[08:53] [scene:talk]
+VISUAL: 
+AUDIO: 'attach an antenna to it. These other two, well, they operate on 2.4 GHz and 900 MHz. Since 900 MHz is a lower frequency, it can give us more range.'
+
+[09:05] [scene:talk]
+VISUAL: 
+AUDIO: 'since lower frequencies travel further and penetrate better even though we didn\'t use 900 MHz for our tests. Okay, then the difference between these two is then that one of them has two'
+
+[09:17] [scene:talk]
+VISUAL: 
+AUDIO: 'transceivers operating completely independently. As you can see, they\'re just two copies of the same RF layout. This diversity setup can improve range and link quality. But I also said that this one violates a rule in RF'
+
+[09:30] [scene:talk]
+VISUAL: 
+AUDIO: 'engineering because look, the antenna for this one is on the opposite side. It\'s connected with a via. A via is like an electrical connection through the PCB. You use them everywhere, but'
+
+[09:42] [scene:talk]
+VISUAL: 
+AUDIO: 'generally you don\'t use them for RF. But in this case, it saves us a lot of space on the board. &gt;&gt; Okay, so you can see our setup. And if we go to the left,'
+
+[09:55] [scene:talk]
+VISUAL: 
+AUDIO: 'there are two 5G towers. Oh, Stella is calling, but speed test has a priority. I\'m doing a speed test because we are right next to the 5G'
+
+[10:08] [scene:talk]
+VISUAL: 
+AUDIO: 'tower. We have 187 megabits per second downloads and 65 uploads. &gt;&gt; Wow, that\'s nice. I\'m I\'m at the spot. &gt;&gt; Okay, so we\'re now I don\'t know how far.'
+
+[10:21] [scene:talk]
+VISUAL: 
+AUDIO: 'I think the receivers Well, you can\'t see, but they\'re all still connected. And even the Gemini is at 100% link quality. That\'s kind of crazy. Okay, big deal. It has a VIA. Who cares? Well, in'
+
+[10:35] [scene:talk]
+VISUAL: 
+AUDIO: 'RF impedances and impedance matching is everything. Let me tell you why. At these higher frequencies like 2.4 GHz, the copper on a PCB, it doesn\'t act like a wire anymore. It\'s a transmission'
+
+[10:50] [scene:talk]
+VISUAL: 
+AUDIO: 'line. And transmission lines, they have a property called characteristic impedance, which is set entirely by its own geometry, like the width of the trace or the thickness of the substrate. and even what dialectric is between'
+
+[11:04] [scene:talk]
+VISUAL: 
+AUDIO: 'them. They all influence the characteristic impedance. Something you might know but not know why is that everything in the RF world is 50 ohms. The chip wants to push 50 ohms. The coax cable is 50 ohms. The antenna wants to'
+
+[11:18] [scene:talk]
+VISUAL: 
+AUDIO: 'get 50 ohms. Why 50 ohms, you may ask? Well, like all things in life, it\'s a historical compromise. In a coaxial cable, around 30 ohms gives you the maximum power handling and around 77'
+
+[11:32] [scene:talk]
+VISUAL: 
+AUDIO: 'ohms gives you the minimum loss. So then you take the geometric mean about 48, you round up to 50 and call it a day. But hey, it works. When the trace is 50'
+
+[11:45] [scene:talk]
+VISUAL: 
+AUDIO: 'and the antenna is 50 and everything in between is 50 ohms, the wave just travels and everybody\'s happy. But if anything in the middle isn\'t 50 ohms, like a sudden width change or a'
+
+[11:58] [scene:talk]
+VISUAL: 
+AUDIO: 'connector or a via, well then part of the wave will bounce back. We call that reflections. And this reflected energy, well, it\'s not reaching the antenna and'
+
+[12:10] [scene:talk]
+VISUAL: 
+AUDIO: 'it\'s also going to interfere with the next wave that\'s coming along. In any case, though, in our testing, we noticed that this via in the PCB had really no measurable impact on performance. So how'
+
+[12:22] [scene:talk]
+VISUAL: 
+AUDIO: 'come? Well, really the VIA itself is a much smaller part of the bigger story. And the bigger story is the ground return path. Because here\'s something that so many people get wrong, even'
+
+[12:35] [scene:talk]
+VISUAL: 
+AUDIO: 'engineers. Current flows in circles. Repeat with me. Current flows in circles. The current that flows [clears throat] in the top trace to the antenna. Well, an equal and opposite current must flow on the ground plane'
+
+[12:49] [scene:talk]
+VISUAL: 
+AUDIO: 'directly beneath it. Not like somewhere in the ground plane. No, no, no, no, no. Atom for atom. The ground return current flows underneath the trace because high frequency signals always choose the'
+
+[13:03] [scene:talk]
+VISUAL: 
+AUDIO: 'smallest loop possible. So adding the via itself doesn\'t really disrupt the path of the signal. But the ground return current that needs to jump between layers too. So, we need to make'
+
+[13:16] [scene:talk]
+VISUAL: 
+AUDIO: 'sure that there are ground VAS as close as possible to the RF via. Before I show you the PCB designs itself, let\'s quickly go over what makes a express LRS'
+
+[13:28] [scene:talk]
+VISUAL: 
+AUDIO: 'receiver tick in Keycad, of course. By the way, all of these designs are open source and I\'ll leave the link in the description. Firstly, we need an ESP32 microcontroller to control everything.'
+
+[13:42] [scene:talk]
+VISUAL: 
+AUDIO: 'Of course, we need a Laura transceiver to receive the signals. The ESP32 itself also has Wi-Fi, by the way, which allows overthe-air updates. It\'s what these little chip antennas are for. The rest'
+
+[13:56] [scene:talk]
+VISUAL: 
+AUDIO: 'in here is just voltage regulation and an RGB LED and maybe a boot button. Then doing the layout, we end up some with something like this. If we try to get it really compact, by the way, these are'
+
+[14:08] [scene:talk]
+VISUAL: 
+AUDIO: 'tiny. For the Gemini receiver, you can see that this is where the RF signal travels through the VIA and it has plenty of ground return via close to it, which is why the VIA doesn\'t cause a'
+
+[14:21] [scene:talk]
+VISUAL: 
+AUDIO: 'problem. So, that is why these Express LRS receivers can get ranges like 100 km in Wesley\'s video here and why VAS are really not the problem. It\'s your layout. Thanks for watching.'
