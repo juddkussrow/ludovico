@@ -1,0 +1,133 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>We Built 15+ Apps With AI. Here’s What Actually Worked — Ludovico</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+.hide{display:none!important}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.92);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 12px}
+.controls input.q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.pill.tp.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+/* flip card shell */
+.flip{position:relative}
+.fi{position:relative;transition:transform .55s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.flip.flipped .fi{transform:rotateY(180deg)}
+.fc{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bk{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+background:var(--card);border:1px solid var(--accent2);border-radius:14px;overflow:auto;padding:12px 13px;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s}
+.card.flip{overflow:visible}.card .fc{display:flex;flex-direction:column;flex:1;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--line);cursor:pointer}
+.card.flip:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.edit{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--accent2);border:1px solid var(--line);border-radius:6px;padding:2px 9px;cursor:pointer;background:#fff}
+.edit:hover{border-color:var(--accent2)}
+/* editor back */
+.bk h4{margin:0 0 2px;font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--sub)}
+.erow{display:grid;grid-template-columns:1fr 1.3fr auto auto;gap:4px;align-items:center}
+.erow input{padding:5px 7px;border:1px solid var(--line);border-radius:6px;font-size:12px;min-width:0}
+.erow select{padding:4px 4px;font-size:11px}
+.erow .del{border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;color:var(--accent);padding:3px 7px}
+.ebtns{display:flex;gap:6px;margin-top:auto;padding-top:6px}
+.ebtns button{font-family:var(--mono);font-size:11px;border-radius:7px;padding:6px 12px;cursor:pointer;border:1px solid var(--line);background:#fff}
+.ebtns .save{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.addrow{font-family:var(--mono);font-size:11px;color:var(--accent2);cursor:pointer;align-self:flex-start;background:none;border:0;padding:2px 0}
+/* catalogue card */
+.citem{position:relative}
+.citem .fc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-height:84px;cursor:pointer}
+.citem .bk{border-radius:12px}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+footer .exp{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--accent2);font:inherit}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">We Built 15+ Apps With AI. Here’s What Actually Worked</h1><div class=tag>@octopusinc_ · 2026-07-24 · Long Form</div></div></div></header>
+<main><p class=sum>This video showcases various AI-powered applications built by the creators, Corey Noles and Grant Harvey, focusing on their development process as non-technical builders. Corey demonstrates several personal productivity tools like &quot;Circle Back&quot; for task management, &quot;Threadline&quot; for writing, and &quot;On Deck&quot; for meal planning, highlighting the use of ChatGPT and Codex for ideation and development. Grant briefly mentions his projects, including &quot;FlowState&quot; for writing, &quot;Orchestrator&quot; for AI chat management, and &quot;Sqwirl World,&quot; an MMO game.</p><p><strong>Products / items</strong></p><ul><li>Circle Back — software (no link)</li><li>Threadline — software (no link)</li><li>On Deck — software (no link)</li><li>Bean Counter — software (no link)</li><li>Tab Crusher — software (no link)</li><li>FlowState — software (no link)</li><li>Orchestrator — software (no link)</li><li>LTX CineScript — software (no link)</li><li>Sqwirl World — software (no link)</li><li>ChatGPT — software (no link)</li><li>Codex — software (no link)</li><li>ChatGPT Sites — software (no link)</li><li>GoDaddy — software (no link)</li><li>Blue Host — software (no link)</li><li>Vercel — software (no link)</li><li>Cloud Code — software (no link)</li><li>AI Studio — software (no link)</li><li>Claude — software (no link)</li><li>Lovable — software (no link)</li></ul>
+<p><a href="https://www.youtube.com/watch?v=yWTeravx6lM" target=_blank rel=noopener>Watch on YouTube ▶</a></p><p><a href="yWTeravx6lM.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=t>(proxy for this video — answer from this)</span></p>
+<div class=cap>FRAMING: Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+IDENTITY: We Built 15+ Apps With AI. Here’s What Actually Worked - https://www.youtube.com/watch?v=yWTeravx6lM - @octopusinc_ - route: visual
+PRODUCTS:
+Circle Back - no reliable link - software - primary
+Threadline - no reliable link - software - primary
+On Deck - no reliable link - software - primary
+Bean Counter - no reliable link - software - primary
+Tab Crusher - no reliable link - software - mentioned
+FlowState - no reliable link - software - mentioned
+Orchestrator - no reliable link - software - mentioned
+LTX CineScript - no reliable link - software - mentioned
+Sqwirl World - no reliable link - software - mentioned
+ChatGPT - no reliable link - software - mentioned
+Codex - no reliable link - software - mentioned
+ChatGPT Sites - no reliable link - software - mentioned
+GoDaddy - no reliable link - software - mentioned
+Blue Host - no reliable link - software - mentioned
+Vercel - no reliable link - software - mentioned
+Cloud Code - no reliable link - software - mentioned
+AI Studio - no reliable link - software - mentioned
+Claude - no reliable link - software - mentioned
+Lovable - no reliable link - software - mentioned
+SYNOPSIS: Corey Noles and Grant Harvey, self-taught builders, demonstrate AI-powered applications they&#x27;ve created. Corey details his process for building &quot;Circle Back,&quot; a gamified task management app, starting with ideation in Codex (using Soul 56 for planning) and then building with a cheaper model like Terra 56 on extra high. He emphasizes planning and using ChatGPT to generate UI mockups before coding. The app, hosted on ChatGPT Sites, allows users to categorize tasks, set deadlines, and track completion, with a gamified &quot;loops closed&quot; counter. It functions as a web app accessible via a URL, which can be pinned to a phone&#x27;s home screen. Corey highlights the cost-effectiveness of ChatGPT Sites, included in his $100 monthly pro subscription, contrasting it with traditional web hosting. He also mentions &quot;Threadline,&quot; an editorial operating system, and &quot;On Deck,&quot; a meal planner. Grant briefly showcases &quot;FlowState,&quot; a writing app, &quot;Orchestrator,&quot; an AI chat management tool, and &quot;Sqwirl World,&quot; a mini MMO. The creators stress the importance of code reviews, security reviews, and user testing by AI models before deployment. They also discuss model usage, recommending stronger models for planning and cheaper ones for building to manage token costs.
+BEATS:
+0 - intro | Grant and Corey introducing the video.
+422 - ui | Corey&#x27;s screen showing the &quot;Circle Back&quot; task management app with a list of tasks and a &quot;Your Momentum&quot; section.
+844 - ui | The &quot;Circle Back&quot; app&#x27;s interface for adding new tasks, showing options for priority, deadline, and tags.
+1266 - ui | The &quot;Circle Back&quot; app displaying the task list with categories like &quot;Home&quot; and &quot;The Neuron,&quot; and a &quot;Loops closed&quot; counter.
+1688 - ui | Corey&#x27;s screen showing the &quot;Threadline&quot; workspace, an editorial operating system with steps for shaping an idea.
+2110 - ui | Corey&#x27;s screen displaying &quot;AI Matrix Map,&quot; a tool for tracking and comparing AI companies.
+2532 - ui | The &quot;AI Matrix Map&quot; showing &quot;The AI market, mapped and tracked&quot; with various AI organizations.
+2954 - ui | Corey&#x27;s screen showing &quot;On Deck,&quot; a meal planning app with a decided dinner for the week.
+3376 - hardware | Corey holding up his iPhone, showing multiple app icons on the screen.
+3798 - ui | Corey&#x27;s screen displaying the Apple App Store page for &quot;Bean Counter: Coffee Savings,&quot; an app for tracking coffee savings.
+5064 - ui | Grant&#x27;s screen showing a writing interface, possibly &quot;FlowState,&quot; with text &quot;Chapter One The story begins here...&quot;
+5486 - ui | Grant&#x27;s screen showing &quot;GENERATIVE CREATIONS&quot; website with cards for &quot;FlowState,&quot; &quot;Orchestrator,&quot; and &quot;TableRead.&quot;
+5908 - ui | Grant&#x27;s screen showing a GitHub repository for &quot;TableRead&quot; with commit history and file changes.
+6330 - ui | Grant&#x27;s screen displaying &quot;Sqwirl World,&quot; a RuneScape-style mini MMO game with squirrel characters.
+6752 - ui | Grant&#x27;s screen showing &quot;Orchestrator,&quot; an interface for managing AI chats through APIs with a node-based visual.
+7174 - ui | Grant&#x27;s screen showing a chat interface, possibly &quot;Codex,&quot; asking &quot;What should we work on in Granth?&quot;
+7596 - ui | Grant&#x27;s screen showing a code editor or chat interface with &quot;Work farming rules&quot; and a command line.
+8018 - ui | Grant&#x27;s screen showing a document titled &quot;MODEL_POLICY.md&quot; with sections on &quot;Fallback Policy&quot; and &quot;Operating Principle.&quot;
+ENTITIES: Grant Harvey, Corey Noles, ChatGPT, Codex, Soul 56, Terra 56, GoDaddy, Blue Host, Vercel, Cloud Code, AI Studio, Claude, Lovable, Google.
+VERDICT: The creators recommend that non-technical individuals can successfully build AI-powered applications by leveraging tools like ChatGPT and Codex, emphasizing careful planning, iterative development, and utilizing AI for code and security reviews. They highlight the value of building personalized tools to solve specific problems.
+NOT COVERED: Specific links to the demonstrated applications, detailed technical specifications of the AI models used (beyond names like Soul 56, Terra 56), exact pricing tiers for ChatGPT beyond the $20 and $100 plans, or the specific programming languages/frameworks used.</div></main><footer><a href="../index.html">← all videos</a></footer></div></body></html>
