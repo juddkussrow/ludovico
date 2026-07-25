@@ -1,0 +1,320 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Edit Images Using JoyAI Image Edit Plus | ComfyUI Workflow
+channel: @octopusinc_
+duration: 16:36
+source: https://www.youtube.com/watch?v=5uCsXAKweVE
+upload_date: 20260719
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:ui]
+VISUAL: Hugging Face page for JoyAI-Image-Edit-Plus-ComfyUI model.
+AUDIO: 'Hey guys, so recently Comfy UI has added support for Joy AI image edit plus an image editing model that supports up to six reference images. In this video, let\'s take a look at the model, where to download it, and do some tests on the'
+
+[00:12] [scene:talk]
+VISUAL: 
+AUDIO: 'model. So, let\'s get started. The download link for the model is available in the description. Open that link, and you will see a page like this. Let\'s see what files we need for running Joy AAIEEdit Plus. So, let\'s click on files'
+
+[00:24] [scene:talk]
+VISUAL: 
+AUDIO: 'and versions. In here we have three folders. The Joyai image edit plus is located inside the diffusion models folder. So let\'s open that. So here we can find two files. One is the BF16'
+
+[00:37] [scene:talk]
+VISUAL: 
+AUDIO: 'version of Joy AI image edit plus and the other is INT 8. So depending on your hardware, download either of these. I will be using INT 8. So download the model you are going to use and put it'
+
+[00:50] [scene:talk]
+VISUAL: 
+AUDIO: 'inside the diffusion models folder of Confy UI. Next we need the text encoder. So let\'s go back to the parent folder. Then open the text encoders folder. So the text encoder is qn3v8b.'
+
+[01:03] [scene:talk]
+VISUAL: 
+AUDIO: 'Here we have bf16 and int8. So depending on your hardware, download either of these. I will be using int8. So download the text encoder and put it inside the text encoders folder of comfy UI. The'
+
+[01:15] [scene:talk]
+VISUAL: 
+AUDIO: 'next file we need is the VAE. So let\'s go back to the parent folder. Then open the VAE folder. So this is the VAE we need which is one 2.1 VAE. So it\'s the same VAE used for Juan models. So if you'
+
+[01:30] [scene:ui]
+VISUAL: ComfyUI workflow showing "Load Diffusion Model", "Load CLIP", "Load VAE" nodes and "TextEncodeJoyImageEdit (Positive Prompt)" node.
+AUDIO: 'already have this VAE then you can use that otherwise download it and put it inside the VAE folder of Comfy UI. Now let\'s switch over to Comfy UI. So here I have already built a workflow. As always'
+
+[01:44] [scene:talk]
+VISUAL: 
+AUDIO: 'you can download it from the description. So the workflow has some similarities with QN imageedit workflows. Still let\'s get a basic understanding of this workflow so you can start using it. So we will be using'
+
+[01:56] [scene:talk]
+VISUAL: 
+AUDIO: 'the load diffusion model node to load the joy AI imageedit plus. In my case I am using the int8. Then we have the load clip node for loading the text encoder. So here you can see that I have selected'
+
+[02:09] [scene:talk]
+VISUAL: 
+AUDIO: 'the QN3 VL8B joy imageedit plus text encoder. Then the type is going to be joy image. If this option is missing that means your comfy UI is outdated. So make sure you update your comfy UI. So'
+
+[02:21] [scene:ui]
+VISUAL: ComfyUI workflow with positive and negative prompts visible.
+AUDIO: 'the device is going to be default. Then the load VAE node for loading the one 2.1 VAE. Then let\'s focus on the prompt. So if you have updated your compy UI,'
+
+[02:33] [scene:talk]
+VISUAL: 
+AUDIO: 'you will get a new node for using with joy AI image edit. So the node is called text encode joy image edit. So this node supports up to six reference images. And also remember the image inputs counting'
+
+[02:46] [scene:talk]
+VISUAL: 
+AUDIO: 'starts from zero. So it can confuse you sometimes and I have connected all the image inputs to different image loaders. Some image loaders are in bypass mode. So our first image editing task is going'
+
+[02:58] [scene:talk]
+VISUAL: 
+AUDIO: 'to be multi-reference editing. So we are going to use four reference images for this editing task. So here I wrote the woman wearing the brown jacket, black shoes and the hat. So I have mentioned the objects from different reference'
+
+[03:11] [scene:ui]
+VISUAL: ComfyUI workflow showing "Load Image" nodes with reference images (woman, jacket, shoes, hat).
+AUDIO: 'images that I want to be added to the first image. Then about the negative prompt. Well, we can write some words related to things that we don\'t want to appear in the output image. Here I wrote just bad quality. Then let\'s focus on'
+
+[03:23] [scene:talk]
+VISUAL: 
+AUDIO: 'the image loaders. So the first image loader will be used for loading the main image and the other image loaders are for loading images that contain different objects or backgrounds. So I found out that this image editing model'
+
+[03:36] [scene:talk]
+VISUAL: 
+AUDIO: 'performs better with 1,024 square images. But since we have not loaded a square image, we have to do something to make it 1,024 square. So not only do we have to rescale the image to 1024, but'
+
+[03:50] [scene:talk]
+VISUAL: 
+AUDIO: 'also either crop the image or if we want to keep all the elements of the image, add a black padding to it. So I will be using the resize image V2 node from the KJ nodes custom node pack to rescale the'
+
+[04:03] [scene:ui]
+VISUAL: ComfyUI workflow showing connections from "Load Image" nodes to "Resize Image V2" and "Invert Mask" nodes.
+AUDIO: 'image to 1024 and also add black padding to the rescaled image so we can preserve all the elements. So the rescaled image is then sent to image zero inputs of'
+
+[04:15] [scene:talk]
+VISUAL: 
+AUDIO: 'both the text endode joy imageedit positive prompt and negative prompt and also the mask output of resize image v2 is used to avoid changes in the padded area. So this is how it goes. The mask'
+
+[04:27] [scene:talk]
+VISUAL: 
+AUDIO: 'coming from resize image v2 will be inverted by using the invert mask node. Then we are going to combine it with the latent generated from the first image using the VAE endode node. For combining'
+
+[04:40] [scene:talk]
+VISUAL: 
+AUDIO: 'the mask with the latent, we will be using set latent noise mask. So the latent combined with the mask is then sent to the kamper. Also we are going to use the inverted mask to remove the'
+
+[04:54] [scene:ui]
+VISUAL: ComfyUI workflow showing "VAE Encode" and "Set Latent Noise" nodes.
+AUDIO: 'black padding from the output image. Then focusing on load image two, I have loaded a jacket for replacing the woman\'s sweater. And because I thought loading large resolution images might be slowing down generation, that\'s why I'
+
+[05:07] [scene:talk]
+VISUAL: 
+AUDIO: 'added the scale image to totals pixels node. Currently, it\'s in bypass mode. So in case you want to lower the resolution of loaded images, you can use this node. So in the third image loader, I have'
+
+[05:21] [scene:talk]
+VISUAL: 
+AUDIO: 'loaded an image containing shoes. So load image 3 is connected to the image 2 inputs of both positive and negative prompts. Then in load image 4 I have loaded an image containing a hat. And'
+
+[05:34] [scene:talk]
+VISUAL: 
+AUDIO: 'also know this using multiple reference images actually slows down the generation. So in this video I am only going to do one example of multi-reference editing. So the other'
+
+[05:46] [scene:ui]
+VISUAL: ComfyUI workflow showing the overall structure with KSampler.
+AUDIO: 'two image loaders are going to stay in bypass mode. And in here you can see that I have combined the inverted mask with the latent using the set latent noise mask node. Doing so we can avoid changes in the padded area of the main'
+
+[06:00] [scene:talk]
+VISUAL: 
+AUDIO: 'image. Remember this is not for inpainting because we usually use this node for doing inpainting but not on this workflow. So simply put the rescaled main image is transformed into a latent using the VAE encode node. Then'
+
+[06:14] [scene:talk]
+VISUAL: 
+AUDIO: 'we will combine the latent with the mask using the set latent noise mask node to avoid changes in the padded areas. And if you want to add changes to the padded area, then use the empty SD3 latent image node instead of this node. Because'
+
+[06:28] [scene:ui]
+VISUAL: ComfyUI workflow showing "VAE Decode", "Image Crop By Mask", "Save Image", and "Image Comparer" nodes.
+AUDIO: 'I learned that the model can actually do outpainting too, but it still needs more tests to see how much it can do. Then let\'s focus on the K samper. So here I am using a random seed. The steps are'
+
+[06:40] [scene:talk]
+VISUAL: 
+AUDIO: 'going to be 20. If we want to improve the quality, we can try 30 steps. Remember, more steps increase the generation time. CFG is going to be four. Then the sampler is going to be'
+
+[06:52] [scene:talk]
+VISUAL: 
+AUDIO: 'ooler. Theuler is going to be normal. D noiseis 1.0. Then like in any other workflows, the VAE decode node is for transforming the latent output of the K'
+
+[07:04] [scene:talk]
+VISUAL: 
+AUDIO: 'samper to a pixel image. Then the image crop by mask node for removing the padded area of the output image. Then the save image node for saving images. Then the image comparer for comparing'
+
+[07:17] [scene:result]
+VISUAL: Comparison of original and edited image (multi-reference editing).
+AUDIO: 'the output image with the main image. Now that you have an idea about this workflow, let\'s try our first image editing task. So as I said before, the first is going to be multi-reference'
+
+[07:30] [scene:talk]
+VISUAL: 
+AUDIO: 'editing. So in the prompt, as I said before, I wrote the woman wearing the brown jacket, black shoes, and the hat. So in other image editing workflows, we often mention the reference image'
+
+[07:43] [scene:talk]
+VISUAL: 
+AUDIO: 'number, but in this case, we only mention the elements of the reference images. Now, let\'s hit generation and see the result. So here is the result. Let\'s take a look at the result. Well,'
+
+[07:55] [scene:talk]
+VISUAL: 
+AUDIO: 'as you can see here, we got a nice result. I don\'t see any pixel drifting in it, but there are some minor issues, especially with the hands and also the bag has changed. Overall, it\'s a good'
+
+[08:07] [scene:result]
+VISUAL: Comparison of original empty room and furnished room.
+AUDIO: 'edit. Now, let\'s try another editing task. I am going to put these three image loaders in bypass mode as we don\'t need them, which can speed up the generation.'
+
+[08:20] [scene:talk]
+VISUAL: 
+AUDIO: 'Now, let\'s load a different image. So, I\'m going to choose this image. So, this is an empty room. Let\'s add some elements into this. So in the prompt, let\'s type furnish the room with a TV, a'
+
+[08:32] [scene:talk]
+VISUAL: 
+AUDIO: 'sofa, and other furniture. Now let\'s hit generation. So here is the result. Now let\'s take a look at the result. Well, if we compare it with the original, we can see that it\'s a nicely done edit and'
+
+[08:45] [scene:talk]
+VISUAL: 
+AUDIO: 'there\'s a slight issue with the fan, but overall it\'s a good one. And if we look at the generation time, you can see that this was faster than the previous generation. The previous generation took around 10 minutes and this took around'
+
+[08:59] [scene:ui]
+VISUAL: File explorer open to select an image for object removal.
+AUDIO: 'three minutes. Now let\'s take a look at removing objects from an image. So let\'s choose a different image. I\'m going to remove these two people from the image. So in the prompt, let\'s type remove the'
+
+[09:12] [scene:talk]
+VISUAL: 
+AUDIO: 'people from the scene. Now let\'s hit generation and see the result. So here is the result. I think the model did a good job at removing people. Now let\'s try another image editing task.'
+
+[09:26] [scene:talk]
+VISUAL: 
+AUDIO: 'For example, replacing the background. So let\'s choose a different image. So here we are going to replace the white background with a forest. So in the prompt, let\'s type replace the white'
+
+[09:38] [scene:talk]
+VISUAL: 
+AUDIO: 'background with a forest and relight it to fit the forest. Now let\'s hit generation. So here is the result. Well, I do like the background replacement and the relighting of objects to fit the new'
+
+[09:51] [scene:ui]
+VISUAL: ComfyUI workflow with prompt "transform the image into anime art style".
+AUDIO: 'background. But doesn\'t it feel slightly off? Especially, I think the relighting needs improvement. Now, let\'s try changing the image into an anime art style. So, in the prompt, let\'s type transform the image into anime art'
+
+[10:05] [scene:talk]
+VISUAL: 
+AUDIO: 'style. Now, let\'s hit generation and see the result. Here is the result. Let\'s take a look at the result. I think it\'s a nice result. Now, let\'s load another image and change the time of the image.'
+
+[10:17] [scene:talk]
+VISUAL: 
+AUDIO: 'So, we are going to turn this night image into a day image. So in the prompt, let\'s type transform the scene into a day scene. Keep the objects. Now let\'s hit generation and see the'
+
+[10:30] [scene:talk]
+VISUAL: 
+AUDIO: 'results. So here is the result we got. It\'s a nice one, but the elements position does not match with the original. Other than that, I think it\'s a good one. What do you guys think about this? Please let me know in the comment'
+
+[10:43] [scene:result]
+VISUAL: Comparison of original and edited image (winter season).
+AUDIO: 'section. Now let\'s load a different image and try another editing task. So, we are going to change the season of this image. In the prompt, let\'s type transform this scene into a winter'
+
+[10:57] [scene:talk]
+VISUAL: 
+AUDIO: 'season. Keep camera angle unchanged. Now, let\'s hit generation and see the result. Here is the result we got. It\'s a good one, but there are some issues. For example, the camera position has changed. There are new elements in the'
+
+[11:11] [scene:talk]
+VISUAL: 
+AUDIO: 'image. Now, let\'s load a different image. So, what about making the woman smile? So, in the prompt, let\'s type change her expression to a warm smile while preserving her identity,'
+
+[11:23] [scene:talk]
+VISUAL: 
+AUDIO: 'hairstyle, and clothing. Now, let\'s hit generation and see the result. Here is the result. So, there are minor differences between the original and the edited one, but not that bad. So, now'
+
+[11:35] [scene:result]
+VISUAL: Comparison of original and edited image (puppy replacing cat).
+AUDIO: 'let\'s load another image and do another editing task. So, let\'s replace this cat with a puppy. In the positive prompt, let\'s type replace the cat with a puppy and let\'s hit generation and see the'
+
+[11:49] [scene:talk]
+VISUAL: 
+AUDIO: 'result. Okay, here is the result. Well, this is a nicely done edit. As you can see here, the cat is fully replaced with a puppy. Now, let\'s take a look at some other features that make this model'
+
+[12:02] [scene:talk]
+VISUAL: 
+AUDIO: 'stand out from other editing models. One is object rotation. So, you can rotate an object in an image with specific prompts. For that you can use this prompt template. So in this prompt template replace the object with the'
+
+[12:16] [scene:result]
+VISUAL: Comparison of original and edited image (chair rotation).
+AUDIO: 'object you want to rotate. Then replace the view with the supported views given below. So the supported views are front right left rear front right front left rear right and rear left. And here you'
+
+[12:28] [scene:talk]
+VISUAL: 
+AUDIO: 'can see an example which is for showing back side of a chair. So let\'s load a different image containing an object. So I\'m going to rotate this chair to show the back side of the chair. So in the'
+
+[12:40] [scene:talk]
+VISUAL: 
+AUDIO: 'prompt, let\'s type rotate the chair to show the rear side view. And now let\'s hit generation and see the result. Here is the result we got. Well, I do like the result, but is this what the chair'
+
+[12:52] [scene:talk]
+VISUAL: 
+AUDIO: 'back actually looks like? Anyway, nice guessing done by the model. So now let\'s take a look at another feature of this model that can help you change the camera viewpoint. So for changing the camera viewpoint, you can use this'
+
+[13:05] [scene:ui]
+VISUAL: Markdown Note node displaying "Camera Control" prompt template.
+AUDIO: 'prompt template. In this prompt template, yaw means horizontal rotation around the vertical axis. Meanwhile, pitch means vertical rotation around the horizontal axis. So, the rotation is written in degrees. And also, if you'
+
+[13:19] [scene:talk]
+VISUAL: 
+AUDIO: 'want to change the camera zoom, just replace zoom with in, which means zoom in. If you want to zoom out, just use the word out. If you don\'t want to change the zoom, just use the word unchanged. Then, here you can see an'
+
+[13:32] [scene:talk]
+VISUAL: 
+AUDIO: 'example of how the prompt template is used. So let\'s try changing the camera viewpoint of an image. So I am going to copy this prompt template. Then I will paste it inside the positive prompt.'
+
+[13:46] [scene:talk]
+VISUAL: 
+AUDIO: 'Then let\'s choose a different image. So I\'m going to change the camera viewpoint of this photo. So in the prompt, let\'s replace the Y rotation with 45°. And for pitch, we are going to keep 0°. And the'
+
+[14:00] [scene:ui]
+VISUAL: ComfyUI workflow with prompt for camera viewpoint change.
+AUDIO: 'camera zoom is going to be out. And also to make sure the elements don\'t change, keep this sentence. And now let\'s hit the generation and see the result. Well, the camera viewpoint did change,'
+
+[14:14] [scene:talk]
+VISUAL: 
+AUDIO: 'but the car looks squished. But the model did try to create this new viewpoint. So now what about trying another camera viewpoint? So let\'s use 0° for yaw and 90° for pitch. Then let\'s'
+
+[14:27] [scene:talk]
+VISUAL: 
+AUDIO: 'hit generation and see the result. Okay, so this looks so much better than the previous generation. So guys, I suggest trying different camera'
+
+[14:39] [scene:talk]
+VISUAL: 
+AUDIO: 'viewpoints to see how this model performs. So now let\'s try some text editing. So let\'s choose a different image containing text. So let\'s replace the text loop with another text. So in the positive prompt, let\'s type replace'
+
+[14:52] [scene:ui]
+VISUAL: File explorer open to select an image for text editing.
+AUDIO: 'the text loop with the text axe m. Remember when you want to add, replace or delete text, always put it inside double quotes. Now let\'s hit generation and see the result. So here is the'
+
+[15:06] [scene:talk]
+VISUAL: 
+AUDIO: 'result we got. Well, the text got replaced but the colors also got changed but the model did try to copy the font style. Now let\'s try one more text editing. So let\'s open another image. So'
+
+[15:19] [scene:talk]
+VISUAL: 
+AUDIO: 'let\'s try transforming this image into a magazine cover. So, I already wrote a prompt. Let\'s copy and paste it inside the positive prompt. So, this is a more complex text editing challenge than'
+
+[15:32] [scene:talk]
+VISUAL: 
+AUDIO: 'before. Let\'s try the generation and see the result. So, here is the result. Well, it\'s a good one. I like the text alignment. And also, I don\'t see any spelling mistakes in the main text and'
+
+[15:45] [scene:result]
+VISUAL: Comparison of original and edited magazine cover.
+AUDIO: 'the subtitles, but there are some small issues with the text at the top and the bottom. And also the photo got zoomed in and her legs merged together. So this is a nice try done by the model. So guys,'
+
+[15:57] [scene:talk]
+VISUAL: 
+AUDIO: 'in my opinion, I won\'t say this model can beat Klein and Q image edit 2511, but still it\'s not a bad model. The resolution limit can be a burden. And also the model comes under the Apache'
+
+[16:10] [scene:talk]
+VISUAL: 
+AUDIO: 'license, so there is room for improvement. And also I think the developers should release a distilled model because this model is pretty slow compared with Klein 9B and QN image edit 2511 combined with lightning loris. So'
+
+[16:24] [scene:talk]
+VISUAL: 
+AUDIO: 'guys that\'s it for this video. Thanks for watching. See you soon with another video and don\'t forget to like, share, and subscribe to this'

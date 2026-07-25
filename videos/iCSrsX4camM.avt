@@ -1,0 +1,224 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Points as Tori: Fast Pointwise Signed Distance for Point Clouds (SIGGRAPH 2026)
+channel: @octopusinc_
+duration: 11:17
+source: https://www.youtube.com/watch?v=iCSrsX4camM
+upload_date: 20260721
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'Hi there and thanks for tuning in. I\'m Nicole and I\'m very excited to show you how we can get signed distance directly from point clouds. The basic problem is simple. Given a point cloud, we want signed distance to the underlying surface, also known as an'
+
+[00:12] [scene:talk]
+VISUAL: 
+AUDIO: 'SDF. Now, this is actually two problems in one because signed distance asks for both the shortest distance from a given point to the surface and also whether that point is inside or outside a well-defined region. So, signed distance'
+
+[00:25] [scene:talk]
+VISUAL: 
+AUDIO: 'implicitly requires surface reconstruction and at the same time distance to that reconstructed surface. As a result, methods that can successfully generalize distance to point clouds are expensive because they'
+
+[00:37] [scene:talk]
+VISUAL: 
+AUDIO: 'either require global solves or expensive neural field fitting and global optimization. Neural methods especially also struggle to recover true distance. Then, we have over 40 years of'
+
+[00:50] [scene:talk]
+VISUAL: 
+AUDIO: 'literature in fast point-based methods that do reconstruction, but can\'t compute distance. At best, many so-called distance algorithms actually give the wrong answer for point clouds. In this talk, we introduce our method,'
+
+[01:03] [scene:talk]
+VISUAL: 
+AUDIO: 'points as tori, which takes as input a point cloud with normals and returns an approximation of the true signed distance at the given query points. Our method is simple.'
+
+[01:15] [scene:talk]
+VISUAL: 
+AUDIO: 'We use a simple kernel density estimator giving a weighted average of per-point functions. Critically, we define these functions using tori. Not only can tori locally approximate the underlying surface up to'
+
+[01:27] [scene:talk]
+VISUAL: 
+AUDIO: 'second order, each torus has an efficient closed-form SDF that enables fast evaluation of the global SDF. In the end, our algorithm approximates signed distance to the true unknown'
+
+[01:39] [scene:talk]
+VISUAL: 
+AUDIO: 'surface while enabling fast evaluation at arbitrary resolution. And it does all this without requiring global solves or spatial discretization. This formula is not just a heuristic and in fact, it\'s one of the only ones that'
+
+[01:52] [scene:talk]
+VISUAL: 
+AUDIO: 'works. This formula is one of two so-called convolutional formulas for distance which approximate distance through a summation of kernel functions concentrated on the shape\'s boundary. The first formula in particular subsumes'
+
+[02:06] [scene:talk]
+VISUAL: 
+AUDIO: 'many other formulas across math and engineering and the key is the exponential function. In particular, consider any function fee and apply the exponential. The difference between the largest values of'
+
+[02:19] [scene:talk]
+VISUAL: 
+AUDIO: 'fee versus the rest becomes exponentially exaggerated with a parameter lambda controlling the severity of this disparity. Similarly, if we consider the negation of these values, it\'s the smallest value that becomes exponentially larger than'
+
+[02:31] [scene:talk]
+VISUAL: 
+AUDIO: 'the rest. In fact, one can show that any integral of the following form becomes dominated by the contribution at the minimizer. Then, taking a log, for example, makes this whole process act like the minimum'
+
+[02:44] [scene:talk]
+VISUAL: 
+AUDIO: 'operator. So, by letting fee equal a distance function, this gives us our first general convolutional formula for distance, of which there are many special cases. In our paper, we show how one of these'
+
+[02:57] [scene:talk]
+VISUAL: 
+AUDIO: 'perspectives in fact unifies signed distance with a popular reconstruction methods of winding numbers and Poisson surface reconstruction. We found these connections quite remarkable and I hope that you read about them in our paper.'
+
+[03:10] [scene:talk]
+VISUAL: 
+AUDIO: 'But unfortunately, in practice, none of these formulas work. They all give a distance function to the sampled points rather than to the underlying surface from which the points were sampled. And the reason for this behavior is that'
+
+[03:23] [scene:talk]
+VISUAL: 
+AUDIO: 'convolutional distance is essentially a single point approximation. The exponential is so powerful it just dominates everything including any regularization we might try to use. There\'s also no value of lambda that'
+
+[03:35] [scene:talk]
+VISUAL: 
+AUDIO: 'gives both a good reconstruction and good distance. Because of this tension between reconstruction and distance, past formulas fundamentally cannot provide distance from point clouds, either unsigned or signed. In In face of'
+
+[03:47] [scene:talk]
+VISUAL: 
+AUDIO: 'this challenge, we instead consider the second class of distance formulas. Using a similar asymptotic argument as before, the second formula instead approximates the value of G at the closest points. In'
+
+[04:00] [scene:talk]
+VISUAL: 
+AUDIO: 'contrast to the first formula, this lets us control the shape of the estimated surface through the function G. The second formula also secretly underlies many methods, and probably the most common instance simply uses the'
+
+[04:13] [scene:talk]
+VISUAL: 
+AUDIO: 'distance to an estimated tangent plane around each points. Unfortunately, this gives undesirable shape completions, and also is very unstable in practice. So, instead of using linear surface'
+
+[04:26] [scene:talk]
+VISUAL: 
+AUDIO: 'approximations, we instead use second-order surfaces. Importantly, we use tori, which can locally capture both ellipsoidal and saddle surfaces. Second, unlike all of the other geometric'
+
+[04:38] [scene:talk]
+VISUAL: 
+AUDIO: 'proxies that people have used to fit the point clouds in the past, tori have closed-form SDFs that are cheap to evaluate. These tori can look kind of crazy once fitted to a point cloud, but they all'
+
+[04:50] [scene:talk]
+VISUAL: 
+AUDIO: 'blend together nicely into a global SDF using our simple formula. The tori just needs to match the underlying surface within a small neighborhood, and the idea is pretty straightforward. Around each point, we assume the true surface'
+
+[05:02] [scene:talk]
+VISUAL: 
+AUDIO: 'can be expressed as a quadratic polynomial. Six coefficients are enough to determine an osculating torus, whose sign is determined by the signs of the principal curvatures. The SDF of each torus then has a simple expression. In'
+
+[05:15] [scene:talk]
+VISUAL: 
+AUDIO: 'short, fitting a torus to a given surface is easy. The hard part is getting the surface in the first place, because inferring the true surface, even locally, is really hard, and classic methods use brittle heuristics. Because'
+
+[05:28] [scene:talk]
+VISUAL: 
+AUDIO: 'of how difficult this problem is, there\'s been a huge amount of literature proposing endless variations of kernel-based reconstruction. Unfortunately, standard approaches are sensitive to parameter tuning, and some'
+
+[05:40] [scene:talk]
+VISUAL: 
+AUDIO: 'more sophisticated statistical methods come at a cost. So, rather than manually tweak one particular surface fitting model whose parameters might be unlikely to generalize anyway, we instead simply used fixed-size neighborhoods with a'
+
+[05:54] [scene:talk]
+VISUAL: 
+AUDIO: 'data-driven approach that can fit to a very large set of examples using a far more sophisticated data fitting model than we could ever craft purely by hand. And we can do this easily because we\'ve broken down the problem into one that\'s'
+
+[06:07] [scene:talk]
+VISUAL: 
+AUDIO: 'dominated by local behavior, and it\'s easy to generate massive amounts of training data for individual surface patches. To that end, we use a small transformer-based neural network that takes in a point and its k nearest'
+
+[06:19] [scene:talk]
+VISUAL: 
+AUDIO: 'neighbors and outputs the six coefficients needed to fit a torus. To train this network, we use CAD models and procedurally generated shapes and sample them into point clouds for a total of about 40 million training examples.'
+
+[06:32] [scene:talk]
+VISUAL: 
+AUDIO: 'As our loss function, we simply penalize the difference between the predicted and true signed distance values and encourage smooth blending. In total, pre-training took about 45 hours on a single GPU. In contrast to'
+
+[06:44] [scene:talk]
+VISUAL: 
+AUDIO: 'other neural methods, this network is purely local and needs to be pre-trained only once before you can then apply it to any input. So, for a given point cloud, we first fit tori by applying the network. The final SDF is obtained using'
+
+[06:57] [scene:talk]
+VISUAL: 
+AUDIO: 'the simple analytical formula, so queries are fast and multiple queries are easily parallelizable. We also just have a single simple formula for lambda, so we don\'t have to play around with it'
+
+[07:09] [scene:talk]
+VISUAL: 
+AUDIO: 'or make a trade-off between reconstruction and distance. In these past distance formulas, it\'s actually not even very easy to choose a lambda that gives good results. In fact, our method gives better'
+
+[07:21] [scene:talk]
+VISUAL: 
+AUDIO: 'reconstructions than other fast point-based methods, including winding numbers, while also providing distance information. Significantly, our method allows pointwise evaluation of distance without discretization or global solves, so you'
+
+[07:34] [scene:talk]
+VISUAL: 
+AUDIO: 'can directly sphere trace level set surfaces in a shader, as well as implement some other cool shader demos. Here the SDF values you see are being evaluated per pixel in real time. For sparse point clouds, our method'
+
+[07:48] [scene:talk]
+VISUAL: 
+AUDIO: 'gives better quality than the recent sign heat method. The recent N and Vips method does tend to produce better reconstructions of sparse point clouds, but is also far more expensive. Across four data sets, we found that our method'
+
+[08:01] [scene:talk]
+VISUAL: 
+AUDIO: 'was faster than other approaches for computing sign distance, sometimes by orders of magnitude, and produce lower error. On a higher level, one important of this project is that we intentionally do not attempt end-to-end learning.'
+
+[08:14] [scene:talk]
+VISUAL: 
+AUDIO: 'Learning SDFs directly from entire point clouds is difficult because the eikonal equation is non-linear and has tons of local minima. A lot of literature therefore proposes various regularizations trying to encourage more'
+
+[08:27] [scene:talk]
+VISUAL: 
+AUDIO: 'SDF-like solutions, but the problem is difficult and inference is expensive if you use one big network for everything. A lot of neural implicit methods actually require you to train a new'
+
+[08:39] [scene:talk]
+VISUAL: 
+AUDIO: 'network for every shape. In contrast, we completely avoid these difficulties by using a simple analytical formula and use learning only for the one component with no easy solution. This network can be reused across problems and the result'
+
+[08:52] [scene:talk]
+VISUAL: 
+AUDIO: 'is a less training and much faster inference. On another note, our insights about low-dimensional geometry also apply in higher dimensions. One example is generative modeling where flow-based models actually have a closed-form'
+
+[09:05] [scene:talk]
+VISUAL: 
+AUDIO: 'expression for the solution that looks really similar to our distance formula. It\'s a vector that points from the current sample to an estimate of the closest data point seen in training. This means that as is, flow-based models'
+
+[09:17] [scene:talk]
+VISUAL: 
+AUDIO: 'can actually only memorize their training data. They simply reproduce the discrete distribution of the training examples, and this is exactly the same reason why naive distance formulas fail to generalize. The current state of the'
+
+[09:31] [scene:talk]
+VISUAL: 
+AUDIO: 'art in generative modeling is to train a huge neural network. Very recently, some authors have begun to explore more geometry-based ideas, and I don\'t see why there can\'t be more. There\'s so much more to say, but to'
+
+[09:44] [scene:talk]
+VISUAL: 
+AUDIO: 'summarize what\'s in our paper, we first show how signed distance can be unified with certain classic reconstruction methods. They\'re all actually equivalent in the sense that they can all be obtained from one family of PDEs.'
+
+[09:56] [scene:talk]
+VISUAL: 
+AUDIO: 'Building on these insights, we show that decades of distance and reconstruction methods can be seen as instances of just two formulas, but none of them work for point clouds. And in general, this phenomenon is fundamental to not just'
+
+[10:09] [scene:talk]
+VISUAL: 
+AUDIO: 'distance and not just in low dimensions, but for more general manifold learning tasks. In the end, we show how a deceptively simple formula, combined with torus SDFs and some careful design choices, can be used to efficiently approximate the true'
+
+[10:23] [scene:talk]
+VISUAL: 
+AUDIO: 'signed distance directly from point clouds. Looking forward, I think it might still be possible to further improve this performance, like the pre-computation cost of fitting tori. I didn\'t extensively engineer this neural'
+
+[10:35] [scene:talk]
+VISUAL: 
+AUDIO: 'network, so I really think there\'s a lot of improvements still on the table. It\'s also still an open question whether it\'s possible to bypass this network entirely. Another area of improvements is further generalization to extremely corrupt'
+
+[10:48] [scene:talk]
+VISUAL: 
+AUDIO: 'data, such as point clouds with large amounts of noise, outliers, missing data, or sampling densities not seen in training. And in addition to many other possible directions, more broadly, this final formula is differentiable, point-based,'
+
+[11:01] [scene:talk]
+VISUAL: 
+AUDIO: 'and output-sensitive, which could be promising for inverse tasks using torus signed distance as a differentiable shape representation. Anyway, that\'s the end of this presentation, and thanks for listening.'

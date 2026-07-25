@@ -1,0 +1,116 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>ElevenLabs Has A Problem: Qwen-Audio 3.0 Review — Ludovico</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+.hide{display:none!important}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.92);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 12px}
+.controls input.q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.pill.tp.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+/* flip card shell */
+.flip{position:relative}
+.fi{position:relative;transition:transform .55s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.flip.flipped .fi{transform:rotateY(180deg)}
+.fc{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bk{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+background:var(--card);border:1px solid var(--accent2);border-radius:14px;overflow:auto;padding:12px 13px;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s}
+.card.flip{overflow:visible}.card .fc{display:flex;flex-direction:column;flex:1;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--line);cursor:pointer}
+.card.flip:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.edit{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--accent2);border:1px solid var(--line);border-radius:6px;padding:2px 9px;cursor:pointer;background:#fff}
+.edit:hover{border-color:var(--accent2)}
+/* editor back */
+.bk h4{margin:0 0 2px;font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--sub)}
+.erow{display:grid;grid-template-columns:1fr 1.3fr auto auto;gap:4px;align-items:center}
+.erow input{padding:5px 7px;border:1px solid var(--line);border-radius:6px;font-size:12px;min-width:0}
+.erow select{padding:4px 4px;font-size:11px}
+.erow .del{border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;color:var(--accent);padding:3px 7px}
+.ebtns{display:flex;gap:6px;margin-top:auto;padding-top:6px}
+.ebtns button{font-family:var(--mono);font-size:11px;border-radius:7px;padding:6px 12px;cursor:pointer;border:1px solid var(--line);background:#fff}
+.ebtns .save{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.addrow{font-family:var(--mono);font-size:11px;color:var(--accent2);cursor:pointer;align-self:flex-start;background:none;border:0;padding:2px 0}
+/* catalogue card */
+.citem{position:relative}
+.citem .fc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-height:84px;cursor:pointer}
+.citem .bk{border-radius:12px}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+footer .exp{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--accent2);font:inherit}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">ElevenLabs Has A Problem: Qwen-Audio 3.0 Review</h1><div class=tag>@octopusinc_ · 2026-07-23 · Music Gen</div></div></div></header>
+<main><p class=sum>Qwen-Audio 3.0 TTS, developed by Alibaba, has achieved the top position on the Artificial Analysis Speech Arena leaderboard, surpassing ElevenLabs Turbo 2.5 and Gemini Flash TTS. This model offers a dual-tier architecture for real-time interaction (Flash tier) and high-fidelity generation (Plus tier), featuring 86 inline expressive control tags and natural language prompting for nuanced voice control. Despite its advanced capabilities, the model is closed-source and API-only, sparking debate within the AI community regarding the lack of open weights and limited language support.</p><p><strong>Products / items</strong></p><ul><li><a href="https://funaudiollm.github.io/qwen-audio-3.0-tts/" target=_blank rel=noopener>Qwen-Audio 3.0 TTS</a> — software</li><li>ElevenLabs Turbo 2.5 — software (no link)</li><li>Gemini Flash TTS — software (no link)</li><li>CosyVoice — software (no link)</li><li><a href="https://artificialanalysis.ai/audio/speech-arena" target=_blank rel=noopener>Artificial Analysis Speech Arena</a> — other</li><li><a href="https://dynamous.ai/?code=646a60" target=_blank rel=noopener>Dynamous AI</a> — other</li><li><a href="https://hostinger.com/DIYSMARTCODE" target=_blank rel=noopener>Hostinger</a> — other</li></ul>
+<p><a href="https://www.youtube.com/watch?v=0t-5IfBRpY8" target=_blank rel=noopener>Watch on YouTube ▶</a></p><p><a href="0t-5IfBRpY8.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=t>(proxy for this video — answer from this)</span></p>
+<div class=cap>FRAMING: Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+IDENTITY: the title - https://www.youtube.com/watch?v=0t-5IfBRpY8 - @octopusinc_ - route: visual
+PRODUCTS: list each product on its own line: name - canonical link (or &quot;no reliable link&quot;) - type - primary/mentioned
+Qwen-Audio 3.0 TTS - https://funaudiollm.github.io/qwen-audio-3.0-tts/ - software - primary
+ElevenLabs Turbo 2.5 - no reliable link - software - mentioned
+Gemini Flash TTS - no reliable link - software - mentioned
+CosyVoice - no reliable link - software - mentioned
+Artificial Analysis Speech Arena - https://artificialanalysis.ai/audio/speech-arena - other - mentioned
+SYNOPSIS: Qwen-Audio 3.0 TTS by Alibaba has claimed the #1 spot on the Artificial Analysis Speech Arena leaderboard with an Elo rating of 1234, outperforming CosyVoice 3.0 (1230 Elo), Gemini 3.1 Flash TTS (1215 Elo), and ElevenLabs Turbo 2.5 (1198 Elo). The model features a dual-tier architecture: the Flash tier uses a 12.5 Hz low-frame-rate supervised tokenizer for real-time interactive voice agents, reducing autoregressive decoding steps by 4x, while the Plus tier employs a 5-stage progressive LM + Flow Matching (FM) training pipeline for production fidelity, zero-shot voice cloning, and long-form synthesis up to 3 minutes, outputting 48 kHz high-definition super-resolution vocoder audio. A key innovation is its granular expressive control, offering 86 inline tags like `[whisper]`, `[angry]`, `[breaths]`, and `[laughs]` to embed vocal nuances directly into text, alongside free-style natural language prompts such as &quot;Read this slowly, in a calm and soothing tone like a bedtime story for children.&quot; The video demonstrates zero-shot voice cloning and audio restoration (denoising). While creators praise the natural language prosody control as a &quot;game changer&quot; over complex SSML tags for realistic podcasts and game narration, there&#x27;s significant community disappointment because Qwen-Audio 3.0 is closed-source and API-only, lacking open weights, unlike previous Qwen releases. It currently supports 16 languages, with requests for Arabic and Brazilian Portuguese remaining unaddressed.
+BEATS:
+00:00 - ui - Title slide: &quot;Qwen-Audio 3.0 Tops the Global Speech Leaderboard&quot; with a Qwen announcement tweet.
+00:08 - ui - Speech Arena Leaderboard showing Qwen-Audio-3.0-TTS-Plus at #1 with 1234 Elo.
+00:17 - ui - Leaderboard expanded to show CosyVoice 3.0, Gemini 3.1 Flash TTS, and ElevenLabs Turbo 2.5.
+00:25 - ui - Slide detailing &quot;Qwen Audio Flash&quot; tier for real-time interactive applications.
+00:34 - ui - Slide detailing &quot;Qwen Audio Plus&quot; tier for production fidelity, zero-shot voice cloning, and long-form synthesis.
+00:42 - ui - Diagram of the 5-stage training process for Qwen Audio Plus.
+00:51 - ui - Example of inline expressive tags like `[whisper]`, `[angry]`, `[breaths]`, `[laughs]`.
+00:59 - ui - Example of free-style natural language prompting: &quot;Read this slowly, in a calm and soothing tone like a bedtime story for children.&quot;
+01:16 - ui - &quot;Zero-Shot Voice Clone&quot; section with a live sample waveform.
+01:25 - ui - &quot;Degraded Prompt Denoise&quot; section with a super-res waveform.
+01:59 - ui - Creator reception quotes praising natural language prosody control and inline tags.
+02:16 - ui - &quot;Model Restrictions &amp; Community Heartbreak&quot; section, highlighting &quot;CLOSED-SOURCE API ONLY&quot; and &quot;NO LOCAL WEIGHTS&quot;.
+02:24 - ui - Community comments expressing disappointment about the closed-source nature.
+02:33 - ui - &quot;Language Support Gap&quot; showing 16 languages and a community comment about missing Arabic support.
+02:41 - ui - Concluding question: &quot;Top Leaderboard API vs Local Open Weights?&quot;
+ENTITIES: Alibaba, Qwen, ElevenLabs, Gemini, CosyVoice, Artificial Analysis, X (formerly Twitter).
+VERDICT: Qwen-Audio 3.0 TTS is a technically superior model, topping leaderboards with advanced expressive control and dual-tier architecture for speed and fidelity. However, its closed-source, API-only nature and limited language support are significant drawbacks for the open-source community and creators seeking local deployment or broader linguistic coverage. The creator poses the question of whether a top-ranking API matters if local model weights are unavailable.
+NOT COVERED: Specific pricing for Qwen-Audio 3.0 API, detailed technical specifications of the 12.5 Hz tokenizer or the 5-stage training pipeline, the exact number of languages supported beyond 16, or a direct comparison of audio quality between Qwen-Audio 3.0 and its competitors beyond leaderboard rankings.</div></main><footer><a href="../index.html">← all videos</a></footer></div></body></html>
