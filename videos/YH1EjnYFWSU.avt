@@ -1,0 +1,572 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Little Coder: Small Models Need Small Harnesses
+channel: @octopusinc_
+duration: 29:34
+source: https://www.youtube.com/watch?v=YH1EjnYFWSU
+upload_date: 20260722
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'Here is an interesting fact. Quen 3.6 with a little coder harness which is built on Pi was able to beat Gemini 2.5 with the Gemini CLI harness on terminal bench. Now Gemini 2.5 is an older model and while the feed is impressive, the'
+
+[00:15] [scene:talk]
+VISUAL: 
+AUDIO: 'results for Little Coder isn\'t objectively great, sitting at roughly 25%. But there are some intriguing considerations. For example, Quen 3.6 Six is a local model, meaning that you could run it from your laptop. This'
+
+[00:28] [scene:talk]
+VISUAL: 
+AUDIO: 'means you aren\'t restricted by any usage limits, nor are there any absurd API pricing or subscriptions. And you could run this completely offline. So whether you are in a train, on an airplane, or'
+
+[00:41] [scene:talk]
+VISUAL: 
+AUDIO: 'if you\'re even at a campsite, you could always be coding with your AI agent. and Little Coder, which is something I discovered recently, is a coding harness that is specifically designed for'
+
+[00:53] [scene:talk]
+VISUAL: 
+AUDIO: 'smaller language models like the Quan 3.6 and the Gemma 4. What makes Little Coder interesting is that it has built-in techniques to help less capable models manage their context and tool calling better. So, naturally, I was'
+
+[01:06] [scene:talk]
+VISUAL: 
+AUDIO: 'intrigued just how good is this local model and little coder combo? Could it actually code build something? And what exactly does it take to run these models on your computer? And so I went down this rabbit hole and the results were'
+
+[01:19] [scene:talk]
+VISUAL: 
+AUDIO: 'intriguing and I\'m super excited to share my findings with you. So in this video I\'ll be covering the following. How local models work, how to host them on your machine, how to install and run little coder. And finally I\'ll go over'
+
+[01:33] [scene:talk]
+VISUAL: 
+AUDIO: 'the experiments that I ran and what my thoughts are for using Little Coder for daily programming tasks. Before we get started though, I do want to point out that this video is not meant to convince you to use local models or to use Little Coder. It\'s more of an experiment that'
+
+[01:46] [scene:talk]
+VISUAL: 
+AUDIO: 'I\'ve conducted for myself and I thought the results were interesting and so I\'m sharing it with the rest of you guys regardless of the outcome. I hope this video is insightful and entertaining and that you guys are able to take something out of it. Anyway, let\'s get started.'
+
+[01:58] [scene:talk]
+VISUAL: 
+AUDIO: 'So, what exactly is a local model? Now, there are tons of great videos out there that explain how large language models work. And understanding that is helpful, but for the sake of this video, I\'ll explain things just enough so that you'
+
+[02:11] [scene:talk]
+VISUAL: 
+AUDIO: 'can get the ball rolling on these local models with little coder. Models like the Gemma 4 and Quen 3.6 are actually not a single model, but rather a family or a suite of models. They contain models of various sizes and parameters,'
+
+[02:25] [scene:talk]
+VISUAL: 
+AUDIO: 'which essentially just means that they have different sized brains. And generally speaking, the bigger the brain, the smarter it is, but also the more demanding they are on your hardware. Take a look at this Gemma 4 family chart. It can look a little'
+
+[02:38] [scene:talk]
+VISUAL: 
+AUDIO: 'intimidating at first glance, but don\'t worry, I\'ll explain everything. So, each row here depicts a different model. We got Gemma 4 E2B, Gemma 4B, which stands for 12 billion parameters. And just for'
+
+[02:50] [scene:talk]
+VISUAL: 
+AUDIO: 'reference, E2B stands for efficient. So, these are going to be the smaller, more lightweight models. And in this case, that\'s a 2 billion parameter model. And the largest one that they have is a 31B 31 billion parameters. And they have an'
+
+[03:02] [scene:talk]
+VISUAL: 
+AUDIO: 'interesting one called the A4B, which is what is considered a mixture of models. Now, the way that that works is instead of activating the entire model at once, the model is actually fragmented into various experts. And for a given token,'
+
+[03:14] [scene:talk]
+VISUAL: 
+AUDIO: 'it only goes to that specific area of the model. So, you\'re actually not using the full model, but a more specialized version of it. The benefit there is that because you\'re only activating a small subset of the entire model, your model'
+
+[03:27] [scene:talk]
+VISUAL: 
+AUDIO: 'is actually going to perform a lot faster. And on the column here, you\'ll see that we got strange looking things like BF-16, Q4, mobile, and stuff like that. And what that refers to is something called quantization. And you'
+
+[03:40] [scene:talk]
+VISUAL: 
+AUDIO: 'can think of this as like compressing your model to make it a little bit smaller. You\'ll see in the table cells here that we have the size of the models in gigabytes. And as we compress the models, the size also shrinks down. And'
+
+[03:53] [scene:talk]
+VISUAL: 
+AUDIO: 'just to help with understanding how quantization works, here\'s a little diagram. Now, at full f16, there is zero compression. You get what you get. But when you start compressing your models down a little bit, it\'s kind of like you'
+
+[04:06] [scene:talk]
+VISUAL: 
+AUDIO: 'are compressing a picture. It\'s going to start looking a little bit more more compressed. And at some point, you\'re going to be losing so much detail that it\'s not going to look very similar to your original photo. Now, the community kind of has landed in the Q4 as kind of'
+
+[04:18] [scene:talk]
+VISUAL: 
+AUDIO: 'like the de facto standard for running your models locally. And this is the sweet spot between too much compression where you lose some of that accuracy and performance, but enough compression that your model is still small enough so that'
+
+[04:30] [scene:talk]
+VISUAL: 
+AUDIO: 'it can fit in your memory and perform. So, what exactly are the requirements to running one of these models on your computer? Well, contrary to popular belief, you actually don\'t need to have a GPU to be able to run these models.'
+
+[04:43] [scene:talk]
+VISUAL: 
+AUDIO: 'But what a GPU does for you is make your model faster. In reality though, what you really need is memory. The more memory you have, the larger the model you\'re able to run. And as for how much memory you need for your model, you'
+
+[04:57] [scene:talk]
+VISUAL: 
+AUDIO: 'basically just need to look at the file size. And just to help illustrate this point, here\'s a little diagram. You\'ll end up putting the entire file into memory. So the size of the file is pretty much how much memory you need. Now, just because you have 16 GB of'
+
+[05:10] [scene:talk]
+VISUAL: 
+AUDIO: 'memory doesn\'t mean you can fit a 16 GB size model. You\'re going to need some extra space for the context window of the model as well. In addition, you\'re going to need extra space for everything else like your browser, your terminal, your desktop apps, what have you. And'
+
+[05:23] [scene:talk]
+VISUAL: 
+AUDIO: 'so, totality of that is going to be your memory requirements. So, for example, here the Quen 3.6 4 billion parameter model on file is around 2 1/2 GB. And with a little bit of context, you\'re'
+
+[05:35] [scene:talk]
+VISUAL: 
+AUDIO: 'going to need around 6 GB of buffer space. So, this will work perfectly fine on any 16 GB memory laptop. But if you want to use a more beefy or larger model like the Quen 3.6 35 billion mixture of'
+
+[05:47] [scene:talk]
+VISUAL: 
+AUDIO: 'experts model, it\'s a bit of a mouthful. Holy smokes, that\'s hard to say. But for this, you\'re going to need around 30 GB of memory. So, yeah, there you have it. I also have here an extra interactive'
+
+[05:59] [scene:talk]
+VISUAL: 
+AUDIO: 'demo called Can I Run It? The link to these interactive demos will be provided through my GitHub. Uh the link for it will be down in the description below. So feel free to check that out if you like. But this one here, can I run it? Kind of is a way to see if your computer'
+
+[06:11] [scene:talk]
+VISUAL: 
+AUDIO: 'is going to be able to run a certain model. Now here you select your hardware, what kind of computer or GPU you may have. You look at the quantization or compression you\'re looking at for your model. Usually that\'s going to be Q4. And then you'
+
+[06:24] [scene:talk]
+VISUAL: 
+AUDIO: 'select the model size parameters and it tells you just how much memory you\'re going to need or if you are not going to have enough memory. And you can also specify the context window. These kind of give you a rough estimate as to whether you\'re able to run your model or'
+
+[06:36] [scene:talk]
+VISUAL: 
+AUDIO: 'not. But yeah, the basic flow of running your local model is actually very straightforward. First, you download your model and it\'s just a single file and then you load that up into your'
+
+[06:48] [scene:talk]
+VISUAL: 
+AUDIO: 'memory and then you spin up an inference server so you can talk to it back and forth in an easy way. And there are three apps that make this super easy for you. First is the llama.cpp method. Uh there\'s also the Olama CLI and finally'
+
+[07:00] [scene:talk]
+VISUAL: 
+AUDIO: 'there is the LM Studio desktop app. I\'ll personally walk you through the LM Studio desktop app just because it\'s more visual and it\'s easier for me to present on YouTube, but you can do everything I\'m doing today with the'
+
+[07:13] [scene:talk]
+VISUAL: 
+AUDIO: 'other routes as well. In fact, the recommended approach is actually to use llama.cpp. Uh that\'s the one that is most performant. But the downside is that it\'s not as userfriendly to set up, but it\'s also not a whole lot of work to get it running. But yeah, the good news'
+
+[07:26] [scene:talk]
+VISUAL: 
+AUDIO: 'here is that everything that we\'ve talked about today is supported on all major operating systems. So it\'s not just Mac users for today, which is usually the case. So to get started, just download the LM Studio desktop app and spin her up. After you\'ve downloaded'
+
+[07:38] [scene:talk]
+VISUAL: 
+AUDIO: 'and installed the application, the first step is to download the model that you want. So just navigate to the model search page, look for the model that you\'re looking for. Gemma 4 works for me. And you\'ll see a whole bunch of them'
+
+[07:50] [scene:talk]
+VISUAL: 
+AUDIO: 'here and select the one that you want. And then you click that download button. You can also hit that subscribe and like button as well to support this channel and I would really appreciate that, but that\'s optional. Once it downloads, you\'ll want to load up the model. Go to the developer tab and press load model.'
+
+[08:03] [scene:talk]
+VISUAL: 
+AUDIO: 'Select the model you want to run. And at this point, you can specify the context size to this context length field. So, for example, if I want to set the context to 100,000 tokens, I can do that. For programming tasks, you\'ll want'
+
+[08:16] [scene:talk]
+VISUAL: 
+AUDIO: 'your context size to be as large as possible without running out of RAM. Then once that is loaded, you\'ll want to click this button here to start your server and you\'re good to go. This essentially spins up an API so that you'
+
+[08:28] [scene:talk]
+VISUAL: 
+AUDIO: 'can interact with your LLM. And at this point, your LLM is fully activated and ready to go. You can in fact have a conversation with it directly inside of LM Studio. Load up that model and just say hi. And there we go. But that\'s not'
+
+[08:41] [scene:talk]
+VISUAL: 
+AUDIO: 'what we want to do today. We want to start coding with it. So we want to hook it up with little coder. And that\'s what we\'re going to do right now. Little coder is a coding harness built on top of pi. This is the paper that'
+
+[08:53] [scene:talk]
+VISUAL: 
+AUDIO: 'explains the rationale behind little coder which is essentially that a coding harness meant for frontier models will tend to not do so well for smaller models. Little coder is different from the more mainstream harnesses in a few'
+
+[09:06] [scene:talk]
+VISUAL: 
+AUDIO: 'different ways. Mainstream harnesses like claw code works by giving an intelligent model freedom. You give it tools like bash and when it runs into an issue you assume that the model is smart enough to realize its mistakes and'
+
+[09:18] [scene:talk]
+VISUAL: 
+AUDIO: 'course correct on its own. Smaller models are different more prone to errors and as such little coder aims to constrain the model. It adds checks to the model outputs to check for things'
+
+[09:30] [scene:talk]
+VISUAL: 
+AUDIO: 'like empty responses, improper tool calling, injecting tool information only when it needs it, repetition loop detection, and it can even try to steer the conversation if it realizes that the local model is in a bind. And it tries'
+
+[09:42] [scene:talk]
+VISUAL: 
+AUDIO: 'to be more aggressive with context management since the context is a precious resource for smaller computers. Anyway, getting started with little coder is easy. Just go to the GitHub repo, copy the install script,'
+
+[09:54] [scene:talk]
+VISUAL: 
+AUDIO: 'and run it. Once installed, you\'ll want to run little dashcoder to spin it up. Now, there are a couple of gotchas that I\'ll explain now. First things first, in'
+
+[10:07] [scene:talk]
+VISUAL: 
+AUDIO: 'order for pi, the underlying engine of little coder to work with local models, you actually need to provide a few environment variables. The GitHub repository has the details that you need, and you\'ll basically want to copy'
+
+[10:19] [scene:talk]
+VISUAL: 
+AUDIO: 'these values into your bash rc or whatever uh profile that you are currently using. The other thing is you\'ll want to change the model to the LM Studio local model. Run slashmodel.'
+
+[10:32] [scene:talk]
+VISUAL: 
+AUDIO: 'Then you want to select local model. Now, if it\'s not the first one that shows up here, just type in local-model and it should pop up. Now, when you select that, you will likely see on your screen your context window to be set to'
+
+[10:44] [scene:talk]
+VISUAL: 
+AUDIO: '33,000 instead of the 102 that I currently have. And 33 was a default for me when I first installed it. And if you\'re using llama.cp, CPP Little Coder will actually autodetect the context'
+
+[10:56] [scene:talk]
+VISUAL: 
+AUDIO: 'window for you based on the model D that you have currently loaded. Unfortunately, they don\'t currently have an integration with LM Studio quite yet. So, you\'ll actually need to update this value manually. To do this, you\'ll want to open up the configuration section on'
+
+[11:10] [scene:talk]
+VISUAL: 
+AUDIO: 'the GitHub repository. Uh depending on your platform, you\'re going to have different locations for your little coder config file. Uh but for me, I\'m on Mac, so this third one here is where I need to put in that configuration. And if I open this up,'
+
+[11:23] [scene:talk]
+VISUAL: 
+AUDIO: 'you\'ll see that the values here look very similar to the values that they provide in the examples. You just want to make sure that you are providing the local model here and you provide the size of that context window here as'
+
+[11:35] [scene:talk]
+VISUAL: 
+AUDIO: 'well. This number should pretty much match closely the number that you have on your LM studio. In terms of testing the local models, I ran two experiments. I used Quen 3.6 and Gemma 4. You can see on this sheet here that Gemma I used 31'
+
+[11:49] [scene:talk]
+VISUAL: 
+AUDIO: 'billion parameters and Quen was 35 billion. But the difference here is Quen is actually a mixture of experts model. And this means that for a given prompt for a given token actually to be'
+
+[12:01] [scene:talk]
+VISUAL: 
+AUDIO: 'specific only a fraction of the entire model is being activated at once. Whereas with Gemma 4 the entire 31 billion billion parameters are always being used for every token generation. As a result, they both occupy a similar'
+
+[12:14] [scene:talk]
+VISUAL: 
+AUDIO: 'amount of space on storage and similar amount of memory. But the difference here is that the coin model was substantially faster because only a portion of the models were being used.'
+
+[12:26] [scene:talk]
+VISUAL: 
+AUDIO: 'And just for reference, I\'m using an M3 Max chip with uh 64 GB of RAM. The task I gave little coder was admittedly ambitious. I asked for a full stack'
+
+[12:38] [scene:talk]
+VISUAL: 
+AUDIO: 'application with a complete front end, backend, some sort of database, a database seed function so that there\'s test data to play around with and also authentication. Basically, the whole nine yards. Here in front of me is the'
+
+[12:50] [scene:talk]
+VISUAL: 
+AUDIO: 'prompt itself. Uh, and this again will be available in the GitHub repository with the link down below. So, I basically fed the prompt to both Quen 3.6 and Gemma 4, but for the sake of'
+
+[13:02] [scene:talk]
+VISUAL: 
+AUDIO: 'this demonstration, let\'s just start with Quen first. And here you can see already just how fast the Quen model is. And because this is the mixture of experts model, it\'s'
+
+[13:15] [scene:talk]
+VISUAL: 
+AUDIO: 'only activating a small subset of the entire model at a given time. And so as a result, the token per second is really really high on on my machine for for this model. This is one of those little'
+
+[13:27] [scene:talk]
+VISUAL: 
+AUDIO: 'quirks about little coder. You\'ll notice that it says write is refused. The file already exists. So just because little coder doesn\'t provide all of this tooling details up front, it\'s going to run into these issues uh as it goes and'
+
+[13:39] [scene:talk]
+VISUAL: 
+AUDIO: 'the harness has a little intervention where it says small models can\'t rewrite whole files redirected the model to edit in the process of not providing too much context up front. The the model is going to have a lot of little issues like'
+
+[13:53] [scene:talk]
+VISUAL: 
+AUDIO: 'these and the harness kind of steps in and kind of redirects the model to the correct course of action. So don\'t be alarmed if you see stuff like this happening all the time in your little coding sessions. Now Quen 3.6 was actually fairly surprising in the sense'
+
+[14:07] [scene:talk]
+VISUAL: 
+AUDIO: 'that it was able to work for almost 30 minutes on its own and it actually did finish its task. Finish its task. I\'ll show you what the final result looked like. Okay, so the first time I opened up this application, this is what the'
+
+[14:21] [scene:talk]
+VISUAL: 
+AUDIO: 'app looked like. Uh it provided me with demo credentials for me to work with, which is exactly what I had asked for. I filled that in and I got this lovely view. So, it wasn\'t perfect. Obviously, there is some major major styling issues'
+
+[14:36] [scene:talk]
+VISUAL: 
+AUDIO: 'with this application. Uh the sidebar is completely transparent and the content is shifted underneath that. So, that\'s that\'s not very good. And you can see in the bottom left here that there are some Nex.js issues. Uh buttons being a'
+
+[14:48] [scene:talk]
+VISUAL: 
+AUDIO: 'descendant of buttons. Uh not really something that you should be doing. But if you actually use chat and components quite a bit, uh, you will actually run into this problem pretty much all the time and you have to kind of fix it. Uh, so I\'m not terribly surprised that Quen'
+
+[15:00] [scene:talk]
+VISUAL: 
+AUDIO: 'ran into this issue, but it didn\'t fix it. So that\'s kind of a point taken off its fabricated score. Now, so what I did was I basically took a screenshot of uh the problems that I saw and fed it right'
+
+[15:12] [scene:talk]
+VISUAL: 
+AUDIO: 'back into Quen 3.6. It has the ability to be able to view images, so you are able to take uh snapshots and feed it back in as well. Uh that\'s very handy especially for these local models which I\'m very impressed by and let me just'
+
+[15:24] [scene:talk]
+VISUAL: 
+AUDIO: 'fast forward to what it did afterwards. Okay, so we are jumping a little bit into the future now. Um we have encountered basically what is kind of like the major issue that I ran into uh'
+
+[15:37] [scene:talk]
+VISUAL: 
+AUDIO: 'with little coder and this is an infinite thinking loop. So you\'ll see here that a lot of these uh thinking lines or reasoning uh logs are repetitive and duplicated and it was not'
+
+[15:49] [scene:talk]
+VISUAL: 
+AUDIO: 'able to come to a conclusion on its own and in fact you saw there that the model basically intervened saying budget exceeded please commit to an implementation test stop deliberating'
+
+[16:01] [scene:talk]
+VISUAL: 
+AUDIO: 'and use your tools to make progress and yeah that seemed to have done the trick so that is a good sign. I believe I had to kind of pause the application uh with my escape key and then press uh enter because uh little coder had prefilled'
+
+[16:13] [scene:talk]
+VISUAL: 
+AUDIO: 'that the text in for me and I had to put it in. Sometimes uh I noticed that it will inject that for me but sometimes it just had it in the text input box and I had to manually press it in myself. Wasn\'t super consistent with that but'
+
+[16:25] [scene:talk]
+VISUAL: 
+AUDIO: 'yeah it did eventually work I guess but it will it did run into that infinite loop and that was a little annoying. Here is another example where uh it ran into another infinite loop and I believe this was another case of me kind of'
+
+[16:37] [scene:talk]
+VISUAL: 
+AUDIO: 'iterating with the visuals with the sidebar. I told it it\'s in an infinite loop and I specifically told it what the problem is. It it was able to kind of figure it out for itself in the in the thinking dialogue here. The main element has a PL 64 which is 256. This actually'
+
+[16:50] [scene:talk]
+VISUAL: 
+AUDIO: 'is the problem and is it was able to identify the problem correctly. It just wasn\'t able to get out of this thinking loop and start implementing. After a few iterations with the AI, I was able to get to a point where the sidebars uh'
+
+[17:04] [scene:talk]
+VISUAL: 
+AUDIO: 'were all kind of fixed. It actually doesn\'t look terrible. It\'s got its own style. I guess it\'s I don\'t know. It reached for these uh funky colors and uh I guess it\'s a little bit tropical. I don\'t know. Uh but there are obviously'
+
+[17:17] [scene:talk]
+VISUAL: 
+AUDIO: 'some glaring issues. Uh numbers don\'t really add up. It\'s doesn\'t calculate the available days. It just says not a number. That that is a recurring theme across this application. Uh I also created a new request. there is no way to actually approve the request that I'
+
+[17:30] [scene:talk]
+VISUAL: 
+AUDIO: 'made. So it actually didn\'t complete the full life cycle of this application set of features. So it would not pass the test that I would normally give it. But again it is a local model. So there is'
+
+[17:42] [scene:talk]
+VISUAL: 
+AUDIO: 'that consideration. Uh the calendar page is existing. Uh it doesn\'t show everything. Again a whole bunch of not a number days remaining. Not particularly useful but at least the the visual the structure is kind of nice. It\'s there.'
+
+[17:54] [scene:talk]
+VISUAL: 
+AUDIO: 'Um, there\'s no way to navigate pages. Like, you know, it kind of feels like it\'s you\'re looking at a PowerPoint presentation. It\'s got some of the visuals there, but not everything is working behind the scenes. Team members are here and the button is there for the'
+
+[18:07] [scene:talk]
+VISUAL: 
+AUDIO: 'delete for these uh control buttons, but they don\'t actually work. None of these buttons actually work. So, yeah, that\'s the Quen 3.6 uh final result. This is kind of where I left it. Let\'s uh move on to Gemma 4 now. So we are doing the'
+
+[18:19] [scene:talk]
+VISUAL: 
+AUDIO: 'exact same thing for Java 4, providing the exact same prompt and let\'s see how this one does. Now you\'ll notice that it\'s actually working for quite some time now. And this whole experience with'
+
+[18:31] [scene:talk]
+VISUAL: 
+AUDIO: 'Java 4 has been a lot slower than Quen 3.6 because of the same reasons as I mentioned earlier. And you can see here in our rendering that tokens per second is noticeably a lot slower than the Quen'
+
+[18:44] [scene:talk]
+VISUAL: 
+AUDIO: '3.6. It\'s kind of like you can see the text kind of slide into our viewport as opposed to the Quen 3.6 where it just kind of flew by, right? And as a result, you\'re likely going to see that this is'
+
+[18:57] [scene:talk]
+VISUAL: 
+AUDIO: 'going to take a lot longer to finish. And um yeah, fortunately for you, this is a video, so we\'re going to fast forward a lot of this. So Gemma 4 has completed its task. The'
+
+[19:09] [scene:talk]
+VISUAL: 
+AUDIO: 'problem is that the server will actually not start. I looked at the issues. It\'s basically a syntax issue. I provided it with a screenshot. And let me show you what that looks like. Here on my IDE, you can see here that there are a couple'
+
+[19:21] [scene:talk]
+VISUAL: 
+AUDIO: 'of uh squiggly red squiggly lines which indicates syntax error. It\'s basically you forgot closing brackets, whether that\'s the parenthesis or the closing squirly brackets. It\'s a really easy fix. Unfortunately, unfortunately,'
+
+[19:33] [scene:talk]
+VISUAL: 
+AUDIO: 'unfortunately, Gemma 4 had a really hard time fixing this. In fact, it hallucinated us at some point. Said, "Oh, I fixed something and you can go run the application. It\'s running now." Spoiler alert, it was not fixed. Now,'
+
+[19:45] [scene:talk]
+VISUAL: 
+AUDIO: 'you can see here that the thinking dialogue has mentioned that I\'ve provided a screenshot, but it can\'t see the image directly unless I use a tool that can read it or if it was provided as an attachment. Uh, I provided a path,'
+
+[19:57] [scene:talk]
+VISUAL: 
+AUDIO: 'which is kind of how Pi handles it natively. If I take a screenshot and copy that screenshot and inject it in here, that\'s how it works. Natively, Pi will work with this and this work with Quen 3.6. I don\'t know why Gemma 4 is struggling so much to be able to read'
+
+[20:11] [scene:talk]
+VISUAL: 
+AUDIO: 'this image, but that was something interesting to note. So, because Gemma 4 is not looking at the actual server logs, it doesn\'t realize that the screenshot that I sent it was an issue with the syntax and so it\'s going around'
+
+[20:24] [scene:talk]
+VISUAL: 
+AUDIO: 'and kind of figuring out that there are other problems in the application and it\'s fixing those, but overall they don\'t really contribute to me being able to actually see the application running. So yeah, we are a few iterations in to try to fix this syntax issue that Gemma'
+
+[20:39] [scene:talk]
+VISUAL: 
+AUDIO: '4 has created. So unfortunately at some point I had to bring out the big guns and use cloud code to actually fix it. Admittedly, I could have probably fixed the syntax issues myself, but it was across a few different files, so I didn\'t particularly feel like doing that'
+
+[20:52] [scene:talk]
+VISUAL: 
+AUDIO: 'myself. So yeah, AI agent, that\'s what they\'re there for. So eventually we did get the app running. It does show this welcome page and it provides a user oneample.com. Now, the first thing you\'ll notice here does this is that'
+
+[21:06] [scene:talk]
+VISUAL: 
+AUDIO: 'this is actually not an authentication form. It just goes straight into it. Just from the get- go, you\'ll see that, you know, it looks a lot nicer. There is no um kind of visual issues with a sidebar that\'s overlapping. So, that like this is what it looked like from'
+
+[21:20] [scene:talk]
+VISUAL: 
+AUDIO: 'the from the very moment it finished. This one does seem a lot more functional. Uh it\'s got the available days, uh use days, total aotment. And just to kind of give you how that works, if I were to create a new leaf 30 to the 31st'
+
+[21:33] [scene:talk]
+VISUAL: 
+AUDIO: 'um test, I can create that request. It\'s set to pending and I can log out, use that manager login to go in here. And for some reason, this view has a different container size than the user one. But'
+
+[21:46] [scene:talk]
+VISUAL: 
+AUDIO: 'hey, you know what? If it works, it works. We can approve or reject the pending approvals. We can press approve. And we can see here that Alice is now Oh, it\'s using 20 out of 20. It should be 19 out of 20. That\'s kind of odd.'
+
+[21:58] [scene:talk]
+VISUAL: 
+AUDIO: 'Well, I guess we can give people more days, too, which is kind of interesting. But yeah, let\'s log back out. Check out user. Available days is now set to zero. Maybe it\'s counting the 29th to the 30th as inclusive. So, it must be counting'
+
+[22:12] [scene:talk]
+VISUAL: 
+AUDIO: 'the 29th and the 30th separately. So, that\'s why it counts as two days. But yeah, a lot more functional than the Quen 3.6 version. So, I would say, you know, honestly, Gemma 4, I\'m frankly a little bit impressed, but I am not'
+
+[22:25] [scene:talk]
+VISUAL: 
+AUDIO: 'impressed that you were not able to get the syntax right. That\'s bonkers. But one final note for this uh Gemma 4 version, it\'s still not complete. The basic loop of actually approving people is working, which is much better than'
+
+[22:38] [scene:talk]
+VISUAL: 
+AUDIO: 'Quen 3.6. But again, there is no user management on this at all. That was completely skipped. But I guess, you know, it\'s gone a little bit further than Quinn, but at the same time, it didn\'t do the authentication. So, ah,'
+
+[22:51] [scene:talk]
+VISUAL: 
+AUDIO: 'pick pick your poison, I guess. And this is the part of the video where we talk about the good parts and also the bad parts. But let\'s start with the good news first. The first thing I want to emphasize is that this actually works.'
+
+[23:03] [scene:talk]
+VISUAL: 
+AUDIO: 'It\'s crazy. Just the sheer idea that my laptop can run an AI LLM and create something out of nothing just by me providing some prompts and it does try'
+
+[23:15] [scene:talk]
+VISUAL: 
+AUDIO: 'to create a full stack application with a full front end, backend, and database with somewhat decent looking stuff. That\'s incredible. I think there\'s no way to downplay just how incredible that'
+
+[23:27] [scene:talk]
+VISUAL: 
+AUDIO: 'is to be able to run something like that on our local machines and kind of get away with it. The other thing that I really enjoyed was seeing how fast the Quen 3.6 six model was. And obviously the result was not entirely as nice as maybe the Gemma 4 question mark. You'
+
+[23:40] [scene:talk]
+VISUAL: 
+AUDIO: 'know, maybe different people have different reviews of these kind of things. But honestly, for a model that has a mixture of models where only a small subset of the model is active at a given time to create that really fast experience, holy smokes, that was'
+
+[23:53] [scene:talk]
+VISUAL: 
+AUDIO: 'amazing. And I think that\'s a really good thing to have to be able to work really quickly uh while you\'re on your m local machine is incredible. And the final good point here is that I do think the little coder harness does add'
+
+[24:05] [scene:talk]
+VISUAL: 
+AUDIO: 'substantially for these models. It\'s able to kind of sometimes not perfectly but interject itself and give the model a little nud nudge whenever it gets stuck or gets you know gets down and about if they can go down and about.'
+
+[24:19] [scene:talk]
+VISUAL: 
+AUDIO: 'Now the bad side of little coder plus local model. I\'m going to start with something that is very personal to me and just because this is what I was doing. My laptop got super super hot, like super super super hot because these'
+
+[24:33] [scene:talk]
+VISUAL: 
+AUDIO: 'models are very intensive and it requires a lot of memory and compute. Your computer is basically running at full capacity the entire time. And so for that time Quinn was working, Gemma 4'
+
+[24:45] [scene:talk]
+VISUAL: 
+AUDIO: 'was working. Uh it takes half an hour, an hour, whatever, whatever it was, my laptop was spinning, but the fan was going crazy and my hands were almost burning whenever I was touching close to where the the CPUs are on my computer.'
+
+[24:57] [scene:talk]
+VISUAL: 
+AUDIO: 'and that was not a pleasant experience. If you are running your little coder and your local models on a separate computer or somewhere tucked away and you\'re accessing it through the network, I think this is not going to be a problem'
+
+[25:09] [scene:talk]
+VISUAL: 
+AUDIO: 'for you at all whatsoever. But just saying if you\'re going to be running this on your laptop, do keep that in mind that your laptop is going to get a little toasty. Second issue was that the results were um lackluster. So obviously it didn\'t'
+
+[25:23] [scene:talk]
+VISUAL: 
+AUDIO: 'complete everything. It was somewhat working. you had to iterate with it and that whole process of iteration was a little buggy. So I\'m honestly quite surprised that the first time I gave that Quen 3.6 the prompt, it was able to'
+
+[25:35] [scene:talk]
+VISUAL: 
+AUDIO: 'kind of go from start to finish mostly working implementation without running into these infinite loops. Admittedly, I don\'t know everything about LM Studio. I don\'t know if the infinite loop was something that was caused on my end, but'
+
+[25:47] [scene:talk]
+VISUAL: 
+AUDIO: 'at the end of the day, it occurred while I was trying to record this video and so it\'s going to be captured in my assessment of things. But yeah, the infinite loops were not a fun experience. And obviously that\'s kind of like what little coder is trying to'
+
+[25:59] [scene:talk]
+VISUAL: 
+AUDIO: 'solve. And it you can see its valiant attempts at doing so. And I think that\'s kind of a good thing, but the fact that they\'re still there is a bit annoying. The other negative I would say is that I think you still kind of need a good'
+
+[26:12] [scene:talk]
+VISUAL: 
+AUDIO: 'laptop. Sure, you can run these uh really small models, but yeah, I think you do need to have some decent hardware to be able to run these things at a relatively fast enough pace at a large enough model. Even with the quantization'
+
+[26:25] [scene:talk]
+VISUAL: 
+AUDIO: 'factored in, running it on a 8 GB laptop, you\'re you\'re not going to have a lot of space for everything else like your browser or your Word doc or what have you while you\'re running it. So, there is that. Finally, this is not'
+
+[26:38] [scene:talk]
+VISUAL: 
+AUDIO: 'really a bad thing, and I think this kind of ties into my conclusion. I do think you\'re going to run into a few issues running these uh local models. And I do believe you need to be a bit of'
+
+[26:50] [scene:talk]
+VISUAL: 
+AUDIO: 'a tinkerer, someone that has a bit of a thick skin when it comes to running into issues and to be able to have that spirit to debug and to kind of persevere through these issues for you to actually get something valuable out of this. So I'
+
+[27:02] [scene:talk]
+VISUAL: 
+AUDIO: 'think, you know, with little coder, the current experience is decent but not great. But I think you will continue to run into these issues. you you\'re going to have to have that patience to deal with it. And for me, I do a lot of'
+
+[27:14] [scene:talk]
+VISUAL: 
+AUDIO: 'programming and the Frontier models with the mainstream uh harnesses, they they do kind of get the job done for me. So, I\'m not too sure where little coders going to stand in terms of usage. But I can totally see this being useful for a'
+
+[27:27] [scene:talk]
+VISUAL: 
+AUDIO: 'lot of other people who may be tinkerers or maybe have very specific workflows that they\'re building around or they\'re just really incredibly fascinated by this this uh little coder experience uh of having this model on your computer'
+
+[27:39] [scene:talk]
+VISUAL: 
+AUDIO: 'that you just want to toy around with it and see if you can just see how far you can get with programming on this thing. And I think that\'s a totally valid way to use it. So in conclusion, I honestly hope that you found this video very'
+
+[27:51] [scene:talk]
+VISUAL: 
+AUDIO: 'intriguing. I had a lot of fun just kind of going down this rabbit hole, testing things out and seeing how far my laptop can go. The one thing I didn\'t mention is that while the results that I got for this experiment were perhaps not up to'
+
+[28:05] [scene:talk]
+VISUAL: 
+AUDIO: 'the standard that I would have liked to see, I think the really good silver lining here is that things are going to get better, not worse. Laptops and computers are going to get better, faster, and cheaper. Well, cheaper with'
+
+[28:18] [scene:talk]
+VISUAL: 
+AUDIO: 'a caveat here because right now things are getting out of control expensive for a lot of people. But over the long haul, hopefully it things should, you know, get cheaper and better and even these uh small models have gotten better and'
+
+[28:31] [scene:talk]
+VISUAL: 
+AUDIO: 'better. Like this Gemma 4 is a relatively newer model and it\'s making the headlines in terms of how just just how good a small model can be. And as these uh smaller models get smarter and'
+
+[28:43] [scene:talk]
+VISUAL: 
+AUDIO: 'smarter, you\'re going to be able to get more more out of your laptop over long periods of time. So, I think this is a really good thing for the community, for all of us who are benefiting from this.'
+
+[28:55] [scene:talk]
+VISUAL: 
+AUDIO: 'And especially if you\'re someone who can\'t afford to pay the eye watering cost of several hundred bucks a month for the Claw Max plans or the Codeex plans, this might just be a really good way for people to play around and learn'
+
+[29:08] [scene:talk]
+VISUAL: 
+AUDIO: 'how AI works and to be able to program a little bit on the side. Anyway, I hope you found this video insightful. As always, I tend to cover software releases and uh new innovative things coming out in the AI space like this. If you found this interesting and fun, do'
+
+[29:20] [scene:talk]
+VISUAL: 
+AUDIO: 'hit that subscribe and like button to stay notified and to kind of give me a boost in the algorithm. It help really helps out with the channel. And yeah, without further ado, I\'ll see you guys in the next one. Take care you guys. Bye-bye.'
