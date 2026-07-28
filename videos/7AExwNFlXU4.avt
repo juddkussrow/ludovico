@@ -1,0 +1,232 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Running a 22GB AI Model on a 6GB GPU, FAST (llama.cpp Guide)
+channel: @octopusinc_
+duration: 11:35
+source: https://www.youtube.com/watch?v=7AExwNFlXU4
+upload_date: 20260728
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:intro]
+VISUAL: Text: "The model file is 22 GB. The graphics card has six, and it still answers at 17 tokens a second on a card that shipped in 2016."
+AUDIO: 'The model file is 22 GB. The graphics card has six, and it still answers at 17 tokens a second on a card that shipped in 2016. That works because of one detail in the model\'s name, 35B, a 3B, 35 billion parameters total. 3 billion'
+
+[00:14] [scene:talk]
+VISUAL: 
+AUDIO: 'of them fire per token. So, here is the whole video. Five llama.cpp flags that take this from three tokens a second to 17, and then the three places where the trick stops working. The model is QN3.6'
+
+[00:26] [scene:ui]
+VISUAL: Diagram showing a router distributing tokens to 8+1 experts out of 256.
+AUDIO: '35B A3B. Alibaba shipped it on April 15th, 2026, Apache 2.0, and it scores 73.4 on SWE bench verified, which is a strange thing to have sitting on your'
+
+[00:41] [scene:talk]
+VISUAL: 
+AUDIO: 'desk. The four-bit build from Unsloth is 22.36 GB. A 6 gig card holds about a quarter of it. Open that file up, and it is 256 experts. For any one token, the router wakes eight of them, plus one'
+
+[00:54] [scene:talk]
+VISUAL: 
+AUDIO: 'shared. The other 248 sit still. Hold that next to a dense model for a second. A dense 35B reads every one of its 35 billion weights to produce a single token. At four bits, that is roughly 20'
+
+[01:06] [scene:ui]
+VISUAL: Comparison of GPU (6GB) and System RAM (32GB) roles in processing.
+AUDIO: 'GB of memory traffic per token. QN3.6 reads under one. Same knowledge on paper, a 20th of the movement. So, the question stops being, does the model fit, and becomes, which parts of it have'
+
+[01:18] [scene:talk]
+VISUAL: 
+AUDIO: 'to be fast? Attention runs on every single token, so attention goes on the GPU. Embeddings, the shared expert, the key value cache, all GPU. The routed experts are idle most of the time. Idle'
+
+[01:31] [scene:talk]
+VISUAL: 
+AUDIO: 'weights can live in system RAM. Until the middle of last year, you did that by hand with a regular expression, override tensor, backslash.ffn_.*_exps = CPU. It worked. It was also the kind of flag'
+
+[01:45] [scene:talk]
+VISUAL: 
+AUDIO: 'you copy off a forum post at midnight and hope you paste it correctly. Then, on the 31st of July, 2025, a llama.cpp maintainer merged a flag called CPU-MOA. 4 days later came'
+
+[01:58] [scene:talk]
+VISUAL: 
+AUDIO: 'N-CPU-MOA. Keep the expert weights of the first N layers on the CPU. That pull request was open for 80 minutes before it went in. That is flag one, and it is most of the win. On a 6 gig GTX 1060, QN3.6 starts'
+
+[02:10] [scene:ui]
+VISUAL: Slider demonstrating tuning `N` for `--n-cpu-moe` based on VRAM usage.
+AUDIO: 'out around three tokens a second. Add N-CPU-MOA-30, and it lands on 10. You have not bought hardware. You have not quantized down further. You told the scheduler which'
+
+[02:23] [scene:talk]
+VISUAL: 
+AUDIO: 'weights were worth the fast memory. Picking N is a dial, not a formula. Start with every layer on the CPU, then walk the number down. 28, 26, 24. Keep going until the loader tells you it ran'
+
+[02:36] [scene:talk]
+VISUAL: 
+AUDIO: 'out of VRAM. Then step back one. The right value is the last one that fits. And this is where the tooling gets awkward because you cannot do any of this in Ollama. The feature request went up in August 2025, and it is still open.'
+
+[02:49] [scene:ui]
+VISUAL: Performance comparison (t/s) with different `llama.cpp` flags: no flags (3.0 t/s), `--n-cpu-moe 30` (10.0 t/s), `--no-mmap` (13.5 t/s), `-ngl tuned` (15.5 t/s).
+AUDIO: 'One tester watched Ollama split a model 17% CPU, 83% GPU on its own, with no way to argue. LM Studio at least gives you a checkbox. All experts on the CPU, or'
+
+[03:01] [scene:talk]
+VISUAL: 
+AUDIO: 'none. The ticket asking for an actual number has been open just as long. Flag two is smaller and stranger. No-MMAP. By default, llama.cpp memory maps the weights straight off disk, and lets the'
+
+[03:14] [scene:talk]
+VISUAL: 
+AUDIO: 'kernel decide what stays resident. Switch that off, load the whole thing into RAM up front, and 10 becomes 13 and 1/2. Except build llama.cpp and that flag prints a deprecation warning.'
+
+[03:27] [scene:ui]
+VISUAL: Graph showing `mmap` performance vs. RAM usage, indicating `mmap` wins past 100% RAM.
+AUDIO: 'Back in March, MMAP, No-MMAP, and MLOCK all collapsed into one option called load mode, with four settings. None, MMAP, MLOCK, DEO. Same behavior, one place, and a lot of guides online are'
+
+[03:40] [scene:talk]
+VISUAL: 
+AUDIO: 'now wrong. There is a second catch underneath that one. If the model is larger than your RAM, No-MMAP is the wrong answer. The maintainers found that mixture of experts models sitting at 100, even 150% of system memory, run faster with memory'
+
+[03:54] [scene:ui]
+VISUAL: Visual representation of expert pages resident in RAM over time, showing kernel reclaim.
+AUDIO: 'mapping left on because the page cache is doing real work. Flag three is arithmetic. Once the experts move out, most of your 6 gigs is empty again. So, push layers back with n_gpu_layers until VRAM fills up. 13 and 1/2 turns into 17.'
+
+[04:07] [scene:talk]
+VISUAL: 
+AUDIO: '3 to 17 on a card from 2016 and 32 gigs of ordinary desktop RAM in three flags. Flag four only matters if you leave the server running. Over a few hours, the'
+
+[04:19] [scene:talk]
+VISUAL: 
+AUDIO: 'kernel decides those expert pages are cold and pages them out to make room for something else. mlock tells it not to. Your first token after lunch stops taking 4 seconds, but there is a ceiling here that no flag will move. The moment'
+
+[04:32] [scene:ui]
+VISUAL: Performance comparison (t/s) across different GPUs (GTX 1060, GTX 1070, RTX 3090, RTX 5090).
+AUDIO: 'those experts live in system RAM, your tokens per second stops being a GPU number and becomes a memory bandwidth number. Dual channel DDR4 at 3200 gives you about 51 GB/s. That 1060\'s own VRAM'
+
+[04:44] [scene:talk]
+VISUAL: 
+AUDIO: 'does 192. You move the work into the slow lane on purpose, and the slow lane is nearly four times slower, which is why the numbers scale the way they do. A GTX 1070 with 8 gigs runs the same model'
+
+[04:58] [scene:talk]
+VISUAL: 
+AUDIO: 'near 18 tokens a second at 132,000 tokens of context. Fit the whole thing inside a 3090 and you get 105. A 5090, 183.'
+
+[05:10] [scene:ui]
+VISUAL: Code editor showing `ggml-cuda.cu` and `op_offload_min_batch_size`.
+AUDIO: 'Now, if you have actually tried this, you have probably hit the wall I did. Generation feels fine, then you paste in a file, and the thing just sits there. Reading your prompt and writing its answer are not the same job, and'
+
+[05:22] [scene:talk]
+VISUAL: 
+AUDIO: 'llama.cpp does not run them the same way. Down in the CUDA back end, there is a single constant, op_offload_min_batch_size. Its default value is 32, and you can override it with an environment'
+
+[05:34] [scene:talk]
+VISUAL: 
+AUDIO: 'variable. Every expert matrix multiply gets measured against that one number, and whichever side of it you land on decides who does the work. Writing an answer happens one token at a time, so the batch size is one. One is under 32, so the CPU does the multiply out of'
+
+[05:48] [scene:talk]
+VISUAL: 
+AUDIO: 'system RAM at 51 GB a second. That is your 17 tokens a second. Reading a prompt happens hundreds of tokens at once. That is over 32, so llama.cpp copies the expert weights across PCI Express into'
+
+[06:01] [scene:talk]
+VISUAL: 
+AUDIO: 'VRAM and hands the job to the GPU instead. Same model, same flags, a completely different machine underneath, which hands you a lever most tutorials skip. The default micro batch is 512 tokens. Raise it. In the maintainer\'s'
+
+[06:15] [scene:ui]
+VISUAL: Diagram showing only 8+1 experts routed for a batch out of 256, with a PR for copying only used experts.
+AUDIO: 'own benchmark on a similar offloaded model, going from 128 up to 2048 took prompt processing from 22 tokens a second to 345. 15 times from one flag, and it got'
+
+[06:28] [scene:talk]
+VISUAL: 
+AUDIO: 'better again after that. In August 2025, a patch landed with a title that says exactly what it fixes. Copy only the used experts when offloading prompt processing.'
+
+[06:40] [scene:talk]
+VISUAL: 
+AUDIO: 'Before that, every expert made the trip, all 256 of them. So, that is the speed half. Context is a separate fight. QN 3.6 ships with 262,000 tokens of context, and if you are'
+
+[06:52] [scene:ui]
+VISUAL: Text: "Forty layers, repeating in tens".
+AUDIO: 'pointing a coding agent at a repository, you will use every one of them. Here\'s what that costs on this specific model. 20,480 bytes of key value cache per token per sequence, 20 KB. So, the full 256,000 tokens works out'
+
+[07:06] [scene:talk]
+VISUAL: 
+AUDIO: 'around 5 GB, which is small, and the reason is the shape of the model. 40 layers, but only 10 of them run real attention. The other 30 are gated DeltaNet, a linear attention that carries a fixed-size'
+
+[07:20] [scene:ui]
+VISUAL: Text: "108 DAYS SINCE PUBLICATION".
+AUDIO: 'state instead of a cache that grows with every token. 3/4 of this model has no key value cache at all. Put a normal full attention mixture of experts model of the same class beside it, and that one wants 98,000 bytes per token. 4.8'
+
+[07:32] [scene:talk]
+VISUAL: 
+AUDIO: 'times more memory for the identical conversation. The cheapest context you will ever get is the context that architecture never allocates. 5 gigs of cash still will not sit next to 5 gigs'
+
+[07:44] [scene:talk]
+VISUAL: 
+AUDIO: 'of hot weights on a 6 gig card, so the guide reaches for Turbo Quant. Google Research and NYU put the paper on arXiv in April 2025, where it sat for 11 months until a Google blog post in March'
+
+[07:56] [scene:ui]
+VISUAL: Terminal output showing `llama-server` command with TurboQuant flags and KV cache size reduction.
+AUDIO: 'lit the whole community on fire. It is heading to ICLR 2026. The trick is a rotation. Spin every key and value vector into a basis where the coordinates behave, then quantize against one fixed codebook.'
+
+[08:09] [scene:talk]
+VISUAL: 
+AUDIO: '3-bit, no calibration, cash type K Turbo 3, cash type V Turbo 3, flash attention on. Google measured at least a six times cut in key value memory with the benchmark scores intact. In the guide, that same 6'
+
+[08:22] [scene:talk]
+VISUAL: 
+AUDIO: 'gig card goes from 64,000 tokens of context to 256,000. And here\'s the part the write-ups leave out. Turbo Quant is not in llama.cpp. 75 pull requests and issues in that'
+
+[08:35] [scene:ui]
+VISUAL: Graph comparing F16 decode vs Turbo2 KV decode performance on MoE models.
+AUDIO: 'repository mention it. Every one of the pull requests is closed and unmerged, two of them tagged as an AI policy violation. To type Turbo 3, you build a fork sitting 300 commits ahead of upstream.'
+
+[08:48] [scene:talk]
+VISUAL: 
+AUDIO: 'It also stopped being a speed win somewhere along the way. When upstream rewrote the mixture of experts attention kernels, plain 16-bit got four times faster and the turbo path did not follow. On one MoE model, Turbo 2 now decodes at 45% of F16.'
+
+[09:03] [scene:talk]
+VISUAL: 
+AUDIO: 'The Threads own verdict: this is memory, not speed, which brings me to the flag that did not make the list, speculative decoding, where a small model guesses several tokens ahead and the big one'
+
+[09:15] [scene:ui]
+VISUAL: Diagram showing 2 of 8 experts woken by one token, but more than seven by eight tokens.
+AUDIO: 'checks them in a single pass on a dense model that is close to free. &gt;&gt; [snorts] &gt;&gt; Here it fell over. The reason is elegant in a slightly infuriating way. One token wakes eight experts. Guess four tokens ahead and you are not waking'
+
+[09:27] [scene:talk]
+VISUAL: 
+AUDIO: 'eight anymore, you are waking most of them. A 2025 paper measured it on Mixtral. One token pulled two experts. Eight tokens pulled more than seven. Three and a half times the data movement'
+
+[09:39] [scene:ui]
+VISUAL: Bar chart comparing multi-token prediction speedups for dense vs. mixture of experts models.
+AUDIO: 'and your experts are sitting on the CPU. So, every extra expert is another walk across the memory bus. That paper measured verification running two to three times slower and speculation making the whole system up to one and a'
+
+[09:51] [scene:talk]
+VISUAL: 
+AUDIO: 'half times slower than not speculating at all. The workaround is multi-token prediction, a draft head trained into the model itself sharing its context and its cache instead of running a second one. It helps. Just less than you would'
+
+[10:03] [scene:talk]
+VISUAL: 
+AUDIO: 'like. Roughly 1.4 to two times on dense models and 1.15 to 1.25 on a mixture of experts. Sparsity gives with one hand and takes with the other. One question'
+
+[10:15] [scene:ui]
+VISUAL: Quote from Unsloth's own docs about perplexity and KLD being misleading.
+AUDIO: 'left and it decides whether any of this was worth doing. Is the 4-bit copy still the model that scored 73.4? Unsloth published numbers on the previous generation put 4-bit KL divergence at 0.0137'
+
+[10:27] [scene:talk]
+VISUAL: 
+AUDIO: 'against 0.0026 for 8-bit. Five times a drift. Perplexity, meanwhile, moves less than 1%. Their own warning is the useful part. Perplexity and KL divergence both'
+
+[10:39] [scene:talk]
+VISUAL: 
+AUDIO: 'get pushed around by calibration data and neither one reliably predicts whether the model can finish your task. Run it on your own repository for a day. That is the benchmark that applies to you. So, set the bar where it belongs.'
+
+[10:52] [scene:ui]
+VISUAL: Visual metaphor of VRAM changing from a "wall" to a "budget".
+AUDIO: '17 tokens a second is faster than you read and far too slow for an agent grinding through a code base unattended. This is a very good local assistant on hardware you already own. It is not a drop-in for the API. But, the thing'
+
+[11:04] [scene:talk]
+VISUAL: 
+AUDIO: 'worth keeping is not the flag list. For two years, the rule was that VRAM is a wall. The model fits or it does not and the only fix is a bigger card. Sparse models turned that wall into a budget. You have stopped buying capacity and'
+
+[11:18] [scene:talk]
+VISUAL: 
+AUDIO: 'started deciding which weights deserve the fast memory. 6 GB, a card from 2016, 35 billion parameters answering in real time. Go run it, then tell me your tokens per second and your RAM speed. Those two numbers together are the whole'
+
+[11:31] [scene:talk]
+VISUAL: 
+AUDIO: 'story. See you in the next one.'
