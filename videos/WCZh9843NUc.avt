@@ -1,0 +1,120 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Someone Built an OS for AI Agents, and It Sandboxes Claude Code
+channel: @octopusinc_
+duration: 05:49
+source: https://www.youtube.com/watch?v=WCZh9843NUc
+upload_date: 20260728
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:intro]
+VISUAL: "7,600 STARS — NINE WATCHING" and a diagram showing SANDBOX, KERNEL, AOS, USERSPACE, PERMISSIONS, 21 CAPSULES.
+AUDIO: 'Someone built an actual operating system for AI agents. Real sandbox, real permissions, 21 capsules, 7,600 stars, and nine people watching. Here\'s the problem it\'s solving. You hand a coding agent your repo and it gets everything.'
+
+[00:13] [scene:problem]
+VISUAL: Diagram showing an AGENT having access to FILESYSTEM, SHELL, CREDENTIALS with "FULL BLAST RADIUS".
+AUDIO: 'Your whole file system, your shell, your credentials. You approve one command and hope. This project\'s answer is the one operating system settled decades ago.'
+
+[00:25] [scene:ui]
+VISUAL: Diagram showing "LEAST PRIVILEGE, FOR AGENTS" with YOUR DISK, VFS AIRLOCK, and an AGENT requesting READ, WRITE, REPLACE.
+AUDIO: 'Don\'t trust the program, contain it. Give it a tiny slice of the world and make it ask for the rest. It\'s called AOS, Agent OS. The interesting part isn\'t that it says that, it\'s that it'
+
+[00:38] [scene:talk]
+VISUAL: 
+AUDIO: 'built it. So, what does containment look like in practice? The file system capsule can read, write, grep, move, and delete, but every one of those goes through what they call a VFS airlock. The agent never touches your'
+
+[00:52] [scene:ui]
+VISUAL: A comparison of "ALLOWED" (git status) and "BLOCKED" (recursive delete) commands for "THE SHELL CAPSULE".
+AUDIO: 'disk directly. It asks and something else decides. The shell capsule is better. It does sub-command aware approval and, in their words, catastrophic command blocking. So, it\'s not one dumb prompt asking, "Run this,'
+
+[01:06] [scene:ui]
+VISUAL: Diagram showing an OPERATOR making a REQUEST to AOS (IDENTITY BROKER) to TARGET: ALICE, illustrating "AN ACCOUNT, NOT ROOT".
+AUDIO: 'yes or no?" It knows the difference between a git status and a recursive delete. And users are real users. There\'s a principal system, so the operator running the thing and the environment being provisioned aren\'t the'
+
+[01:19] [scene:ui]
+VISUAL: Text "YOU ARE NOT SWITCHING AGENTS" with buttons for CLAUDE CODE, GROK BUILD, CODEX.
+AUDIO: 'same identity. Your agent gets an account, not root. Now, the obvious objection. You already have a coding agent you like. You\'re not switching. You don\'t have to. That\'s the whole'
+
+[01:31] [scene:talk]
+VISUAL: 
+AUDIO: 'design. There\'s a repo in this project called Oracles and it is exactly one thing, governed host adapters for Claude Code, Grok Build, and Codex. Their MCP server is described as the product edge shared'
+
+[01:44] [scene:ui]
+VISUAL: Diagram showing CLAUDE CODE, GROK BUILD, CODEX on top, connected to UNICITY AOS (GOVERNED HOST ADAPTERS) which sits on top of ASTRID RUNTIME.
+AUDIO: 'by all three. Read that again. It doesn\'t want to replace your agent. It wants to sit underneath it, the floor your agent stands on, deciding what your agent is allowed to reach. And it\'s about here that I went looking for who'
+
+[01:57] [scene:ui]
+VISUAL: Diagram mapping OPERATING SYSTEM PROCESS to UNICITY AOS CAPSULE (WASM component).
+AUDIO: 'else was using it. I take the OS claim seriously because the abstractions line up one-for-one. A process becomes a capsule, a web assembly component sandboxed doing one job. 21 ship in the'
+
+[02:09] [scene:ui]
+VISUAL: Diagram mapping OPERATING SYSTEM SYSCALL to UNICITY AOS WIT INTERFACE.
+AUDIO: 'community edition. Memory, identity, sessions, routing, skills, the reasoning loop. A syscall becomes a wit interface. That\'s the contract a capsule talks'
+
+[02:22] [scene:talk]
+VISUAL: 
+AUDIO: 'through. The interface definitions every capsule depends on. Nothing gets in or out except through one. File permissions become that airlock. Users become principals. Underneath it sits a separate kernel called Astrid.'
+
+[02:36] [scene:ui]
+VISUAL: Diagram showing the full mapping: PROCESS to CAPSULE, SYSCALL to WIT INTERFACE, PERMISSIONS to VFS AIRLOCK, USER to PRINCIPAL, all underpinned by ASTRID KERNEL.
+AUDIO: 'Their docs are blunt about the split. AOS is the operating system, not the harness. It routes messages, enforces capabilities, meters resources, audits actions.'
+
+[02:50] [scene:ui]
+VISUAL: Circular diagram showing "IT LETS THE AGENT EXTEND THE OS" with segments for NOTICE GAP, INSPECT WORLD, INSTALL, RETAIN.
+AUDIO: 'This is a real design built by someone who has clearly written system software before. Which makes one thing about this project very strange. Because there\'s a feature in here that\'s more ambitious than anything in the pitch. It ships a'
+
+[03:03] [scene:ui]
+VISUAL: The circular diagram from 174s, with FORGE and NEW CAPSULE (NARROW PERMS, OS CONSTRUCTION TOOLING) added to the "NOTICE GAP" segment.
+AUDIO: 'thing called forge. And forge\'s job is to let an agent extend the operating system it\'s running on. The agent notices it\'s missing a capability, inspects its own environment, writes a new capsule with the narrowest'
+
+[03:17] [scene:talk]
+VISUAL: 
+AUDIO: 'permissions that solve the problem, and keeps it for next time. User space that writes itself. On an OS built 2 weeks ago. So, who\'s running this? The kernel repo has 10,000 stars, 22 people'
+
+[03:30] [scene:talk]
+VISUAL: 
+AUDIO: 'watching it. Their JavaScript SDK has 8,000 stars. Last month, the package that repo publishes was downloaded from NPM 24 times. Same repo. 8,000 stars, 24'
+
+[03:42] [scene:stats]
+VISUAL: Table showing REPO, STARS, CREATED for multiple repos: astrid, sdk-js, aos-ce, capsule-fs, capsule-shell, capsule-cli.
+AUDIO: 'downloads. And the shape is everywhere. The file system capsule was created in March. The main AOS repo was created in July, 4 months later. They are 16 stars'
+
+[03:57] [scene:stats]
+VISUAL: Bar chart comparing "book - documentation" (7,520), "handbook - documentation" (7,465), and "wit - the interface definitions" (3).
+AUDIO: 'apart. Five capsules were published the same day by the same author, all equally boring infrastructure. One has 7 and 1/2 thousand stars. The other four have zero.'
+
+[04:10] [scene:code]
+VISUAL: Terminal showing a `curl` command to install AOS: `curl --proto '=https' --tlsv1.2 -fsSL https://aos.unicity.ai/install.sh | sh`.
+AUDIO: 'Their handbook has 7 and 1/2 thousand. Their book has 7 and 1/2 thousand. And the interface definitions every capsule depends on, the contract I told you nothing gets past, have three. Let me'
+
+[04:22] [scene:talk]
+VISUAL: 
+AUDIO: 'argue against myself because there\'s a real hole in that. AOS installs with a curl pipe shell script, not a package registry. So the low rust download numbers don\'t prove much. Install the'
+
+[04:35] [scene:talk]
+VISUAL: 
+AUDIO: 'product and you never touch the registry. That\'s a fair objection and it\'s why I led with the NPM number instead. You install that package or you don\'t use it. What I can\'t tell you is why.'
+
+[04:47] [scene:results]
+VISUAL: List of features: Signed releases, Build provenance attestations, Release gate.
+AUDIO: 'Stars spike for boring reasons. A newsletter, a badge, one good post. Nothing here shows who added them. And the code is real. Signed releases, build provenance, a release gate that'
+
+[05:01] [scene:talk]
+VISUAL: 
+AUDIO: 'refuses to publish if a self-heal check fails. More supply chain discipline than most funded startups ship. Both things are true at once. That\'s the actual story. So,'
+
+[05:14] [scene:conclusion]
+VISUAL: Sliders for STARS (EASY), WATCHERS (STIFF), DOWNLOADS (EARNED) with labels ATTENTION, COMMITMENT, USAGE.
+AUDIO: 'here\'s what I\'d take away. The architecture is worth stealing. Capability sandboxing for agents is going to be table stakes and this is the most serious attempt I\'ve seen. And the trend around it tells you'
+
+[05:26] [scene:conclusion]
+VISUAL: Three gauges for STARS (FREE), WATCHERS (STIFF), DOWNLOADS (STUCK) with specific low star counts for capsule-shell, capsule-registry, capsule-cli, and wit.
+AUDIO: 'nothing. Stars are the one number on that page anybody can move. Three numbers, not one. Stars, watchers, downloads, then check the boring sibling repos in the'
+
+[05:39] [scene:talk]
+VISUAL: 
+AUDIO: 'same org. And yes, the title of this video has a star count in it. They work. That\'s the problem.'
