@@ -1,0 +1,180 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Krea 2 Image To Image Tutorial For ComfyUI (Free Workflow)
+channel: @octopusinc_
+duration: 08:45
+source: https://www.youtube.com/watch?v=_5GY2mkMdwQ
+upload_date: 20260726
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'If you\'ve been running Creal 2, whether it\'s the base model, the turbo model, or the base model with turbo LoRAs, you\'ve probably encountered the shortage of image-to-image workflow solutions. I noticed there was barely any on Civitai, and the ones I tested were not that'
+
+[00:12] [scene:talk]
+VISUAL: 
+AUDIO: 'great. I noticed the background falls apart, the lighting shifts, the surroundings get soft and weird, and the whole shot starts looking fake even when your character looks great. In this video, I\'m showing you how I do Creal 2 image-to-image the right way. Instead of'
+
+[00:24] [scene:talk]
+VISUAL: 
+AUDIO: 'regenerating the entire image, I mask just the subject and leave the background completely untouched, so it uses the same photo, same lighting, same everything except now your character is in it. This workflow is completely free.'
+
+[00:36] [scene:talk]
+VISUAL: 
+AUDIO: 'It\'s in the free workflow section of my Discord, and the link to my Discord is in the description. If you want help setting it up, or you\'re stuck on LoRA training, run pod configuration, setting up ComfyUI and becoming proficient with it, or growing an AI influencer, I do'
+
+[00:49] [scene:talk]
+VISUAL: 
+AUDIO: 'coaching through the server, too. If you want the workflows that I refine and update and use every day for my own personal content creation pipelines, or node packs that I code designed around the AI influencer space, and secret'
+
+[01:01] [scene:talk]
+VISUAL: 
+AUDIO: 'tricks that expand and improve your own content creation pipeline, you can find stuff like that being posted almost every day over at my Patreon. Link for that is in the description, as well. So, a quick run through on the base models that we\'re running. Obviously, we\'re'
+
+[01:14] [scene:talk]
+VISUAL: 
+AUDIO: 'using Creal 2, but I\'m using the turbo version. You can use the Creal 2 raw or the base model Creal 2 with turbo LoRAs, as well. That\'s completely fine. I prefer the Creal 2 turbo version. For the text encoder, we are using the'
+
+[01:26] [scene:talk]
+VISUAL: 
+AUDIO: 'corresponding compatible text encoder that goes with Creal 2, the Qwen 3 VL 4 billion parameter model. I\'m using the FP8 scaled version. And for the VAE, it\'s recommended that you use the Qwen image VAE, but a lot of people have been'
+
+[01:38] [scene:talk]
+VISUAL: 
+AUDIO: 'stating that they get better results with the Waifu 2.1 VAE, so I\'m using that. Before we move on, let\'s cover what\'s required outside of those three base models, because this workflow leans on a few extra downloads people are going to'
+
+[01:51] [scene:talk]
+VISUAL: 
+AUDIO: 'be missing. For masking, the checkpoint loader here is running SAM 3.1 multiplex. That\'s what\'s doing the actual subject masking based on the described mask prompt. For the detailer stage, there\'s a separate, way smaller Sam model. It\'s the Sam ViT-B model'
+
+[02:04] [scene:talk]
+VISUAL: 
+AUDIO: 'running alongside it two Ultralytics detectors, which we have in the detailer section over here. We have the face detector and the eye detector. And those are basically what point the face detailer nodes at the'
+
+[02:17] [scene:talk]
+VISUAL: 
+AUDIO: 'right spot before they run. And for the LoRA model, I am using a custom-trained LoRA model based on a character that I have created. If your character starts looking overpowered or off compared to your training data, you can bring the strength of the LoRA model down. Or if'
+
+[02:29] [scene:talk]
+VISUAL: 
+AUDIO: 'the opposite is happening and your character is not being displayed strongly enough, you can bring the strength up. And finally, for upscaling, which I will go into more detail about in a minute as to why we upscale, I\'m using this model. I\'m not even going to'
+
+[02:41] [scene:talk]
+VISUAL: 
+AUDIO: 'try and say that. Now, in the described person prompt, you want to start with your trigger word for your LoRA if you\'re using one, and then a basic description of what your person\'s going to look like. So, hair color, eye color, and whatever separates your character'
+
+[02:53] [scene:talk]
+VISUAL: 
+AUDIO: 'from the reference photos that you\'re going to be using. I recommend that you keep the last line in there, the one about the edges blending into the background. That\'s not filler, that\'s what makes the inpaint blend cleaner instead of looking pasted in. And for this negative prompt, you can really put'
+
+[03:05] [scene:talk]
+VISUAL: 
+AUDIO: 'whatever you want in here. If you\'re getting unwanted results, you can just put values into the negative prompt here to negate them. And finally, the described mask prompt. This is the most important prompt in the whole workflow. The described mask prompt tells the'
+
+[03:17] [scene:talk]
+VISUAL: 
+AUDIO: 'segment anything model what to generate. Anything inside that mask gets replaced, and you can really type anything into this mask description, whether it\'s face, hair, head, clothes, body, entire people like women or men, and so on.'
+
+[03:30] [scene:talk]
+VISUAL: 
+AUDIO: 'Here\'s why it\'s important to upscale. Before your reference photo touches anything else in this workflow, it goes through this CR upscale first. But why upscale before you even mask anything? Well, because if you don\'t, your'
+
+[03:42] [scene:talk]
+VISUAL: 
+AUDIO: 'regenerated character comes out sharp and detailed, and the rest of your photo, the background, the clothes, everything that didn\'t get masked, stays soft if you\'ve used a low-resolution photo. And that mismatch is what makes a lot of AI edits or photos look obviously'
+
+[03:55] [scene:talk]
+VISUAL: 
+AUDIO: 'fake. So, sharpening that reference photo first means the whole image matches in quality before you even generate anything new into it. After this upscale, the resize image by longer edge brings the image back down to a controlled size. You just upscaled it.'
+
+[04:08] [scene:talk]
+VISUAL: 
+AUDIO: 'It\'s probably oversized now depending on the resolution of the photo that you\'ve used as your input. So, this sets your actual output resolution instead of letting the upscale dictate it. And you can change the longer edge value to'
+
+[04:21] [scene:talk]
+VISUAL: 
+AUDIO: 'whatever you want. Obviously, higher number means a bigger output, so that means more VRAM, which means more generation time. A default size that is pretty standard is 1280, so I\'m just going to keep it there. But you should probably adjust this based on your'
+
+[04:33] [scene:talk]
+VISUAL: 
+AUDIO: 'hardware. And inside of this mask subgraph node here, there is a masking pipeline that I have configured to work really well with this workflow. I wouldn\'t recommend changing any of these settings unless you actually know about'
+
+[04:45] [scene:talk]
+VISUAL: 
+AUDIO: 'masking and know what you\'re doing, and you want to get different desired output. If you don\'t, I would just leave these settings the same. I\'ve fine-tuned these for this workflow to work pretty well, so. And real quick, before we get into some generations, if you\'re coming'
+
+[04:58] [scene:talk]
+VISUAL: 
+AUDIO: 'from another checkpoint like Z Image Turbo, Create 2 handles denoise differently. It\'s a lot more sensitive than what you might be used to with Z Image Turbo or any other model that you used image to image with. So, the ranges that worked for you elsewhere are not going to translate directly here. On the'
+
+[05:10] [scene:talk]
+VISUAL: 
+AUDIO: 'main input sampler, I recommend running somewhere between .3 to .4. If you push it much higher, you\'ll start losing the reference photo entirely. And if you push it any lower, your character won\'t come through strong enough. And same'
+
+[05:22] [scene:talk]
+VISUAL: 
+AUDIO: 'applies to both the face detailer and eye detailer. Typically, we would run somewhere around .2 to .3 denoise in both of these nodes, but since we\'re using Create 2 as our base model here, we need to adjust accordingly. So, .1 for both of these.'
+
+[05:36] [scene:talk]
+VISUAL: 
+AUDIO: 'So, now I\'m going to run some generations, and as you can see, I just ran one. But before we look at the results, I just want to point this out real quick. If your generation comes out looking off, don\'t start tearing apart your settings right away. Randomize your seed and run it again. A lot of the time'
+
+[05:49] [scene:talk]
+VISUAL: 
+AUDIO: 'it\'s not the workflow, it\'s just a bad seed and a fresh one will clear it up. Maybe mess around with the Denoise slightly, go up in increments of maybe 0.02 at a time. If you still have not gotten the results that you\'re looking'
+
+[06:01] [scene:talk]
+VISUAL: 
+AUDIO: 'for, that\'s okay. AI isn\'t going to nail exactly what you want or exactly what\'s being displayed in your reference photo every single time. That\'s just the reality of working with these models. Once you actually accept that, you stop burning hours chasing one perfect generation that might not even be'
+
+[06:14] [scene:talk]
+VISUAL: 
+AUDIO: 'possible. Sometimes the model is just not capable of creating photos, especially ones that have weird poses and weird compositions. But with that in mind, you will free up a ton of time you\'d otherwise spend stuck on something that was probably never going to happen'
+
+[06:26] [scene:talk]
+VISUAL: 
+AUDIO: 'in the first place. So you can see here we have our base reference photo here. And here is our output generation. We can see the background is obviously a 100% consistent with our reference photo, and our character has replaced'
+
+[06:38] [scene:talk]
+VISUAL: 
+AUDIO: 'the original person. Here\'s an example of what I mean by sometimes the generation will not be perfect. If I were to run this again, I\'m sure that I would get a different composition of the hand here, and it might look better, it might look worse, but that\'s just an'
+
+[06:50] [scene:talk]
+VISUAL: 
+AUDIO: 'example. I\'d like to point that out. Just run the generation again, maybe change the Denoise a little bit. Here is another example. So we have our reference photo here, and here is the output that we have gotten with our'
+
+[07:02] [scene:talk]
+VISUAL: 
+AUDIO: 'Laura replacing that person. This one obviously came out so much cleaner. I don\'t see any obvious signs that this was masked or that the in-paint was stitched on top of this image. Here is another example for you guys. So'
+
+[07:14] [scene:talk]
+VISUAL: 
+AUDIO: 'here we have our base image, our reference photo, and this is the output. And while I\'ll say that the hands that we\'ve generated with our Laura look better than the original photo\'s hands, let\'s just pretend that the hands were'
+
+[07:27] [scene:talk]
+VISUAL: 
+AUDIO: 'messed up for example for this. I\'m going to demonstrate how you can change the masking. So for example, if we just wanted to replace the base, head, and the hair, and keep the body from the original reference photo, we'
+
+[07:39] [scene:talk]
+VISUAL: 
+AUDIO: 'can do that as well. And as we can see here, what has been masked it now is only the face, the hair, and the head. Now, it turns out for this particular photo, we were better off from the beginning just masking the entire'
+
+[07:51] [scene:talk]
+VISUAL: 
+AUDIO: 'person. As we can see here, the consistency kind of dropped off. But, that might not be the case for all generations and all reference photos, so experiment with changing the mask if you need to. So, here\'s a pretty good example of some good output that we got from just masking the face and the head'
+
+[08:05] [scene:talk]
+VISUAL: 
+AUDIO: 'and the hair. We can see that the skin tone has been matched properly, the head looks like it fits on the body, and so on. And just to give you guys some comparison, I have switched the mask back to like the full person, so we can see here that it masked the full person.'
+
+[08:18] [scene:talk]
+VISUAL: 
+AUDIO: 'Here are the results. I honestly like the results from masking it the entire person better most of the time, so I recommend that if you guys do have a character lower trained for create two, that you just do this. But, as always,'
+
+[08:30] [scene:talk]
+VISUAL: 
+AUDIO: 'the workflow is free in the Discord, so you can experiment with this in any way that you\'d prefer. And yeah, that\'s the workflow. Thank you guys so much for watching the video. If you enjoyed it, please like, drop a subscribe, and join the Discord. Peace.'

@@ -1,0 +1,232 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Krea 2 Identity Edit v1.2 is Here! (Face Swaps & 2x2 Character Sheets)
+channel: @octopusinc_
+duration: 12:05
+source: https://www.youtube.com/watch?v=Y640lyHqqOo
+upload_date: 20260727
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'Krea 2 Identity Edit version one point two is here and this update rounds out its character-editing features in a much more complete way It can now do more than just swap faces You can swap an entire head or even replace the whole person in an image It also adds a mask feature'
+
+[00:13] [scene:talk]
+VISUAL: 
+AUDIO: 'but keep in mind that this mask works differently from the inpainting masks we normally use Finally it now supports the character sheets we commonly work with That said supporting a feature doesn’t necessarily mean every part of it is already perfectly stable'
+
+[00:25] [scene:talk]
+VISUAL: 
+AUDIO: 'In this video I’ll use a fixed seed to test face swapping head swapping full-person replacement identity-strength enhancement'
+
+[00:37] [scene:talk]
+VISUAL: 
+AUDIO: 'the new mask feature and character sheets Some of the results are very straightforward while others, in my opinion may require a few rerolls before you get the best result Since we previously covered version one point one'
+
+[00:50] [scene:talk]
+VISUAL: 
+AUDIO: 'let’s start with a quick recap This is an open-source community LoRA built on Krea 2 Its goal is to turn Krea 2 into a character image editor that can understand natural-language instructions Installation is actually pretty simple'
+
+[01:04] [scene:talk]
+VISUAL: 
+AUDIO: 'Clone the entire repository into ComfyUI’s custom_nodes folder then restart ComfyUI The developers specifically note that it doesn’t require any additional Python dependencies You’ll also need to download the Krea 2 Identity Edit version one point two LoRA that we’re covering today'
+
+[01:18] [scene:talk]
+VISUAL: 
+AUDIO: 'For easier testing I’ve also built this workflow on RunningHub In the ComfyUI space RunningHub is a great online working platform because whenever a new model or extension is released the platform usually adds support for it very quickly'
+
+[01:35] [scene:talk]
+VISUAL: 
+AUDIO: 'RunningHub also provides an online community for ComfyUI creators where you can find plenty of creative inspiration and example workflows The workflow I built uses the FP8 version of the Krea 2 Turbo model together with Qwen3-VL as the text encoder'
+
+[01:50] [scene:talk]
+VISUAL: 
+AUDIO: 'There are several VAE options but I recommend two of them: Qwen Image VAE and Wan 2.1 VAE This workflow may look like it contains a lot of nodes but only two of them are truly essential'
+
+[02:03] [scene:talk]
+VISUAL: 
+AUDIO: 'The first is Krea2EditModelPatch This node injects the reference image’s appearance composition and character information into the model The second is Krea2EditGroundedEncode'
+
+[02:15] [scene:talk]
+VISUAL: 
+AUDIO: 'which is essentially a text encoder However it doesn’t only process our editing instructions It also reads the reference image which is why it uses the Qwen3-VL text encoder Qwen3-VL is a vision model'
+
+[02:30] [scene:talk]
+VISUAL: 
+AUDIO: 'so it can understand image content Now let’s see exactly what the new Krea 2 Identity Edit can do We’ll start with the simplest feature: single-image editing I have a reference image of a beautiful woman in traditional Chinese clothing'
+
+[02:42] [scene:talk]
+VISUAL: 
+AUDIO: 'Our goal is to place the same character on a decorated boat at dawn sitting in front of a painting table and working on a painting At the same time'
+
+[02:54] [scene:talk]
+VISUAL: 
+AUDIO: 'we need to preserve her face hair accessories and gray embroidered outfit Let’s quickly review how to write the prompt I normally divide it into three parts First clearly state what needs to be changed'
+
+[03:06] [scene:talk]
+VISUAL: 
+AUDIO: 'Second specify what needs to be preserved Third exclude anything that absolutely must not appear You can also describe the desired final state I’m using the Turbo model here'
+
+[03:19] [scene:talk]
+VISUAL: 
+AUDIO: 'so I’m running ten sampling steps with CFG set to one point zero After running the workflow we get this result The image has moved into a completely new scene on a lake aboard a decorated boat The pose, composition'
+
+[03:32] [scene:talk]
+VISUAL: 
+AUDIO: 'and lighting have all changed significantly while the hair accessories and clothing we asked it to preserve remain fairly complete Next let’s look at something many of you will care about: what exactly is the difference between swapping a face'
+
+[03:44] [scene:talk]
+VISUAL: 
+AUDIO: 'swapping a head and replacing the entire person? First be aware that this is a multi-image reference workflow because it now supports two images In my first image'
+
+[03:57] [scene:talk]
+VISUAL: 
+AUDIO: 'we have a woman with a light-blonde low ponytail wearing a blue qipao The second image shows a woman with warm brown twin braids and light wispy bangs We can write a prompt asking the model to replace only the person’s face'
+
+[04:09] [scene:talk]
+VISUAL: 
+AUDIO: 'Take a look at the result The specific facial features from the second image have been transferred but the low ponytail, blue qipao and gray background from Image One have largely been preserved'
+
+[04:21] [scene:talk]
+VISUAL: 
+AUDIO: 'Now let’s try replacing the head This time we explicitly tell the model in the prompt to replace the entire head In the generated result'
+
+[04:33] [scene:talk]
+VISUAL: 
+AUDIO: 'both the facial features and the bangs have been transferred However everything below the neck is still preserved including the blue qipao pearl necklace body, and background For the third test'
+
+[04:46] [scene:talk]
+VISUAL: 
+AUDIO: 'we’ll replace the entire person This time, the hairstyle face and black off-the-shoulder dress have all been transferred from the second image The original blue qipao is gone These two examples demonstrate both single-image and multi-image editing but whichever mode you use'
+
+[05:02] [scene:talk]
+VISUAL: 
+AUDIO: 'there are still quite a few parameters Some of them are essential so let’s go through the ones you really need to understand The first parameter is called ref_boost You can think of it as the strength of the appearance constraint from the reference image The higher this value is'
+
+[05:18] [scene:talk]
+VISUAL: 
+AUDIO: 'the harder the model tries to extract identity and appearance information from your reference image For this test I’ll lock the prompt seed, resolution and every other parameter The only thing I’ll change is ref_boost'
+
+[05:30] [scene:talk]
+VISUAL: 
+AUDIO: 'testing it at one four, and twelve These are also reference values recommended by the developers When ref_boost is set to one the general character type is still recognizable but the facial features are noticeably different from the reference person'
+
+[05:44] [scene:talk]
+VISUAL: 
+AUDIO: 'Once we raise it to four the face, hairstyle and even the blue-gray clothing become much closer to the reference image When we increase it again to twelve the similarity improves a little further'
+
+[05:57] [scene:talk]
+VISUAL: 
+AUDIO: 'but the difference is no longer as obvious In normal use I recommend starting at four by default That usually gives you a good result Next'
+
+[06:09] [scene:talk]
+VISUAL: 
+AUDIO: 'let’s look at the reference image mode We have two options here: fit and crop Their names already give us a good idea of what they do Fit adapts the complete image while crop cuts into it Let’s look at the fit result first followed by the crop result'
+
+[06:22] [scene:talk]
+VISUAL: 
+AUDIO: 'Both outputs have generated a horizontal scene even though our reference image is vertical The real difference is how much information about the original character the model is able to read Notice that in the fit result'
+
+[06:35] [scene:talk]
+VISUAL: 
+AUDIO: 'the clothing has a much stronger connection to the outfit in our reference image In the crop result the subject is larger but the clothing no longer has much relation to the original reference If you want to preserve a wider range of information from the reference image'
+
+[06:48] [scene:talk]
+VISUAL: 
+AUDIO: 'use fit If your target is closer to a tight facial close-up crop may be more useful Now let’s examine another parameter called ref_boost_mask Remember'
+
+[07:02] [scene:talk]
+VISUAL: 
+AUDIO: 'this is different from an inpainting mask It doesn’t tell the model which parts of the output image may be edited and which parts must remain unchanged Instead it controls the strength of the model’s attention Any area covered by this mask receives more attention from the model'
+
+[07:15] [scene:talk]
+VISUAL: 
+AUDIO: 'Let’s run a test This is our original image featuring a beautiful woman in a kimono and the prompt asks the model to change her outfit We’ll set ref_boost to one'
+
+[07:27] [scene:talk]
+VISUAL: 
+AUDIO: 'One version will use the mask while the other will run without it You’ll notice that the two results are almost identical which makes it look as though the mask isn’t working But the mask itself isn’t the problem When ref_boost is set to one'
+
+[07:40] [scene:talk]
+VISUAL: 
+AUDIO: 'there is no actual enhancement being applied so the mask has nothing to amplify Now let’s change ref_boost to four This time the immediate impression is that the generated image aligns almost perfectly with the original The reason this happens is that the face receives much stronger consistency through the mask'
+
+[07:55] [scene:talk]
+VISUAL: 
+AUDIO: 'Next let’s test the boundary between two people when using two reference images First, remember the image order The first image must be the scene'
+
+[08:09] [scene:talk]
+VISUAL: 
+AUDIO: 'and the second image must be the reference character you want to insert Don’t reverse them because this order is explicitly defined in the code Our first image shows two separate people one on the left and one on the right'
+
+[08:22] [scene:talk]
+VISUAL: 
+AUDIO: 'standing inside an art gallery My prompt is very simple: replace the woman on the left side of Image One with the traditional Chinese female painter from Image Two At the same time'
+
+[08:34] [scene:talk]
+VISUAL: 
+AUDIO: 'preserve the woman on the right and the complete gallery scene from Image One Overall the result is pretty good For the second version I made the prompt much more detailed In addition to specifying the left-side position I described the original character’s short hair'
+
+[08:48] [scene:talk]
+VISUAL: 
+AUDIO: 'white suit and exhibition brochure I also described the woman in the green dress on the right in detail and specified that her drinking glass hairstyle'
+
+[09:00] [scene:talk]
+VISUAL: 
+AUDIO: 'and the background must all be preserved However this much longer prompt didn’t produce any obvious advantage So longer prompts are not always better As long as the prompt can accurately identify the person you want to edit'
+
+[09:12] [scene:talk]
+VISUAL: 
+AUDIO: 'that’s usually enough Now let’s look at one of the biggest new features: character sheets A character sheet can provide the model with a character’s front three-quarter, side and back views in a single image'
+
+[09:25] [scene:talk]
+VISUAL: 
+AUDIO: 'This is the original image I used and I asked the model to generate a two-by-two character sheet The four panels contain her front view three-quarter view left-side profile, and back view'
+
+[09:37] [scene:talk]
+VISUAL: 
+AUDIO: 'Keep in mind that this character sheet was also generated with Krea 2 There are a few useful tricks here First when generating this kind of character sheet I recommend removing the background beforehand This reduces interference from the scene and helps the model focus on the character'
+
+[09:51] [scene:talk]
+VISUAL: 
+AUDIO: 'Second don’t generate the final image at too low a resolution Because the layout is split proportionally into four panels the resolution of each smaller image is also reduced relative to the full image'
+
+[10:03] [scene:talk]
+VISUAL: 
+AUDIO: 'As for the prompt there’s no need to overdescribe it Focus on stating that you want a two-by-two layout with four viewpoints then specify which view should appear in each position'
+
+[10:17] [scene:talk]
+VISUAL: 
+AUDIO: 'We can now use this character sheet as a reference to generate three new scenes Take a look at the first one It’s a facial close-up beside the window of a restaurant on a rainy night The scene, lighting'
+
+[10:31] [scene:talk]
+VISUAL: 
+AUDIO: 'and clothing have all changed but the character’s face shape facial features and hairstyle remain fairly stable The second image places her in a bright garden café and expands the framing to show her from the knees up The clothing, pose'
+
+[10:45] [scene:talk]
+VISUAL: 
+AUDIO: 'and props have all been changed but the character’s identity is still recognizable The third image uses a profile composition close to ninety degrees directly matching the left-side view in the character sheet The bridge of the nose, jawline'
+
+[10:59] [scene:talk]
+VISUAL: 
+AUDIO: 'and layered long hair all carry over naturally Finally let’s do a quick VAE comparison Personally I don’t think this part is especially important so I only tested two options: Qwen Image VAE and Wan 2.1 VAE'
+
+[11:13] [scene:talk]
+VISUAL: 
+AUDIO: 'Comparatively speaking Wan 2.1 VAE looks slightly better but the difference isn’t substantial You don’t need to worry too much about this setting To sum it all up'
+
+[11:25] [scene:talk]
+VISUAL: 
+AUDIO: 'Krea 2 Identity Edit version one point two adds a lot of new functionality In my opinion it is currently the most powerful Krea 2 image-editing model It can swap faces, replace heads and replace entire people'
+
+[11:38] [scene:talk]
+VISUAL: 
+AUDIO: 'It can also apply localized reference enhancement through ref_boost while the mask and character-sheet features can serve as additional tools for strengthening reference information Compared with version one point one'
+
+[11:51] [scene:talk]
+VISUAL: 
+AUDIO: 'version one point two offers much more practical value so I strongly recommend giving it a try That’s all for today Follow me and become someone who truly understands AI'
