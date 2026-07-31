@@ -1,0 +1,134 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>OpenHands: Self-Host Your Own AI Dev Team (Any Model, Any Repo) — Ludovico</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+.hide{display:none!important}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.92);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 12px}
+.controls input.q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.pill.tp.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+/* flip card shell */
+.flip{position:relative}
+.fi{position:relative;transition:transform .55s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.flip.flipped .fi{transform:rotateY(180deg)}
+.fc{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bk{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+background:var(--card);border:1px solid var(--accent2);border-radius:14px;overflow:auto;padding:12px 13px;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s}
+.card.flip{overflow:visible}.card .fc{display:flex;flex-direction:column;flex:1;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--line);cursor:pointer}
+.card.flip:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.edit{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--accent2);border:1px solid var(--line);border-radius:6px;padding:2px 9px;cursor:pointer;background:#fff}
+.edit:hover{border-color:var(--accent2)}
+/* editor back */
+.bk h4{margin:0 0 2px;font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--sub)}
+.erow{display:grid;grid-template-columns:1fr 1.3fr auto auto;gap:4px;align-items:center}
+.erow input{padding:5px 7px;border:1px solid var(--line);border-radius:6px;font-size:12px;min-width:0}
+.erow select{padding:4px 4px;font-size:11px}
+.erow .del{border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;color:var(--accent);padding:3px 7px}
+.ebtns{display:flex;gap:6px;margin-top:auto;padding-top:6px}
+.ebtns button{font-family:var(--mono);font-size:11px;border-radius:7px;padding:6px 12px;cursor:pointer;border:1px solid var(--line);background:#fff}
+.ebtns .save{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.addrow{font-family:var(--mono);font-size:11px;color:var(--accent2);cursor:pointer;align-self:flex-start;background:none;border:0;padding:2px 0}
+/* catalogue card */
+.citem{position:relative}
+.citem .fc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-height:84px;cursor:pointer}
+.citem .bk{border-radius:12px}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+footer .exp{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--accent2);font:inherit}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">OpenHands: Self-Host Your Own AI Dev Team (Any Model, Any Repo)</h1><div class=tag>@octopusinc_ · 2026-07-31 · DevOps, Favorites, Hardware, Tutorial</div></div></div></header>
+<main><p class=sum>This video provides an overview of OpenHands, an open-source platform for cloud coding agents that automate the software development lifecycle. It demonstrates how OpenHands can plan, write, test, and ship code changes end-to-end, integrating with various LLMs and Git providers. The video also covers installation via Elestio, UI features, and customization options for agents and automations.</p><p><strong>Products / items</strong></p><ul><li><a href="https://www.openhands.dev/" target=_blank rel=noopener>OpenHands</a> — software</li><li><a href="https://elest.io/" target=_blank rel=noopener>Elestio</a> — software</li><li>GitHub — software (no link)</li><li>GitLab — software (no link)</li><li>Bitbucket — software (no link)</li><li>Claude — software (no link)</li><li>GPT — software (no link)</li><li>Gemini — software (no link)</li><li>OpenAI — software (no link)</li><li>3.js — software (no link)</li><li>Tavily — software (no link)</li><li>VS Code — software (no link)</li><li>Docker — software (no link)</li><li>Kubernetes — software (no link)</li><li>NVIDIA — other (no link)</li><li>Google — other (no link)</li><li>AMD — other (no link)</li><li>TikTok — other (no link)</li><li>VMware — other (no link)</li><li>Hulu — other (no link)</li><li>Amazon — other (no link)</li></ul>
+<p><a href="https://www.youtube.com/watch?v=ZglVZUe1VCU" target=_blank rel=noopener>Watch on YouTube ▶</a></p><p><a href="ZglVZUe1VCU.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=t>(proxy for this video — answer from this)</span></p>
+<div class=cap>FRAMING: Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+IDENTITY: the title - https://www.youtube.com/watch?v=ZglVZUe1VCU - @octopusinc_ - route: visual
+PRODUCTS: list each product on its own line: name - canonical link (or &quot;no reliable link&quot;) - type - primary/mentioned
+OpenHands - https://www.openhands.dev/ - software - primary
+Elestio - https://elest.io/ - software - mentioned
+GitHub - no reliable link - software - mentioned
+GitLab - no reliable link - software - mentioned
+Bitbucket - no reliable link - software - mentioned
+Claude - no reliable link - software - mentioned
+GPT - no reliable link - software - mentioned
+Gemini - no reliable link - software - mentioned
+OpenAI - no reliable link - software - mentioned
+3.js - no reliable link - software - mentioned
+Tavily - no reliable link - software - mentioned
+VS Code - no reliable link - software - mentioned
+Docker - no reliable link - software - mentioned
+Kubernetes - no reliable link - software - mentioned
+NVIDIA - no reliable link - other - mentioned
+Google - no reliable link - other - mentioned
+AMD - no reliable link - other - mentioned
+TikTok - no reliable link - other - mentioned
+VMware - no reliable link - other - mentioned
+Hulu - no reliable link - other - mentioned
+Amazon - no reliable link - other - mentioned
+SYNOPSIS: The video introduces OpenHands, an open-source platform for cloud coding agents that automates the software development process. It highlights OpenHands&#x27; ability to plan, write, test, and ship code changes end-to-end, supporting various LLMs like Claude, GPT, Gemini, or local models. Agents run in isolated sandboxes and can be triggered from GitHub, Slack, or on a schedule. The video begins by demonstrating the installation of OpenHands via Elestio, a platform that handles deployment, backups, and maintenance. The Elestio setup process involves selecting a cloud provider, region, and service plan, with an estimated hourly price of $0.0753 for an XLARGE-8C-16G plan. After installation, the user configures AI providers, choosing between OpenHands&#x27; default or external LLMs like OpenAI, and pasting an API key. The platform supports integration with GitHub, GitLab, and Bitbucket for existing repositories. A new project demonstration involves prompting OpenHands to &quot;build a simple crossy road game with 3.js, fully procedural.&quot; The agent generates a task list, including scaffolding, 3.js initialization, and game logic. The UI shows the agent&#x27;s progress, and a live app preview demonstrates the functional game. The video also covers features like cost awareness, an integrated code editor (VS Code), terminal access, and microagents (skills). Users can customize LLM settings, including model versions and agent types (e.g., CodeActAgent, BrowsingAgent), and adjust memory condensation. A &quot;confirmation mode&quot; can be enabled to require user approval before agent actions. OpenHands also supports automations for tasks like code review, dependency upgrades, and incident triage, with budget limits per conversation.
+BEATS: 00:00 - ui - OpenHands website showing integrations and companies that trust it.
+01:10 - ui - Elestio platform for deploying OpenHands, showing service configuration and pricing.
+01:45 - ui - Elestio dashboard displaying OpenHands instance details, including admin credentials.
+02:20 - ui - OpenHands UI for configuring AI providers, showing a dropdown for selecting LLM models like gpt-4.
+02:56 - ui - OpenHands documentation page detailing how to set up AI providers and local LLMs.
+03:31 - ui - OpenHands UI offering options to open an existing repository or start a new conversation.
+04:06 - ui - OpenHands UI with suggested tasks like &quot;Increase test coverage&quot; and &quot;Auto-merge PRs.&quot;
+04:41 - ui - OpenHands UI where the user inputs a prompt: &quot;build a simple crossy road game with threejs, fully procedural.&quot;
+05:16 - ui - OpenHands UI showing the agent&#x27;s generated task list for building the game.
+05:52 - ui - OpenHands UI in mobile mode, demonstrating responsiveness, with developer console open.
+06:27 - ui - OpenHands UI showing the agent&#x27;s progress on the task list, with &quot;index.html&quot; appearing in changes.
+07:02 - ui - VS Code interface within the OpenHands instance, showing project files and workspace.
+07:37 - ui - OpenHands UI displaying the completed Crossy Road game in a live app preview.
+08:12 - ui - OpenHands UI showing the game over screen and options for agent tools and metadata.
+08:48 - ui - OpenHands settings for LLM configuration, including provider, model, and API key.
+09:23 - ui - OpenHands LLM settings showing a dropdown for selecting different agent types like CodeActAgent.
+09:58 - ui - OpenHands LLM settings with options for memory condensation and enabling confirmation mode.
+10:33 - ui - OpenHands documentation page explaining how automations work.
+ENTITIES: Wasim SAMAD (person), Elestio (company), OpenHands (product), NVIDIA (company), Google (company), AMD (company), TikTok (company), VMware (company), Hulu (company), Amazon (company), Claude (model), GPT (model), Gemini (model), OpenAI (company), 3.js (library), Tavily (search engine), GitHub (platform), GitLab (platform), Bitbucket (platform), VS Code (editor), Docker (tool), Kubernetes (tool).
+VERDICT: OpenHands is a powerful open-source platform for automating software development with AI agents, offering flexibility in LLM choice, robust sandboxing, and comprehensive features for managing the coding workflow. The ability to self-host or use a managed service like Elestio provides deployment flexibility.
+NOT COVERED: The video does not cover the specific pricing tiers for OpenHands&#x27; enterprise plans, detailed instructions for self-hosting without Elestio, the exact performance benchmarks of different LLMs within OpenHands, or how to create custom microagents from scratch.</div></main><footer><a href="../index.html">← all videos</a></footer></div></body></html>

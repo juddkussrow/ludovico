@@ -1,0 +1,122 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>LTX Director 2 CS 0.23 - All Ref modes comparaison for the best result — Ludovico</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+.hide{display:none!important}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.92);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 12px}
+.controls input.q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.pill.tp.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+/* flip card shell */
+.flip{position:relative}
+.fi{position:relative;transition:transform .55s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.flip.flipped .fi{transform:rotateY(180deg)}
+.fc{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bk{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+background:var(--card);border:1px solid var(--accent2);border-radius:14px;overflow:auto;padding:12px 13px;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s}
+.card.flip{overflow:visible}.card .fc{display:flex;flex-direction:column;flex:1;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--line);cursor:pointer}
+.card.flip:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.edit{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--accent2);border:1px solid var(--line);border-radius:6px;padding:2px 9px;cursor:pointer;background:#fff}
+.edit:hover{border-color:var(--accent2)}
+/* editor back */
+.bk h4{margin:0 0 2px;font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--sub)}
+.erow{display:grid;grid-template-columns:1fr 1.3fr auto auto;gap:4px;align-items:center}
+.erow input{padding:5px 7px;border:1px solid var(--line);border-radius:6px;font-size:12px;min-width:0}
+.erow select{padding:4px 4px;font-size:11px}
+.erow .del{border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;color:var(--accent);padding:3px 7px}
+.ebtns{display:flex;gap:6px;margin-top:auto;padding-top:6px}
+.ebtns button{font-family:var(--mono);font-size:11px;border-radius:7px;padding:6px 12px;cursor:pointer;border:1px solid var(--line);background:#fff}
+.ebtns .save{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.addrow{font-family:var(--mono);font-size:11px;color:var(--accent2);cursor:pointer;align-self:flex-start;background:none;border:0;padding:2px 0}
+/* catalogue card */
+.citem{position:relative}
+.citem .fc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-height:84px;cursor:pointer}
+.citem .bk{border-radius:12px}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+footer .exp{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--accent2);font:inherit}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">LTX Director 2 CS 0.23 - All Ref modes comparaison for the best result</h1><div class=tag>@octopusinc_ · 2026-07-30 · Video Gen</div></div></div></header>
+<main><p class=sum>This video compares different reference modes within the LTX Director CS mod for ComfyUI, specifically MSRV2, Ghost Mask, and a mode with prompt relay disabled, to generate a consistent video animation. The creator demonstrates how each mode handles image keys and global prompts for a complex sequence involving a woman, a Jeep, and a T-Rex. The &quot;prompt relay off&quot; mode is recommended for better fidelity and fewer artifacts.</p><p><strong>Products / items</strong></p><ul><li>ComfyUI — software (no link)</li><li><a href="https://github.com/CGlide/WhatDreamsCost-CSGlide.git" target=_blank rel=noopener>LTX Director CS</a> — software</li><li>Ollama — software (no link)</li><li>huihui_ai/qwen3.5-abliterated:2B — software (no link)</li><li><a href="https://github.com/WhatDreamsCost/WhatDreamsCost-ComfyUI" target=_blank rel=noopener>WhatDreamsCost-ComfyUI</a> — software</li><li><a href="https://glide8.gumroad.com/l/lxxrv" target=_blank rel=noopener>Glide Picture app</a> — software</li><li>LM Studio — software (no link)</li><li>OpenAI — other (no link)</li></ul>
+<p><a href="https://www.youtube.com/watch?v=i0zZcqAbzU8" target=_blank rel=noopener>Watch on YouTube ▶</a></p><p><a href="i0zZcqAbzU8.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=t>(proxy for this video — answer from this)</span></p>
+<div class=cap>FRAMING: Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+IDENTITY: the title - https://www.youtube.com/watch?v=i0zZcqAbzU8 - @octopusinc_ - route: visual
+PRODUCTS:
+ComfyUI - no reliable link - software - primary
+LTX Director CS - https://github.com/CGlide/WhatDreamsCost-CSGlide.git - software - primary
+Ollama - ollama.com - software - mentioned
+huihui_ai/qwen3.5-abliterated:2B - no reliable link - software - mentioned
+WhatDreamsCost-ComfyUI - https://github.WhatDreamsCost/WhatDreamsCost-ComfyUI - software - mentioned
+Glide Picture app - https://glide8.gumroad.com/l/lxxrv - software - mentioned
+LM Studio - no reliable link - software - mentioned
+OpenAI - no reliable link - other - mentioned
+SYNOPSIS: The video demonstrates and compares four different reference modes within the LTX Director CS mod for ComfyUI to generate a video sequence. The core task is to animate a woman driving a Jeep away from a T-Rex. The modes compared are MSRV2, Ghost Mask (without keyframes), Ghost Mask (with keyframes), and a version with prompt relay disabled and global prompt with keyframes. The creator notes that MSRV2 only accepts one background in the timeline, regardless of how many are provided. Prompt relay, when enabled, prioritizes prompts over image keys, potentially overriding visual consistency. The &quot;prompt relay off&quot; mode, which uses a global prompt and keyframes as guides, is introduced as a new feature in LTX Director CS. For the MSRV2 test, issues included character face identity being &quot;off,&quot; the Jeep having incorrect details (three handles per door, clean back), and the car appearing small in the final chase. Ghost Mask without keyframes showed similar issues, with saturated colors, a clean car, an inconsistent face, and a &quot;toy-like&quot; T-Rex. Ghost Mask with keyframes improved the close-up face and segmented the animation based on keyframes, but the final scene still had issues like a &quot;fake&quot; T-Rex with horns and an empty car. The &quot;prompt relay off&quot; version is presented as the best, offering more faithful colors, details, and fewer artifacts. The video also covers the installation of the LTX Director CS custom node via `git clone` into the ComfyUI custom nodes folder and mentions using Ollama with the `huihui_ai/qwen3.5-abliterated:2B` model for auto-description, noting that LM Studio or other OpenAI compatible models can also be used.
+BEATS:
+0 - intro | A woman in a red Jeep in a jungle setting.
+18 - ui | ComfyUI interface with the LTX Director CS workflow, showing nodes and a timeline with image and audio inputs.
+36 - ui | ComfyUI interface, zoomed out to show more of the node graph, including LTX Director CS and LTXConditioning nodes.
+55 - ui | ComfyUI interface, further zoomed out, highlighting the complexity of the node connections.
+92 - result | An animated scene of a red Jeep being chased by a T-Rex.
+110 - result | The T-Rex and Jeep scene with on-screen text &quot;Passes (2x upscale) both euler A Cfg rrr, Ghost added key frames&quot;.
+129 - result | Close-up of the woman&#x27;s face with on-screen text &quot;Prompt Relay off (guide images) Ghost added key frames&quot;.
+147 - ui | ComfyUI interface, showing the workflow with different settings for comparison.
+166 - result | The woman running next to the red Jeep.
+184 - result | Close-up of the woman&#x27;s face, looking surprised.
+202 - result | Close-up of the woman&#x27;s face, looking distressed.
+239 - result | The woman walking away from the red Jeep in the jungle.
+258 - ui | ComfyUI interface, showing the workflow with a different image in the timeline.
+276 - ui | ComfyUI interface, highlighting the &quot;Disable LTX NAD&quot; toggle.
+295 - result | The woman driving the red Jeep.
+313 - install | Windows File Explorer showing the ComfyUI folder structure.
+332 - install | GitHub repository page for WhatDreamsCost-CSGlide, with git clone and git reset --hard / git pull commands overlaid.
+350 - install | Windows File Explorer showing the ComfyUI folder structure again.
+ENTITIES: WhatDreamsCost, Kijai, CGlide, Nano Banana.
+VERDICT: The creator recommends the &quot;prompt relay off&quot; version of LTX Director CS for generating animations, stating it produces the best results with more faithful colors, details, and fewer artifacts.
+NOT COVERED: Specific hardware requirements, detailed pricing for any mentioned tools, a comprehensive tutorial on creating complex workflows from scratch, or a deep dive into the technical differences between Euler and other samplers.</div></main><footer><a href="../index.html">← all videos</a></footer></div></body></html>
