@@ -1,0 +1,216 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Single Photo vs. Character Sheet: The LTX 2.3 Best Face ID Secret
+channel: @octopusinc_
+duration: 11:15
+source: https://www.youtube.com/watch?v=2eR57B4uaGM
+upload_date: 20260729
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'Today we’re testing a character-consistency LoRA for LTX 2.3 It has a pretty interesting name: Best Face ID From that name we can roughly guess the two main problems it’s designed to solve First'
+
+[00:12] [scene:talk]
+VISUAL: 
+AUDIO: 'with just one clear reference image it tries to preserve the character’s facial features while generating new scenes and actions That’s why it’s called Best Face ID Second it supports Character Sheets also known as character reference sheets So besides the face'
+
+[00:26] [scene:talk]
+VISUAL: 
+AUDIO: 'we can provide the model with information about the character’s hairstyle clothing, body shape overall appearance side view, and back view What you’re seeing right now is the result generated from a regular reference image The input is just a normal portrait'
+
+[00:40] [scene:talk]
+VISUAL: 
+AUDIO: 'Even though the scene and movement change in the generated video the character’s face and hairstyle remain highly consistent Later we’ll also test the Character Sheet workflow to see whether adding full-body side-view'
+
+[00:54] [scene:talk]
+VISUAL: 
+AUDIO: 'and back-view information can produce a more complete result In this video I’ll provide four workflows and answer three practical questions First what’s the difference between the results produced by the various reference methods? Second'
+
+[01:08] [scene:talk]
+VISUAL: 
+AUDIO: 'does the aspect ratio affect character similarity? And third after generating a fully high-resolution video what kinds of problems might still appear? Let’s start with installation This is the LoRA’s Hugging Face page'
+
+[01:20] [scene:talk]
+VISUAL: 
+AUDIO: 'where you can download two models The first is the standard Best Face ID model and the second is designed specifically for Character Sheets Place both files in the loras folder under ComfyUI/models You’ll also need to install the ComfyUI-BFSNodes extension because we’re going to use some of its nodes'
+
+[01:35] [scene:talk]
+VISUAL: 
+AUDIO: 'I also recommend installing this other extension that we covered previously since we’ll use its tiled upscaling mode during the high-resolution stage For easier testing'
+
+[01:50] [scene:talk]
+VISUAL: 
+AUDIO: 'I’ve also built these workflows on RunningHub In the ComfyUI space RunningHub is a great online working platform because whenever a new model or extension comes out the platform usually adds support for it very quickly RunningHub also provides an online community for ComfyUI creators'
+
+[02:05] [scene:talk]
+VISUAL: 
+AUDIO: 'where you can find plenty of creative inspiration and example workflows Now let’s look at the standard workflow My base model is LTX 2.3 Distilled version one point one We then load the standard Best Face ID LoRA and set its weight to one'
+
+[02:20] [scene:talk]
+VISUAL: 
+AUDIO: 'Your reference image needs to meet four requirements It should contain only one person show the person from the front have clear lighting'
+
+[02:32] [scene:talk]
+VISUAL: 
+AUDIO: 'and make the face large enough within the frame Once the image enters the workflow we resize it so that its longest side is five hundred and twelve pixels I recommend removing the background as well because this helps focus the model’s attention more heavily on the character'
+
+[02:45] [scene:talk]
+VISUAL: 
+AUDIO: 'Next we use the core node called LTX Identity Transfer There are several important parameters here Set source_id to two This is a fixed value because that’s how the model was configured during training'
+
+[02:57] [scene:talk]
+VISUAL: 
+AUDIO: 'Set phase_scale to one use overlap for the layout and set the guidance strength to one The most important parameter here is ref_resize_mode For standard reference generation'
+
+[03:12] [scene:talk]
+VISUAL: 
+AUDIO: 'set it to match_target This adapts the reference image to the resolution of the target video We’re still using eight sampling steps with CFG set to one I’ve set a relatively long duration of two hundred and forty-one frames'
+
+[03:24] [scene:talk]
+VISUAL: 
+AUDIO: 'and the resolution is one thousand twenty-four by one thousand twenty-four This square resolution is also recommended by the developers If you look at their official examples'
+
+[03:38] [scene:talk]
+VISUAL: 
+AUDIO: 'most of them use this resolution We also need to talk about prompt writing because this model has some specific prompt requirements First the prompt must begin with ref_t2v followed by a colon After that'
+
+[03:52] [scene:talk]
+VISUAL: 
+AUDIO: 'structure the prompt in four layers The first describes the character’s appearance The second describes the clothing and accessories The third describes the new scene and action The final layer covers the shot size'
+
+[04:04] [scene:talk]
+VISUAL: 
+AUDIO: 'camera movement and lighting The developers emphasize that you shouldn’t write something overly simple like “A woman walking in a garden ” This LoRA doesn’t rely only on the reference image It also relies on the text prompt'
+
+[04:17] [scene:talk]
+VISUAL: 
+AUDIO: 'The more accurately you describe the face shape hairstyle clothing, and framing the more stable the character’s identity will usually be As I mentioned earlier this is reference-based generation'
+
+[04:29] [scene:talk]
+VISUAL: 
+AUDIO: 'not image-to-video Let’s verify that I’m going to bypass the background-removal step which makes the workflow look a little more like image-to-video However I’ll use a prompt that describes a completely different scene'
+
+[04:41] [scene:talk]
+VISUAL: 
+AUDIO: 'Notice that I’m only changing the scene not the character’s appearance I’ll ask the character to stand beside a garden path and take one step forward while the camera follows horizontally in a medium shot As you can see'
+
+[04:56] [scene:talk]
+VISUAL: 
+AUDIO: 'the generated video doesn’t begin from the supplied reference image and the indoor scene from that image hasn’t been carried over However the character’s defining features have been preserved completely This confirms that the image is being used as an identity reference rather than as the starting frame of an image-to-video sequence'
+
+[05:08] [scene:talk]
+VISUAL: 
+AUDIO: 'Next let’s look at resolution and aspect ratio Because the standard reference workflow uses match_target mode both the dimensions of the reference image and the dimensions of the target video can affect the result'
+
+[05:23] [scene:talk]
+VISUAL: 
+AUDIO: 'Let’s run a few comparisons In the first test we use a vertical reference image to generate a horizontal video The facial similarity drops noticeably'
+
+[05:35] [scene:talk]
+VISUAL: 
+AUDIO: 'In the second test we use a horizontal reference image to generate a vertical video The character and clothing are still recognizable but the overall character consistency is still not particularly strong In the third test'
+
+[05:50] [scene:talk]
+VISUAL: 
+AUDIO: 'we use a vertical reference image to generate a vertical video This time the facial features become much more stable So for standard reference images remember one simple rule: pair horizontal images with horizontal videos'
+
+[06:02] [scene:talk]
+VISUAL: 
+AUDIO: 'and vertical images with vertical videos Generally speaking, though a square video at one thousand twenty-four by one thousand twenty-four provides the highest overall stability If you want to preserve more than just the face'
+
+[06:16] [scene:talk]
+VISUAL: 
+AUDIO: 'and you also need stronger consistency in the hairstyle clothing, body and other appearance details use the Character Sheet workflow A Character Sheet isn’t simply four random photos stitched together'
+
+[06:28] [scene:talk]
+VISUAL: 
+AUDIO: 'It must be a horizontal image divided into four columns The first column should contain a close-up of the face The remaining three columns should show the character’s full body from the front'
+
+[06:40] [scene:talk]
+VISUAL: 
+AUDIO: 'from a ninety-degree side view and from the back I recommend using a pure white background Try to keep the character’s face shape hairstyle and body proportions consistent across all four views'
+
+[06:52] [scene:talk]
+VISUAL: 
+AUDIO: 'You only need to change three things in the workflow First replace the standard LoRA with the corresponding Character Sheet version Second disable background removal'
+
+[07:04] [scene:talk]
+VISUAL: 
+AUDIO: 'Since the reference already uses a white background it won’t cause much interference Third, and most importantly set ref_resize_mode to native_resolution instead of match_target This is different from the standard workflow we just covered'
+
+[07:18] [scene:talk]
+VISUAL: 
+AUDIO: 'There’s also a small inconsistency regarding the resize dimensions The official workflow uses one thousand five hundred and thirty-six by one thousand five hundred and thirty-six while the official text instructions specify one thousand five hundred and thirty-six by one thousand twenty-four'
+
+[07:31] [scene:talk]
+VISUAL: 
+AUDIO: 'In my tests the difference between them wasn’t significant The workflow needs to preserve the original information from the facial close-up and the three full-body views which is why we can’t use match_target mode here'
+
+[07:47] [scene:talk]
+VISUAL: 
+AUDIO: 'If we did the entire wide Character Sheet would be compressed into the target video’s aspect ratio That would cause facial details clothing details and other information to be lost'
+
+[07:59] [scene:talk]
+VISUAL: 
+AUDIO: 'Some of you may be wondering how to create the Character Sheet itself It’s actually quite simple The key is writing the prompt clearly Tell the model to generate a horizontal four-column character reference sheet based on the reference person'
+
+[08:11] [scene:talk]
+VISUAL: 
+AUDIO: 'From left to right specify a facial close-up a full-body front view a full-body side view and a full-body back view all on a pure white background'
+
+[08:23] [scene:talk]
+VISUAL: 
+AUDIO: 'You can then add your consistency constraints underneath GPT Image 2, Nano Banana and even Krea 2 which we’ve discussed before can all generate good Character Sheets Once the Character Sheet enters the workflow'
+
+[08:36] [scene:talk]
+VISUAL: 
+AUDIO: 'it doesn’t need to be resized to match the target video As a result both horizontal and vertical outputs perform much better than a standard single-image reference In the vertical test'
+
+[08:49] [scene:talk]
+VISUAL: 
+AUDIO: 'the character’s short blonde hair earrings and blue embroidered qipao are all preserved extremely well In the horizontal test the character moves from a white studio setting into a dark hotel interior while her short hair, white top'
+
+[09:02] [scene:talk]
+VISUAL: 
+AUDIO: 'and identity remain very stable Now let’s talk about high-resolution upscaling Both reference methods have their own corresponding high-resolution workflows but the underlying process is basically the same'
+
+[09:14] [scene:talk]
+VISUAL: 
+AUDIO: 'In the first stage we generate the base video at half resolution In the second stage we upscale it with a tiled latent upsampler and then apply low-strength refinement with a tiled sampler This approach can generate higher-resolution videos while keeping VRAM usage under control'
+
+[09:29] [scene:talk]
+VISUAL: 
+AUDIO: 'For the standard reference workflow we output a vertical video at one thousand four hundred and eight by one thousand nine hundred and twenty For the Character Sheet test'
+
+[09:42] [scene:talk]
+VISUAL: 
+AUDIO: 'the output resolution is one thousand twenty-four by one thousand nine hundred and twenty After upscaling details such as embroidery individual strands of hair and background textures do become noticeably clearer'
+
+[09:54] [scene:talk]
+VISUAL: 
+AUDIO: 'But here’s something you need to watch out for The second stage doesn’t simply enlarge the pixels It resamples the high-resolution latent which means the face may effectively be redrawn As a result'
+
+[10:08] [scene:talk]
+VISUAL: 
+AUDIO: 'identity consistency may drop slightly The Character Sheet upscale has the same issue That’s why I consider upscaling optional First make sure the base video is stable Once the character and motion are working properly'
+
+[10:20] [scene:talk]
+VISUAL: 
+AUDIO: 'you can think about increasing the resolution So here’s my recommendation for this model If you only have one clear close-up portrait use the standard Best Face ID LoRA Resize the longest side of the reference image to five hundred and twelve pixels'
+
+[10:32] [scene:talk]
+VISUAL: 
+AUDIO: 'use match_target mode and keep the target video’s orientation as close as possible to the orientation of the reference image If you need to provide more consistency information use a Character Sheet and select native_resolution mode'
+
+[10:46] [scene:talk]
+VISUAL: 
+AUDIO: 'If you need a high-resolution video you can also use the two-stage upscaling workflow Just remember that it may slightly reduce both the overall visual quality and the character’s identity consistency Personally'
+
+[11:03] [scene:talk]
+VISUAL: 
+AUDIO: 'I think this model produces some very good results so it’s definitely worth trying for yourself That’s all for today Follow me and become someone who truly understands AI'

@@ -1,0 +1,164 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: This $8 Microcontroller Is Running a Language Model Locally!
+channel: @octopusinc_
+duration: 08:14
+source: https://www.youtube.com/watch?v=0qXVMt3pIjU
+upload_date: 20260731
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'This is a 28.9 million parameter language model generating text right now, one word at a time on a chip that costs about $8. There\'s no Wi-Fi. Nothing is being sent to a server.'
+
+[00:12] [scene:talk]
+VISUAL: 
+AUDIO: 'Everything is happening inside an ESP32S3, a microcontroller with less RAM than a computer from the \'90s. This is insane. How is this actually possible? What\'s'
+
+[00:25] [scene:talk]
+VISUAL: 
+AUDIO: 'the magic behind it? and how can we build something similar? Well, those are all good questions that we\'re going to look at in today\'s video. It\'s going to be a lot of fun. So, let\'s dive into it. So, the ESP32S3'
+
+[00:42] [scene:talk]
+VISUAL: 
+AUDIO: 'is a chip that gives you 512 kilob of SRAMM. And that is the amount of fast memory this chip can compute with. Normally, if you would attempt to run an'
+
+[00:54] [scene:talk]
+VISUAL: 
+AUDIO: 'LLM inside of it, the whole model would have to fit right in there. The last language model anyone got running on a chip like this topped out at 260,000 parameters. So, this one holds about 110'
+
+[01:07] [scene:talk]
+VISUAL: 
+AUDIO: 'times more. And the person who pulled it off is a Ukrainian developer, Slava S. So, what\'s the magic trick? How did they do it? How did they fit a 28.9 million parameter model on an eight chip? Well,'
+
+[01:21] [scene:talk]
+VISUAL: 
+AUDIO: 'the workaround comes from an idea Google used in Gemma. It\'s called per layer embeddings. Most of a language model\'s parameters do not compute anything. They sit in an embedding table that just gets'
+
+[01:34] [scene:talk]
+VISUAL: 
+AUDIO: 'read from. If most of your parameters are only ever looked up, they don\'t need fast memory. So you can get away with leaving that table sitting in a slow cheap flash memory and only pull the'
+
+[01:46] [scene:talk]
+VISUAL: 
+AUDIO: 'rows the current token needs and the small part that actually computes and thinks about the next token the attention head and feed forward stays in SRAMM. Okay, that\'s the compute part.'
+
+[01:58] [scene:talk]
+VISUAL: 
+AUDIO: 'But the question still remains, how do we fit such a big model onto such a tiny chip? So, the 25 million row table lives in flash memory, and that\'s the biggest chunk of the model\'s whole 28.9 million'
+
+[02:10] [scene:talk]
+VISUAL: 
+AUDIO: 'parameters. And flash is cheap and huge on this particular chip. It has 16 megabytes of it. So, instead of trying to squeeze that table into the same 512 kilob of SRAM, it just stays parked in'
+
+[02:25] [scene:talk]
+VISUAL: 
+AUDIO: 'flash. We pull out about six rows from it, one for each of the model six layers. That\'s roughly 450 bytes total. Now, before you get too excited, I do have to address the fact that this is a'
+
+[02:38] [scene:talk]
+VISUAL: 
+AUDIO: 'very dumb simple model. This won\'t be your typical GPT style LLM. It won\'t give you code generation or answer questions about difficult topics because if you tried to train a normal model'
+
+[02:51] [scene:talk]
+VISUAL: 
+AUDIO: 'this size on a normal data set, 28 million parameters would just give you gibberish. But this model itself is trained on tiny stories. A data set built by researchers at Microsoft'
+
+[03:03] [scene:talk]
+VISUAL: 
+AUDIO: 'written deliberately simple enough that even a tiny model a few million parameters can learn to write them coherently and running it in plain C on a chip with no operating system and no'
+
+[03:15] [scene:talk]
+VISUAL: 
+AUDIO: 'Python interpreter. That idea comes from the famous Andre Karpathy\'s Llama 2.C C project which showed us that you could train a small language model and run inference on it using nothing but a few'
+
+[03:28] [scene:talk]
+VISUAL: 
+AUDIO: 'hundred lines of portable C and that is the blueprint this entire project is built on without Karpathy this probably wouldn\'t even be possible. So that\'s how it works in a nutshell. Now let\'s'
+
+[03:40] [scene:talk]
+VISUAL: 
+AUDIO: 'actually try to build it on our own and run it on the chip to see how it performs. To actually build this ourselves, the first thing you need is the right hardware. Specifically, an ESP32S3'
+
+[03:52] [scene:talk]
+VISUAL: 
+AUDIO: 'with 16 MGB of flash and 8 MGB of PS RAM. That\'s the N16R8 variant. And this is really important because remember when we talked about that 25 million row table living in'
+
+[04:05] [scene:talk]
+VISUAL: 
+AUDIO: 'flash? Well, by itself, once trained and exported, it comes to about 15 megabytes. But boards with four or eight megabytes of flash simply won\'t hold it. So, if you\'re shopping for a board to'
+
+[04:19] [scene:talk]
+VISUAL: 
+AUDIO: 'follow along, that\'s the one spec you should check first. Now, when I first went through the project\'s actual instructions, the setup was scattered across a few different files and it assumed a fair amount of context I didn\'t have going into it. So instead of'
+
+[04:32] [scene:talk]
+VISUAL: 
+AUDIO: 'walking you through it exactly as written, I put together a single oneshot script that does everything. Checks the board, installs the tool chain, prepares the data, trains it, exports it,'
+
+[04:44] [scene:talk]
+VISUAL: 
+AUDIO: 'verifies, builds, and flashes it all in one go. So let\'s go ahead and run that script. And one quick heads up, if you\'re following along, the whole script takes about 25 minutes to finish. And'
+
+[04:57] [scene:talk]
+VISUAL: 
+AUDIO: 'probably that\'s the same time it would take you doing it step by step. It\'s just because there are so many separate commands you have to babysit. And most of the time is actually spent on training the tiny stories model. That'
+
+[05:09] [scene:talk]
+VISUAL: 
+AUDIO: 'takes about 30 minutes on my MacBook. And once the training is done, you\'ll see the LEDs on the panel start flashing. And that\'s an indication that we\'re about to load the model. And once'
+
+[05:21] [scene:talk]
+VISUAL: 
+AUDIO: 'it\'s loaded, here we can see the first basic example of a story of a little girl. And indeed, we\'re getting those nine tokens a second. But you\'ll notice that at a certain point, it will restart the story again. So the model is going'
+
+[05:34] [scene:talk]
+VISUAL: 
+AUDIO: 'in some kind of a loop. And if you want to give it a custom prompt, I\'ve also included a sample script you can use to run your own custom prompts. So for this example, let\'s start a story about a'
+
+[05:46] [scene:talk]
+VISUAL: 
+AUDIO: 'robot. And another thing to note is that if you change the prompt, you will have to reflash the ESP32 again. And that\'s a limitation of this method. It can only play back one prompt that is pre-flashed at a time. And as you can see, we do get'
+
+[06:00] [scene:talk]
+VISUAL: 
+AUDIO: 'a mention of the robot in the story, and the story is indeed a bit different this time. But notice what happens after the end of the paragraph. We get back to the story of the little girl. So, I have no'
+
+[06:12] [scene:talk]
+VISUAL: 
+AUDIO: 'idea why this is happening, but clearly the model tends to steer back to that one specific story about that little girl. And let\'s do another example. And this time, let\'s use the famous phrase that is written at the very beginning of'
+
+[06:25] [scene:talk]
+VISUAL: 
+AUDIO: 'every Star Wars movie. and let\'s see where that takes us. So, this is an interesting one. We can see that the model immediately drifts back to the little girl narrative again. And I\'m assuming that for a model of this size,'
+
+[06:38] [scene:talk]
+VISUAL: 
+AUDIO: 'it doesn\'t even understand what a galaxy is. So, probably that\'s why it\'s ignoring our specific prompt in this case. And once again, we see that the next paragraph starts the same story. So although this experiment is impressive'
+
+[06:51] [scene:talk]
+VISUAL: 
+AUDIO: 'and seeing a model produce nine tokens per second on a tiny microchip is genuinely mind-blowing, it\'s still very much a very limited proof of concept. As we saw, no matter what you ask the'
+
+[07:03] [scene:talk]
+VISUAL: 
+AUDIO: 'model, it will always drift back to storytelling because that\'s what it\'s trained on. But if you found this test interesting, I also did another video in a similar realm where I tested out if a firstg Raspberry Pi could actually run a'
+
+[07:17] [scene:talk]
+VISUAL: 
+AUDIO: 'real LLM locally. So go check out that video if you\'re interested. So there you have it, folks. That\'s how you run a 28.9 million parameter language model on an ESP32 chip. We tested it. It works.'
+
+[07:29] [scene:talk]
+VISUAL: 
+AUDIO: 'So kudos to Slava for making this project. But what are your thoughts on this experiment? Do you see any realworld examples where such an implementation might be useful? Give us'
+
+[07:41] [scene:talk]
+VISUAL: 
+AUDIO: 'your thoughts in the comment section down below. And folks, if you like these types of technical breakdowns, please let me know by smashing that like button underneath the video. And also don\'t forget to subscribe to our channel. This has been Andress from Better Stack, and'
+
+[07:54] [scene:talk]
+VISUAL: 
+AUDIO: 'I will see you in the next videos.'

@@ -1,0 +1,126 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>Tutorial: High quality handmade Pokemon Holographic Proxy Card — Ludovico</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+.hide{display:none!important}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.92);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 12px}
+.controls input.q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.pill.tp.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+/* flip card shell */
+.flip{position:relative}
+.fi{position:relative;transition:transform .55s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.flip.flipped .fi{transform:rotateY(180deg)}
+.fc{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bk{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+background:var(--card);border:1px solid var(--accent2);border-radius:14px;overflow:auto;padding:12px 13px;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s}
+.card.flip{overflow:visible}.card .fc{display:flex;flex-direction:column;flex:1;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--line);cursor:pointer}
+.card.flip:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.edit{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--accent2);border:1px solid var(--line);border-radius:6px;padding:2px 9px;cursor:pointer;background:#fff}
+.edit:hover{border-color:var(--accent2)}
+/* editor back */
+.bk h4{margin:0 0 2px;font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--sub)}
+.erow{display:grid;grid-template-columns:1fr 1.3fr auto auto;gap:4px;align-items:center}
+.erow input{padding:5px 7px;border:1px solid var(--line);border-radius:6px;font-size:12px;min-width:0}
+.erow select{padding:4px 4px;font-size:11px}
+.erow .del{border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;color:var(--accent);padding:3px 7px}
+.ebtns{display:flex;gap:6px;margin-top:auto;padding-top:6px}
+.ebtns button{font-family:var(--mono);font-size:11px;border-radius:7px;padding:6px 12px;cursor:pointer;border:1px solid var(--line);background:#fff}
+.ebtns .save{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.addrow{font-family:var(--mono);font-size:11px;color:var(--accent2);cursor:pointer;align-self:flex-start;background:none;border:0;padding:2px 0}
+/* catalogue card */
+.citem{position:relative}
+.citem .fc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-height:84px;cursor:pointer}
+.citem .bk{border-radius:12px}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+footer .exp{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--accent2);font:inherit}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">Tutorial: High quality handmade Pokemon Holographic Proxy Card</h1><div class=tag>@octopusinc_ · 2022-02-25 · Hardware</div></div></div></header>
+<main><p class=sum>This video demonstrates a DIY method to create high-quality holographic proxy Pokemon cards. The process involves cleaning a cheap holographic card, painting over specific areas, printing a custom card design on transparent paper, and then carefully cutting and gluing the transparent print onto the prepared holographic card. The end result is a custom holographic card that mimics the appearance of expensive vintage cards.</p><p><strong>Products / items</strong></p><ul><li><a href="https://www.amazon.de/gp/product/B07WMT7T3D/ref=ppx_yo_dt_b_asin_title_o03_s00?ie=UTF8&amp;psc=1" target=_blank rel=noopener>Paint brush</a> — hardware</li><li><a href="https://www.amazon.de/gp/product/B001OUZ6RC/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&amp;psc=1" target=_blank rel=noopener>Lineal Aluminium 30 cm</a> — hardware</li><li><a href="https://www.amazon.de/gp/product/B0845BB7K4/ref=ppx_yo_dt_b_asin_title_o05_s00?ie=UTF8&amp;psc=1" target=_blank rel=noopener>Cutting mat</a> — hardware</li><li><a href="https://www.amazon.de/Wolfcraft-4133000-Standard-Messer-einziehbarer-Klinge/dp/B002HRE258/ref=sr_1_21?keywords=wolfcraft+cutter&amp;qid=1645745382&amp;sprefix=wolcraft+cutt%2Caps%2C76&amp;sr=8-21" target=_blank rel=noopener>Wolfcraft cutter</a> — hardware</li><li><a href="https://www.amazon.de/gp/product/B07DFLFYDK/ref=ppx_yo_dt_b_asin_title_o08_s02?ie=UTF8&amp;psc=1" target=_blank rel=noopener>Tweezers</a> — hardware</li><li><a href="https://www.labelocean.de/products.php?cid=4" target=_blank rel=noopener>Transparent paper</a> — other</li><li><a href="https://www.amazon.de/gp/product/B0057H6HV2/ref=ppx_yo_dt_b_asin_title_o01_s00?ie=UTF8&amp;psc=1" target=_blank rel=noopener>Tape</a> — other</li><li><a href="https://www.amazon.de/gp/product/B0057H6I0C/ref=ppx_yo_dt_b_asin_title_o04_s00?ie=UTF8&amp;psc=1" target=_blank rel=noopener>Tape</a> — other</li><li><a href="https://www.amazon.de/Revell-REVELL-Dosen-04-wei%C3%9F-gl%C3%A4nzend/dp/B0026R7V7A?ref_=ast_sto_dp" target=_blank rel=noopener>Revell Color</a> — other</li><li><a href="https://www.amazon.de/UHU-46745-Spr%C3%BChkleber-permanent-500/dp/B000OZHY0U/ref=sr_1_1_sspa?keywords=uhu%2Bspr%C3%BChkleber&amp;qid=1645745503&amp;sprefix=uhu%2Bsp%2Caps%2C84&amp;sr=8-1-spons&amp;spLa=ZW5jcnlwdGVkUXVhbGlmaWVyPUEzTUJGS0RXNFVYQ01BJmVuY3J5cHRlZElkPUEwNTYxMjk1M0g4S01PTjVOS1VGWCZlbmNyeXB0ZWRBZElkPUEwMjA4NTc0MzM5WUo2SjZXSEtMVSZ3aWRnZXROYW1lPXNwX2F0ZiZhY3Rpb249Y2xpY2tSZWRpcmVjdCZkb05vdExvZ0NsaWNrPXRydWU&amp;th=1" target=_blank rel=noopener>Spray glue</a> — other</li><li>Photoshop — software (no link)</li></ul>
+<p><a href="https://www.youtube.com/watch?v=aWQZH3CH8-g" target=_blank rel=noopener>Watch on YouTube ▶</a></p><p><a href="aWQZH3CH8-g.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=t>(proxy for this video — answer from this)</span></p>
+<div class=cap>FRAMING: Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+IDENTITY: Tutorial: High quality handmade Pokemon Holographic Proxy Card - https://www.youtube.com/watch?v=aWQZH3CH8-g - @octopusinc_ - route: visual
+PRODUCTS:
+Paint brush - https://www.amazon.de/gp/product/B07WMT7T3D/ref=ppx_yo_dt_b_asin_title_o03_s00?ie=UTF8&amp;psc=1 - hardware - mentioned
+Lineal Aluminium 30 cm - https://www.amazon.de/gp/product/B001OUZ6RC/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&amp;psc=1 - hardware - mentioned
+Cutting mat - https://www.amazon.de/gp/product/B0845BB7K4/ref=ppx_yo_dt_b_asin_title_o05_s00?ie=UTF8&amp;psc=1 - hardware - mentioned
+Wolfcraft cutter - https://www.amazon.de/Wolfcraft-4133000-Standard-Messer-einziehbarer-Klinge/dp/B002HRE258/ref=sr_1_21?keywords=wolfcraft+cutter&amp;qid=1645745382&amp;sprefix=wolcraft+cutt%2Caps%2C76&amp;sr=8-21 - hardware - mentioned
+Tweezers - https://www.amazon.de/gp/product/B07DFLFYDK/ref=ppx_yo_dt_b_asin_title_o08_s02?ie=UTF8&amp;psc=1 - hardware - mentioned
+Transparent paper - https://www.labelocean.de/products.php?cid=4 - other - mentioned
+Tape - https://www.amazon.de/gp/product/B0057H6HV2/ref=ppx_yo_dt_b_asin_title_o01_s00?ie=UTF8&amp;psc=1 - other - mentioned
+Tape - https://www.amazon.de/gp/product/B0057H6I0C/ref=ppx_yo_dt_b_asin_title_o04_s00?ie=UTF8&amp;psc=1 - other - mentioned
+Revell Color - https://www.amazon.de/Revell-REVELL-Dosen-04-wei%C3%9F-gl%C3%A4nzend/dp/B0026R7V7A?ref_=ast_sto_dp - other - mentioned
+Spray glue - https://www.amazon.de/UHU-46745-Spr%C3%BChkleber-permanent-500/dp/B000OZHY0U/ref=sr_1_1_sspa?keywords=uhu%2Bspr%C3%BChkleber&amp;qid=1645745503&amp;sprefix=uhu%2Bsp%2Caps%2C84&amp;sr=8-1-spons&amp;spLa=ZW5jcnlwdGVkUXVhbGlmaWVyPUEzTUJGS0RXNFVYQ01BJmVuY3J5cHRlZElkPUEwNTYxMjk1M0g4S01PTjVOS1VGWCZlbmNyeXBlZElkPUEwMjA4NTc0MzM5WUo2SjZXSEtMVSZ3aWRnZXROYW1lPXNwX2F0ZiZhY3Rpb249Y2xpY2tSZWRpcmVjdCZkb05vdExvZ0NsaWNrPXRydWU&amp;th=1 - other - mentioned
+Photoshop - no reliable link - software - mentioned
+SYNOPSIS: The video provides a step-by-step tutorial on creating custom holographic Pokemon proxy cards. The process begins with designing the card in Photoshop (a separate video is promised for this step). Next, a cheap holographic Pokemon card is cleaned using nail polish remover to remove the existing ink, revealing the holographic layer underneath. The card is then taped off to protect the holographic area, and the non-holographic sections are painted white using Revell Color paint, requiring 24 hours to dry. After drying, the tape is removed, and the custom-designed card, printed on transparent paper, is carefully cut out. Finally, spray glue is applied to the back of the transparent print, which is then precisely aligned and glued onto the prepared holographic card. The video showcases the creation of Pikachu and Charizard holographic proxy cards, demonstrating the final product&#x27;s appearance. The creator emphasizes that this method allows for creating a &quot;vintage collection&quot; without purchasing expensive cards.
+BEATS:
+00:00 - intro - A hand holds up a finished holographic Pokemon card, then places it into a display stand.
+00:49 - demo - Several printed Pokemon cards (Charizard, Pikachu, Illustrator) are shown, some on transparent sheets.
+01:13 - demo - A hand uses a cotton pad and nail polish remover to clean a holographic Pokemon card on a wooden surface.
+01:38 - demo - Close-up of a hand rubbing nail polish remover on a holographic Pokemon card, removing the ink.
+02:03 - demo - Text overlay &quot;card slide down&quot; with an arrow, showing the card being cleaned.
+02:27 - demo - A hand cleans a Pokemon card with a yellow cloth.
+02:52 - demo - A hand paints white paint onto a taped-off section of a Pokemon card.
+03:16 - demo - Three Pokemon cards are shown with painted white sections, with text &quot;dry for 24h&quot;.
+03:41 - demo - Two painted Pokemon cards are shown with tape still on, next to a can of white paint.
+04:06 - demo - A hand uses a toothpick to carefully remove paint from a small area of a card, with a &quot;Subscribe&quot; button overlay.
+04:30 - demo - A close-up of a partially finished Pikachu holographic card, held by two hands.
+04:55 - demo - A hand peels off the backing from a piece of tape on a cutting mat.
+05:19 - demo - Three pieces of transparent paper with printed card designs are shown on a wooden surface.
+05:44 - demo - A close-up of a finished Pikachu holographic card, held by two hands.
+06:09 - demo - A finished Pikachu holographic card is held up and rotated to show the holographic effect.
+06:33 - result - Several finished holographic Pokemon cards are displayed in stands.
+06:58 - result - A close-up of a finished Pikachu holographic card, showing the details and holographic effect.
+07:22 - result - A hand holds up a finished Charizard holographic card, bending it slightly to show its flexibility.
+07:47 - outro - A finished Charizard holographic card is held up, showing the holographic effect.
+ENTITIES: Pokemon, Pikachu, Charizard, Illustrator, Revell Color, UHU, Labelocean, Wolfcraft, Amazon
+VERDICT: The creator recommends this DIY method for creating a &quot;nice vintage collection&quot; of holographic Pokemon cards without the expense of buying original cards, suitable for collection, gifts, or decoration.
+NOT COVERED: The video does not cover the Photoshop design process for the custom cards, the specific type of printer used for transparent paper, or the cost comparison between making proxy cards and buying authentic ones.</div></main><footer><a href="../index.html">← all videos</a></footer></div></body></html>

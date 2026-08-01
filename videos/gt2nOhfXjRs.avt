@@ -1,0 +1,260 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Krea 2 Identity Edit in Comfy UI: Image Editing, Face Swap & Ref Boost Explained
+channel: @octopusinc_
+duration: 15:09
+source: https://www.youtube.com/watch?v=gt2nOhfXjRs
+upload_date: 20260731
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'The text-to-image Krea 2 model can now be used&nbsp; for image editing, reference-based generation,&nbsp;&nbsp; and face swapping. Let’s look at how it works,&nbsp; step by step. Krea 2 is still not a native&nbsp;&nbsp; edit model. But this custom node repository for&nbsp; ComfyUI adds an editing workflow around Krea 2.&nbsp;&nbsp;'
+
+[00:12] [scene:talk]
+VISUAL: 
+AUDIO: 'It lets the model generate a new image&nbsp; while looking at the original image and&nbsp;&nbsp; following an edit instruction during denoising.&nbsp;&nbsp; To use it, clone the repository into your ComfyUI&nbsp; `custom_nodes` folder and restart ComfyUI.&nbsp;&nbsp;'
+
+[00:26] [scene:talk]
+VISUAL: 
+AUDIO: 'After restarting, get the workflow from the&nbsp; GitHub repository and load it inside the Comfy UI.&nbsp; The Identity edit lora is missing,&nbsp;&nbsp;'
+
+[00:40] [scene:talk]
+VISUAL: 
+AUDIO: 'get the lora from Hugging face and&nbsp; place it inside the Lora folder.&nbsp; In the workflow, you should&nbsp; find these two important nodes:&nbsp;&nbsp; `Krea2 Edit (source patch)` gives the diffusion&nbsp; model the visual reference. `Krea2 Edit (grounded&nbsp;&nbsp;'
+
+[00:55] [scene:talk]
+VISUAL: 
+AUDIO: 'encode)` helps the text encoder understand the&nbsp; source image together with your edit instruction.&nbsp;&nbsp; Together, these two nodes give&nbsp; Krea model two kinds of guidance:&nbsp;&nbsp;'
+
+[01:09] [scene:talk]
+VISUAL: 
+AUDIO: 'First, visual guidance through&nbsp; source image latent tokens.&nbsp;&nbsp; Second, instruction guidance, where Qwen3-VL sees&nbsp; the reference image and the edit prompt together. These nodes create the special input format needed&nbsp; for editing, and the Krea 2 Identity Edit LoRA&nbsp;&nbsp;'
+
+[01:23] [scene:talk]
+VISUAL: 
+AUDIO: 'teaches Krea 2 how to use that format. Without the&nbsp; correct edit LoRA, Krea 2 may not behave like an&nbsp;&nbsp; image editor. `Krea2 Edit (source patch)` patches&nbsp; the Krea 2 diffusion model. During sampling,&nbsp;&nbsp;'
+
+[01:35] [scene:talk]
+VISUAL: 
+AUDIO: 'the model is guided by three things: First, the encoded instruction from `Krea2&nbsp;&nbsp; Edit (grounded encode)`, where Qwen3-VL looks&nbsp; at the reference image and reads your prompt.&nbsp; Second, the source image reference, converted&nbsp; into a format the diffusion model can look at.&nbsp;'
+
+[01:51] [scene:talk]
+VISUAL: 
+AUDIO: 'Third, the blank generation&nbsp; canvas from `EmptySD3LatentImage`,&nbsp;&nbsp; which gradually becomes the final edited image.&nbsp; So the source image does not&nbsp; affect the blank canvas directly.&nbsp;&nbsp;'
+
+[02:04] [scene:talk]
+VISUAL: 
+AUDIO: 'Something like when we do the image-to-image&nbsp; generation controlled by the denoising value.&nbsp; Instead, Krea 2 generates the new image while&nbsp; looking at the source image as a reference.&nbsp;&nbsp; This reference influence happens&nbsp; through attention inside the model.&nbsp;'
+
+[02:19] [scene:talk]
+VISUAL: 
+AUDIO: 'One thing to watch out for: speeding&nbsp; up attention with options like Sage&nbsp;&nbsp; Attention or Flash Attention can&nbsp; also reduce the image quality.&nbsp; The `Krea2 Edit (grounded encode)`, is the&nbsp; understanding node. It sends the source image into&nbsp;&nbsp;'
+
+[02:35] [scene:talk]
+VISUAL: 
+AUDIO: 'the Qwen3-VL text encoder along with your prompt. So instead of encoding only a prompt like:&nbsp;&nbsp; “change the dress color to red” it encodes&nbsp; something closer to: “look at this image,&nbsp;&nbsp; understand the person, object, and scene,&nbsp; then change the dress color to red.”&nbsp;'
+
+[02:51] [scene:talk]
+VISUAL: 
+AUDIO: 'The source patch node helps preserve&nbsp; appearance. The grounded encode node&nbsp;&nbsp; helps the model understand what part of&nbsp; the image your prompt is talking about. Now let’s look at the inputs&nbsp; required by these nodes.&nbsp;'
+
+[03:06] [scene:talk]
+VISUAL: 
+AUDIO: 'The `Krea2 Edit (source patch)`. The first&nbsp; input is `model`. This should be the Krea 2&nbsp;&nbsp; model after applying the Krea 2 Identity Edit&nbsp; LoRA. Next is `source_latent`. This takes the&nbsp;&nbsp; VAE-encoded source image. This connection was&nbsp; also required in older versions of the node.&nbsp;&nbsp;'
+
+[03:20] [scene:talk]
+VISUAL: 
+AUDIO: 'But in the current version, we also have&nbsp; separate inputs for `vae` and `source_image`.&nbsp;&nbsp; When `VAE` and `source_image` are connected, the&nbsp; node uses the newer pixel-space path internally.&nbsp;&nbsp; So `source_latent` is still required, but it&nbsp; becomes more like the classic or fallback input.&nbsp;&nbsp;'
+
+[03:36] [scene:talk]
+VISUAL: 
+AUDIO: '`source_latent_b` is optional. It is&nbsp; used for a second reference latent.&nbsp;&nbsp; For a two-reference workflow, the first reference&nbsp; can be the scene, connected to `source_latent`.&nbsp;&nbsp; The second reference can be a person, object, or&nbsp; clothing item, connected to `source_latent_b`.&nbsp;&nbsp;'
+
+[03:52] [scene:talk]
+VISUAL: 
+AUDIO: 'Internally, the first reference gets frame index&nbsp; 1, and the second reference gets frame index 2.&nbsp;&nbsp; This helps the model separate the scene&nbsp; reference from the subject reference.'
+
+[04:04] [scene:talk]
+VISUAL: 
+AUDIO: 'Next is `ref_boost`. Increasing `ref_boost`&nbsp; does not simply increase denoise strength&nbsp;&nbsp; like in a normal image-to-image workflow.&nbsp; Instead, `ref_boost` tells the model to pay&nbsp;&nbsp; more attention to the reference tokens. You&nbsp; can think of it as a reference-fidelity dial.'
+
+[04:20] [scene:talk]
+VISUAL: 
+AUDIO: 'The value here affects the last reference image.&nbsp; When working with two-reference images, it affects&nbsp;&nbsp; the second reference, usually the person, object,&nbsp; or clothing item you want to insert or swap.&nbsp;&nbsp;'
+
+[04:32] [scene:talk]
+VISUAL: 
+AUDIO: 'For a single-reference edit, it affects&nbsp; the only reference image present.&nbsp; The value `1.0`, makes it neutral. Higher&nbsp; values increase attention toward the reference.&nbsp;&nbsp; Use it when identity, face, clothing, or object&nbsp; likeness is too weak. But if you push it too high,&nbsp;&nbsp;'
+
+[04:49] [scene:talk]
+VISUAL: 
+AUDIO: 'the output can become stiff, copied,&nbsp; distorted, or too attached to the reference.&nbsp; `ref_boost_a` works the same way, but for the&nbsp; first reference. In a two-reference workflow,&nbsp;&nbsp;'
+
+[05:01] [scene:talk]
+VISUAL: 
+AUDIO: 'this usually means the scene image.&nbsp;&nbsp; In a single-reference workflow,&nbsp; it usually does not matter much. Next is `fit_mode`. In the current version of&nbsp; the node, `fit` is the default option, and it is&nbsp;&nbsp; important. `fit` is designed to handle mismatched&nbsp; source and output aspect ratios better, especially&nbsp;&nbsp;'
+
+[05:16] [scene:talk]
+VISUAL: 
+AUDIO: 'when `vae` and `source_image` are connected. It uses the raw image plus VAE path to&nbsp;&nbsp; prepare the reference before encoding, which&nbsp; helps avoid blurry or stretched references.&nbsp;'
+
+[05:28] [scene:talk]
+VISUAL: 
+AUDIO: 'The second option is `crop (legacy)`.&nbsp; This is the older behavior.&nbsp; It center-crops the source image to match the&nbsp; target output aspect ratio, then resizes it.&nbsp; Remember: `fit` only fully works when both&nbsp; `VAE` and `source_image` are connected.&nbsp;'
+
+[05:43] [scene:talk]
+VISUAL: 
+AUDIO: 'Next is `source_image`. This input&nbsp; takes the original source image.&nbsp;&nbsp; When it is connected together with `vae`,&nbsp; it overrides the plain `source_latent` path&nbsp;&nbsp; internally. This is the recommended path in the&nbsp; current version of the node. `source_image + vae`&nbsp;&nbsp;'
+
+[05:59] [scene:talk]
+VISUAL: 
+AUDIO: 'is usually better than only using `source_latent`,&nbsp; because `fit_mode` can resize or crop the image&nbsp;&nbsp; in pixel space before VAE encoding. If the node&nbsp; has to resize latents after VAE encoding, details&nbsp;&nbsp; can become softer or distorted. `source_image_b`&nbsp; is the second raw image reference. Use this with&nbsp;&nbsp;'
+
+[06:16] [scene:talk]
+VISUAL: 
+AUDIO: '`vae` for two-reference edits. The order stays&nbsp; the same: the first image is usually the scene,&nbsp;&nbsp; and `source_image_b` is usually the&nbsp; person, object, or clothing reference.&nbsp;&nbsp;'
+
+[06:28] [scene:talk]
+VISUAL: 
+AUDIO: '`ref_boost_mask` is optional. It limits&nbsp; `ref_boost` to only part of the last reference&nbsp;&nbsp; image. For example, in a face-swap workflow, you&nbsp; can mask only the face area so the extra reference&nbsp;&nbsp; boost focuses there. Without a mask, `ref_boost`&nbsp; applies to the whole last reference image.&nbsp;&nbsp;'
+
+[06:44] [scene:talk]
+VISUAL: 
+AUDIO: 'Last is `vae`. The VAE is used to encode the raw&nbsp; source image internally. With `source_image`, the&nbsp;&nbsp; VAE enables the newer pixel-space path. The node&nbsp; first fits or resizes the image in pixel space,&nbsp;&nbsp;'
+
+[06:58] [scene:talk]
+VISUAL: 
+AUDIO: 'then VAE-encodes it. This is usually better&nbsp; than resizing a latent tensors after encoding. The other node, `Krea2 Edit (grounded encode)`,&nbsp; takes the Qwen3-VL text encoder through the&nbsp;&nbsp;'
+
+[07:10] [scene:talk]
+VISUAL: 
+AUDIO: '`clip` input. The `image` input should&nbsp; be the same source image. This lets the&nbsp;&nbsp; Qwen3-VL encoder look at the image while reading&nbsp; your edit instruction. `image_b` is optional.&nbsp;&nbsp; Use it for the second reference image&nbsp; when working with two-reference edits.&nbsp;'
+
+[07:27] [scene:talk]
+VISUAL: 
+AUDIO: 'Next is the `prompt` box. You can keep&nbsp; the prompt simple and direct, like:&nbsp; Change her outfit to a red raincoat&nbsp; over the black dress. The faced&nbsp;&nbsp; swap worked, and the result is acceptable. Replace the yellow car with the red cartoon car.&nbsp;'
+
+[07:40] [scene:talk]
+VISUAL: 
+AUDIO: 'Keep the main prompt simple. If you want&nbsp; the model to pay extra attention to things&nbsp;&nbsp; like face identity, clothing details,&nbsp; or object shape, use the system prompt.&nbsp; The `grounding_px` value controls the&nbsp; resolution of the image, or images,&nbsp;&nbsp;'
+
+[07:58] [scene:talk]
+VISUAL: 
+AUDIO: 'sent into the Qwen3-VL vision-language encoder.&nbsp; The default value is `768`. If an image is&nbsp;&nbsp; larger than `768` on its longest side, the node&nbsp; scales it down while preserving the aspect ratio.&nbsp;&nbsp; It does not crop the image here. For example,&nbsp; if `grounding_px` is `768` and the input&nbsp;&nbsp;'
+
+[08:15] [scene:talk]
+VISUAL: 
+AUDIO: 'image is `1536 x 1024`, it becomes `768 x 512`&nbsp; before going into the vision-language encoder.&nbsp;&nbsp; Lower `grounding_px` values can make the model&nbsp; follow the edit instruction more directly and&nbsp;&nbsp;'
+
+[08:28] [scene:talk]
+VISUAL: 
+AUDIO: 'can use less memory. Higher values can help&nbsp; with identity, faces, and fine visual details,&nbsp;&nbsp; but they may use more memory and can sometimes&nbsp; confuse the composition if pushed too high.&nbsp;&nbsp;'
+
+[08:40] [scene:talk]
+VISUAL: 
+AUDIO: 'A value of `0` means native resolution,&nbsp; so the image is not resized by this node.&nbsp; Last is `system_prompt`. This overrides&nbsp; the default system instruction used by the&nbsp;&nbsp; vision-language encoder. It can steer&nbsp; what the encoder pays attention to.&nbsp;&nbsp;'
+
+[08:56] [scene:talk]
+VISUAL: 
+AUDIO: 'For example, a face-focused system prompt&nbsp; might make it focus more on identity details.&nbsp;&nbsp; This is not the same as the edit prompt. The edit&nbsp; prompt says what you want to change. The system&nbsp;&nbsp; prompt changes how the image is described and&nbsp; understood before the edit instruction is encoded.&nbsp;'
+
+[09:11] [scene:talk]
+VISUAL: 
+AUDIO: 'Now let’s quickly look at some use cases. In this workflow, I have two images on the&nbsp;&nbsp; left, but initially only the first image is&nbsp; connected to the two nodes we saw just now.&nbsp;'
+
+[09:23] [scene:talk]
+VISUAL: 
+AUDIO: 'My prompt is: “The woman is holding&nbsp;&nbsp; a smiling cucumber in her hand.” And this is the result. As you can see, the second image is not connected&nbsp; yet. So the model creates a different cucumber&nbsp;&nbsp; on its own. It looks realistic, but it does not&nbsp; match the specific cucumber character I wanted,&nbsp;&nbsp;'
+
+[09:39] [scene:talk]
+VISUAL: 
+AUDIO: 'because the model has not&nbsp; seen that reference image. Now I am connecting the second image to&nbsp; the `Krea2 Edit (grounded encode)` node. This means Qwen3-VL can look at the&nbsp; second image while encoding the prompt.&nbsp;&nbsp;'
+
+[09:53] [scene:talk]
+VISUAL: 
+AUDIO: 'The result now understands the idea better,&nbsp; but the cucumber is floating around her hand.&nbsp; One possible reason is that the first image,&nbsp; connected through the source patch node, still has&nbsp;&nbsp; stronger visual influence. Also, the `ref_boost`&nbsp; values are still neutral for both images.'
+
+[10:09] [scene:talk]
+VISUAL: 
+AUDIO: 'Now I will connect the second image to the&nbsp; `Krea2 Edit (source patch)` node as well.&nbsp; This gives the diffusion model the&nbsp; visual reference of the cucumber.&nbsp;&nbsp;'
+
+[10:22] [scene:talk]
+VISUAL: 
+AUDIO: 'Now the generated result has the same 3D-style&nbsp; cucumber face from the reference image.&nbsp; But the black clutch, or purse, is&nbsp; still present in the woman’s hand,&nbsp;&nbsp; so the cucumber appears to float in the air. In this case, I should make the edit instruction&nbsp;&nbsp;'
+
+[10:37] [scene:talk]
+VISUAL: 
+AUDIO: 'clearer. I can update the main prompt to say: “The woman is holding the smiling cucumber&nbsp;&nbsp; character from the second image.&nbsp; Remove the black purse from her hand.”&nbsp; You can also use the system prompt to guide&nbsp; what the image encoder should pay attention to,&nbsp;&nbsp;'
+
+[10:54] [scene:talk]
+VISUAL: 
+AUDIO: 'but actual edit instructions&nbsp; usually belong in the main prompt.&nbsp; Now the result is much closer to what I wanted.&nbsp; Next, I will try another prompt: “Both are standing together for a photo.”&nbsp;'
+
+[11:07] [scene:talk]
+VISUAL: 
+AUDIO: 'The image looks fine, but the cucumber is&nbsp; longer than the one in the reference image.&nbsp; In this kind of case, we can increase `ref_boost`.&nbsp; I usually test values between 3 and 4.&nbsp; We can also create a mask for the area&nbsp; we want the model to focus on. Here,&nbsp;&nbsp;'
+
+[11:24] [scene:talk]
+VISUAL: 
+AUDIO: 'I am masking the cucumber in the reference image&nbsp; and connecting that mask to `ref_boost_mask`.&nbsp; This did not work consistently in my&nbsp; testing. So now I will increase `ref_boost`&nbsp;&nbsp;'
+
+[11:39] [scene:talk]
+VISUAL: 
+AUDIO: 'for the second image and try again. In my workflow, I also noticed a bug:&nbsp;&nbsp; sometimes the mask effect does not refresh&nbsp; unless I make a tiny change to the mask.&nbsp;&nbsp; I have not seen many people mention this, so you&nbsp; should test whether it happens in your setup too.&nbsp;'
+
+[11:55] [scene:talk]
+VISUAL: 
+AUDIO: 'Now I will also increase&nbsp; `ref_boost_a` for the first image.&nbsp;&nbsp; I will keep it close to the second&nbsp; reference boost, around 3.85 to 4.00.&nbsp; After this, the cucumber in the generated&nbsp; image matches the reference much better.&nbsp;'
+
+[12:14] [scene:talk]
+VISUAL: 
+AUDIO: 'This method worked in most of my tests. At this point, you may have two questions:&nbsp; Why increase `ref_boost` for both images?&nbsp; And why am I slightly editing&nbsp; the mask after changing settings?&nbsp;'
+
+[12:27] [scene:talk]
+VISUAL: 
+AUDIO: 'First, `ref_boost` controls the last reference&nbsp; image, which in this case is the cucumber.&nbsp;&nbsp; Increasing it tells the model to pay&nbsp; more attention to the cucumber reference.&nbsp; But sometimes that is not enough. The first&nbsp; image still needs to anchor the scene, body pose,&nbsp;&nbsp;'
+
+[12:41] [scene:talk]
+VISUAL: 
+AUDIO: 'hand position, and overall composition.&nbsp; Increasing `ref_boost_a` helps preserve the&nbsp;&nbsp; first image strongly enough so the second&nbsp; reference can fit into it more reliably. The second issue is the mask refresh problem.&nbsp;'
+
+[12:57] [scene:talk]
+VISUAL: 
+AUDIO: 'With a fixed seed, running the same&nbsp; workflow should return the same result.&nbsp;&nbsp; If I remove the mask, the cucumber&nbsp; becomes longer, which is expected.&nbsp;&nbsp; But when I reconnect the same mask, the&nbsp; results generated are not consistent.&nbsp;&nbsp;'
+
+[13:12] [scene:talk]
+VISUAL: 
+AUDIO: 'If I make a very small edit to the mask,&nbsp; the masked boost starts working again. This looks like a bug or&nbsp; cache-related issue in this workflow.&nbsp;'
+
+[13:28] [scene:talk]
+VISUAL: 
+AUDIO: 'Making any changes, like increasing ref_boost&nbsp; by point one also fails the mask feature.&nbsp; The project was updated recently, so I&nbsp; checked whether this mask problem was fixed.&nbsp;'
+
+[13:45] [scene:talk]
+VISUAL: 
+AUDIO: 'I ran the git pull command&nbsp; to get the latest updates. The update added a new `target_latent` input to&nbsp; the source patch node, improved some `fit_mode`&nbsp;&nbsp; geometry, and added better warning messages. The new `target_latent` input should be&nbsp;&nbsp;'
+
+[13:59] [scene:talk]
+VISUAL: 
+AUDIO: 'connected to the same latent that goes into&nbsp; `KSampler and connects to the latent_image`.&nbsp;&nbsp; It lets the node know the output resolution&nbsp; before sampling starts, so it can prepare&nbsp;&nbsp; the source image earlier. This can make the&nbsp; workflow more efficient on lower-VRAM systems.&nbsp;'
+
+[14:14] [scene:talk]
+VISUAL: 
+AUDIO: 'I tested the same workflow again after updating.&nbsp; In my case, the mask issue was not fully fixed.&nbsp;&nbsp; I could still get the correct image, but&nbsp; it felt more hit-or-miss in my tests.'
+
+[14:26] [scene:talk]
+VISUAL: 
+AUDIO: 'I went back to the previous version&nbsp; of the node, the version without the&nbsp;&nbsp; `target_latent` input, and tested again. After restarting ComfyUI, I added the&nbsp;&nbsp; source patch node again, reconnected&nbsp; everything, and tested the workflow.&nbsp;'
+
+[14:38] [scene:talk]
+VISUAL: 
+AUDIO: 'It worked after a couple of attempts,&nbsp; but this still needs more testing.&nbsp; So that is it for this video. I will&nbsp; continue looking for a possible fix&nbsp;&nbsp; for the mask refresh problem. If you try this workflow,&nbsp;&nbsp;'
+
+[14:52] [scene:talk]
+VISUAL: 
+AUDIO: 'I suggest testing it on your current node&nbsp; version first. And update later for comparison.&nbsp; I hope this video was informative. Thank&nbsp; you for watching, and have an excellent day.'
