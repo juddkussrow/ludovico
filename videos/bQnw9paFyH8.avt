@@ -1,0 +1,196 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Build Your Own YouTube Hover Preview System (Native JS + CSS)
+channel: @octopusinc_
+duration: 09:50
+source: https://www.youtube.com/watch?v=bQnw9paFyH8
+upload_date: 20260731
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'Ever wonder how YouTube shows you that little preview thumbnail the instant you hover over its progress bar with zero lag and zero loading spinner? Here\'s exactly what we\'re building today. We\'re reverse engineering that exact trick for real using nothing but'
+
+[00:12] [scene:talk]
+VISUAL: 
+AUDIO: 'plain JavaScript and one CSS property. You\'ll learn why a single sprite sheet image beats loading dozens of separate thumbnails, [music] the real math that turns your mouse position into an exact video frame, and'
+
+[00:25] [scene:talk]
+VISUAL: 
+AUDIO: 'even how this whole system has to work differently on a video that\'s still being broadcast live right now. All from zero, all in real code, no libraries. Let\'s get into it. So, let\'s start with'
+
+[00:37] [scene:talk]
+VISUAL: 
+AUDIO: 'the actual problem and why it\'s trickier than it looks. That little floating thumbnail that pops up when you hover over a video\'s progress bar isn\'t just a nice touch. It genuinely helps people find the exact'
+
+[00:49] [scene:talk]
+VISUAL: 
+AUDIO: 'moment they want, which is why nearly every serious video platform has one. So, how would you build it the naive way? Your first idea might be just load a tiny preview image for every single'
+
+[01:01] [scene:talk]
+VISUAL: 
+AUDIO: 'moment in the video. But think about that for a second. A 10-minute video checked every few seconds is hundreds of separate image files, hundreds of separate network requests, each one with its own overhead, all just to show a'
+
+[01:15] [scene:talk]
+VISUAL: 
+AUDIO: 'preview nobody might even look at. Another naive idea, a single animated GIF scrubbing through the whole video. But GIFs are heavy, they load slowly, [music] and you can\'t easily jump to an exact'
+
+[01:27] [scene:talk]
+VISUAL: 
+AUDIO: 'moment inside one. You\'re stuck playing it start to finish. So, here\'s the real standard fix, the same one YouTube actually uses, and it\'s simpler than either naive option. Instead of dozens of separate images,'
+
+[01:39] [scene:talk]
+VISUAL: 
+AUDIO: 'you generate exactly one image, a grid of small frames snapshotted at even intervals across the whole video, all packed together into a single file. That\'s called a sprite sheet. One'
+
+[01:51] [scene:talk]
+VISUAL: 
+AUDIO: 'request loads the whole thing, and then it\'s just sitting there in memory, ready. Now, before we build this, I want to ask an honest question that most tutorials on this topic skip completely. Everything we just described assumes the'
+
+[02:04] [scene:talk]
+VISUAL: 
+AUDIO: 'video is finished, already fully recorded, sitting on a server somewhere. But what about a live stream? Something that\'s being broadcast right this second. You genuinely cannot pre-generate one complete sprite sheet'
+
+[02:17] [scene:talk]
+VISUAL: 
+AUDIO: 'for a video that doesn\'t have an ending yet. So, what actually happens? &gt;&gt; [music] &gt;&gt; If you look at the real data YouTube\'s own player receives behind the scenes, there are actually two completely separate systems. One spec for a'
+
+[02:30] [scene:talk]
+VISUAL: 
+AUDIO: 'finished video\'s complete storyboard, and a distinctly different one used specifically for live streams. Live previews get built incrementally, filled in piece by piece as the'
+
+[02:42] [scene:talk]
+VISUAL: 
+AUDIO: 'broadcast actually happens, rather than shipped complete up front. And there\'s another piece to this. Whether you can even scrub backward on a live stream at all depends on a setting called DVR, which the creator has to turn on. Switch'
+
+[02:56] [scene:talk]
+VISUAL: 
+AUDIO: 'it off and viewers cannot rewind during the live broadcast, though they can always watch the complete recording afterward once it\'s finished and behaves like any other video. So, live preview systems aren\'t a smaller version of what'
+
+[03:10] [scene:talk]
+VISUAL: 
+AUDIO: 'we\'re about to build. They\'re a genuinely different architecture built for a video whose ending hasn\'t happened yet. All right, let\'s actually build our sprite sheet engine. For our demo, imagine we already have that grid image'
+
+[03:23] [scene:talk]
+VISUAL: 
+AUDIO: 'ready. 100 small frames arranged 10 across and 10 down. That specific 10 by 10 shape is a common standard choice you\'ll see across the industry, not some arbitrary number. First, we need a small'
+
+[03:36] [scene:talk]
+VISUAL: 
+AUDIO: 'window to look through. We make a container the exact size of one single frame, and we give it a property called overflow hidden, which simply means anything spilling outside this box\'s'
+
+[03:48] [scene:talk]
+VISUAL: 
+AUDIO: 'edges gets clipped away, invisible. Then, inside that little window, we place our entire giant sprite sheet image as a background. Right now, you\'ll just see one corner [music] of it, whatever sitting at'
+
+[04:01] [scene:talk]
+VISUAL: 
+AUDIO: 'position 0 0. That\'s our starting point, a tiny window showing one small slice of one big image. Now for the actual math, the part that makes us feel like real engineering.'
+
+[04:13] [scene:talk]
+VISUAL: 
+AUDIO: 'We need to turn a mouse position into an exact frame. First [music] step, when the mouse moves across our progress bar, we figure out how far across it is as a simple percentage.'
+
+[04:26] [scene:talk]
+VISUAL: 
+AUDIO: 'Say the cursor sits at 60% of the bar\'s total width. We multiply that percentage by our total frame count, 100 in our case, and round it down. That gives us a single number, our frame'
+
+[04:39] [scene:talk]
+VISUAL: 
+AUDIO: 'index. Let\'s say frame 60. Now, here\'s where the modulo operator earns its keep, the operator that gives you the remainder left over after dividing.'
+
+[04:51] [scene:talk]
+VISUAL: 
+AUDIO: 'Our frames aren\'t in one long line, remember? They\'re arranged in a grid, 10 columns wide. So, to find which column frame 60 sits [music] in, we take 60 and find the remainder after dividing by 10 using'
+
+[05:03] [scene:talk]
+VISUAL: 
+AUDIO: 'modulo. And to find which row it\'s in, we take 60 and divide by 10 normally, throwing away any remainder. &gt;&gt; [music] &gt;&gt; That gives us an exact row and column inside our grid.'
+
+[05:16] [scene:talk]
+VISUAL: 
+AUDIO: 'And once we have that row and column, getting actual pixel coordinates is simple multiplication, the column number times the frame\'s width, and the row number times the frame\'s height. &gt;&gt; [music]'
+
+[05:29] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; That\'s it. A percentage becomes an index, an index becomes a row and column, and a row and column becomes exact pixel numbers. So now, let\'s actually move that background image using our new numbers. We take those pixel coordinates we just'
+
+[05:43] [scene:talk]
+VISUAL: 
+AUDIO: 'calculated, and we set them as our container\'s background position using negative values since we\'re sliding the big image backward underneath our little window to reveal a different frame. Do that on every mouse movement, and the'
+
+[05:57] [scene:talk]
+VISUAL: 
+AUDIO: 'preview updates as you drag across the bar. Now, a quick honest note here because this deserves its own full explanation elsewhere. To keep that background position update smooth, especially on a fast mouse'
+
+[06:09] [scene:talk]
+VISUAL: 
+AUDIO: 'movement, you want to perform the actual visual right inside a function called request animation frame rather than directly inside your mouse listener. If that sentence went by fast, don\'t'
+
+[06:22] [scene:talk]
+VISUAL: 
+AUDIO: 'worry. [music] That\'s genuinely the entire subject of the next video in this series, where we go deep on exactly why that matters and how to make any high-frequency interaction like this one completely bulletproof.'
+
+[06:35] [scene:talk]
+VISUAL: 
+AUDIO: 'For now, know that wrapping your update in request animation frame is enough to keep this feeling smooth for our purposes today. Last touch, the premium feel. A real hover preview doesn\'t just snap'
+
+[06:48] [scene:talk]
+VISUAL: 
+AUDIO: 'into existence instantly. It fades and lifts in with a short transition, and the frame changes themselves use a tiny easing curve rather than a hard robotic jump. [music]'
+
+[07:01] [scene:talk]
+VISUAL: 
+AUDIO: 'That small bit of polish is genuinely most of what makes an interaction feel expensive rather than functional. &gt;&gt; [music] &gt;&gt; Let\'s talk about why this approach is actually worth defending, not just building.'
+
+[07:13] [scene:talk]
+VISUAL: 
+AUDIO: 'Compare our finished sprite sheet engine against reaching for a full third-party animation or slider library just for this one feature. Our entire approach is a small amount of vanilla JavaScript and one image. While'
+
+[07:25] [scene:talk]
+VISUAL: 
+AUDIO: 'a typical animation library adds a meaningful chunk of extra code your users have to download, parse, and run just to get an effect this simple. Compare memory, too.'
+
+[07:39] [scene:talk]
+VISUAL: 
+AUDIO: 'Our approach keeps exactly one image loaded in memory the whole time. The alternative, actually injecting and swapping real video elements to scrub through frames, &gt;&gt; [music] &gt;&gt; means asking the browser to manage'
+
+[07:51] [scene:talk]
+VISUAL: 
+AUDIO: 'decoding overhead for video playback just to show a still image, which is a heavier, clumsier tool for this particular job. &gt;&gt; [music] &gt;&gt; And when you\'re generating your own sprite sheets for a real project, a good practical target is keeping the whole'
+
+[08:05] [scene:talk]
+VISUAL: 
+AUDIO: 'sheet a few hundred kilobytes, well under a single megabyte, by balancing your frame count, your image dimensions, and reasonable compression. Hit that, and one small file quietly replaces what could have been hundreds'
+
+[08:18] [scene:talk]
+VISUAL: 
+AUDIO: 'of separate network requests. So, let\'s bring it all together in one breath. A sprite sheet turns hundreds of separate preview images into a single, efficient file.'
+
+[08:31] [scene:talk]
+VISUAL: 
+AUDIO: 'A little overflow hidden window, moved with background position, lets us reveal exactly one frame at a time. Percentage divided into an index, divided again with modulo, turns your'
+
+[08:43] [scene:talk]
+VISUAL: 
+AUDIO: 'mouse position into an exact row and column. And a live broadcast needs its own, genuinely different system, because its ending hasn\'t happened yet. So, the question we opened with,'
+
+[08:57] [scene:talk]
+VISUAL: 
+AUDIO: 'how does YouTube show you that preview so instantly? Now you know, it\'s not magic, it\'s one smart image, and a little bit of honest math. But we left one thread hanging on'
+
+[09:10] [scene:talk]
+VISUAL: 
+AUDIO: 'purpose. We wrapped our updates in request animation frame today, and promised we\'d actually explain why that matters, and how to make it flawless even under really fast, aggressive mouse movement.'
+
+[09:22] [scene:talk]
+VISUAL: 
+AUDIO: 'That\'s exactly what the next video in this series is about, &gt;&gt; [music] &gt;&gt; taking this exact preview and making it feel physically attached to your cursor, no matter how fast you move. [music] If this finally made YouTube\'s hover'
+
+[09:36] [scene:talk]
+VISUAL: 
+AUDIO: 'previews click for you, do me one small favor and subscribe. &gt;&gt; [music] &gt;&gt; We go deep on exactly one concept every single week, and I\'ll see you in the next class.'

@@ -1,0 +1,532 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Pi Extensible Workflows: Full Guide
+channel: @octopusinc_
+duration: 28:11
+source: https://www.youtube.com/watch?v=qAiivspEHmU
+upload_date: 20260725
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'Hello everyone. Uh, welcome to this video. I wanted to introduce you to my Pi extension which is called PI extensible workflows which should be already self-explanatory but there is a lot inside of it and a lot you can'
+
+[00:12] [scene:talk]
+VISUAL: 
+AUDIO: 'achieve with it. So I thought it was good idea to actually provide a kind of a explanatory video of why I did this and what you can do with it. Okay. So uh'
+
+[00:24] [scene:talk]
+VISUAL: 
+AUDIO: 'the repository is going to be linked in the uh video in the video description below and uh it\'s currently very very actively developed by me right now and'
+
+[00:36] [scene:talk]
+VISUAL: 
+AUDIO: 'you can find all the information here in the documentation or with the developer or a agent guide. Uh I expect this video to be very very long. So in the YouTube'
+
+[00:49] [scene:talk]
+VISUAL: 
+AUDIO: 'here you should be able to find timestamp chapters if you want to skip along. Before going inside the the extension itself, I want you to'
+
+[01:01] [scene:talk]
+VISUAL: 
+AUDIO: 'introduce you to the workflows uh kind of concept which is uh which firstly introduced by the code team which uh in May apparently I thought it was before that but apparently in May decided to'
+
+[01:14] [scene:talk]
+VISUAL: 
+AUDIO: 'publish this way where you basically fan out a task to different sub aents. uh every sub aent should be able to focus only on a single specific thing. And the'
+
+[01:26] [scene:talk]
+VISUAL: 
+AUDIO: 'main thing here [clears throat] is that everything was uh differently done compared to what we were used to do before. Before we had just sub agents that would uh just fun out and uh report'
+
+[01:41] [scene:talk]
+VISUAL: 
+AUDIO: 'back to the main agent and the main agent would report back and decide what to do. U maybe maybe spawn another agent, etc. And what was interesting in this um new way of working is that'
+
+[01:55] [scene:talk]
+VISUAL: 
+AUDIO: 'basically here Clude decided to write a little script with a very very small DSL. So some very very narrow primitives where you can uh use parallel to'
+
+[02:08] [scene:talk]
+VISUAL: 
+AUDIO: 'parallelize some some tasks. Uh but everything was contained in a script. I will show you in in a in a few moments what I mean about this. But this is not a novel concept. It\'s a a good a very'
+
+[02:21] [scene:talk]
+VISUAL: 
+AUDIO: 'good concept that let you do everything you can do with agent and with coding. Uh basically combining the best of the two words I would say. So uh just to'
+
+[02:33] [scene:talk]
+VISUAL: 
+AUDIO: 'give you an example um what you can do with this uh let\'s think about the slashgo um prompt or command whatever you want to to say and the slash goal command let'
+
+[02:46] [scene:talk]
+VISUAL: 
+AUDIO: 'you basically ask the main model to um continue to pursue the task until a specific condition is met. Right? So let\'s say that you just did a very big'
+
+[02:59] [scene:talk]
+VISUAL: 
+AUDIO: 'refactor on your codebase and you want to fix all the tests that\'s for some reason were broke went broken. Um you can do with a /go but you\'re basically'
+
+[03:11] [scene:talk]
+VISUAL: 
+AUDIO: 'uh putting the trust of uh making sure that everything goes until the tests go uh green to the main model. the main model might uh forget it, might want to'
+
+[03:24] [scene:talk]
+VISUAL: 
+AUDIO: 'cheat about it, might want to do a lot of things. So instead of doing something like this, you basically could uh write a little piece of software or let the model do it for you that basically has a'
+
+[03:36] [scene:talk]
+VISUAL: 
+AUDIO: 'very uh simple while loop or for loop whatever with some number of attempts that says the exit condition here is that this bash command exits with uh okay or zero. Right? So you for example'
+
+[03:51] [scene:talk]
+VISUAL: 
+AUDIO: 'you could say until the yarn tests run uh with the zero exit code you should pro continue to pursue the task. Right? So this is just a very simple'
+
+[04:04] [scene:talk]
+VISUAL: 
+AUDIO: 'explanation of what you can do. You can uh avoid relying on main model. This is one of the first things and other things is that you when you you fan out to sub agents the uh end result do not end up'
+
+[04:16] [scene:talk]
+VISUAL: 
+AUDIO: 'on the main agent context window which is very very good compared to the sub aents that we were talking about before. You get a very very uh narrow and'
+
+[04:28] [scene:talk]
+VISUAL: 
+AUDIO: 'good system prompt. Here I have some scribbles and just to give you an uh a perspective of how I\'m currently'
+
+[04:40] [scene:talk]
+VISUAL: 
+AUDIO: 'actively working on the extension itself. I\'ve built two workflows which basically uh you can see it running here. Um it\'s basically I have 50 five not 15 sorry five agents here running.'
+
+[04:56] [scene:talk]
+VISUAL: 
+AUDIO: 'Uh you can check out the issue the open issues here. Uh basically the way I work right now is I have ideas or whatever uh I find a bug or something like that and'
+
+[05:09] [scene:talk]
+VISUAL: 
+AUDIO: 'I dump the idea on a coding sorry a GitHub issue. This one is for adding extensions. Yeah, I\'m talking about extensions of this extension. We will get there in a few moments. And uh yeah'
+
+[05:22] [scene:talk]
+VISUAL: 
+AUDIO: 'uh you get the idea. I dump everything in the GitHub issue and after that I have this uh I asked GPT5 uh 6 to this uh where basically I say okay'
+
+[05:37] [scene:talk]
+VISUAL: 
+AUDIO: 'please uh work on the open issues and uh here goes a phase which you can see here a phase okay and uh basically it goes in parallel so in parallel it launches n um'
+
+[05:51] [scene:talk]
+VISUAL: 
+AUDIO: 'subtasks Each subtask just opens a new work tree. So every single agent that are going to be spawned later on inside'
+
+[06:03] [scene:talk]
+VISUAL: 
+AUDIO: 'this contained single task is uh contained in in its own work tree. And here I have another workflow which is called develop until approved which is'
+
+[06:15] [scene:talk]
+VISUAL: 
+AUDIO: 'different from this one. But basically there are two models different models. One is only responsible of developing the task the issue in this case and the other one is going to review the task.'
+
+[06:28] [scene:talk]
+VISUAL: 
+AUDIO: 'If the reviewer says okay then we go next. If it doesn\'t if it doesn\'t there are an maximum number of retries but basically it feeds back the information to the developer agent and the developer'
+
+[06:40] [scene:talk]
+VISUAL: 
+AUDIO: 'agent retries to fix everything that was done until eventually it passes. And uh you will probably see it by the end of the video, but there will be another phase once this goes. And here you can'
+
+[06:52] [scene:talk]
+VISUAL: 
+AUDIO: 'clearly say uh see that there was a first developer phase, then a reviewer that probably said, "No, you did a a poor job. You need to do something else." Then there was another run and another run. Uh I think here we have'
+
+[07:05] [scene:talk]
+VISUAL: 
+AUDIO: 'five maximum allowed runs and you can see here that it\'s doing some tests by itself on her, but this is out of scope. And yeah here you you basically have uh'
+
+[07:17] [scene:talk]
+VISUAL: 
+AUDIO: 'the first phase. After this is done there is a merge phase where we want to get all the work trees that have been working on on the previous parallel uh fan out where we basically try to merge'
+
+[07:30] [scene:talk]
+VISUAL: 
+AUDIO: 'all of them together. So we have basically the same develop until approved. But this right now the task is merge all the all the work trees together. Um and after that here let me'
+
+[07:43] [scene:talk]
+VISUAL: 
+AUDIO: 'zoom in I have uh some cleanup. So this one is not an agent. This one is uh the terministic codebase. So if the agent'
+
+[07:56] [scene:talk]
+VISUAL: 
+AUDIO: 'was able to merge the codebase in main in this case um basically I\'ve get uh all the work trees that were were merged properly by uh checking the the commits'
+
+[08:09] [scene:talk]
+VISUAL: 
+AUDIO: 'that were done in the other work trees and this is deterministic. This is not done by an agent. I can show you this is my configuration of pi and this is very'
+
+[08:22] [scene:talk]
+VISUAL: 
+AUDIO: 'very um uh you you can take inspiration of this workflow but let me zoom out a little bit. Uh here clean up clean up merge'
+
+[08:34] [scene:talk]
+VISUAL: 
+AUDIO: 'work trees. Let me zoom in. It basically get a show um function which can let the the the function run scripts like JIT merge bases an ancestor blah blah blah.'
+
+[08:49] [scene:talk]
+VISUAL: 
+AUDIO: 'It basically checks was it this really merged into main? If so, please it does also clean up the mer the work tree uh by removing the work tree etc etc. And'
+
+[09:02] [scene:talk]
+VISUAL: 
+AUDIO: 'this is deterministic. It\'s not it\'s not um done by the agent itself. It it makes no point to spin up another agent to do this kind of cleanup phase. Right? We we'
+
+[09:14] [scene:talk]
+VISUAL: 
+AUDIO: 'we have the tools to do that. And then there is a summary phase. You can see it here. Here is the merge and then we have a summary phase. The summary phase basically says um please summarize what'
+
+[09:26] [scene:talk]
+VISUAL: 
+AUDIO: 'succeeded, what failed to review, what was tested, blah blah blah. And these were the issues the these were the results of the issues. Was it done? Was not done blah blah blah. The failed'
+
+[09:38] [scene:talk]
+VISUAL: 
+AUDIO: 'issues which might happen and the merge result. Okay. So we have a summarize and this is what ends up to be inside the system prompt of the main agent I\'ve'
+
+[09:50] [scene:talk]
+VISUAL: 
+AUDIO: 'been launching this from. So all of the work that has been done here is uh even if it was from an agent uh so for example this one task that runs and uh spins up different agents nothing leaks'
+
+[10:04] [scene:talk]
+VISUAL: 
+AUDIO: 'on the system prompt uh sorry on the context of the main agent. Oh uh this is very powerful concept because you can work and uh avoid the polluting uh with noise where the the main context of the'
+
+[10:18] [scene:talk]
+VISUAL: 
+AUDIO: 'main agent and you can do a lot with it. For example, this is not part of the main uh extension itself. This is part of the uh another extension that'
+
+[10:30] [scene:talk]
+VISUAL: 
+AUDIO: 'basically hooks into the PI extensible workflow extension and adds more functionality into it. Um in this case it adds uh a function which is called develop issues until approved which have'
+
+[10:44] [scene:talk]
+VISUAL: 
+AUDIO: 'been we have seen here. Okay that does all the things. It has a description because this one needs to be found out by the main coding agent LLM. And I will show you uh all of this was basically'
+
+[10:57] [scene:talk]
+VISUAL: 
+AUDIO: 'triggered by this very simple prompt uh developer issues until approved of all the currently ready and I didn\'t even say GitHub issues. So it it went and checked the the skill. This is another'
+
+[11:12] [scene:talk]
+VISUAL: 
+AUDIO: 'concept I made. uh it it as another tool which uh is meant for the LLM to find out all the uh functions that are exposed currently either uh by the core or from other extension itself like the'
+
+[11:26] [scene:talk]
+VISUAL: 
+AUDIO: 'one I\'ve shown before and this is the way uh this is how the main LLM knows how to work around and do stuff of course you can do a lot of stuff like uh'
+
+[11:38] [scene:talk]
+VISUAL: 
+AUDIO: 'uh checking right now it\'s very very flaky because it\'s doing all the test of the extension itself because I\'m working on the extension. You have some kind of information like how many agents and how much uh was um consumed. You can see the'
+
+[11:52] [scene:talk]
+VISUAL: 
+AUDIO: 'the same thing. You can pause, stop because also this one is very very interesting compared to other extensions that let you do workflows. Here you can pause, stop, resumes whatever you want'
+
+[12:04] [scene:talk]
+VISUAL: 
+AUDIO: 'because basically there is a journal of whatever happened. So in case this exits the main agent might want to like recover and rerun the same uh workflow'
+
+[12:16] [scene:talk]
+VISUAL: 
+AUDIO: 'and u everything that has been done already will not be touched. It it is kind of cached right. Uh you can see the script. The script is very very easy in this case. It\'s basically develop issues'
+
+[12:29] [scene:talk]
+VISUAL: 
+AUDIO: 'until approved with some arguments which is the number of issues. So this is not very very interesting. Uh you can copy the run path the the run ID. This is all this is useful only for debugging'
+
+[12:41] [scene:talk]
+VISUAL: 
+AUDIO: 'purposes as you can uh check all the agents and you can even fork a as a pi session. So for example, if you wanted to see what this reviewer did, we can fork pi uh this pi extension here and eventually it will pick up and launch uh'
+
+[12:55] [scene:talk]
+VISUAL: 
+AUDIO: 'and see what happened. Right. We see that it ended with a workflow result with a pass through and no findings which we expected because this maybe was the the final one. But if we scroll up,'
+
+[13:08] [scene:talk]
+VISUAL: 
+AUDIO: 'we can see the prompt that was given. And um we we we can see everything that was done. All right. Like a normal PI thing that would would run, right? So'
+
+[13:20] [scene:talk]
+VISUAL: 
+AUDIO: 'this is very very good to keeping to keep checking what how it went, right? we should go and see some of the the the documentation because this is very very'
+
+[13:32] [scene:talk]
+VISUAL: 
+AUDIO: 'self-explanatory and we will go from there. So uh there are some settings uh that can be global or project settings. Um for example, you can specify a number of concurrency that you want to for example parallelize um let\'s say that'
+
+[13:45] [scene:talk]
+VISUAL: 
+AUDIO: 'you have a very very high work parallel workflow uh where it spins up like um 15 different agents you want to limit up for different reasons. You have model'
+
+[13:58] [scene:talk]
+VISUAL: 
+AUDIO: 'aliases. I will talk about that more later. So for example when I ask the the the workflow to run with a reviewer model in this case uh I will be using a fable 5 the developer model Luna'
+
+[14:10] [scene:talk]
+VISUAL: 
+AUDIO: 'whatever and then this is another thing that is [clears throat] very very unseen. I I put a lot of attention on how many tokens ends up in the system prompt and in the'
+
+[14:23] [scene:talk]
+VISUAL: 
+AUDIO: 'session entirely. So I thought it was a good idea to disable some uh resources at global level and you can even tweak this later. But for example a developer'
+
+[14:36] [scene:talk]
+VISUAL: 
+AUDIO: 'role or a developer does not need to have some tools like for example the question tool that prompts me the the question right because the developer tool sorry the developer role is only'
+
+[14:49] [scene:talk]
+VISUAL: 
+AUDIO: 'meant to develop things. It\'s not meant to ask me things. it it should already have all the context, all the information and should not have a way to ask me for information, right? And the same goes for extensions. Some'
+
+[15:03] [scene:talk]
+VISUAL: 
+AUDIO: 'extensions might uh just add some system prompts uh data or might add some functionality you don\'t want to have in the side inside the the run itself right uh here model aliases I already talked'
+
+[15:16] [scene:talk]
+VISUAL: 
+AUDIO: 'about it you can uh already check it out if you want workflow agent resources exclusion this I\'m work currently working on it but it\'s going to be uh even more extensible than this so uh'
+
+[15:28] [scene:talk]
+VISUAL: 
+AUDIO: 'stay tuned for that uh some API uh workflow parameters and respond that we already seen resume and then there are for example run budgets. Let\'s say that you want u the whole workflow to spend'
+
+[15:42] [scene:talk]
+VISUAL: 
+AUDIO: 'at most some time some time or some tokens or cost at most this and you you can uh both add a soft and hard cup. The soft cup works like this. It basically'
+
+[15:56] [scene:talk]
+VISUAL: 
+AUDIO: 'adds a new message on the agents that are running right now to say please wrap up your work because we are running out of quota something like this. You can always ask your agent to to check out'
+
+[16:10] [scene:talk]
+VISUAL: 
+AUDIO: 'the the real message but this is the idea and then you have a hard uh which basically truncates the work and uh stops it entirely. uh the workflow DSL. This is the basic primitives that every'
+
+[16:23] [scene:talk]
+VISUAL: 
+AUDIO: 'installation of this extension gets but you can as I\'ve been showing you to you to you before you can add more things so you can build upon it. Of course there'
+
+[16:36] [scene:talk]
+VISUAL: 
+AUDIO: 'is agent which has a prompt and some options. There is shell to perform some shell commands. Prompt is basically a way to um interpolate data from a previous run. I will show you later.'
+
+[16:49] [scene:talk]
+VISUAL: 
+AUDIO: 'Parallel is a self-explanatory pipeline as well. Phase is to add some phases. So they would appear uh I\'m sorry it\'s not scrolling because of some rendering bug but uh you can see a phase here and you'
+
+[17:02] [scene:talk]
+VISUAL: 
+AUDIO: 'will hopefully see another phase run uh here. It\'s just for reporting purposes not doing a much log. Again checkpoint is something that needs approval. So for'
+
+[17:16] [scene:talk]
+VISUAL: 
+AUDIO: 'example, if you need approval from um whatever the the the workflow um requires some kind of external approval. Of course, you can use shell to for'
+
+[17:29] [scene:talk]
+VISUAL: 
+AUDIO: 'example wait for some kind of human interaction with some uh scripting or whatever or another binary whatever but this is kind of builtin and then you have with work three which I already'
+
+[17:42] [scene:talk]
+VISUAL: 
+AUDIO: 'shown you before and this is basically the whole DSL there is nothing else nothing more but you get everything that basically you can find in JavaScript right so this is a very simple example'
+
+[17:54] [scene:talk]
+VISUAL: 
+AUDIO: 'fixed test for example on a simple work tree. You have a number of temps and you basically run the tests and this is a very poorly written uh loop but I did not write this one but basically after'
+
+[18:08] [scene:talk]
+VISUAL: 
+AUDIO: 'the exit code is not zero it says please fix the text failures and it passes out the standard error and the standard output. Right? You have some agent'
+
+[18:21] [scene:talk]
+VISUAL: 
+AUDIO: 'options. agent options. You can even specify the number of tools and which tools you want to expose. Like I said, I have a summarizer role which we will get later which has no tools whatsoever. Uh you have composition with parallel like'
+
+[18:35] [scene:talk]
+VISUAL: 
+AUDIO: 'she seeing before. Um and then you can use reuse function here. You have been seeing before but you can basically specify a new function that can be used inside workflows and can add'
+
+[18:49] [scene:talk]
+VISUAL: 
+AUDIO: 'functionality. uh out of it here for example you have the develop until approved which has uh a task and the max iteration input. Okay, this one another thing is that the'
+
+[19:01] [scene:talk]
+VISUAL: 
+AUDIO: 'workflows and everything basically can be asked to reply with the JSON schema um output. So uh it\'s kind of asking the agent to reply in a structured format'
+
+[19:16] [scene:talk]
+VISUAL: 
+AUDIO: 'that can be used later on. This has different mechanisms to do that. I will not get into it right now. But uh yeah, so this workflow will reply to the main agent or to whoever is calling with this'
+
+[19:30] [scene:talk]
+VISUAL: 
+AUDIO: 'output. And uh here you have a max iteration. The first run basically says implement this task. The second one says address the review finding. The task was this one. And the review the last review'
+
+[19:42] [scene:talk]
+VISUAL: 
+AUDIO: 'is this one. And you have prompt to interpolate the data, right? And that\'s basically it. Nothing nothing very very special here. Uh here it explains how it works blah blah blah. Uh you have the RO'
+
+[19:55] [scene:talk]
+VISUAL: 
+AUDIO: 'files. RO files are very very good. Let me show you mine. Uh PI config extensions. No sorry uh PI extensible workflow roles. For example, I have a summarizer role. The summarizer role as'
+
+[20:08] [scene:talk]
+VISUAL: 
+AUDIO: 'I\'ve seen been saying before it is using a chip model which is a model alias. The model alias is available in settings.json. JSON and the chip model in this case is referencing another'
+
+[20:21] [scene:talk]
+VISUAL: 
+AUDIO: 'alias which is Luna high in my case but you can do whatever. This gives you the ability to have different roles like many many roles where you have a preferred model for different cases like'
+
+[20:34] [scene:talk]
+VISUAL: 
+AUDIO: 'I don\'t know a front-end designer or a designer model which is very very good at design or UI whatever you may have different mo roles for that that want to reference exactly that here you have'
+
+[20:48] [scene:talk]
+VISUAL: 
+AUDIO: 'basically the same thing that you get with the skills where uh you define the tools that are available in this case nothing there are no tools available And you have a small description that is being used after by the uh main agent LM'
+
+[21:00] [scene:talk]
+VISUAL: 
+AUDIO: 'to decide which role to use, right? Like skills do. And this one ends up in the system prompt. And this is very very unique. Uh as far as I know, the other'
+
+[21:13] [scene:talk]
+VISUAL: 
+AUDIO: 'workflow extensions do not allow that, do not put things inside the system prompt. Not these kind of things at least. So uh this becomes very very uh important for'
+
+[21:25] [scene:talk]
+VISUAL: 
+AUDIO: 'the summary sorry the the summarizer model the summarizer agent because it gets inside the system prompt. Uh I I\'m still experimenting of what to'
+
+[21:38] [scene:talk]
+VISUAL: 
+AUDIO: 'put here but yeah you get the idea. You we can see another role for example for the uh developer for example has different tools right than the other um it has different rules in terms of what'
+
+[21:53] [scene:talk]
+VISUAL: 
+AUDIO: 'to do. For example, here I have a TDD uh to work. But here we can do a workflow for example that basically is a TDD work, right? TDD development and exposes that and it basically ask the first'
+
+[22:07] [scene:talk]
+VISUAL: 
+AUDIO: 'agent to write a test for whatever needs to be done and then a second agent to make the test pass with the yarn thing that we\'ve been seeing before. Right? So'
+
+[22:19] [scene:talk]
+VISUAL: 
+AUDIO: 'everything can be uh composed uh the way you the way you work and let\'s go back here. Um yeah, you have tools and you can even disable per roll. I think I\'ve'
+
+[22:33] [scene:talk]
+VISUAL: 
+AUDIO: 'disabled nothing here. The only role where I disabled something is the summarizer because in my configuration uh I have a lot of disabled skills and extensions that I don\'t want. For'
+
+[22:46] [scene:talk]
+VISUAL: 
+AUDIO: 'example, I don\'t want the agent to have the skill grill me which might be you might know or might you might not but for example the ponytail I don\'t want the ponytail all the ponytails also and I don\'t want the visual explainer teach'
+
+[22:59] [scene:talk]
+VISUAL: 
+AUDIO: 'all of this gets removed from the system prompt and keeps the agent that um is pawned to uh more focused on the task for example I am also removing some extension they don\'t get loaded at all'
+
+[23:12] [scene:talk]
+VISUAL: 
+AUDIO: 'so this is very very powerful for because I was able to get the system prompt reduced by 50% for the runs here and you you of course you pay less but'
+
+[23:24] [scene:talk]
+VISUAL: 
+AUDIO: 'we are talking peanuts here but the model is very very sharp and focused only on the task because you removed all the noise from the system prompt and the and the context itself. So um yeah here'
+
+[23:37] [scene:talk]
+VISUAL: 
+AUDIO: 'it is talking how you can do stuff for example you can even modify the agent that runs. You can uh modify dynamically the number of extensions which extension'
+
+[23:51] [scene:talk]
+VISUAL: 
+AUDIO: 'you want. You can even modify uh some kind of options to be passed to pi directly. So this is very very powerful. This is kind of the latest hook that you can uh work with where an extension'
+
+[24:03] [scene:talk]
+VISUAL: 
+AUDIO: 'might want to inject and just before spawning an agent to do whatever you want. Um checkpoint already explained. Uh there these are some kind of errors'
+
+[24:16] [scene:talk]
+VISUAL: 
+AUDIO: 'and life cycle events. Um and then there are some kind of utility functionalities like the doctor. I might want to uh show you this one. Um, let me go on this tab and I might want to do doctor and doctor'
+
+[24:32] [scene:talk]
+VISUAL: 
+AUDIO: 'will basically check all my roles and stuff and tools whatever and say and tell me if everything is okay. For example, I might end up writing a wrong tool in the ex exclusion list and this'
+
+[24:46] [scene:talk]
+VISUAL: 
+AUDIO: 'by default will stop the execution. Uh with doctor you get some uh some good insight and you can uh fix things. You can inspect other session ID. You get'
+
+[24:59] [scene:talk]
+VISUAL: 
+AUDIO: 'the transcription file etc etc. Yeah. And you can export a workflow. Export a workflow is a kind of a good concept. I will maybe talk about this later. I\'m still thinking about keeping it inside'
+
+[25:12] [scene:talk]
+VISUAL: 
+AUDIO: 'here or using another uh extension to do this. U maybe I will use another extension. So let\'s let\'s keep it there for now. Uh, of course I\'ve I already showed you before. So this is basically'
+
+[25:24] [scene:talk]
+VISUAL: 
+AUDIO: 'the extension. Uh, it\'s actively developed right now like I\'ve been saying. Uh, there is a lot more into it uh that I didn\'t cover in this almost half an hour video. So uh I invite'
+
+[25:38] [scene:talk]
+VISUAL: 
+AUDIO: 'everyone uh to experiment with it. Uh I want you maybe to show you just one little thing. So here I I I basically bundled a workflow inside a binary which'
+
+[25:51] [scene:talk]
+VISUAL: 
+AUDIO: 'eventually will be like a real binary where it accepts a simple uh prompt. In this case it plan for relax days in Rome'
+
+[26:03] [scene:talk]
+VISUAL: 
+AUDIO: 'blah blah blah. Here is a previous date. So I\'m even surprised. But the workflow basically goes and first of all tries to extract information from my prompt and then the other there is another phase that researches the prompt researches'
+
+[26:16] [scene:talk]
+VISUAL: 
+AUDIO: 'the information like uh one does experiences the other does food the other does logistics whatever and this is meant to be a standard binary by itself'
+
+[26:29] [scene:talk]
+VISUAL: 
+AUDIO: 'of course I can\'t bundle u some stuff but this is kind of a new concept of bundling uh mixed JavaScript or code and agent workflows. And think about this one like if you'
+
+[26:44] [scene:talk]
+VISUAL: 
+AUDIO: 'were like um travel agency that needed to do this kind of work daily right for their client. Uh at the end after the research etc. Some stuff can be uh agent'
+
+[26:57] [scene:talk]
+VISUAL: 
+AUDIO: 'related and some other can be real code. For example, if you need to search for hotels or uh other stuff, you could uh for example have direct API calls and'
+
+[27:09] [scene:talk]
+VISUAL: 
+AUDIO: 'feed that it that information inside the agent so they don\'t hallucinate stuff and uh yeah and of also you can keep out all your credentials because you keep'
+
+[27:23] [scene:talk]
+VISUAL: 
+AUDIO: 'the code uh doing the the real authenticated API calls and then at at the end of the explorative phase you can create for example an HTML, a PDF, a report, whatever, etc. Everything is uh'
+
+[27:36] [scene:talk]
+VISUAL: 
+AUDIO: 'really really um doable with this extension. And for this, I would say it\'s uh uh it\'s all if you want to check it out, it\'s uh on GitHub. As I said,'
+
+[27:48] [scene:talk]
+VISUAL: 
+AUDIO: 'it\'s inside the description of this video. And um yeah, that\'s basically it for now. So, thank you for attention. Let me know if you have um other'
+
+[28:00] [scene:talk]
+VISUAL: 
+AUDIO: 'questions uh about this one. Um and also if you play with it and uh let\'s keep uh working on'
