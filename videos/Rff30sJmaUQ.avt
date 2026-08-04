@@ -1,0 +1,140 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: MiniMax-H3 GGUFs | LOW VRAM Workflow
+channel: @octopusinc_
+duration: 06:55
+source: https://www.youtube.com/watch?v=Rff30sJmaUQ
+upload_date: 20260803
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:01] [scene:talk]
+VISUAL: 
+AUDIO: '[music] &gt;&gt; All right, YouTube. What is good? It\'s your boy Rebel back with another video, and today we are going to be talking about MiniMax H3. So, at the time of recording, it is 9:43 a.m. on August'
+
+[00:16] [scene:ui]
+VISUAL: Hugging Face page for realrebelai/MiniMax-H3_GGUFs, showing directory structure and hardware compatibility.
+AUDIO: '3rd. Last night, from around 10:00 or 11:00 o\'clock when we got the news that the model finally dropped, I spent my time merging files together, grabbing the'
+
+[00:28] [scene:talk]
+VISUAL: 
+AUDIO: 'config, and I was able to quant the model. So, now if you would like to try to run the INT8 or the pruned INT8 or even the FP8 scaled from the comfy or team, that\'s up to you. The only'
+
+[00:42] [scene:talk]
+VISUAL: 
+AUDIO: 'difference between the two of us is the size discrepancy. So, if you would like, you can play around with these different sizes, or you can grab my guff. Currently, in the repo, I have the Q3'
+
+[00:56] [scene:ui]
+VISUAL: Hugging Face page for realrebelai/MiniMax-H3_GGUFs, showing files and versions, specifically the MiniMax-H3-FL2VA-Q3_K_M.gguf file.
+AUDIO: 'with the Q4 currently uploading. I actually was so tired last night that I uploaded the wrong quant to hugging face before I fell asleep. I meant to put the Q4 up. So, if anybody downloaded the Q3,'
+
+[01:09] [scene:talk]
+VISUAL: 
+AUDIO: 'and they wanted to use the Q4, that\'s my apologies. I I literally was just so tired, I forgot. But that being said, um the Q4 will be on here, and that is the one that I tested today. Um the Q3 does work. It is a little bit of a quality'
+
+[01:22] [scene:ui]
+VISUAL: Hugging Face page for realrebelai/MiniMax-H3_GGUFs, highlighting the MiniMax-H3-FL2VA-Q3_K_M.gguf file.
+AUDIO: 'loss, I will be honest. If you can\'t specifically run the Q4 or higher, then the Q3 will be an option that you can use. Um you\'re going to have to figure out how to work around the quality loss. Aside from that, I can, if you guys'
+
+[01:35] [scene:ui]
+VISUAL: Hugging Face page for realrebelai/MiniMax-H3_GGUFs, showing download icon for MiniMax-H3-FL2VA-Q3_K_M.gguf.
+AUDIO: 'want, all I need you to do is just let me know in the comments. But if you would like, I can quant a Q2 and a new Q3, but they are going to be under mixed precision. They\'re going to be about 1 to 2 gigs bigger than the original size'
+
+[01:47] [scene:talk]
+VISUAL: 
+AUDIO: 'of the quant. So, if this quant is a 15 GB Q3, it would be closer to 17 GB after I mix precision the layering. Long story short, if you want higher quality,'
+
+[02:01] [scene:ui]
+VISUAL: Hugging Face page for realrebelai/MiniMax-H3_GGUFs, showing directory structure and hardware compatibility.
+AUDIO: 'you\'re going to need a bigger size, but it\'ll only be about 1 to 2 gigs. So, let me know if you guys want that in the comments and I will be more than happy to re-quant for you. In the directory structure on the model repo card, you have your folder layout for where you'
+
+[02:13] [scene:talk]
+VISUAL: 
+AUDIO: 'will need to put your files. The Transformer DIT guff will go in in your U-Net folder and your encoder of choice will go in your text encoders folder. You do need the two VAEs, the audio and video VAEs from the comfy org repo. In'
+
+[02:29] [scene:talk]
+VISUAL: 
+AUDIO: 'there, they have an audio FP32 and a video FP16, but after you grab your model of choice, your encoder of choice, and your VAEs from the comfy repo, grab'
+
+[02:41] [scene:ui]
+VISUAL: ComfyUI workflow for MiniMax H3 GGUFs, showing various nodes including image loading, resolution selector, and video generation.
+AUDIO: 'the workflow from my repo and you can throw it into comfy and it will look something like this. So, this is literally just a copy paste of the comfy template workflow. I just added some'
+
+[02:54] [scene:talk]
+VISUAL: 
+AUDIO: 'clean VRAM and clear cache nodes throughout the workflow to save VRAM and we have moved the diffusion transformer node to a U-Net node and the clip loader to a guff clip loader node to house our'
+
+[03:08] [scene:talk]
+VISUAL: 
+AUDIO: 'new files. Everything else is essentially the same as the original workflow. Um I did add the image nodes because they are not in the text to image workflow, but so I do have my sizes dropped down to 480 by 480 because'
+
+[03:21] [scene:ui]
+VISUAL: ComfyUI workflow, zoomed in on the "Image to Video MiniMax H3" node, showing prompt and model selection.
+AUDIO: 'run a heavy resolution in my PC, but you have your load image nodes, your resize nodes for the load image nodes, and then you have a resolution selector for the'
+
+[03:33] [scene:talk]
+VISUAL: 
+AUDIO: 'actual video resolution itself. And in this little note here, you have all of your megapixel percentages to determine your output size. So, if you would like to adjust how big you want your'
+
+[03:47] [scene:ui]
+VISUAL: ComfyUI workflow, zoomed in on the "Image to Video MiniMax H3" node, showing prompt details and model parameters.
+AUDIO: 'resolution, you can follow this chart here and it will get you through really nicely. Um and then we have our prompting section with all of our values and variables as far as models. So, you can select your models here, your seed,'
+
+[04:00] [scene:ui]
+VISUAL: ComfyUI workflow, showing the generated video output alongside the input images.
+AUDIO: 'the length of the video, and you can put your prompt in. And then again, we have our clear cache and clean VRAM nodes. And then on the end here, I took the save video node and muted it and then added the RTX super resolution node just'
+
+[04:13] [scene:talk]
+VISUAL: 
+AUDIO: 'to help scale up our generations as we are on 480 P. This will help with quality a little bit and just making the video a little bit sharper. Now, I do only have one example for you guys today because I was up so late working on'
+
+[04:26] [scene:ui]
+VISUAL: ComfyUI workflow, showing the input images and the workflow structure.
+AUDIO: 'this, but we will take a look at that right now. So, this video is a first last frame generation. Um the two frames were these two here and it is just a zoom out with the man saying what is on the actual card. Usually just my'
+
+[04:40] [scene:ui]
+VISUAL: ComfyUI workflow, showing the generated video output.
+AUDIO: 'standard test that I run with all models. Rebels, MiniMax, H3, GGUFs. Rebels, MiniMax, H3, GGUFs. So, as you can see, the Q4 does have a'
+
+[04:55] [scene:talk]
+VISUAL: 
+AUDIO: 'little bit of quality loss as far as sharpness and coherence. There is a little bit of like artifacting going on in the eyes as it zooms out, but overall, I do think that this is a good output for as simple as the prompt was.'
+
+[05:09] [scene:ui]
+VISUAL: ComfyUI workflow, zoomed in on the "Image to Video MiniMax H3" node, showing the detailed prompt and storyboard.
+AUDIO: 'Very, very simple prompt. And I actually would like to give you guys a little pro tip here. Um if you spell everything out the way you would sound it, so phonetically, you actually are able to avoid a lot of the pitfalls of speech when it comes to understanding the text'
+
+[05:22] [scene:ui]
+VISUAL: ComfyUI workflow, showing the generated video output.
+AUDIO: 'from the model. A lot of models don\'t understand how to say things like H3, like with the dash, it can mess it up. So, I tend to do things like GGUFs for GGUF and that phonetic spelling tends to'
+
+[05:34] [scene:talk]
+VISUAL: 
+AUDIO: 'help the model just speak it properly. Um and it did execute it very well here. There\'s absolutely 100% adherence. There is nothing wrong with the clip other than maybe a a bit of quality loss. But as you can see, even if I pull back on'
+
+[05:46] [scene:ui]
+VISUAL: Hugging Face page for MiniMax H3 model.
+AUDIO: 'the video and was to, you know, upscale this even more, we could probably get a cleaner output. But, all right, guys. That\'s all I\'m going to have for you today. Just wanted to get you guys this quant and let you know that I had, you know, spent a majority of my night'
+
+[05:59] [scene:talk]
+VISUAL: 
+AUDIO: 'quanting this. The fact that we have a multimodal video model that fits on low VRAM cards and still is pretty efficient is a blessing to the community and I have to thank Minimax just in general'
+
+[06:11] [scene:ui]
+VISUAL: Hugging Face page for MiniMax H3 model, showing model card details.
+AUDIO: 'for even releasing this model as I did play with the int8 and it was incredible. Um some of the generations I did get with it and I will be making a second video on this model once I get, you know, my hands on it a little bit'
+
+[06:24] [scene:ui]
+VISUAL: Hugging Face page for MiniMax H3 model, showing model card details.
+AUDIO: 'more to kind of showcase how strong the model is. But, the int8 provided some amazing results and it was like a It feels like we have VO on our computer now. So, but if you enjoyed today, you should please consider subscribing to the channel and leaving me a comment on'
+
+[06:37] [scene:talk]
+VISUAL: 
+AUDIO: 'the video to let me know how I did. You can also like the video. It genuinely helps the channel tremendously. So, go ahead and grab my guffs if you want or grab comfy\'s variations and enjoy'
+
+[06:49] [scene:talk]
+VISUAL: 
+AUDIO: 'Minimax H3. All right, thank you, guys. Have a nice day. Bye.'
