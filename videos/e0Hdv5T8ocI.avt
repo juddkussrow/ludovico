@@ -1,0 +1,280 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: SCAIL 2 Infinity Is Insane! Perfect Motion Control in ComfyUI
+channel: @octopusinc_
+duration: 14:00
+source: https://www.youtube.com/watch?v=e0Hdv5T8ocI
+upload_date: 20260802
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'Character movement is something everyone\'s trying to crack in AI video right now. Well, today we\'re looking at a wildly powerful solution that gives you 100% control over your character animations. From simple gestures to complex cinematic actions, for one'
+
+[00:13] [scene:talk]
+VISUAL: 
+AUDIO: 'character or a whole group, this tool is a game-changer. Hello everyone, I\'m So Tai, welcome back to my channel. My tutorials on character motion control always get a massive amount of love from'
+
+[00:25] [scene:talk]
+VISUAL: 
+AUDIO: 'you guys on the channel, and I just want to say a huge thank you for that. Well, today I\'ve got some amazing news for you because we have a massively upgraded solution compared to what we\'ve been'
+
+[00:37] [scene:talk]
+VISUAL: 
+AUDIO: 'using. Yes, the tool I\'m talking about is Scale 2. So, what makes Scale 2 stand out from previous workflows? Just take a look at this example from the creator\'s page. As you can see, when two'
+
+[00:49] [scene:talk]
+VISUAL: 
+AUDIO: 'characters interact heavily, older solutions like Juan Animate or even the first version of Scale start to break down and glitch out with body parts weirdly morphing and overlapping. But look at Scale 2, it manages to keep our'
+
+[01:02] [scene:talk]
+VISUAL: 
+AUDIO: 'characters completely distinct. Body parts stay perfectly clear, and it actually obeys real-world physics. That right there is the absolute game-changer for Scale 2, making it the ultimate'
+
+[01:14] [scene:talk]
+VISUAL: 
+AUDIO: 'solution when you want to generate videos with intense dynamic interactions between characters. And of course, for your standard everyday scenarios, Scale 2 still performs flawlessly. So, in this video, I\'m going to walk you through a'
+
+[01:27] [scene:talk]
+VISUAL: 
+AUDIO: 'detailed step-by-step guide on how to set up the Scale 2 workflow inside ComfyUI. And most importantly, I\'ll show you exactly how to optimize it so you get those crisp, picture-perfect results'
+
+[01:39] [scene:talk]
+VISUAL: 
+AUDIO: 'you\'re aiming for. All right, enough talking. Smash that like button for me, subscribe if you haven\'t already, and let\'s get straight into it. And of course, the very first step is always setting up our environment'
+
+[01:51] [scene:talk]
+VISUAL: 
+AUDIO: 'properly so we can build this Scale 2 workflow. Now, if you\'ve watched other tutorials on this solution, you\'re probably familiar with the workflow that uses one sale to video as the core node. However, that setup has a pretty'
+
+[02:04] [scene:talk]
+VISUAL: 
+AUDIO: 'annoying drawback. In each run, you can only render a limited number of frames entirely bottlenecked by your GPU\'s VRAM. If you wanted to create a longer video, you\'d have to constantly duplicate the processing block from the'
+
+[02:17] [scene:talk]
+VISUAL: 
+AUDIO: 'previous clip and then pipe that result into the previous frames input to force the model to generate the rest. Now, this workaround is acceptable for really short clips, but the second you try'
+
+[02:30] [scene:talk]
+VISUAL: 
+AUDIO: 'generating a video longer than 10 seconds, that workflow quickly becomes a massive, clunky, and incredibly messy spaghetti web of nodes. That is exactly why in today\'s video, I\'m going to show you how to build a much more optimized'
+
+[02:43] [scene:talk]
+VISUAL: 
+AUDIO: 'workflow using a central node called scale two infinity. Yes, true to its infinity name, this absolute beast of a node can automatically split and'
+
+[02:55] [scene:talk]
+VISUAL: 
+AUDIO: 'continuously render your sequence until it has processed the entire length of your input video. You no longer have to manually duplicate processing groups, and you don\'t have to keep patching clips into previous frames like before.'
+
+[03:08] [scene:talk]
+VISUAL: 
+AUDIO: 'Because of this, our workflow is going to be incredibly clean, intuitive, and so much easier to manage, especially when you\'re cranking out longer videos. To kick things off, the first thing you guys need to do is install this custom'
+
+[03:21] [scene:talk]
+VISUAL: 
+AUDIO: 'node into ComfyUI. Along with that, we\'ve got to download all the required models and drop each specific file into its correct folder, so the workflow can actually recognize them and run'
+
+[03:33] [scene:talk]
+VISUAL: 
+AUDIO: 'flawlessly. And as always, to make your life easier, I\'ve compiled all the custom node links and every model download link you\'ll need in the dedicated post over on my Patreon. All you have to do is head over to that'
+
+[03:46] [scene:talk]
+VISUAL: 
+AUDIO: 'post, click through the links, get everything downloaded, and you\'re good to go. All right, and here it is, the star of the show today, the S2 workflow. The processing pipeline is still broken'
+
+[03:58] [scene:talk]
+VISUAL: 
+AUDIO: 'down into three super familiar stages, just like in the previous videos you guys have seen. First up is stage one, which is where you load in all your input data. This includes your character image, the reference motion video, and'
+
+[04:11] [scene:talk]
+VISUAL: 
+AUDIO: 'the prompt describing exactly what you want to generate. On top of that, we have a boolean toggle here to turn the replaces mode on or off, just in case you want to swap your character directly'
+
+[04:24] [scene:talk]
+VISUAL: 
+AUDIO: 'into the original video environment. Right next to that is the loading zone for all the models this workflow needs to function. We\'re also throwing in this specific LoRA to drop the sampling steps down to just a few steps. This massively'
+
+[04:37] [scene:talk]
+VISUAL: 
+AUDIO: 'speeds up generation times while still locking in that high-quality output. Plus, as you can see right here, the workflow utilizes a SAM model to segment and accurately isolate the character'
+
+[04:49] [scene:talk]
+VISUAL: 
+AUDIO: 'area. This process strips away irrelevant background noise from your input images and videos, forcing the model to hyperfocus on the subject and capture the character\'s motion with way more precision. Next, we move into stage'
+
+[05:01] [scene:talk]
+VISUAL: 
+AUDIO: 'two. This is where the models we loaded in stage one get to work processing our input data, converting everything into the essential intermediate values that will be fed into the S2 model. Now, at'
+
+[05:13] [scene:talk]
+VISUAL: 
+AUDIO: 'first glance, this section might look a little chaotic, but that\'s because I\'ve wired in a few extra processing steps to output two brand new variables, pose video remove background and reference'
+
+[05:25] [scene:talk]
+VISUAL: 
+AUDIO: 'image remove background. You guys can totally experiment with using these background removed options to replace the standard inputs up above. The whole point of this step is to eliminate excess details and redundant data from'
+
+[05:37] [scene:talk]
+VISUAL: 
+AUDIO: 'both your motion video and your reference image. By doing this, you\'re helping the model dial in on the character with laser accuracy, resulting in a video that perfectly sticks to your prompt. And finally, we arrive at stage'
+
+[05:49] [scene:talk]
+VISUAL: 
+AUDIO: 'three where the real magic happens. Exactly as I hyped up earlier, right here we only need one single node, S Cal 2 Infinity.'
+
+[06:01] [scene:talk]
+VISUAL: 
+AUDIO: 'This absolute unit of a node takes all those prepared values from stage two and then automatically crunches the numbers, continuously rendering until it spits out a video exactly as long as you need'
+
+[06:13] [scene:talk]
+VISUAL: 
+AUDIO: 'it to be. Now, a super important parameter you must pay attention to here is max frames. This determines the cap on the number of frames or the total length of the video you want to'
+
+[06:25] [scene:talk]
+VISUAL: 
+AUDIO: 'generate. If you only want to render out a specific chunk, just punch in the exact frame count right here. But, if you set max frames to zero, the node will automatically render the entire sequence based on the length of your'
+
+[06:38] [scene:talk]
+VISUAL: 
+AUDIO: 'input reference video. No need to duplicate any processing blocks, no manual patching of clips into previous frames. Everything is handled entirely under the hood inside this one single'
+
+[06:51] [scene:talk]
+VISUAL: 
+AUDIO: 'node. Super easy, clean, and intuitive, exactly like I promised, right? And just like that, we have fully built our scale 2 workflow using the S Cal 2 Infinity node. The whole setup might look like it'
+
+[07:03] [scene:talk]
+VISUAL: 
+AUDIO: 'has a lot of moving parts, but when you break it down into these three stages, the actual logic is incredibly simple and easy to grasp. Now, let\'s jump into the most exciting part, putting this into practice with some real-world'
+
+[07:16] [scene:talk]
+VISUAL: 
+AUDIO: 'examples to see how this workflow actually performs. And while we\'re at it, I\'m going to drop some pro tips to help you optimize your workflow and get those absolutely flawless, picture-perfect results. Let\'s go. All right, first up we\'re going to run a'
+
+[07:31] [scene:talk]
+VISUAL: 
+AUDIO: 'relatively simple test. Right here, I\'m dropping this image of a girl into the workflow and setting it as our reference image. Next up is our motion reference video featuring a girl performing the exact action you\'re seeing right now on screen. Now, the absolute kicker for'
+
+[07:44] [scene:talk]
+VISUAL: 
+AUDIO: 'this test is that the camera isn\'t just static. It\'s actually pulling back from a tight close-up to a full-body shot. This makes it the perfect challenge to see if the model can accurately recreate the'
+
+[07:57] [scene:talk]
+VISUAL: 
+AUDIO: 'character\'s movement and perfectly nail that shifting camera angle at the exact same time. For the resolution, I\'m locking the output to HD. And as for the prompt, we don\'t need to overcomplicate'
+
+[08:09] [scene:talk]
+VISUAL: 
+AUDIO: 'things here. A short direct description just like this is more than enough. All right, let\'s take a look at the results. Yeah, are you guys seeing this? Right out of the gate on the very first test, the model absolutely crushed it. The'
+
+[08:21] [scene:talk]
+VISUAL: 
+AUDIO: 'generated character perfectly latches onto the action and posture from the motion reference video. At the same time, crucial details like the face, the hairstyle, and the outfit stay incredibly consistent with our original'
+
+[08:33] [scene:talk]
+VISUAL: 
+AUDIO: 'reference image. And it doesn\'t just stop at the character\'s movement. The model flawlessly replicates the camera motion, smoothing transitioning that angle right from a close-up out to a full-body shot. This is genuinely'
+
+[08:45] [scene:talk]
+VISUAL: 
+AUDIO: 'phenomenal, guys, because this is exactly what I expect from a top-tier motion control model. It shouldn\'t just copy the action. It needs to understand camera dynamics, all while keeping the'
+
+[08:57] [scene:talk]
+VISUAL: 
+AUDIO: 'character\'s identity and visual details rock-solid throughout the entire video. All right, and this workflow isn\'t just amazing for real-life human characters. As you guys saw in the clips during the'
+
+[09:09] [scene:talk]
+VISUAL: 
+AUDIO: 'intro, we can totally apply this to 2D and 3D characters as well, and the results are still absolutely stunning. The model flawlessly copies the character\'s movement and perfectly tracks the camera dynamics, exactly like'
+
+[09:21] [scene:talk]
+VISUAL: 
+AUDIO: 'it did with our live-action example just now. This just goes to show how insanely flexible Scale2 is across multiple character types and visual styles, whether you\'re working with'
+
+[09:33] [scene:talk]
+VISUAL: 
+AUDIO: 'hyperrealistic footage, 2D animation, or 3D graphics. However, there is one major pro tip I need you guys to keep in mind when you\'re running tests like this. When working with 2D or 3D characters, you really want to use a pose video that'
+
+[09:46] [scene:talk]
+VISUAL: 
+AUDIO: 'has the background completely removed. On top of that, make sure you write a prompt that explicitly and accurately describes the specific background you want the model to generate. Why? Because if the original real-world background is'
+
+[09:58] [scene:talk]
+VISUAL: 
+AUDIO: 'still visible in your pose video, it\'ll likely trick the model into generating a photorealistic background. And trust me, that\'s going to cause a massive clash in styles across your entire video. Just'
+
+[10:10] [scene:talk]
+VISUAL: 
+AUDIO: 'like in the example I\'ve got on screen right now. I used a background removed pose video and clearly detailed the vibe of the environment in my prompt. Thanks to that setup, the model can laser-focus'
+
+[10:22] [scene:talk]
+VISUAL: 
+AUDIO: 'purely on the character and camera motion, all while building out a brand new scene that perfectly matches the exact aesthetic we dialed in. All right, up next I\'m going to show you guys the night and day difference between Scale 2 and the older version.'
+
+[10:35] [scene:talk]
+VISUAL: 
+AUDIO: 'For this one, I\'ve cooked up a pretty brutal stress test featuring two characters interacting heavily and continuously, as you can see right here on the screen. And boom, here is the result generated by Scale 2. Yeah, things are looking absolutely'
+
+[10:48] [scene:talk]
+VISUAL: 
+AUDIO: 'incredible. Both characters stick perfectly to the motion from the reference video, from their posture and pacing right down to the exact way they interact with each other. What\'s really mind-blowing is that even when they get super close and constantly bump into'
+
+[11:02] [scene:talk]
+VISUAL: 
+AUDIO: 'each other, Scale 2 manages to keep both characters distinctly separate, virtually eliminating those weird glitches where body parts overlap or merge together. Now, let\'s flip over and look at the result from the original version of Scale, the exact same one I'
+
+[11:15] [scene:talk]
+VISUAL: 
+AUDIO: 'covered in my last tutorial. You guys see the difference, right? The second these two characters start heavily interacting, Scale 1 completely loses its mind trying to track each subject. It results in some massive fails,'
+
+[11:29] [scene:talk]
+VISUAL: 
+AUDIO: 'distorted character shapes, weirdly overlapping limbs, and even the distinct features of the two characters just melting into each other. Meanwhile, thrown into the exact same stress test, Hasegwa 2 keeps our characters perfectly'
+
+[11:41] [scene:talk]
+VISUAL: 
+AUDIO: 'isolated while maintaining highly stable and consistent motion throughout the entire clip. This result perfectly backs up exactly what the devs showcased on their home page, and it genuinely proves what a massive next-level upgrade'
+
+[11:55] [scene:talk]
+VISUAL: 
+AUDIO: 'Hasegwa 2 really is when it comes to rendering complex multi-character interactions. All right, and before we wrap up today\'s video, I want to drop one final massive pro tip for you guys. Consider this a bonus reward for all of you who stuck'
+
+[12:09] [scene:talk]
+VISUAL: 
+AUDIO: 'around to the very end. You can actually pipe multiple reference images simultaneously right into the Hasegwa 2 Infinity node. What does that mean for us? Well, let\'s look back at our first example. Let\'s say I didn\'t just want to'
+
+[12:21] [scene:talk]
+VISUAL: 
+AUDIO: 'lock in the exact face. I also wanted the model to capture all the specific clothing details of our character perfectly. To pull this off, I just load up an additional full-body image, combine it with our original portrait to'
+
+[12:34] [scene:talk]
+VISUAL: 
+AUDIO: 'create an image batch, and feed that entire batch straight into the Hasegwa 2 Infinity node. And boom, check out these results. As you guys can see, the character is now rocking the exact same shoes that were'
+
+[12:47] [scene:talk]
+VISUAL: 
+AUDIO: 'in the full-body shot I provided. At the same time, because we still included the portrait shot, the model flawlessly maintains the facial features and the core identity of the character throughout the entire video. Basically,'
+
+[12:59] [scene:talk]
+VISUAL: 
+AUDIO: 'the portrait shot forces the model to focus on the identity and facial structure, while the full-body shot injects all that extra data about the physique, outfit, accessories, and'
+
+[13:11] [scene:talk]
+VISUAL: 
+AUDIO: 'anything else outside of the portrait\'s frame. However, guys, here is a crucial thing you need to remember. You should always set your portrait shot into the image zero slot, and then stack your full-body or detail images into the'
+
+[13:25] [scene:talk]
+VISUAL: 
+AUDIO: 'slots after that. Feeding the images in this specific order tells the model to prioritize the facial identity data first, which keeps your character insanely consistent and gets you way better overall results. All'
+
+[13:37] [scene:talk]
+VISUAL: 
+AUDIO: 'right, and that is going to wrap up everything I wanted to share with you guys in today\'s video. I really hope you watched all the way through so you didn\'t miss out on any of those pro tips and workflow tricks I dropped along the way. If you found this video helpful and'
+
+[13:49] [scene:talk]
+VISUAL: 
+AUDIO: 'got some value out of it, please smash that like button and share it around. Thank you guys so much for watching. Until next time, I\'ll catch you in the next one. Peace out.'

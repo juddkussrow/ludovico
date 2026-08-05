@@ -1,0 +1,224 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Run LTX-2.3 Without ComfyUI: Terminal-Only Video Generation
+channel: @octopusinc_
+duration: 11:01
+source: https://www.youtube.com/watch?v=Attd6vwFOac
+upload_date: 20260804
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'Hey everybody, Doug here again and this week we\'re back with a challenge. I thought it\'d be fun to try to use LTX2, but this time with no comfy UI. We\'re talking no guey at all to produce a final video with uh picture and sound.'
+
+[00:14] [scene:talk]
+VISUAL: 
+AUDIO: 'So this means again we are going to be doing all of this with a terminal only. So, this is a little bit more of an advanced challenge, but I think what you\'ll see really quick is that even'
+
+[00:26] [scene:talk]
+VISUAL: 
+AUDIO: 'though a terminal may look scarier than a guey, it\'s actually pretty simple once you once you stick to just a few commands that I\'m going to be walking you through. So, what do you need to follow along? Well, you need a machine'
+
+[00:38] [scene:talk]
+VISUAL: 
+AUDIO: 'with Python, with Git, and preferably an Nvidia GPU. So, if you\'ve got these, well, you are ready. And I\'m going to be working on a Windows machine. I\'ve got'
+
+[00:50] [scene:talk]
+VISUAL: 
+AUDIO: 'my Dell Studio machine over here with a uh Blackwell 6000 in there. So, a ton of firepower for my GPU. We\'re not going to use all of that, but what this does mean is that we\'re going to be uh running uh'
+
+[01:03] [scene:talk]
+VISUAL: 
+AUDIO: 'on Windows. We\'re going to work inside of a WSL2 environment. So, this just means PyTorch installs with CUDA. And this is because there\'s a limitation with Windows.'
+
+[01:15] [scene:talk]
+VISUAL: 
+AUDIO: 'Windows pulls a CPUon build and basically just makes your GPU just sit there not doing anything, which is not going to help us at all. So, uh, if you are in a Linux environment or even a Mac environment, you\'re not going to have to'
+
+[01:27] [scene:talk]
+VISUAL: 
+AUDIO: 'do this. Uh, but just in case you\'re Windows like me and, uh, maybe you\'re new to WSL, well, you\'ll be running the WSL install command in a terminal before you start here as well. Give it a little reboot and your current Nvidia driver'
+
+[01:40] [scene:talk]
+VISUAL: 
+AUDIO: 'will come through automatically. You can get a full guide over at this link right here as well, aka.ms/wsl. And we will do our best to put a link in the description below as well, so you'
+
+[01:53] [scene:talk]
+VISUAL: 
+AUDIO: 'can grab it right there. But what we\'re going to be doing here now is we we\'re going to be running these commands right here. We\'re going to be using git to clone the ltx2 uh GitHub repository. We\'re going to be then changing directory to go into that'
+
+[02:07] [scene:talk]
+VISUAL: 
+AUDIO: 'ltx2 folder that we just pulled down. and then we\'re going to be setting our UV sync frozen. You might recognize this from a previous video. And then we\'re going to be activating this new environment. So, let\'s go ahead and do'
+
+[02:19] [scene:talk]
+VISUAL: 
+AUDIO: 'this. So, as you can see here, I have just a normal PowerShell uh inside of Windows, and I\'ve already activated my WSL environment by just typing WSL. But let\'s uh go home. I want to work in my'
+
+[02:32] [scene:talk]
+VISUAL: 
+AUDIO: 'home directory. That\'s usually how I how I like to work. And all we\'re going to be doing now is just get clone. And once you do that, you\'ll just hit enter. Now it\'s been installed and pulled down from git. We\'re going to go into ltx2 and'
+
+[02:44] [scene:talk]
+VISUAL: 
+AUDIO: 'then we\'re going to be running that uvync d- Let me spell that correctly. D- frozen. All right. And now let\'s go ahead and activate our source'
+
+[02:56] [scene:talk]
+VISUAL: 
+AUDIO: 'environment. Then slashactivate. Again, all of those commands can be copied and pasted from what we saw previously. So now that we are in that environment and everything'
+
+[03:08] [scene:talk]
+VISUAL: 
+AUDIO: 'is up and running. Well, we have three downloads that we need to do. First one is going to be uh working out of the distilled checkpoint. So this is going to be LTX23 22 billion distilled 1.1 safe tensors. We\'re also going to be'
+
+[03:21] [scene:talk]
+VISUAL: 
+AUDIO: 'using a spatial upscaler when this just doubles the resolution in the second stage we\'re going to be calling. So it\'s going to pull it back up to full size. And that model right here is the 2.3 spatial upscaler X2 1.1. We\'re also'
+
+[03:33] [scene:talk]
+VISUAL: 
+AUDIO: 'going to be grabbing the Jimma text encoder, which is turns your prompt into something that the model will understand. And you can find the first two models right here over in the huggingface.co/lightrix2.3'
+
+[03:46] [scene:talk]
+VISUAL: 
+AUDIO: 'huggingface page. So that\'s going to bring you over to here, and you\'re going to find uh all of those models right here. Don\'t feel like you have to'
+
+[03:58] [scene:talk]
+VISUAL: 
+AUDIO: 'download these yet though because we\'re going to be doing this programmatically and I\'ll show you how to do that next just to keep up with the challenge, right? Let\'s keep it all in the terminal. One note on the Gemma model is that this is a gated model which'
+
+[04:11] [scene:talk]
+VISUAL: 
+AUDIO: 'basically just means you\'ve got to accept a license on hugging face before you can uh you can pull it down. And you\'re going to be also making a hugging face read token uh to give you access to this to download it uh as we\'re going to'
+
+[04:25] [scene:talk]
+VISUAL: 
+AUDIO: 'be doing it in the command line. So LTX models aren\'t gated. Only Jimma is. But you can find uh the gated model over here at by following this once. Uh you just got to go over here, follow that'
+
+[04:37] [scene:talk]
+VISUAL: 
+AUDIO: 'URL. And right here you\'re going to see I\'ve already accepted this, but it\'s going to be just a little check box right up here. Check it. only have to accept it once and then you are good to go to the next step. Now again, we need to make a token real quick. And what is'
+
+[04:50] [scene:talk]
+VISUAL: 
+AUDIO: 'a token? What do you need it for? Tokens are just your key. So on your HuggingFace account, you\'re going to be going to huggingface.co/ing settings/tokens. And we are going to be making uh here\'s'
+
+[05:02] [scene:talk]
+VISUAL: 
+AUDIO: 'the tokens page right here. Go ahead and just click that create new token. And you\'re going to be creating a read token. Call it whatever you want. I called mine LTX2. And then you\'re going to be uh hitting create token. There you'
+
+[05:15] [scene:talk]
+VISUAL: 
+AUDIO: 'go. Uh this is going to be my one-time code. I\'m going to delete this afterwards, don\'t worry. But just go ahead and click copy right there. And you\'ll be moving on to the next stage. Now, inside of your terminal that we had open up before, you\'re going to be'
+
+[05:28] [scene:talk]
+VISUAL: 
+AUDIO: 'running this HF off login command. So, let\'s go ahead and do that. And it\'s going to open this up. And right here, it\'s going to ask you to enter in your token. Well, if you copied'
+
+[05:40] [scene:talk]
+VISUAL: 
+AUDIO: 'your token before, just rightclick again if you\'re on Windows uh in here and you will see nothing happen, nothing. Paste. Well, don\'t worry. It\'s actually there. Go ahead and hit enter. And uh you are'
+
+[05:52] [scene:talk]
+VISUAL: 
+AUDIO: 'going to be good to go. And yep, add token as a get credential. Yes, there you go. Current active token is LTX2. Again, what we just named our token.'
+
+[06:04] [scene:talk]
+VISUAL: 
+AUDIO: 'Next up, you\'re going to be running these commands right here. And it\'s just going to again in the terminal, don\'t have to do this by hand. Uh you\'re going to be downloading each one of the models that we need. This is especially helpful'
+
+[06:17] [scene:talk]
+VISUAL: 
+AUDIO: 'for Gemma because this is going to be downloading of a few different models and not just one. And it\'s a lot to kind of, you know, you don\'t want have to manage all these models. Let the computer do it for you. And once all those models are downloaded, it will'
+
+[06:30] [scene:talk]
+VISUAL: 
+AUDIO: 'take a few minutes. you are ready for the fun which is actually generating something using the we\'re going to be running a Python command again. We\'re still inside that exact same folder as you can see here. And uh now we can just'
+
+[06:43] [scene:talk]
+VISUAL: 
+AUDIO: 'copy and paste this again right in there. Let\'s go ahead and just rightclick copy and paste and hit enter. All right, you can see there that we are building from the text encoder.'
+
+[06:55] [scene:talk]
+VISUAL: 
+AUDIO: 'Everything looks like it\'s starting to go. But let\'s go over to back over to our Nvidia SMI. And you can again see we\'ve got more wattage going over to our our uh our GPU. And the Nvidia SMI uh is'
+
+[07:07] [scene:talk]
+VISUAL: 
+AUDIO: 'just another command line tool. Literally just make up a terminal and type in Nvidia SMI if you have a Nvidia GPU just like me. And you can watch uh the progress. Just make sure it\'s all'
+
+[07:21] [scene:talk]
+VISUAL: 
+AUDIO: 'all humming along, which if we step back over to our main tab, you can see it\'s doing a whole bunch of stuff behind the scenes. And I I really like this process. This is a really fun look under'
+
+[07:33] [scene:talk]
+VISUAL: 
+AUDIO: 'the hood of uh of what these guies are actually doing. And as you can see here, video saved to LTX2OputMPP4. So that\'s great. We\'ve got uh we\'ve got'
+
+[07:46] [scene:talk]
+VISUAL: 
+AUDIO: 'an output. So, let\'s go ahead and check that out. Now, you\'ll also, again, as a reminder, we are in the WSL environment. So, it\'s almost like its own operating system, uh, outside of my Windows machine. So, let\'s go ahead and copy'
+
+[07:59] [scene:talk]
+VISUAL: 
+AUDIO: 'that uh that LTX output.mpp4 over to my uh, Windows machine in the downloads folder, or any folder you want, but this is my downloads folder, and we\'re just going to be doing that'
+
+[08:12] [scene:talk]
+VISUAL: 
+AUDIO: 'with this command, uh, that you can see on screen here. Let\'s go ahead and hit go. And if we open up our downloads folder, well, there we are. Right there. There you go. We\'ve got a nice sunset.'
+
+[08:25] [scene:talk]
+VISUAL: 
+AUDIO: 'Beautiful. Looks like somebody\'s surfing. That\'s uh Let\'s go there, everybody. That looks nice. So, again, this is full res. Our final resolution is 1536x 1024 thanks to that upscaler'
+
+[08:37] [scene:talk]
+VISUAL: 
+AUDIO: 'model we ran for 121 frames at 24 frames per second, and it generated an audio track. And as you saw, it took uh about a minute and a half on an RTX Pro 6000.'
+
+[08:49] [scene:talk]
+VISUAL: 
+AUDIO: 'So very very fast. Uh and again, watch that uh SM Nvidia SMI readout. Uh that\'s a that\'s a a very nice uh command line tool that allows you to monitor progress'
+
+[09:01] [scene:talk]
+VISUAL: 
+AUDIO: 'uh beyond just what LTX tells you in the command line. So where to go next? Well, you can go over to uh check out the two-stage pipeline production uh uh pipeline uh'
+
+[09:13] [scene:talk]
+VISUAL: 
+AUDIO: 'packages over here in the GitHub. This has a ton of different quick starts right here. Again, all command line uh that you can uh you can follow along just like we used for uh this this uh'
+
+[09:25] [scene:talk]
+VISUAL: 
+AUDIO: 'example demo right here. And again, we generated a beautiful sunset over the ocean just like here. So, you can just go over here and follow it step by step. Uh if you ever get lost in this video, it is all over here on GitHub. GitHub is'
+
+[09:38] [scene:talk]
+VISUAL: 
+AUDIO: 'your friend. That GitHub has 11 pipelines to explore across image, video, audio, key frame, all of it is right there. And also make sure that you check out the pipeline selection guide.'
+
+[09:52] [scene:talk]
+VISUAL: 
+AUDIO: 'It tells you like which one which one to pick. There\'s a lot, right? There\'s 11. And you can find that again over on the GitHub page in the docs folder. It\'s called pipeline selection.mmd for mark mark markdown files. So that\'s it.'
+
+[10:04] [scene:talk]
+VISUAL: 
+AUDIO: 'Challenge is complete. We made a video without comfy UI. No fancy gooies, no beautiful gooies, just a nice clean terminal. So see it\'s not that scary. And there\'s a lot of different ways to'
+
+[10:17] [scene:talk]
+VISUAL: 
+AUDIO: 'use LTX. Uh so go ahead and explore, play around with this. And again, check out the GitHub repo. There\'s a ton of uh docs over on the docs.ltx.video video uh URL right there. And again, come and'
+
+[10:30] [scene:talk]
+VISUAL: 
+AUDIO: 'join the community Discord, discord.gg/ltxplatform. And make sure you subscribe to this channel for more LTX walkthroughs like this. We\'ve got a whole bunch that we\'re'
+
+[10:42] [scene:talk]
+VISUAL: 
+AUDIO: 'playing in here, maybe some more fun challenges, right? Little curve balls, ways to uh grow as artists and really get our hands around these really powerful tools that uh we can approach in a variety of different ways as you saw here. So, with that, I\'m Doug and I'
+
+[10:55] [scene:talk]
+VISUAL: 
+AUDIO: 'will see y\'all next time. Later.'

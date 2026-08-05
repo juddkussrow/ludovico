@@ -1,0 +1,224 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: MiniMax H3 On RTX 5060 Ti Test, Setup & Speed Boost Guide
+channel: @octopusinc_
+duration: 14:03
+source: https://www.youtube.com/watch?v=KlINSdYDSe4
+upload_date: 20260804
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:SCENE]
+VISUAL: ComfyUI update process shown in a Windows Explorer window.
+AUDIO: 'MiniMax H3 has been released, and it&nbsp; is capable of generating text-to-video,&nbsp;&nbsp; image-to-video, and reference-to-video. So, in&nbsp; this video, I\'ll run the model on my RTX 5060&nbsp;&nbsp; Ti 16 GB to see how well it performs&nbsp; and generate a few videos. I\'ll first&nbsp;&nbsp; update ComfyUI to the nightly version. If you\'re using the stable version,&nbsp;&nbsp;'
+
+[00:16] [scene:talk]
+VISUAL: 
+AUDIO: 'run the file shown below to update it. In the&nbsp; Templates section, select MiniMax H3 to filter&nbsp;&nbsp; the workflows. We have three workflows here. These workflows require an API to run,&nbsp;&nbsp;'
+
+[00:28] [scene:talk]
+VISUAL: 
+AUDIO: 'so you\'ll need to purchase some credits to&nbsp; use them. These three workflows, however,&nbsp;&nbsp; run completely locally. Let\'s begin with the&nbsp; text-to-video workflow. The links to all the&nbsp;&nbsp; required files are provided inside the workflow,&nbsp; but first I want to check the file sizes.'
+
+[00:45] [scene:talk]
+VISUAL: 
+AUDIO: 'The BF16 model won\'t even fit on a flagship&nbsp; graphics card. You will need a workstation&nbsp;&nbsp; graphics card, so I will be using the smaller&nbsp; models. There are two types of models here. This&nbsp;&nbsp; one is the Reference-to-Video-Audio&nbsp; model, and the one above it is the&nbsp;&nbsp;'
+
+[01:01] [scene:talk]
+VISUAL: 
+AUDIO: 'First-and-Last-Frame-to-Video-Audio model. The&nbsp; same model is also used for text-to-video when&nbsp;&nbsp; no image is provided. Save both of these&nbsp; files in the diffusion_models folder. I\'ll&nbsp;&nbsp; download the remaining files directly from the&nbsp; workflow since they are the smallest recommended&nbsp;&nbsp;'
+
+[01:17] [scene:UI]
+VISUAL: ComfyUI interface showing a "Resolution Selector" node with aspect ratio, megapixels, and multiple settings.
+AUDIO: 'versions. Even a 12 GB RTX 3060 can generate&nbsp; videos using these large models in ComfyUI,&nbsp;&nbsp; but the generation time isn\'t very practical.&nbsp; It completely depends on your patience. The&nbsp;&nbsp;'
+
+[01:30] [scene:talk]
+VISUAL: 
+AUDIO: 'download has completed. Refreshing the&nbsp; page should remove the missing model&nbsp;&nbsp; error. There is already a resolution selector set&nbsp; to widescreen with a 0.4-megapixel resolution,&nbsp;&nbsp; which gives us an output size of 864 × 480. The video length is five seconds,&nbsp;&nbsp;'
+
+[01:45] [scene:talk]
+VISUAL: 
+AUDIO: 'which is the default value here. Inside the subgraph, everything looks&nbsp;&nbsp; simple. There\'s nothing fancy happening&nbsp; in the workflow. I\'ll try adding a Sage&nbsp;&nbsp; Attention node later, but first let\'s see&nbsp; how it performs without Sage Attention.'
+
+[02:00] [scene:RESULT]
+VISUAL: Generated video output from MiniMax H3 displayed in ComfyUI, showing an action scene on a rooftop.
+AUDIO: 'The Task Manager shows that both the&nbsp; GPU and system RAM are fully occupied,&nbsp;&nbsp; and it is taking around 12 seconds per&nbsp; iteration. Since there are 20 steps,&nbsp;&nbsp; the time taken to generate a 5-second video is 323&nbsp; seconds. The result looks good. The sound quality&nbsp;&nbsp;'
+
+[02:15] [scene:talk]
+VISUAL: 
+AUDIO: 'is decent and perfectly acceptable. Now I\'ll&nbsp; add a Sage Attention node to see the difference.&nbsp;&nbsp;'
+
+[02:28] [scene:talk]
+VISUAL: 
+AUDIO: 'Previously, it took around 12 seconds per&nbsp; iteration, but with Sage Attention enabled,&nbsp;&nbsp;'
+
+[02:40] [scene:RESULT]
+VISUAL: Another frame of the generated video, showing the same action scene.
+AUDIO: 'it drops to about 8 seconds per iteration.&nbsp; The total generation time was 187 seconds,&nbsp;&nbsp; but the quality is noticeably lower compared&nbsp; to the result we saw earlier. I ran the same&nbsp;&nbsp;'
+
+[02:52] [scene:talk]
+VISUAL: 
+AUDIO: 'prompt again without Sage Attention because the&nbsp; first run is often slower due to the model being&nbsp;&nbsp; loaded into memory. So, on my RTX 5060 Ti 16&nbsp; GB, Sage Attention 2 reduces the generation&nbsp;&nbsp; time by about 100 seconds. However, the quality is&nbsp; affected, and the difference is quite noticeable.'
+
+[03:09] [scene:talk]
+VISUAL: 
+AUDIO: 'In this example, it failed to generate&nbsp; the woman\'s voice after the man\'s voice,&nbsp;&nbsp; although everything else looks good. Later&nbsp; I change the prompt, and tried which worked.&nbsp; I also tried generating a 4K&nbsp; image using this text-to-video&nbsp;&nbsp;'
+
+[03:35] [scene:talk]
+VISUAL: 
+AUDIO: 'workflow. I kept the video length at 5&nbsp; frames. It should ideally be 1 frame,&nbsp;&nbsp; but 5 is the lowest value the workflow&nbsp; accepts. The generated image looks good.&nbsp;&nbsp; These are the five frames played one&nbsp; after another. I wonder what kind of&nbsp;&nbsp;'
+
+[04:02] [scene:UI]
+VISUAL: ComfyUI workflow graph with nodes for loading diffusion models, CLIP, VAE, and various processing steps.
+AUDIO: 'videos this model could generate&nbsp; at such a high resolution on a&nbsp;&nbsp; more powerful GPU. Now I\'m moving on to the&nbsp; First-and-Last-Frame workflow. In the workflow,&nbsp;&nbsp; there\'s an option to add a second frame. Whether&nbsp; you use it or not is completely up to you.&nbsp;&nbsp;'
+
+[04:15] [scene:talk]
+VISUAL: 
+AUDIO: 'The prompt here is about the transparent&nbsp; computer mouse, so I\'ll load the images and&nbsp;&nbsp; use the default prompt. Inside the subgraph,&nbsp; there\'s nothing special. The workflow is as&nbsp;&nbsp; simple as it gets. The conditioning node accepts&nbsp; both images when they are provided. Otherwise,&nbsp;&nbsp;'
+
+[04:33] [scene:talk]
+VISUAL: 
+AUDIO: 'this workflow also works as a text-to-video&nbsp; workflow when no images are given. The video generation took 297&nbsp; seconds, and the result looks good.&nbsp;&nbsp; With Sage Attention enabled, the generation&nbsp; time dropped to 185 seconds, and the result&nbsp;&nbsp;'
+
+[05:02] [scene:talk]
+VISUAL: 
+AUDIO: 'looks very similar to the previous one. The&nbsp; quality difference appears to be minimal.&nbsp;&nbsp; If you\'ve watched my older videos, you\'ve&nbsp; probably seen this car animation before. I&nbsp;&nbsp;'
+
+[05:20] [scene:talk]
+VISUAL: 
+AUDIO: 'originally created it using the Wan model when&nbsp; it was released, then recreated it with LTX,&nbsp;&nbsp; and now with MiniMax H3. The improvement in&nbsp; quality over the past year is quite significant.&nbsp;&nbsp; There is also a prompt guide provided.&nbsp; You can give it to ChatGPT or Google\'s&nbsp;&nbsp;'
+
+[05:43] [scene:talk]
+VISUAL: 
+AUDIO: 'Gemini to generate better prompts for&nbsp; your videos. I\'ll include the guide in&nbsp;&nbsp; the video description. Now I\'ll try the&nbsp; third workflow. The diffusion model used&nbsp;&nbsp; here is different. It\'s the Reference-to-Video&nbsp; model that we saw on Hugging Face. The other&nbsp;&nbsp;'
+
+[05:58] [scene:talk]
+VISUAL: 
+AUDIO: 'major difference is the conditioning node,&nbsp; which accepts multiple reference images. First, I need to check whether this workflow works&nbsp;&nbsp; properly and can generate results&nbsp; within a reasonable amount of time.&nbsp;'
+
+[06:12] [scene:UI]
+VISUAL: Blurred ComfyUI interface, likely transitioning between sections.
+AUDIO: 'The default prompt in the text node&nbsp; below uses two reference images.&nbsp; I found both images on the internet, loaded them&nbsp; into the workflow, and started the generation.&nbsp; The generation took 348 seconds,&nbsp; and the result was good.'
+
+[06:26] [scene:talk]
+VISUAL: 
+AUDIO: 'So, I spent a couple of hours understanding&nbsp; this workflow. This is the reference image,&nbsp;&nbsp;'
+
+[06:41] [scene:talk]
+VISUAL: 
+AUDIO: 'and below it is the reference video of the&nbsp; dinosaur. Let me remove all the connections&nbsp;&nbsp; first, because they can be confusing. Here,&nbsp; I\'ll use two reference images. The first is&nbsp;&nbsp;'
+
+[06:53] [scene:UI]
+VISUAL: ComfyUI workflow showing nodes for loading images (dinosaur, background), a video, and a "MiniMax H3 Reference to Video" node.
+AUDIO: 'the dinosaur itself, and the second&nbsp; is the background for the dinosaur.&nbsp;&nbsp; The number of available input connections here&nbsp; increases automatically as we start connecting the&nbsp;&nbsp;'
+
+[07:05] [scene:talk]
+VISUAL: 
+AUDIO: 'nodes. After connecting the first reference image,&nbsp; a new input appears for the second reference&nbsp;&nbsp; image. Now both reference images are connected.&nbsp; Next, I need to provide a reference audio clip&nbsp;&nbsp; from the dinosaur video shown below. The reference&nbsp; audio should be connected to Ref-Audio-0.&nbsp;&nbsp;'
+
+[07:22] [scene:talk]
+VISUAL: 
+AUDIO: 'Once it\'s connected, another audio input appears&nbsp; automatically, but I won\'t be using it. After&nbsp;&nbsp;'
+
+[07:34] [scene:UI]
+VISUAL: ComfyUI interface, focusing on an "Input Text (Prompt)" node with detailed instructions for using reference images and audio.
+AUDIO: 'making these connections, this workflow becomes&nbsp; a reference image and audio to video workflow. The prompt contains instructions on how these&nbsp; three references should be used. Inside ComfyUI,&nbsp;&nbsp; I looked at the MiniMax Video node implementation,&nbsp; starting from line 154. The first reference image&nbsp;&nbsp;'
+
+[07:52] [scene:talk]
+VISUAL: 
+AUDIO: 'is labeled Picture-1, and the second reference&nbsp; image is labeled Picture-2. The reference audio&nbsp;&nbsp; I connected is labeled Audio-1, so we need&nbsp; to use these exact labels in the prompt for&nbsp;&nbsp;'
+
+[08:05] [scene:talk]
+VISUAL: 
+AUDIO: 'the model to understand which references to&nbsp; use. Here is the prompt, where I\'ve specified&nbsp;&nbsp; how the reference images and audio should&nbsp; be used. Below that are the instructions&nbsp;&nbsp; describing what should happen throughout&nbsp; the video. During the first five seconds,&nbsp;&nbsp;'
+
+[08:20] [scene:RESULT]
+VISUAL: Generated video output in ComfyUI, showing a dinosaur with a volcanic background.
+AUDIO: 'the dinosaur from Picture-1 walks. After&nbsp; five seconds, the dinosaur roars using&nbsp;&nbsp; the sound from Audio-1. Finally, the video&nbsp; ends with the dinosaur lowering its head. In the next test, I tried replacing&nbsp; the dinosaur in the reference video,&nbsp;&nbsp;'
+
+[08:50] [scene:talk]
+VISUAL: 
+AUDIO: 'with the blue dinosaur in the reference image. The subject image is connected to Ref-Image-0.&nbsp;&nbsp; The video is connected to Ref-Video-0. The&nbsp; audio extracted from that video is connected to&nbsp;&nbsp; Ref-Video-Audio-0. Unlike the previous example,&nbsp; I didn\'t connect a separate reference audio.&nbsp;&nbsp;'
+
+[09:06] [scene:UI]
+VISUAL: ComfyUI interface, showing an "Input Text (Prompt)" node with instructions for replacing a dinosaur in a video.
+AUDIO: 'Previously, Audio-1 was the label for the separate&nbsp; reference audio connected at Ref-Audio-0. Now,&nbsp;&nbsp;'
+
+[09:18] [scene:talk]
+VISUAL: 
+AUDIO: 'Audio-1 is the label for the audio coming&nbsp; from the reference video, which is connected&nbsp;&nbsp; at Ref-Video-Audio-0. So, if I also connect a&nbsp; separate reference audio through the audio node,&nbsp;&nbsp; it will be labeled Audio-2. In that case,&nbsp; the prompt should refer to Audio-2 whenever&nbsp;&nbsp;'
+
+[09:35] [scene:talk]
+VISUAL: 
+AUDIO: 'you want to use the separate reference audio&nbsp; alongside the video\'s original audio. Similarly,&nbsp;&nbsp; Video-1 in the prompt corresponds to the reference&nbsp; video connected here. The generated result looks&nbsp;&nbsp;'
+
+[09:47] [scene:UI]
+VISUAL: Hugging Face page for tsolful/Minimax_H3_INT4MixedConvRot, showing smaller INT4 model files.
+AUDIO: 'good. One thing worth noting is that the reference&nbsp; audio workflow is excellent for voice cloning.&nbsp;&nbsp; You can make almost anyone speak by providing a&nbsp; reference image along with their reference audio.'
+
+[09:59] [scene:talk]
+VISUAL: 
+AUDIO: 'There is also a smaller version of the model&nbsp; shared by a user on Hugging Face. However,&nbsp;&nbsp; it didn\'t perform very well in my test. That&nbsp; said, I only tested it once, and I was comparing&nbsp;&nbsp;'
+
+[10:11] [scene:talk]
+VISUAL: 
+AUDIO: 'it against the larger model. The demo video&nbsp; on the Hugging Face page looks impressive,&nbsp;&nbsp; and the model is noticeably faster&nbsp; than the default model I\'m using. You will need to update KJ-Nodes if you want&nbsp; to speed up video generation. After updating&nbsp;&nbsp;'
+
+[10:26] [scene:UI]
+VISUAL: GitHub repository page for kijai/ComfyUI-SolAttn_triton, showing code files and commit history.
+AUDIO: 'and restarting Comfy UI, you should see these&nbsp; new nodes. The node in the center is new to me,&nbsp;&nbsp; and these nodes can significantly speed up video&nbsp; generation. Kijai has been releasing updates&nbsp;&nbsp; to Comfy UI and KJ-Nodes at an incredible&nbsp; pace, he may not need AI, but the AI needs&nbsp;&nbsp;'
+
+[10:42] [scene:talk]
+VISUAL: 
+AUDIO: 'him. He recently introduced a new node called&nbsp; Sol-Attention. You will need to install this&nbsp;&nbsp; custom node project to get the node in Comfy UI&nbsp; which can speed up video generation even further.&nbsp;&nbsp;'
+
+[10:54] [scene:talk]
+VISUAL: 
+AUDIO: 'In this example, the reduction in the&nbsp; iteration time is quite noticeable,&nbsp;&nbsp; and it doesn\'t seem to affect the video quality. I did notice that the audio quality&nbsp; became slightly worse after enabling it,&nbsp;&nbsp;'
+
+[11:08] [scene:UI]
+VISUAL: ComfyUI workflow with nodes for loading an image (dinosaur), input text, and a "Resolution Selector".
+AUDIO: 'but knowing Kijai, that will probably&nbsp; be fixed within the next five minutes.&nbsp;&nbsp; After cloning the project and restarting ComfyUI,&nbsp;&nbsp; you should see this custom node. Connect it&nbsp; between these two nodes like this. And this is&nbsp;&nbsp;'
+
+[11:21] [scene:talk]
+VISUAL: 
+AUDIO: 'how it should be connected in the workflow. . I\'ll do the testing using a simpler workflow&nbsp;&nbsp; so the results are easier to compare. The&nbsp; video resolution is set to 0.3 megapixels,&nbsp;&nbsp;'
+
+[11:34] [scene:talk]
+VISUAL: 
+AUDIO: 'and the duration is 2 seconds. For this test,&nbsp; I\'m using just a single reference image and a&nbsp;&nbsp; prompt. Inside the subgraph, everything is already&nbsp; connected, and I\'ll begin by running the workflow&nbsp;&nbsp; without any of these new nodes. The generation&nbsp; took 112 seconds. I\'ll change the seed and run it&nbsp;&nbsp;'
+
+[11:50] [scene:RESULT]
+VISUAL: Generated video output in ComfyUI, showing a dinosaur in a jungle, with a terminal window displaying generation progress and time.
+AUDIO: 'again because the first run usually takes longer&nbsp; while the model is being loaded into memory. The second run took 72 seconds, so this is&nbsp; the performance without any optimization&nbsp;&nbsp;'
+
+[12:04] [scene:talk]
+VISUAL: 
+AUDIO: 'nodes. Now I\'ll enable the Easy Cache node&nbsp; and run the workflow again. This time,&nbsp;&nbsp; the generation took 53 seconds. However, note&nbsp; that Easy Cache skipped 7 out of the 20 steps to&nbsp;&nbsp; speed up the generation. Skipping steps generally&nbsp; means a loss in quality, so whether you use it or&nbsp;&nbsp;'
+
+[12:21] [scene:talk]
+VISUAL: 
+AUDIO: 'not depends on your preference. Next, I\'ll&nbsp; enable the Sage Attention node. I\'ve already&nbsp;&nbsp; made three videos on installing Sage Attention,&nbsp; and they\'re very easy to follow if you haven\'t&nbsp;&nbsp;'
+
+[12:37] [scene:RESULT]
+VISUAL: Generated video output in ComfyUI, showing a dinosaur roaring in a jungle, with the input text prompt visible.
+AUDIO: 'installed it yet. This run took 41 seconds, and&nbsp; the generated video looks perfectly fine to me.&nbsp;&nbsp; The quality loss we observed earlier&nbsp; in the text-to-video example with Sage&nbsp;&nbsp;'
+
+[12:52] [scene:talk]
+VISUAL: 
+AUDIO: 'Attention was much more noticeable than&nbsp; it is in this image-to-video workflow. Now I\'ll try using these two optimization nodes&nbsp; together. Actually, I\'m not sure whether Sage&nbsp;&nbsp; Attention is supposed to be used alongside this&nbsp; node. I haven\'t looked through the code yet,&nbsp;&nbsp;'
+
+[13:08] [scene:talk]
+VISUAL: 
+AUDIO: 'so I can\'t say for certain. I\'ll make a dedicated&nbsp; video once Kijai is finished working on it.&nbsp;&nbsp; In the program output, Sol-Attention is clearly&nbsp; visible, and Easy Cache is also listed. However,&nbsp;&nbsp; Sage Attention doesn\'t appear there. From this&nbsp; point onward, you\'ll have to experiment with&nbsp;&nbsp;'
+
+[13:25] [scene:talk]
+VISUAL: 
+AUDIO: 'these nodes yourself to see which combination&nbsp; works best for your workflow. I don\'t want to&nbsp;&nbsp; make any conclusions until I understand what\'s&nbsp; happening internally. A 4-second video at 0.4&nbsp;&nbsp; megapixels was generated in 145 seconds.&nbsp; That\'s almost a 45% speed improvement&nbsp;&nbsp;'
+
+[13:45] [scene:talk]
+VISUAL: 
+AUDIO: 'compared to yesterday. So, that\'s&nbsp; it for this video. I hope you found&nbsp;&nbsp; it informative and interesting. Thanks for&nbsp; watching, and I wish you an excellent day.'
