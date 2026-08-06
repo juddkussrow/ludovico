@@ -1,0 +1,292 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Native Audio + Motion Reference? Testing MiniMax H3 Limits
+channel: @octopusinc_
+duration: 15:15
+source: https://www.youtube.com/watch?v=3NLbgpZ8cvs
+upload_date: 20260805
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'What’s the hottest model in open-source video generation right now? Of course, it’s MiniMax H3 As everyone knows this is a fully multimodal model that generates video and audio at the same time But today'
+
+[00:12] [scene:talk]
+VISUAL: 
+AUDIO: 'we’re going much deeper with some more original and challenging tests Let’s start with the hardest one In this video a woman is writing Chinese calligraphy on rice paper Pay attention to the ink It appears almost exactly as the brush tip moves across the paper'
+
+[00:24] [scene:talk]
+VISUAL: 
+AUDIO: 'and the sequence of the three brushstrokes also works correctly Now let’s look at three more interesting videos In the first scene a woman wipes her palm across a fogged-up window and only the areas she physically touches gradually become clear'
+
+[00:37] [scene:talk]
+VISUAL: 
+AUDIO: 'In the second scene we designed a mechanical box that has to complete four actions in sequence Each material also produces a different sound The third scene is something we see all the time:'
+
+[00:50] [scene:talk]
+VISUAL: 
+AUDIO: 'milk being poured into coffee Pay attention to the entire process including the changing liquid and the way the coffee, milk and ice behave inside the glass The result is excellent'
+
+[01:03] [scene:talk]
+VISUAL: 
+AUDIO: 'The model also supports reference-based generation We can provide four images containing a character an outfit a handbag, and an environment MiniMax H3 then combines these four sources into one continuous video In my opinion'
+
+[01:19] [scene:talk]
+VISUAL: 
+AUDIO: 'H3 is one of the models that’s genuinely worth paying attention to right now But to use it well there are quite a few techniques you need to understand We’ll divide this tutorial into three sections: text-to-video, image-to-video'
+
+[01:31] [scene:talk]
+VISUAL: 
+AUDIO: 'and reference-to-video As we just mentioned MiniMax H3 is an omni-modal audio and video generation system It can understand text, images video, and audio'
+
+[01:43] [scene:talk]
+VISUAL: 
+AUDIO: 'ComfyUI already supports the model but keep in mind that this isn’t exactly the same model provided through MiniMax’s official platform You can think of the current ComfyUI release as the Base version which mainly generates videos at seven hundred and sixty-eight P'
+
+[01:56] [scene:talk]
+VISUAL: 
+AUDIO: 'At the moment there are two H3 Base models available The first is called FL2VA and it’s mainly used for image-to-video The second is called Ref2VA'
+
+[02:10] [scene:talk]
+VISUAL: 
+AUDIO: 'and it handles reference-based generation What you’re seeing here is the collection of models officially provided by ComfyUI The repository includes several formats such as BF16'
+
+[02:22] [scene:talk]
+VISUAL: 
+AUDIO: 'FP8, and INT8 For the workflows in this video we’re using the Pruned INT8 model This is a pruned model As we all know the main ways to reduce the size of a large model are pruning distillation, and quantization'
+
+[02:37] [scene:talk]
+VISUAL: 
+AUDIO: 'Besides the main model we also need MiniMax’s dedicated text encoder Here, we’re using Qwen3-VL-32B along with a special VAE setup Notice that there are two VAEs:'
+
+[02:50] [scene:talk]
+VISUAL: 
+AUDIO: 'one handles audio and the other handles video For easier testing I’ve also built the workflows on RunningHub In the ComfyUI space RunningHub is a great online working platform because whenever a new model or extension comes out the platform usually adds support for it very quickly'
+
+[03:05] [scene:talk]
+VISUAL: 
+AUDIO: 'RunningHub also provides an online community for ComfyUI creators where you can find plenty of creative inspiration and example workflows MiniMax H3 has some special requirements for frame rate and frame count'
+
+[03:17] [scene:talk]
+VISUAL: 
+AUDIO: 'First the frame rate must be twenty-four frames per second The total frame count must also satisfy the formula seventeen k plus five When you inspect the workflow later'
+
+[03:31] [scene:talk]
+VISUAL: 
+AUDIO: 'you’ll see that after we specify the duration in seconds a special formula calculates the total frame count That formula is there because the final number of frames must satisfy the seventeen k plus five requirement Now look at the sampling settings'
+
+[03:47] [scene:talk]
+VISUAL: 
+AUDIO: 'The sampler we’re using is called res_multistep and the number of sampling steps is set to twenty All three workflows basically follow this setup although there are slight differences between their structures Let’s begin with the text-to-video workflow'
+
+[04:00] [scene:talk]
+VISUAL: 
+AUDIO: 'The main model is FL2VA and one of the most important nodes is called MiniMax H3 Image to Video Image-to-video also uses this same node For text-to-video'
+
+[04:13] [scene:talk]
+VISUAL: 
+AUDIO: 'we simply leave First Frame and Last Frame disconnected The prompt format is important I recommend dividing the prompt into five sections First, describe the visual style Second'
+
+[04:26] [scene:talk]
+VISUAL: 
+AUDIO: 'use a timeline to define the corresponding actions Third, describe the camera Fourth, describe the sound Fifth, specify the constraints The timeline is the most important section You need to state clearly when each action begins and when it ends'
+
+[04:39] [scene:talk]
+VISUAL: 
+AUDIO: 'Some of you may be wondering whether the prompt really makes that much difference so let’s test it We’ll start with a normal prompt The scene features a cultural artifact conservator repairing a damaged black lacquer folding fan'
+
+[04:51] [scene:talk]
+VISUAL: 
+AUDIO: 'The basic prompt only describes the character the environment and three key actions In the result, the character workshop'
+
+[05:04] [scene:talk]
+VISUAL: 
+AUDIO: 'and folding fan all appear but the relationships between the actions are fairly loose Now let’s try a structured prompt Focus on the Timeline section For this five-second video we divide the action into three segments:'
+
+[05:16] [scene:talk]
+VISUAL: 
+AUDIO: 'zero to two seconds two to three point five seconds and three point five to five seconds Each segment contains a detailed action description Take a look at the overall result'
+
+[05:28] [scene:talk]
+VISUAL: 
+AUDIO: 'With this version of the prompt the action sequence camera relationships points of focus and narrative are all much clearer Next, let’s test sound The scene contains a woman operating a mechanical device'
+
+[05:40] [scene:talk]
+VISUAL: 
+AUDIO: 'She first rotates its bronze outer ring then presses a white jade button pulls out a silver tray and unfolds six metal lotus petals These four actions correspond to four different sounds:'
+
+[05:52] [scene:talk]
+VISUAL: 
+AUDIO: 'metal friction a jade click the sound of a sliding rail and a metallic spring sound Let’s look at the result The main sounds appear in sync with the visible actions'
+
+[06:08] [scene:talk]
+VISUAL: 
+AUDIO: 'This shows that H3 is also very strong at aligning audio with on-screen events Now let’s test an audio feature many people care about: lip-syncing The prompt describes a Jiangnan-style teahouse after the rain'
+
+[06:20] [scene:talk]
+VISUAL: 
+AUDIO: 'After pouring the tea the character looks into the camera and says “The rain has stopped The mountains will feel closer ” In the prompt we use a special dialogue tag and specify Chinese to tell the model that the spoken line should be in Chinese'
+
+[06:32] [scene:talk]
+VISUAL: 
+AUDIO: 'Let’s look at the generated result The Chinese pronunciation and lip movements basically work'
+
+[06:47] [scene:talk]
+VISUAL: 
+AUDIO: 'and the sounds of pouring tea falling rain and spoken dialogue don’t overlap or drown each other out Next let’s look at multi-shot storytelling For this test'
+
+[07:00] [scene:talk]
+VISUAL: 
+AUDIO: 'we designed a particularly interesting story In the structured prompt we use SHOT 1, SHOT 2 and SHOT 3 to define separate shots The first shot shows a jade seal sliding off a table In the second shot'
+
+[07:13] [scene:talk]
+VISUAL: 
+AUDIO: 'a female diplomat runs through a beaded curtain to chase it In the third shot she catches the jade seal in the connecting section between two train cars Let’s look at the final result As you can see'
+
+[07:25] [scene:talk]
+VISUAL: 
+AUDIO: 'H3 isn’t limited to single-take videos It can also create compressed narratives or what we might call multi-shot storytelling The second major section is image-to-video The image-to-video workflow isn’t very different from the text-to-video workflow'
+
+[07:38] [scene:talk]
+VISUAL: 
+AUDIO: 'We still use FL2VA as the main model The main difference is that we connect an image to First Frame Last Frame or both'
+
+[07:50] [scene:talk]
+VISUAL: 
+AUDIO: 'After uploading the image I recommend resizing it to an appropriate resolution Since this is image-to-video I’ve extracted the image dimensions and connected them directly to the workflow’s width and height The sampling settings remain unchanged'
+
+[08:04] [scene:talk]
+VISUAL: 
+AUDIO: 'Once again prompt writing is the most important part The image-to-video prompt follows almost the same structure as the text-to-video prompt The main thing to watch is consistency Make sure the character described in your prompt matches the character in the reference image as closely as possible'
+
+[08:16] [scene:talk]
+VISUAL: 
+AUDIO: 'Now let’s run some more interesting tests In the first reference image a woman is standing in front of a fogged-up window The prompt asks her to touch the glass with her palm'
+
+[08:29] [scene:talk]
+VISUAL: 
+AUDIO: 'then wipe upward and to the right in a curved motion Only the areas her hand actually passes over should become clear This is a familiar kind of scene so let’s look at the generated result'
+
+[08:41] [scene:talk]
+VISUAL: 
+AUDIO: 'The positions of the character window frame and bridge remain relatively stable The clear area also expands as the hand moves Direction is important here too: the hand correctly moves toward the upper right'
+
+[08:54] [scene:talk]
+VISUAL: 
+AUDIO: 'This example shows that H3 has a good understanding of common materials and localized physical changes The second test is, in my opinion the hardest one in the entire video'
+
+[09:06] [scene:talk]
+VISUAL: 
+AUDIO: 'Here we use both a first frame and a last frame The first frame is a medium shot from an oblique side angle with a blank sheet of rice paper The last frame is a high-angle close-up that’s almost overhead and the Chinese character for “mountain” has already been written on the paper'
+
+[09:21] [scene:talk]
+VISUAL: 
+AUDIO: 'The prompt divides the character’s brushstrokes into three steps At the same time it asks the camera to complete a series of framing and position changes Let’s look at the result'
+
+[09:34] [scene:talk]
+VISUAL: 
+AUDIO: 'The three brush movements happen in the correct order The ink strokes grow along with the brush tip and the camera completes clear changes in both shot size and position But pay attention to what this result actually proves'
+
+[09:46] [scene:talk]
+VISUAL: 
+AUDIO: 'It doesn’t prove that MiniMax H3 can correctly write every Chinese character It only shows that the model can produce a good result when action order ink behavior'
+
+[09:58] [scene:talk]
+VISUAL: 
+AUDIO: 'and complex camera movement all need to work at the same time The third test also includes a camera change from a medium shot to a close-up but that isn’t the main challenge The key is that we’re once again providing both a first frame and a last frame Between those frames'
+
+[10:13] [scene:talk]
+VISUAL: 
+AUDIO: 'the model needs to pour milk into a glass of coffee raise the liquid level blend the colors and change the camera position The prompt explicitly establishes a conservation relationship The milk can only enter the glass through the spout'
+
+[10:25] [scene:talk]
+VISUAL: 
+AUDIO: 'As the amount of liquid in the pitcher decreases the level inside the glass should gradually rise The coffee should also develop light-brown cloud-like patterns as the milk mixes in Let’s look at the final result'
+
+[10:39] [scene:talk]
+VISUAL: 
+AUDIO: 'The milk mixing glass refraction and state of the ice cubes all look quite natural There is a shot transition in the middle but the overall performance and video quality are still very high Now we come to the third section:'
+
+[10:53] [scene:talk]
+VISUAL: 
+AUDIO: 'reference-based generation This workflow is a little different First we switch the main model to Ref2VA We also replace the conditioning node with MiniMax H3 Reference to Video This node accepts multiple images'
+
+[11:08] [scene:talk]
+VISUAL: 
+AUDIO: 'as well as audio and video inputs The sampling section is basically the same as the text-to-video and image-to-video workflows There’s one special option here called ref_image_size It has two values: Match and Max'
+
+[11:22] [scene:talk]
+VISUAL: 
+AUDIO: 'We can roughly understand their behavior from their names When necessary Match reduces the reference image to approximately the same pixel area as the target video This uses fewer reference tokens and runs faster'
+
+[11:35] [scene:talk]
+VISUAL: 
+AUDIO: 'Max tries to preserve as much of the original reference detail as possible so generation takes longer Let’s test them First I’ll select Match and provide a reference image of a woman In the prompt'
+
+[11:49] [scene:talk]
+VISUAL: 
+AUDIO: 'we ask her to adjust a white tulip in a modern living room The camera moves from behind her toward the front so the sequence includes a turning motion We’ll observe whether the model preserves her hair color glasses'
+
+[12:01] [scene:talk]
+VISUAL: 
+AUDIO: 'necklace, and clothing Let’s start with the Match result Her hair and glasses are preserved without any major problems but the character identity isn’t especially strong Now let’s switch to Max while keeping everything else unchanged The only setting I’m changing is ref_image_size'
+
+[12:16] [scene:talk]
+VISUAL: 
+AUDIO: 'from Match to Max In the generated video the difference is obvious The character consistency is much stronger and details such as the necklace also match the supplied reference image more closely For the second test'
+
+[12:30] [scene:talk]
+VISUAL: 
+AUDIO: 'we’ll use a Character Sheet of the same person The prompt needs to explain that these aren’t four different people They’re multiple views of the same person Using the same main prompt we get this result'
+
+[12:43] [scene:talk]
+VISUAL: 
+AUDIO: 'After the character turns to the side her hair color eyes, clothing and necklace remain more stable When you need a turning camera move a full-body action or multiple viewing angles a Character Sheet is often more valuable than a single frontal portrait'
+
+[12:55] [scene:talk]
+VISUAL: 
+AUDIO: 'Next let’s run a stress test with four reference images each responsible for something different The first defines the character’s identity The second defines the outfit'
+
+[13:07] [scene:talk]
+VISUAL: 
+AUDIO: 'which is a misty blue linen suit The third provides a caramel-colored handbag The fourth provides the environment which is an urban flower shop For the target video we ask the character to walk out of the flower shop carrying a white bouquet while the camera tracks her toward the right'
+
+[13:19] [scene:talk]
+VISUAL: 
+AUDIO: 'Let’s look at the result The blue-and-white long hair glasses misty blue suit, handbag and flower-shop environment all make it into the final video'
+
+[13:32] [scene:talk]
+VISUAL: 
+AUDIO: 'More importantly the model doesn’t simply copy the composition of any one reference image This test shows that the key to multi-reference generation isn’t the number of images The important part is clearly defining the role of each reference in the prompt'
+
+[13:46] [scene:talk]
+VISUAL: 
+AUDIO: 'Character identity should take priority followed by clothing and props while the environment can come later Finally let’s look at something we haven’t seen in our previous reference-generation workflows:'
+
+[13:58] [scene:talk]
+VISUAL: 
+AUDIO: 'motion reference Here’s the reference video A stunt performer picks up a beige trench coat from a bench puts their right hand into the sleeve pulls the collar around the back of the neck'
+
+[14:11] [scene:talk]
+VISUAL: 
+AUDIO: 'and finally lets the coat settle onto both shoulders Essentially it’s the action of trying on a coat Next we replace the reference image with the Character Sheet we used earlier and describe the task as motion transfer First'
+
+[14:27] [scene:talk]
+VISUAL: 
+AUDIO: 'we explain that Video 1 is responsible only for the action sequence We don’t need to preserve the stunt performer’s overall appearance clothing or scene Now let’s look at the generated result Pay attention to the key actions:'
+
+[14:39] [scene:talk]
+VISUAL: 
+AUDIO: 'picking up the coat finding the sleeve opening putting the arm through it and adjusting the collar The entire sequence is transferred while the target character’s identity is preserved As you can see'
+
+[14:51] [scene:talk]
+VISUAL: 
+AUDIO: 'we’ve run a lot of tests Overall H3’s biggest advantage is that it combines native audio first-and-last-frame control and multimodal reference generation in a standalone open-source model The three workflows I’ve provided are also very useful'
+
+[15:03] [scene:talk]
+VISUAL: 
+AUDIO: 'so I recommend trying them for yourself That’s all for today Follow me and become someone who truly understands AI'
