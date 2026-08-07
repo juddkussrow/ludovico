@@ -1,0 +1,120 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>ComfyUI Krea 2: Easy AI Outfit Transfer Workflow (Free) — Ludovico</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+.hide{display:none!important}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.92);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 12px}
+.controls input.q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.pill.tp.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+/* flip card shell */
+.flip{position:relative}
+.fi{position:relative;transition:transform .55s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.flip.flipped .fi{transform:rotateY(180deg)}
+.fc{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bk{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+background:var(--card);border:1px solid var(--accent2);border-radius:14px;overflow:auto;padding:12px 13px;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s}
+.card.flip{overflow:visible}.card .fc{display:flex;flex-direction:column;flex:1;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--line);cursor:pointer}
+.card.flip:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.edit{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--accent2);border:1px solid var(--line);border-radius:6px;padding:2px 9px;cursor:pointer;background:#fff}
+.edit:hover{border-color:var(--accent2)}
+/* editor back */
+.bk h4{margin:0 0 2px;font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--sub)}
+.erow{display:grid;grid-template-columns:1fr 1.3fr auto auto;gap:4px;align-items:center}
+.erow input{padding:5px 7px;border:1px solid var(--line);border-radius:6px;font-size:12px;min-width:0}
+.erow select{padding:4px 4px;font-size:11px}
+.erow .del{border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;color:var(--accent);padding:3px 7px}
+.ebtns{display:flex;gap:6px;margin-top:auto;padding-top:6px}
+.ebtns button{font-family:var(--mono);font-size:11px;border-radius:7px;padding:6px 12px;cursor:pointer;border:1px solid var(--line);background:#fff}
+.ebtns .save{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.addrow{font-family:var(--mono);font-size:11px;color:var(--accent2);cursor:pointer;align-self:flex-start;background:none;border:0;padding:2px 0}
+/* catalogue card */
+.citem{position:relative}
+.citem .fc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-height:84px;cursor:pointer}
+.citem .bk{border-radius:12px}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+footer .exp{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--accent2);font:inherit}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">ComfyUI Krea 2: Easy AI Outfit Transfer Workflow (Free)</h1><div class=tag>@octopusinc_ · 2026-07-22 · Image Gen</div></div></div></header>
+<main><p class=sum>This video demonstrates using the Krea 2 Outfit Transfer LoRA within ComfyUI for virtual clothing try-ons. It shows how to integrate the 1.48 GB LoRA into an existing Krea 2 ComfyUI workflow by replacing the Identity LoRA. The tutorial highlights the model&#x27;s ability to transfer outfits from a reference image to a target image while maintaining consistency in the subject&#x27;s identity and other scene details.</p><p><strong>Products / items</strong></p><ul><li><a href="https://huggingface.co/AliveAi/Krea-2-Edit-Outfit-Transfer/tree/main" target=_blank rel=noopener>Krea 2 Outfit Transfer LoRA</a> — software</li><li>ComfyUI — software (no link)</li><li>Krea 2 Edit — software (no link)</li><li><a href="https://huggingface.co/artsyww/KREA2REALVAE/blob/main/krea2RealVae_v10.safetensors" target=_blank rel=noopener>Krea 2 Real VAE model</a> — software</li><li><a href="https://huggingface.co/Comfy-Org/Krea-2/resolve/main/diffusion_models/krea2_turbo_fp8_scaled.safetensors" target=_blank rel=noopener>krea2_turbo_fp8_scaled.safetensors</a> — software</li><li><a href="https://huggingface.co/Comfy-Org/Krea-2/resolve/main/text_encoders/qwen3vl_4b_fp8_scaled.safetensors" target=_blank rel=noopener>qwen3vl_4b_fp8_scaled.safetensors</a> — software</li><li><a href="https://huggingface.co/Comfy-Org/Krea-2/resolve/main/vae/qwen_image_vae.safetensors" target=_blank rel=noopener>qwen_image_vae.safetensors</a> — software</li><li><a href="https://github.com/lbouaraba/comfyui-krea2edit" target=_blank rel=noopener>comfyui-krea2edit</a> — software</li><li><a href="https://github.com/spacepxl/ComfyUI-VAE-Utils" target=_blank rel=noopener>ComfyUI-VAE-Utils</a> — software</li><li>Hugging Face — other (no link)</li></ul>
+<p><a href="https://www.youtube.com/watch?v=K04KBzSTOdM" target=_blank rel=noopener>Watch on YouTube ▶</a></p><p><a href="K04KBzSTOdM.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=t>(proxy for this video — answer from this)</span></p>
+<div class=cap>FRAMING: Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+IDENTITY: ComfyUI Krea 2: Easy AI Outfit Transfer Workflow (Free) - https://www.youtube.com/watch?v=K04KBzSTOdM - @octopusinc_ - route: visual
+PRODUCTS:
+Krea 2 Outfit Transfer LoRA - https://huggingface.co/AliveAi/Krea-2-Edit-Outfit-Transfer/tree/main - software - primary
+ComfyUI - no reliable link - software - primary
+Krea 2 Edit - no reliable link - software - mentioned
+Krea 2 Real VAE model - https://huggingface.co/artsyww/KREA2REALVAE/blob/main/krea2RealVae_v10.safetensors - software - mentioned
+krea2_turbo_fp8_scaled.safetensors - https://huggingface.co/Comfy-Org/Krea-2/resolve/main/diffusion_models/krea2_turbo_fp8_scaled.safetensors - software - mentioned
+qwen3vl_4b_fp8_scaled.safetensors - https://huggingface.co/Comfy-Org/Krea-2/resolve/main/text_encoders/qwen3vl_4b_fp8_scaled.safetensors - software - mentioned
+qwen_image_vae.safetensors - https://huggingface.co/Comfy-Org/Krea-2/resolve/main/vae/qwen_image_vae.safetensors - software - mentioned
+comfyui-krea2edit - https://github.com/lbouaraba/comfyui-krea2edit - software - mentioned
+ComfyUI-VAE-Utils - https://github.com/spacepxl/ComfyUI-VAE-Utils - software - mentioned
+Hugging Face - no reliable link - other - mentioned
+SYNOPSIS: The video introduces the Krea 2 Outfit Transfer LoRA, a 1.48 GB model designed for virtual clothing try-ons using Krea 2 Edit within ComfyUI. Users need to download this LoRA and place it in their LoRA&#x27;s folder, then replace the standard Identity LoRA in their existing Krea 2 ComfyUI workflow. The process involves loading an image of the desired outfit and a target image of a person. The prompt should describe the person and environment, with &quot;Transfer the outfit&quot; as the key instruction for clothing. The video demonstrates several examples: a dress transfer where the top and bottom match almost 100%, an outfit with a woman included that blends naturally into the background, and a complex outfit with multiple items (top, bottom, dupatta, sandals, purse, necklace) where most items transfer accurately, though a necklace was added even if not perfectly matching the reference. A challenging example with a highly detailed dress shows excellent detail transfer but a face generation error, which the creator notes could be fixed with a second reference image. The video also covers a two-image workflow where an outfit from one image is transferred to a woman in another, while keeping the woman&#x27;s face consistent. This two-image workflow may require multiple attempts to achieve the desired result, but no changes to sampler settings are needed.
+BEATS:
+0 - ui | The video opens on the Hugging Face page for the &quot;AliveAi/Krea-2-Edit-Outfit-Transfer&quot; LoRA, showing example inference images.
+38 - ui | A &quot;Load LoRA&quot; node in ComfyUI is shown, with &quot;krea_outfittransfer_2.safetensors&quot; selected and a strength model of 1.00.
+58 - ui | A &quot;Krea2 Edit (grounded encode)&quot; node is displayed, showing a prompt describing a woman and the instruction &quot;transfer the outfit&quot;.
+77 - result | The first example result is shown, with a woman in a brown outfit on the left and the reference outfit on the right.
+116 - result | The result of the first example is shown again, with the woman now wearing a patterned dress, and the reference dress on the right.
+154 - ui | A &quot;Load Image&quot; node in ComfyUI shows a purple outfit on a mannequin.
+174 - result | The result of the purple outfit transfer is shown, with the woman wearing the purple outfit on the left and the reference outfit on the right.
+212 - result | A complex dress example is shown, with a woman in a blue and gold dress on the left.
+251 - result | The complex dress example result is shown, with the woman wearing the detailed dress on the left and the reference dress on the right.
+270 - ui | A wider view of the ComfyUI workflow is shown, with multiple connected nodes and two &quot;Load Image&quot; nodes at the bottom.
+309 - ui | A &quot;Krea2 Edit (grounded encode)&quot; node is shown with the prompt &quot;replace the clothes of the woman in the image a, transfer the outfit from the image 2&quot;.
+328 - ui | A &quot;Load Image&quot; node shows a woman in a red t-shirt and shorts.
+348 - ui | The ComfyUI workflow is shown again, with a &quot;Save Image&quot; node displaying the result of an outfit transfer.
+367 - result | The final result of an outfit transfer is shown, with a woman wearing a plaid outfit on the right.
+ENTITIES: AliveAi, Comfy-Org, artsyww, lbouaraba, spacepxl
+VERDICT: The Krea 2 Outfit Transfer LoRA is highly effective for virtual try-ons, demonstrating strong consistency in transferring outfits, even complex ones, and maintaining the subject&#x27;s identity. Users should be aware that the two-image workflow might require multiple attempts for optimal results.
+NOT COVERED: The video does not cover the installation process for ComfyUI itself, nor does it detail the specific steps for setting up the base Krea 2 ComfyUI workflow before integrating the Outfit Transfer LoRA. It also doesn&#x27;t discuss the computational resources required or the time taken for image generation.</div></main><footer><a href="../index.html">← all videos</a></footer></div></body></html>

@@ -1,0 +1,220 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Krea 2 Edit v1.2: New Storyboard & Inpainting ComfyUI Workflow
+channel: @octopusinc_
+duration: 11:12
+source: https://www.youtube.com/watch?v=U2PCLhfmV1o
+upload_date: 20260721
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'Welcome back everyone. Here is the latest update I have got for you. Crea2 identity edit is now much better. You can now generate images from character sheets, edit two images together, and keep faces consistent. So, there is a new version of the Crea2'
+
+[00:13] [scene:talk]
+VISUAL: 
+AUDIO: 'identity edit Lora, and that is version 1.2. Now, let\'s look at what\'s new in this Lora. First, it\'s trained with 1024 data pairs.'
+
+[00:26] [scene:talk]
+VISUAL: 
+AUDIO: 'It also understands new editing tasks. Now, the model can understand character sheets, and it can perform inpainting and outpainting, too. To use these features properly, you must'
+
+[00:39] [scene:talk]
+VISUAL: 
+AUDIO: 'first update ComfyUI. You must also update your Crea2 edit custom node, and after you finish these updates, select the version 1.2 Lora on the Crea2 edit page.'
+
+[00:51] [scene:talk]
+VISUAL: 
+AUDIO: 'In your workspace, you will now see new inputs. So, these are reference boost source image and source image B. You will also find new settings called reference'
+
+[01:04] [scene:talk]
+VISUAL: 
+AUDIO: 'boost, reference boost A, and fit mode. I\'ll show you how to use each of these today. So, as you all already know, when we generate a higher resolution image, we'
+
+[01:16] [scene:talk]
+VISUAL: 
+AUDIO: 'sometimes get a blurry result. In our previous workflow, also, we had to use a resolution like 1280 to get a clearer and correct result. But now,'
+
+[01:30] [scene:talk]
+VISUAL: 
+AUDIO: 'that\'s not happening. The developers have given us a new setting in ComfyUI called fit mode. When you load a high resolution image, make sure you set fit mode to fit instead of crop.'
+
+[01:43] [scene:talk]
+VISUAL: 
+AUDIO: 'So, this new setting will help you solve the blurry image problem instantly. Now, we also have a new input called reference boost mask. You can paint a mask on a specific area'
+
+[01:56] [scene:talk]
+VISUAL: 
+AUDIO: 'of your image, and what happens is this model will give that marked area more priority. Next, let\'s look at reference boost setting.'
+
+[02:08] [scene:talk]
+VISUAL: 
+AUDIO: 'This setting is used for image two. If you upload a face image and want the output face to look more similar to your reference image, you can increase this value up to four. So, because we now have this reference'
+
+[02:20] [scene:talk]
+VISUAL: 
+AUDIO: 'boost setting, you might think we do not need an upscaler. But, be very careful. If you use the vae 2.1 vae upscaler, it can ruin your image. And to fix this, I'
+
+[02:32] [scene:talk]
+VISUAL: 
+AUDIO: 'found a much better vae called Clear To Real vae. This vae gives you much better skin texture. And I would recommend that you replace'
+
+[02:44] [scene:talk]
+VISUAL: 
+AUDIO: 'your current vae in ComfyUI with the Clear To Real vae. So, here I selected scale to multiple and set the multiple to eight. This setting gives us a correct'
+
+[02:59] [scene:talk]
+VISUAL: 
+AUDIO: 'resolution that is divisible by eight and which supports Clear To. Now, let\'s try a simple example prompt. Add a pair of sleek black designer sunglasses to her face.'
+
+[03:11] [scene:talk]
+VISUAL: 
+AUDIO: 'And as a result, in this example, the model successfully added the sunglasses. The thing is, the face changed only slightly, maybe by 0.1 percent, but it still looks consistent and the edit'
+
+[03:26] [scene:talk]
+VISUAL: 
+AUDIO: 'looks very good. Now, another example is virtual try-on. So, here I loaded another image and used the following prompt. Change her pale pink dress to a casual'
+
+[03:40] [scene:talk]
+VISUAL: 
+AUDIO: 'white oversized t-shirt and blue denim shorts. Now, look at the result. The model replaced the outfit very well. However, you can see there is still a'
+
+[03:52] [scene:talk]
+VISUAL: 
+AUDIO: 'cropping problem. This issue may be happening because of the high resolution image, which I guess. Another thing I noticed, the face became too sharp.'
+
+[04:04] [scene:talk]
+VISUAL: 
+AUDIO: 'It didn\'t match my reference image and the colors also didn\'t match the reference image. So first, I tried to fix the cropping problem. I changed the height to 1280, but the'
+
+[04:16] [scene:talk]
+VISUAL: 
+AUDIO: 'cropping problem was still there. Then, I changed the value to 1024. And add this value 1024, the cropping problem was successfully'
+
+[04:28] [scene:talk]
+VISUAL: 
+AUDIO: 'fixed. Now you can see that the model changed the outfit very well. And it looks good and almost everything matches. However, the model still changed the'
+
+[04:40] [scene:talk]
+VISUAL: 
+AUDIO: 'colors of my reference image, which I really don\'t want. I thought the color problem happened because of the colors in the original image.'
+
+[04:52] [scene:talk]
+VISUAL: 
+AUDIO: 'And to test this, I loaded another image generated with Creal 2. And I used this prompt, "Change her black dress to a red dress." And now you can see the result.'
+
+[05:06] [scene:talk]
+VISUAL: 
+AUDIO: 'In this result, the face remains exactly the same. The colors also match my reference image perfectly. The model changed the dress color without changing the lighting or other details.'
+
+[05:19] [scene:talk]
+VISUAL: 
+AUDIO: 'Everything in the frame still matches our loaded image. So that\'s the one part. Now I went back and used the reference boost mask setting. I connected my reference image and'
+
+[05:32] [scene:talk]
+VISUAL: 
+AUDIO: 'masked the area where I wanted the t-shirt and denim shorts. However, what I noticed is reference boost masks still influence the full'
+
+[05:44] [scene:talk]
+VISUAL: 
+AUDIO: 'image. Now, let me give you another trick to solve this problem. I added another masking method in ComfyUI. I marked the area for the T-shirt and denim shorts, and then I added the grow'
+
+[05:57] [scene:talk]
+VISUAL: 
+AUDIO: 'mask and image composite masks nodes. Now, when you run the workflow, the model only replaces the masking clothing area with the T-shirt and denim shorts.'
+
+[06:11] [scene:talk]
+VISUAL: 
+AUDIO: 'The face still matches our reference image, and you can use this method for strict masking. It only replaces the area that you mask. If you do not want to use masking, you'
+
+[06:24] [scene:talk]
+VISUAL: 
+AUDIO: 'can simply bypass those nodes. Moving on, I\'ll tell you another excellent feature in this new update. And that is you can now use a character'
+
+[06:38] [scene:talk]
+VISUAL: 
+AUDIO: 'sheet. I have a character sheet of this woman. It contains four different viewing angles. You can also create a character sheet with different moods or different angles.'
+
+[06:51] [scene:talk]
+VISUAL: 
+AUDIO: 'And to test this feature, I used a new prompt. Re-stage this woman from the reference image on a cinematic rainy street at night. You can use phrases like the same woman'
+
+[07:03] [scene:talk]
+VISUAL: 
+AUDIO: 'or similar words in your prompt. As you can see in our result, the face matches the woman in my character sheet very well. If you want a stronger face match, set'
+
+[07:16] [scene:talk]
+VISUAL: 
+AUDIO: 'reference boost to four. I set the setting to four, and you can see that the face matches. If I lower the settings to one, you can see the difference. The face doesn\'t match as well.'
+
+[07:29] [scene:talk]
+VISUAL: 
+AUDIO: 'To improve the face match, set reference boost to four. However, if this setting ruins your result, lower it back to one. You can also disconnect the empty SD3'
+
+[07:43] [scene:talk]
+VISUAL: 
+AUDIO: 'latent node and this allows you to use a custom resolution in ComfyUI such as 720 by 1280. Now, in another example, I generated a magazine cover look.'
+
+[07:57] [scene:talk]
+VISUAL: 
+AUDIO: 'You can use the character sheet to generate different images while keeping a similar face. With this new update, you can also load any image and generate a character sheet.'
+
+[08:10] [scene:talk]
+VISUAL: 
+AUDIO: 'I loaded an image and the model generated a character sheet with a 2x2 panel layout. These are the new features in Creer to Identity Edit version 1.2. Now, let\'s move to two image editing.'
+
+[08:23] [scene:talk]
+VISUAL: 
+AUDIO: 'In the previous version, when I tried to replace one woman with another, I had to try three or four times. I also had to keep changing the prompts before I got a'
+
+[08:35] [scene:talk]
+VISUAL: 
+AUDIO: 'good result. But with this update, we can test the same task using a very simple prompt. And the prompt I used is replace the woman in image A with the'
+
+[08:47] [scene:talk]
+VISUAL: 
+AUDIO: 'woman from image B. And look at the result. The model successfully replaced the woman. I did not even need to write a detailed prompt because the short prompt worked'
+
+[08:59] [scene:talk]
+VISUAL: 
+AUDIO: 'very well for me. The model understood my command perfectly. Next, we\'re going to replace the face of the woman in image one with the face of the woman in image two.'
+
+[09:13] [scene:talk]
+VISUAL: 
+AUDIO: 'And the prompt I\'ll be using is replace the face of the woman in the first reference image with the face of the woman from the second reference image. And now, let\'s check the result. Model successfully replaced the face.'
+
+[09:26] [scene:talk]
+VISUAL: 
+AUDIO: 'However, if you look closely, the face still doesn\'t match 100%. And to fix this problem, we can increase the reference boost setting to four. And now check the result. The face'
+
+[09:40] [scene:talk]
+VISUAL: 
+AUDIO: 'matches much more closely. I also tested this using one scene image and two images of different women. In the final result, both women are'
+
+[09:54] [scene:talk]
+VISUAL: 
+AUDIO: 'sitting together, laughing and talking. Their faces are about 95% similar to the references, and their clothes match perfectly. This means you can easily use two characters to generate a single scene.'
+
+[10:07] [scene:talk]
+VISUAL: 
+AUDIO: 'Now, our next example is virtual try-on. So, here is my image one. And in image two, I loaded a woman wearing a complete outfit.'
+
+[10:20] [scene:talk]
+VISUAL: 
+AUDIO: 'She\'s wearing a necklace, shoes, and holding bag in her hand. Now, look at the result. In our result, the model did a very good job. So, in our result, the model did a very'
+
+[10:33] [scene:talk]
+VISUAL: 
+AUDIO: 'good job. The woman is sitting near the jacuzzi. The necklace doesn\'t match perfectly, but the shoes match. And notice, the woman is also holding the bag. Most important part is the'
+
+[10:46] [scene:talk]
+VISUAL: 
+AUDIO: 'purse looks physically correct. The posture, perspective, and other details also look much better. So, yes, this new update has done a very good job. And these are the new features'
+
+[10:58] [scene:talk]
+VISUAL: 
+AUDIO: 'you can try yourself, and do not [clears throat] forget to share your experience in the comments below. So, that\'s all for today\'s video. If you like the content, please like, share, and subscribe us. Thank you. Bye-bye.'

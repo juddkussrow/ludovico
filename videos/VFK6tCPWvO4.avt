@@ -1,0 +1,304 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: 🟠 Free Local AI Character Dataset Generator: Krea 2, Qwen Edit & Flux 2 Klein (ComfyUI Deep Dive)
+channel: @octopusinc_
+duration: 15:44
+source: https://www.youtube.com/watch?v=VFK6tCPWvO4
+upload_date: 20260727
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:02] [scene:talk]
+VISUAL: 
+AUDIO: 'Hey everyone, welcome back. Today, I am publishing my 2-week research results on creating consistent AI characters. This was incredibly time-consuming, but the setup is rock-solid and completely free and local.'
+
+[00:14] [scene:talk]
+VISUAL: 
+AUDIO: 'The ultimate goal was to find a reliable, local workflow to generate hyper-consistent characters from a single reference photo or AI image, and then curate those outputs into a high-quality data set for LoRA training.'
+
+[00:26] [scene:talk]
+VISUAL: 
+AUDIO: 'In this video, we are putting four heavy hitters to the test. Crea 2, Qwen-Image-Edit-2509, Qwen-Image-Edit-2511, and Flux 2 klein 9b.'
+
+[00:38] [scene:talk]
+VISUAL: 
+AUDIO: 'I have fine-tuned each model to play directly to its specific strengths. As the icing on the cake, I am also including two distinct ways to reliably enhance skin texture and completely'
+
+[00:51] [scene:talk]
+VISUAL: 
+AUDIO: 'eliminate the fake plastic skin look. It is quick, easy, and almost no one is talking about it. Let us dive into the workflows and distill hours of experimentation into actionable steps.'
+
+[01:04] [scene:talk]
+VISUAL: 
+AUDIO: 'We start with the source generator workflow, Crea 2 generate. In today\'s landscape, Crea 2 holds the crown for speed and quality, outperforming Z Image Turbo in key visual aspects. The setup'
+
+[01:16] [scene:talk]
+VISUAL: 
+AUDIO: 'is remarkably straightforward. First, we generate natively at 2048 by 2048 because Crea 2 handles this resolution beautifully with superior fidelity.'
+
+[01:28] [scene:talk]
+VISUAL: 
+AUDIO: 'Second, we generate a structured multi-angle character sheet right in the prompt. A three-panel grid featuring a front close-up on the top left, a half-body at 45° on the bottom left, and a full-body shot on the right.'
+
+[01:41] [scene:talk]
+VISUAL: 
+AUDIO: 'In my testing, Z Image Turbo failed to keep a clean, consistent grid layout, which is why Crea 2 is our go-to here. At eight steps and a 1.0 CFG, it generates instantly. For the sampler,'
+
+[01:55] [scene:talk]
+VISUAL: 
+AUDIO: 'ERSD is preferred, though standard Euler works fine, too. Generating all three poses inside a single seed guarantees natural character consistency. To ensure standard lower our training quality,'
+
+[02:08] [scene:talk]
+VISUAL: 
+AUDIO: 'each tile size is kept at a minimum of 1,024 pixels as a result of this method. For today\'s target character, we are'
+
+[02:22] [scene:talk]
+VISUAL: 
+AUDIO: 'creating an East Asian female with an hourglass frame, glossy raven black hair, intense dark eyes, and dark tortoise shell glasses. Once we generate the space grid, we move'
+
+[02:36] [scene:talk]
+VISUAL: 
+AUDIO: 'over to the second workflow, the main data set generator. At the top of the workflow, you will find direct links to all required base models and lower res. In the input group, we crop our initial'
+
+[02:50] [scene:talk]
+VISUAL: 
+AUDIO: 'character sheet into three distinct reference inputs. Face, medium portrait, and full body. Combined with the original grid, we have four distinct anchor points to drive our downstream generations.'
+
+[03:02] [scene:talk]
+VISUAL: 
+AUDIO: 'Moving down, we have our prompt nodes. There are 20 dedicated face prompts focusing on profile shots and specific angles. 12 lifestyle prompts framing the'
+
+[03:17] [scene:talk]
+VISUAL: 
+AUDIO: 'character in real-world environments like rainy city streets. Eight basic camera angles. And a complete 64 angle matrix for full spatial coverage.'
+
+[03:30] [scene:talk]
+VISUAL: 
+AUDIO: 'These are automatically formatted with the necessary prefix tokens like next scene or SKS for lower activation. Everything is laid out directly on'
+
+[03:42] [scene:talk]
+VISUAL: 
+AUDIO: 'screen. As you can see when I move this prompt node out of the way, there are no hidden tricks or gated functional nodes. What you see is what you get. Now let us execute the generations.'
+
+[03:54] [scene:talk]
+VISUAL: 
+AUDIO: 'First up is QN edit 2509. We can feed it either our cropped portrait or the full grid. The critical design logic across this entire suite is scaling the input image up to a 2'
+
+[04:07] [scene:talk]
+VISUAL: 
+AUDIO: 'megapixel latent space. Because standard VAEs encode latents down to 1/8 of the original input size, starting with a large latent is vital for preserving delicate facial features.'
+
+[04:19] [scene:talk]
+VISUAL: 
+AUDIO: 'We keep outputs around 1 megapixel using the built-in resolution selector to toggle between 2 by 3, 3 by 2, and square ratios to give the training data set necessary variance.'
+
+[04:31] [scene:talk]
+VISUAL: 
+AUDIO: 'We load our multiple angle and neck seam low res with an optional skin low res toggle depending on how much texture your base image needs. Standard execution is CFG 1.0, four steps, seed'
+
+[04:43] [scene:talk]
+VISUAL: 
+AUDIO: 'zero, and Euler sampling. Running this instantly gives us eight precise camera angles. To the right, we pass the raw outputs into our automated'
+
+[04:57] [scene:talk]
+VISUAL: 
+AUDIO: 'validation group. Here, our face analysis model measures the exact cosine distance between the generated face and our reference frame. It formats the similarity score into the output file name automatically.'
+
+[05:10] [scene:talk]
+VISUAL: 
+AUDIO: 'When you open your comfy UI output directory, every single render is neatly sorted by its mathematical similarity'
+
+[05:22] [scene:talk]
+VISUAL: 
+AUDIO: 'score. Evaluating the eight angle run, the cosine distance scores hover predictably between 0.4 and 0.6. Low angles and'
+
+[05:35] [scene:talk]
+VISUAL: 
+AUDIO: 'extreme distance shots yield slightly lower scores because the face occupies fewer pixels. But the structural character continuity remains solid.'
+
+[05:48] [scene:talk]
+VISUAL: 
+AUDIO: 'When we run the exact same workflow using the full three panel grid as the'
+
+[06:02] [scene:talk]
+VISUAL: 
+AUDIO: 'reference input instead of a single portrait, the scores improve dramatically into the 0.4 range across the board. Models like Q and Edit and Flux 2 Klein natively understand character sheets when provided as a'
+
+[06:15] [scene:talk]
+VISUAL: 
+AUDIO: 'complete reference frame, and you should leverage this whenever possible. Next, we run our 20 targeted face prompts through Q and Edit 2509 using the close-up face input.'
+
+[06:29] [scene:talk]
+VISUAL: 
+AUDIO: 'In under 3 minutes, we get 20 high-resolution portrait variations with'
+
+[06:42] [scene:talk]
+VISUAL: 
+AUDIO: 'exceptional likeness scores ranging between 0.2 and 0.5. A smart LoRA training methodology is to train a face-focused LoRA first, use that LoRA to generate high-fidelity'
+
+[06:56] [scene:talk]
+VISUAL: 
+AUDIO: 'full-body shots, and then train a comprehensive final model. This group streamlines that initial phase. We then switch to the 12 lifestyle prompts using the full grid reference to'
+
+[07:09] [scene:talk]
+VISUAL: 
+AUDIO: 'maximize consistency. Running a 2x3 portrait aspect ratio generates 12 rich, environment-heavy'
+
+[07:23] [scene:talk]
+VISUAL: 
+AUDIO: 'full-body images well under our 0.68 cosine distance threshold. Rerunning the exact same batch at a 3x2'
+
+[07:35] [scene:talk]
+VISUAL: 
+AUDIO: 'landscape aspect ratio adds necessary environmental and pose diversity while holding core identity steady. Moving into QN edit 2511 territory, we'
+
+[07:51] [scene:talk]
+VISUAL: 
+AUDIO: 'switch to a 360° angle LoRA specifically trained for this updated model base. We feed the full body crop and render out 64 angles around the subject.'
+
+[08:04] [scene:talk]
+VISUAL: 
+AUDIO: 'The objective here is to capture complete body proportions, back details, and full anatomical structure for our LoRA to learn.'
+
+[08:17] [scene:talk]
+VISUAL: 
+AUDIO: 'Pro tip, set start index to your targeted starting prompt and max rows to'
+
+[08:29] [scene:talk]
+VISUAL: 
+AUDIO: 'four when testing, so you can evaluate prompt quality quickly without rendering all 64 shots at once. We then duplicate the setup using Flux 2'
+
+[08:42] [scene:talk]
+VISUAL: 
+AUDIO: 'Klein 9B for the 64 angle grid. Again, we feed the large 2 megapixel encoded latent of our three image character sheet, so the model fully processes the subject\'s anatomy before sampling.'
+
+[08:55] [scene:talk]
+VISUAL: 
+AUDIO: 'It is worth noting a critical technical detail here. The Flux 2 Klein VAE strictly encodes and decodes images at multiples of 16, whereas QN image edit operates on multiples of eight.'
+
+[09:07] [scene:talk]
+VISUAL: 
+AUDIO: 'Because of this stricter requirement, we adjust our latent resolution setting to a multiple of 16 right here to ensure optimal pixel alignment and prevent quality degradation. At four steps and a 1.0 CFG, the'
+
+[09:20] [scene:talk]
+VISUAL: 
+AUDIO: 'generation speed is blisteringly fast. In my testing, Flux 2 Klein displays significantly more freedom and creative variants in its generations, meaning the'
+
+[09:33] [scene:talk]
+VISUAL: 
+AUDIO: 'outputs can range from incredibly detailed to somewhat off-target. However, having access to such a massive and diverse pool of generated images is a massive advantage when picking top-tier frames.'
+
+[09:46] [scene:talk]
+VISUAL: 
+AUDIO: 'Finally, let us test the newest addition to our tool set. A community-driven version of Creal 2 specifically adapted for image editing tasks.'
+
+[09:58] [scene:talk]
+VISUAL: 
+AUDIO: 'Setting this up is completely painless. You simply get clone the repository directly into your custom nodes folder. It utilizes a clean custom node paired'
+
+[10:10] [scene:talk]
+VISUAL: 
+AUDIO: 'with a specialized editing Laura, which we can figure to 768 grounding pixels and a 4.0 reference boost. When we feed in our original base face'
+
+[10:23] [scene:talk]
+VISUAL: 
+AUDIO: 'reference and execute our lifestyle prompt batch, the face analysis scores land consistently between 0.2 and 0.5. In terms of raw facial preservation and'
+
+[10:37] [scene:talk]
+VISUAL: 
+AUDIO: 'holding identity, it noticeably outperforms both QN and Flux, making it an absolute powerhouse for maintaining character fidelity across tricky environment changes. Now for post-production. Let us clear'
+
+[11:00] [scene:talk]
+VISUAL: 
+AUDIO: 'the slate by feeding in a fresh input image and disabling all extra Laura\'s for QN edit 2509. Standard raw four-step QN image edit'
+
+[11:13] [scene:talk]
+VISUAL: 
+AUDIO: 'turbo outputs often retain an artificial plastic skin sheen, which is easily one of the most common complaints in AI image generation. If you compare the raw QN edit output directly to our original'
+
+[11:25] [scene:talk]
+VISUAL: 
+AUDIO: 'Creal 2 reference input, you will notice the original Creal 2 render possesses far more organic skin 2 render possesses far more organic skin tones and realistic'
+
+[11:38] [scene:talk]
+VISUAL: 
+AUDIO: 'To solve this disparity, our post-production workflow gives you two straightforward solutions. Create 2 image-to-image refinement and Flux 2 Klein image editing.'
+
+[11:50] [scene:talk]
+VISUAL: 
+AUDIO: 'Method 1 utilizes Create 2 image-to-image with a very subtle denoise strength between 0.2 and 0.4. Feel free to experiment with different'
+
+[12:02] [scene:talk]
+VISUAL: 
+AUDIO: 'samplers like Euler SD or switch over to a beta scheduler to fine-tune the noise pattern. This subtle pass injects authentic pore detail and fine texture right back into the skin without shifting the underlying'
+
+[12:14] [scene:talk]
+VISUAL: 
+AUDIO: 'facial structure. Method 2 leverages Flux 2 Klein 9B. It starts with an empty latent paired with a dead simple text prompt. Improve the realism of the image. To make this work'
+
+[12:27] [scene:talk]
+VISUAL: 
+AUDIO: 'seamlessly, we use a clever architectural trick where we encode and then decode the input image first. This ensures the latent matches Flux 2 Klein\'s native resolution requirements'
+
+[12:39] [scene:talk]
+VISUAL: 
+AUDIO: 'perfectly before running the sampler. Looking at the before and after, you get an exact geometric pixel match while instantly stripping away rendering'
+
+[12:51] [scene:talk]
+VISUAL: 
+AUDIO: 'artifacts and restoring natural skin textures. Both methods yield phenomenal results, so you can easily pick whichever'
+
+[13:03] [scene:talk]
+VISUAL: 
+AUDIO: 'approach fits your specific scene best. To wrap up the data set pipeline, we run the finalized images through our automated Florence 2 captioning node,'
+
+[13:15] [scene:talk]
+VISUAL: 
+AUDIO: 'which writes corresponding text files alongside each image, fully prepared for trainer ingestion. If you want a complete breakdown of how to fine-tune that tagging logic, make sure to check out our previous videos covering the'
+
+[13:28] [scene:talk]
+VISUAL: 
+AUDIO: 'automated captioning setup in detail. At this point, our ComfyUI output directory is packed with a raw data set of over 150 images. To summarize the main data set generator'
+
+[13:40] [scene:talk]
+VISUAL: 
+AUDIO: 'process we just walked through, it is important to remember that not every single output will be flawless. You will get some absolute gems alongside frames that completely miss the mark. Building an elite lower training data set'
+
+[13:54] [scene:talk]
+VISUAL: 
+AUDIO: 'naturally requires a bit of manual curation, but putting in that extra effort pays off massively because a well-curated data set can be recycled to train or fine-tune practically any base model, whether that is Z image turbo,'
+
+[14:06] [scene:talk]
+VISUAL: 
+AUDIO: 'Crea 2, or Qwen. To make this filtering process as effortless as possible, we built in our automated face resemblance scoring system to help sort your results mathematically.'
+
+[14:19] [scene:talk]
+VISUAL: 
+AUDIO: 'Just keep in mind that facial similarity is only one piece of the puzzle, so always use your own eye as the final judge of quality. Now, I want to make an honest, heartfelt'
+
+[14:36] [scene:talk]
+VISUAL: 
+AUDIO: 'plea. We haven\'t hidden a single thing in this video. Every node, connection, and setting is right there on screen. If you pause, follow along, and build it step by step, you can recreate this entire workflow for free.'
+
+[14:49] [scene:talk]
+VISUAL: 
+AUDIO: 'I genuinely mean that. I spent two solid weeks testing, debugging, and refining this stack so you wouldn\'t have to waste time on broken setups. If you would like to skip the manual'
+
+[15:02] [scene:talk]
+VISUAL: 
+AUDIO: 'labor, you can grab the four workflow bundle on our Ko-fi page. Includes all the prompts, presets, and setup documentation. Plus two extra perks. The verified node'
+
+[15:15] [scene:talk]
+VISUAL: 
+AUDIO: 'role on our Discord server, which unlocks access to our private technical channels and exclusive discounts on all our future mega workflows. You are essentially paying for the convenience of saving dozens of hours'
+
+[15:27] [scene:talk]
+VISUAL: 
+AUDIO: 'while directly supporting our mission to keep delivering fast, zero filler, open source content. And that\'s the node. All open source, no filler. Thank you for watching. Grab the'
+
+[15:39] [scene:talk]
+VISUAL: 
+AUDIO: 'file, keep creating.'

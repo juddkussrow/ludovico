@@ -1,0 +1,220 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Master JoyAI Image Edit: Pixel-Perfect Editing in ComfyUI
+channel: @octopusinc_
+duration: 11:09
+source: https://www.youtube.com/watch?v=4TAfDVegaIk
+upload_date: 20260722
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:intro]
+VISUAL: A camera rotating in 3D space.
+AUDIO: 'Today I’m going to show you how to use a new model inside ComfyUI called JoyAI Image Edit This is actually two models developed by JD One is specifically for single-image editing and the other is specifically for multi-image reference generation At the same time'
+
+[00:15] [scene:talk]
+VISUAL: 
+AUDIO: 'I’ll also give you an optimized workflow that thoroughly solves the pixel alignment problem in single-image editing Let’s look at this example below This is also a vertical image We directly edit it'
+
+[00:27] [scene:intro]
+VISUAL: A woman in a dress, with a hand emoji pointing to her.
+AUDIO: 'which means changing the outfit Because of the resolution issue these two images are actually not aligned To make it easier to see I added a white border on the right side You’ll notice that after we regenerate the image'
+
+[00:39] [scene:talk]
+VISUAL: 
+AUDIO: 'the white border disappears But after using our optimized workflow you’ll see that the overall pixels are fully aligned and the white border on the right is still there As I just mentioned'
+
+[00:52] [scene:talk]
+VISUAL: 
+AUDIO: 'JoyAI Image Edit is divided into two models: Single and Plus It has two sets of diffusion models and text encoders and these two sets must be paired correctly But they share the Wan two point one VAE'
+
+[01:04] [scene:ui]
+VISUAL: RunningHub website interface, showing various AI apps and models.
+AUDIO: 'In this video we use a new optimized version which is an INT8 ConvRot version Also, pay attention: if you want to use the extended nodes we just mentioned you must update your ComfyUI to the latest version'
+
+[01:17] [scene:talk]
+VISUAL: 
+AUDIO: 'For easier demonstration I also built the workflow on RunningHub In the ComfyUI space RunningHub is a very solid online workflow platform because whenever a new model or new extension appears it follows up right away'
+
+[01:32] [scene:ui]
+VISUAL: ComfyUI node graph, showing a context menu for "TextEncode.JoyImageEdit".
+AUDIO: 'RunningHub also provides an online communication platform for ComfyUI creators where you can find a lot of creative inspiration and example workflows Next let’s first look at the simplest single-image editing workflow'
+
+[01:44] [scene:talk]
+VISUAL: 
+AUDIO: 'It sends our reference image and prompt together into a dedicated multimodal encoding node The final canvas is determined by `EmptySD3LatentImage`. Pay attention here:'
+
+[01:57] [scene:talk]
+VISUAL: 
+AUDIO: 'in this workflow the latent can have a different aspect ratio from the original image At that point the model may reconstruct the overall composition Because this workflow is for image editing we need to remember four things when writing prompts'
+
+[02:10] [scene:demo]
+VISUAL: A woman in a blue coat in an elevator, demonstrating image editing.
+AUDIO: 'First specify the object you want to modify Second clearly describe the target result after modification Third explain as much as possible what must be preserved Fourth'
+
+[02:24] [scene:talk]
+VISUAL: 
+AUDIO: 'clearly define the boundary of the edit For example if we are changing clothes we can first write what clothing to change into then describe the material and structure of that clothing Finally, we lock the face'
+
+[02:36] [scene:demo]
+VISUAL: A woman in a gray coat against a tiled wall, demonstrating object removal.
+AUDIO: 'hairstyle and pose so they stay unchanged Then add one final sentence: only replace the clothing A prompt like this is much more meaningful for the model Next, let’s do some basic tests'
+
+[02:48] [scene:talk]
+VISUAL: 
+AUDIO: 'For these tests I’ll try to make them a little more interesting The first one is removing a person But pay attention: this is not just a simple person removal In the original image the person blocks a regular tiled wall'
+
+[03:01] [scene:talk]
+VISUAL: 
+AUDIO: 'There is also a large shadow on the floor This makes it very interesting First the background has a tiled wall made of red and blue diamond patterns which is not easy to handle when removing a person Also'
+
+[03:15] [scene:on-screen text]
+VISUAL: Prompt text for removing a woman and reconstructing the background.
+AUDIO: 'you’ll notice that the person casts shadows on both the tiled wall and the floor So our prompt cannot just say remove the person I need to explicitly say to remove the body clothing shoes'
+
+[03:27] [scene:talk]
+VISUAL: 
+AUDIO: 'hair, and shadows Then I need to ask it to restore the red and blue diamond pattern and keep the tile seams and the wall-floor boundary continuous What is the key point here? When removing an object you also need to remove related elements'
+
+[03:40] [scene:talk]
+VISUAL: 
+AUDIO: 'And after removal you need to tell the model what the final state should look like Next let’s look at a very interesting example: material replacement Here, we have a lamp Its material is amber resin'
+
+[03:53] [scene:demo]
+VISUAL: A mushroom-shaped lamp, demonstrating material replacement.
+AUDIO: 'Now I want to change it into translucent jade but I want to lock the overall silhouette which is a mushroom-like shape Let’s look at the overall result The consistency is also very good Apart from changes in the overall appearance and material texture'
+
+[04:06] [scene:talk]
+VISUAL: 
+AUDIO: 'we can see that the bulb, switch and some details remain consistent with the original image The next example is also a typical use case We need to move an object'
+
+[04:18] [scene:demo]
+VISUAL: A teapot and teacups, demonstrating object movement.
+AUDIO: 'Here we have a teapot and a teacup Now I want to move the teapot to a new position To make that position clearer we use a red box to mark it So the core editing sentence becomes: move this teapot to the position inside the red box'
+
+[04:30] [scene:talk]
+VISUAL: 
+AUDIO: 'and remove the red border in the final image You’ll notice that the overall movement result is very good But pay attention: the size of the teapot changes slightly If you care a lot about the size'
+
+[04:43] [scene:talk]
+VISUAL: 
+AUDIO: 'you can emphasize in the prompt that the edited object’s proportion or size should remain the same as before the edit Next let’s look at one of the strongest abilities of the Single model We call it new viewpoints'
+
+[04:56] [scene:result]
+VISUAL: Split screen showing before and after of a camera rotation.
+AUDIO: 'Here, we have a vintage camera We will rotate the whole camera angle and generate views from eight directions At the same time we need to lock the camera body material lens, strap, buttons'
+
+[05:09] [scene:talk]
+VISUAL: 
+AUDIO: 'background, and camera distance When switching the angle you only need to slightly modify the prompt For the eight directions the generated results are almost all fine But pay attention:'
+
+[05:21] [scene:talk]
+VISUAL: 
+AUDIO: 'the right-side view has a small surprise It generates two red buttons Next let’s look at a relatively complex scene This is a greenhouse library scene In the prompt, we can use Yaw Pitch, and Zoom'
+
+[05:34] [scene:result]
+VISUAL: A greenhouse library scene, demonstrating camera angle changes.
+AUDIO: 'You can understand these as horizontal angle offset vertical angle offset and zoom Then we need to add one more sentence: keep the whole three-D scene consistent You’ll notice that the changes in upward and downward angle are quite clear But for left and right'
+
+[05:50] [scene:talk]
+VISUAL: 
+AUDIO: 'it feels more like recomposition Things like the stairs, pool and character position may change In one group the character is even cropped out So the Single model is very strong at changing viewpoints but sometimes its consistency can have issues'
+
+[06:04] [scene:ui]
+VISUAL: ComfyUI node graph, showing an "Output latent" node with width and height parameters.
+AUDIO: 'Next let’s look at whether this Single workflow has any problems Here is an image The original image is seven hundred thirty-six by eleven hundred four I deliberately added a white border on its right side'
+
+[06:17] [scene:talk]
+VISUAL: 
+AUDIO: 'In the official workflow the empty latent resolution is ten twenty-four by ten twenty-four So after direct sampling it generates a square image You’ll notice that the entire character and edge positions are redistributed'
+
+[06:30] [scene:demo]
+VISUAL: A woman in a dress, demonstrating pixel misalignment.
+AUDIO: 'This is what we mean by pixel misalignment Some people may ask: can I manually change the resolution? Yes, you can Because the model itself has reconstruction ability'
+
+[06:42] [scene:talk]
+VISUAL: 
+AUDIO: 'changing it to any resolution should basically work For example I can change it to seven hundred sixty-eight by twelve eighty Then you’ll see it becomes an image like this But it still does not align with the original image'
+
+[06:55] [scene:talk]
+VISUAL: 
+AUDIO: 'Very clearly the image becomes narrower and the white border disappears If we change it to ten eighty-eight by nineteen twenty more of the body appears but the pixels still do not align'
+
+[07:07] [scene:ui]
+VISUAL: ComfyUI node graph, showing the workflow for image editing.
+AUDIO: 'Now let’s look at how to keep the pixels aligned as much as possible First let’s look at the first method which is the simplest: preserving the original aspect ratio Our method is to scale the longest side to ten twenty-four'
+
+[07:19] [scene:talk]
+VISUAL: 
+AUDIO: 'and then let the empty latent use the real width and height after scaling This way, after scaling this image becomes roughly six hundred eighty-two by ten twenty-four It is still a vertical image'
+
+[07:34] [scene:talk]
+VISUAL: 
+AUDIO: 'not the ten twenty-four square image we saw earlier But pay attention: this is not fully aligned The white border on the right clearly still disappears If you want full alignment or strict alignment'
+
+[07:46] [scene:ui]
+VISUAL: ComfyUI node graph, zoomed in on the "Output latent" node.
+AUDIO: 'then I recommend using the method below First we do a proportional resize For the resize mode we use padding We pad it to ten twenty-four by ten twenty-four Then the empty latent is also ten twenty-four by ten twenty-four'
+
+[07:58] [scene:talk]
+VISUAL: 
+AUDIO: 'After generation is finished however many pixels we padded earlier we crop those pixels off precisely afterward This lets the model work inside a familiar square canvas'
+
+[08:10] [scene:ui]
+VISUAL: ComfyUI node graph, showing a multi-image composition workflow.
+AUDIO: 'while also restoring the original vertical boundary Can you see the white border on the far right? Its position is aligned with the original image again You’ll also notice that the character is not forcibly stretched'
+
+[08:23] [scene:talk]
+VISUAL: 
+AUDIO: 'This is the strict correspondence method I’m talking about Next, let’s talk about Plus The examples we can use are basically the common ones everyone knows so here I’ll focus on a few issues that are easy to run into'
+
+[08:36] [scene:talk]
+VISUAL: 
+AUDIO: 'As we mentioned earlier the main difference between Plus and Single is that the encoding node can connect multiple reference images The prompt must first explain the responsibility of each image For example'
+
+[08:51] [scene:demo]
+VISUAL: An empty concrete tunnel, demonstrating multi-image composition.
+AUDIO: 'Image One provides the character Image Two provides the clothing and Image Three provides the prop Now let’s look at a few cases In this case we have three images: a character a background, and a folding fan One is used as the character'
+
+[09:04] [scene:talk]
+VISUAL: 
+AUDIO: 'one as the environment and one as the prop Also pay attention that their resolutions are different Some are vertical images some are horizontal images and some are square images We can write a prompt that combines these three elements into the final image'
+
+[09:16] [scene:talk]
+VISUAL: 
+AUDIO: 'But pay attention: the character seems a little stretched The body and clothing feel like they have been recomposed a bit So I recommend using the same resolution as much as possible when using the Plus version That usually works better'
+
+[09:32] [scene:talk]
+VISUAL: 
+AUDIO: 'There is another thing everyone needs to pay attention to which is how you provide the reference images The key is the character and the background I recommend that when providing reference images you put the character and background into the same main image from the beginning'
+
+[09:44] [scene:talk]
+VISUAL: 
+AUDIO: 'This way the main image is responsible for identity pose, camera angle space, and lighting If we have a second image it can be responsible for clothing'
+
+[09:56] [scene:ui]
+VISUAL: ComfyUI node graph, showing a detailed prompt text box.
+AUDIO: 'The third image can be responsible for props In plain terms I do not recommend separating the character and background Otherwise it is very easy to get that pasted-on texture Prompt writing also has some rules'
+
+[10:10] [scene:talk]
+VISUAL: 
+AUDIO: 'For example, we say: only change the clothing let the character’s left hand hold the prop and keep the face standing position, composition and architectural structure from the main image unchanged In the result'
+
+[10:25] [scene:demo]
+VISUAL: A teapot and teacups, demonstrating object movement.
+AUDIO: 'you’ll notice that the relationship between the character and the overall environment is relatively stable The shawl jacket diagonal waist area pleated skirt and bronze trim all enter the image The brass frame'
+
+[10:39] [scene:talk]
+VISUAL: 
+AUDIO: 'transparent shell and amber droplets of the dew-drop lamp are also fully preserved Now let’s come back to these two models My suggestion is: if you are working with a single image use Single as much as possible'
+
+[10:51] [scene:talk]
+VISUAL: 
+AUDIO: 'Some people may say I’ll just use Plus and only upload one image Let me give you a simple example For the eight-angle camera view we mentioned earlier Single can do it but Plus may not be able to Because Plus focuses on multi-image reference not single-image editing'
+
+[11:03] [scene:talk]
+VISUAL: 
+AUDIO: 'Also pay attention to the workflow we provide that can strictly preserve image alignment Personally I think it is very valuable All right, that’s all for today What are you waiting for? Go try it yourself Follow me and become someone who truly understands AI'
