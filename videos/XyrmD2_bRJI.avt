@@ -1,0 +1,144 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: celld: Deno's Free Self-Hosted Durable Objects [85x Cheaper]
+channel: @octopusinc_
+duration: 06:59
+source: https://www.youtube.com/watch?v=XyrmD2_bRJI
+upload_date: 20260807
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: '10,000 durable objects cost about $4,50 a month on Cloudflare. Seld runs the exact same code on your own hardware for $49. It\'s a new open-source project from the Dino team, a Rust demon that embeds V8, speaks the real workers and durable'
+
+[00:13] [scene:talk]
+VISUAL: 
+AUDIO: 'objects, APIs, and coordinates a whole fleet with nothing but an S3 bucket. No control plane, no consensus protocol. Here\'s how it works and how to run it. Zeld calls itself self-hosted'
+
+[00:25] [scene:talk]
+VISUAL: 
+AUDIO: 'distributed durable objects and the pitch is exactly that direct. You take the workers and durable objects code you already wrote for Cloudflare and it runs unchanged on machines you control. State lives in an S3 compatible bucket you'
+
+[00:39] [scene:talk]
+VISUAL: 
+AUDIO: 'own. So there\'s no vendor holding your data. Under the hood, it\'s built from boring proven parts. V8 for execution, SQLite for storage, Tokyo for the runtime, and LTX Lightream\'s replication'
+
+[00:51] [scene:talk]
+VISUAL: 
+AUDIO: 'format. To stream every change into the bucket, a hibernated cell costs almost nothing and a busy one wakes in about 4 milliseconds. And the way nodes decide who owns which object with no'
+
+[01:05] [scene:talk]
+VISUAL: 
+AUDIO: 'coordinator anywhere is the cleverest trick in the whole design. I\'ll break it down in a minute. This ships from Denoland, the git hub or behind the Dino runtime. 234 public repositories under the banner uncomplicate JavaScript. The'
+
+[01:19] [scene:talk]
+VISUAL: 
+AUDIO: 'driving force is Ryan Dah, the creator of Node DS and Dino, who says he\'s been chipping away at this problem on and off for over a year. The breakthrough in his telling came when the team got serious'
+
+[01:31] [scene:talk]
+VISUAL: 
+AUDIO: 'about deterministic simulation testing, the technique Foundation DB and Tiger Beetle made famous, where you run the whole distributed system in a simulator and replay every failure until the bugs run out. That\'s the pedigree behind the'
+
+[01:43] [scene:talk]
+VISUAL: 
+AUDIO: 'reliability claims we\'re about to look at. Strip away the branding and Cel makes five concrete promises. Your existing workers and durable objects code runs without modification. Same APIs, same bundle from Wrangler. Every'
+
+[01:56] [scene:talk]
+VISUAL: 
+AUDIO: 'object is its own SQL light database addressed by name. So your app is sharted by construction instead of by heroic engineering. The S3 bucket is the single durable source of truth. Writes'
+
+[02:08] [scene:talk]
+VISUAL: 
+AUDIO: 'are acknowledged only after they\'re durable, a recovery point objective of zero, and the whole thing is Apache 2.0. So nothing stops you from running it in production commercially. The repo itself'
+
+[02:20] [scene:talk]
+VISUAL: 
+AUDIO: 'is pure rust and it comes with a delightfully old school quirk. Pull requests are disabled entirely. If you want to contribute, you email a git format patch to ray at dino.com kernel mailing list style. The maintainers say'
+
+[02:33] [scene:talk]
+VISUAL: 
+AUDIO: 'they want thoughtful patches, not driveby commits. The docs are unusually honest, too. There\'s a dedicated security page and a limitations page they ask you to read before operating a public fleet. 2,000 stars arrived in the'
+
+[02:45] [scene:talk]
+VISUAL: 
+AUDIO: 'first days and the issue tracker is already full of people asking the right hard questions. Six pieces make the system go. Each node embeds V8 and executes your Wrangler bundle directly.'
+
+[02:57] [scene:talk]
+VISUAL: 
+AUDIO: 'Each cell state is a real SQLite database on local disk. LTX streams every committed change up to the bucket, which is what makes migration and recovery possible. Peer-to-peer requests are HMAC authenticated, clockbounded,'
+
+[03:10] [scene:talk]
+VISUAL: 
+AUDIO: 'and replay protected using a fleet secret that itself lives in the bucket. Idle cells hibernate automatically down to almost zero cost. An optional pressure shedding uses resident cell watermarks to spread load when a node'
+
+[03:22] [scene:talk]
+VISUAL: 
+AUDIO: 'gets hot. Notice what\'s missing from this list. There\'s nouler service, no ETCD, no gossip layer, no operator pattern. The bucket does the coordinating and every node is identical and disposable, which is precisely what'
+
+[03:35] [scene:talk]
+VISUAL: 
+AUDIO: 'makes the whole thing operable by one person. Here\'s what code unchanged actually means. This is a bog standard durable object, a counter with persistent storage. The class shape, the state.s storage API, the fetch handler,'
+
+[03:47] [scene:talk]
+VISUAL: 
+AUDIO: 'all identical to what you deploy to Cloudflare today. Seld executes the same bundle Wrangler produces. So there\'s no fork of your code base, no SDK swap, no rewrite. If you\'ve been holding stateful'
+
+[03:59] [scene:talk]
+VISUAL: 
+AUDIO: 'logic out of durable objects because of lock and fear, this is the escape hatch that makes the pattern safe to bet on. Now the money chart. This is the managed durable object spill. As your fleet grows about 415s a month at 100 resident'
+
+[04:11] [scene:talk]
+VISUAL: 
+AUDIO: 'cells and it climbs linearly from there by 10,000 cells, you\'re staring at $41,500 a month. Seld\'s line barely moves. The same 10,000 cell fleet lands around 480 learns because you\'re paying'
+
+[04:25] [scene:talk]
+VISUAL: 
+AUDIO: 'for commodity VMS and S3 storage instead of per request platform pricing. That\'s the orders of magnitude cheaper at scale claim on the site and the math behind it is right there to check. And here\'s the'
+
+[04:38] [scene:talk]
+VISUAL: 
+AUDIO: 'payoff on that ownership question from the start. Distributed systems usually need raft, Paxos or control plane to agree on who owns what. Seld needs none of them. When a node wants to sell, it performs a compare and swap on the'
+
+[04:51] [scene:talk]
+VISUAL: 
+AUDIO: 'object store itself. S3\'s conditional rights become the lock. Win the swap, you own the cell. Lose it, you redirect to whoever won. Ownership is exact, global, and enforced by the bucket, the'
+
+[05:03] [scene:talk]
+VISUAL: 
+AUDIO: 'one component everyone already trusts. A dead node cells recover from replicated state in about 20 seconds with zero data loss. The readme says it best. Standing up a fleet is genuinely four commands.'
+
+[05:15] [scene:talk]
+VISUAL: 
+AUDIO: 'The install script drops a single static binary. CD deploy pushes your Wrangler bundle into the bucket. Starting a node is one invocation with a listen address and an advertise address. Point three machines at the same bucket and you have'
+
+[05:28] [scene:talk]
+VISUAL: 
+AUDIO: 'a distributed system and cell dagnose reads the fleet state straight out of the bucket. Which nodes are healthy? How many cells are resident? How many are hibernating? No YAML, no operators, no ATCD cluster to babysit before you'
+
+[05:41] [scene:talk]
+VISUAL: 
+AUDIO: 'migrate production. The honest caveats. This is a young project. The doc ship explicit security and limitations pages and the team asks you to read both before running a public fleet. Pure'
+
+[05:53] [scene:talk]
+VISUAL: 
+AUDIO: 'traffic is authenticated, but you are now the one operating the fleet. Patching nodes, sizing memory at roughly 4 megabytes per resident cell, and owning the buckets life cycle. The density math is friendly. About a'
+
+[06:06] [scene:talk]
+VISUAL: 
+AUDIO: 'thousand resident cells fit in an 8 GB node, but capacity planning is your job. Again, self-hosting trades a bill for responsibility, and Zeld is refreshingly upfront about that. The timing here is'
+
+[06:18] [scene:talk]
+VISUAL: 
+AUDIO: 'pointed. Cloudflare just spent a week making durable objects, the foundation of its agent story. Cloudflare OS, the computer preview, all of it sits on this primitive. Days later, the Deno team ships a portable Apache licensed'
+
+[06:31] [scene:talk]
+VISUAL: 
+AUDIO: 'implementation that runs the same code anywhere. That\'s healthy pressure. The pattern gets to win independently of the vendor with 54 forks already and Rust source you can actually read. Zelda is both a real deployment option today and'
+
+[06:45] [scene:talk]
+VISUAL: 
+AUDIO: 'the reference implementation that keeps everyone honest. The repo, cell.dev, and the docs are linked in the description. Subscribe to Prism Labs for weekly deep dives on developer infrastructure.'
