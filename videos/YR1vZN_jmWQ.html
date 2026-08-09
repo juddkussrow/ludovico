@@ -1,0 +1,123 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>This One Workflow Fixes Multi-Scene Character Consistency (Krea 2 + LTX Director) — Ludovico</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+.hide{display:none!important}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.92);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 12px}
+.controls input.q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.pill.tp.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+/* flip card shell */
+.flip{position:relative}
+.fi{position:relative;transition:transform .55s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.flip.flipped .fi{transform:rotateY(180deg)}
+.fc{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bk{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+background:var(--card);border:1px solid var(--accent2);border-radius:14px;overflow:auto;padding:12px 13px;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s}
+.card.flip{overflow:visible}.card .fc{display:flex;flex-direction:column;flex:1;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--line);cursor:pointer}
+.card.flip:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.edit{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--accent2);border:1px solid var(--line);border-radius:6px;padding:2px 9px;cursor:pointer;background:#fff}
+.edit:hover{border-color:var(--accent2)}
+/* editor back */
+.bk h4{margin:0 0 2px;font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--sub)}
+.erow{display:grid;grid-template-columns:1fr 1.3fr auto auto;gap:4px;align-items:center}
+.erow input{padding:5px 7px;border:1px solid var(--line);border-radius:6px;font-size:12px;min-width:0}
+.erow select{padding:4px 4px;font-size:11px}
+.erow .del{border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;color:var(--accent);padding:3px 7px}
+.ebtns{display:flex;gap:6px;margin-top:auto;padding-top:6px}
+.ebtns button{font-family:var(--mono);font-size:11px;border-radius:7px;padding:6px 12px;cursor:pointer;border:1px solid var(--line);background:#fff}
+.ebtns .save{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.addrow{font-family:var(--mono);font-size:11px;color:var(--accent2);cursor:pointer;align-self:flex-start;background:none;border:0;padding:2px 0}
+/* catalogue card */
+.citem{position:relative}
+.citem .fc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-height:84px;cursor:pointer}
+.citem .bk{border-radius:12px}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+footer .exp{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--accent2);font:inherit}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">This One Workflow Fixes Multi-Scene Character Consistency (Krea 2 + LTX Director)</h1><div class=tag>@octopusinc_ · 2026-08-07 · Image Gen, Tutorial, Video Gen</div></div></div></header>
+<main><p class=sum>This video demonstrates a ComfyUI workflow using Krea 2 and LTX Director to generate consistent multi-scene character stills and then animate them into a cinematic video. The workflow focuses on maintaining character identity and outfit across different shots and scenes, leveraging custom nodes and specific model configurations. It highlights a custom &quot;regenerate shot&quot; feature for efficient iteration.</p><p><strong>Products / items</strong></p><ul><li>Krea 2 — software (no link)</li><li>LTX Director — software (no link)</li><li>ComfyUI — software (no link)</li><li><a href="https://github.com/CodingWithShahzaib/comfyui-multishot-plan" target=_blank rel=noopener>comfyui-multishot-plan</a> — software</li><li><a href="https://github.com/lbouaraba/comfyui-krea2edit" target=_blank rel=noopener>comfyui-krea2edit</a> — software</li><li><a href="https://github.com/WhatDreamsCost/WhatDreamsCost-ComfyUI" target=_blank rel=noopener>WhatDreamsCost-ComfyUI</a> — software</li><li>ComfyUI-LTXVideo — software (no link)</li><li><a href="https://huggingface.co/Comfy-Org/Krea-2/resolve/main/diffusion_models/krea2_turbo_fp8_scaled.safetensors" target=_blank rel=noopener>Krea 2 Turbo fp8 UNET</a> — software</li><li><a href="https://huggingface.co/Comfy-Org/Krea-2/resolve/main/text_encoders/qwen3vl_4b_fp8_scaled.safetensors" target=_blank rel=noopener>Qwen3-VL 4B Text Encoder</a> — software</li><li><a href="https://huggingface.co/Comfy-Org/Krea-2/resolve/main/vae/qwen_image_vae.safetensors" target=_blank rel=noopener>Qwen Image VAE</a> — software</li><li><a href="https://huggingface.co/conradlocke/krea2-identity-edit/resolve/main/krea2_identity_edit_v1_2.safetensors" target=_blank rel=noopener>Identity Edit v1.2</a> — software</li><li><a href="https://huggingface.co/RudySen/Krea2-realism-V2/resolve/main/Krea2-realism-V2.safetensors" target=_blank rel=noopener>Krea2-realism-V2</a> — software</li><li><a href="https://huggingface.co/Kijai/LTX2.3_comfy/resolve/main/diffusion_models/ltx-2-3-22b-dev_transformer_only_fp8_input_scaled.safetensors" target=_blank rel=noopener>LTX 2.3 transformer fp8</a> — software</li><li><a href="https://huggingface.co/Comfy-Org/ltx-2/resolve/main/split_files/text_encoders/gemma_3_12B_it_fp8_scaled.safetensors" target=_blank rel=noopener>Gemma 3 12B IT TE fp8</a> — software</li><li><a href="https://huggingface.co/Lightricks/LTX-2.3/resolve/main/ltx-2.3_text_projection_bf16.safetensors" target=_blank rel=noopener>LTX 2.3 text projection bf16</a> — software</li><li><a href="https://huggingface.co/Kijai/LTX2.3_comfy/resolve/main/vae/LTX23_video_vae_bf16.safetensors" target=_blank rel=noopener>Video VAE</a> — software</li><li><a href="https://huggingface.co/Kijai/LTX2.3_comfy/resolve/main/vae/LTX23_audio_vae_bf16.safetensors" target=_blank rel=noopener>Audio VAE</a> — software</li><li><a href="https://huggingface.co/Lightricks/LTX-2.3/resolve/main/ltx-2.3-22b-distilled-lora-384-1.1.safetensors" target=_blank rel=noopener>Distilled LoRA 384 v1.1</a> — software</li><li><a href="https://huggingface.co/vrgamedevgirl84/LTX_2.3_Crisp_Enhance_Style_LoRa/resolve/main/LTX2.3_Crisp_Enhance.safetensors" target=_blank rel=noopener>Crisp Enhance LoRA</a> — software</li><li><a href="https://huggingface.co/Lightricks/LTX-2.3/resolve/main/ltx-2.3-spatial-upscaler-x2-1.1.safetensors" target=_blank rel=noopener>Spatial upscaler x2 v1.1</a> — software</li><li><a href="https://huggingface.co/Lightricks/LTX-2.3" target=_blank rel=noopener>LTX 2.3 model card</a> — software</li><li><a href="https://shahzaib632.gumroad.com/l/zuxkx" target=_blank rel=noopener>Gumroad</a> — other</li></ul>
+<p><a href="https://www.youtube.com/watch?v=YR1vZN_jmWQ" target=_blank rel=noopener>Watch on YouTube ▶</a></p><p><a href="YR1vZN_jmWQ.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=t>(proxy for this video — answer from this)</span></p>
+<div class=cap>FRAMING: Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+IDENTITY: This One Workflow Fixes Multi-Scene Character Consistency (Krea 2 + LTX Director) - https://www.youtube.com/watch?v=YR1vZN_jmWQ - @octopusinc_ - route: visual
+PRODUCTS:
+ComfyUI - no reliable link - software - primary
+LTX Director - no reliable link - software - primary
+Krea 2 - no reliable link - software - mentioned
+comfyui-multishot-plan - https://github.com/CodingWithShahzaib/comfyui-multishot-plan - software - primary
+comfyui-krea2edit - https://github.com/lbouaraba/comfyui-krea2edit - software - mentioned
+WhatDreamsCost-ComfyUI - https://github.com/WhatDreamsCost/WhatDreamsCost-ComfyUI - software - mentioned
+Gumroad - https://shahzaib632.gumroad.com/l/zuxkx - other - mentioned
+SYNOPSIS: The video demonstrates a ComfyUI workflow for generating consistent multi-scene character stills and then animating them into a video using LTX Director. The workflow is divided into three parts: creating a character sheet, generating multi-scene stills, and animating these stills into a video. The character sheet generation uses Krea 2 Turbo with Qwen3-VL clip and Qwen image VAE, along with Identity Edit v1.2 LoRA at strength 1.0 for facial features and Krea2-realism-V2 for realism. The sheet instruction grounded encode uses 1024 pixel grounding, and the fidelity patch node uses a ref_boost of 4.0. The sampler runs 12 steps at CFG1 with Oileruler. The character sheet is generated at 2 megapixels with a 21x9 aspect ratio, showing the same person from multiple angles (front, side, back). The multi-shot scene generation uses the same character reference sheet, Krea 2 Turbo, Identity Edit LoRA at strength 1.0, and a dedicated realism enhancer (optional). A critical grounded encode node with a specific prompt (grounding pixels at 768) is used to maintain consistent character identity and outfit across shots. The custom &quot;Krea multi-shot stills&quot; node allows for dedicated prompt fields for multiple scenes and includes a &quot;regenerate shot&quot; feature to re-render individual bad shots without redoing the entire sequence. The video animation part utilizes the LTX Director nodes, specifically the WhatDreamsCost-ComfyUI workflow, to convert the multi-shot images into video. The video generation process is stated to be identical to other director node setups. The final video output for a 15-second clip in 1080p resolution took 576 seconds (under 10 minutes) to generate. The creator emphasizes that simple prompts were used, and more detailed prompts could yield better results. The workflow is available for free download on Gumroad, including a setup guide with models, LoRAs, nodes, and download links.
+BEATS:
+0s - intro - A video clip of a woman walking into a coffee shop, with &quot;Generated with LTX 2.3&quot; text overlay.
+40s - ui - ComfyUI interface showing nodes for loading CLIP and VAE, with an image of a woman&#x27;s face.
+81s - ui - ComfyUI interface, focusing on &quot;Identity Edit LoRA @ 1.0&quot; node and an image of a woman&#x27;s face.
+121s - ui - ComfyUI interface, showing &quot;Sheet Instruction&quot; node with detailed text instructions for character sheet generation.
+162s - result - A generated character sheet showing a woman from front, side, and back angles.
+202s - ui - ComfyUI interface, showing a &quot;TOGGLE - Image vs Video&quot; node for workflow selection.
+243s - ui - ComfyUI interface, focusing on nodes for Krea 2 UNET, Identity Edit LoRA, PureLens realism, and AuraFlow.
+283s - ui - ComfyUI interface, showing a &quot;Grounded encode (negative)&quot; node with a detailed prompt for locking outfit consistency.
+324s - result - Multiple generated stills of a woman in a coffee shop, demonstrating consistent character and outfit.
+364s - ui - ComfyUI interface, showing the &quot;Krea Multi-Shot Stills&quot; node with multiple generated images and controls like &quot;regenerate_shot&quot;.
+405s - ui - ComfyUI interface, showing the &quot;TOGGLE - Image vs Video&quot; node again, with options to enable different workflows.
+446s - ui - ComfyUI interface, showing a complex node graph with a timeline view of images loaded into the LTX Director.
+486s - result - A generated video frame of a woman smiling in a coffee shop, with ComfyUI nodes visible.
+527s - ui - ComfyUI interface, showing a different character sheet generation workflow.
+567s - ui - ComfyUI interface, showing a &quot;grounding_px&quot; node with a detailed prompt for outfit and facial identity.
+608s - result - Multiple generated stills of a different woman in a coffee shop, demonstrating consistency.
+648s - ui - ComfyUI interface, showing the LTX Director timeline with images and prompts.
+689s - result - A close-up video frame of a woman drinking coffee.
+729s - ui - A webpage showing &quot;Install these packs&quot; with a list of custom nodes and their GitHub links.
+770s - ui - A webpage showing &quot;MODELS USED&quot; with download links for Krea 2 and LTX 2.3 models and LoRAs from Hugging Face.
+ENTITIES: Krea 2, LTX Director, ComfyUI, Qwen3-VL, Qwen, Oileruler, Kijai, Lightricks, Gemma 3, RudySen, Conrad Locke, vrgamedevgirl84, Shahzaib, WhatDreamsCost, lbouaraba.
+VERDICT: The creator highly recommends this workflow for achieving multi-scene character consistency in generated stills and videos, emphasizing its efficiency and quality, especially with the custom &quot;regenerate shot&quot; feature.
+NOT COVERED: Specific hardware requirements for running the workflow, detailed comparison of generation speed or quality with other tools, the exact cost of cloud resources if not run locally, or the specific technical details of how the custom nodes function internally.</div></main><footer><a href="../index.html">← all videos</a></footer></div></body></html>
