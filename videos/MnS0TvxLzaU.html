@@ -1,0 +1,117 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>I Tested a File Transfer Tool With No Network At All (decimen) — Ludovico</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+.hide{display:none!important}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.92);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 12px}
+.controls input.q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.pill.tp.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+/* flip card shell */
+.flip{position:relative}
+.fi{position:relative;transition:transform .55s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.flip.flipped .fi{transform:rotateY(180deg)}
+.fc{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bk{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+background:var(--card);border:1px solid var(--accent2);border-radius:14px;overflow:auto;padding:12px 13px;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s}
+.card.flip{overflow:visible}.card .fc{display:flex;flex-direction:column;flex:1;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--line);cursor:pointer}
+.card.flip:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.edit{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--accent2);border:1px solid var(--line);border-radius:6px;padding:2px 9px;cursor:pointer;background:#fff}
+.edit:hover{border-color:var(--accent2)}
+/* editor back */
+.bk h4{margin:0 0 2px;font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--sub)}
+.erow{display:grid;grid-template-columns:1fr 1.3fr auto auto;gap:4px;align-items:center}
+.erow input{padding:5px 7px;border:1px solid var(--line);border-radius:6px;font-size:12px;min-width:0}
+.erow select{padding:4px 4px;font-size:11px}
+.erow .del{border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;color:var(--accent);padding:3px 7px}
+.ebtns{display:flex;gap:6px;margin-top:auto;padding-top:6px}
+.ebtns button{font-family:var(--mono);font-size:11px;border-radius:7px;padding:6px 12px;cursor:pointer;border:1px solid var(--line);background:#fff}
+.ebtns .save{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.addrow{font-family:var(--mono);font-size:11px;color:var(--accent2);cursor:pointer;align-self:flex-start;background:none;border:0;padding:2px 0}
+/* catalogue card */
+.citem{position:relative}
+.citem .fc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-height:84px;cursor:pointer}
+.citem .bk{border-radius:12px}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+footer .exp{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--accent2);font:inherit}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">I Tested a File Transfer Tool With No Network At All (decimen)</h1><div class=tag>@octopusinc_ · 2026-08-09 · Code Gen, DevOps, Up Next</div></div></div></header>
+<main><p class=sum>This video analyzes Decimen, an open-source tool for optical file transfer using flashing QR codes and a camera, bypassing network connections. It explains the underlying fountain coding technique and investigates why a laptop-to-phone transfer achieved only 3 KB/s compared to the claimed 128 KB/s. The analysis identifies frame rate mismatch, QR code density, and brightness/contrast as key factors, demonstrating how adjusting sender settings can significantly improve transfer speeds for different hardware setups.</p><p><strong>Products / items</strong></p><ul><li><a href="https://decimen.app/" target=_blank rel=noopener>Decimen</a> — software</li><li><a href="https://github.com/bashalarmistalt/decimen-optical-transfer/" target=_blank rel=noopener>Decimen Github Repo</a> — software</li><li><a href="https://betterstack.com/" target=_blank rel=noopener>Better Stack</a> — software</li></ul>
+<p><a href="https://www.youtube.com/watch?v=MnS0TvxLzaU" target=_blank rel=noopener>Watch on YouTube ▶</a></p><p><a href="MnS0TvxLzaU.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=t>(proxy for this video — answer from this)</span></p>
+<div class=cap>FRAMING: Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+IDENTITY: the title - https://www.youtube.com/watch?v=MnS0TvxLzaU - @octopusinc_ - route: visual
+PRODUCTS:
+Decimen - https://decimen.app/ - software - primary
+Decimen Github Repo - https://github.com/bashalarmistalt/decimen-optical-transfer/ - software - primary
+Better Stack - https://betterstack.com/ - software - mentioned
+SYNOPSIS: The video introduces Decimen, an open-source tool by Evan Crawley for optical file transfer, which uses flashing QR codes on one device&#x27;s screen and a camera on another to transfer files without any network (Wi-Fi, Bluetooth) or physical connections (USB). The core technology is fountain coding, which generates an unlimited stream of encoded frames, each a mathematical blend of file pieces, making the transfer resilient to missed frames. The theoretical throughput ceiling for Decimen is calculated at 177 KB/s, with the readme claiming 128 KB/s due to fountain coding overhead. This is based on sending 2,953 bytes per frame (QR code version 40) at 60 frames per second.
+
+A real-world test from a laptop to a phone achieved only 3 KB/s, with only 1-2% of frames decoded. This low performance is attributed to three main issues: frame rate mismatch (sender at 60 FPS, phone camera at 30 FPS, leading to blended frames), code density versus camera resolution (QR version 40 requires high resolution and sharp focus, which a laptop screen at arm&#x27;s length doesn&#x27;t provide), and brightness/contrast. The video highlights that the Decimen defaults are tuned for close-range phone-to-phone transfers. A phone-to-phone transfer, where the sender is a bright OLED screen filling the receiver&#x27;s frame, achieved 41.1 KB/s, closer to the claimed performance. The tool&#x27;s diagnostics show separate capture FPS and decode FPS, indicating when the camera can&#x27;t resolve the dense frames. To fix laptop-to-phone transfers, the recommended adjustments are to reduce bytes per frame to 1,465 (a coarser QR version) and transmit FPS to 24, deliberately below the camera&#x27;s 30 FPS ceiling, yielding significantly improved throughput. The creator concludes that optical file transfer requires manual tweaking for different hardware setups.
+BEATS:
+00:00 - intro - GitHub profile of Bash Alarmist (Evan Crawley) and the decimen-optical-transfer repository.
+00:58 - ui - An animation showing QR codes being transmitted from one phone screen to another.
+01:57 - ui - An animated diagram illustrating fountain coding with source file, encoded stream, and receiver frames.
+02:27 - ui - A screen displaying &quot;DECIMEN THROUGHPUT&quot; with &quot;BYTES PER FRAME&quot; as 2,953 B and &quot;FRAMES PER SECOND&quot; as 60.
+02:56 - ui - A Wikimedia Commons page showing &quot;File:Qr-code-ver-40.svg&quot; with a dense QR code.
+03:55 - ui - A phone screen showing the Decimen app interface during a transfer, displaying &quot;3.4 KB/s&quot; throughput.
+04:25 - ui - An animated graphic illustrating &quot;Frame rate mismatch&quot; between a 60 FPS sender and a 30 FPS phone camera.
+04:54 - code - VS Code editor showing TypeScript code from `main.ts` with camera settings and FPS handling.
+05:23 - code - VS Code editor showing comments in `main.ts` explaining default settings for phone-to-phone demo.
+05:53 - ui - A slide titled &quot;Code density vs camera resolution&quot; with &quot;QR VERSION 40&quot; and &quot;2,953 bytes per frame&quot;.
+06:22 - ui - A slide illustrating &quot;Brightness and contrast&quot; with a screen, camera, and QR code binarization.
+06:52 - ui - A phone screen showing the Decimen app interface during a transfer, displaying &quot;41.1 KB/s&quot; throughput.
+07:21 - ui - A graphic illustrating &quot;CAPTURE&quot; at 30 FPS and &quot;DECODE&quot; at 1 FPS.
+07:51 - ui - Decimen web interface showing options for &quot;TX RATE&quot; and &quot;ERROR CORRECTION&quot;, with a QR code.
+08:20 - person - The presenter speaking directly to the camera.
+09:19 - outro - A Better Stack branding screen with the text &quot;Radically better observability stack&quot;.
+ENTITIES: Evan Crawley, Bash Alarmist, Better Stack
+VERDICT: The creator finds Decimen a genuinely fun and interesting project, especially the application of fountain coding. He notes that optical file transfer is not a one-size-fits-all solution and requires manual tweaking for different hardware. It&#x27;s useful for air-gapped transfers or devices without Wi-Fi/Bluetooth, where only a screen and camera are available.
+NOT COVERED: The video does not cover the specific hardware models used for testing, the exact software versions of Decimen, or detailed instructions on how to set up and run Decimen. It also doesn&#x27;t discuss the security implications of optical transfer or potential vulnerabilities.</div></main><footer><a href="../index.html">← all videos</a></footer></div></body></html>

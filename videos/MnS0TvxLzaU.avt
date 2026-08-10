@@ -1,0 +1,188 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: I Tested a File Transfer Tool With No Network At All (decimen)
+channel: @octopusinc_
+duration: 09:49
+source: https://www.youtube.com/watch?v=MnS0TvxLzaU
+upload_date: 20260809
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'Here\'s a question. How do you send someone a file without using a network and without using any physical devices like USB sticks? Well, the answer is optical file transfer. A developer named Evan Cwley just built a tool called'
+
+[00:13] [scene:talk]
+VISUAL: 
+AUDIO: 'Desimon, which is capable of sending a file from one device to another just by flashing QR codes and reading them back. It\'s a super cool file transfer technique and it uses some pretty clever'
+
+[00:26] [scene:talk]
+VISUAL: 
+AUDIO: 'engineering tactics. So, in today\'s video, we\'ll take a look at Desimon, see how it works, and test it out on different scenarios to see how powerful optical file transfer actually is. It\'s going to be a lot of fun. So, let\'s dive'
+
+[00:40] [scene:talk]
+VISUAL: 
+AUDIO: 'into it. So, Descim works like this. One device displays a stream of QR code-l like frames on its screen and another device points a camera at it and decodes them'
+
+[00:54] [scene:talk]
+VISUAL: 
+AUDIO: 'back into a file. So there\'s no network stack involved at all. So if you ever needed to exchange a file with an airgapped device, this is the only way to do it without physically plugging in'
+
+[01:06] [scene:talk]
+VISUAL: 
+AUDIO: 'any external devices like USB drives. And the idea is that you encode your file as a sequence of QR codes, flash them on screen, one after the other, and have a camera on the other end capture'
+
+[01:19] [scene:talk]
+VISUAL: 
+AUDIO: 'and decode each frame. Now, that might sound simple, but the complication arises from the fact that cameras don\'t actually capture instantaneously, and screens don\'t refresh instantaneously.'
+
+[01:31] [scene:talk]
+VISUAL: 
+AUDIO: 'So you\'re racing two different pieces of hardware against each other and if they get out of sync frames get corrupted or missed entirely. But Desimon\'s answer to this problem is a method called fountain'
+
+[01:43] [scene:talk]
+VISUAL: 
+AUDIO: 'coding. Instead of sending frame one, frame two, frame three, and hoping every single one lands, it generates an effectively unlimited stream of encoded frames where each frame is a'
+
+[01:57] [scene:talk]
+VISUAL: 
+AUDIO: 'mathematical blend of pieces of the original file rather than one specific chunk of it. That means no single frame is irreplaceable. The receiver doesn\'t need frame number 47 specifically. It'
+
+[02:09] [scene:talk]
+VISUAL: 
+AUDIO: 'just needs enough frames, whichever ones happen to land. And if you miss half of them, that doesn\'t matter. It just keeps broadcasting until the receiver has collected enough of them. But this'
+
+[02:22] [scene:talk]
+VISUAL: 
+AUDIO: 'approach is no way a silver bullet. With this method, there is a ceiling to how much data we can transfer. By default, Descim sender pushes 2,953 bytes per frame at 60 frames per second.'
+
+[02:35] [scene:talk]
+VISUAL: 
+AUDIO: 'If you do the math on that, you get a theoretical ceiling of roughly 177 kilobytes per second. Factor in the overhead from fountain coding since some of those blended frames are essentially'
+
+[02:49] [scene:talk]
+VISUAL: 
+AUDIO: 'redundant by design and what you\'re left with is the number that Descendants\'s readme file actually claims. It peaks at around 128 kilobytes per second when measured phone. And the reason why it'
+
+[03:01] [scene:talk]
+VISUAL: 
+AUDIO: 'uses 2,953 byte chunks specifically is because it corresponds to QR code version 40, the largest standard QR size, a 177x 177 grid of individual modules packed into a'
+
+[03:16] [scene:talk]
+VISUAL: 
+AUDIO: 'single frame. And that\'s where the real tradeoff shows up. If you cram more data into a frame, you need fewer frames overall to send the same file, which means whatever camera is reading it back'
+
+[03:29] [scene:talk]
+VISUAL: 
+AUDIO: 'needs more resolution, a steadier hand, and a sharper focus to tell one module from the next. So, the entire system is really a balancing act between three variables. how many frames per second'
+
+[03:42] [scene:talk]
+VISUAL: 
+AUDIO: 'you\'re sending, how dense each one of those frames is, and how good the receiving camera actually is at resolving that density. And Descimon ships with one specific balance dialed in by default. And it\'s tuned for one'
+
+[03:56] [scene:talk]
+VISUAL: 
+AUDIO: 'specific scenario, which as I found is not the scenario I tested it in. So here\'s my setup. A laptop screen as the sender sitting at a normal arms length distance like you\'d actually use this in'
+
+[04:09] [scene:talk]
+VISUAL: 
+AUDIO: 'practice. With this setup, my transfer capped at about 3 kilobytes per second. Roughly 1 to 2% of transmitted frames are actually being decoded. The rest are captured and thrown away. Now, there are'
+
+[04:22] [scene:talk]
+VISUAL: 
+AUDIO: 'three things that are stacking up against us here. The first and the biggest hurdle is frame rate mismatch. The sender is pushing 60 frames per second, but my phone\'s camera captures at 30. You cannot sample 60 distinct'
+
+[04:35] [scene:talk]
+VISUAL: 
+AUDIO: 'images with a sensor that\'s only grabbing 30. And it\'s worse than just missing half of them because the exposure window on each captured frame straddles two different QR codes on screen. So the camera doesn\'t cleanly'
+
+[04:49] [scene:talk]
+VISUAL: 
+AUDIO: 'miss a frame. It blends two of them together into something that decodes to nothing. And in the main.ts file, there\'s even a note that says that iOS will silently deliver 30 frames per'
+
+[05:01] [scene:talk]
+VISUAL: 
+AUDIO: 'second even when the app explicitly asks the camera for 60. the camera just doesn\'t give you what you requested and the code already addresses that. And a little further down in the same file, there\'s a comment that basically'
+
+[05:14] [scene:talk]
+VISUAL: 
+AUDIO: 'predicts exactly what happened to me on my first attempt. The defaults, which are the 2,953 bytes per frame at 60 frames per second, are tuned specifically for close range phonetoone demo. And that same'
+
+[05:28] [scene:talk]
+VISUAL: 
+AUDIO: 'combination is expected to struggle on an ordinary monitor at arms length. In other words, the project told me this would happen. I just hadn\'t scrolled far enough in the code to see it. And on the sending side, a 60 Hz laptop panel has'
+
+[05:41] [scene:talk]
+VISUAL: 
+AUDIO: 'the same problem in reverse. And LCD pixels take a lot of time to fully transition color gray to gray. And that setting time means the panel hasn\'t fully arrived at one code before the'
+
+[05:54] [scene:talk]
+VISUAL: 
+AUDIO: 'next one starts painting over it. So, you\'re getting ghosting artifacts. And the second problem is code density versus camera resolution. 2,953 bytes is QR version 40. But reliable'
+
+[06:06] [scene:talk]
+VISUAL: 
+AUDIO: 'decoding needs roughly 3 to four camera pixels per module, which works out to 600 plus pixels across in sharp focus just for the code itself. And a laptop'
+
+[06:19] [scene:talk]
+VISUAL: 
+AUDIO: 'screen held at arms length rarely fills that much of a phone\'s camera frame. But phoneto phone at close range fills the entire viewfinder easily. And the third problem is brightness and contrast. It\'s'
+
+[06:31] [scene:talk]
+VISUAL: 
+AUDIO: 'a secondary issue, but it helps if the receivers\'s binarizer threshold the image cleanly, but it still can\'t fix a frame rate mismatch or an undized code. So now let\'s try to do the same'
+
+[06:44] [scene:talk]
+VISUAL: 
+AUDIO: 'transfer, but this time from one phone to another phone. So the only thing that changes is the sender. It\'s a small, bright OLED screen held close, filling the receiving phone\'s entire frame. Now,'
+
+[06:56] [scene:talk]
+VISUAL: 
+AUDIO: 'the camera can actually hit closer to its real frame rate. The code fills the frame at high resolution, and there\'s no LCD ghosting to fight with. This is the scenario that the 128 kilobs number in'
+
+[07:08] [scene:talk]
+VISUAL: 
+AUDIO: 'the readme file was actually measured under. There\'s also a small but genuinely useful detail in the receivers\'s code. It reports capture FPS and decode FPS separately. Capture tells'
+
+[07:21] [scene:talk]
+VISUAL: 
+AUDIO: 'us what the camera is physically seeing. Decode tells you how much of that is actually usable. When those two numbers pull apart from each other, so capture staying healthy while decode craters,'
+
+[07:33] [scene:talk]
+VISUAL: 
+AUDIO: 'you\'re looking at a mismatch between how dense the frames are and what the camera can actually resolve at that range. So, if laptop to phone is your actual use case, the fix is to rebalance those'
+
+[07:46] [scene:talk]
+VISUAL: 
+AUDIO: 'three variables on the sender side, you should drop bytes per frame down to 1,465, which corresponds to a coarser QR version with bigger, more forgiving modules, and then drop the transmit FPS'
+
+[07:59] [scene:talk]
+VISUAL: 
+AUDIO: 'to 24 deliberately below the camera\'s 30fps ceiling, so frames get sampled cleanly one at a time instead of blending into each other. And as you can see, lowering these numbers yield a much'
+
+[08:13] [scene:talk]
+VISUAL: 
+AUDIO: 'bigger throughput. So this just shows you that optical file transfer is not a onesizefits-all solution. You have to manually tweak it for every use case depending on the hardware you\'re using. So there you have it, folks. That is'
+
+[08:27] [scene:talk]
+VISUAL: 
+AUDIO: 'decim. Overall, this was a genuinely fun project to dig into. Optical file transfer is a pretty cool technique and seeing the fountain coding concept being applied in a real case scenario here was'
+
+[08:40] [scene:talk]
+VISUAL: 
+AUDIO: 'really interesting to see. And while I was exploring this project, I was also thinking where would you actually use this kind of tool? I guess the obvious answer would be for airgapped transfers where you deliberately don\'t want any'
+
+[08:54] [scene:talk]
+VISUAL: 
+AUDIO: 'network connection at all or maybe devices that don\'t even have Bluetooth or Wi-Fi like old hardware or embedded systems. I mean anywhere where a screen and a camera are the only two things you'
+
+[09:07] [scene:talk]
+VISUAL: 
+AUDIO: 'can count on. But what do you think about this tool? Have you used optical transfer tools before? Do you see any real life application for this? Let us know in the comments section down below. And folks, if you like these types of'
+
+[09:20] [scene:talk]
+VISUAL: 
+AUDIO: 'technical breakdowns, please let me know by smashing that like button underneath the video. And also don\'t forget to subscribe to our channel. This has been Andress from Better Stack, and I will see you in the next videos.'
