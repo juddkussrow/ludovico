@@ -1,0 +1,144 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: MCP Was Wrong From The Start (They Just Fixed It)
+channel: @octopusinc_
+duration: 06:52
+source: https://www.youtube.com/watch?v=f4mI3d-nTrI
+upload_date: 20260808
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:intro]
+VISUAL: The presenter introduces the topic of MCP's biggest change, making the protocol stateless.
+AUDIO: 'MCP just shipped its biggest change since it launched, and the headline is the entire protocol is now stateless as it probably should have been from the start. There\'s no more handshakes, no more session IDs, everything just got way simpler except for upgrading because there\'s been a lot of deprecations and'
+
+[00:12] [scene:diagram]
+VISUAL: A diagram shows a client and an MCP server, both without a session.
+AUDIO: 'breaking changes in here. So, let\'s jump in and see what\'s changed. &gt;&gt; [music] &gt;&gt; I\'ll start by giving you some context on the old version of MCP, the stateful version, and why this caused so much'
+
+[00:25] [scene:talk]
+VISUAL: 
+AUDIO: 'pain. The old flow went like this. The client posts initialize to your MCP endpoint, and your server would then mint a session ID and send that back. Every follow-up request would then have to carry that session ID, and that meant the session ID pins the client to'
+
+[00:38] [scene:diagram]
+VISUAL: A diagram illustrates a client with an `Mcp-Session-Id` being pinned to a specific server instance through a load balancer.
+AUDIO: 'whichever server instance issued it, and that is the part that caused all of the issues. Say you had a load balancer and you scaled your MCP server up to three instances, the next request that comes in gets routed to a different instance than the one that ran initialize, and'
+
+[00:51] [scene:diagram]
+VISUAL: The diagram is updated to show a Redis instance storing the session state.
+AUDIO: 'that instance had never heard of the session before, you would end up with a 400 session not found error. The same thing could happen if one of those pods went down, the session state would simply be lost, and every request after would fail. Now, obviously there were workarounds for this. You could use'
+
+[01:04] [scene:talk]
+VISUAL: 
+AUDIO: 'sticky sessions so the client always hits the same instance, or you could have a shared Redis instance so every session can be looked up. But, those just added unnecessary complexity and also latency and costs. Something that doesn\'t cost you anything is subscribing'
+
+[01:16] [scene:ui]
+VISUAL: A GitHub pull request for "SEP-2575: Make MCP Stateless" is displayed, detailing its motivation.
+AUDIO: 'if you want to stay up to date with developer and AI news, it really helps us out. So, those were the problems with stateful MCP, and this is what the new spec has fixed. The spec is called 20260728 because MCP versions are actually dates,'
+
+[01:28] [scene:talk]
+VISUAL: 
+AUDIO: 'and it has two key proposals in it. SCP 2575 removes the initialize and initialize handshake, and SCP 2567 removes the MCP session ID header and the protocol level session that came with it. This means that the handshake'
+
+[01:40] [scene:ui]
+VISUAL: A code comparison shows the old stateful MCP request versus the new stateless request with `Mcp-Protocol-Version`, `Mcp-Method`, and `Mcp-Name` headers.
+AUDIO: 'is gone, and from a protocol level, every single request is completely independent now. These changes make the code for an MCP tool call go from something like this with initialize and session headers to this, a single self-contained request. It is much, much'
+
+[01:52] [scene:diagram]
+VISUAL: A diagram shows a client interacting with a load balancer, distributing requests to instances, with Redis marked as "not needed".
+AUDIO: 'simpler, and it also solves all of our earlier painpoints. We can now use standard round robin routing because any container can now handle any request. So, we can use a completely traditional load balancer and we don\'t need a Redis'
+
+[02:04] [scene:talk]
+VISUAL: 
+AUDIO: 'instance sat there holding our sessions. So, if a server does crash or gets restarted, the load balancer can just send the request to the next working instance and the client never notices. But, the best advantage for me is in deployment. On something like Cloudflare'
+
+[02:16] [scene:ui]
+VISUAL: A blog post snippet explains that MCP no longer requires Durable Objects and mentions Cloudflare's Agents SDK support.
+AUDIO: 'Workers or Google Cloud Run, the server doesn\'t need to be up 24/7 anymore since there\'s no connections to hold open. So, it can scale down to zero when using it, which should save you a bit of money and also just give you way more deployment'
+
+[02:28] [scene:talk]
+VISUAL: 
+AUDIO: 'options. On Cloudflare\'s own post about this, they say the MCP no longer requires durable objects to speak the protocol. So, everything is getting way simpler and the new spec is basically just MCP built on top of normal HTTP infrastructure, which everyone already'
+
+[02:41] [scene:ui]
+VISUAL: A code snippet highlights the `Mcp-Method` and `Mcp-Name` HTTP headers in a `tools/call` request.
+AUDIO: 'knows how to deal with. In fact, talking about HTTP, there\'s also two other changes that have been inspired by it. Previously, all of the MCP information lived inside the JSON body of a request, but now there\'s two new HTTP headers, MCP method and MCP name. And this means'
+
+[02:54] [scene:ui]
+VISUAL: A JSON response for `tools/list` shows `ttlMs` and `cacheScope` caching hints in the `_meta` field.
+AUDIO: 'that a gateway, rate limiter, or firewall can make decisions using those headers without having to parse the JSON. So, it should help reduce some latency. They also added time to live and cache scope hints to tool prompt and resource list calls, again modeled on'
+
+[03:07] [scene:talk]
+VISUAL: 
+AUDIO: 'HTTP caching. So, now a client should know exactly how long a tool list is fresh for and whether it\'s safe to share across users. It doesn\'t need a persistent connection to stay up-to-date anymore. Now, you might be wondering'
+
+[03:19] [scene:ui]
+VISUAL: A code snippet demonstrates how handshake information is now carried in a `_meta` field within the JSON body of every request.
+AUDIO: 'where all of that handshake information actually went as it wasn\'t useless information. The server might still need to know what protocol version you\'re on and what your client can do. But, this information now just rides along on a meta field within the JSON of a single'
+
+[03:31] [scene:talk]
+VISUAL: 
+AUDIO: 'request. So, the server can simply read that to understand what the client can do. And if a client wants to know what a server can do, there\'s now a new optional method called server discover that returns that information. So far then, we\'ve seen a lot of'
+
+[03:43] [scene:speaker]
+VISUAL: The presenter discusses how to manage state explicitly, similar to traditional HTTP APIs.
+AUDIO: 'simplification, but you still might have two questions. First, what if we actually wanted state? And second, if there\'s no persistent connection, how does the server ask the client something, like a follow-up question? Well, I\'ll start with question one. What'
+
+[03:55] [scene:talk]
+VISUAL: 
+AUDIO: 'if you actually wanted some state? And guess what? You just do this the same way that HTTP APIs have done it for as long as they\'ve existed. You could have a tool mint an explicit handle, something like basket ID or browser ID, and then the model just passes this back'
+
+[04:08] [scene:talk]
+VISUAL: 
+AUDIO: 'as an ordinary argument on the later tool calls. So now, it\'s completely up to you how you manage the state and not the protocol, which is a way more flexible approach. And it\'s worth knowing authorization still works. They\'ve actually done a lot of work'
+
+[04:20] [scene:diagram]
+VISUAL: A diagram illustrates a client and server with a stream held open, showing example follow-up questions.
+AUDIO: 'hardening it in this update as well. As for the second question, what if the server wants to send a follow-up question, like, "Are you sure?" Well, the old way needed a constant open stream to send that message down to the client. This actually meant that the user could be prompted out of nowhere'
+
+[04:32] [scene:talk]
+VISUAL: 
+AUDIO: 'without having asked for anything, which is a pretty bad experience and also a possible security problem. So in this new spec, they\'ve completely rebuilt the workflow as a multi-round trip request. So say I had a tool that deleted a file on some cloud provider and I called it.'
+
+[04:45] [scene:ui]
+VISUAL: A JSON response with `resultType: "input_required"` is shown, including `inputRequests` and a `requestState` payload.
+AUDIO: 'Instead of pushing a follow-up question to me, the server actually returns an input required result, and attached to that is a request state payload, which is all of the context for that call serialized. This input required result can actually be something as simple as,'
+
+[04:57] [scene:talk]
+VISUAL: 
+AUDIO: '"Are you sure?" typed as a boolean. And this will prompt the client to ask me, and when I answer, the client then reissues that original call, but this time with my input responses attached, and it also echoes that request state back. That request state actually'
+
+[05:09] [scene:diagram]
+VISUAL: A "complete" JSON response is shown, indicating that any instance can finish the task because state travels with the call.
+AUDIO: 'contains all of the context needed to resume this work, which means that any instance on my load balancer can actually pick this up and retry it, and it doesn\'t have to be the one that initially requested the answer. But what about tool call that takes a long time? You don\'t want it to be holding that'
+
+[05:22] [scene:ui]
+VISUAL: A TypeScript code snippet for a `process_refund` tool demonstrates how to handle long-running tasks by returning a task handle.
+AUDIO: 'connection open and blocking the entire conversation. Well, this is why they graduated tasks from experimental to an official extension. Let\'s say we have a tool for processing a refund, and this is a task that takes a while. You\'d simply write that task state into a database somewhere as working and kick'
+
+[05:35] [scene:talk]
+VISUAL: 
+AUDIO: 'off the async job, and then immediately return a response for that tool call telling the agent and the user that it\'s running. From here, the client can then poll that tool call with tasks/get or subscribe with subscription/listen to track its progress and pull in the final'
+
+[05:48] [scene:ui]
+VISUAL: A blog post section outlines the protocol's evolution, emphasizing the 12-month deprecation period for breaking changes.
+AUDIO: 'result when it\'s done. So, those are the key changes that make MCP stateless now, and as I mentioned in the intro, this comes with a lot of breaking changes and deprecations. They have said though that all of these features will have a minimum of 12 months in deprecation before they\'re officially removed. So,'
+
+[06:01] [scene:ui]
+VISUAL: A blog post section details the new TypeScript SDK split into `@modelcontextprotocol/server` and `@modelcontextprotocol/client`, and mentions a codemod.
+AUDIO: 'there is still some time to update your servers, and talking of updating, all of the SDKs now support this back with most of them having a major version bump up to version two. And if you use TypeScript like me, they\'ve actually replaced the monolithic SDK package with'
+
+[06:13] [scene:talk]
+VISUAL: 
+AUDIO: 'modular libraries, one for the server and one for the client, and they also made a code mod that handles the standard API renames for you. Obviously though, we have seen a lot of changes in this update, so it\'s not going to be a simple update the package and leave, but'
+
+[06:25] [scene:outro]
+VISUAL: The presenter concludes the video, encouraging viewers to share their thoughts and subscribe.
+AUDIO: 'all of these changes are genuinely worth making as it feels like a great reset for MCP, doing things the way they should have been done from the start, and I\'m pretty excited to see how much further MCP goes. What do you think? Let me know in the comments down below, or'
+
+[06:38] [scene:talk]
+VISUAL: 
+AUDIO: 'hit that subscribe, and as always, see you in the next one.'

@@ -1,0 +1,152 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>Orca: YOU&#x27;RE MISSING OUT! This OPEN AGENT ORCHESTRATOR is CRAZY! — Ludovico</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+.hide{display:none!important}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.92);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 12px}
+.controls input.q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.pill.tp.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+/* flip card shell */
+.flip{position:relative}
+.fi{position:relative;transition:transform .55s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.flip.flipped .fi{transform:rotateY(180deg)}
+.fc{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bk{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+background:var(--card);border:1px solid var(--accent2);border-radius:14px;overflow:auto;padding:12px 13px;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s}
+.card.flip{overflow:visible}.card .fc{display:flex;flex-direction:column;flex:1;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--line);cursor:pointer}
+.card.flip:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.edit{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--accent2);border:1px solid var(--line);border-radius:6px;padding:2px 9px;cursor:pointer;background:#fff}
+.edit:hover{border-color:var(--accent2)}
+/* editor back */
+.bk h4{margin:0 0 2px;font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--sub)}
+.erow{display:grid;grid-template-columns:1fr 1.3fr auto auto;gap:4px;align-items:center}
+.erow input{padding:5px 7px;border:1px solid var(--line);border-radius:6px;font-size:12px;min-width:0}
+.erow select{padding:4px 4px;font-size:11px}
+.erow .del{border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;color:var(--accent);padding:3px 7px}
+.ebtns{display:flex;gap:6px;margin-top:auto;padding-top:6px}
+.ebtns button{font-family:var(--mono);font-size:11px;border-radius:7px;padding:6px 12px;cursor:pointer;border:1px solid var(--line);background:#fff}
+.ebtns .save{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.addrow{font-family:var(--mono);font-size:11px;color:var(--accent2);cursor:pointer;align-self:flex-start;background:none;border:0;padding:2px 0}
+/* catalogue card */
+.citem{position:relative}
+.citem .fc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-height:84px;cursor:pointer}
+.citem .bk{border-radius:12px}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+footer .exp{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--accent2);font:inherit}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">Orca: YOU&#x27;RE MISSING OUT! This OPEN AGENT ORCHESTRATOR is CRAZY!</h1><div class=tag>@octopusinc_ · 2026-08-10 · DevOps</div></div></div></header>
+<main><p class=sum>Orca is an open-source Agent Development Environment (ADE) that orchestrates multiple CLI coding agents like Claude Code, Codex, and Gemini within a single application. It uses parallel Git worktrees for safe, concurrent agent operations on the same repository, and provides a comprehensive development environment with integrated terminals, a Monaco editor, a built-in browser with design mode, and an iPhone simulator. Orca aims to streamline the agent-driven development workflow by centralizing agent management, comparison, and result merging, offering features like automated testing, bug fixing, and mobile companion access.</p><p><strong>Products / items</strong></p><ul><li><a href="https://orca.dev" target=_blank rel=noopener>Orca</a> — software</li><li>Claude Code — software (no link)</li><li>Codex — software (no link)</li><li>Grok — software (no link)</li><li>Gemini — software (no link)</li><li>Kimi — software (no link)</li><li>Qwen Code — software (no link)</li><li>Open Code — software (no link)</li><li>Pi — software (no link)</li><li>Anti-Gravity — software (no link)</li><li>Kilo Code — software (no link)</li><li>Klein — software (no link)</li><li>Command Code — software (no link)</li><li>Mistral — software (no link)</li><li>Vibe — software (no link)</li><li>Hermes — software (no link)</li><li>Open Claw — software (no link)</li><li>Homebrew — software (no link)</li><li>AUR — software (no link)</li><li>Node — software (no link)</li><li>GitHub — software (no link)</li><li>GitLab — software (no link)</li><li>Bitbucket — software (no link)</li><li>Azure DevOps — software (no link)</li><li>Linear — software (no link)</li><li>Jira — software (no link)</li><li>OpenAI — software (no link)</li><li>Tailscale — software (no link)</li></ul>
+<p><a href="https://www.youtube.com/watch?v=nM6tvi48nMs" target=_blank rel=noopener>Watch on YouTube ▶</a></p><p><a href="nM6tvi48nMs.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=t>(proxy for this video — answer from this)</span></p>
+<div class=cap>FRAMING: Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+IDENTITY: the title - https://www.youtube.com/watch?v=nM6tvi48nMs - @octopusinc_ - route: visual
+PRODUCTS: list each product on its own line: name - canonical link (or &quot;no reliable link&quot;) - type - primary/mentioned
+Orca - https://orca.dev - software - primary
+Claude Code - no reliable link - software - mentioned
+Codex - no reliable link - software - mentioned
+Grok - no reliable link - software - mentioned
+Gemini - no reliable link - software - mentioned
+Kimi - no reliable link - software - mentioned
+Qwen Code - no reliable link - software - mentioned
+Open Code - no reliable link - software - mentioned
+Pi - no reliable link - software - mentioned
+Anti-Gravity - no reliable link - software - mentioned
+Kilo Code - no reliable link - software - mentioned
+Klein - no reliable link - software - mentioned
+Command Code - no reliable link - software - mentioned
+Mistral - no reliable link - software - mentioned
+Vibe - no reliable link - software - mentioned
+Hermes - no reliable link - software - mentioned
+Open Claw - no reliable link - software - mentioned
+Homebrew - no reliable link - software - mentioned
+AUR - no reliable link - software - mentioned
+Node - no reliable link - software - mentioned
+GitHub - no reliable link - software - mentioned
+GitLab - no reliable link - software - mentioned
+Bitbucket - no reliable link - software - mentioned
+Azure DevOps - no reliable link - software - mentioned
+Linear - no reliable link - software - mentioned
+Jira - no reliable link - software - mentioned
+OpenAI - no reliable link - software - mentioned
+Tailscale - no reliable link - software - mentioned
+SYNOPSIS: The video introduces Orca, an open-source Agent Development Environment (ADE) by Stable AI, designed to orchestrate multiple CLI coding agents. It addresses the common problem of managing numerous terminal windows for different agents by consolidating them into a single application. Orca is MIT-licensed and free, requiring users to bring their existing agent subscriptions (e.g., Claude, Codex). Its core mechanic is the use of parallel Git worktrees, allowing multiple agents to work on the same repository concurrently on different branches without conflicts. Orca is agent-agnostic, supporting over 30 CLI agents including Claude Code, Codex, Grok, Gemini, Kimi, and Qwen Code, and can auto-detect agents installed on the user&#x27;s machine. It runs on Mac, Windows, and Linux, with installation options via Homebrew, AUR, or direct download from orca.dev.
+
+The video demonstrates Orca&#x27;s capabilities by having a Claude Code agent create a single-file retro arcade landing page with a snake mini-game. The agent not only wrote an 1,100-line self-contained page but also tested its own work by running game logic through Node, opening the page in Orca&#x27;s built-in browser, and playing the game to verify functionality. During this process, the agent identified and fixed two real bugs: an overeager blur handler causing pauses and spacebar auto-repeat issues. Orca&#x27;s sidebar provides live status updates for agents (working, waiting, done) and automatically titles sessions in the history panel. The built-in browser allows for in-app previewing of results.
+
+Orca offers a comprehensive dev environment per worktree, including WebGL-rendered terminals with split panes, a Monaco editor (like VS Code) with auto-save and inline color swatches, and markdown/diagram/PDF/image viewers. A diff viewer highlights agent changes, allowing inline comments to be sent back as instructions. It also tracks attribution, showing lines written by AI versus human. Orca integrates with GitHub, GitLab, Bitbucket, and Azure DevOps for version control and pull request management.
+
+A standout feature is the built-in browser&#x27;s &quot;Design Mode&quot; with an element picker, which allows users to click on a UI element to instantly copy its HTML and CSS for agent instructions. A &quot;draw on screenshot&quot; tool enables visual annotations for agents. Orca also includes an interactive iPhone 17 Pro simulator, which agents can drive to verify iOS app UIs. A &quot;Computer Use&quot; section in settings allows agents to inspect and operate any desktop app.
+
+Orca functions as an orchestrator, enabling agents to coordinate tasks, hand off work with full context, run phase workflows, and split work across parallel child agents. It supports delegation between different agent sessions (e.g., Claude delegating to Codex). An &quot;Automations&quot; tab provides cron-like scheduling for agents, with templates for repo audits, release readiness summaries, and daily change reviews. Task management integrates with GitHub Issues, GitLab, Linear, and Jira, allowing agents to read and update tickets. The status bar displays live usage meters for various providers (Claude, OpenAI, Kimi, Grok) and includes an account switcher and a prompt cache timer for Claude.
+
+Orca Mobile is a companion app for iOS and Android, pairing via QR code, offering remote monitoring and control of terminals and agents, with notifications and terminal reflowing for phone screens. Additional features include voice dictation, a floating workspace, session restore, worktree checkpoints, agent hibernation, SSH worktrees for remote execution, a headless server mode, and an Orca CLI for scripting.
+BEATS: 00:00 - ui - GitHub README for Orca, showing features like Mobile Companion, Parallel Worktrees, Terminal Splits, and Design Mode.
+00:29 - ui - Orca UI showing a dropdown menu with various AI agents like Claude, Codex, Grok, Gemini, and Kimi.
+00:59 - ui - Orca UI with a terminal running Kimi Code, showing a &quot;NEON COIL&quot; game preview in an embedded browser.
+01:29 - ui - Orca UI with a terminal running Claude Code, showing code changes (red/green diff) and the &quot;NEON COIL&quot; game preview.
+01:59 - ui - GitHub README for Orca, showing installation instructions for Desktop (macOS, Windows, Linux) and Mobile Companion.
+02:29 - ui - Orca UI showing Claude Code output in the terminal, with the &quot;NEON COIL&quot; game preview in the browser.
+02:59 - ui - Orca UI showing detailed Claude Code output in the terminal, with the &quot;NEON COIL&quot; game preview.
+03:29 - ui - Orca UI showing a dropdown menu for creating new tabs, including &quot;New Terminal&quot;, &quot;New Browser Tab&quot;, &quot;New Markdown&quot;, and options to go to Mobile Emulator or preview iOS simulators with various agents.
+03:59 - ui - Orca UI showing the Monaco editor with `index.html` open, displaying game code, and the &quot;GAME OVER&quot; screen of &quot;NEON COIL&quot; in the browser.
+04:29 - ui - Orca UI showing Claude Code output in the terminal, with the &quot;NEON COIL&quot; game preview.
+04:59 - ui - Orca UI showing the built-in browser with an element picker active, highlighting the &quot;NEON COIL&quot; title.
+05:29 - ui - Orca UI showing an embedded iPhone simulator displaying the iOS home screen.
+05:59 - ui - Orca settings UI, specifically the &quot;Computer Use&quot; section, showing options for Accessibility, Screenshots, and installing the &quot;Computer Use skill&quot;.
+06:29 - ui - Orca UI showing the &quot;Automations&quot; tab, with a &quot;Create automation&quot; dialog for a &quot;Release readiness review&quot; prompt.
+06:59 - ui - Orca settings UI, specifically the &quot;Integrations&quot; section, showing options to connect with Linear and Jira.
+07:29 - ui - Orca UI showing Claude Code output in the terminal with code updates, and the &quot;GAME OVER&quot; screen of &quot;NEON COIL&quot; in the browser, along with agent usage meters in the status bar.
+07:59 - ui - Orca UI showing the &quot;Orca Mobile&quot; section, with a mobile phone screen displaying a terminal output.
+08:29 - ui - Orca UI showing Claude Code output in the terminal with code updates, the Monaco editor with `index.html`, and the &quot;GAME OVER&quot; screen of &quot;NEON COIL&quot; in the browser.
+08:59 - ui - Orca UI showing Claude Code output in the terminal with code updates, the Monaco editor with `index.html`, and the &quot;GAME OVER&quot; screen of &quot;NEON COIL&quot; in the browser.
+ENTITIES: Stable AI, Claude Code, Codex, Grok, Open Code, Pi, Gemini, Anti-Gravity, Kilo Code, Klein, Command Code, Kimmy, Mistral, Vibe, Quen Code, Hermes, Open Claw, Homebrew, AUR, Node, GitHub, GitLab, Bitbucket, Azure DevOps, Linear, Jira, OpenAI, Tailscale.
+VERDICT: The creator highly recommends Orca, calling it one of the most complete agent orchestration tools available. They praise its open-source nature, MIT license, and compatibility with existing agent subscriptions. Key differentiating features highlighted are the design mode, embedded simulator, agent orchestration capabilities, and the mobile companion app, which are not found together in other tools. While acknowledging it&#x27;s a young project with some beta features (like the mobile relay) and potential UI overwhelm on small screens, the creator views the agent&#x27;s ability to build, test, find, and fix bugs within Orca as a glimpse into the future of development workflows.
+NOT COVERED: Specific pricing for agent subscriptions, detailed technical specifications of Orca&#x27;s underlying architecture beyond Git worktrees, a comprehensive list of all 30+ supported CLI agents, or a deep dive into the implementation details of features like voice dictation or SSH worktrees.</div></main><footer><a href="../index.html">← all videos</a></footer></div></body></html>

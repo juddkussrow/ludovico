@@ -1,0 +1,156 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Wan Animate 2: 22-Second Fast Dance Test in ComfyUI
+channel: @octopusinc_
+duration: 08:02
+source: https://www.youtube.com/watch?v=-OnJS4JA-v4
+upload_date: 20260811
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:01] [scene:talk]
+VISUAL: 
+AUDIO: '[music] Welcome back everyone. When Animate 2 is a big upgrade over the older Ven'
+
+[00:13] [scene:ui]
+VISUAL: Hugging Face page for Comfy-Org/Wan-Animate-2 model files.
+AUDIO: 'Animate. Just look at how well it captures this fast dance motion. On the Comfy UI hugging face, open the Ven Animate to model files. And here you have two model versions. One is base and'
+
+[00:25] [scene:talk]
+VISUAL: 
+AUDIO: 'another one is distilled. But in this video I am using the normal when animate 2 in8 model with a distilled lura model. There is another option. You can also use the distilled'
+
+[00:38] [scene:ui]
+VISUAL: ComfyUI nodes for "Load Diffusion Model" and "Load LoRA".
+AUDIO: 'model. But for this you do not need any separate distura model file. So you can choose whatever suits you best. But for the rest of the workflow we also need a UMT5xl'
+
+[00:51] [scene:talk]
+VISUAL: 
+AUDIO: 'FBA text encoder. We need a clip vision h file and the VAE. So I have selected the vin animate to model file and connected it with this lura. Connect this after the diffusion model. So this'
+
+[01:03] [scene:ui]
+VISUAL: ComfyUI "WanAnimate2ToVideo" node parameters, including length set to 81.
+AUDIO: 'is the main vin animate node where we can connect the reference image and our video. It also gives us options for strength and motion. I\'ll try these when we generate the example, but right now I'
+
+[01:16] [scene:talk]
+VISUAL: 
+AUDIO: 'don\'t exactly know what they do yet, but we will test them. Next, I have added two clip vision nodes. One for the reference image and one for the reference video. Connect'
+
+[01:29] [scene:ui]
+VISUAL: ComfyUI nodes for Positive, Negative, and Positive Pose conditioning.
+AUDIO: 'these with the clip vision output for the reference image and the clip vision output pose for my reference video. So for this model, instead of only using positive and negative, I am using three'
+
+[01:42] [scene:talk]
+VISUAL: 
+AUDIO: 'text nodes. One of them is positive pose. So here the main positive prompt describes the character and the scene and the pose node is different. Here you'
+
+[01:54] [scene:ui]
+VISUAL: ComfyUI "WanAnimate2ToVideo" node showing width, height, and length parameters.
+AUDIO: 'can describe the motion from your reference video. So for a long video we have to create multiple segments. Here my first segment is 81 frames and I\'m'
+
+[02:06] [scene:talk]
+VISUAL: 
+AUDIO: 'using that only 81 frames. If I talk about steps, I chose six steps and use the LCM scheduleuler. So these are the settings I am using with the current'
+
+[02:19] [scene:ui]
+VISUAL: ComfyUI "SamplerCustom" node with CFG set to 1 and "BasicScheduler" with 6 steps and LCM scheduler.
+AUDIO: 'distura. I have added another node sampler custom where I just set my CFG to one. And if I talk about add noise, I\'ll keep it as true. So I just connect my model input'
+
+[02:33] [scene:talk]
+VISUAL: 
+AUDIO: 'sampler and sigma input with that. Now I have added a trim video latent node and connected it with the sampler output and connected when animate to trim latent'
+
+[02:45] [scene:ui]
+VISUAL: Full ComfyUI workflow with various nodes and a character image.
+AUDIO: 'with trim amount. So that helps us remove the extra reference latent before we decode the final frames. So this is our van anim workflow ready.'
+
+[02:58] [scene:talk]
+VISUAL: 
+AUDIO: 'Now just for testing I load a video and a picture of a cat. In my first positive prompt, I just write the description of my character and the description of my background.'
+
+[03:10] [scene:ui]
+VISUAL: ComfyUI "Positive Pose" node with detailed motion description.
+AUDIO: 'Then there is another positive pose where I just type natural full body motion following the driving video matching the body movement, posture, arm gestures, leg movement and and timing of the performance. So here I just'
+
+[03:24] [scene:talk]
+VISUAL: 
+AUDIO: 'described the pose and motion of the video. Now, as a result, you can look the workflow is working and the character stays close to our reference image. The dance movement also follows'
+
+[03:37] [scene:talk]
+VISUAL: 
+AUDIO: 'my reference video. So, with these two prompts, one for pose and one for character, they help make the motion more stable. Now, another thing, if I want to change the background, I just'
+
+[03:51] [scene:result]
+VISUAL: Animated cat character dancing in a classroom.
+AUDIO: 'give it two tags, character appearance description and background description. So here I just changed the background from a white background to a bright school classroom with desks, soft'
+
+[04:04] [scene:talk]
+VISUAL: 
+AUDIO: 'daylight from the windows and a clean indoor atmosphere. Now here is the result and you can see it replaces the background and here we have the option to control the'
+
+[04:16] [scene:ui]
+VISUAL: ComfyUI workflow showing the "WanAnimate2ToVideo" node and prompts.
+AUDIO: 'background. Now you can clearly see this cat is dancing in the classroom. So moving on now I want to extend the video beyond 81 frames. Now what you have to do you have to duplicate the'
+
+[04:31] [scene:talk]
+VISUAL: 
+AUDIO: 'when animate 2 node and connect continue motion and video frame offset with the previous when animate 2 segment. So it\'s very simple. I just added another segment and you can see it extends the'
+
+[04:44] [scene:result]
+VISUAL: Side-by-side comparison of the animated cat character.
+AUDIO: 'video. So we can keep adding more segments to extend the video but it takes a lot of time. That\'s a drawback of this. Manual duplication works for long videos, but I tried to make an'
+
+[04:57] [scene:talk]
+VISUAL: 
+AUDIO: 'automatic way. So, it automatically creates the segments and extends your video based on your video reference length. Now, here I have added two loop nodes, loop start and loop end to my'
+
+[05:11] [scene:ui]
+VISUAL: ComfyUI workflow with "loop start" and "loop end" nodes for automation.
+AUDIO: 'workflow. They automate the long video process. In this workflow, the workflow automatically calculates how many continuations segments are needed and keeps generating until it reaches the'
+
+[05:24] [scene:talk]
+VISUAL: 
+AUDIO: 'end of the loaded video. So here the best part is you don\'t have to process the whole video every time. So let me give you an example. If your video is 3 minutes long and you only'
+
+[05:37] [scene:ui]
+VISUAL: ComfyUI "Load Video (Upload)" node with "frame_load_cap" parameter.
+AUDIO: 'want the first 22 24 frames, you can just set frame load gap to 224. At 24 fps, that\'s around a 9-second video. And if you want around 5 seconds, you can'
+
+[05:49] [scene:talk]
+VISUAL: 
+AUDIO: 'set the number of frames here based on 24 fps. So this frame load cap gives you an easy way to control how much of the video you want to generate. And finally, I get the complete 11second video. So the best'
+
+[06:04] [scene:talk]
+VISUAL: 
+AUDIO: 'part is it captured the motion very well. I just loaded a 22cond video and an image. Now here there is one thing I do not see a dedicated option to keep'
+
+[06:16] [scene:result]
+VISUAL: Side-by-side comparison of a reference dancer and the animated character.
+AUDIO: 'the background exactly the same. So I just describe a background similar to my reference image and I get a similar background to my reference image. And here is the result of 22 seconds.'
+
+[06:28] [scene:talk]
+VISUAL: 
+AUDIO: 'the fast dance motion and you know AI'
+
+[06:58] [scene:talk]
+VISUAL: 
+AUDIO: 'can struggle to capture fast movements but if you compare both of them it did a very good job. Now for another test I am just loading an image of a anime character and our'
+
+[07:11] [scene:ui]
+VISUAL: ComfyUI "Positive Pose" node with a street dance motion description.
+AUDIO: 'reference video where the women is dancing and here I want to capture the same motion. So one thing I want to tell you I don\'t change this line. I just use the same one from my other video natural'
+
+[07:24] [scene:talk]
+VISUAL: 
+AUDIO: 'energetic full body street dance. You can just use a pose prompt similar to that only. So now let\'s test how well when enemy 2 transfers distance [music]'
+
+[07:42] [scene:talk]
+VISUAL: 
+AUDIO: 'now as a result you can see the quality in everything. You can see how well it has transferred the dance. So that\'s all about when enemy 2. If you like this'
+
+[07:54] [scene:talk]
+VISUAL: 
+AUDIO: 'video subscribe to our channel for more content like this. Thank you. Bye-bye.'

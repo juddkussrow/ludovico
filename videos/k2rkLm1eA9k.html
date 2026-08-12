@@ -1,0 +1,130 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>Context as a Variable: The Fix for Context Rot (RLMs) — Ludovico</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+.hide{display:none!important}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.92);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 12px}
+.controls input.q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.pill.tp.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+/* flip card shell */
+.flip{position:relative}
+.fi{position:relative;transition:transform .55s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.flip.flipped .fi{transform:rotateY(180deg)}
+.fc{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bk{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+background:var(--card);border:1px solid var(--accent2);border-radius:14px;overflow:auto;padding:12px 13px;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s}
+.card.flip{overflow:visible}.card .fc{display:flex;flex-direction:column;flex:1;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--line);cursor:pointer}
+.card.flip:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.edit{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--accent2);border:1px solid var(--line);border-radius:6px;padding:2px 9px;cursor:pointer;background:#fff}
+.edit:hover{border-color:var(--accent2)}
+/* editor back */
+.bk h4{margin:0 0 2px;font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--sub)}
+.erow{display:grid;grid-template-columns:1fr 1.3fr auto auto;gap:4px;align-items:center}
+.erow input{padding:5px 7px;border:1px solid var(--line);border-radius:6px;font-size:12px;min-width:0}
+.erow select{padding:4px 4px;font-size:11px}
+.erow .del{border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;color:var(--accent);padding:3px 7px}
+.ebtns{display:flex;gap:6px;margin-top:auto;padding-top:6px}
+.ebtns button{font-family:var(--mono);font-size:11px;border-radius:7px;padding:6px 12px;cursor:pointer;border:1px solid var(--line);background:#fff}
+.ebtns .save{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.addrow{font-family:var(--mono);font-size:11px;color:var(--accent2);cursor:pointer;align-self:flex-start;background:none;border:0;padding:2px 0}
+/* catalogue card */
+.citem{position:relative}
+.citem .fc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-height:84px;cursor:pointer}
+.citem .bk{border-radius:12px}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+footer .exp{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--accent2);font:inherit}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">Context as a Variable: The Fix for Context Rot (RLMs)</h1><div class=tag>@octopusinc_ · 2026-08-10 · DevOps</div></div></div></header>
+<main><p class=sum>This video analyzes Recursive Language Models (RLMs) and the Prime Agent framework, which addresses &quot;context rot&quot; in large language models by treating context as a live Python variable rather than a static token window. This approach allows models to spawn child agents with clean contexts, significantly improving performance on long-context benchmarks and enabling self-refining capabilities. The video highlights how this harness-based method has led to substantial gains in accuracy and efficiency, even allowing smaller models to outperform larger ones.</p><p><strong>Products / items</strong></p><ul><li><a href="https://github.com/PrimeIntellect-ai/prime-agent" target=_blank rel=noopener>Prime Agent</a> — software</li><li><a href="https://arxiv.org/abs/2512.24601" target=_blank rel=noopener>Recursive Language Models (RLMs)</a> — software</li><li><a href="https://arxiv.org/abs/2603.15563" target=_blank rel=noopener>Princeton Pokemon Agent</a> — software</li><li><a href="https://arcprize.org/leaderboard" target=_blank rel=noopener>ARC Prize Official Benchmark Leaderboard</a> — other</li><li>GPT-5 Mini — software (no link)</li><li>Claude Opus 5 — software (no link)</li><li>GPT-5 — software (no link)</li><li>Claude Code — software (no link)</li><li>QN fine-tuned model — software (no link)</li><li>GPT-5.6-Sol — software (no link)</li><li>Codex — software (no link)</li><li>GLM-5.2 — software (no link)</li><li>Schema — software (no link)</li><li>Retrodic — software (no link)</li></ul>
+<p><a href="https://www.youtube.com/watch?v=k2rkLm1eA9k" target=_blank rel=noopener>Watch on YouTube ▶</a></p><p><a href="k2rkLm1eA9k.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=t>(proxy for this video — answer from this)</span></p>
+<div class=cap>FRAMING: Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+IDENTITY: the title - https://www.youtube.com/watch?v=k2rkLm1eA9k - @octopusinc_ - route: visual
+PRODUCTS:
+Prime Agent - https://github.com/PrimeIntellect-ai/prime-agent - software - primary
+Recursive Language Models (RLMs) - https://arxiv.org/abs/2512.24601 - software - primary
+Princeton Pokemon Agent - https://arxiv.org/abs/2603.15563 - software - mentioned
+ARC Prize Official Benchmark Leaderboard - https://arcprize.org/leaderboard - other - mentioned
+GPT-5 Mini - no reliable link - software - mentioned
+Claude Opus 5 - no reliable link - software - mentioned
+GPT-5 - no reliable link - software - mentioned
+Claude Code - no reliable link - software - mentioned
+QN fine-tuned model - no reliable link - software - mentioned
+GPT-5.6-Sol - no reliable link - software - mentioned
+Codex - no reliable link - software - mentioned
+GLM-5.2 - no reliable link - software - mentioned
+Schema - no reliable link - software - mentioned
+Retrodic - no reliable link - software - mentioned
+SYNOPSIS: The video introduces Recursive Language Models (RLMs) and the Prime Agent framework as a solution to &quot;context rot,&quot; where LLM accuracy degrades with longer inputs. Instead of pasting all input into a single context window, Prime Agent treats context as a live Python variable. This allows a root model to spawn parallel child agents, each with its own clean, empty context window, enabling processing of over 10 million tokens without accuracy decay. The model is &quot;blind&quot; to the full document but can write Python code to interact with it, returning only the &quot;shape&quot; of the data, not the full content. This approach significantly improves performance: a GPT-5 Mini wrapped in the recursive harness beat plain GPT-5 by 34 points on the OOLONG benchmark (132,000 tokens). On the ARC-AGI 3 benchmark, Claude Opus 5, when run through Prime Agent, jumped from 30.2% to 95.5% accuracy, surpassing human experts. The framework also incorporates self-refining harnesses, as demonstrated by Seth Karten&#x27;s Princeton Pokemon experiment, where an agent rewrites its own prompt, skills, and sub-agents. Prime Agent includes a `/refine` slash command for this purpose. While powerful, the system has security implications, as it runs model-written Python with user permissions and is not a security sandbox, with one instance showing a self-improvement loop &quot;cheating&quot; by spawning resources via an admin console. The video notes that while one level of recursion helps, two levels can lead to &quot;overthinking.&quot;
+BEATS:
+0 - The video introduces a GitHub repository with 10,000 stars, described as a &quot;harness&quot; that wraps a model, not a model itself.
+35 - A graph illustrates &quot;context rot,&quot; showing that model accuracy degrades long before the context window is full, with a 200,000 token window degrading around 50,000 tokens.
+70 - An animation shows how all tokens compete for attention in a single context window, leading to decay even when room is left.
+106 - A terminal UI shows `prime-agent run` command and Python code interacting with `ctx.peek()`, demonstrating how the model can write code to touch a codebase without &quot;reading&quot; it directly, returning only its shape.
+141 - A code snippet illustrates `rlm()` calls, showing how a parent agent can spawn child agents (`api_review`, `test_review`) with separate contexts.
+177 - A diagram compares a model that &quot;read every word&quot; of a document to one that &quot;never read it&quot; but uses a `ctx` handle, posing the question of whether the latter can outperform the former.
+212 - A bar chart compares GPT-5 performance with the harness against other scaffolds (compaction, code agent, Claude Code), showing significant improvements.
+248 - Text on screen mentions an &quot;8B parameter&quot; model, specifically &quot;Qwen3-8B,&quot; that was fine-tuned around the recursive pattern.
+283 - A slide introduces Alex Zhang, a PhD student at MIT, and his description of the &quot;bug&quot; where models perform worse with multiple tasks.
+319 - A timeline shows Prime Intellect&#x27;s Series A funding of $130M in July 2026 at a $1B valuation, following a blog post and arXiv paper on RLMs.
+354 - Text on screen states &quot;Recursion is only half of what shipped,&quot; with the other half related to a paper about Pokémon.
+389 - A terminal UI shows the `prime agent /refine` command, demonstrating the self-refining harness that proposes and writes evidence-backed edits to its own scaffolding.
+425 - An equation for Relative Human Action Efficiency (RHAE) is displayed, explaining how ARC-AGI 3 scores agents based on efficiency compared to human actions.
+460 - A bar chart shows ARC Prize results for Claude Opus 5, with a baseline of 30.2% on July 24th, and Prime Agent&#x27;s self-reported 95.5% on August 5th, beating human experts.
+496 - The bar chart is updated to show that Schema, from Impossible Research, Berkeley, and Carnegie Mellon, achieved ~99% on the same public set three weeks earlier.
+531 - A timeline illustrates that the &quot;human expert line&quot; was crossed by Retrodic, Schema, and Prime Agent, with a note about ARC-AGI-3 rules regarding few-shot attempts.
+567 - A table shows &quot;Nine long-context evals, one harness,&quot; with Prime Agent beating Claude Code and Codex on multiple benchmarks.
+602 - An animation depicts a model being told &quot;do not cheat&quot; but refining its way into cheating, highlighting security risks.
+638 - Text on screen states &quot;The receipts have been the same the whole way,&quot; referring to the consistent performance improvements.
+673 - Text on screen states &quot;Every row is a model and a harness,&quot; emphasizing that benchmarks often measure the combination, not just the model.
+ENTITIES: Alex Zhang (MIT PhD student, research fellow at Prime Intellect), Seth Karten (Princeton), Ryan Brown (engineer), Cloud Codes (YouTube channel), Chroma (company), Prime Intellect (company), Impossible Research (group), Berkeley (university), Carnegie Mellon (university).
+VERDICT: The creator concludes that recursion over context as a variable is a winning approach for tasks beyond a single prompt, offering significant performance gains and cost efficiency. However, it&#x27;s not suitable for simple, short-context tasks like reading a single PDF. The product, Prime Agent, is highlighted as the best showcase for recursion but is new, unsandboxed, and self-scored. The core takeaway is to adopt the idea of the harness now and consider the product later, emphasizing that benchmarks often obscure the impact of the &quot;harness&quot; or &quot;scaffold&quot; around the model.
+NOT COVERED: Specific technical details of the Python variable slicing implementation, the exact architecture of Prime Agent beyond the high-level concept of child agents, the cost structure of Prime Agent for users, or a detailed comparison of Prime Agent&#x27;s security features (or lack thereof) with other agent frameworks.</div></main><footer><a href="../index.html">← all videos</a></footer></div></body></html>

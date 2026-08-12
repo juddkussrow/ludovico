@@ -1,0 +1,516 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Improved AI Memory? 🧠 Full Hermes Tutorial (Mnemosyne & Hindsight)
+channel: @octopusinc_
+duration: 26:25
+source: https://www.youtube.com/watch?v=R1TNGOZAOZs
+upload_date: 20260807
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'So, to me this is pretty wild that not only are we able to get the agent to remember things, but it\'s able to build this graph based on our memory in a way that improves the agent on the problems I\'m trying to solve. Have you ever been frustrated that your AI just forgets things? You explain the same context'
+
+[00:12] [scene:talk]
+VISUAL: 
+AUDIO: 'over and over again, wasting tokens and time. And if you\'re running multiple agents, it gets even worse because you have to share context just to keep them on the same page. That\'s because you\'re not using a real memory system, or at least not a very good one. Let\'s fix'
+
+[00:26] [scene:talk]
+VISUAL: 
+AUDIO: 'that. Hi, my name is Callum, also known as Waterlitz, and welcome to today\'s video on giving your agent true memory. Today I\'m using Hermes agent as an example, but the memory tools I talk about apply to any different agentic AI. And more importantly, they work between'
+
+[00:39] [scene:talk]
+VISUAL: 
+AUDIO: 'any AI agents. You can set this system up once and then connect it to any agent with the same universal memory. If you\'re new to Hermes and want to get it set up safely, I have a full agentic AI playlist here. By the end of this video, you\'ll understand the different tiers of'
+
+[00:52] [scene:talk]
+VISUAL: 
+AUDIO: 'the memory stack and how agentic memory compares to a knowledge layer like Obsidian LLM Wiki. Why you might want a dedicated memory provider instead of using built-in memory, the different memory options and why I picked the two we\'re setting up today, how to install'
+
+[01:04] [scene:talk]
+VISUAL: 
+AUDIO: 'an unofficial lightweight memory layer, and how to install an official heavyweight memory engine. I\'m personally very excited because memory is something I\'ve been looking at for a long time, and I can\'t wait to help you get it set up today. Now, let\'s take a look at agentic memory.'
+
+[01:17] [scene:talk]
+VISUAL: 
+AUDIO: 'Before we get anything installed, I just want to quickly clear up some common confusions on agentic memory. It\'s not a layer, it\'s a stack. When people say second brain or agentic memory, they\'re'
+
+[01:30] [scene:talk]
+VISUAL: 
+AUDIO: 'actually referring to three things: world knowledge, built-in memory, and external memory. The knowledge layer like Obsidian vaults or an LLM Wiki is part of the memory stack, but it\'s not true operational memory the way we mean it when we say agent memory. It\'s world'
+
+[01:43] [scene:talk]
+VISUAL: 
+AUDIO: 'knowledge, the ground truth across every project and every agent. You can even limit the access your agent has to this knowledge layer, like I talked more about in connecting agentic AI to Obsidian here. Then we have operational memory, which splits into two tiers,'
+
+[01:56] [scene:talk]
+VISUAL: 
+AUDIO: 'built-in memory and dedicated memory providers. Operational memory focuses more on what the agent should remember about working with me specifically. A simple test is to consider if it\'s knowledge you want preserved and organized across everything you do,'
+
+[02:08] [scene:talk]
+VISUAL: 
+AUDIO: 'that\'s Obsidian. If it\'s a fact about how you like to work or what you\'re working on right now, that\'s agentic memory. So, putting it all together, we have built-in memory, which is great for simple single session chats, a memory provider when you\'re running complex'
+
+[02:20] [scene:talk]
+VISUAL: 
+AUDIO: 'ongoing projects or you just want noticeably better performance and agent recall, and your knowledge layer, like Obsidian, for building world knowledge that spans every project and every agent you run. I talked more about getting Obsidian connected to agentic AI in this'
+
+[02:32] [scene:talk]
+VISUAL: 
+AUDIO: 'video here. So, today I want to focus more specifically on the first two layers, on the built-in memory and the external memory provider. My next video is going to go deeper into setting up an Obsidian LLM wiki that complements the agent memory we\'re setting up today.'
+
+[02:45] [scene:talk]
+VISUAL: 
+AUDIO: 'Let\'s start by comparing the built-in memory to true memory providers. If you find this video helpful, please like, hype, and subscribe as I appreciate your support a lot. If you\'re looking for more ways to support me, please consider joining my YouTube or my Patreon membership, where I give my members'
+
+[02:57] [scene:talk]
+VISUAL: 
+AUDIO: 'access to tips, insights, and my thoughts on the future of agentic AI and knowledge management. So, what does built-in memory actually look like for Hermes? It has three'
+
+[03:09] [scene:talk]
+VISUAL: 
+AUDIO: 'files, memory.md, which is your operational memory, user.md, which is who you are, and soul.md, which is technically not memory but the agent\'s own personality. On top of that, the built-in memory includes session search,'
+
+[03:21] [scene:talk]
+VISUAL: 
+AUDIO: 'stored in a local database, so you can literally ask Hermes to search across your past sessions. As a quick tip, the best way to get going with an agent like Hermes is to tell Hermes about yourself right off the bat. If it understands a'
+
+[03:33] [scene:talk]
+VISUAL: 
+AUDIO: 'little bit more about who you are and how you like to work, the whole system gets so much smarter almost immediately. One question I get a lot about running the built-in memory is if you\'re using Hermes terminal execution back end, you\'re running the code in something'
+
+[03:46] [scene:talk]
+VISUAL: 
+AUDIO: 'like Docker, can Hermes still access the memory? And the answer is yes, it can. Running in Docker doesn\'t impact Hermes\' ability to access its own memory and user files. That\'s done using a memory tool, which is the same thing that the'
+
+[03:58] [scene:talk]
+VISUAL: 
+AUDIO: 'memory providers use, rather than running through code that ends up being sandboxed in Docker. I talked more about that in my how to get your agent isolated and operating more safely on your computer. The key is that the built-in user and memory files get'
+
+[04:10] [scene:talk]
+VISUAL: 
+AUDIO: 'injected into every new session. It becomes part of the context of every chat you have with Hermes. Now, this is great because it means that your agent never forgets who you are, but it also means that it\'s using up some of the context and tokens for every single'
+
+[04:22] [scene:talk]
+VISUAL: 
+AUDIO: 'chat. You want to keep this as lean as possible, so you\'re not wasting tokens. And that\'s where having an actual memory provider comes in. A memory provider is an external layer that stores and retrieves facts at runtime or when the agent actually needs it, rather than'
+
+[04:34] [scene:talk]
+VISUAL: 
+AUDIO: 'inserting it into every conversation. This helps keep your context lean and your facts on point for when you actually need them. Let\'s take a deeper look into memory providers. A lot of people feel overwhelmed when'
+
+[04:48] [scene:talk]
+VISUAL: 
+AUDIO: 'trying to pick a memory provider, and that\'s fair. There\'s a lot of options and things to consider. It depends on your goals, how many agents or people are accessing that shared memory, what hardware you have available to run it, and whether you want to use free or paid'
+
+[05:00] [scene:talk]
+VISUAL: 
+AUDIO: 'tools. The good news is that most, if not all of them, allow you to migrate between each other, so you\'re not locked into one that you pick up front. You can test and experiment, and if you don\'t like one tool, you can always migrate your memories to another one. But rather'
+
+[05:13] [scene:talk]
+VISUAL: 
+AUDIO: 'than comparing them all in this video, which would take a while, I put together my analysis free Patreon post that I\'ll link in the top comment of the video, so you can take a look at the different options and see what works best for your scenario. But today, rather than going off of benchmarks or feature lists, I'
+
+[05:26] [scene:talk]
+VISUAL: 
+AUDIO: 'thought I would take a look at what the community has been rating the most highly and what many people have recommended to me. And they are Nemesis and Hindsight. Nemesis is a zero-dependency lightweight system and doesn\'t require an LLM to work. It runs fully locally, incredibly fast with'
+
+[05:40] [scene:talk]
+VISUAL: 
+AUDIO: 'built-in embeddings. Nemesis is great if you want a memory provider that doesn\'t slow your system down. Hindsight has more features and it ranks at or near the top of most memory benchmarks, but it either needs a cloud connection or your own server plus an LLM to actually'
+
+[05:52] [scene:talk]
+VISUAL: 
+AUDIO: 'power it. The simplest way to think of it is Nomasyne is a memory layer, Hindsight is a memory engine. So, let\'s start with the lightweight option of Nomasyne so you can see a memory provider in action before we move on to a little more power with Hindsight.'
+
+[06:05] [scene:talk]
+VISUAL: 
+AUDIO: 'So, we can think of Nomasyne as a universal memory layer for any AI agent running a SQLite backend with sub-millisecond zero dependencies. So,'
+
+[06:17] [scene:talk]
+VISUAL: 
+AUDIO: 'the purpose of showing you this one first is that it is very fast and it doesn\'t require you to install a lot of other things. So, a little bit more about Nomasyne is that it\'s biologically inspired by the BEAM architecture, which'
+
+[06:30] [scene:talk]
+VISUAL: 
+AUDIO: 'brings in different memory tiers like working, episodic, semantic, and a scratchpad where each one is optimized for different access patterns. Everything stays local, which is good for privacy. It has sub-100 millisecond queries and it has native Hermes'
+
+[06:43] [scene:talk]
+VISUAL: 
+AUDIO: 'integration. Let\'s take a look at the architecture for a moment. So, the key is that we\'re building auto context injection, which basically means that when you have a query, when you ask Hermes something,'
+
+[06:56] [scene:talk]
+VISUAL: 
+AUDIO: 'Nomasyne will receive that query, use a recall tool to go take a look at its existing context, and inject that context into the agent\'s prompts before it responds to you. As you continue'
+
+[07:09] [scene:talk]
+VISUAL: 
+AUDIO: 'having conversations, it\'s going to remember more, which is going to get fed back into Nomasyne to help it build this context assembly. So, this is just one great way to continue building out a self-evolving memory system for your agent. And like we can see, it can be'
+
+[07:21] [scene:talk]
+VISUAL: 
+AUDIO: 'used for Claude code, for Codex, it can be used for Cursor, it can be used for any agent that you want, and we can have all of them connect to the same memory bank if we want to. All right, so let\'s get Nomasyne set up.'
+
+[07:33] [scene:talk]
+VISUAL: 
+AUDIO: 'So, if we go to their docs here, we can see that they have Hermes agent integration and it gives a list of quick commands here, so it\'s pretty easy to install. And one thing I want to mention just very quickly is that if you\'re'
+
+[07:45] [scene:talk]
+VISUAL: 
+AUDIO: 'running Hermes and you have your terminal execution back end running in Docker, we can\'t just give Hermes the task of setting up Mnemosyne for us because Hermes would try and run its terminal, and it would run inside of a Docker container here, and that\'s not'
+
+[07:57] [scene:talk]
+VISUAL: 
+AUDIO: 'what we need because we need our memory system to survive outside of the terminal back end Docker container. If you\'re not running inside a Docker, you can just ask Hermes to do it, but basically this just means that we need to run it from our host device inside of'
+
+[08:09] [scene:talk]
+VISUAL: 
+AUDIO: 'our computer. So, I\'m going to install it directly from terminal myself. Mnemosyne is not a built-in provider, so we need to install Mnemosyne a little bit more manually. But the key here is that we\'re not installing it inside of'
+
+[08:21] [scene:talk]
+VISUAL: 
+AUDIO: 'Hermes managed virtual environment because every time you run Hermes update, it rebuilds that virtual environment, and then it wipes any extra packages. So, we have two options that are listed here. We can use pipx, which'
+
+[08:33] [scene:talk]
+VISUAL: 
+AUDIO: 'creates a separate virtual environment, or we can manually create a virtual environment using the fallback option. However, neither of these options worked perfectly for me. So, if you install Mnemosyne and you run Hermes memory'
+
+[08:45] [scene:talk]
+VISUAL: 
+AUDIO: 'status and you get a plugin missing error, or when you first install it, the Python environments don\'t match error, you might need to add another step in between. So, the first step is going to be to'
+
+[08:59] [scene:talk]
+VISUAL: 
+AUDIO: 'install Mnemosyne Hermes into its own pipx environment, then set the config. So, these two steps are the same, but then before we restart the gateway, we need to link the new environment that we just created into the Hermes plugins'
+
+[09:11] [scene:talk]
+VISUAL: 
+AUDIO: 'folder, and then we need to run what\'s called the Hermes memory setup. That\'s just a very easy way that you can run it inside of terminal, and it will go through and configure Mnemosyne for you so that it gets recognized as a memory'
+
+[09:23] [scene:talk]
+VISUAL: 
+AUDIO: 'provider instead of just as a plugin. So, let\'s get started. Okay, so I\'m going to go to the documentation. I\'m going to copy the install. I\'m going to go to my terminal and paste this in. Great, there we go. That took less than a minute. So, we now have Mnemosyne'
+
+[09:35] [scene:talk]
+VISUAL: 
+AUDIO: 'Hermes set up. Now, if we go over to memory and context, we can see that we currently have the default memory system enabled, and this is the built-in memory provider. But, we can see here, if we click the drop-down, we don\'t have access to Mnemosyne inside of here.'
+
+[09:47] [scene:talk]
+VISUAL: 
+AUDIO: 'That\'s because it\'s a plugin, it\'s not a built-in memory provider. So, we need to enable that for our default profile outside of the settings of the desktop app. So, let\'s do that for a moment. So, I\'m going to go back to the docs here,'
+
+[09:59] [scene:talk]
+VISUAL: 
+AUDIO: 'copy this string, paste it in. Great, there we go. That just took 2 seconds. And basically, what just happened there is it modified the config.yaml file to use Mnemosyne as the memory provider. Now, we just installed Mnemosyne into'
+
+[10:13] [scene:talk]
+VISUAL: 
+AUDIO: 'One Bin, and we want to create a symlink or a link between where we just installed it using that separate environment and the actual Hermes plugin folder right here. So, that\'s what we'
+
+[10:25] [scene:talk]
+VISUAL: 
+AUDIO: 'can see right here. It just went through and verified that the provider of Mnemosyne is available and that it was able to connect Mnemosyne to Hermes. So, our next step is to run Hermes memory setup, and this is where we can see here, we want to go to Mnemosyne local,'
+
+[10:37] [scene:talk]
+VISUAL: 
+AUDIO: 'click yes. So, now that we are running Hermes memory setup, we\'re going to go through step-by-step and select all of the different configurations we want for Mnemosyne as Hermes memory provider. I just used the default option for'
+
+[10:50] [scene:talk]
+VISUAL: 
+AUDIO: 'everything except for being able to access global rather than session memories. But, I do recommend reading what it\'s asking, and if you\'re not sure, asking Hermes to help you understand the setup in a way that\'s going to work best for you. The most'
+
+[11:02] [scene:talk]
+VISUAL: 
+AUDIO: 'important setting, what\'s the default scope for remembering? I don\'t want to limit it per session, I want to have it be across all sessions. That\'s one of the benefits of running a memory system, so it\'s really important to switch this one to global. And there we go. So, we'
+
+[11:15] [scene:talk]
+VISUAL: 
+AUDIO: 'can see that this just went through and it saved the memory provider of Mnemosyne. So, now what we do is, if we go over to config.yaml inside of our .hermes folder, there we go. We can see that we have a whole memory system here with all of these different skills and'
+
+[11:28] [scene:talk]
+VISUAL: 
+AUDIO: 'tools set up for the Mnemosyne provider. So now I\'m going to restart the Hermes Gateway. Going to type in Hermes memory status and we can see that the memory tools enabled, the provider is Nemesis, we have all of the configurations that'
+
+[11:40] [scene:talk]
+VISUAL: 
+AUDIO: 'we just went through so we can change this later if we want. We have the plugin installed and the status is available which is key. And now we can see here if I type in Hermes Nemesis stats, everything is currently at zero because we haven\'t actually stored'
+
+[11:52] [scene:talk]
+VISUAL: 
+AUDIO: 'anything yet. So let\'s get that started. I\'m going to open the Hermes desktop app and if you go over to memory and context, we can see that Nemesis is now set up as the memory provider. Great. So now we have it all installed and if we'
+
+[12:05] [scene:talk]
+VISUAL: 
+AUDIO: 'ever want to upgrade this, we can just type in pipx upgrade Nemesis-Hermes. One more step I want to quickly mention here is that the Nemesis documentation suggests disabling legacy memory. And basically what that means is just this'
+
+[12:17] [scene:talk]
+VISUAL: 
+AUDIO: 'persistent memory and user profile we have set. The main reason is to avoid duplication and token waste. So I would suggest disabling it to start and then testing it out and if you notice a problem, you can always re-enable it.'
+
+[12:29] [scene:talk]
+VISUAL: 
+AUDIO: 'But don\'t disable it using a command like this. Make sure you just update it inside of the config.yaml file where we can see memory enabled false, user profile enabled false, which is the same thing as toggling these buttons off'
+
+[12:42] [scene:talk]
+VISUAL: 
+AUDIO: 'right here. Okay, so let\'s quickly test it out. If I ask Hermes a question, it shouldn\'t know anything about me. So previously I had told Hermes who I was, but now why don\'t we try it again since we have Nemesis'
+
+[12:55] [scene:talk]
+VISUAL: 
+AUDIO: 'set up. So we can see here it\'s going and it\'s actually enabling the Nemesis recall skills and the canonical skill, but it doesn\'t have anything. So I\'m going to give it a little bit about me so that it can remember it. Just as a quick tip, this is always the first'
+
+[13:07] [scene:talk]
+VISUAL: 
+AUDIO: 'thing I would do when you\'re setting up a new memory system is give Hermes or your agent some context on who you are and what you like. That way it starts to build a profile around you and the chat will start to feel more personalized and'
+
+[13:19] [scene:talk]
+VISUAL: 
+AUDIO: 'effective for what you\'re trying to accomplish. So my name is Callum, I go by Wander Roots, I run a YouTube channel, I\'m a patent agent, intellectual property lawyer. I studied mechanical materials science engineering, and this is my preference for how I like to respond. So, we can'
+
+[13:32] [scene:talk]
+VISUAL: 
+AUDIO: 'see here, now Hermes is going through and is running the Nemesis tool. It\'s running remember. It has professional background, alias, and name. And all of these things are being stored into the'
+
+[13:44] [scene:talk]
+VISUAL: 
+AUDIO: 'database that Nemesis has set up. So, now for example, if I open a new chat and I say who am I, we should see Hermes recall from Nemesis. Here we go. It pulled it in. That\'s awesome. That means'
+
+[13:56] [scene:talk]
+VISUAL: 
+AUDIO: 'that it is working perfectly. And now if we go back to terminal and run Hermes Nemesis stats, we can see here there\'s a total of four pieces of working memory unconsolidated. So, this is where it\'s going to go through and over time it\'s going to shift working memory into'
+
+[14:08] [scene:talk]
+VISUAL: 
+AUDIO: 'episodic memory and then deeper into it. And this is bringing in what\'s called the beam architecture. So, it\'s going to observe, it\'s going to take in conversation and tool results, and it\'s going to remember all of these things into its working memory. Then over time'
+
+[14:20] [scene:talk]
+VISUAL: 
+AUDIO: 'it\'s going to consolidate that into its long-term experiences or its episodic memories. Every time we ask the agent something, every time there\'s an input, it\'s going to go through and pull from both of those and then recall it. So, there\'s more details on working memory'
+
+[14:33] [scene:talk]
+VISUAL: 
+AUDIO: 'but this is a pretty cool system especially considering that it\'s all happening locally inside that SQLite database. And what\'s cool too is it\'s also bringing in structured knowledge stored as subject predicate object'
+
+[14:45] [scene:talk]
+VISUAL: 
+AUDIO: 'triples which is the basis of a knowledge graph. And if you want to learn more about that, I do have a video on knowledge graphs and how we can use it for improving agent systems. But I highly recommend going through and just exploring the beam overview so you understand a little bit more how this is'
+
+[14:58] [scene:talk]
+VISUAL: 
+AUDIO: 'all operating. This is pretty cool. Remember, if we go here, we had to manually add Nemesis to this list. But there\'s all these built-in ones that perhaps are a little more powerful'
+
+[15:11] [scene:talk]
+VISUAL: 
+AUDIO: 'depending on what you\'re looking for. And I\'m going to work on installing hindsight today. So, I personally like the fact that Nemesis can run locally, it runs without me needing to create anything extra. It doesn\'t have any'
+
+[15:24] [scene:talk]
+VISUAL: 
+AUDIO: 'dependencies and it\'s very fast. So, I\'m going to leave this as my default right now, but I\'m going to create a new profile and I\'m going to call it hindsight and I\'m going to use this to set up a separate configuration here. Okay, so I\'m now on the hindsight profile and if we go over to memory and'
+
+[15:36] [scene:talk]
+VISUAL: 
+AUDIO: 'context again, we can see here that I have persistent memory and user profile still turned on and the built-in memory provider is set. So, I don\'t have this one set up to connect to Namaseni. You can see that the hindsight profile'
+
+[15:50] [scene:talk]
+VISUAL: 
+AUDIO: 'doesn\'t even see it here. So, what we can do is we can go over to memory provider in our settings. We can go down to hindsight and turn this on. But, just before I do that, let\'s take a look at the hindsight website itself. So, hindsight is a native memory'
+
+[16:06] [scene:talk]
+VISUAL: 
+AUDIO: 'provider in the Hermes agent, which means it\'s built-in. And hindsight is a little bit different because it operates by having the agent actually connect to a separate server. So, it\'s not something that\'s running within Hermes'
+
+[16:18] [scene:talk]
+VISUAL: 
+AUDIO: 'itself, but what\'s cool is it has a whole bunch of different ways of operating. It builds its own mental models. It pulls in observations. It has standard memories. There\'s a lot you can do here and it can even reflect and then it\'s going to go through and extract'
+
+[16:32] [scene:talk]
+VISUAL: 
+AUDIO: 'more aware responses using a deeper sense of reasoning. So, when you run reflect, it runs an agentic loop that automatically searches the memory and then applies that to shape its own reasoning style and then produces a'
+
+[16:44] [scene:talk]
+VISUAL: 
+AUDIO: 'final answer grounded in what it\'s found. So, rather than just returning raw facts, reflect is a more synthesized response, which is why it also requires an LLM. So, there\'s a little bit more complexity here. I highly recommend'
+
+[16:57] [scene:talk]
+VISUAL: 
+AUDIO: 'exploring the hindsight documents if you want to learn a little bit more about it, but the key here is that this requires actually running a separate server or connecting to a separate server. So, if we go back to our memory provider here and select hindsight, we'
+
+[17:09] [scene:talk]
+VISUAL: 
+AUDIO: 'can see that a mode appears. So, this mode we have the option to switch between cloud and local external. And to understand that a little bit more, we can go specifically to the'
+
+[17:22] [scene:talk]
+VISUAL: 
+AUDIO: 'Hindsight docs on setting up for Hermes desktop specifically. And if you want to do it for the command line, there\'s also a separate way to get it going using the Hermes memory setup like you saw we did for Namacini. So basically we just need to select Hindsight, set what mode we'
+
+[17:34] [scene:talk]
+VISUAL: 
+AUDIO: 'want. And here we have cloud which requires an API key. That\'s where we can connect to the Hindsight cloud. But this does have a fee to it. It has you go so you can start for free and then'
+
+[17:47] [scene:talk]
+VISUAL: 
+AUDIO: 'depending on how often you\'re using it, depending on how big your system gets, you are going to have to start paying for it. You could just run the system yourself for free on your own computer if you have the hardware to do so. But if you don\'t, it might be worth taking a'
+
+[17:59] [scene:talk]
+VISUAL: 
+AUDIO: 'look at Hindsight cloud to see how much it costs. I personally haven\'t tried this yet. And today we\'re going to set up a local system. So take a look at this comparison here on comparing local to cloud LLMs for running your agent memory. So this is the LLM that\'s going'
+
+[18:11] [scene:talk]
+VISUAL: 
+AUDIO: 'to power the actual system as opposed to connecting to Hindsight cloud which also deals with storage. You can just connect to an open AI Anthropic or Gemini API, but then you\'re going to pay per token for every time you retain it. So you can'
+
+[18:24] [scene:talk]
+VISUAL: 
+AUDIO: 'run free locally on your own computer using something like Ollama which I have a video on running Ollama for agentic AI if you\'re interested in seeing how that works. One thing to keep in mind is that not all local models support tool calling. So you have to make sure that'
+
+[18:37] [scene:talk]
+VISUAL: 
+AUDIO: 'the one you\'re using does. I\'m going to use GPT-OSS 20 billion parameters which is 13 gigs. So make sure you have that model installed already. And also make sure that you have the Ollama app running in the background or serve it'
+
+[18:49] [scene:talk]
+VISUAL: 
+AUDIO: 'yourself from terminal. So our next step now that we have the local model downloaded is that we need to connect Hindsight to that local model and get the server running in the'
+
+[19:02] [scene:talk]
+VISUAL: 
+AUDIO: 'background. So I\'m going to do this inside of a docker container because this just improves the safety. Right now I already have my Hermes terminal back end is connecting to a docker container, so we\'re going to add another Docker container here that runs our memory'
+
+[19:14] [scene:talk]
+VISUAL: 
+AUDIO: 'system in hindsight directly. We can paste in this string, which I\'ll include in the free article linked in the top comment, but basically we want to run the Docker container with the name of hindsight, and we want it to even if the computer shuts down and starts up again,'
+
+[19:26] [scene:talk]
+VISUAL: 
+AUDIO: 'we want it to restart on its own. We\'re giving it two different ports, one for running the actual server, and then one for us to be able to look at the dashboard. And then these are all just environment variables that we are configuring so that it can connect to'
+
+[19:39] [scene:talk]
+VISUAL: 
+AUDIO: 'specifically the model that I have just selected here, which is the GPT-OSS 20 billion. Okay, there we go, and it was able to download hindsight for us. And now if we go over to Docker Desktop, which by the way this has to be running,'
+
+[19:51] [scene:talk]
+VISUAL: 
+AUDIO: 'I have a whole video that goes deeper into how to get your Hermes agent and now something like hindsight containerized inside of Docker, but we can go here and we can see that we have our server is now running. So if we go over to dashboard here, we can select memory bank, we can create a new one, we'
+
+[20:04] [scene:talk]
+VISUAL: 
+AUDIO: 'can get everything going. But this just shows us that we have the server running and it\'s available for us to connect to. Okay, so our next step is to connect this running server to Hermes. Let\'s do that for a moment.'
+
+[20:16] [scene:talk]
+VISUAL: 
+AUDIO: 'So remember I\'m in my hindsight profile, I\'m going over to memory and context. We have hindsight settings here since we\'ve selected the drop-down, and I\'m going to change this to local external. Because of that we can leave the API key blank.'
+
+[20:29] [scene:talk]
+VISUAL: 
+AUDIO: 'I\'m going to instead of having this connect to hindsight cloud, I\'m going to put in the local host server that we just set up. I\'m going to give it the name of Hermes, and I\'m going to keep this recall budget as mid. So this isn\'t doing anything to control the AI model,'
+
+[20:42] [scene:talk]
+VISUAL: 
+AUDIO: 'this is just telling Hermes where to find the hindsight program that we just launched. So now just to test this, I\'m going to go back and I\'m going to actually turn off persistent memory. This is something that you can run in the background with hindsight. I\'m just'
+
+[20:54] [scene:talk]
+VISUAL: 
+AUDIO: 'going to turn it off for a second so we can test hindsight. And this is different than Namaste, which recommends disabling this. So I\'m going to say who am I? There we go. So we can see hindsight recall just triggered, but it doesn\'t know who I am. So, I\'m giving it'
+
+[21:06] [scene:talk]
+VISUAL: 
+AUDIO: 'the same prompt as before to see if it can remember this. We can see it\'s planning durable memory. It\'s trying to update it, but again, in memories I turned that off. So, now it\'s running hindsight retain, and this can take a'
+
+[21:18] [scene:talk]
+VISUAL: 
+AUDIO: 'little bit because I\'m running a local model. But, if we go take a look at Docker for a second, we can go to my hindsight container. We can see here that it\'s running triggering the memory engine. So, if the model that I selected has gone to sleep, it can take a little'
+
+[21:30] [scene:talk]
+VISUAL: 
+AUDIO: 'bit. But, we can see here it\'s working to store in chunks. Okay, there we go. It was able to use hindsight retain to store the user profile and preferences. Cool. So, now it\'s saying too, the most useful optional context would be what are the answers to all of these things.'
+
+[21:43] [scene:talk]
+VISUAL: 
+AUDIO: 'But, I\'m just going to start a new session and say, "Who am I?" and see if it\'s able to pull that information from hindsight. There we go. So, rather than retain, it\'s now running hindsight recall, and it pulls up all the details that we had before, which is great. That'
+
+[21:55] [scene:talk]
+VISUAL: 
+AUDIO: 'means that this memory provider is working. And now, if we go back to localhost 99 dashboard, we can select the Hermes memory bank that now exists here. We can'
+
+[22:07] [scene:talk]
+VISUAL: 
+AUDIO: 'click on it, and what\'s super cool is we have the ability to see all of the information here that\'s already been created as part of the hindsight system. So, to me this is pretty wild that not only are we able to get the agent to'
+
+[22:19] [scene:talk]
+VISUAL: 
+AUDIO: 'remember things, but it\'s able to build this graph based on our memory, and there\'s so much detail we can get into here. This is called constellation view. We can switch it to table. We can take a look at timeline, which would happen as we get more details. There\'s'
+
+[22:32] [scene:talk]
+VISUAL: 
+AUDIO: 'experiences, observations, mental models. There\'s so many things that we can structure here that I\'m personally super excited to dive into. So, for example, I\'m just going to'
+
+[22:44] [scene:talk]
+VISUAL: 
+AUDIO: 'answer the question that Hermes had given me, giving it a little more context on what I hope to do with my YouTube channel, who I like to help, why I\'m doing this in the first place. So, I\'m going to have hindsight now retain this information. Okay, so it was able'
+
+[22:57] [scene:talk]
+VISUAL: 
+AUDIO: 'to run there, and if I click refresh on this graph, we can see that there\'s now a few more pieces of information. I can tell Hermes to please reflect on this conversation. So, here\'s the result of the reflection'
+
+[23:09] [scene:talk]
+VISUAL: 
+AUDIO: 'that also pulled in some recall. There was a bit of an issue, but it seems to have done a pretty good job pulling in a deeper understanding of what it is I\'m trying to do just based on that brief discussion I\'ve had. I\'m pretty'
+
+[23:21] [scene:talk]
+VISUAL: 
+AUDIO: 'impressed that it\'s pulling this in so quickly. The capable but overloaded builder people that I\'m chatting with and I\'m teaching here are curious and are wanting to understand rather than just getting answers, but I hope you can see that not only are these memories'
+
+[23:33] [scene:talk]
+VISUAL: 
+AUDIO: 'being stored here, they\'re being used in a way that improves the reflection that the agent has on the problems I\'m trying to solve and what I\'m interested in doing. And that was just after a basic amount of information. So, that\'s pretty'
+
+[23:45] [scene:talk]
+VISUAL: 
+AUDIO: 'cool. And again, this reflection is something that from what I understand at least at this moment, Mnemosyne doesn\'t have yet. So, that brings me to the question of which one should you choose? What should we actually care about here and where should we take this next?'
+
+[23:59] [scene:talk]
+VISUAL: 
+AUDIO: 'The author of Mnemosyne says these are not direct competitors. Hindsight is a memory engine with sophisticated natural language processing and multi-signal'
+
+[24:11] [scene:talk]
+VISUAL: 
+AUDIO: 'retrieval. Mnemosyne is a memory layer optimized for simplicity, speed, and single machine deployments. So, this is really the summary of it. Hindsight is an engine, whereas Mnemosyne is a layer. So, it\'s up to you to decide what works'
+
+[24:24] [scene:talk]
+VISUAL: 
+AUDIO: 'best for you. I am going to put more information here and all of the resources I talk about today into a free Patreon article that will go more in-depth on how to make this decision yourself, think the key here is to test one provider for a week and see if it'
+
+[24:36] [scene:talk]
+VISUAL: 
+AUDIO: 'improves your workflow. If it doesn\'t, try another one. You can always export from one to the other, there\'s no lock-in. And again, one thing that I personally am excited to explore a lot more is the dashboard here. I just think this is so cool that I\'m able to go and'
+
+[24:49] [scene:talk]
+VISUAL: 
+AUDIO: 'see all of these elements coming together, this full dashboard of the memories that are being created from my agent as I just have conversations with it. And to me, this is also the key benefit of running something like'
+
+[25:02] [scene:talk]
+VISUAL: 
+AUDIO: 'hindsight over Nemesimy because while Nemesimy does have a dashboard, it\'s a community dashboard. It\'s not built by the creator of Nemesimy. So, Nemesimy is a smaller tool built by a smaller team and hindsight is a full system that\'s'
+
+[25:15] [scene:talk]
+VISUAL: 
+AUDIO: 'got a lot more going for it. And that brings me to the next step, which I\'m really excited about. Not just building memories based on my chats with the agent, but also connecting this to my world knowledge, my library, or my second brain inside of my Obsidian LLM'
+
+[25:29] [scene:talk]
+VISUAL: 
+AUDIO: 'Wiki. So, now your agent has true agentic memory. Nemesimy gives you a fast lightweight memory layer, and if you\'re looking for a little more power, you can use the memory engine of hindsight. If'
+
+[25:41] [scene:talk]
+VISUAL: 
+AUDIO: 'you have any questions about what we talked about today or tips for how you\'re using your own workflow, please let me know in the comments. I\'m happy to answer questions and I love learning how you\'re using these systems as well. But, there\'s still one piece missing, world knowledge. Your operational'
+
+[25:53] [scene:talk]
+VISUAL: 
+AUDIO: 'memory, the agentic memory we set up, now knows how you work. Next, I\'ll connect it to the Obsidian LLM Wiki so your agent isn\'t just remembering facts about you. It\'s also reasoning against everything you already know. If you found this video helpful, please like'
+
+[26:06] [scene:talk]
+VISUAL: 
+AUDIO: 'and subscribe. I really appreciate it. And don\'t forget to check out the free Patreon post that I\'ve linked below with more information on the setup, the code, and the memory provider options. Thanks again for watching and I will see you in the next video.'

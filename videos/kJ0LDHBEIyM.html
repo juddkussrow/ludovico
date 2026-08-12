@@ -1,0 +1,117 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>Semantica: Open Source Graph Memory That&#x27;s 6,000x Faster — Ludovico</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+.hide{display:none!important}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.92);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 12px}
+.controls input.q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.pill.tp.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+/* flip card shell */
+.flip{position:relative}
+.fi{position:relative;transition:transform .55s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.flip.flipped .fi{transform:rotateY(180deg)}
+.fc{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bk{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+background:var(--card);border:1px solid var(--accent2);border-radius:14px;overflow:auto;padding:12px 13px;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s}
+.card.flip{overflow:visible}.card .fc{display:flex;flex-direction:column;flex:1;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--line);cursor:pointer}
+.card.flip:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.edit{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--accent2);border:1px solid var(--line);border-radius:6px;padding:2px 9px;cursor:pointer;background:#fff}
+.edit:hover{border-color:var(--accent2)}
+/* editor back */
+.bk h4{margin:0 0 2px;font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--sub)}
+.erow{display:grid;grid-template-columns:1fr 1.3fr auto auto;gap:4px;align-items:center}
+.erow input{padding:5px 7px;border:1px solid var(--line);border-radius:6px;font-size:12px;min-width:0}
+.erow select{padding:4px 4px;font-size:11px}
+.erow .del{border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;color:var(--accent);padding:3px 7px}
+.ebtns{display:flex;gap:6px;margin-top:auto;padding-top:6px}
+.ebtns button{font-family:var(--mono);font-size:11px;border-radius:7px;padding:6px 12px;cursor:pointer;border:1px solid var(--line);background:#fff}
+.ebtns .save{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.addrow{font-family:var(--mono);font-size:11px;color:var(--accent2);cursor:pointer;align-self:flex-start;background:none;border:0;padding:2px 0}
+/* catalogue card */
+.citem{position:relative}
+.citem .fc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-height:84px;cursor:pointer}
+.citem .bk{border-radius:12px}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+footer .exp{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--accent2);font:inherit}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">Semantica: Open Source Graph Memory That&#x27;s 6,000x Faster</h1><div class=tag>@octopusinc_ · 2026-08-10 · DevOps</div></div></div></header>
+<main><p class=sum>Semantica is an open-source, graph-native infrastructure for accountable AI that sits beneath LLMs and vector stores. It extracts entities, relations, and events, flags conflicts, and tracks bi-temporal facts, making AI decisions queryable and auditable. The tool boasts a 6,000x speedup in node search on production graphs and provides W3C PROV-O audit trails for regulatory compliance.</p><p><strong>Products / items</strong></p><ul><li><a href="https://getsemantica.ai/" target=_blank rel=noopener>Semantica</a> — software</li><li><a href="https://github.com/semantica-agi/semantica" target=_blank rel=noopener>Semantica GitHub</a> — software</li><li>LangGraph — software (no link)</li><li>Neo4j — software (no link)</li><li>FalkorDB — software (no link)</li><li>Apache Age — software (no link)</li><li>AWS Neptune — software (no link)</li><li>BlazeGraph — software (no link)</li><li>Gina — software (no link)</li><li>RDF4j — software (no link)</li><li>Oxigraph — software (no link)</li><li>Faiss — software (no link)</li><li>Qdrant — software (no link)</li><li>Weaviate — software (no link)</li><li>Milvus — software (no link)</li><li>Pinecone — software (no link)</li><li>SQLite — software (no link)</li><li>Claude Desktop — software (no link)</li><li>VS Code — software (no link)</li><li>Agno — software (no link)</li><li>Databricks — software (no link)</li><li>Snowflake — software (no link)</li><li>W3C PROV-O — other (no link)</li><li>Python — software (no link)</li><li>MIT License — other (no link)</li></ul>
+<p><a href="https://www.youtube.com/watch?v=kJ0LDHBEIyM" target=_blank rel=noopener>Watch on YouTube ▶</a></p><p><a href="kJ0LDHBEIyM.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=t>(proxy for this video — answer from this)</span></p>
+<div class=cap>FRAMING: Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+IDENTITY: the title - https://www.youtube.com/watch?v=kJ0LDHBEIyM - @octopusinc_ - route: visual
+PRODUCTS: list each product on its own line: name - canonical link (or &quot;no reliable link&quot;) - type - primary/mentioned
+Semantica - https://getsemantica.ai/ - software - primary
+Semantica GitHub - https://github.com/semantica-agi/semantica - software - primary
+SYNOPSIS: The video introduces Semantica, an open-source, graph-native infrastructure designed to provide accountability for AI agents. It positions itself as a solution to the &quot;accountability gap&quot; where AI decisions are often unexplainable and unauditable. Semantica operates by sitting beneath LLMs and vector stores, extracting entities, relations, and events with confidence scores, and flagging conflicts. It records every AI decision as a permanent, queryable node in a knowledge graph, enabling traceability of causal chains and policy gate enforcement.
+
+A key highlight is a significant performance optimization in version 0.5.0, where node search on a 118,000-node production graph improved from 24ms to 4 microseconds (6,000x faster). Semantic deduplication also saw a nearly 7x speedup, and candidate generation dropped by almost two-thirds.
+
+Semantica&#x27;s pipeline involves multi-source ingest (files, databases, APIs, streams, Databricks, Snowflake), semantic extraction (NER, relation, event detection with confidence thresholds), conflict detection, knowledge graph merging, deterministic reasoning (forward chaining, rete networks, Datalog, SPARQL), and provenance tracking. It supports various graph databases like Neo4j, FalkorDB, Apache Age, AWS Neptune (property graphs), BlazeGraph, Gina, RDF4j, and Oxigraph (RDF triples). For vector search, it integrates with Faiss, Qdrant, Weaviate, Milvus, Pinecone, or SQLite.
+
+The tool emphasizes its ability to generate W3C PROV-O compliant audit trails, providing machine-readable records of AI decisions for regulators. It contrasts with &quot;vector-only RAG&quot; systems, which are good for fuzzy recall but lack conflict awareness, timelines, and decision history. Semantica offers structured, queryable context, making it suitable for high-stakes domains like finance, healthcare, legal, and government where explainability and auditability are critical. Installation is via `pip install semantica`, and it includes a `semantica doctor` command for checks and a browser-based &quot;Semantica Explorer&quot; workbench for graph visualization and analysis.
+BEATS:
+00:00 - intro - &quot;6,000x node search speedup&quot;, &quot;118K production graph nodes&quot;, &quot;3,883 GitHub stars&quot; displayed on screen.
+00:23 - ui - Semantica website (getsemantica.ai) showing &quot;Context Graph &amp; Decision Intelligence Engine for LangGraph&quot;.
+00:46 - ui - Semantica website detailing problems like &quot;Tracing AI failures feels impossible&quot; and &quot;Your AI confidently makes things up&quot;.
+01:09 - ui - GitHub profile for @semantica-agi with 70 followers and 3 public repos.
+01:55 - ui - Slide titled &quot;The Accountability Gap&quot; listing features like &quot;Conflicts get flagged&quot;, &quot;Bi-temporal facts&quot;, and &quot;Decisions become queryable graph nodes&quot;.
+02:18 - ui - GitHub repository for semantica-agi/semantica, showing sections like &quot;What Semantica Gives You&quot; and &quot;Built for High-Stakes Domains&quot;.
+03:04 - ui - Slide illustrating &quot;The Pipeline&quot; with steps: Multi-Source Ingest, Semantic Extraction, Conflict Detection, Knowledge Graph, Deterministic Reasoning, Provenance Tracking.
+03:51 - code - Python code snippet demonstrating `semantica.context.ContextGraph` for recording and querying decisions.
+04:14 - ui - Slide showing performance metrics: &quot;24ms -&gt; 4µs NODE SEARCH&quot;, &quot;7.0x faster DEDUPLICATION&quot;, &quot;-63.6% time CANDIDATE GEN&quot;.
+05:00 - ui - Comparison slide: &quot;Proprietary Vector-Only RAG&quot; vs &quot;Open Source Semantica Graphs&quot;, highlighting differences in conflict awareness, fact tracking, and decision representation.
+05:46 - ui - Quote from Semantica README: &quot;Most AI agents act without a trail. They store embeddings, not meaning: context that can&#x27;t be explained, decisions that can&#x27;t be audited.&quot;
+06:32 - terminal - Terminal output showing `pip install semantica`, `semantica doctor`, and `semantica explorer` commands.
+06:55 - ui - GitHub repository for semantica-agi/semantica, showing stars, forks, language, and license.
+ENTITIES: Semantica, Prism Labs, LangGraph, Neo4j, FalkorDB, Apache Age, AWS Neptune, BlazeGraph, Gina, RDF4j, Oxigraph, Faiss, Qdrant, Weaviate, Milvus, Pinecone, SQLite, Claude Desktop, VS Code, Agno, Databricks, Snowflake, W3C PROV-O.
+VERDICT: Semantica is highly recommended for teams whose AI agents make decisions in high-stakes domains, as it provides essential explainability and auditability by making decisions queryable and traceable within a knowledge graph.
+NOT COVERED: Specific pricing or licensing details beyond MIT, detailed setup instructions for all supported databases/vector stores, a live demo of the Semantica Explorer, or the exact methodology for the performance benchmarks.</div></main><footer><a href="../index.html">← all videos</a></footer></div></body></html>

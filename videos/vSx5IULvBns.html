@@ -1,0 +1,172 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>Always-on agents run production without the on-call tax — Justin Smith, Resolve AI — Ludovico</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+.hide{display:none!important}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.92);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 12px}
+.controls input.q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.pill.tp.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+/* flip card shell */
+.flip{position:relative}
+.fi{position:relative;transition:transform .55s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.flip.flipped .fi{transform:rotateY(180deg)}
+.fc{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bk{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+background:var(--card);border:1px solid var(--accent2);border-radius:14px;overflow:auto;padding:12px 13px;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s}
+.card.flip{overflow:visible}.card .fc{display:flex;flex-direction:column;flex:1;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--line);cursor:pointer}
+.card.flip:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.edit{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--accent2);border:1px solid var(--line);border-radius:6px;padding:2px 9px;cursor:pointer;background:#fff}
+.edit:hover{border-color:var(--accent2)}
+/* editor back */
+.bk h4{margin:0 0 2px;font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--sub)}
+.erow{display:grid;grid-template-columns:1fr 1.3fr auto auto;gap:4px;align-items:center}
+.erow input{padding:5px 7px;border:1px solid var(--line);border-radius:6px;font-size:12px;min-width:0}
+.erow select{padding:4px 4px;font-size:11px}
+.erow .del{border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;color:var(--accent);padding:3px 7px}
+.ebtns{display:flex;gap:6px;margin-top:auto;padding-top:6px}
+.ebtns button{font-family:var(--mono);font-size:11px;border-radius:7px;padding:6px 12px;cursor:pointer;border:1px solid var(--line);background:#fff}
+.ebtns .save{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.addrow{font-family:var(--mono);font-size:11px;color:var(--accent2);cursor:pointer;align-self:flex-start;background:none;border:0;padding:2px 0}
+/* catalogue card */
+.citem{position:relative}
+.citem .fc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-height:84px;cursor:pointer}
+.citem .bk{border-radius:12px}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+footer .exp{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--accent2);font:inherit}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">Always-on agents run production without the on-call tax — Justin Smith, Resolve AI</h1><div class=tag>@octopusinc_ · 2026-08-09 · DevOps</div></div></div></header>
+<main><p class=sum>Resolve AI provides an agent-based platform designed to reduce the operational burden on engineering teams by automating tasks related to production monitoring, incident response, and daily operations. The platform leverages AI agents that can autonomously monitor deployments, perform health checks, generate reports, and even answer engineering questions in Slack, aiming to free up engineers from &quot;invisible toil&quot; and allow them to focus on writing code. These agents are distinguished by their ability to understand production context and adapt their monitoring plans based on specific changes.</p><p><strong>Products / items</strong></p><ul><li><a href="https://resolve.ai/" target=_blank rel=noopener>Resolve AI</a> — software</li><li>Slack — software (no link)</li><li>GitHub — software (no link)</li><li>Splunk — software (no link)</li><li>VMware — software (no link)</li><li>Zscaler — software (no link)</li><li>DoorDash — software (no link)</li><li>Coinbase — software (no link)</li><li>Salesforce — software (no link)</li><li>MongoDB — software (no link)</li><li>Snowflake — software (no link)</li><li>Expedia Group — software (no link)</li><li>Cisco — software (no link)</li><li>Guidewire — software (no link)</li><li>Toast — software (no link)</li><li>Veza — software (no link)</li><li>Upwind — software (no link)</li><li>Gametime — software (no link)</li><li>Pinecone — software (no link)</li><li>iFIT — software (no link)</li><li>Microsoft — other (no link)</li><li>IDC 2023 Survey Spotlight — other (no link)</li><li>Kafka — software (no link)</li><li>PostgreSQL — software (no link)</li></ul>
+<p><a href="https://www.youtube.com/watch?v=vSx5IULvBns" target=_blank rel=noopener>Watch on YouTube ▶</a></p><p><a href="vSx5IULvBns.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=t>(proxy for this video — answer from this)</span></p>
+<div class=cap>FRAMING: Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+IDENTITY: the title - https://www.youtube.com/watch?v=vSx5IULBns - @octopusinc_ - route: visual
+PRODUCTS:
+Resolve AI - https://resolve.ai/ - software - primary
+Slack - no reliable link - software - mentioned
+GitHub - no reliable link - software - mentioned
+Splunk - no reliable link - software - mentioned
+VMware - no reliable link - software - mentioned
+Zscaler - no reliable link - software - mentioned
+DoorDash - no reliable link - software - mentioned
+Coinbase - no reliable link - software - mentioned
+Salesforce - no reliable link - software - mentioned
+MongoDB - no reliable link - software - mentioned
+Snowflake - no reliable link - software - mentioned
+Expedia Group - no reliable link - software - mentioned
+Cisco - no reliable link - software - mentioned
+Guidewire - no reliable link - software - mentioned
+Toast - no reliable link - software - mentioned
+Veza - no reliable link - software - mentioned
+Upwind - no reliable link - software - mentioned
+Gametime - no reliable link - software - mentioned
+Pinecone - no reliable link - software - mentioned
+iFIT - no reliable link - software - mentioned
+Microsoft - no reliable link - other - mentioned
+IDC 2023 Survey Spotlight - no reliable link - other - mentioned
+Kafka - no reliable link - software - mentioned
+PostgreSQL - no reliable link - software - mentioned
+SYNOPSIS: Justin Smith, Founding Product Engineer at Resolve AI, discusses how AI agents can reduce the &quot;on-call tax&quot; and operational toil for engineering teams. He highlights that 70% of an engineer&#x27;s time is spent running, not writing, software, a problem exacerbated by AI-generated code increasing the volume of changes. Resolve AI offers an agent-based platform to address this by automating production operations. The platform features on-call agents for alert triage and root cause analysis, incident agents for larger cross-team issues, and background agents for continuous operational tasks. These agents operate based on three principles: when they run (schedule, event streams, or message-based), how they run (in a cloud sandbox with its own file system), and how they know what to do (tasks, skills, and integrations).
+
+Smith demonstrates four key workloads for background agents: deployment monitoring, scheduled health and anomaly checks, operational reports and handoffs, and acting as a first responder to engineering questions. For deployment monitoring, an agent detects a GitHub release tag in Slack, analyzes the code changes, and dynamically creates a customized check plan. For example, if a checkout service replaces a currency service, the agent monitors checkout latency, error rates, and the Kafka pipeline. This monitoring is not hardcoded; the agent can decide to re-check in an hour or three days based on the nature of potential failures. The agent can also generate daily operational reports, summarizing investigations and notable changes. A unique feature is a Slack-watching agent that can answer engineering questions with confidence, or DM a human engineer for confirmation before replying publicly. The core idea is that execution is easy, but understanding &quot;production context&quot; (e.g., knowing when a metric &quot;smells wrong&quot;) is crucial, and Resolve AI aims to build the knowledge system for this context.
+
+BEATS:
+0 - intro | Justin Smith, Founding Product Engineer at Resolve AI, is introduced with his professional background.
+74 - context | A slide shows &quot;70% of engineering time is spent on running software&quot; with a diagram illustrating &quot;Coding&quot; vs. &quot;Production&quot; tasks.
+149 - context | A slide titled &quot;Running software is getting exponentially harder&quot; displays news headlines about AI creating production issues and the end of &quot;unlimited tokens.&quot;
+224 - context | A slide shows &quot;World class engineering teams using AI for prod&quot; with logos of companies like Zscaler, DoorDash, and Coinbase, and their reported benefits from using AI.
+299 - ui | A slide titled &quot;AI for prod&quot; presents a diagram of &quot;AI AGENTS&quot; (On-call, Incidents, Background, Your agents), &quot;AGENT ARCHITECTURE&quot; (Models, Context, Reasoning, Actions, Learning, Evils), and &quot;ENTERPRISE GRADE PLATFORM&quot; (Integrations, Cost efficiency, Agent Security, Usage &amp; audit, Deployment).
+374 - ui | The same &quot;AI for prod&quot; slide is shown.
+448 - context | A slide asks &quot;Are you using agents in your daily work today?&quot; for a live poll.
+523 - context | A slide titled &quot;Most production work is always there and not always a critical event&quot; lists examples of &quot;invisible toil&quot; like watching deploys and writing reports.
+598 - context | A slide defines &quot;Task = Execution x Production Context,&quot; explaining the difference between isolated execution and the knowledge-intensive production context.
+673 - ui | A slide titled &quot;When does the agent work?&quot; lists &quot;On schedule,&quot; &quot;Event streams,&quot; and &quot;Message-based&quot; as triggers for agents.
+748 - ui | A slide titled &quot;How does the agent know what to do?&quot; lists &quot;Tasks,&quot; &quot;Skills,&quot; and &quot;Integrations&quot; as components.
+822 - ui | A slide titled &quot;Four workloads to easily hand off to background agents&quot; shows &quot;Deployment monitoring&quot; with a template &quot;Engineering Deploys Agent.&quot;
+897 - ui | The slide expands to include &quot;Scheduled health and anomaly checks&quot; with a template &quot;PostgreSQL Watch.&quot;
+972 - ui | The slide further expands to include &quot;Operational reports and handoffs&quot; with &quot;Daily Pulse&quot; and &quot;First responder to engineering questions&quot; with &quot;Primary on-caller.&quot;
+1047 - demo | A Slack UI is shown, demonstrating a &quot;deploy-log&quot; channel where a Resolve AI agent monitors a GitHub release tag and provides a detailed check plan.
+1122 - demo | The Slack UI continues to show the Resolve AI agent&#x27;s detailed check plan for a deployment.
+1196 - demo | A Slack UI shows an &quot;oncall-handoff&quot; channel with a &quot;Daily Operational Handoff Report&quot; generated by Resolve AI, summarizing investigations and changes.
+1271 - ui | A Resolve AI web UI is shown, displaying a &quot;Daily Code Changes &amp; Feature Flags Summary&quot; report with details on code changes and feature flag states.
+1346 - ui | A slide titled &quot;BYOA, or call Resolve AI from yours&quot; presents two options: &quot;Drive from your agents&quot; (Resolve AI as a Plugin, MCP server, API) and &quot;Bring your skills to Resolve&quot; (Resolve AI agents consume internal skills).
+1421 - outro | Justin Smith is seen on stage, concluding his presentation.
+
+ENTITIES:
+Justin Smith (Speaker, Founding Product Engineer at Resolve AI)
+Resolve AI (Company, Product)
+Microsoft (Sponsor)
+Splunk (Company)
+VMware (Company)
+Zscaler (Company)
+DoorDash (Company)
+Coinbase (Company)
+Salesforce (Company)
+MongoDB (Company)
+Snowflake (Company)
+Expedia Group (Company)
+Cisco (Company)
+Guidewire (Company)
+Toast (Company)
+Veza (Company)
+Upwind (Company)
+Gametime (Company)
+Pinecone (Company)
+iFIT (Company)
+IDC (Research firm)
+Satya Nadella (Microsoft CEO)
+Anthropic (AI company)
+Meta (Company)
+Craig Hockenberry (Individual)
+Jonathan Canales (Individual)
+
+VERDICT: Resolve AI offers a valuable solution for engineering teams struggling with the operational burden of running software, especially with the increased complexity introduced by AI-generated code. Its agent-based approach, which emphasizes understanding production context over mere execution, provides a flexible and powerful way to automate monitoring, incident response, and routine tasks, thereby freeing up engineers for more strategic work.
+
+NOT COVERED: The video does not cover the pricing model of Resolve AI, specific technical details of the AI models used, the exact integration process with various tools beyond mentioning &quot;integrations,&quot; or the security implications and data privacy measures of running agents in a cloud sandbox.</div></main><footer><a href="../index.html">← all videos</a></footer></div></body></html>

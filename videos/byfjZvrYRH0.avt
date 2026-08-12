@@ -1,0 +1,212 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Did This Open Source Model Just Fix AI Reasoning? (ThinkingCap)
+channel: @octopusinc_
+duration: 10:46
+source: https://www.youtube.com/watch?v=byfjZvrYRH0
+upload_date: 20260809
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:ui]
+VISUAL: Side-by-side comparison of two models answering a card puzzle, showing token count and speed differences.
+AUDIO: 'This is the same question asked to the same base model. Watch the token counters here. One of them is spending a lot of time reasoning about the question, while the other one has already completed the task. And if we check both outputs, the answer to the'
+
+[00:12] [scene:talk]
+VISUAL: 
+AUDIO: 'question is basically the same, but the model on the right wasted far more tokens to get to the same conclusion. And that is pretty cool, because the only difference between these two models is that one on the left is running'
+
+[00:24] [scene:ui]
+VISUAL: ThinkingCap demo UI showing metrics like elapsed time, tokens/sec, total tokens, thinking tokens, answer tokens, and time to first token.
+AUDIO: 'thinking cap, a custom fine-tuned version of the same model, which aims to ensure you get the same quality outputs while sacrificing less tokens and getting to your answer two times faster.'
+
+[00:36] [scene:talk]
+VISUAL: 
+AUDIO: 'So, in today\'s video, we\'ll take a look at thinking cap, see how it works, and then we\'re going to test them out ourselves to see if this really is a novel approach to fine-tuning AI models. It\'s going to be a lot of fun, so let\'s'
+
+[00:50] [scene:talk]
+VISUAL: 
+AUDIO: 'dive into it. Before we talk about thinking cap, let\'s rewind the clocks a bit to see how we actually got here. The first ever'
+
+[01:02] [scene:ui]
+VISUAL: Timeline graphic showing the public release of ChatGPT (GPT-3.5) in 2022.
+AUDIO: 'broadly available model, GPT-3, was launched back in 2020. And by the late 2022, ChatGPT put GPT-3.5 in front of the general public for the'
+
+[01:14] [scene:talk]
+VISUAL: 
+AUDIO: 'first time. That\'s when most people\'s relationship with AI actually started. GPT-4 followed in 2023, which was another jump in capability, but it still had fundamentally the same idea. Predict'
+
+[01:26] [scene:talk]
+VISUAL: 
+AUDIO: 'the next token and answer immediately. But then, in September 2024, OpenAI released O1. And this was the first model which used a thinking mode before'
+
+[01:38] [scene:talk]
+VISUAL: 
+AUDIO: 'answering. So, instead of firing off a response immediately, it spent extra time and tokens reasoning through the problem first. That one architectural shift kicked off the reasoning model'
+
+[01:51] [scene:talk]
+VISUAL: 
+AUDIO: 'era. DeepSeek-R1 followed a few months later and brought the same idea to the open-source world. And pretty quickly, reasoning became the thing that every major AI model maker was shipping. But'
+
+[02:03] [scene:ui]
+VISUAL: ArXiv paper title: "Does Your Reasoning Model Implicitly Know When to Stop Thinking?".
+AUDIO: 'now, a little over a year later, we\'re starting to see the opposite trend show up. Models fine-tuned specifically to think less and not more. In a way, we\'re going back to basics, just with'
+
+[02:16] [scene:talk]
+VISUAL: 
+AUDIO: 'everything we learned from the reasoning era baked in. But here\'s the thing, that shift towards more thinking solved one problem and quietly created another. Nobody actually taught these models when'
+
+[02:28] [scene:talk]
+VISUAL: 
+AUDIO: 'to stop thinking. If you ask a reasoning model something genuinely simple, it will still burn through thousands of tokens re-deriving things it already figured out three sentences ago, restating the same point in slightly'
+
+[02:41] [scene:ui]
+VISUAL: UI of a reasoning model (Step 3.5 Flash) responding to "Hello" with extensive internal monologue.
+AUDIO: 'different words, or in worst-case scenario, it\'s going to start looping. And I mean that almost literally. Let me show you one of the most ridiculous examples I\'ve run into. This is Step 3.5 Flash. And when I was testing this'
+
+[02:56] [scene:talk]
+VISUAL: 
+AUDIO: 'reasoning model, I just sent it a single word, "Hello." And look at what it does with that. It spends multiple paragraphs debating whether it\'s required to introduce itself by its exact model name, whether always use the exact name'
+
+[03:09] [scene:talk]
+VISUAL: 
+AUDIO: 'when introducing yourself means it must introduce itself every time or only when it chooses to. Then it weighs whether mentioning today\'s date is relevant, and eventually, after all that, it lands on'
+
+[03:22] [scene:talk]
+VISUAL: 
+AUDIO: 'a response any of us would have typed in about 2 seconds. "Hello, I\'m Step 3.5 Flash. How can I assist you today?" So, that\'s not really reasoning. That\'s a model that\'s trained to think, but it'
+
+[03:35] [scene:talk]
+VISUAL: 
+AUDIO: 'was never trained to know when thinking is done. Now, Bottlecap AI is a European startup focused specifically on making inference more efficient. And what they did with Thinking Cap is honestly really'
+
+[03:48] [scene:talk]
+VISUAL: 
+AUDIO: 'clever. So, they took the model Qwen 3.6, the 27 billion parameter version, and they weren\'t trying to make it smarter, and they weren\'t teaching it new skills or changing its personality or touching its safety behavior, either.'
+
+[04:02] [scene:talk]
+VISUAL: 
+AUDIO: 'The only thing they wanted to change was how much compute it burns getting to an answer it was already capable of giving. And that sounds simple, but it\'s actually harder than it seems. So, the lazy way to make a model faster is to'
+
+[04:15] [scene:talk]
+VISUAL: 
+AUDIO: 'just cut its reasoning short, force it to stop after X amount of tokens, whether it\'s actually done or not. That will absolutely reduce token counts, but it will also make the model wrong more'
+
+[04:27] [scene:talk]
+VISUAL: 
+AUDIO: 'often because sometimes it genuinely needs those extra steps. So, the real engineering challenge here isn\'t making it shorter, it\'s making it shorter without secretly making it dumber. And'
+
+[04:39] [scene:ui]
+VISUAL: Diagram illustrating the difference between "Correctness only" (verbose, no incentive to stop) and "Correctness + efficiency" (rewards stopping early).
+AUDIO: 'here\'s how they actually did it. Starting from the Qwen 3.6 27 billion parameter model base checkpoint, they trained it on a curated set of problems spanning multiple domains and difficulty'
+
+[04:52] [scene:talk]
+VISUAL: 
+AUDIO: 'levels. And instead of rewarding the model for getting the right answer, they rewarded it for getting the right answer efficiently. Because if a model only gets rewarded for correctness, being verbose doesn\'t cost anything. There\'s'
+
+[05:06] [scene:talk]
+VISUAL: 
+AUDIO: 'no incentive to stop thinking early. But by explicitly rewarding efficiency alongside correctness, the model learns to recognize when it already has enough to commit to an answer. So, in result, they got a model that behaves almost'
+
+[05:20] [scene:ui]
+VISUAL: Table showing benchmark results, including accuracy, token count, and percentage reduction in tokens.
+AUDIO: 'identically to the original. Now, let\'s actually look at the numbers because this is where it gets interesting. Across 12 out-of-domain benchmarks, meaning problems that weren\'t part of the training data, Thinking Cap cut its'
+
+[05:32] [scene:talk]
+VISUAL: 
+AUDIO: 'thinking tokens by an average of 45.8% and the accuracy barely changed. It moved by less than one percentage point on average. And on the benchmarks that were part of the training domain, the'
+
+[05:44] [scene:ui]
+VISUAL: Benchmark results table highlighting "looping" rates for various models.
+AUDIO: 'token reduction was even bigger, almost 58% and on the GSM 8K specifically, accuracy actually went up from 93.3% to 96.5.'
+
+[05:56] [scene:talk]
+VISUAL: 
+AUDIO: 'And they also tracked something called a looping rate, how often a model gets stuck rephrasing the same reasoning over and over without converging, like we just saw in that step 3.5 flash example. That dropped, too, on most benchmarks,'
+
+[06:09] [scene:talk]
+VISUAL: 
+AUDIO: 'which tells us that a lot of the extra reasoning these models were doing was never actually productive. It was just noise that happened to look like effort. Okay, numbers on a page is one thing,'
+
+[06:21] [scene:ui]
+VISUAL: ThinkingCap demo UI with an empty prompt field for a live test.
+AUDIO: 'but let\'s actually test it ourselves. So, I\'m running this test on a machine with an RTX 5090 with 64 GB of RAM and I\'m going to ask both of the models the same question. What is the smallest'
+
+[06:34] [scene:talk]
+VISUAL: 
+AUDIO: 'positive integer n such that n! has exactly 100 trailing zeros? And to get to the answer of this question, it has to use the Legendre\'s formula, in which case for this particular question would'
+
+[06:47] [scene:talk]
+VISUAL: 
+AUDIO: 'yield the answer of 405. There\'s only one correct answer, there\'s no in between. So, if we get 405, then we know that the model has answered correctly. Okay, so first let\'s run the standard 27'
+
+[06:59] [scene:ui]
+VISUAL: Qwen3.6-27B model running a complex math problem, showing high thinking token count.
+AUDIO: 'billion parameter Qwen 3.6 quantized model and see how it performs. And as you can see right off the bat, the token speed is not that bad. It\'s averaging about 60 tokens per second, but look how'
+
+[07:12] [scene:talk]
+VISUAL: 
+AUDIO: 'much thinking this model is doing. It\'s It\'s absolutely ridiculous. We\'re well past a minute now and it\'s still churning out tokens just on the reasoning part. I had to speed up the'
+
+[07:25] [scene:ui]
+VISUAL: Qwen3.6-27B model's final output for the math problem, displaying high elapsed time and thinking tokens.
+AUDIO: 'preview here because the total time was running over 2 minutes. But nonetheless, at the end of it, we did get the correct result, which is 405, which is good. But look at the total elapsed time. It\'s 140'
+
+[07:37] [scene:talk]
+VISUAL: 
+AUDIO: 'seconds and look at the token expenditure. More than 7,000 tokens were spent just on reasoning alone. And merely just 900 tokens were actually spent on printing out the answer. So,'
+
+[07:50] [scene:talk]
+VISUAL: 
+AUDIO: 'this example clearly demonstrates how over-the-top ridiculously Qwen is reasoning about every request. Now, let\'s switch to the thinking cap version of the same model. And just on the record, we\'re using the same 27 billion'
+
+[08:03] [scene:ui]
+VISUAL: ThinkingCap model running the same math problem, showing significantly lower elapsed time and thinking tokens.
+AUDIO: 'parameter model with the same quantization. And as you can see here, we\'re 20 seconds in and we\'re already done with reasoning. And just 9 seconds later, we get the answer, which in this case is also correct, 405. And look what'
+
+[08:16] [scene:talk]
+VISUAL: 
+AUDIO: 'a stark difference this is. Not only did we only spend less than 2,000 tokens in total, of which only 1,100 was allocated for reasoning, but we also got a'
+
+[08:29] [scene:ui]
+VISUAL: BottleCap AI website, specifically a blog post about ThinkingCap, discussing the accidental shortening of answers.
+AUDIO: 'slightly faster tokens per second speed of 62 tokens per second. So, in every metric, this model just blows the base Qwen 3.6 model out of the water. It\'s faster, it\'s more efficient, it costs'
+
+[08:43] [scene:talk]
+VISUAL: 
+AUDIO: 'less tokens, and it gives you the same correct answer. So, this is a pretty impressive improvement. And here\'s a detail from their write-up that I have to mention because it\'s genuinely a funny accident. Their original goal was'
+
+[08:56] [scene:talk]
+VISUAL: 
+AUDIO: 'to only shrink the thinking trace. So, it that\'s the reasoning part. While keeping the final answer exactly the same length as before. But, they had a bug. The shortening accidentally applied to the final answer, too, not just the'
+
+[09:09] [scene:ui]
+VISUAL: BottleCap AI website, highlighting text about humans having a "penalty" for long answers.
+AUDIO: 'thinking. So, they fixed the bug, but apparently, internally, everyone actually preferred the buggy version. So, their theory is that humans get tired writing long answers, so we naturally compress what we say. And'
+
+[09:22] [scene:talk]
+VISUAL: 
+AUDIO: 'these models never had that kind of fatigue built in until now. So, they ended up shipping the broken concise version anyway and saving the technically correct one for a future'
+
+[09:34] [scene:ui]
+VISUAL: Side-by-side comparison of ThinkingCap-Qwen3.6-27B and Qwen3.6-27B on a physics problem, showing token and speed differences.
+AUDIO: 'release. So, there you have it, folks. That is Thinking Cap in a nutshell. I guess the big takeaway from all of this is that we\'ve always believed that the more the models think, the more intelligent they are. Whereas, Thinking'
+
+[09:47] [scene:talk]
+VISUAL: 
+AUDIO: 'Cap just proved that is not necessarily the case. Once you actually train against it, you can get the same quality output for a fraction of the cost with basically nothing given up. If you want'
+
+[10:00] [scene:talk]
+VISUAL: 
+AUDIO: 'to try the model on your own, it\'s freely available on Hugging Face under Apache 2.0 license. And I want to hear from you folks. What do you think about this new approach? Do you see any pros or cons to this technique? Let us know'
+
+[10:13] [scene:intro]
+VISUAL: Andris Gauracs, Developer Advocate at Better Stack, introducing himself.
+AUDIO: 'in the comment section down below. And folks, if you like these types of technical breakdowns, please let me know by smashing that like button underneath the video. And also, don\'t forget to subscribe to our channel. This has been Andrus from Better Stack, and I will see'
+
+[10:26] [scene:talk]
+VISUAL: 
+AUDIO: 'you in the next videos. &gt;&gt; [music]'

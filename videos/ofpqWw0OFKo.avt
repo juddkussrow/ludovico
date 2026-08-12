@@ -1,0 +1,264 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Build a Local Router with Nemotron Lightning
+channel: @octopusinc_
+duration: 13:44
+source: https://www.youtube.com/watch?v=ofpqWw0OFKo
+upload_date: 20260811
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:intro]
+VISUAL: Diagram: "the harness" with tools.json, "the transcript", "the model", and a "router" directing to "the frontier model" or "your own machine".
+AUDIO: 'Okay, so models are just one piece of the puzzle when it comes to powerful agentic systems. Now, harnesses are becoming a lot more important and that\'s why I\'ve been spending a lot of time on this channel on harnesses. Now, today I want to look at another topic which I'
+
+[00:13] [scene:talk]
+VISUAL: 
+AUDIO: 'think is going to be very hot and that is the router. In this video, I want to show you what exactly a router is and how to run one locally where you have all the control. Okay. So why do we even'
+
+[00:26] [scene:talk]
+VISUAL: 
+AUDIO: 'need a router? Now today a lot of people just use frontier level models available to them for every task especially if you\'re paying for a subscription and not'
+
+[00:38] [scene:concept]
+VISUAL: Diagram: "this month your token bill" showing tasks and costs, with a "router" directing to "the frontier model" or "your own machine".
+AUDIO: 'API pricing. So even for something like a simple commit message you are going to be probably using a frontier model. But if you are going to be paying API pricing this can get expensive really'
+
+[00:51] [scene:talk]
+VISUAL: 
+AUDIO: 'quickly. So we\'re going to look at this idea of using a routing layer to decide to use different models based on the complexity of the task. Now you have probably seen this in some fashion. So'
+
+[01:04] [scene:talk]
+VISUAL: 
+AUDIO: 'if you have used a service like open router uh there\'s a single API endpoint that gives you access to different models. It\'s a form of routing. Now what we are going to build in this video is'
+
+[01:17] [scene:concept]
+VISUAL: Diagram: Four points: "1 cost", "2 speed", "3 specialization", "4 privacy", with a bar chart showing "all frontier" vs "routed" cost.
+AUDIO: 'going to be your own routing layer which is going to decide whether to use a frontier model versus a local model based on the capabilities and task at hand. Now the question is why do you'
+
+[01:29] [scene:talk]
+VISUAL: 
+AUDIO: 'want to route? There are four different reasons with every one having their own constraints. So cost is the most obvious one. Especially for enterprises, they\'re realizing that they\'re burning tokens or'
+
+[01:43] [scene:talk]
+VISUAL: 
+AUDIO: 'token maxing. So based on the workflow at hand, they probably want to use smaller models as a part of that workflow. Now the second one is speed. Sometimes you don\'t want the smartest'
+
+[01:56] [scene:concept]
+VISUAL: Diagram: The four points, with "Glean 25% fewer tokens", "small planner 35% cheaper", and a timeline showing "80 seconds of spinner cheap is not fast".
+AUDIO: 'model. You need the faster one. Especially for agentic workflows where agents are taking hundreds of steps. You can\'t be waiting there. want a really fast model but it doesn\'t always come with lack of intelligence. OpenAI is'
+
+[02:11] [scene:talk]
+VISUAL: 
+AUDIO: 'about to release GBD 5.6 on Cerebras. So there are constraints on latency for certain applications. Now this brings us to specialization because the best'
+
+[02:23] [scene:talk]
+VISUAL: 
+AUDIO: 'average model is not good for everything and especially for enterprises they use specialized fine-tuned models for different purposes. So your routing layer should be able to select a'
+
+[02:35] [scene:concept]
+VISUAL: Diagram: The four points, with a heatmap showing "best on average is not best at everything" and a house icon for "privacy customer records under contract security said no".
+AUDIO: 'specialized model based on the task at hand. And the last one is privacy. A lot of companies are adopting a hybrid approach where they use local models for sensitive'
+
+[02:51] [scene:talk]
+VISUAL: 
+AUDIO: 'data and then they also use a more intelligent hybrid model for the rest of the tasks. Now even though all of these uses some sort of routing they have'
+
+[03:04] [scene:talk]
+VISUAL: 
+AUDIO: 'completely different set of requirements. Okay. So if you decide to use a routing mechanism or a routing layer what exactly are your options today? There are both proprietary options like open router or dev fusion'
+
+[03:18] [scene:concept]
+VISUAL: Diagram: "what already exists" showing "OpenRouter", "Devin Fusion", "RouteLLM", and boxes for "a classifier", "several strategies", "a proxy".
+AUDIO: 'and then there is open-source solutions like route l which is a trained classifier that can help you select a different model based on the task at hand. Now Nvidia also recently released'
+
+[03:30] [scene:talk]
+VISUAL: 
+AUDIO: 'their own solution called switchyard which is an open-source solution built on top of route lm. Now this gives you a classifier along with a proxy for plumbing. But then additionally it has a'
+
+[03:42] [scene:talk]
+VISUAL: 
+AUDIO: 'number of different strategies and how to do routing and it also state of conversation cross your sessions along with specific uh traces of actions that'
+
+[03:54] [scene:talk]
+VISUAL: 
+AUDIO: 'it has taken. And this is the solution that we\'re going to be using in this video. But first, we need to talk about an interesting release from Nvidia. And this is their Neotron 3.5 Lightning, which is a 30 billion MOE and'
+
+[04:08] [scene:talk]
+VISUAL: 
+AUDIO: 'is specifically designed for high throughput workloads as a total of 30 different experts. Now, in architecturally, it\'s very similar to the rest of Neotron family. Now,'
+
+[04:20] [scene:talk]
+VISUAL: 
+AUDIO: 'Lighting projects any incoming tokens into a smaller latent space and then routes them into one of those active experts. calls this latent MO and the claim is better accuracy per bite. Now'
+
+[04:32] [scene:talk]
+VISUAL: 
+AUDIO: 'architecturally it\'s a hybrid between Mumba and transformer. Of this they are able to preserve that 1 million context window much more'
+
+[04:44] [scene:result]
+VISUAL: Bar chart: "Artificial Analysis Intelligence Index" showing various models' performance, with Nemotron 3.5 Lightning visible.
+AUDIO: 'effectively. It also supports speculative decoding essentially means processing multiple different tokens instead of a single token in one pass. It has support for MTP, Dlash, and DSpark. If you want to learn more about'
+
+[04:58] [scene:talk]
+VISUAL: 
+AUDIO: 'speculative decoding, I highly recommend to watch this video. Okay. So, why exactly are we talking about this new Neotron 3.5 Lightning? If you look at the artificial intelligence index, it is'
+
+[05:10] [scene:talk]
+VISUAL: 
+AUDIO: 'on par with the GPT OSS, but at a much higher throughput, which means it\'s much faster. So in this video I want to combine this with Kim K3 to show you an application of where you don\'t really'
+
+[05:24] [scene:demo]
+VISUAL: Terminal output: `curl localhost:8000/models` showing `nvidia/nemotron-3.5-lightning-30b-a3b` loaded, with "71 tokens/s sustained" and "75% MTP accepted".
+AUDIO: 'need frontier level intelligence for every task. There are tasks where you can use a smaller and faster model like this. Now Nvidia give me early access to this model. I\'m running this locally on'
+
+[05:36] [scene:talk]
+VISUAL: 
+AUDIO: 'DGX Spark. Now for this uh specific model I get about 71 tokens per second on a single stream and multi-token prediction is accepting about 70%'
+
+[05:48] [scene:talk]
+VISUAL: 
+AUDIO: 'of its guesses which is actually pretty good. So to test this I give a 1400 tokens reasoning task to the lightning model locally and then Kimik3 over the'
+
+[06:01] [scene:talk]
+VISUAL: 
+AUDIO: 'API. So even on DJX Spark uh it finished the task in about 20 seconds. I get 3 took about 50 seconds. Now for this specific task I was more interested in the speed'
+
+[06:15] [scene:talk]
+VISUAL: 
+AUDIO: 'and it\'s much faster though it\'s running on the DGX Spark and there are a lot of task where you don\'t need more intelligence but you need more speed and privacy. In the rest of the video I\'ll'
+
+[06:27] [scene:talk]
+VISUAL: 
+AUDIO: 'show you how to set up your own routing layer completely locally. Say we want to use Kimik K3 as the capable model and then a more efficient local model as'
+
+[06:39] [scene:talk]
+VISUAL: 
+AUDIO: 'Neimoton 3.5 lightning. Now in switchard there are different primitives that you will need to set. So the first one is profile whether it\'s a stage router or'
+
+[06:51] [scene:ui]
+VISUAL: Diagram: Switchyard configuration with "targets" (kimi-k3, nemotron-3.5-lightning) and "profiles" (stage_router, escalation_router).
+AUDIO: 'escalation router then you need to set targets where you can have multiple different models. In this case, I\'m calling one capable, the other one'
+
+[07:03] [scene:talk]
+VISUAL: 
+AUDIO: 'efficient, and then I simply describe what model to use. What is going to be uh the API provider? You\'ll notice a spark here, which is my local GX Spark running the Neotron 3.5 lightning model.'
+
+[07:18] [scene:talk]
+VISUAL: 
+AUDIO: 'Now, in your own app, you just need to set the router to the profile that you\'re using. Okay, so shipyard ships with four different routing strategies and you pick uh one per route in the'
+
+[07:30] [scene:concept]
+VISUAL: Table: "four strategies ship in the box" with "random" route type described as "a fixed traffic split".
+AUDIO: 'config. Now the first one is called random. So it essentially splits traffic on fixed ratio. This might be founding completely useless. But in a lot of'
+
+[07:44] [scene:talk]
+VISUAL: 
+AUDIO: 'cases you want to run AB tests or if you want to measure a baseline, this is the strategy that you would use. The second one is LLM classifier. You have a second model which reads the request and'
+
+[07:58] [scene:talk]
+VISUAL: 
+AUDIO: 'decides which tier should handle it. In this case, the input is content and the output is tier selection. Now the third one is stage router. So instead of'
+
+[08:11] [scene:concept]
+VISUAL: Table: The four strategies, now including "llm classifier" and "stage_router".
+AUDIO: 'asking a model, it reads signals that are already sitting in the conversation. things like whether tool calls are failing or whether edits are landing and based on that it essentially decides'
+
+[08:27] [scene:talk]
+VISUAL: 
+AUDIO: 'uh which route to select. Now the fourth one is escalation which is the classifier in a different mode. So every task starts on the cheaper model and a judge basically watches it. So when it'
+
+[08:41] [scene:talk]
+VISUAL: 
+AUDIO: 'sees real trouble, it moves that session up and it will stay up. Now we need to look at the cost of each of these strategies. So the random one is not going to cost you anything at all. If'
+
+[08:55] [scene:concept]
+VISUAL: Table: The four strategies, with "extra model call?" column filled for each, showing costs.
+AUDIO: 'you use the LLM classifier, every query is going to run through an extra LLM call. The stage router mostly cost you nothing because the signals that you\'re getting are essentially free. And then'
+
+[09:07] [scene:talk]
+VISUAL: 
+AUDIO: 'escalation is going to cost you that one judge call until the session latches. So if you\'re using a routing lay, this is the column that you actually want to pay a lot of attention to. But before that,'
+
+[09:20] [scene:talk]
+VISUAL: 
+AUDIO: 'we need to look at what are the different signals that the router actually uses. Okay. Uh before showing you the demo, here\'s one idea where you can combine'
+
+[09:32] [scene:result]
+VISUAL: Graph: "frontier accuracy at half the cost" comparing Opus 4.8 with and without Nemotron 3.5 Lightning and NeMo Switchyard.
+AUDIO: 'switchard with a frontier model in a workhorse model to substantially reduce the cost without sacrifice of intelligence. So if you look at opus 4.8'
+
+[09:44] [scene:talk]
+VISUAL: 
+AUDIO: 'for uh this specific data set uh it gets about 80% of the tasks completed but almost at $180. But then if you uh combine it with'
+
+[09:57] [scene:talk]
+VISUAL: 
+AUDIO: 'something like Neotron 3.5 lightning along with the Nemo switch here, you can actually have it route between different multiple models based on their'
+
+[10:10] [scene:ui]
+VISUAL: Dashboard: "on-call triage - Nemotron 3.5 Lightning" with empty "inside your building" and "outside third party" sections.
+AUDIO: 'capabilities and you get very similar level of performance but at substantially reduced cost. This is where specialized models comes into play. You don\'t need the frontier'
+
+[10:22] [scene:talk]
+VISUAL: 
+AUDIO: 'intelligence for every task. Especially for production use cases, you want the most reliable and cost effective models. Okay. So, let me show you a couple of scenarios with this uh combination of a'
+
+[10:35] [scene:talk]
+VISUAL: 
+AUDIO: 'model like Neotron 3.5 lighting with switchyard as a router is going to be extremely helpful. So, let\'s say uh we have network data that we want to analyze. there are different alerts that'
+
+[10:49] [scene:ui]
+VISUAL: Dashboard: "on-call triage" showing network alerts being processed by Nemotron 3.5 Lightning and digests sent to Kimi K3.
+AUDIO: 'are being generated. In the first case, I\'m going to show you this two-stage all local digest out. Uh so the idea here is that these network alerts have a lot of data that you can\'t send to an external'
+
+[11:02] [scene:talk]
+VISUAL: 
+AUDIO: 'API. So for example, there are host names and things like that. Basically when an alert comes in switch initially uh just uses the Neotron 3.5 lightning'
+
+[11:14] [scene:talk]
+VISUAL: 
+AUDIO: 'model which is very fast and efficient for these kind of tasks. The only thing that it generates is a digest line which basically creates a JSON from the'
+
+[11:26] [scene:talk]
+VISUAL: 
+AUDIO: 'incoming data and then all of these are uh put together by removing the PPIs and only the combined data is sent to Kimik 3 as an API. And right now you can'
+
+[11:41] [scene:talk]
+VISUAL: 
+AUDIO: 'actually see that the Kimik3 is trying to look for root cause. H in this case we have completely removed any host name, IP addresses, account numbers from the payload. Right? So this is like one'
+
+[11:54] [scene:talk]
+VISUAL: 
+AUDIO: 'scenario in which you would want to use a local model which is going to capture what is happening in the network analyze the alerts and then for escalation you\'re using a third party API but'
+
+[12:09] [scene:talk]
+VISUAL: 
+AUDIO: 'you\'re uh removing any private information that you don\'t want to send to a third API. In this case only the combi com combined information is going through to the third party API. Now in this second scenario we are analyzing'
+
+[12:23] [scene:talk]
+VISUAL: 
+AUDIO: 'every alert and then a switch yard is basically doing escalation. Uh so it uses a router to escalate specifics to the bigger more intelligent model.'
+
+[12:36] [scene:talk]
+VISUAL: 
+AUDIO: 'Okay. So here\'s a detailed overview of the routing. Uh so in here we can see that there are t two different paths uh it\'s a stage router so the lm classifier'
+
+[12:49] [scene:talk]
+VISUAL: 
+AUDIO: 'decides what path to take and the switchyard. Now if you\'re doing routing it\'s actually very important that you don\'t do it per turn because that\'s'
+
+[13:01] [scene:ui]
+VISUAL: Dashboard: "on-call triage" showing multiple alerts escalated, with "calls that left" and "cost" displayed.
+AUDIO: 'going to be extremely expensive. It\'s going to break the caching. you probably want to do it at the start of a task and then just keep with that specific route uh for the entire task or conversation.'
+
+[13:17] [scene:talk]
+VISUAL: 
+AUDIO: 'Anyways, I\'ll highly recommend to check out the Neotron 3.5 lightning and switch out links are going to be in the video description and if you are interested in this simple application uh to understand'
+
+[13:29] [scene:talk]
+VISUAL: 
+AUDIO: 'the codebase link to the repo is going to be also in the video description. Do check them out. I hope you found this video useful. Thanks for watching and as always, see you in the next one.'

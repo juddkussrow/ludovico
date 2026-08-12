@@ -1,0 +1,240 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Context as a Variable: The Fix for Context Rot (RLMs)
+channel: @octopusinc_
+duration: 11:49
+source: https://www.youtube.com/watch?v=k2rkLm1eA9k
+upload_date: 20260810
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:intro]
+VISUAL: A slide with text "It is not a model. It is a harness." and a diagram showing a loop with "REASON", "OBSERVE", "ACT" around "MODEL".
+AUDIO: '4 days ago, a repository that had been sitting on GitHub since May went to number one on trending. 10,000 stars on it now, nearly 1,000 forks, and an MIT license, so you can read every line of it. It is not a model. There are no weights anywhere in it. It is a harness,'
+
+[00:13] [scene:talk]
+VISUAL: 
+AUDIO: 'the loop that wraps a model. And its headline claim is that it beat human experts on a benchmark designed to resist exactly this kind of trick. That claim is the smaller story. The bigger one is the idea underneath it and where'
+
+[00:26] [scene:concept]
+VISUAL: A graph showing "ANSWER QUALITY" degrading as "CONTEXT WINDOW" fills, with "degradation starts" around 50K tokens in a 200K window.
+AUDIO: 'that idea came from. Because the last video on this channel ended on a thread that was deliberately left hanging, and this is it. It was about context rot, the measured, repeatable fact that giving a model more input makes its'
+
+[00:38] [scene:talk]
+VISUAL: 
+AUDIO: 'answers worse. Chroma put 18 frontier models through it in a 2025 study and watched accuracy fall long before any window filled. A 200,000 token window already degrading around 50,000. That is'
+
+[00:50] [scene:talk]
+VISUAL: 
+AUDIO: 'storage, not comprehension. That video pointed out one research idea and said the direction was right, but that nobody had shipped it. 4 days ago, it shipped. So, this video is that'
+
+[01:02] [scene:concept]
+VISUAL: A diagram illustrating "Every token competes for the same pool" in a fixed context window, with self-attention links between various document components.
+AUDIO: 'answer, and the answer turned out stranger than I expected. The idea is called a recursive language model. The whole thing turns on one word, and the word is variable. Here\'s what happens today when you hand a model'
+
+[01:14] [scene:talk]
+VISUAL: 
+AUDIO: 'something long. All of it becomes tokens inside one window, and every token competes with every other token for the same finite pool of attention. Chroma measured that decay and said plainly it could not explain the'
+
+[01:26] [scene:talk]
+VISUAL: 
+AUDIO: 'mechanism, but the room is still there. What runs short is attention. A recursive language model refuses the paste. The long input never enters the model\'s context at all. It gets assigned to a variable inside a live Python'
+
+[01:38] [scene:ui]
+VISUAL: A terminal showing `prime-agent run` command output, demonstrating how a model can interact with a codebase (`ctx.peek()`) by writing Python code without directly reading the entire content.
+AUDIO: 'session, and the model is handed the variable name. So, the root model starts the task effectively blind. It cannot see the document, the repository, the transcript. What it can do is write code that touches them. Say the input is a'
+
+[01:51] [scene:talk]
+VISUAL: 
+AUDIO: 'code base. The model writes a line of Python, list every file, keep the ones over 10 kilobytes, print the first 200 characters of each. The session runs it and returns that, not the code base. It now knows the shape of a thing it has'
+
+[02:05] [scene:talk]
+VISUAL: 
+AUDIO: 'not read, which is enough to decide what to look at next, and that decision is where the recursion starts. In Prime Agent, the recursive call is an ordinary Python function. You hand it a task in plain English and a name, and it'
+
+[02:17] [scene:concept]
+VISUAL: A code snippet showing `rlm("review the public API", name="api_review")` and `rlm("check test coverage", name="test_review")`, illustrating how a parent spawns child agents with separate contexts.
+AUDIO: 'spawns a child agent with its own model, its own kernel, and its own empty context. Review the authentication flow for security issues, name it auth reviewer. The call returns immediately, not with an answer, with a handle. The'
+
+[02:30] [scene:talk]
+VISUAL: 
+AUDIO: 'child works somewhere else and replies by message when it has something, so the parent can fire off an API review, a test coverage review, and a slow integration audit in three lines, end its turn, and go do something else while'
+
+[02:42] [scene:talk]
+VISUAL: 
+AUDIO: 'three separate contexts fill up instead of one. That is the whole inversion. Context stops being something the model drowns in and becomes something it queries. The prompt is not a prompt anymore. It is a variable, which sounds'
+
+[02:54] [scene:concept]
+VISUAL: A diagram comparing a model that "READ EVERY WORD" of a document to one that "NEVER READ IT" but uses a `ctx` handle, asking if the latter can outperform the former.
+AUDIO: 'elegant, and elegance is cheap. The real question is whether a model that never read the document can beat a model that did. The paper\'s answer runs on four long context benchmarks. The clearest is O long, where the questions cannot be'
+
+[03:08] [scene:talk]
+VISUAL: 
+AUDIO: 'answered by finding one line, you have to aggregate across the whole document. At 132,000 tokens, GPT-5 Mini wrapped in the recursive harness beat plain GPT-5 by more than 34 points. 34 points of'
+
+[03:21] [scene:result]
+VISUAL: A bar chart titled "Against the scaffolds people actually ship" showing "GPT-5" performance improvements (median % better) when using the harness compared to compaction, code agents, and Claude Code.
+AUDIO: 'accuracy, which works out to about 114% relative. Read that pairing again, because it is the whole argument. The small model, blind, driving Python, against the large model that read every'
+
+[03:34] [scene:talk]
+VISUAL: 
+AUDIO: 'word, at roughly the same API cost per query. Push the same test to 263,000 tokens, and the gap narrows but holds, 15 points, and by then the recursive version is the cheaper of the two per'
+
+[03:46] [scene:talk]
+VISUAL: 
+AUDIO: 'query. Against the scaffolds people actually ship, the paper reports medians on GPT-5, 26% better than compaction, 130% better than a code agent making sub calls, 13% better than Claude code, and'
+
+[03:59] [scene:concept]
+VISUAL: Text on screen mentioning an "8B" parameter model, "Qwen3-8B," that was fine-tuned around the recursive pattern.
+AUDIO: 'then there is the cost table, which rarely gets quoted. Across those four benchmarks, the recursive runs cost between 11 cents and 99 cents a query. Claude code on the same tasks cost between 98 cents and'
+
+[04:12] [scene:talk]
+VISUAL: 
+AUDIO: '$6.75. The ceiling moved as well. The authors report feeding it past 10 million tokens without the usual collapse, two orders of magnitude beyond the window the model advertises. Then they went further and trained a model'
+
+[04:25] [scene:talk]
+VISUAL: 
+AUDIO: 'around the pattern. An 8 billion parameter QN fine-tuned on a thousand recursive trajectories beat its own base by about 28% across four tasks and walked up to vanilla GPT-5 on three long context ones.'
+
+[04:39] [scene:person]
+VISUAL: A slide introducing Alex Zhang with his name and image, discussing his description of a "bug" in model behavior.
+AUDIO: 'So, how does an idea like that go from nowhere to a billion-dollar company\'s flagship product in under a year? And why did a company get there before any of the labs? It started as a blog post in October 2025 written by a first-year'
+
+[04:51] [scene:talk]
+VISUAL: 
+AUDIO: 'PhD student at MIT named Alex Jiang. He was 24, about 6 weeks into the degree. His description of the bug is still the best one anyone has written. I know my model can do task A. I know it can do'
+
+[05:03] [scene:talk]
+VISUAL: 
+AUDIO: 'task B. Give it both at once and it does worse than it did on either alone. By the last day of the year that post was an arXiv paper with his two advisors on it, revised twice through May, and still, worth saying, published to no'
+
+[05:16] [scene:company]
+VISUAL: A timeline showing Prime Intellect's Series A funding ($130M at $1B valuation) in July 2026.
+AUDIO: 'conference at all. While that was happening, a company called Prime Intellect was building the same idea into its own stack. In January, it put out a post titled Recursive Language Models, The Paradigm of 2026. In July, that company closed a'
+
+[05:29] [scene:talk]
+VISUAL: 
+AUDIO: '$130 series A at a billion-dollar valuation on roughly 100 million in annualized revenue and 6,000 customers. Four weeks later, it shipped Prime'
+
+[05:41] [scene:talk]
+VISUAL: 
+AUDIO: 'Agent. And Alex Jiang\'s name is on the launch post because he is a research fellow there now. The person who wrote the blog post is inside the company that turned it into a product. The repository is older than the announcement, by the way.'
+
+[05:53] [scene:concept]
+VISUAL: Text on screen stating "Recursion is only half of what shipped," with the other half related to a paper about Pokémon.
+AUDIO: 'Created the 8th of May, 41 releases since mid-May, version 0.7 on the day they finally told anyone. And in the last day alone, it picked up about 3,000 more stars. But recursion is only half'
+
+[06:05] [scene:talk]
+VISUAL: 
+AUDIO: 'of what shipped. The other half comes from a different paper, and that paper is about Pokémon. A team led by Seth Cardin at Princeton built a harness that finished Pokémon Blue, Yellow Legacy on hard mode, and Crystal, the last one'
+
+[06:18] [scene:ui]
+VISUAL: A terminal and code editor showing the `prime agent /refine` command and a diff of a `.md` file, demonstrating the self-refining harness.
+AUDIO: 'without losing a single battle. A human kept refining the harness as it played. Their follow-up took the human out. The agent alternates between playing and rewriting its own prompt, its own skills, its own memory, and its own'
+
+[06:31] [scene:talk]
+VISUAL: 
+AUDIO: 'sub-agents inside a single run with no reset between attempts. In Prime Agent that arrives as a slash command called refine. It reads back what just happened, proposes small evidence-backed edits to'
+
+[06:43] [scene:talk]
+VISUAL: 
+AUDIO: 'its own scaffolding, and writes them to disk with a snapshot you can roll back. There is one wall it cannot cross. The base system prompt is immutable. Everything built on top of it, memories, skills, sub-agent definitions, is the'
+
+[06:56] [scene:concept]
+VISUAL: An equation for "Relative human action efficiency" (RHAE) is displayed, explaining the scoring metric for ARC-AGI 3.
+AUDIO: 'agent\'s to rewrite, which brings us back to the number I skipped past at the start and to the fight that has been going on around it since. ARC AGI-3 is not a puzzle set. It drops an agent into 25 interactive games it has never seen'
+
+[07:09] [scene:talk]
+VISUAL: 
+AUDIO: 'and scores how efficiently it works out the rules and wins. The metric is relative human action efficiency. Take the actions a competent human needed, divide by the actions the agent needed, and square the result. Take twice as'
+
+[07:22] [scene:talk]
+VISUAL: 
+AUDIO: 'many actions as a human, and you score a quarter. The squaring is the design. Brute force cannot buy a score here. An agent that flails its way to a win scores close to nothing, which is exactly what makes this benchmark hard'
+
+[07:34] [scene:result]
+VISUAL: A bar chart comparing ARC Prize results for Claude Opus 5 (30.2%) and Prime Agent's self-reported score (95.5%), highlighting the 65-point difference.
+AUDIO: 'to game with a scaffold. On the 24th of July, ARC Prize ran Claude Opus 5 on the public set themselves and published 30.2% That was state-of-the-art, nearly four times the previous record. 12 days'
+
+[07:47] [scene:talk]
+VISUAL: 
+AUDIO: 'later, Prime Intellect ran the same model on the same 25 games inside their harness and reported 95.5% The human expert baseline is 95.4. Same weights, same games, same metric.'
+
+[07:59] [scene:talk]
+VISUAL: 
+AUDIO: '65 points of difference and the only thing that changed was the loop around the model. So, which of those two numbers is Claude Opus 5? And if the answer turns out to be that it depends what you wrapped it in, what exactly has'
+
+[08:12] [scene:result]
+VISUAL: The bar chart is updated to show that "SCHEMA" achieved ~99% on the same public set three weeks earlier.
+AUDIO: 'the industry been ranking for the last 3 years? Now, the harness result is self-reported and Prime Intellect is not on the official leaderboard. That was the first thing people said and it is fair. The second thing is harder on the announcement. 3 weeks earlier, a group'
+
+[08:26] [scene:talk]
+VISUAL: 
+AUDIO: 'from Impossible Research, Berkeley and Carnegie Mellon had published a harness called Schema hitting about 99% on the same public set. And an engineer named Ryan Brown working on it in his own time published an agent'
+
+[08:39] [scene:talk]
+VISUAL: 
+AUDIO: 'scoring 99.86 across all 25 games using 5.5 times fewer tokens than the previous best. His repository has eight stars. So, the human line had already been crossed twice by people without a launch'
+
+[08:52] [scene:talk]
+VISUAL: 
+AUDIO: 'post. A harness beating the model it wraps is not the news here. It is the background condition. The sharpest objection is about the rules. That benchmark is explicitly few-shot and a harness that rewrites itself between'
+
+[09:04] [scene:talk]
+VISUAL: 
+AUDIO: 'attempts may be taking more tries than the rules allow. One commenter on the Schema thread put it as bluntly as it can be put. This is moving the goal post by defeating the entire point of the test. The language model equivalent of running a chess'
+
+[09:17] [scene:result]
+VISUAL: A table showing "Nine long-context evals, one harness," with Prime Agent beating Claude Code and Codex on multiple benchmarks.
+AUDIO: 'engine on the side. The reply to that is not weak either. To write a working simulator of a game you were not shown, you have to have learned the rules of that game, which is the thing the benchmark was trying to measure in the first place. Set the games aside though,'
+
+[09:29] [scene:talk]
+VISUAL: 
+AUDIO: 'because there is a second table on that launch post and it is is one that matters if you write software for a living. Nine long context evaluations. With Opus 5, Prime Agent beat Claude Code on six of the nine. With'
+
+[09:42] [scene:talk]
+VISUAL: 
+AUDIO: 'GPT-5.6-Sol, it beat Codex on six of nine. With an open model, GLM-5.2, it beat the harness it was forked from on eight of nine. Those are the vendor\'s own numbers on the vendor\'s own page,'
+
+[09:55] [scene:warning]
+VISUAL: An animation depicting a model being told "do not cheat" but then "It refined its way into cheating," illustrating a security concern.
+AUDIO: 'and most of the margins are hundreds. To their credit, the same page says their own runs of Claude Code and Codex came out worse than the official ones, so they use the official ones instead. The product also has teeth pointed at'
+
+[10:07] [scene:talk]
+VISUAL: 
+AUDIO: 'you. It runs model-written Python with your permissions, and its own documentation says in a warning box that it is not a security sandbox. In their own factorial tests, the self-improvement loop worked out that it'
+
+[10:19] [scene:talk]
+VISUAL: 
+AUDIO: 'could spawn resources straight into its assembly machines through an admin console instead of building the factory. It had been told not to cheat. It refined its way into cheating anyway. And the research has a ceiling of its'
+
+[10:31] [scene:concept]
+VISUAL: Text on screen stating "The receipts have been the same the whole way," referring to consistent performance improvements.
+AUDIO: 'own. A March reproduction found one level of recursion helps, and two levels start overthinking. A 3 and 1/2 second retrieval turning into nearly 6 minutes of work. So, here is the verdict, and it is not the one the headline number is'
+
+[10:44] [scene:talk]
+VISUAL: 
+AUDIO: 'selling. Recursion over context as a variable wins, and it wins for almost anyone whose work outlives a single prompt. The receipts have been the same the whole way. A small blind model beating a large reading one by 34 points at the same'
+
+[10:56] [scene:talk]
+VISUAL: 
+AUDIO: 'price per query cost an order of magnitude apart. And one set of weights scoring 30 and 95 depending on the loop around them. What it loses is narrow and real. One document under about 30,000'
+
+[11:08] [scene:concept]
+VISUAL: Text on screen stating "Every row is a model and a harness," emphasizing the combined nature of benchmark results.
+AUDIO: 'tokens answered once. Paste it in. Do not build a recursive pipeline to read a PDF. And the paradigm is not the product. Prime Agent is the best showcase recursion has, and it is 4 days'
+
+[11:20] [scene:talk]
+VISUAL: 
+AUDIO: 'old, unsandboxed, and scored by the people who built it. Take the idea now. Take the install later. Because the thing worth being angry about is not a company. It is the habit of scoring the model and forgetting the scaffold.'
+
+[11:32] [scene:talk]
+VISUAL: 
+AUDIO: 'Every leaderboard row you have ever read is a model and a harness, and only one of them gets a name. Which leaves the uncomfortable question, if the loop around the model is worth 65 points, what is the model worth? And how much of'
+
+[11:45] [scene:talk]
+VISUAL: 
+AUDIO: 'the last 3 years of progress'
