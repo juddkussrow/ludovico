@@ -1,0 +1,640 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Gaussian Splats in Houdini 22 — Part 1: Relighting & Rendering
+channel: @octopusinc_
+duration: 33:44
+source: https://www.youtube.com/watch?v=xjdMv-1-cIw
+upload_date: 20260811
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:05] [scene:talk]
+VISUAL: 
+AUDIO: 'Hey guys, Tyler here, technical artist with World Labs. I hope you\'re having a great day so far. Today we have a really exciting tutorial ahead of us. We\'re going to be going over how we get our splats from Marble and into Houdini 22 for re-lighting. Let\'s dive in. All right, so we have this amazing'
+
+[00:19] [scene:talk]
+VISUAL: 
+AUDIO: 'environment that we\'ve generated in Marble and ready to begin the re-lighting process in Houdini 22. The first thing that we need to ensure is that our download settings were set correctly. So to do that, I\'m going to click download, and click settings. We'
+
+[00:32] [scene:talk]
+VISUAL: 
+AUDIO: 'just need to ensure that our splat file format and our coordinate systems are set. So our splat file format should be a PLY and our coordinate system should be OpenGL. Since they already are, we\'re going to close this dialog box and we'
+
+[00:45] [scene:talk]
+VISUAL: 
+AUDIO: 'click splats to download our splat. Now, before you really dig into Houdini, I want to make sure that our project is configured correctly. So we\'re going to go to file, and we\'re going to new project, and I\'m going to jump over to my file browser, little quick explorer,'
+
+[00:59] [scene:talk]
+VISUAL: 
+AUDIO: 'and I\'m going to go to a folder that I\'ve already made. It\'s going to be the location of our project. Um let\'s set in all this desert scene. And then we also want to make sure that we have a custom folder'
+
+[01:12] [scene:talk]
+VISUAL: 
+AUDIO: 'location uh custom folder called splats. And this is where we\'re going to put our splat actor. And we click accept. Now that our project is set, I\'m going to jump back over to explorer. I\'m going to'
+
+[01:25] [scene:talk]
+VISUAL: 
+AUDIO: 'go to downloads. I\'m going to cut the splat. I\'m going to go into the project, go to my splats folder, and I\'m going to paste the PLY. Awesome. So now back in Houdini, I\'m going to go to my object'
+
+[01:39] [scene:ui]
+VISUAL: Houdini 22 viewport displaying raw imported Gaussian Splat points, which appear as a dense cloud.
+AUDIO: 'network, and I\'m going to create a file node. So hit tab, type in file, and this is going to create a geometry uh soft network uh that we can import our file to. So before we dive into the geometry'
+
+[01:51] [scene:talk]
+VISUAL: 
+AUDIO: 'network, I\'m going to name this desert scene just for organization. Double click to step inside and select our file node. You can see we have a placeholder cube and have our properties panel. Uh we want to come to our geometry file.'
+
+[02:05] [scene:talk]
+VISUAL: 
+AUDIO: 'We\'re going to select this icon to browse to our our splat. Um it might open up to your splats folder. If not, uh you may need to navigate to your project file, uh but this is what we need to'
+
+[02:19] [scene:talk]
+VISUAL: 
+AUDIO: 'uh import someone click accept. As you can see, uh it imported our splat, but it came in with a bunch of points. And this is kind of hard to read. It\'s not really clear what we\'re looking at'
+
+[02:31] [scene:talk]
+VISUAL: 
+AUDIO: 'or or how it\'s really looking. So, in order to to to visualize our splats inside of Houdini, you need to create a node called bake G splats. Hit tab and I\'m going to just type in bake and I\'m going to select bake G splats from the'
+
+[02:44] [scene:talk]
+VISUAL: 
+AUDIO: 'drop-down. All uh put it into our network and I\'m going to drag the output of our file node into the bake G splats node. And once we enable it, uh we can see it in our viewport.'
+
+[02:57] [scene:talk]
+VISUAL: 
+AUDIO: 'Awesome. This is looking so good. And um okay, so there\'s there\'s some areas that we need to clean up. So, like right here doesn\'t really make sense what\'s going on in the scene. I think we could call that out uh and I think it would look a'
+
+[03:09] [scene:talk]
+VISUAL: 
+AUDIO: 'lot better. Uh and so to do that, we need to select the points here and we need to delete them. Um in order to do that, we need to create a group node. So, I\'m going to hit tab in our in our workspace and I\'ll type group and'
+
+[03:22] [scene:ui]
+VISUAL: Houdini 22 viewport showing the Gaussian Splats after being processed by a "bake G splats" node, revealing a clear desert scene with a selected bounding box for cleanup.
+AUDIO: 'I\'m going to select group create. And then I\'m going to select drag the output of our of our bake G splats to the first input of our group node. Now, if I select it, nothing really looks to be happening. So, first let\'s'
+
+[03:35] [scene:talk]
+VISUAL: 
+AUDIO: 'come to our properties panel and we\'re going to say group name, we need to change that to call. And then we need to change the group type to be points. And then we need to make sure that we have keep in bounding'
+
+[03:47] [scene:talk]
+VISUAL: 
+AUDIO: 'regions enabled. Awesome. So, now you can see we have a bounding region over here with a bunch of points selected. Except that\'s not where we want it to be. We we would like the bounding region to be over here and selecting these'
+
+[04:01] [scene:talk]
+VISUAL: 
+AUDIO: 'guys. Um so to do that, we\'re going to need needing to move the size and the center of our bounding box. So the center is going to control the position and the size is going to control the size. So we\'re going to just move this over.'
+
+[04:13] [scene:talk]
+VISUAL: 
+AUDIO: 'Beautiful. I\'ll make it a bit taller, make it thicker and longer. It needs to be a lot taller.'
+
+[04:26] [scene:talk]
+VISUAL: 
+AUDIO: 'Cool. And then we need to move it up a little bit. But I like them all floor ones. Yeah, I think that\'s pretty good.'
+
+[04:42] [scene:talk]
+VISUAL: 
+AUDIO: 'Space F to focus. I got that. Um awesome. So now that we have those points selected, uh we want to drop in a blast node. So'
+
+[04:55] [scene:ui]
+VISUAL: Houdini 22 viewport showing the cleaned-up Gaussian Splats with a "normals from splats" node active in the node graph.
+AUDIO: 'I\'m going to hit tab again, type in blast. This drops in our blast node and we connect the output of our group to the input of our blast and go to our blast and as you can see,'
+
+[05:08] [scene:talk]
+VISUAL: 
+AUDIO: 'everything is gone. And that\'s because by default the blast node is going to blow is going to delete everything that you have input. So we need to make sure that we have our group defined. So from the hamburger I\'m going to select our call group. As you can see, all those'
+
+[05:21] [scene:talk]
+VISUAL: 
+AUDIO: 'those points that don\'t make sense, they\'re gone. So it\'s looking really good. I\'m liking where this is going. Now in before we can move to the re-lighting step, we need to make sure that our'
+
+[05:35] [scene:talk]
+VISUAL: 
+AUDIO: 'splat has normal information. Now to do that, we\'re going to create a new node called normals from splats. So hit tab and I\'ll type in normals, and we\'re going to select labs normals from'
+
+[05:48] [scene:talk]
+VISUAL: 
+AUDIO: 'G spots. Drop that in, and I\'m going to move the output into the input, and activate the normals from spots. It\'s going to think for a second. Awesome. So, now that it\'s cooked, we'
+
+[06:03] [scene:talk]
+VISUAL: 
+AUDIO: 'have normals on our uh, spot. To visualize that, we can select our normals from spots, and check visualize normals. As you can see, we have normal information on our environment. This is'
+
+[06:15] [scene:talk]
+VISUAL: 
+AUDIO: 'looking pretty good. If you want to refine that, uh, you can come up to this voxel scale, uh, and fiddle with the settings. We find that for this environment, one worked pretty well for us. So, we\'re just going to leave that there. I\'m'
+
+[06:27] [scene:talk]
+VISUAL: 
+AUDIO: 'going to uncheck visualize normals, so that we remove that visualization. Um, and we are ready to begin the re-lighting step. So, the next thing we need to do is we\'re going to create a null node, so that we can easily select the output of our environment chain. So,'
+
+[06:41] [scene:ui]
+VISUAL: Houdini 22 viewport showing the desert scene, with a "null" node named "env_out" in the node graph, marking the output for the environment chain.
+AUDIO: 'I\'m going to hit tab, type null, select it from the from the list. I\'m going to double-click to rename, and I\'m going to name it env out. And then, I\'m going to output the'
+
+[06:53] [scene:talk]
+VISUAL: 
+AUDIO: 'fir- the first output of the normal G spot into the input of our of our env out. Uh, and that is looking pretty good. So, the really cool thing about null nodes is that when you when you'
+
+[07:06] [scene:talk]
+VISUAL: 
+AUDIO: 'reference them someplace else, any edits that you have to this to this string of uh, to this this chain, this network, uh, will will propagate down to this environment out node, or this null node.'
+
+[07:18] [scene:talk]
+VISUAL: 
+AUDIO: 'So, let\'s say we wanted to do some more tweaks. We wanted another blast node, or we would remove the spire. We could just drop in another blast node, and then we wouldn\'t have to update any of the sources. So, that\'s pretty nice. Um, okay. So, now that we have that there,'
+
+[07:31] [scene:talk]
+VISUAL: 
+AUDIO: 'we just need to uh, head on over to our stage. So, I\'m going to click object. I\'m going to click it again. I\'m going to select stage from the drop-down. And this brings us into Solaris, which is our uh where we can set up our our'
+
+[07:44] [scene:talk]
+VISUAL: 
+AUDIO: 'Houdini rendering. Get our splat into our into our stage, we need to import our SOP. So, uh to do that, we\'re going to hit tab and we\'re going to type in SOP'
+
+[07:57] [scene:talk]
+VISUAL: 
+AUDIO: 'and we\'re going to select SOP import from the drop-down. And then we\'re going to come up to SOP path and we\'re going to select this icon to navigate to our env_out node and we\'re going to click accept.'
+
+[08:11] [scene:talk]
+VISUAL: 
+AUDIO: 'And as you can see, it takes a little bit, but it loads in. Um and it\'s looking pretty cool. Now, by default, um your renderer is going to be'
+
+[08:24] [scene:ui]
+VISUAL: Houdini 22 viewport in Solaris, displaying the Gaussian Splats with a "dome light" and "relight_gsplats" node applied, showing initial relighting effects.
+AUDIO: 'the Houdini VK renderer like we\'re seeing right here. Um in order to change that, uh we need to come up to persp and we want to make sure that Karma XPU is set. So, we\'ll select that. As you can see, now we\'re'
+
+[08:36] [scene:talk]
+VISUAL: 
+AUDIO: 'rendering uh using Karma. And that\'s looking pretty cool, but we want to relight this. So, to do that, we\'re going to hit tab and we\'re going to type in we\'re going to create a dome light. We\'ll drop'
+
+[08:48] [scene:talk]
+VISUAL: 
+AUDIO: 'that in. I\'m going to select the output of my SOP import to the import of my dome light. And as we can see, nothing is happening. And that\'s because we need to drop in a relight node. So, to do that, we\'ll hit tab again and'
+
+[09:01] [scene:talk]
+VISUAL: 
+AUDIO: 'we\'re going to just type in relight and you can see labs relight G spots. We\'ll select that, drop that in, and then I\'m going to connect my light to the labs uh relight and then activate it. It\'s going to think. Beautiful. All'
+
+[09:16] [scene:talk]
+VISUAL: 
+AUDIO: 'right. So, maybe not what we want. Uh so, let\'s do some explorations. Let\'s keep that there and that\'s one of the really cool things about what I love about the the node graphs in Houdini. It\'s almost like active history. You can'
+
+[09:28] [scene:talk]
+VISUAL: 
+AUDIO: 'do a lot of explorations in a really non-destructive manner. So, we\'re going to control C, control V, paste our dome light. We\'re going to connect a new dome light to the input of our splats relight, and I\'m just going to change it'
+
+[09:40] [scene:talk]
+VISUAL: 
+AUDIO: 'up a little bit. Already, that is a lot better. But again, in this non-destructive workflow, let\'s do some more exploration. So, I can copy'
+
+[09:52] [scene:talk]
+VISUAL: 
+AUDIO: 'paste this, drag it in there. Let\'s say we want a little more orange or something. That\'s cool. Let\'s make it brighter. Like green.'
+
+[10:05] [scene:ui]
+VISUAL: Houdini 22 viewport in Solaris, showcasing a different lighting scenario with an orange hue, demonstrating the flexibility of relighting.
+AUDIO: 'Oh, better. Love. That\'s cool, but I want some more color. Let\'s push the Let\'s push the color a little more. That\'s looking'
+
+[10:17] [scene:talk]
+VISUAL: 
+AUDIO: 'better. I\'m liking the oohs. I don\'t know. Vibrant deserts are so cool. I like that. Okay, I mean, it\'s definitely a bit oversaturated. Oh, well.'
+
+[10:29] [scene:talk]
+VISUAL: 
+AUDIO: 'Yeah, I like the contrast a little bit. We can\'t have super saturated. Look'
+
+[10:42] [scene:talk]
+VISUAL: 
+AUDIO: 'Oh, yeah, that\'s pretty cool. Really good. Okay, we\'re good. I like this. This is pretty cool.'
+
+[10:54] [scene:talk]
+VISUAL: 
+AUDIO: 'Okay, so now we have our lights. We have um our light is being applied to our splat. It\'s looking really cool. Um we just need to render it. So, we need to we need to define a camera'
+
+[11:08] [scene:talk]
+VISUAL: 
+AUDIO: 'angle that we\'re going to render from. So, this is the fun part, right? Um now we get to maneuver our viewport camera. Let\'s find a cool angle that we want to render. So, maybe like something like that. All right.'
+
+[11:23] [scene:talk]
+VISUAL: 
+AUDIO: 'Look along that. Get the Get those footprints or something, and I kind of want to get that uh dune map. I like that back dune. That\'s looking pretty good. It\'s pretty cool.'
+
+[11:36] [scene:talk]
+VISUAL: 
+AUDIO: 'Cool. All right.'
+
+[11:48] [scene:ui]
+VISUAL: Houdini 22 viewport in Solaris, with Karma Render Settings visible, preparing for the final render.
+AUDIO: 'So, we\'re happy with the camera and we want to create a camera. So, we\'re going to come up to our shelf under lights and cameras, we\'re going to create we\'re going to click camera. This is going to create a camera in the exact same position as our viewport camera,'
+
+[12:01] [scene:talk]
+VISUAL: 
+AUDIO: 'which is exactly what we want. Sweet. That is looking awesome. So, now we\'re ready to render. So, if we want to hit tab, I\'m going to type in Karma. This is going to create three nodes. It\'s going to help us configure'
+
+[12:13] [scene:talk]
+VISUAL: 
+AUDIO: 'our render our render settings. Um I\'m going to click okay to to get rid of the warning. I\'m going to input my camera into the render settings. Now, the camera the first node in our graph in our chain is where all of our render settings live. So, if we'
+
+[12:26] [scene:talk]
+VISUAL: 
+AUDIO: 'want to edit our samples, want to edit our resolution, all that good stuff is going to be here. We\'re not going to touch that. The defaults work for us for now. Um and then we\'re'
+
+[12:38] [scene:talk]
+VISUAL: 
+AUDIO: 'we\'re going to come and then the render pass obviously has all your all your render passes. Uh So, that you can render out specific things, but we\'re not again we\'re not touching that today. And then uh the actual render'
+
+[12:51] [scene:talk]
+VISUAL: 
+AUDIO: 'uh node. So, with this selected, uh we can this is where we can configure if we\'re going to be rendering a sequence, individual frames, what have you. So, we\'re going to click render to'
+
+[13:03] [scene:talk]
+VISUAL: 
+AUDIO: 'MPlay, and that\'s going to render out this image for us. Uh and you can see we didn\'t we don\'t have our settings right. So, right now, out of the box, it is rendering with the CPU, and we need to close that.'
+
+[13:15] [scene:talk]
+VISUAL: 
+AUDIO: 'It\'s going to give us an error. That\'s totally okay. We\'re going to come up to our render settings, and right now our engine settings are CPU parameters. So, we want to come click that, and we\'re going to change that to XP parameters. Awesome. So now let\'s go back to render and play. Select'
+
+[13:30] [scene:talk]
+VISUAL: 
+AUDIO: 'that again. Awesome. You can see our scene is rendering. It is looking pretty good. But man, what if what if we add some smoke building, you know, like like some frost bite? Wouldn\'t that be cool?'
+
+[13:43] [scene:talk]
+VISUAL: 
+AUDIO: 'I think we should do it. So, bonus content. Let\'s dive into a smoke sim. We\'re going to close that. Close and play. And the first thing we need to do when when we\'re talking about a smoke sim is we need to generate a source, an'
+
+[13:55] [scene:talk]
+VISUAL: 
+AUDIO: 'emission source. So we\'re going to go up to back to our object network and we\'re going to step back into our desert scene. Um and I\'m kind of thinking we can put a smoke volume like right there and have'
+
+[14:07] [scene:talk]
+VISUAL: 
+AUDIO: 'like some nice billowy smoke just kind of knitting from that. So in order to do that, well, first off, before we get into that, let\'s do some uh scene cleanup. So right now'
+
+[14:20] [scene:talk]
+VISUAL: 
+AUDIO: 'that these guys are kind of all floating together, let\'s just drop a network box around them. So we\'re going to select them and then you can click this icon here and that drops a nice little tidy box around them here. And I\'m just going to'
+
+[14:32] [scene:talk]
+VISUAL: 
+AUDIO: 'type in ENV so that we know it\'s labeled. Perfect. Okay. So we need to create an emission point for our smoke. And to do that, um one of the'
+
+[14:44] [scene:talk]
+VISUAL: 
+AUDIO: 'easiest ways that uh we found uh or one of the easiest ways is just to drop a sphere. So we\'re going to hit tab and then sphere. Drop that in. Uh we\'re going to select it.'
+
+[14:56] [scene:talk]
+VISUAL: 
+AUDIO: 'Space F to focus. And awesome. So we have this perfect sphere, which is awesome. Um but we need we probably want introduce a little bit of irregularity into it so that um we don\'t have such a uniform starting'
+
+[15:10] [scene:ui]
+VISUAL: Houdini 22 viewport displaying a sphere deformed by a "mountain" node, serving as the emission source for the smoke simulation.
+AUDIO: 'location for our volume. Our simulation, I mean. So hit tab. We\'re going to type in mountain. This is one of my favorite notes. It\'s just so useful. You can introduce just noise and just get some quick deformation. As you'
+
+[15:22] [scene:talk]
+VISUAL: 
+AUDIO: 'can see, we get some pretty cool It\'s already changing the silhouette silhouette up silhouette up quite nice. That\'s a hard word. Um So, there\'s a lot of options we can do.'
+
+[15:34] [scene:talk]
+VISUAL: 
+AUDIO: 'Uh we can change the operator, which is going to impact how the noise is applied to our asset. We can have different noise. We\'ll leave it with simplex simplex noise. There\'s a lot of different things you can dig into.'
+
+[15:46] [scene:talk]
+VISUAL: 
+AUDIO: 'Uh One of the but we\'ll be just doing the amplitude and the operation. So, I like the subtract. It\'s pretty cool. Let\'s just push it a little bit more. That\'s a pretty interesting interesting shape. Well, I don\'t like pinches there. So,'
+
+[15:58] [scene:talk]
+VISUAL: 
+AUDIO: 'we\'re just going to ease it up. There you go. That\'s That\'s a little bit better. Awesome. So, cool. Now, we have an interesting shape for our smoke volume. We have our mountains. Uh now, we need to Now, we need to put it in position.'
+
+[16:11] [scene:talk]
+VISUAL: 
+AUDIO: 'So, it\'s kind of hard to place it right now. We don\'t really have a good idea of where it is on the environment, things like that. So, what we want to do first off is we need we need to be able to move this asset. So, we\'re going to hit'
+
+[16:23] [scene:talk]
+VISUAL: 
+AUDIO: 'tab, hit transform. We connect our mountain node to the transform node. And now, I\'m going to select my transform and I\'m going to shift select blast and I\'m going to hold'
+
+[16:35] [scene:talk]
+VISUAL: 
+AUDIO: 'alt and I\'m going to drag from the output of transform and I\'m going to release. And it\'s It creates this awesome merge node. Um now, with the merge node selected, I\'m going to highlight my transform node and I\'m'
+
+[16:47] [scene:ui]
+VISUAL: Houdini 22 viewport showing the deformed sphere merged with the desert scene, being positioned for the smoke simulation.
+AUDIO: 'going to click on the show handles there and now I can position my my my smoke starting point, my asset, my sphere'
+
+[16:59] [scene:talk]
+VISUAL: 
+AUDIO: 'and still see what\'s going on in the environment. So, we\'re just going to place it like roughly thereish. Awesome. That\'s pretty cool. Okay.'
+
+[17:12] [scene:talk]
+VISUAL: 
+AUDIO: 'Now that we\'ve placed our our asset of smoke starting point, we can begin to define the smoke sim. Okay, cool. For real. Done this time.'
+
+[17:24] [scene:talk]
+VISUAL: 
+AUDIO: 'Um all right. So, the next thing we need to do is we need to define uh we need to start giving the we need to start adding elements for our sim. So, the first thing we need to do is add a pyro source. So, I\'m going to hit tab,'
+
+[17:36] [scene:talk]
+VISUAL: 
+AUDIO: 'type pyro, and I\'m going to select pyro source from the list, drop that in. I\'m going to connect my transform node to the first input of my pyro source. I\'m going to select it. And'
+
+[17:48] [scene:talk]
+VISUAL: 
+AUDIO: 'as you can see, we have a we have a scattering of points on the surface of our sphere. Now, that\'s almost what we want. These points are going to be the starting locations for our smoke sim, but it would be'
+
+[18:00] [scene:talk]
+VISUAL: 
+AUDIO: 'better if we had a bunch of them inside of our shape. So, with the pyro source selected, I\'m going to come up to mode. The right now it\'s currently set to keep input. I\'m going to select it, and I\'m'
+
+[18:13] [scene:talk]
+VISUAL: 
+AUDIO: 'going to select volume scatter. Now, I have a bunch of points inside of my inside of my shape, which is awesome. Now, the next thing we need to do is we need to add an attribute. So, I\'m going'
+
+[18:25] [scene:ui]
+VISUAL: Houdini 22 viewport showing the node graph with "pyro source" and "volume rasterize attribute" nodes connected, preparing the smoke volume.
+AUDIO: 'to click on the plus icon. Uh right now it\'s set to custom. We\'re going to select the drop down, uh and I\'m going to select density. Awesome. Now that that is set, we need to create a volume rasterize attribute'
+
+[18:37] [scene:talk]
+VISUAL: 
+AUDIO: 'node. So, I\'m going to hit tab, type in volume rasterize attribute. Select that from the list, drop it in, connect pyro source to volume rasterize, select it, and the only thing you need to do here'
+
+[18:50] [scene:talk]
+VISUAL: 
+AUDIO: 'is you need to come up to attributes and hit the hamburger menu and select density from the list. Beautiful. We have something showing up. That is looking awesome. So, now that we have our volume rasterize attributes down, we'
+
+[19:02] [scene:talk]
+VISUAL: 
+AUDIO: 'can drop the the next node, which is our pyro solver. This is going to be the meat and potatoes of our smoke sim. Drop that in. Um this is a really beefy node.'
+
+[19:14] [scene:talk]
+VISUAL: 
+AUDIO: 'There is a lot going on here. Um but oh, I dropped the pyro source instead of a pyro solver. So let\'s add a solver.'
+
+[19:26] [scene:talk]
+VISUAL: 
+AUDIO: 'Yeah, this is the meat and potatoes of our So connect the the output of the volume rasterize to the first input of the pyro solver. Uh we\'re going to select it. There you go. Scroll up. Okay, this is'
+
+[19:39] [scene:talk]
+VISUAL: 
+AUDIO: 'the meat and potatoes of our sim. Now, there\'s a lot going on in this node, way too much to cover for this tutorial. We\'re just going to be going over the attributes that we enabled um and just glossing over them and just so that you'
+
+[19:53] [scene:talk]
+VISUAL: 
+AUDIO: 'can make a really quick smoke shape. So the things that we need to edit for our source. So for our sim, another thing with these pyro sources uh simulations are is that we\'re'
+
+[20:05] [scene:ui]
+VISUAL: Houdini 22 viewport displaying a blurred, volumetric shape, representing the initial density for the smoke simulation.
+AUDIO: 'they\'re simulating real forces. So there\'s things like temperature and density and velocity and things like that that all kind of you know, come together to make the the output shape. So for but for our need we'
+
+[20:18] [scene:talk]
+VISUAL: 
+AUDIO: 'we just we want a really simple simulation. So we\'re going to disable flame and velocity and then we\'re going to come up to our temperature. And we\'re just going to change that source to be density.'
+
+[20:32] [scene:talk]
+VISUAL: 
+AUDIO: 'Awesome. So we have temperature set to pull to use density and the next thing we need to edit are is the shape. So this these parameters are going to be controlling'
+
+[20:45] [scene:talk]
+VISUAL: 
+AUDIO: 'the the output have a lot of play in the output shape of our simulation. So the first thing that we need to edit is buoyancy. Now this is going to be like an upward sort of movement that takes our particles our simulation influences'
+
+[20:58] [scene:talk]
+VISUAL: 
+AUDIO: 'our simulation upward. At one we\'re going to see a strong buoyant force. So we don\'t want that much buoyancy So, we\'re just going to put 0.01 so we don\'t have as much buoyancy. Now, the next'
+
+[21:10] [scene:talk]
+VISUAL: 
+AUDIO: 'things we need to enable, we need to enable the service turbulence and shredding. We\'re also going to enable wind. Now, disturbance and shredding, these parameters introduce high-frequency noise without impacting'
+
+[21:22] [scene:talk]
+VISUAL: 
+AUDIO: 'the overall motion of the sim. So, um they just are going to help us break up the smooth shapes. Um and so, we found that, you know, for this instance, uh disturbance and shredding at 0.5 is'
+
+[21:36] [scene:talk]
+VISUAL: 
+AUDIO: 'awesome. Uh the next one that we need to set is turbulence. Now, this is going to introduce like a churn into our into our sim. Uh so, we\'re going to crank that up'
+
+[21:48] [scene:ui]
+VISUAL: Houdini 22 viewport showing the volumetric shape, with the "pyro solver" node being configured in the node graph.
+AUDIO: 'to like five. And then, let\'s see. And then, viscosity. So, this just kind of helps keep the the sim together a little bit. Uh we\'re going to add a little bit of that'
+
+[22:01] [scene:talk]
+VISUAL: 
+AUDIO: 'to kind of keep some of our shapes together. All right, let me check. Oh, wind. We\'re going to change wind to three. And then, we also Excuse me. We also want to have the wind direction being in like a diagonal'
+
+[22:15] [scene:talk]
+VISUAL: 
+AUDIO: 'to our sim. So, this is going to introduce a uh a nice just wind force that is pushing our sim in a direction to, you know, have that that'
+
+[22:27] [scene:talk]
+VISUAL: 
+AUDIO: 'nice sim trail. Um let me double-check my notes. I think that\'s it. Awesome. So, now that we\'ve defined our pyro solver, we have all the settings that we need uh for our sim.'
+
+[22:39] [scene:talk]
+VISUAL: 
+AUDIO: 'Um the next thing we need to do is we need to drop down a pyro bake volume. Pyro bake volume. Yeah.'
+
+[22:51] [scene:talk]
+VISUAL: 
+AUDIO: 'Drop that in. Put that in here. Um and then, we need to make sure that our density scale is set to 25. And our shadow density is set to two. Now, if we'
+
+[23:04] [scene:talk]
+VISUAL: 
+AUDIO: 'play this, we can get a nice little preview of what our sim is going to look like. Super cool. I don\'t know, this stuff is just always so cool. So, that is looking really cool. That looks like some nice'
+
+[23:18] [scene:talk]
+VISUAL: 
+AUDIO: 'thick smoke. Pretty happy with that. We can pause it, zoom out. That is looking pretty cool. All right. So, now the next thing that we need to do, just to make our lives easier, when we work like when we\'re working with sims, each frame the'
+
+[23:31] [scene:ui]
+VISUAL: Houdini 22 viewport displaying a fully simulated smoke plume, with a "file cache" node active for caching the simulation.
+AUDIO: 'the sim is calculating the position of where the voxels need to be, so they can render this out. So, if we want to make it more performant, we just need to cache this out. So, we\'re going to do uh'
+
+[23:43] [scene:talk]
+VISUAL: 
+AUDIO: 'we\'re going to drop in a file cache node. File cache. We select that from the drop-down. We\'re going to connect our file cache node to the pyro bake volume. Um and then we just need to We\'re going'
+
+[23:57] [scene:talk]
+VISUAL: 
+AUDIO: 'to say uh base name is going to be smoke. And then our frame range 1 to 240, which is what we have down there. Beautiful. That\'s awesome. And we\'re just going to save to disk.'
+
+[24:10] [scene:talk]
+VISUAL: 
+AUDIO: 'Awesome. So, now that we have cached our simulation, um we can scrub through it. It\'s a lot more responsive in the viewport. That is looking super cool.'
+
+[24:22] [scene:talk]
+VISUAL: 
+AUDIO: 'Uh and so now we can drop a null node in. Place that down. Um and we\'re going to name this smoke. So, now this is ready to'
+
+[24:36] [scene:talk]
+VISUAL: 
+AUDIO: 'pick to Solaris, but I\'m going to delete our merge node real quick. Just do a little bit of scene clean up. Drag this to the middle. Um we\'re going to select our node chain, move it there, and we\'re going to put a'
+
+[24:49] [scene:talk]
+VISUAL: 
+AUDIO: 'group on it, name it smoke. Awesome. I\'m going to drop this down. Yeah, yeah, that\'s that\'s a lot better. Okay, awesome. So, now we have our smoke. Let\'s take our file cache'
+
+[25:01] [scene:talk]
+VISUAL: 
+AUDIO: 'node. Let\'s take our blast node. We\'re going to up And the output now we have preview of our scene. Looking pretty cool. We have our smoke'
+
+[25:15] [scene:ui]
+VISUAL: Houdini 22 viewport in Solaris, importing the cached smoke simulation into the scene.
+AUDIO: 'billowing from our crash site. That is looking pretty awesome. I like that. Send your so cool. You can play. It\'s rendering. It\'s looking super sweet. Awesome. So, we hit pause. Okay, so now'
+
+[25:27] [scene:talk]
+VISUAL: 
+AUDIO: 'we have a null for our smoke. Just put a put a out consistent. Awesome. Cool. So, now we have that and we are going to jump to Solaris. So, we\'re going to go over to'
+
+[25:41] [scene:talk]
+VISUAL: 
+AUDIO: 'Solaris. Go to our stage. Going to think. Awesome. So, now that we\'re in our stage, we need to bring in our smoke sim'
+
+[25:53] [scene:talk]
+VISUAL: 
+AUDIO: 'so we can light it and add it to the scene. So, we\'re going to do the same thing. We\'re going to SOP import. Select it there. Then we\'re going to click this icon to choose our operator'
+
+[26:06] [scene:talk]
+VISUAL: 
+AUDIO: 'and we are going to select smoke out. Accept. Awesome. I\'m just going to select him so he is rendering. Beautiful. Okay. Really cool.'
+
+[26:21] [scene:talk]
+VISUAL: 
+AUDIO: 'Um now we need to create a material library node. We\'re going to drop that down and then we need to create a material for uh our smoke. So, we\'re going to drop back over to our object.'
+
+[26:34] [scene:talk]
+VISUAL: 
+AUDIO: 'There it is. We\'re going to step into our our desert scene. I\'m going to go to my pyro baked volume. And under quick setups, I\'m going to change I\'m going to'
+
+[26:46] [scene:talk]
+VISUAL: 
+AUDIO: 'say create material. I\'m going to choose custom location. And our stage, I\'m going to select our material library and I\'m going to click accept. Awesome. So, now we\'ve defined the material there.'
+
+[26:59] [scene:ui]
+VISUAL: Houdini 22 viewport in Solaris, showing the smoke simulation integrated into the desert scene, with lighting nodes visible.
+AUDIO: 'Um we need to jump back over to our stage. Awesome. So, we have that there. Now, we just need to assign material. And we\'re going to select our material'
+
+[27:14] [scene:talk]
+VISUAL: 
+AUDIO: 'path. Like materials and we\'re going to say the combined pyro shader and click apply. Okay. And now we are good to relight. So, we\'re just going to hit tab and I\'m'
+
+[27:27] [scene:talk]
+VISUAL: 
+AUDIO: 'going to do a direct or distance light. Do a distance light. Do one distance light here. And we\'re going to have full I mean, you want like a nice little rim light. So, we\'re going to select our dome'
+
+[27:40] [scene:talk]
+VISUAL: 
+AUDIO: 'lights that we both have active. Merge them there, right? And then we\'re going to drop in the light linker. Okay. And then the light linker gets plugged into our relit splats. Now,'
+
+[27:53] [scene:talk]
+VISUAL: 
+AUDIO: 'we\'re going to select our light linker and I\'m going to drag out our SOP import two, which is our smoke volume and I\'m going'
+
+[28:05] [scene:talk]
+VISUAL: 
+AUDIO: 'to drag the dome light to not affect. Beautiful. Okay. So, now we have our smoke not being impacted by the the dome lights so that we\'re able to uh'
+
+[28:18] [scene:talk]
+VISUAL: 
+AUDIO: 'light our distant light independently of of that. So, let\'s just drop back over here real quick so we can position our directional light.'
+
+[28:33] [scene:ui]
+VISUAL: Houdini 22 viewport in Solaris, displaying the smoke simulation interacting with the scene lighting, showing a dark, billowy smoke.
+AUDIO: 'Location doesn\'t impact it, but I just like having it close to what it\'s impacting so that I could see um we want a little bit of down angle on that. Let\'s go back to our re-light.'
+
+[28:46] [scene:talk]
+VISUAL: 
+AUDIO: 'So, we\'re going to go to our distant light. There we go. And now we can add orange goodness into it.'
+
+[28:59] [scene:talk]
+VISUAL: 
+AUDIO: 'This is just our back light. So, I kind of want more of that strong'
+
+[29:11] [scene:talk]
+VISUAL: 
+AUDIO: 'intensity. And we\'re going to need to like So, we\'re also we need a front-facing light cuz we don\'t we don\'t have any lighting information in the top of our smoke, which is why'
+
+[29:24] [scene:talk]
+VISUAL: 
+AUDIO: 'we are seeing uh the blackness right there. So, I Ctrl-C Ctrl-V to copy the distant light. Now, I\'m just going to do a 180 really. Just to get it facing'
+
+[29:37] [scene:talk]
+VISUAL: 
+AUDIO: 'up and yeah. So, it\'s kind of facing the right way. We\'re going to do that. And then we can just make it more I like the I like those empty sky lights. Let\'s see how that light looks'
+
+[29:50] [scene:talk]
+VISUAL: 
+AUDIO: 'in the baby bird scene. So, if you have a line like that going into another merge node, hold Alt, click on the line, that\'ll create a point, and now you can just update that point um with that. And then we can go back to our scene re-light.'
+
+[30:03] [scene:talk]
+VISUAL: 
+AUDIO: 'Now, that looks And maybe that\'s not looking too bad. &gt;&gt; [laughter] &gt;&gt; On second thought, yeah, I don\'t like I\'m not a fan of So, this is not Let\'s drop the'
+
+[30:16] [scene:ui]
+VISUAL: Houdini 22 viewport in Solaris, showing the final scene with smoke, ready for rendering.
+AUDIO: 'Make it a little bit more white. Definitely drop the intensity a little bit. Looking better. And we\'ll drop the'
+
+[30:29] [scene:talk]
+VISUAL: 
+AUDIO: 'intensity of the sky a little bit, too. Like the sky. We\'re going to pull color from the scene. Click on the'
+
+[30:41] [scene:talk]
+VISUAL: 
+AUDIO: 'dropper on this one like that cuz I want I want to try to emulate some of that bounce. Uh that\'s a lot better. Like that. Smooth.'
+
+[30:53] [scene:talk]
+VISUAL: 
+AUDIO: 'We can scrub through our sim. All right, cool. So now that we have our lights Let\'s let\'s do a little bit of scene cleanup here, too. So we\'re going to We\'re going to select'
+
+[31:05] [scene:talk]
+VISUAL: 
+AUDIO: 'our environment and create another network box. We\'ll do ENV. And then I\'m going to select our our smoke.'
+
+[31:17] [scene:talk]
+VISUAL: 
+AUDIO: 'Another network box and that\'s smoke. Awesome. And then we\'re going to another network box. We\'re going to do render'
+
+[31:30] [scene:talk]
+VISUAL: 
+AUDIO: 'settings. And then right here we\'re going to relight. We do light. And we\'re going to have one for camera.'
+
+[31:42] [scene:talk]
+VISUAL: 
+AUDIO: 'All right. So now that we have our scene organized, it\'s looking pretty nice. Um we have We have our light set up. We have our'
+
+[31:55] [scene:result]
+VISUAL: A rendered animation of the desert scene with the smoke simulation playing in MPlay.
+AUDIO: 'material set up for our smoke. We have a camera set up. Uh we have our render settings in and now we are ready to render. So if we wanted to render this entire sequence out we\'re going to you know from frame zero to frame 240. Um'
+
+[32:07] [scene:talk]
+VISUAL: 
+AUDIO: 'we can do that. So I\'m just going to put it back to zero. Um I\'m going to change the valid frame range from uh render uh current frame to render uh specific frame range to 1 through 240.'
+
+[32:21] [scene:talk]
+VISUAL: 
+AUDIO: 'Beautiful. And then uh I\'m going to click render to end plate. And this is going to open up the render window. &gt;&gt; Awesome. So, you can see that we\'ve'
+
+[32:40] [scene:talk]
+VISUAL: 
+AUDIO: 'finished rendering and all of our frames are in MPlay. We can scrub through them and see how they\'re looking and that is looking pretty cool. I love Sims. They\'re so cool. Um all right. So, now that we have it in MPlay, we need to save it to disk. Now, there\'s two ways that we can do that. If'
+
+[32:53] [scene:talk]
+VISUAL: 
+AUDIO: 'we need to save out as an image sequence, we just want to go to save sequence as. And that will allow us to save it out. So, we can go to smoke tutorial smoke sequence.'
+
+[33:06] [scene:talk]
+VISUAL: 
+AUDIO: 'And then we can click save. And that\'s going to save out all these all 60 images or all you know, all images that you rendered out. Or you can save this out as a MP4. So, to do that,'
+
+[33:18] [scene:talk]
+VISUAL: 
+AUDIO: 'we\'re going to go to file, export FFmpeg. And we can do tutorial video. And then we\'re going to set the quality'
+
+[33:32] [scene:talk]
+VISUAL: 
+AUDIO: 'to 100 and we\'re going to click save. So, that about wraps it up for today\'s tutorial. I\'m really excited to see what you guys create.'
