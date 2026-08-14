@@ -1,0 +1,576 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: ComfyUI: Minimax Music 3 - First Impressions
+channel: @octopusinc_
+duration: 31:35
+source: https://www.youtube.com/watch?v=wnIHDz4Y02c
+upload_date: 20260814
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'All right, guys. We\'re back. I think Miniax is on a tear this past week. It is, what day is it today? Uh, August 13th, 2026.'
+
+[00:12] [scene:talk]
+VISUAL: 
+AUDIO: 'Uh, and Miniax just dropped a proprietary music model called, uh, Mini Max Music 3. Now, this is like going to be my our very my very first impressions'
+
+[00:25] [scene:talk]
+VISUAL: 
+AUDIO: 'of this model. I got it downloaded. Um, I got it running in Comfy. I literally just hit go. So, I didn\'t I haven\'t prompted with this thing. This is fresh first impressions. This model just'
+
+[00:39] [scene:talk]
+VISUAL: 
+AUDIO: 'dropped today. And you know what? Like I said, they are on a tear, right? Uh, if we go back here, H3 is the video model. It has just been an insane week. I have some more'
+
+[00:51] [scene:talk]
+VISUAL: 
+AUDIO: 'videos coming up for you guys where we\'re going to go over some crazy workflows, some audio sync stuff. I know a lot of you been watching my Twitter and uh seeing the crazy stuff I\'ve been playing with, but today we\'re going to'
+
+[01:03] [scene:talk]
+VISUAL: 
+AUDIO: 'focus on the audio side of things because this is a this is a big one. It\'s a big one. There\'s not a lot of music models out there. There\'s just not. I think like the last open source'
+
+[01:15] [scene:talk]
+VISUAL: 
+AUDIO: 'one that we got that was like even relatively workable was a step you know 1.5 and you know people people played with it but it fell short.'
+
+[01:28] [scene:talk]
+VISUAL: 
+AUDIO: 'So another open source music model entering the ring always appreciated um especially because of this right here 32 kHz. So same with the uh Miniax H3 video model. This thing has a really really'
+
+[01:42] [scene:talk]
+VISUAL: 
+AUDIO: 'clean, relatively speaking audio quality to other open source models. 32 kHz for people who don\'t know. Uh, you know, I think I think like the standard is like'
+
+[01:55] [scene:talk]
+VISUAL: 
+AUDIO: '44 kilhertz. Um, so I mean we\'re not that far we\'re not that far behind. So we\'re we\'re essentially approaching MP3 fidelity, which in my opinion is like that\'s amazing, you know, like that\'s we'
+
+[02:08] [scene:talk]
+VISUAL: 
+AUDIO: 'are making progress in fidelity. um in the uh the wave renders. So that\'s that\'s awesome. So let\'s go through this the architecture really quick just so we know what we\'re we\'re doing with um Miniax 3 combines a 8 billion global LLM'
+
+[02:22] [scene:talk]
+VISUAL: 
+AUDIO: 'for uh long range musical structure and a super small 6 billion parameter local LLM for frame level acoustic detail and continuous hidden state system based on'
+
+[02:35] [scene:talk]
+VISUAL: 
+AUDIO: 'flow matching. So, you know, a lot lot of fancy words there, but like let\'s just like take a look at this for a sec for a second. We\'ve got our input conditioning structured caption. So, this is probably going to be like, you'
+
+[02:48] [scene:talk]
+VISUAL: 
+AUDIO: 'know, song description maybe like uh phrase section. And then they have a totally different uh conditioning stream here for lyrics, which makes sense. um separating audio from like uh language'
+
+[03:01] [scene:talk]
+VISUAL: 
+AUDIO: 'basically and having musical notation as well as like language capabilities. Um we\'ve seen this before a lot of a lot of um open source models they they split'
+
+[03:14] [scene:talk]
+VISUAL: 
+AUDIO: 'this up. They split up the concerns, right? Makes sense. It\'s basically a little mini mixture of experts system going on here. Then we go into the hybrid LLM. I guess this is your like 8 billion and your 6'
+
+[03:28] [scene:talk]
+VISUAL: 
+AUDIO: 'billion and then you know flow matching uh DIT and then the V the decode. So pretty pretty simple pretty simple little system here. Um so they boast it gives us lyric control you know verse'
+
+[03:43] [scene:talk]
+VISUAL: 
+AUDIO: 'pre chorus chorus right everything we\'ve seen with sununo up to this point um you know defining the description global metatags BPM scale emotional progression vocal details uh arrangement types so'
+
+[03:56] [scene:talk]
+VISUAL: 
+AUDIO: 'let\'s see what what is this hybrid uses hierarchical auto reggressive architecture so it is auto reggressive guys it it it does generate predicts next token so I think like LLM. It\'s not'
+
+[04:09] [scene:talk]
+VISUAL: 
+AUDIO: 'a diffusion model. We\'re not just like waiting around, which means I mean, you know, you could probably stream this in chunks like it you could probably real time this uh potentially. Um it is quite it is quite fast from the first'
+
+[04:23] [scene:talk]
+VISUAL: 
+AUDIO: 'render I noticed and a lot of other fancy stuff that I don\'t know we want to go over. There is no official training scripts yet, but it is literally only been a few hours. So, you know, I\'m sure Ostus and and Koya'
+
+[04:36] [scene:talk]
+VISUAL: 
+AUDIO: 'are probably working on the training scripts for this right now. Um, and then, you know, very important note here at the very bottom. I just caught it. Uh, fits on less than 24 gigs'
+
+[04:48] [scene:talk]
+VISUAL: 
+AUDIO: 'of VRAM, guys. That\'s massive, of course, right? Like RAM is is in high demand right now. But why I think this is even crazier is because I think we will be able to run this on a'
+
+[05:01] [scene:talk]
+VISUAL: 
+AUDIO: 'uh Wait, will it catch me doing this? Come on. Come on. Yeah, my MacBook. I think uh I think I could get this running on MLX. And if I\'m not the one'
+
+[05:14] [scene:talk]
+VISUAL: 
+AUDIO: 'to do it, someone else is going to do it. But uh I I think this can be rendered on a MacBook with probably 16 to 24 gigs if you\'ve got an Mchip MacBook, which is'
+
+[05:26] [scene:talk]
+VISUAL: 
+AUDIO: 'crazy. Like audio is so light. So, um definitely look out for that. I I might be I might be tackling that in the future. But, uh yeah, let\'s let\'s jump right into Comfy here. So, I mean, super'
+
+[05:39] [scene:talk]
+VISUAL: 
+AUDIO: 'simple system. You know, you got your classic. This is straight from the models template. I had to uh actually it was the blog. I went on the blog to get this. But uh super simple system here. Let\'s'
+
+[05:52] [scene:talk]
+VISUAL: 
+AUDIO: 'see what we got going on. We\'ve got the models. Let\'s color code this. We got purple. We got the clip. And we got the V. So, nothing super crazy going on here. You know, eight eight uh int on the Vay,'
+
+[06:05] [scene:talk]
+VISUAL: 
+AUDIO: 'FP16 on the DIT. You know, it goes into your text encoder. Now, let me just like get rid of that because that\'s ridiculous. But you see here now we have caption and we have lyrics. Right? So'
+
+[06:17] [scene:talk]
+VISUAL: 
+AUDIO: 'this is that those two streams we were talking about. Um I\'m still behind me here. I\'m still looking for the official prompting guide to figure out how I want to structure and play with this thing.'
+
+[06:30] [scene:talk]
+VISUAL: 
+AUDIO: 'But you know here we got max duration your top K you know LLM parameters your CFG scale um your empty latent based on the seconds here batch size zeroed out'
+
+[06:42] [scene:talk]
+VISUAL: 
+AUDIO: 'conditioning this is important in this case because the cfg is higher than one so you do want to zero it out um and then you know uler in third in 30 steps.'
+
+[06:54] [scene:talk]
+VISUAL: 
+AUDIO: 'So, let\'s see here. I\'ve got right behind me, I\'ve got the uh LLM looking up for the official prompt guide because I didn\'t see that there was any docs.'
+
+[07:06] [scene:talk]
+VISUAL: 
+AUDIO: 'But, let\'s see. Model card, they have an official rewriter. Separate the input du. I wonder'
+
+[07:23] [scene:talk]
+VISUAL: 
+AUDIO: 'is it possible to make a custom node that um utilizes the clip from the model the miniax music 3 uh text encoder'
+
+[07:36] [scene:talk]
+VISUAL: 
+AUDIO: 'clip to create a enhanced prompt writer. Is that is that possible in this architecture or should we use an external more intelligent LLM to follow'
+
+[07:48] [scene:talk]
+VISUAL: 
+AUDIO: 'the uh the guides of how the model wants to be prompted? So for anyone who doesn\'t know like this is Echo, you know, quick little quick little plug. Echo is a little app that'
+
+[08:01] [scene:talk]
+VISUAL: 
+AUDIO: 'sits on my Windows computer. It sits on like the native OS, works on Windows with Nvidia graphics cards, works with uh a MacBook as well on an Mchip, but I can just talk to my heart\'s content, and'
+
+[08:14] [scene:talk]
+VISUAL: 
+AUDIO: 'when I\'m ready, I hit escape, and boom, it just fires off all the text. um runs completely local, so you\'re not sending your data to Whisper Flow or any of those other uh competitors that are'
+
+[08:26] [scene:talk]
+VISUAL: 
+AUDIO: 'literally stealing your voice and you know, keeping every word you say in training on on your on your uh literally everything. Um but yeah, uh you can get Echo in the link in the description on'
+
+[08:39] [scene:talk]
+VISUAL: 
+AUDIO: 'my Fix Seed website. But yes, we are asking again the LLM codeex in this instance behind me. Uh if we can use the clip to do a text uh'
+
+[08:51] [scene:talk]
+VISUAL: 
+AUDIO: 'basically a text enhance because Comfy, if you didn\'t know, has this new node that I\'ve been actually really liking is uh it\'s called generate just generate text, right? And so it looks like this. You put in a clip. Actually, let\'s just'
+
+[09:06] [scene:talk]
+VISUAL: 
+AUDIO: 'do it. Let\'s see what happens. Let\'s put in a clip. I\'m not going to do anything. thing. I\'m going to bypass these and then I\'m just going to show show text'
+
+[09:19] [scene:talk]
+VISUAL: 
+AUDIO: 'and then wait, do I have one? FL show text. I do have one. Look at that. Wow. I can\'t I don\'t even remember making this one. And let\'s just say, hey, what\'s up? Let\'s see if this thing can'
+
+[09:31] [scene:talk]
+VISUAL: 
+AUDIO: 'actually do the thing. No, it\'s not even going to do it. Audio. What about load audio? Oh, this is interesting. I wonder if this will work.'
+
+[09:45] [scene:talk]
+VISUAL: 
+AUDIO: 'Okay, I\'m gonna put in a song. Let\'s see. Music. Um, let\'s just do my music for copyright sake. And then we\'ll do Saturn. Okay. Um,'
+
+[09:57] [scene:talk]
+VISUAL: 
+AUDIO: 'describe this song. Let\'s see if that works. No, it\'s just going to fail. Uh, got an unexpected word. Do sample. Weird.'
+
+[10:10] [scene:talk]
+VISUAL: 
+AUDIO: 'sampling mode off. No, I\'ve never tried this before, guys. So, honestly, like, you know, thanks for bearing with me to try that. But, but the generate text node is super useful.'
+
+[10:22] [scene:talk]
+VISUAL: 
+AUDIO: 'But in this case, it doesn\'t work with this model apparently. So, I\'m asking uh codeex right now, hey, can I do this? Uh it says it\'s possible to build'
+
+[10:34] [scene:talk]
+VISUAL: 
+AUDIO: 'enhanced prompt writer but use cleaning copyrighted is architecture separate general purpose LM the correct tool. Okay. All right. Well um in that case let\'s just write a pop song about eating ramen in the'
+
+[10:51] [scene:talk]
+VISUAL: 
+AUDIO: 'alleyway of a dirty street. I have no idea. And uh let\'s make it 60 seconds long. and structure it out based on the'
+
+[11:03] [scene:talk]
+VISUAL: 
+AUDIO: 'the caption and the lyrics thing and give me both chunks of text so I can input it and test out the model. Okay, so we\'re sending that through. But uh yeah, let\'s go let\'s go through'
+
+[11:17] [scene:talk]
+VISUAL: 
+AUDIO: 'the rest of it. I mean, I was trying to do some interesting stuff here. I was like, you know, baby crying on an airplane, seeing like if is this a general purpose'
+
+[11:29] [scene:talk]
+VISUAL: 
+AUDIO: 'audio model or is it just a music model? The main reason why I\'m asking this is because Miniax, the video model H3 was very much a generalpurpose model where'
+
+[11:42] [scene:talk]
+VISUAL: 
+AUDIO: 'it could do so much more than just clips. It it was like nano banana. It could understand everything. All right, I\'ll take that as a no. It can\'t.'
+
+[12:04] [scene:talk]
+VISUAL: 
+AUDIO: 'It\'s not a general purpose uh model, but I we got a prompt here. Let\'s see what we got. Vocal details. Okay, caption. Boom. I\'m going to take all that. What do we got here? Let\'s just go through'
+
+[12:16] [scene:talk]
+VISUAL: 
+AUDIO: 'quickly. Compact 60 seconds. Vocal details. Youthful lead young, slightly raspy. Okay. Arrangement. Uh, introverse. Yeah. Yeah. Yeah. Blah, blah, blah. Lyrics. Rain. Rain on a bus and busted side. Midnight taste like'
+
+[12:29] [scene:talk]
+VISUAL: 
+AUDIO: 'gasoline. I mean, absurd absurd lyrics. But we\'re going to copy all that and we\'re going to paste that into lyrics. We\'re going to let it run and see what\'s up. So, it\'s going to'
+
+[12:41] [scene:talk]
+VISUAL: 
+AUDIO: 'encode our text. takes a while. I\'m probably not going to'
+
+[12:53] [scene:talk]
+VISUAL: 
+AUDIO: 'cut this out mainly because of the just the time. It\'s good to know how long these things take. Encoding does take a while. Um I guess it is a lot of text and we\'re rendering. So I\'m on a RTX'
+
+[13:09] [scene:talk]
+VISUAL: 
+AUDIO: '6000 Pro 96 GB. Think of it like a 5090 in terms of speed. And it\'s going to take about 20 seconds for 60 seconds. So, it is faster than real time, which'
+
+[13:22] [scene:talk]
+VISUAL: 
+AUDIO: 'is amazing. All right, let\'s give this a shot. Let\'s see what\'s up. Steam in the neon light.'
+
+[13:40] [scene:talk]
+VISUAL: 
+AUDIO: 'Rain on a busted sign. Midnight tastes like gasoline.'
+
+[13:54] [scene:talk]
+VISUAL: 
+AUDIO: 'Plastic chair chip red bowl. Best little kingdom I\'ve ever seen. Taxi tires nearby. Graffiti moons in a concrete sky. I break the yoke, the'
+
+[14:09] [scene:talk]
+VISUAL: 
+AUDIO: 'whole world down. All right, that was terrible. Uh, let\'s'
+
+[14:21] [scene:talk]
+VISUAL: 
+AUDIO: 'see what Let\'s see what else we got. Um, describe me or write me another prompt with a boom bap west coast hiphop style. Uh, different. Just make up a story and'
+
+[14:36] [scene:talk]
+VISUAL: 
+AUDIO: 'write me the prompt for it. All right, let\'s see. While we\'re doing that, I think what happens if we just do CFG'
+
+[14:48] [scene:talk]
+VISUAL: 
+AUDIO: 'of one. Let\'s do it. Okay. So, we got our new prompt.'
+
+[15:03] [scene:talk]
+VISUAL: 
+AUDIO: 'Put that in there. Lyrics. Put that in here. We\'ll just We\'ll put'
+
+[15:16] [scene:talk]
+VISUAL: 
+AUDIO: 'this back to 1.7 because this was an experiment at CFG1, the one that\'s rendering right now. I\'m going to ceue up another one with our new prompt and our new set our uh yeah, our new song genre.'
+
+[15:30] [scene:talk]
+VISUAL: 
+AUDIO: 'So, this is the same prompt, same seed as last time, just a CFG of one. We\'re just experimenting to see what\'s going on. Yeah. Okay. So, so CFG is definitely'
+
+[15:45] [scene:talk]
+VISUAL: 
+AUDIO: 'needed here. Okay, I think this one was actually'
+
+[16:07] [scene:talk]
+VISUAL: 
+AUDIO: 'better. Um, in musically speaking, I mean like fidelity. Yeah, you know, but musically speaking, I actually think that one turned out better than the first. Oh, we are on a random seed. That\'s bad. Let\'s lock that. We want to'
+
+[16:20] [scene:talk]
+VISUAL: 
+AUDIO: 'lock the seed. Get some actual actual data here. Okay, so here\'s our new prompt for the sunrise.'
+
+[16:36] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; Yeah. &gt;&gt; 2 in the morning with the dash low. Old black cassette in a place I don\'t know. Name on the label nearly faded away. Play this for mama on a birthday.'
+
+[16:48] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; So I cross through the city where the street lamps blink. Pass the closed down shops in the roller rink. Every red light said I ought to turn around. But that little plastic box held a whole lot'
+
+[17:00] [scene:talk]
+VISUAL: 
+AUDIO: 'of sound. Ride through the night. Keep the wheels in line. Old songs live when you give them time. From the boulevard to the morning blue. I carried that till it made it through.'
+
+[17:13] [scene:talk]
+VISUAL: 
+AUDIO: 'Behind Iron Gates at the window. &gt;&gt; Okay. So that was that was great. Uh, that was awesome. Let\'s um I\'m going to render'
+
+[17:27] [scene:talk]
+VISUAL: 
+AUDIO: 'I\'m going to render it one more time and then just so we have the the seed 42. I\'m not even going to play it. Actually, no, I I do have to play it. Um, I\'m actually going to bump the CFG to four and I want that comparison. Um, locked'
+
+[17:40] [scene:talk]
+VISUAL: 
+AUDIO: 'seed this time because I just want to see what CFG CFG does. audio is such an interesting uh medium in terms of of llm like just'
+
+[17:52] [scene:talk]
+VISUAL: 
+AUDIO: 'diffusion models and like uh neural networks. So So yeah, I just want to see I just want to see what that um what that actually'
+
+[18:04] [scene:talk]
+VISUAL: 
+AUDIO: 'does. It is refreshing having fast renders compared to the last week of video models where it\'s like excruciatingly'
+
+[18:16] [scene:talk]
+VISUAL: 
+AUDIO: 'long even on my graphics card. Okay, so this is the um seed 42. &gt;&gt; Yeah, &gt;&gt; low black cassette and a place I don\'t'
+
+[18:31] [scene:talk]
+VISUAL: 
+AUDIO: 'know. Name on the label nearly faded away. Play this for mama on the birthday. So I cross through the city where the street lamps blink. Pass the closed down shops in the roller rink. Every red light said I ought to turn'
+
+[18:44] [scene:talk]
+VISUAL: 
+AUDIO: 'around but that little plastic box held a whole lost sound. Ride through the nights in line. Old songs live when you give them time. From the boulevard glow till the morning blue. I carried that rhythm till it made it through.'
+
+[18:58] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; All right. So yeah, I mean this is a seed game really. you know, nothing has really changed since AEP. Uh, I mean, all all models, guys, all all models, like, you know, this is important,'
+
+[19:11] [scene:talk]
+VISUAL: 
+AUDIO: 'honestly. All models are still seed dependent. Yeah. I I\'ll let me say that again. Even state-of-the-art seed danceo,'
+
+[19:23] [scene:talk]
+VISUAL: 
+AUDIO: 'we all know that they\'re seed dependent. You don\'t have to change the prompt. If you don\'t like the outcome, only come to that conclusion if you\'ve like uh generated like eight or 10. If if if all'
+
+[19:36] [scene:talk]
+VISUAL: 
+AUDIO: 'eight suck, if all 10 suck, then go back to your prompt. But there are a astronomical amount of you, and I know this for a fact that uh render one and'
+
+[19:48] [scene:talk]
+VISUAL: 
+AUDIO: 'then they\'re just like, "Oh, it\'s terrible. Let me change my prompt." It\'s like, you don\'t know that the prompt is the problem. the seed is still a very very valuable if not arguably the most'
+
+[20:00] [scene:talk]
+VISUAL: 
+AUDIO: 'valuable parameter that we have because you\'re essentially sifting through a amorphous soup of higher dimensional space when it comes to this stuff. It\'s'
+
+[20:12] [scene:talk]
+VISUAL: 
+AUDIO: 'like the difference between the here and here is unfathomably like an insane amount of space and every subdivision of that space is filled with'
+
+[20:24] [scene:talk]
+VISUAL: 
+AUDIO: 'a potential variation that you might like. So play with the seed. The seed matters. Um let\'s go back into this. So this is this rendered. This is a CFG4.'
+
+[20:36] [scene:talk]
+VISUAL: 
+AUDIO: 'Um same prompt, same everything from the last one. And this is CFG4. &gt;&gt; One take one address'
+
+[20:49] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; before the sun. &gt;&gt; 2 in the morning with the dash low. Oh, black is set in a place I don\'t know. Name on the label nearly faded away.'
+
+[21:02] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; All right. I think uh I mean it\'s a not noticeable fidelity drop. So I\'m going to put it at like uh 2.5. Let\'s put it'
+
+[21:14] [scene:talk]
+VISUAL: 
+AUDIO: 'at 2.5. We\'ll render that once more. Um and then while we were waiting here uh I put in another prompt. This one\'s for a um like a 125 BPM house song for on the floor um funky variation. So let\'s see.'
+
+[21:29] [scene:talk]
+VISUAL: 
+AUDIO: 'Let\'s put that in. I\'m going to hit queue it up and we\'ll be back in a second while that renders. All right. So, this is CFG of 2.5 on the'
+
+[21:41] [scene:talk]
+VISUAL: 
+AUDIO: 'old hip-hop song. &gt;&gt; Yeah. One take, one address. Yeah. Two in the morning with the dash blink past the'
+
+[21:54] [scene:talk]
+VISUAL: 
+AUDIO: 'down shops and the roller rink. Every red light said I ought to turn around, but that little plastic box held a whole lot of sound. Ride through the night, keep the wheels in line. Old songs live when you give them time. From the'
+
+[22:07] [scene:talk]
+VISUAL: 
+AUDIO: 'boulevard to the morning blue. &gt;&gt; All right. So, it\'s like kind of it\'s like dissonance. I don\'t know. Like, it\'s very apparent like, you know, let let\'s just be honest with ourselves'
+
+[22:21] [scene:talk]
+VISUAL: 
+AUDIO: 'here for a second. It\'s very apparent that this model was not trained on popular music. It just wasn\'t, right? You can tell immediately. you\'re like, "Okay, you know, it\'s like not aligning like the voice to like the musical'
+
+[22:35] [scene:talk]
+VISUAL: 
+AUDIO: 'scale. It\'s like dissonance." For anyone who\'s not a music nerd, that just basically means like two notes are slightly off. So, it\'s like uh it\'s weird. I don\'t know. I can\'t tell why,'
+
+[22:47] [scene:talk]
+VISUAL: 
+AUDIO: 'but it\'s weird. That kind of stuff. Um which honestly makes sense, right? Like the music industry is not one to be messed with. Uh, however, this is open source, so we can train it on whatever'
+
+[23:01] [scene:talk]
+VISUAL: 
+AUDIO: 'we want. I suspect that in the coming week, we\'re going to see a lot of luras, a lot of fine tunes of people just throwing their favorite music at it. Um, copyright or not, you know, it\'s open'
+
+[23:14] [scene:talk]
+VISUAL: 
+AUDIO: 'source. So, I I don\'t think immediately, first impressions, I don\'t think this model is incapable of doing anything. I think it\'s incredibly capable. The fidelity is there, the speed is there,'
+
+[23:28] [scene:talk]
+VISUAL: 
+AUDIO: 'the text the architecture is there, but I do think that uh it\'s this is a this is a data problem. Immediate immediate out of the box uh you know assessment it\'s a data problem. Um which'
+
+[23:40] [scene:talk]
+VISUAL: 
+AUDIO: 'is fine which is fine because we can we we the community can throw data at it to surpass itself very effortlessly. Okay, so this is a 140 uh sorry 125 BPM'
+
+[23:52] [scene:talk]
+VISUAL: 
+AUDIO: 'house song. Let\'s see what it did. &gt;&gt; One red sock in a washing machine.'
+
+[24:22] [scene:talk]
+VISUAL: 
+AUDIO: 'You said while we wait and want to dance with me. So bubble and a radio glow. Machines keep turning so we follow the flow. Lights flash green. The room gets hot. You give me everything'
+
+[24:35] [scene:talk]
+VISUAL: 
+AUDIO: 'this night forot. Spin me around. Spin me around. Turn this little upside down. Lost in the while the go. Spin me around. Spin me around. Spin me around.'
+
+[24:47] [scene:talk]
+VISUAL: 
+AUDIO: 'No velvet rope and no time. Just your twostep moving into mine. Wash all the worries out of this town. &gt;&gt; I mean, pretty good. Pretty good. Again,'
+
+[25:01] [scene:talk]
+VISUAL: 
+AUDIO: 'data problem. It\'s a data problem, right? Music fidelity, it\'s like uh it\'s pretty mid, right? Music, musically speaking, it\'s pretty mid, but we can train it. And so, the that little run that that person'
+
+[25:15] [scene:talk]
+VISUAL: 
+AUDIO: 'sang in the song was awesome. That like, you know what I mean? Like that was that was great. So it\'s capable. Uh what if I like bump the steps up to like 50? I\'m'
+
+[25:28] [scene:talk]
+VISUAL: 
+AUDIO: 'curious. And actually, you know what? Yeah. Yeah. Yeah. We\'ll do we\'ll do 50. Same song. Um I\'m going to set this back to 30. And'
+
+[25:40] [scene:talk]
+VISUAL: 
+AUDIO: 'I\'m going to do a resz uh 2S hit on that as well. Basically, for anyone who doesn\'t know this, the sampler res 2S. Um, I believe uh I don\'t know if it\'s Bass Comfy, but'
+
+[25:55] [scene:talk]
+VISUAL: 
+AUDIO: 'Clown Shark maybe. The idea with this sampler is it hits it twice. So, every step is essentially like two steps almost. It\'s not It\'s more mathematically funky than that, but like'
+
+[26:08] [scene:talk]
+VISUAL: 
+AUDIO: 'that\'s the general idea. Okay, so this is 50 steps. Let\'s see if it made any difference. You walked in the laundry'
+
+[26:23] [scene:talk]
+VISUAL: 
+AUDIO: 'sock in a washing machine forotinat. No, I think it\'s I think it\'s about the'
+
+[26:43] [scene:talk]
+VISUAL: 
+AUDIO: 'same honestly. Um, we\'re going to see like the res 2S though in a second here. You can see it\'s much slower, you know, respectively. All right, let\'s see it.'
+
+[26:57] [scene:talk]
+VISUAL: 
+AUDIO: 'No, it\'s it\'s really like basically the'
+
+[27:14] [scene:talk]
+VISUAL: 
+AUDIO: 'exact same. So, we\'re going to go back to Oiler uh 30 steps. Simple. That\'s fine. Yeah, guys. I mean, you know, from here we can do some, you know, funky experimentation, right? Where it\'s like,'
+
+[27:27] [scene:talk]
+VISUAL: 
+AUDIO: 'okay, here\'s here\'s the audio conditioning, whatever, blah blah blah. Okay. So, well, what happens if like it\'s not an edit model. See, that\'s the thing, right? The thing is is like'
+
+[27:39] [scene:talk]
+VISUAL: 
+AUDIO: 'clip latent empty latent in seconds. Yeah. It\'s like mask latent mask'
+
+[27:55] [scene:talk]
+VISUAL: 
+AUDIO: 'audio latent create audio mask. Oh no, that\'s not what I want. Yeah,'
+
+[28:09] [scene:talk]
+VISUAL: 
+AUDIO: 'from here I was going to experiment with like inpainting and uh and like those kind of things, but I really don\'t think this model, just from what I\'ve been listening to'
+
+[28:21] [scene:talk]
+VISUAL: 
+AUDIO: 'it, based on like what I\'ve been getting out of this thing, I don\'t think this model out of the box is going to be able to do in paint, outpaint, maybe outpaint, right? Here\'s a clip. extend the song maybe, you know, but uh'
+
+[28:34] [scene:talk]
+VISUAL: 
+AUDIO: 'yeah, I mean, bless bless Mini Max for dropping this on us because it\'s just another tool in the toolbox to fine-tune and whatnot. But uh yeah, let\'s let\'s'
+
+[28:46] [scene:talk]
+VISUAL: 
+AUDIO: 'leave it there, guys. I mean, it\'s pretty cool. I mean, there\'s lots of work to be done, lots of tuning to be uh done. Um, let me know what you\'re what you think in the comments, what you guys are excited for, you know, what you\'re'
+
+[28:59] [scene:talk]
+VISUAL: 
+AUDIO: 'finding when you\'re playing with this. I\'m going to drop this workflow on uh my Patreon. And just a just a quick note on the on the whole Patreon thing. Um, let\'s go over here to it.'
+
+[29:12] [scene:talk]
+VISUAL: 
+AUDIO: 'Patreon. So, uh, I\'ve revamped the the Patreon and if there\'s a start here post where, uh, I I\'ve now updated the tiers. So, we\'re doing 5, 20, and 40. Um, if you'
+
+[29:25] [scene:talk]
+VISUAL: 
+AUDIO: 'are already a paid member, you\'re going to uh be grandfathered in at the $10 rate. Um, na native downloads are now going to live on uh my website, which I\'m building out here. You\'re going to'
+
+[29:38] [scene:talk]
+VISUAL: 
+AUDIO: 'log in uh with your actual Patreon. So, I I click here, I log in. Um, of course, like I\'m a Whoops, that\'s a bug. Allow. I think I clicked it twice.'
+
+[29:50] [scene:talk]
+VISUAL: 
+AUDIO: 'That\'s why. Yeah, there we go. I\'ve logged in now with my own Patreon. I\'m a free member of my own Patreon apparently, but uh this will allow you to um unlock all the things and it\'s going to be on my website. This is not'
+
+[30:03] [scene:talk]
+VISUAL: 
+AUDIO: 'live right now. The my live website, machined delusions.com. The shop is disabled, but here is where you\'re going to interface with all of the workflows, custom models I train, um and those things. And they\'re going to be various'
+
+[30:17] [scene:talk]
+VISUAL: 
+AUDIO: 'tiers. and I\'m going to uh put a lot of effort into providing value for the community continually. Um I have a ton of open source stuff right now. My my my GitHub is just absolutely exploding with'
+
+[30:29] [scene:talk]
+VISUAL: 
+AUDIO: 'with open-source things that I\'ve built throughout the years. And uh I want to provide that like next level of value to you guys um you know in the form of things that I spend more time on and uh'
+
+[30:43] [scene:talk]
+VISUAL: 
+AUDIO: 'you know expect expect that like uh that high touch from. So there\'s a ton of open source stuff to play with on my GitHub if you haven\'t played with it. You can also find it on my on my website right here under the GitHub link. Um,'
+
+[30:56] [scene:talk]
+VISUAL: 
+AUDIO: 'but in the coming days I\'m going to and I\'m, you know, after this video, I\'m going to post up this workflow and whatnot for the free members. But, uh, going forward, all all of that is going'
+
+[31:08] [scene:talk]
+VISUAL: 
+AUDIO: 'to be under the shop here on my website and then you log in and download everything. But, uh, but that\'s it for now, guys. I appreciate all the support and um I\'m going to be posting a lot more videos and kind of just getting into the cadence, you know, like it\'s uh'
+
+[31:21] [scene:talk]
+VISUAL: 
+AUDIO: 'it\'s weird getting in front of a camera and talking, but um hey, we\'re we\'re all here trying to get better and play with the latest tech. But yeah, it\'s a fun ride. Thanks so much and I\'ll see you guys in the next one.'

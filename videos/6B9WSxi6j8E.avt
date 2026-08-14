@@ -1,0 +1,256 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Master LTX 2.5 in ComfyUI: Multi-Shot, First-Last Frame & 2K Workflows
+channel: @octopusinc_
+duration: 13:17
+source: https://www.youtube.com/watch?v=6B9WSxi6j8E
+upload_date: 20260813
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'The new LTX model is here This is LTX 2.5 Today I’ll show you how to run LTX 2.5 in ComfyUI and address three issues that can directly affect your results Why do multi-shot prompts sometimes create cuts and sometimes remain a single continuous shot?'
+
+[00:12] [scene:talk]
+VISUAL: 
+AUDIO: 'Why does first-and-last-frame generation sometimes introduce an unexpected transition? And why can videos with complex actions look beautiful while still breaking the laws of physics?'
+
+[00:24] [scene:talk]
+VISUAL: 
+AUDIO: 'Let’s start with three results The first is a vlog featuring an East Asian woman Within ten seconds she travels from the Great Wall to Tokyo and then to Paris'
+
+[00:36] [scene:talk]
+VISUAL: 
+AUDIO: 'That gives us three locations three lighting conditions and three different shot sizes while the character’s identity still needs to remain consistent The second video shows a woman repairing a bicycle'
+
+[00:48] [scene:talk]
+VISUAL: 
+AUDIO: 'She inspects the chain and then tests the wheel The third video shows a woman closing an umbrella but as she does it the umbrella ribs suddenly become soft and flexible This is one of the typical problems we encountered while testing LTX 2.3'
+
+[01:03] [scene:talk]
+VISUAL: 
+AUDIO: 'LTX 2.5 still supports the fundamental workflows we’re familiar with including text-to-video image-to-video'
+
+[01:16] [scene:talk]
+VISUAL: 
+AUDIO: 'first-and-last-frame generation and synchronized audio-video generation Compared with LTX 2.3, however version 2.5 strengthens the entire pipeline from prompt understanding and latent generation all the way through to pixel reconstruction'
+
+[01:29] [scene:talk]
+VISUAL: 
+AUDIO: 'The first major improvement is a new technique called diffusion fidelity rendering You can think of it as redistributing the model’s computational budget Areas such as the sky or a blurred background are less likely to expose obvious mistakes'
+
+[01:42] [scene:talk]
+VISUAL: 
+AUDIO: 'so the model can spend less time on them Faces, hands, text fast motion and complex textures are much easier for viewers to notice so the model spends more time processing those areas'
+
+[01:57] [scene:talk]
+VISUAL: 
+AUDIO: 'In this close-up the character begins by reading a card then looks out the window and finally turns back toward the camera as the shot continues to push in Despite that movement, her eyes'
+
+[02:10] [scene:talk]
+VISUAL: 
+AUDIO: 'the corners of her mouth her skin and her hair don’t quickly turn into a blur That’s a very direct example of the model preserving high-frequency detail The second improvement is a diffusion-based video decoder A traditional VAE is more like translating a latent representation into pixels in one pass'
+
+[02:24] [scene:talk]
+VISUAL: 
+AUDIO: 'During that translation fast movement and fine textures can easily be lost The new method is more like translating the latent first and then performing an additional refinement pass with particular attention paid to those details'
+
+[02:41] [scene:talk]
+VISUAL: 
+AUDIO: 'Third LTX 2.5 uses a new text encoder This makes the model feel more like a director who can follow instructions accurately keeping track of the characters action sequence, lighting'
+
+[02:54] [scene:talk]
+VISUAL: 
+AUDIO: 'and camera movement described in the prompt Take the bicycle-repair example This isn’t simply a generic shot of someone fixing a bike It contains five consecutive actions and the model completes most of that sequence'
+
+[03:07] [scene:talk]
+VISUAL: 
+AUDIO: 'This shows that its understanding of action chains has genuinely improved But there’s still a problem When the camera turns toward the bicycle wheel the character’s face leaves the frame When her face appears again'
+
+[03:20] [scene:talk]
+VISUAL: 
+AUDIO: 'you can see that the facial identity has drifted The fourth improvement is native multi-shot support which we’ll examine through two dedicated examples later Now let’s look at how to run LTX 2.5 in ComfyUI already supports LTX 2.5 natively'
+
+[03:35] [scene:talk]
+VISUAL: 
+AUDIO: 'Update ComfyUI to the latest version open the official templates and you’ll find the corresponding workflows There are quite a few model files but you only need to remember three things'
+
+[03:47] [scene:talk]
+VISUAL: 
+AUDIO: 'First the main model comes in both Dev and Distilled versions The Dev model is generally intended for model training For everyday use choose the Distilled model because it’s faster ComfyUI also provides a dedicated INT8 ConvRot version'
+
+[04:00] [scene:talk]
+VISUAL: 
+AUDIO: 'Second we use the twelve-billion-parameter text encoder to help the model understand the prompt There’s also a node called Generate LTX2 Prompt This is a prompt generator'
+
+[04:13] [scene:talk]
+VISUAL: 
+AUDIO: 'or prompt enhancer When you’re not sure how to write the prompt you can use this node to expand it The official upscaling models also come in two types One is a spatial latent upscaler and the other is a temporal latent upscaler'
+
+[04:26] [scene:talk]
+VISUAL: 
+AUDIO: 'The spatial model performs spatial super-resolution while the temporal model is mainly used for frame interpolation For easier testing I’ve also built the workflows on RunningHub In the ComfyUI space'
+
+[04:40] [scene:talk]
+VISUAL: 
+AUDIO: 'RunningHub is a great online working platform because whenever a new model or extension appears it usually adds support very quickly RunningHub also provides an online community for ComfyUI creators where you can find plenty of creative inspiration and example workflows'
+
+[04:53] [scene:talk]
+VISUAL: 
+AUDIO: 'Let’s begin with the image-to-video workflow The first section loads the models including the main model VAE, text encoder and upscaling model'
+
+[05:06] [scene:talk]
+VISUAL: 
+AUDIO: 'If your prompt is relatively short you can enable the prompt enhancer here The second section handles the reference image The processing is quite simple First resize the image so that its longest side is five hundred and twelve pixels'
+
+[05:18] [scene:talk]
+VISUAL: 
+AUDIO: 'After that, the image is encoded Just like LTX 2.3 this is a two-stage sampling workflow The first sampling stage generates the base video'
+
+[05:30] [scene:talk]
+VISUAL: 
+AUDIO: 'The most important node here is called LTXVImgToVideoInplace which we already used with version 2.3 Notice that this workflow contains two instances of the node One is used during base video generation'
+
+[05:43] [scene:talk]
+VISUAL: 
+AUDIO: 'and the other is used during upscaling The purpose of this node should already be familiar It injects the reference image and prompt into the sampling process During the first stage'
+
+[05:55] [scene:talk]
+VISUAL: 
+AUDIO: 'we generate a base video at a lower resolution There are also a few differences in the sampling process The main one is the LTXV Dual CFG Guider which allows us to adjust the audio CFG and video CFG separately This differs from LTX 2.3'
+
+[06:10] [scene:talk]
+VISUAL: 
+AUDIO: 'The fourth step is the second stage which handles upscaling Here we upscale the original video in latent space and sample it again The resulting video then matches the resolution we specified There are two other workflows:'
+
+[06:25] [scene:talk]
+VISUAL: 
+AUDIO: 'text-to-video and first-and-last-frame video generation Both can be built very easily from the image-to-video workflow so let’s focus on their differences Text-to-video is the simplest'
+
+[06:37] [scene:talk]
+VISUAL: 
+AUDIO: 'Bypass the LTXVImgToVideoInplace node we just discussed and the workflow becomes text-to-video Everything else can remain unchanged For first-and-last-frame generation we add two images and use a different node to inject the conditions'
+
+[06:50] [scene:talk]
+VISUAL: 
+AUDIO: 'Here we use two LTXVAddGuide nodes connected in sequence Why use this node? Because it allows us to set the position and strength of each reference frame Since we’re providing a first frame and a last frame'
+
+[07:04] [scene:talk]
+VISUAL: 
+AUDIO: 'their positions are set to zero and negative one Zero represents the first frame while negative one represents the final frame Also note that the official first-and-last-frame workflow doesn’t use two-stage sampling It only has one sampling stage'
+
+[07:19] [scene:talk]
+VISUAL: 
+AUDIO: 'The next two examples show how to choose and use your first and last frames In the first example the story takes place in a hotel lobby The first and last frames are extremely similar The character, clothing'
+
+[07:32] [scene:talk]
+VISUAL: 
+AUDIO: 'environment and composition are all very close In the prompt we simply ask the model to generate a video of the woman closing her umbrella Let’s look at the result The model successfully generates a single continuous shot'
+
+[07:44] [scene:talk]
+VISUAL: 
+AUDIO: 'But pay attention when the umbrella closes The umbrella suddenly becomes soft and flexible making the result look strange and physically incorrect Now let’s examine the second example'
+
+[07:57] [scene:talk]
+VISUAL: 
+AUDIO: 'In the first frame the character is sitting inside a car By the final frame she’s standing behind the vehicle The character’s position camera position and composition all change at the same time Of course'
+
+[08:11] [scene:talk]
+VISUAL: 
+AUDIO: 'the prompt also contains a detailed description of the required actions At first glance the generated result looks pretty good But if you watch closely you’ll notice a camera transition in the middle It isn’t actually a single continuous shot'
+
+[08:24] [scene:talk]
+VISUAL: 
+AUDIO: 'These two examples reveal an important rule If you want to create a continuous one-shot video choose first and last frames that are as consistent as possible If the two frames differ too much'
+
+[08:37] [scene:talk]
+VISUAL: 
+AUDIO: 'the model may introduce a transition Next, let’s look at text-to-video In our first test we ask a travel vlogger to appear successively at the Great Wall Shibuya in Tokyo'
+
+[08:49] [scene:talk]
+VISUAL: 
+AUDIO: 'and the Eiffel Tower in Paris The generated result contains three clear scene changes while the character’s outfit hairstyle and overall appearance remain basically consistent This result shows that LTX 2.5 can natively understand multi-shot prompts'
+
+[09:01] [scene:talk]
+VISUAL: 
+AUDIO: 'But here’s another video Its prompt is also written as a multi-shot prompt except that all three shots remain inside the same old house Only the shot size and camera direction change'
+
+[09:15] [scene:talk]
+VISUAL: 
+AUDIO: 'Even though we explicitly wrote three shots the final result is still one continuous take So multi-shot labels alone don’t guarantee visible cuts When the location remains unchanged and only the framing or camera direction changes'
+
+[09:28] [scene:talk]
+VISUAL: 
+AUDIO: 'LTX 2.5 may interpret those instructions as one continuous camera move Now let’s test image-to-video and facial detail The reference image shows a woman holding a card'
+
+[09:43] [scene:talk]
+VISUAL: 
+AUDIO: 'In the prompt we ask her to read the card look out the window and finally turn back toward the camera with a very restrained smile In the result we can see her gaze shift her eyes blink'
+
+[09:56] [scene:talk]
+VISUAL: 
+AUDIO: 'the corners of her mouth change and the camera move closer More importantly even after the camera pushes in her skin, eyes and hair don’t undergo any major changes Next'
+
+[10:08] [scene:talk]
+VISUAL: 
+AUDIO: 'let’s use image-to-video to create a complex action sequence Our test scene involves repairing a bicycle The prompt divides the task into several steps: inspect the chain rotate the pedals'
+
+[10:20] [scene:talk]
+VISUAL: 
+AUDIO: 'check the wheel and finally raise a wrench That’s a fairly complex chain of actions In the resulting video most of those actions are successfully performed The chain, pedals'
+
+[10:32] [scene:talk]
+VISUAL: 
+AUDIO: 'and wheel also move continuously This further demonstrates that the new text encoder can understand more complicated action sequences However we still encounter the issue I emphasized earlier When the camera turns toward the bicycle'
+
+[10:46] [scene:talk]
+VISUAL: 
+AUDIO: 'the character’s face temporarily leaves the frame When her face reappears her identity looks slightly different Now let’s test a more complex scene involving a mirror reflection inside a dressing room The character first adjusts her earring while looking into the mirror'
+
+[11:00] [scene:talk]
+VISUAL: 
+AUDIO: 'then turns away from the vanity and walks through the backstage area toward the stage entrance In the final result the movements of the real character and her reflection are basically synchronized LTX 2.5 handles this type of reflective scene surprisingly well'
+
+[11:16] [scene:talk]
+VISUAL: 
+AUDIO: 'and the result is very stable When introducing this model I also mentioned that it doesn’t always follow physical laws particularly well Let’s add another test to see whether that problem really exists'
+
+[11:29] [scene:talk]
+VISUAL: 
+AUDIO: 'We’ll once again use an image of a woman driving but this time we only provide the first frame The prompt contains a very complex action sequence She needs to get out of the car'
+
+[11:42] [scene:talk]
+VISUAL: 
+AUDIO: 'close the door get back into the car and then start the vehicle The prompt includes both action requirements and camera-animation instructions making this a relatively difficult test As you can see'
+
+[11:55] [scene:talk]
+VISUAL: 
+AUDIO: 'the overall story sequence is basically correct However the character clips through the area around the car door This example shows that the model’s adherence to physical constraints still needs improvement The sixth test is simpler'
+
+[12:08] [scene:talk]
+VISUAL: 
+AUDIO: 'It’s another image-to-video test but this time the scene contains two people In the result both characters hold the picture frame from opposite sides adjust its position and finally stabilize it'
+
+[12:20] [scene:talk]
+VISUAL: 
+AUDIO: 'This example shows that LTX 2.5 has also made clear progress in handling coordinated actions between multiple characters There’s one more issue we can’t ignore In our text-to-video prompt'
+
+[12:32] [scene:talk]
+VISUAL: 
+AUDIO: 'we explicitly described the character as a twenty-five-year-old East Asian woman However the generated character still looks noticeably older This problem already existed in LTX 2.3 So when you want to generate a beautiful young female character'
+
+[12:46] [scene:talk]
+VISUAL: 
+AUDIO: 'I recommend using the word “girl” instead of “woman ” After this comprehensive round of testing it’s clear that LTX 2.5 delivers a noticeable improvement Of course'
+
+[13:00] [scene:talk]
+VISUAL: 
+AUDIO: 'it still has various limitations and we’ve pointed those out as well When using the model try to take advantage of its strengths while avoiding the situations where it remains unreliable That’s all for today'
+
+[13:12] [scene:talk]
+VISUAL: 
+AUDIO: 'Follow me and become someone who truly understands AI'

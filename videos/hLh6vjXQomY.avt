@@ -1,0 +1,236 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: MiniMax Music 3: w4a8 + INT8 | LOW VRAM Workflow
+channel: @octopusinc_
+duration: 12:47
+source: https://www.youtube.com/watch?v=hLh6vjXQomY
+upload_date: 20260814
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:intro]
+VISUAL: Hugging Face page for MiniMax Music 3, showing model details and architecture.
+AUDIO: 'All right, YouTube. What is good? It\'s your boy Rebel back with another video. And today, we are taking a look at Minimax Music 3. So, Minimax Music 3 is a high-performance music generation model for creating complete songs up to'
+
+[00:12] [scene:talk]
+VISUAL: 
+AUDIO: '5 minutes long. Conditioned on lyrics and a detailed music description, it generates structurally coherent songs with expressive vocals, evolving arrangements, and stable long-form audio quality. Minimax Music 3 combines an 8'
+
+[00:25] [scene:talk]
+VISUAL: 
+AUDIO: 'billion global LLM for long-range musical structure and a 0.6 billion local LLM for frame-level acoustic detail and a continuous hidden state'
+
+[00:37] [scene:intro]
+VISUAL: Hugging Face page for MiniMax Music 3, showing details on fine-grained music control.
+AUDIO: 'synthesis system based on flow matching and flow VAE. The model produces 32 kHz 16-bit stereo wave audio. The model natively supports full song generation'
+
+[00:49] [scene:talk]
+VISUAL: 
+AUDIO: 'up to 5 minutes and maintains musical themes, rhythm, vocal identity, arrangement progression across long sequences, enabling complete structures such as intro, verse, pre-chorus, chorus, bridge,'
+
+[01:03] [scene:talk]
+VISUAL: 
+AUDIO: 'instrumental breaks, and outros. And the model has very fine-grain music control, accepting two complementary inputs, which are lyrics and description. So, you are going to be putting in your'
+
+[01:15] [scene:intro]
+VISUAL: Hugging Face page for MiniMax Music 3, showing details on structured captions for control.
+AUDIO: 'lyrics with these explicit section tags. And the musical description will define the musical style, emotional progression, vocal performance, instrumentation, arrangement, and production profile. The vocal details'
+
+[01:27] [scene:talk]
+VISUAL: 
+AUDIO: 'include vocal gender. And for more precise control, they recommend using structured captions with three sections for global metadata, vocal details, and arrangement. So, for the global metadata, you\'re going to want to'
+
+[01:40] [scene:talk]
+VISUAL: 
+AUDIO: 'include the genre, the subgenre, the beats per minute, the key, the scale, emotional progression, listening scenario, and production profile. The vocal details will include your vocal gender, your timbre, the performance'
+
+[01:54] [scene:intro]
+VISUAL: Hugging Face page for MiniMax Music 3, showing details on structured captions for control.
+AUDIO: 'style, any harmonies you want to include, any backing vocals and vocal effects, and the arrangement needs to be assessed. So, you need to provide primary and secondary instruments such as guitar, lead guitar, and then section'
+
+[02:07] [scene:talk]
+VISUAL: 
+AUDIO: 'level instrument evolution. So, you know, crescendos from the strings or, you know, build up from the drums. You know, those that would be a good example for the section level. You need to'
+
+[02:19] [scene:talk]
+VISUAL: 
+AUDIO: 'define the groove, bass, percussion, textures, and spatial effects. So, if you want an ambient room with, you know, African drums and heavy distorted bass with a R&amp;B groove, that would be good'
+
+[02:32] [scene:intro]
+VISUAL: Hugging Face page for MiniMax Music 3, showing details on continuous hidden-state synthesis.
+AUDIO: 'implementation for your arrangement. Um there is some information on the LLMs, but we won\'t get into that. They are initialized from 138B though, so keep that in mind. This is a Qwen variation'
+
+[02:45] [scene:talk]
+VISUAL: 
+AUDIO: 'LLM that they are using as the baseline for generation. There is some architecture information on how the flow matching works and the tokenizers, um but other than that, you really don\'t'
+
+[02:57] [scene:talk]
+VISUAL: 
+AUDIO: 'need to know much else. So, we want to run this in Comfy, and the Comfy Org team has provided their Comfy format model. So, in the diffusion models folder, you will see an FP16, an FP32, and a int8 Comfy and this model'
+
+[03:12] [scene:talk]
+VISUAL: 
+AUDIO: 'admittedly is a very small model, so most people are going to be able to run this without a heavy VRAM requirement. However, if you are unable to, I am currently uploading a W4A8 variant, and'
+
+[03:26] [scene:talk]
+VISUAL: 
+AUDIO: 'it is around 1.5 GB, so very, very small and manageable. And for the text encoders, you\'re looking at a very similar situation. So, you have, you know, your BF16 at 18, you have your'
+
+[03:39] [scene:ui]
+VISUAL: ComfyUI workflow for MiniMax Music 3, displaying prompt nodes for global metadata, vocal details, and arrangement.
+AUDIO: 'pruned BF16 at 16, and then you have the int8 Comfy at 9 GB. So, this will fit most cards, and there should not be a problem with running this. Okay, so after you grab your three required'
+
+[03:52] [scene:talk]
+VISUAL: 
+AUDIO: 'files, the model, the text encoder, and the VAE, ensure that you are on the latest ComfyUI by updating, and then you can come to the templates and grab the Minimax text-to-music workflow here, and it will look something like this.'
+
+[04:06] [scene:talk]
+VISUAL: 
+AUDIO: 'Essentially, this is a pretty basic subgraph. So, you have your prompt nodes, and each section handles a different part of the song. So, the first section is going to handle your global metadata, your vocal details, and your arrangement. The second part being'
+
+[04:20] [scene:ui]
+VISUAL: ComfyUI workflow for MiniMax Music 3, displaying prompt nodes for lyrics and model parameters like duration, seed, model name, text encoder, VAE, and tiled_decode.
+AUDIO: 'the lyrics. What you can do is just copy both of these sections and take it to Gemini or Claude or ChatGPT and ask it to use this format of prompting and give it whatever information you want to'
+
+[04:32] [scene:talk]
+VISUAL: 
+AUDIO: 'change about it, and that will probably be the route that most people are going to take as you don\'t really want to try to edit this and, you know, get it perfect by yourself. It\'ll be quicker just to let AI do it unless you have a specific reason you\'re using this model, of course. Underneath, we have the max'
+
+[04:45] [scene:talk]
+VISUAL: 
+AUDIO: 'duration set in seconds. We have the seed. We have the model name, which I am using the W4A8 variation that I quanted. Then we have our text encoder, and we have our VAE, and underneath that we'
+
+[04:58] [scene:ui]
+VISUAL: ComfyUI workflow for MiniMax Music 3, showing the overall graph with prompt nodes and save audio node.
+AUDIO: 'have the option to tile or untile the decoding, and that\'s just going to help, you know, save on VRAM so that you don\'t get those long pauses during your decode process if you have low VRAM. And then we have our save audio node. So, that'
+
+[05:10] [scene:talk]
+VISUAL: 
+AUDIO: 'pretty much accounts for the workflow. There is some information here from the Comfy team, and then you have your model structure here if you get confused on where to put them, but it\'s pretty self-explanatory. But with that being said, I do have some examples for you'
+
+[05:23] [scene:talk]
+VISUAL: 
+AUDIO: 'guys, and we will be taking a look at those now. Now, for every example today, I will have the description of the song above the audio while we play, so you can just get a good idea of what you\'re listening to, but the lyrics aren\'t really going to matter because I only'
+
+[05:36] [scene:result]
+VISUAL: ComfyUI displaying a "Load Audio" node with an audio player and a "Markdown Note" containing the prompt description for the first generated song (lo-fi hip-hop).
+AUDIO: 'generated 30-second clips to save time, and you\'re really only going to get probably a good intro and then a couple lines from the first verse of the song. So, I\'m not going to read this to you guys because it\'s going to take a lot of'
+
+[05:49] [scene:talk]
+VISUAL: 
+AUDIO: 'time, but if you want to read what you\'re listening to, you could just pause it or read it as it plays. &gt;&gt; [music] &gt;&gt; Midnight and the canvas glows, dragging'
+
+[06:13] [scene:result]
+VISUAL: ComfyUI displaying a "Load Audio" node with an audio player and a "Markdown Note" containing the prompt description for the first generated song (lo-fi hip-hop).
+AUDIO: 'little wires where the current flows. [music] Type of quiet dream, let the sample drift. Noise into a picture like the fog just lifts. 20 slow steps &gt;&gt; Off the bat, I will say that this'
+
+[06:26] [scene:talk]
+VISUAL: 
+AUDIO: 'example prompt was very good. It was structured well, and the output was pretty clean. I didn\'t really notice too much except for, you know, a little bit of a delay in the lyrics sometimes, and that\'s due to the AI really not understanding that natural human rhythm,'
+
+[06:39] [scene:talk]
+VISUAL: 
+AUDIO: 'um and, you know, feel and vibe in essence that we put into a song, so other than that, I thought that was a good representation. Here is our next example. It\'s a synthwave retrowave song, so'
+
+[06:52] [scene:result]
+VISUAL: ComfyUI displaying a "Load Audio" node with an audio player and a "Markdown Note" containing the prompt description for a synthwave song.
+AUDIO: '&gt;&gt; Digital sweep. Steady pulse. &gt;&gt; [music]'
+
+[07:06] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; Neon lines racing on the curves. Digital shadows flicker past. Cold metal engine [music] humming low.'
+
+[07:19] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; Very, very, very solid output. Um the vocals were perfect. The synthwave feel was there. The analog like 80s hardware feel was there, so very happy and very'
+
+[07:31] [scene:result]
+VISUAL: ComfyUI displaying a "Load Audio" node with an audio player and a "Markdown Note" containing the prompt description for an indie folk song.
+AUDIO: 'punchy gated reverb drums, so. And here is a really good indie folk example. &gt;&gt; Oh.'
+
+[07:43] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; [singing] [music] &gt;&gt; Morning light [singing] climbing up [music] the path. Coffee in a tin cup, feeling fine.'
+
+[07:56] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; [music] &gt;&gt; Boots on the gravel, trail [singing] ahead. Not a single word that needs to be &gt;&gt; Okay, so first thoughts, very good'
+
+[08:10] [scene:result]
+VISUAL: ComfyUI displaying a "Load Audio" node with an audio player and a "Markdown Note" containing the prompt description for an orchestral cinematic song.
+AUDIO: 'intro. The, you know, guitar and harmonies were really good. The only thing I\'m going to say is towards the end of the song, like 25 seconds in out, um, I did notice a weird key drop that kind of stayed consistent throughout the'
+
+[08:24] [scene:talk]
+VISUAL: 
+AUDIO: 'song. After playing it back a couple times, you notice it a little bit more, and that could be due to either seed and it could be due to the format that I used to quant the model, which is the W4A8. And here is a orchestral cinematic, like like epic kind of.'
+
+[08:39] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; [music] &gt;&gt; The horizon breaks through heavy stone.'
+
+[08:55] [scene:result]
+VISUAL: ComfyUI displaying a "Load Audio" node with an audio player and a "Markdown Note" containing the prompt description for an orchestral cinematic song.
+AUDIO: '&gt;&gt; [music] &gt;&gt; Walking through the shadows, dawn not alone. Every battle'
+
+[09:09] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; Very solid output, um, no complaints there. Very solid. Has a little bit of driftiness, but in the middle, but it\'s really not bad. So, this output actually kind of like surprised me a little bit, um, being that the beginning of it kind of started terribly and you\'ll hear it'
+
+[09:22] [scene:talk]
+VISUAL: 
+AUDIO: 'in a second, but it gets really good and very funky and solely. So. &gt;&gt; [cough] [music]'
+
+[09:40] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; So, I really honestly wish there was'
+
+[09:59] [scene:talk]
+VISUAL: 
+AUDIO: 'more to that song because it sounded like it was really going to pick up and be a good track. But, as far as that intro, it felt really natural, really real. Um I was very surprised by that and the funk in there was really good'
+
+[10:11] [scene:result]
+VISUAL: ComfyUI displaying a "Load Audio" node with an audio player and a "Markdown Note" containing the prompt description for an ambient ethereal synth song.
+AUDIO: 'with those guitar riffs. Here we have like an ambient ethereal synth vibe going on here. &gt;&gt; [music]'
+
+[10:47] [scene:result]
+VISUAL: ComfyUI displaying a "Load Audio" node with an audio player and a "Markdown Note" containing the prompt description for a lo-fi song.
+AUDIO: '&gt;&gt; Very, very, very, very good output. I\'m I mean, that was 10 out of 10 as far as that like new age like synth kind of ethereal hip hop kind of vibe goes. I really enjoyed that. And then here we'
+
+[11:00] [scene:talk]
+VISUAL: 
+AUDIO: 'just have a another lo-fi example. &gt;&gt; [music]'
+
+[11:12] [scene:talk]
+VISUAL: 
+AUDIO: '[singing]'
+
+[11:25] [scene:result]
+VISUAL: ComfyUI displaying a "Load Audio" node with an audio player and a "Markdown Note" containing the prompt description for a lo-fi song.
+AUDIO: '[music] &gt;&gt; Very good output. I mean, I intentionally did not prompt for any lyrics and it gave me the oohs and ahs that I was looking for. So, um this is'
+
+[11:38] [scene:talk]
+VISUAL: 
+AUDIO: 'going to be very good for like TikToks, YouTube videos. Like, you could just generate full-on music for like just ambience in the background of your videos and it\'s going to be perfect. So, but all right, guys. That\'s all I\'m'
+
+[11:52] [scene:talk]
+VISUAL: 
+AUDIO: 'going to have for you today. Just wanted to get you guys this W4A8 and let you know that this model even exist as comfy dropped this cold today just randomly on Twitter and MiniMax and them, I believe,'
+
+[12:04] [scene:outro]
+VISUAL: Hugging Face page for MiniMax Music 3, showing model details.
+AUDIO: 'like collaborated to get that done. You know, it\'s just really nice to have a high-performance music model and I\'m happy to see what you guys create with it and I have a very good feeling this is going to pair with not only MiniMax,'
+
+[12:17] [scene:talk]
+VISUAL: 
+AUDIO: 'but LTX very, very well. So, but if you enjoyed what you saw today, please consider subscribing to the channel and leaving me a comment on the video to let me know how I did. You can also like the video. It genuinely helps the channel'
+
+[12:30] [scene:talk]
+VISUAL: 
+AUDIO: 'tremendously. If you wouldn\'t mind clicking the link in the description and buying me a coffee, I would greatly appreciate it. While I do enjoy what I do on a daily basis, it does not pay the bills and anything helps. Again, thank you guys for all the love and support'
+
+[12:43] [scene:talk]
+VISUAL: 
+AUDIO: 'and all right, thank you guys. Have a nice day. Bye.'

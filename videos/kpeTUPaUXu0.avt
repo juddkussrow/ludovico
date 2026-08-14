@@ -1,0 +1,244 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: New Best AI Motion Control Model? - ComfyUI Video Generation Workflow
+channel: @octopusinc_
+duration: 11:58
+source: https://www.youtube.com/watch?v=kpeTUPaUXu0
+upload_date: 20260813
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'What\'s going on everybody? Lord Tech here with another video for you guys. And today we are going to be testing the new One Animate 2 model that has released within the past few days. But we\'re not only going to be testing this model and seeing how good it is as an upgrade over the original One Animate'
+
+[00:13] [scene:talk]
+VISUAL: 
+AUDIO: 'that came out almost a year ago now. We\'re also going to be comparing it to what I consider the current king of motion control within inside ComfyUI. So One Animate 2 came out on August 7th. The default template is already sitting'
+
+[00:26] [scene:talk]
+VISUAL: 
+AUDIO: 'natively in ComfyUI. You can just head over to the workflow template section and get it installed. But I do want to warn you guys, it is very bare bones and there is a lot of manual node processing that you have to do in order to get the workflow to work properly. I\'m sure node'
+
+[00:39] [scene:talk]
+VISUAL: 
+AUDIO: 'support will come out soon for it, but as of right now there is quite a bit that you have to do to actually get the output that most of you guys are going to be looking for. Real quick guys, before we get into the video, I just want to take a minute to shout out my'
+
+[00:51] [scene:talk]
+VISUAL: 
+AUDIO: 'Discord and Patreon. If you want direct guidance or a custom workflow or a custom node built for you, I\'ve got a brand new system for that now. That\'s on top of the free workflows already sitting in the server, no strings attached, ready for you to download. I also run giveaways in there regularly.'
+
+[01:03] [scene:talk]
+VISUAL: 
+AUDIO: 'Plus there\'s a ton of other channels like a support channel where a 2000 plus person community of members are helping each other troubleshoot in real time. And if you guys want to support me even further, my Patreon\'s got exclusive workflows and node packs you won\'t find'
+
+[01:15] [scene:talk]
+VISUAL: 
+AUDIO: 'anywhere else. Like this insanely customizable prompt builder node. It\'s honestly one of the most useful things I\'ve ever made. And there\'s also the metadata forge which strips and swaps your exit data so every image looks camera authentic for your social media'
+
+[01:28] [scene:talk]
+VISUAL: 
+AUDIO: 'posts. I really appreciate it guys. Thank you for taking the time to support me and let\'s get into the video. Today I\'m going to be testing Animate 2 against Scale 2 which has quietly taken the spot as king for motion control in ComfyUI over the past 2 months. So we'
+
+[01:41] [scene:talk]
+VISUAL: 
+AUDIO: 'are going to see if Animate 2 is actually a threat or just another model drop. So here\'s what\'s actually different about this one. One Animate 1 ran your video through a pose extractor first. So it would use Bit Pose to get a skeleton key point and then map that'
+
+[01:55] [scene:talk]
+VISUAL: 
+AUDIO: 'across all the frames of the generation, and that skeleton obviously drove the movement of the character. But, that exact extraction is where you lost a lot of quality, such as finger position, subtle expression, anything the skeleton model couldn\'t represent was just kind'
+
+[02:08] [scene:talk]
+VISUAL: 
+AUDIO: 'of gone before the generation even started. And Animate 2 skips that entirely. The driving video frames go straight into the transformer, so there\'s no skeleton in between, and that\'s the whole pitch about Animate 2, and it\'s why I wanted to test it against hands and face specifically. So, right'
+
+[02:21] [scene:talk]
+VISUAL: 
+AUDIO: 'out of the box, there\'s two new nodes shipping with Animate 2. There is the 1 Animate 2 2 Video, which takes your reference image and your driving video and conditions on both at once. And I\'m pretty sure the other node that shipped'
+
+[02:33] [scene:talk]
+VISUAL: 
+AUDIO: 'with Animate 2 is the 1 Animate 2 Cache, which is optional. It caches the pose branch, so you\'re not recomputing it every step. I I think it cuts your generation down by some time, but I\'m not sure how effective it actually is. So, one important thing worth noting'
+
+[02:46] [scene:talk]
+VISUAL: 
+AUDIO: 'before you touch this workflow is that the output background isn\'t your reference photo, and it isn\'t your driving video. It\'s whatever you write in the prompt. Now, if you guys have used 1 Animate version 1 in the past, you know that it takes the background'
+
+[02:58] [scene:talk]
+VISUAL: 
+AUDIO: 'from the reference video usually, but 1 Animate 2 does not do this. It\'s fully based on the conditioning of the prompt and completely decoupled from both the reference image and the reference video. So, if you skip the background line in your prompt, you\'re just getting'
+
+[03:10] [scene:talk]
+VISUAL: 
+AUDIO: 'whatever the model decides to generate, which may look like the background of the reference photo or video, but it can definitely cause some issues. And that\'s actually the reason that I built the front half of this workflow up a little bit. So, instead of typing the prompt by hand every time, I\'ve got Gemini 4'
+
+[03:22] [scene:talk]
+VISUAL: 
+AUDIO: 'reading the reference image and writing it for me. So, Gemini\'s outputting two lines every time. One\'s going to be the character description, and then one\'s going to be the background description straight off of the photo. And it reads both of those from the reference photo. And you\'ll notice these gigantic nodes'
+
+[03:35] [scene:talk]
+VISUAL: 
+AUDIO: 'over here, which are basically just subgraphs that have a bunch of the actual video processing nodes inside of them. But, what I actually did is I wired up two LoRA loader stacks inside of these subgraphs. So, if you take a'
+
+[03:47] [scene:talk]
+VISUAL: 
+AUDIO: 'look inside of the actual subgraph and you\'re using the workflow that I\'ve modified, which you can find on my Discord for free, by the way. It\'s going to be in the free workflow section in the Discord, and the link to that is in the description. By default, this workflow only had a single Laura input,'
+
+[04:00] [scene:talk]
+VISUAL: 
+AUDIO: 'which is obviously going to be taken up by the light X2V turbo Laura, which makes the animate model run a lot faster. But, with these two Laura stacks loaded in our model loader pipeline, you can take a look here and see that you'
+
+[04:12] [scene:talk]
+VISUAL: 
+AUDIO: 'have the ability to add a ton of Lauras. And I\'m not going to go through every single one of them, but if you\'re interested, I have created a markdown note on the workflow where you can go and get these models. The links to all of them are right there. I definitely'
+
+[04:24] [scene:talk]
+VISUAL: 
+AUDIO: 'recommend getting some of these Lauras. A lot of them help with quality. Some of them help with other things, which I\'ll let you read on screen. And none of that ships in the stock template, so I figured I would help you guys out by adding a little bit of quality of life'
+
+[04:36] [scene:talk]
+VISUAL: 
+AUDIO: 'before all of the programmers who make extensive node packs get on to it. And we\'re going to get right into some more generations, but I just want to point out that this workflow is kind of annoying to use. And that is because each one of these giant green subgraphs'
+
+[04:49] [scene:talk]
+VISUAL: 
+AUDIO: 'on screen right now only generates 81 frames, and that\'s only going to be about two and a half seconds if you\'re using a reference video that is running 30 frames per second. So, if your driving video is longer than two and a half seconds, what you have to do is'
+
+[05:02] [scene:talk]
+VISUAL: 
+AUDIO: 'enable another subgraph. And let\'s say your [snorts] video is longer than five seconds. Well, you need to enable another subgraph. And let\'s say your video is longer than seven and a half seconds. Well, you\'re going to have to copy and paste and rewire another subgraph onto this workflow. Or you can'
+
+[05:15] [scene:talk]
+VISUAL: 
+AUDIO: 'just accept the fact that your video generations will not be longer than seven and a half seconds even if the reference video is longer. And we can see here that the default template actually ships with this math equation'
+
+[05:27] [scene:talk]
+VISUAL: 
+AUDIO: 'that tells you how many subgraphs you\'re going to need based on the length of the video that you\'re using in the frames. You can see here, native loop support public repository is still under review, so you have to manually copy and paste the motion transfer subgraph in order to'
+
+[05:39] [scene:talk]
+VISUAL: 
+AUDIO: 'make a longer video. The number here indicates how many subgraphs you need to match the pose reference video length. So, if I just run up to this node real quick, we can see in order for this workflow to generate the entirety of the'
+
+[05:51] [scene:talk]
+VISUAL: 
+AUDIO: 'reference video that I currently have put into the workflow, I\'m going to need at least 2.7 subgraphs. Now, we can see here that I currently have three, and they\'re all enabled. But, let\'s say you only have a 5-second video. What you can do is just bypass the last subgraph and'
+
+[06:03] [scene:talk]
+VISUAL: 
+AUDIO: 'take the third image output out of the batch images node. But, like I said, it\'s quite tedious, and it\'s definitely not beginner-friendly as of now. There definitely will be nodes for going on in the future, and a lot of the node packs'
+
+[06:16] [scene:talk]
+VISUAL: 
+AUDIO: 'that have been known to release one video-related nodes will definitely be updated soon in the future. But, for now, this is what we need to do. All right, so let\'s actually run it. Let\'s use the same reference image, the same'
+
+[06:28] [scene:talk]
+VISUAL: 
+AUDIO: 'driving clip, and test both pipe blind scale two and animate two. We\'re going to be generating the same seed and the same resolution, and so on. And, I\'ll compare the generation times as well, so we can see which model\'s kind of faster and which model we\'re getting better'
+
+[06:41] [scene:talk]
+VISUAL: 
+AUDIO: 'quality from. So, I\'m going to run this video with this is our reference photo, and this is our reference video. And, while this generates, I just do want to point out that there is also a markdown node all the way to the left-hand side of the workflow. By default, this is'
+
+[06:53] [scene:talk]
+VISUAL: 
+AUDIO: 'even in the template workflow that you can get from ComfyUI directly. It has all the diffusion models, LoRAs, text encoders, clip vision, VAE, all the models that you\'re going to need and the proper paths that they need to go into just to get the workflow running without'
+
+[07:06] [scene:talk]
+VISUAL: 
+AUDIO: 'any of the LoRAs that I showed you guys earlier. And, if you\'re wanting to run my workflow, you\'re also going to need the Gemma 4 FP8 scaled version to generate those prompts, which I highly recommend. Actually, I\'ve decided what I\'m going to do is I\'m going to load'
+
+[07:18] [scene:talk]
+VISUAL: 
+AUDIO: 'every single video and reference photo that I\'m going to generate for both animate and scale two, but specifically in animate first, I\'m going to do the three videos that I have planned to demo for you guys. So, that way I\'m not'
+
+[07:30] [scene:talk]
+VISUAL: 
+AUDIO: 'offloading models, going back and forth between workflows, and making the generations take longer because of the offloading. And also, in the final comparison, I will make sure that the reference video that I\'m using, the original videos are also included in that side by side, so that way you can'
+
+[07:43] [scene:talk]
+VISUAL: 
+AUDIO: 'see what the pose and framing is actually being based off of. Here we have sort of a close-up front camera selfie type video here. I wanted to kind of get a variety of videos to try and'
+
+[07:55] [scene:talk]
+VISUAL: 
+AUDIO: 'highlight any strengths or weaknesses that each of the models are portraying in their generations. And just because I feel like it\'s kind of important to point out, I am using the animate 2 intake convolved quantized version of animate 2. I could technically run the'
+
+[08:09] [scene:talk]
+VISUAL: 
+AUDIO: 'full precision model on my 5090, but that model alone is loading in 32 GB of VRAM. So, when you combine that together with the text encoder and any LoRAs that you\'re also attaching to the workflow,'
+
+[08:23] [scene:talk]
+VISUAL: 
+AUDIO: 'it definitely gets really tight on the VRAM even with the 5090. So, I recommend that you guys use this model as well. It\'s literally cut straight in half, so 16 GB of VRAM loading in and you have plenty of room for your text encoder if'
+
+[08:35] [scene:talk]
+VISUAL: 
+AUDIO: 'you\'re using something like a 4090 or 5090. All right, so all the generations for animate 2 have completed and now I\'m going to head over to my custom scale 2 workflow and do the same generations over again, but I want to point out that'
+
+[08:47] [scene:talk]
+VISUAL: 
+AUDIO: 'as far as predictable output variability, what we do know off the bat is that the scale 2 videos that we generate are going to have the reference video\'s background. I know that the workflow says reference photo background'
+
+[08:59] [scene:talk]
+VISUAL: 
+AUDIO: 'at the top there, but that is not correct. I am stupid. Now, while I load up all of these reference photos and videos to generate, there is something that I feel like I should point out to'
+
+[09:11] [scene:talk]
+VISUAL: 
+AUDIO: 'help you guys out a little bit. I use a fixed video frame from the reference video and run it through a workflow with the character LoRA attached to get a extremely similar looking reference photo to run through these workflows.'
+
+[09:23] [scene:talk]
+VISUAL: 
+AUDIO: 'All you have to do is take one frame from the video, run it through an image to image workflow where you have a character LoRA. So, for example, create 2, Zima Turbo, whatever it may be. And it\'s as simple as that. You basically just get the same exact vibe, surroundings, outfit as the reference'
+
+[09:36] [scene:talk]
+VISUAL: 
+AUDIO: 'video. And then, I upscale my reference photos even further with SeedVR2. So, that\'s kind of my play plan for creating the reference photos that I use in these generations. And for anybody wondering, the Scale2 workflow that I\'m using right'
+
+[09:49] [scene:talk]
+VISUAL: 
+AUDIO: 'now was built by me, and unfortunately, it is not available publicly. But, maybe I\'ll release it to you guys one day. I want to quickly point out to you guys that I\'m also using the Inpaint Convo version or quantized version of One'
+
+[10:01] [scene:talk]
+VISUAL: 
+AUDIO: 'Scale2 as well. So, same exact precision and rank as the Animate2 model that we\'re using. However, these generations seem like they\'re taking quite a bit longer than the Animate generations, but we will compare for certain when they'
+
+[10:13] [scene:talk]
+VISUAL: 
+AUDIO: 'are finished. So, taking a look at the output, we can see that there is a slight color difference, but for the most part, they look pretty similar. I\'d say that Animate has some slight clipping going on with the shirt and'
+
+[10:26] [scene:talk]
+VISUAL: 
+AUDIO: 'artifacting going on towards the end of the generation. So, I\'m going to give this one to Scale, but they both look pretty good. I think from Scale is a little bit better as well, so definitely skip. Now, I had to remove the audio'
+
+[10:38] [scene:talk]
+VISUAL: 
+AUDIO: 'because there is copyrighted music, and I don\'t want to get copyright strike, but to me, honestly, this is a clear one. Scale is the easy winner here. The Animate generation looks pretty discolored for'
+
+[10:50] [scene:talk]
+VISUAL: 
+AUDIO: 'some reason, whether that\'s the reference video doing that or not, but Scale just does a good job of covering it up. So, Scale is up 2-0. Now, it honestly took me a minute to decide on this one, but I think I\'m going to go with Animate for this, even though it still has that slight discoloration'
+
+[11:03] [scene:talk]
+VISUAL: 
+AUDIO: 'that\'s been going on throughout the Animate generations. I don\'t know why. The quality is just better. The eyes look better. Pretty much everything looks better. So, I\'m going to go with Animate here, even though Scale does keep the background of the original video, which is great because there\'s'
+
+[11:16] [scene:talk]
+VISUAL: 
+AUDIO: 'actual people in the background doing stuff in the gym, so it looks very real, but unfortunately, the quality of the person came out not so great. That could probably be changed by just running it'
+
+[11:28] [scene:talk]
+VISUAL: 
+AUDIO: 'again with a different seed. But, with that being said, guys, scale is the winner here. Now, that doesn\'t mean that animate\'s not going to be absolutely amazing once some supporting nodes come out, and I\'m sure they\'ll come out very'
+
+[11:40] [scene:talk]
+VISUAL: 
+AUDIO: 'soon. So, animate may take number one in the near future. So, I would definitely keep an eye out for those nodes coming out. For now, me personally, I\'m going to stick with scale, but as soon as those nodes come out, expect an update from me. I\'ll keep you guys posted, and'
+
+[11:53] [scene:talk]
+VISUAL: 
+AUDIO: 'thank you for watching, and have a good day.'
