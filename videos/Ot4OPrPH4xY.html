@@ -1,0 +1,129 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>The Rise of CaaS: Context-as-a-Service for Agentic AI — Omer Primor, Bright Data — Ludovico</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+.hide{display:none!important}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.92);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 12px}
+.controls input.q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.pill.tp.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+/* flip card shell */
+.flip{position:relative}
+.fi{position:relative;transition:transform .55s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.flip.flipped .fi{transform:rotateY(180deg)}
+.fc{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bk{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+background:var(--card);border:1px solid var(--accent2);border-radius:14px;overflow:auto;padding:12px 13px;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s}
+.card.flip{overflow:visible}.card .fc{display:flex;flex-direction:column;flex:1;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--line);cursor:pointer}
+.card.flip:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.edit{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--accent2);border:1px solid var(--line);border-radius:6px;padding:2px 9px;cursor:pointer;background:#fff}
+.edit:hover{border-color:var(--accent2)}
+/* editor back */
+.bk h4{margin:0 0 2px;font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--sub)}
+.erow{display:grid;grid-template-columns:1fr 1.3fr auto auto;gap:4px;align-items:center}
+.erow input{padding:5px 7px;border:1px solid var(--line);border-radius:6px;font-size:12px;min-width:0}
+.erow select{padding:4px 4px;font-size:11px}
+.erow .del{border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;color:var(--accent);padding:3px 7px}
+.ebtns{display:flex;gap:6px;margin-top:auto;padding-top:6px}
+.ebtns button{font-family:var(--mono);font-size:11px;border-radius:7px;padding:6px 12px;cursor:pointer;border:1px solid var(--line);background:#fff}
+.ebtns .save{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.addrow{font-family:var(--mono);font-size:11px;color:var(--accent2);cursor:pointer;align-self:flex-start;background:none;border:0;padding:2px 0}
+/* catalogue card */
+.citem{position:relative}
+.citem .fc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-height:84px;cursor:pointer}
+.citem .bk{border-radius:12px}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+footer .exp{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--accent2);font:inherit}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">The Rise of CaaS: Context-as-a-Service for Agentic AI — Omer Primor, Bright Data</h1><div class=tag>@octopusinc_ · 2026-08-14 · DevOps, Up Next</div></div></div></header>
+<main><p class=sum>This video compares different methods for retrieving web context for AI agents, specifically focusing on &quot;Context-as-a-Service&quot; (CaaS) vendors, AI search products, and a &quot;build-it-yourself&quot; (DIY) scraping pipeline. The speaker, Omer Primor from Bright Data, presents a test where 25 fields for 100 companies are enriched, analyzing coverage and cost. The key takeaway is that while CaaS and AI search are convenient for ad-hoc tasks, owning the data pipeline becomes significantly more cost-effective for frequent, recurring queries, with a tipping point around 15,000 queries.</p><p><strong>Products / items</strong></p><ul><li>Bright Data — other (no link)</li><li>Claude Opus 4.8 — software (no link)</li><li>Google — software (no link)</li><li>ChatGPT — software (no link)</li><li>Amazon Bedrock AgentCore — software (no link)</li><li>Microsoft Web byQ — software (no link)</li><li>Exa — software (no link)</li><li>Parallel — software (no link)</li><li>You.com — software (no link)</li><li>Tavily — software (no link)</li><li>ZoomInfo — software (no link)</li><li>GTM.AI — software (no link)</li><li>LinkedIn Companies — software (no link)</li><li>LinkedIn Jobs — software (no link)</li><li>Crunchbase — software (no link)</li><li>Dealroom — software (no link)</li><li>Growjo — software (no link)</li><li>Bright Data Scraper Studio — software (no link)</li></ul>
+<p><a href="https://www.youtube.com/watch?v=Ot4OPrPH4xY" target=_blank rel=noopener>Watch on YouTube ▶</a></p><p><a href="Ot4OPrPH4xY.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=t>(proxy for this video — answer from this)</span></p>
+<div class=cap>FRAMING: Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+IDENTITY: The Rise of CaaS: Context-as-a-Service for Agentic AI — Omer Primor, Bright Data - https://www.youtube.com/watch?v=Ot4OPrPH4xY - @octopusinc_ - route: visual
+PRODUCTS:
+Bright Data - no reliable link - other - primary
+Claude Opus 4.8 - no reliable link - software - mentioned
+Google - no reliable link - software - mentioned
+ChatGPT - no reliable link - software - mentioned
+Amazon Bedrock AgentCore - no reliable link - software - mentioned
+Microsoft Web byQ - no reliable link - software - mentioned
+Exa - no reliable link - software - mentioned
+Parallel - no reliable link - software - mentioned
+You.com - no reliable link - software - mentioned
+Tavily - no reliable link - software - mentioned
+ZoomInfo - no reliable link - software - mentioned
+GTM.AI - no reliable link - software - mentioned
+LinkedIn Companies - no reliable link - software - mentioned
+LinkedIn Jobs - no reliable link - software - mentioned
+Crunchbase - no reliable link - software - mentioned
+Dealroom - no reliable link - software - mentioned
+Growjo - no reliable link - software - mentioned
+Bright Data Scraper Studio - no reliable link - software - mentioned
+SYNOPSIS: Omer Primor, from Bright Data, discusses the evolution of web data for AI agents, moving from &quot;data&quot; to &quot;context.&quot; He highlights that web data decays rapidly (e.g., social media &lt;1 day, news/finance 1-2 days, retail 30 days), making context retrieval an ongoing process rather than a snapshot. The presentation compares AI search, Context-as-a-Service (CaaS) vendors, and a DIY scraping pipeline for enriching company profiles with 25 fields. A test involving 100 companies and Claude Opus 4.8 as the agent harness was conducted. In terms of coverage, general AI search solutions (Search 1, Search 2, Search 3, Unlocker + SERP, Native) performed consistently well, often achieving 20-25 fields out of 25. CaaS vendors (CaaS 1, CaaS 2, CaaS 3) showed more variability, with some scoring lower (e.g., CaaS 2 and CaaS 3 often below 15 fields) because they are limited to their existing data, unlike search which can explore. Cost analysis per company showed CaaS 2 as the cheapest at $0.17, followed by Search 1, Search 2, and Unlocker + SERP around $0.34-$0.36. Native search was expensive at $1.30, and CaaS 3 was the most expensive at $1.50. The DIY solution, built in about a day using Bright Data&#x27;s Scraper Studio and existing scrapers for sources like LinkedIn and Crunchbase, achieved a cost of $0.02 per company, excluding a $5,000 setup cost for a week&#x27;s work. The &quot;tipping point&quot; where DIY becomes cheaper than renting was estimated to be around 15,000 queries/entities, after which the upfront investment in DIY is recouped. For high-frequency, recurring tasks, owning the context pipeline offers compounding value and avoids the &quot;silent killer&quot; of repeated query costs, token burn, and scope cutting associated with rented solutions.
+BEATS:
+0s - intro - Speaker Omer Primor on stage at AI Engineer World&#x27;s Fair.
+133s - slide - Slide titled &quot;The web is unstructured and relentlessly changing&quot; showing a graph of data decay for social, news, finance, and retail data.
+200s - slide - Slide titled &quot;Everyone is racing to index the web for agents&quot; showing Google search, ChatGPT search, and an agent&#x27;s output.
+334s - slide - Meme of Woody and Buzz Lightyear with &quot;CONTEXT&quot; and &quot;CONTEXT EVERYWHERE&quot;.
+401s - slide - Slide titled &quot;The rise of Context-as-a-Service&quot; showing a data pipeline diagram from &quot;The Public Web&quot; to &quot;API Surface&quot;.
+535s - slide - Slide titled &quot;Web Context Engineering 101&quot; comparing &quot;AI Search&quot; and &quot;Context-as-a-Service&quot; features.
+602s - slide - Slide titled &quot;Comparing web context retrieval methods&quot; detailing a test setup with Claude Opus 4.8, 25 fields, 100 companies, and guardrails.
+669s - result - Bar chart showing &quot;Coverage spread by method&quot; for various search and CaaS solutions.
+736s - result - Bar chart showing &quot;Cost breakdown: tokens vs service&quot; for different methods.
+870s - slide - Slide titled &quot;Frequency is the silent killer&quot; listing reasons why repeated queries are costly.
+937s - demo - Diagram showing a &quot;Going straight to the source&quot; DIY pipeline using Bright Data, LinkedIn, Crunchbase, Dealroom, and Growjo.
+1071s - result - Bar chart showing &quot;Cost&quot; comparison including the DIY solution.
+1138s - result - Line graph showing &quot;The tipping point&quot; where DIY cost crosses over rented solutions around 15,000 companies enriched.
+1205s - result - Line graph showing &quot;Compounding value at scale&quot; illustrating long-term cost differences.
+1272s - slide - Slide titled &quot;Takeaways&quot; summarizing the video&#x27;s conclusions.
+ENTITIES: Omer Primor, Bright Data, AI Engineer World&#x27;s Fair, Microsoft, Amazon, Claude, Codex, Google, ChatGPT, Exa, Parallel, You.com, Tavily, ZoomInfo, LinkedIn, Crunchbase, Dealroom, Growjo.
+VERDICT: For ad-hoc, infrequent context retrieval, AI search and CaaS are effective. However, for persistent, consistent, and high-frequency knowledge work, building and owning your context pipeline becomes significantly more cost-efficient beyond a certain &quot;tipping point&quot; (estimated around 15,000 queries), offering compounding value and avoiding the escalating costs of rented solutions.
+NOT COVERED: Specific pricing models or exact costs for each CaaS or AI search vendor, detailed technical implementation of the DIY scraper beyond the high-level diagram, specific performance metrics beyond coverage and cost, or the exact methodology for calculating the $5,000 setup cost.</div></main><footer><a href="../index.html">← all videos</a></footer></div></body></html>

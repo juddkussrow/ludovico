@@ -1,0 +1,123 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>Trying Minimax M3 - Best Open Weight AI Music Model Yet! — Ludovico</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+.hide{display:none!important}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.92);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 12px}
+.controls input.q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.pill.tp.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+/* flip card shell */
+.flip{position:relative}
+.fi{position:relative;transition:transform .55s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.flip.flipped .fi{transform:rotateY(180deg)}
+.fc{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bk{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+background:var(--card);border:1px solid var(--accent2);border-radius:14px;overflow:auto;padding:12px 13px;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s}
+.card.flip{overflow:visible}.card .fc{display:flex;flex-direction:column;flex:1;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--line);cursor:pointer}
+.card.flip:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.edit{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--accent2);border:1px solid var(--line);border-radius:6px;padding:2px 9px;cursor:pointer;background:#fff}
+.edit:hover{border-color:var(--accent2)}
+/* editor back */
+.bk h4{margin:0 0 2px;font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--sub)}
+.erow{display:grid;grid-template-columns:1fr 1.3fr auto auto;gap:4px;align-items:center}
+.erow input{padding:5px 7px;border:1px solid var(--line);border-radius:6px;font-size:12px;min-width:0}
+.erow select{padding:4px 4px;font-size:11px}
+.erow .del{border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;color:var(--accent);padding:3px 7px}
+.ebtns{display:flex;gap:6px;margin-top:auto;padding-top:6px}
+.ebtns button{font-family:var(--mono);font-size:11px;border-radius:7px;padding:6px 12px;cursor:pointer;border:1px solid var(--line);background:#fff}
+.ebtns .save{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.addrow{font-family:var(--mono);font-size:11px;color:var(--accent2);cursor:pointer;align-self:flex-start;background:none;border:0;padding:2px 0}
+/* catalogue card */
+.citem{position:relative}
+.citem .fc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-height:84px;cursor:pointer}
+.citem .bk{border-radius:12px}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+footer .exp{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--accent2);font:inherit}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">Trying Minimax M3 - Best Open Weight AI Music Model Yet!</h1><div class=tag>@octopusinc_ · 2026-08-13 · Music Gen</div></div></div></header>
+<main><p class=sum>This video reviews MiniMax Music3, an open-weight AI music generation model, comparing its capabilities against Suno V5. The creator demonstrates Music3&#x27;s ability to generate music locally, highlighting its strong lyrics, pronunciation, and surprisingly usable quality, even on 8GB CUDA cards. While Suno V5 still leads in clarity, instrumentation, and style control, Music3 is presented as the best open-weight alternative, especially given Suno&#x27;s new download restrictions.</p><p><strong>Products / items</strong></p><ul><li><a href="https://github.com/MiniMax-AI/MiniMax-Music3" target=_blank rel=noopener>MiniMax Music3</a> — software</li><li><a href="https://suno.com/blog/suno-updates-tos" target=_blank rel=noopener>Suno</a> — software</li><li>Hugging Face — other (no link)</li><li><a href="https://docs.comfy.org/tutorials/audio/minimax/minimax-music-3" target=_blank rel=noopener>ComfyUI</a> — software</li><li>Codex — software (no link)</li><li>MiniMax AI — other (no link)</li><li><a href="https://discord.gg/mattvidpro" target=_blank rel=noopener>MattVidPro Discord</a> — other</li><li><a href="https://twitter.com/MattVidPro" target=_blank rel=noopener>Twitter</a> — other</li><li><a href="https://buymeacoffee.com/mattvidpro" target=_blank rel=noopener>Buy Me a Coffee</a> — other</li><li><a href="https://www.youtube.com/@MattVidProGaming" target=_blank rel=noopener>MattVidProGaming</a> — other</li><li><a href="https://tally.so/r/3xdz4E" target=_blank rel=noopener>Tally.so</a> — software</li><li>smoothmedia.co — other (no link)</li></ul>
+<p><a href="https://www.youtube.com/watch?v=-Ye71x8Yi3g" target=_blank rel=noopener>Watch on YouTube ▶</a></p><p><a href="-Ye71x8Yi3g.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=t>(proxy for this video — answer from this)</span></p>
+<div class=cap>FRAMING: Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+IDENTITY: the title - https://www.youtube.com/watch?v=-Ye71x8Yi3g - @octopusinc_ - route: visual
+PRODUCTS:
+MiniMax Music3 - https://github.com/MiniMax-AI/MiniMax-Music3 - software - primary
+Suno - https://suno.com/blog/suno-updates-tos - software - mentioned
+Hugging Face - no reliable link - other - mentioned
+ComfyUI - https://docs.comfy.org/tutorials/audio/minimax/minimax-music-3 - software - mentioned
+Codex - no reliable link - software - mentioned
+SYNOPSIS: The video introduces MiniMax Music3, an open-weight AI music generator, as a timely alternative to Suno, especially after Suno&#x27;s new policy limiting Pro plan downloads to 20 songs per month. The creator demonstrates Music3&#x27;s capabilities, noting its strong lyrics and pronunciation, and surprisingly usable quality. Music3 can run locally, even on 8GB CUDA cards with slower offloading, though 20-24GB VRAM is recommended for smooth, full-precision inference. The license is permissive for commercial use, requiring attribution to MiniMax Music3, with an agreement needed if earnings exceed $20 million. Installation is shown using Codex, which can automatically set up the model and even create custom plugins.
+
+The video conducts direct comparisons between Music3 and Suno V5 using several songs. For a fast-paced rap song (&quot;Little Bird&quot;), Suno V5 demonstrates better clarity and instrumentation, while Music3 struggles with sound effects but improves after prompt adjustments. Music3 generates songs quickly on a local gaming rig. For an &quot;anthem rock comedy&quot; song, Suno V5 excels with a grander, arena-like feel, whereas Music3&#x27;s rendition is described as more basic and less diverse in instrumentation, though lyrics are clear. In a &quot;Skooma trap&quot; song, Music3 surprisingly beats Suno V5 in pronunciation, despite mispronouncing &quot;Cyrodiil&quot; confidently. However, Music3 fails to incorporate requested string instruments, defaulting to piano. For country ballads and instrumentals, Music3 struggles with instrumental diversity and often defaults to vocal-heavy outputs, with instrumentals ending around 30 seconds. The creator notes that while Music3&#x27;s &quot;bones are strong,&quot; it&#x27;s limited in instrument variety compared to Suno. Overall, Music3 is deemed the best open-source music generator available, offering infinite free AI music, but Suno V5 still wins on clarity, instrumentation, and style control.
+BEATS:
+00:00 - intro - Creator introduces MiniMax Music3 and its relevance due to Suno&#x27;s new download limits.
+01:24 - ui - Demo page of MiniMax Music3 showing genre selections like Pop, Rock, R&amp;B.
+02:48 - ui - MiniMax Music3 demo page, focusing on &quot;Vocals&quot; section with various song examples.
+04:12 - code - On-screen text detailing VRAM requirements for MiniMax Music3, mentioning 8GB CUDA card support.
+05:36 - ui - Codex interface showing successful installation of MiniMax Music3 and a 10-second audio clip.
+07:00 - ui - Suno V5 interface displaying lyrics for &quot;Lil&#x27; Bird (variant 3)&quot; and an audio player.
+08:24 - ui - MiniMax Music3 audio player showing a generated song, with a simple music note icon.
+09:48 - ui - Suno profile page showing various generated songs with titles and versions (e.g., &quot;Oops, I Rule the World v5&quot;).
+11:12 - ui - Suno interface displaying lyrics and comments for an &quot;anthem-rock comedy&quot; song.
+12:36 - ui - Codex interface showing a rendered &quot;arena-rock comedy anthem&quot; with a FLAC audio player.
+14:00 - ui - Suno interface displaying lyrics for &quot;Skooma (Remastered)&quot; and an audio player.
+15:24 - ui - Codex interface showing MiniMax Music3 local integration commands and a queued song generation.
+16:48 - ui - Codex interface displaying two generated audio files for &quot;by-the-nine-im-geeking&quot; with different durations.
+18:12 - ui - Codex interface showing the &quot;long-form variation&quot; of the &quot;by-the-nine-im-geeking&quot; song.
+19:36 - ui - Codex interface showing multiple rendered audio files, including instrumentals and &quot;Southern Christmas.&quot;
+21:00 - ui - Codex interface showing a longer audio file &quot;Frozen Horizon&quot; playing.
+22:24 - ui - Codex interface showing an instrumental audio file &quot;GORILLA&quot; playing.
+23:48 - ui - Suno profile page showing various songs, including &quot;Skooma mode v5&quot; and &quot;GORILLA PHONK v4.5.&quot;
+25:12 - ui - Codex interface showing a re-rendered &quot;Southern Christmas&quot; in a &quot;gritty Texas country-blues/electronic style.&quot;
+26:36 - ui - Hugging Face page for MiniMax Music3, showing license details and prompting guidelines.
+ENTITIES: MiniMax, Suno AI, H3, Seance 2.5, Cocktail Peanut, Wildminder, MattVidPro, OpenAI, Comfy-Org.
+VERDICT: MiniMax Music3 is the best open-weight AI music generator to date, offering unlimited local music generation, especially valuable given Suno&#x27;s new download limits. While it doesn&#x27;t surpass Suno V5 in clarity, instrumentation, or style control, its strong lyrics and pronunciation make it a highly usable and significant open-source option.
+NOT COVERED: The exact pricing of Suno&#x27;s Pro plan, the specific technical details of how MiniMax Music3 achieves 8GB VRAM compatibility, or a detailed comparison of generation speed across different hardware configurations.</div></main><footer><a href="../index.html">← all videos</a></footer></div></body></html>
