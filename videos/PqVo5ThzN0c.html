@@ -1,0 +1,119 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>I Built DaVinci Resolve&#x27;s Missing Piece With Claude Code — Ludovico</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+.hide{display:none!important}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.92);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 12px}
+.controls input.q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.pill.tp.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+/* flip card shell */
+.flip{position:relative}
+.fi{position:relative;transition:transform .55s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.flip.flipped .fi{transform:rotateY(180deg)}
+.fc{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bk{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+background:var(--card);border:1px solid var(--accent2);border-radius:14px;overflow:auto;padding:12px 13px;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s}
+.card.flip{overflow:visible}.card .fc{display:flex;flex-direction:column;flex:1;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--line);cursor:pointer}
+.card.flip:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.edit{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--accent2);border:1px solid var(--line);border-radius:6px;padding:2px 9px;cursor:pointer;background:#fff}
+.edit:hover{border-color:var(--accent2)}
+/* editor back */
+.bk h4{margin:0 0 2px;font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--sub)}
+.erow{display:grid;grid-template-columns:1fr 1.3fr auto auto;gap:4px;align-items:center}
+.erow input{padding:5px 7px;border:1px solid var(--line);border-radius:6px;font-size:12px;min-width:0}
+.erow select{padding:4px 4px;font-size:11px}
+.erow .del{border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;color:var(--accent);padding:3px 7px}
+.ebtns{display:flex;gap:6px;margin-top:auto;padding-top:6px}
+.ebtns button{font-family:var(--mono);font-size:11px;border-radius:7px;padding:6px 12px;cursor:pointer;border:1px solid var(--line);background:#fff}
+.ebtns .save{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.addrow{font-family:var(--mono);font-size:11px;color:var(--accent2);cursor:pointer;align-self:flex-start;background:none;border:0;padding:2px 0}
+/* catalogue card */
+.citem{position:relative}
+.citem .fc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-height:84px;cursor:pointer}
+.citem .bk{border-radius:12px}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+footer .exp{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--accent2);font:inherit}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">I Built DaVinci Resolve&#x27;s Missing Piece With Claude Code</h1><div class=tag>@octopusinc_ · 2026-08-10 · Video Gen</div></div></div></header>
+<main><p class=sum>The video introduces Cut Valet, a software tool designed to streamline video editing workflows, particularly for DaVinci Resolve users. It automates footage backup, time-of-day syncing across multiple cameras, and provides an AI assistant editor powered by local metadata engines. Cut Valet integrates with DaVinci Resolve via its API to offer one-click actions like speed ramps, graphics creation, and rough cuts, aiming to reduce editing time.</p><p><strong>Products / items</strong></p><ul><li><a href="http://www.cutvalet.com" target=_blank rel=noopener>Cut Valet</a> — software</li><li>DaVinci Resolve — software (no link)</li><li>Claude Code — software (no link)</li><li>Remotion — software (no link)</li><li>Epidemic MCP — software (no link)</li><li>PluralEyes — software (no link)</li></ul>
+<p><a href="https://www.youtube.com/watch?v=PqVo5ThzN0c" target=_blank rel=noopener>Watch on YouTube ▶</a></p><p><a href="PqVo5ThzN0c.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=t>(proxy for this video — answer from this)</span></p>
+<div class=cap>FRAMING: Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+IDENTITY: the title - https://www.youtube.com/watch?v=PqVo5ThzN0c - @octopusinc_ - route: visual
+PRODUCTS:
+Cut Valet - http://www.cutvalet.com - software - primary
+DaVinci Resolve - no reliable link - software - mentioned
+Claude Code - no reliable link - software - mentioned
+Remotion - no reliable link - software - mentioned
+Epidemic MCP - no reliable link - software - mentioned
+PluralEyes - no reliable link - software - mentioned
+SYNOPSIS: The video introduces Cut Valet, a software developed by a videographer with 15 years of experience, to address missing functionalities in video editing workflows, specifically for DaVinci Resolve. The creator used Claude Code to build this tool. Cut Valet&#x27;s core functions include automatic footage backup from memory cards or drag-and-drop, and time-of-day syncing of footage from multiple cameras onto a single timeline in DaVinci Resolve, similar to what PluralEyes used to do but automated. This sync is based on audio waveforms. The software leverages DaVinci Resolve&#x27;s API to enable one-click actions such as speed ramps, graphic creation via Remotion, music integration from Epidemic MCP, rough cuts, color grading, thumbnail generation, and YouTube uploads. A key feature is its local AI processing, utilizing the user&#x27;s GPU for tasks like transcription and description, rather than uploading footage to external data centers. This local processing is powered by eight open-source metadata engines that save all analyzed information to markdown files alongside the footage, ensuring data ownership. This metadata powers a &quot;search and import&quot; feature, allowing users to quickly find and import clips based on tags, descriptions, or transcriptions. It also drives an AI assistant editor, which, in beta, can generate edit plans and execute them in DaVinci Resolve timelines, from full edits to pulling selects or cutting interviews. The creator emphasizes that Cut Valet is a one-time purchase, not a subscription, and is currently in beta, making it the cheapest it will ever be. It works on Mac and Windows.
+BEATS:
+00:46 - ui - A laptop screen displays the Cut Valet UI, showing project files, processing status, and various tools like &quot;Build a Rough Cut&quot; and &quot;Colour Grade&quot;.
+01:09 - talking head - The creator introduces himself and the problem Cut Valet solves.
+01:32 - talking head - The creator explains the initial idea for the tool and how Claude Code helped bring it to life.
+02:18 - ui - The Cut Valet application is shown on a monitor, highlighting &quot;File Organization and Backup&quot; and &quot;Tools and Scripts&quot; sections.
+02:41 - ui - DaVinci Resolve is open with Cut Valet overlayed, showing a &quot;Running Rough Cut&quot; dialog and processing status.
+03:04 - ui - Cut Valet&#x27;s &quot;Create a graphic&quot; feature is demonstrated, showing options for new templates and asset creation.
+03:27 - ui - A close-up of the &quot;TOOLS &amp; SCRIPTS&quot; section in Cut Valet, with &quot;Colour Grade&quot; highlighted.
+03:50 - talking head - The creator discusses the local metadata engines and the importance of data ownership.
+04:13 - talking head - The creator explains how local AI analysis works on the user&#x27;s machine.
+04:36 - ui - The creator is shown with an overlay displaying &quot;Cut Valet - 100% local - $0/mo AI - works offline - $25 one-time&quot;.
+04:59 - ui - A &quot;LOCAL AI&quot; panel is shown, indicating GPU utilization and AI tasks like &quot;Describe&quot; and &quot;Transcribe&quot;.
+05:22 - ui - A markdown file with metadata (tags, description) for a video clip is displayed.
+05:45 - ui - The &quot;Search &amp; Import&quot; feature in Cut Valet is shown, with a search query &quot;Woman looking into camera&quot; and results.
+06:08 - ui - The &quot;Assistant Editor&quot; interface is displayed, showing a chat with a &quot;Planner&quot; AI and a prompt for cutting down a video.
+06:31 - talking head - The creator discusses the benefits of the AI assistant editor and cost savings.
+06:54 - talking head - The creator reiterates the one-time purchase model and the beta status.
+07:17 - talking head - The creator concludes the video, encouraging viewers to try Cut Valet.
+ENTITIES: Claude Code, DaVinci Resolve, Remotion, Epidemic MCP, PluralEyes, Mac, Windows, LLM.
+VERDICT: The creator is highly enthusiastic about Cut Valet, stating it&#x27;s the tool he always wanted, and recommends it as a buy-once, own-it, no-subscription solution that is currently at its cheapest beta price. He plans to continue refining it.
+NOT COVERED: Specific pricing details beyond &quot;cheapest it will ever be&quot; and &quot;$25 one-time&quot; (which appears on screen but is not explicitly stated as the price in the audio), detailed system requirements for local AI processing, specific versions of DaVinci Resolve supported, or a comprehensive list of all 8 local metadata engines.</div></main><footer><a href="../index.html">← all videos</a></footer></div></body></html>

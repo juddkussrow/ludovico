@@ -1,0 +1,122 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>Turn Your iPhone Into a 1970s Video Camera — Ludovico</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+.hide{display:none!important}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.92);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 12px}
+.controls input.q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.pill.tp.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+/* flip card shell */
+.flip{position:relative}
+.fi{position:relative;transition:transform .55s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.flip.flipped .fi{transform:rotateY(180deg)}
+.fc{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bk{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+background:var(--card);border:1px solid var(--accent2);border-radius:14px;overflow:auto;padding:12px 13px;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s}
+.card.flip{overflow:visible}.card .fc{display:flex;flex-direction:column;flex:1;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--line);cursor:pointer}
+.card.flip:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.edit{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--accent2);border:1px solid var(--line);border-radius:6px;padding:2px 9px;cursor:pointer;background:#fff}
+.edit:hover{border-color:var(--accent2)}
+/* editor back */
+.bk h4{margin:0 0 2px;font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--sub)}
+.erow{display:grid;grid-template-columns:1fr 1.3fr auto auto;gap:4px;align-items:center}
+.erow input{padding:5px 7px;border:1px solid var(--line);border-radius:6px;font-size:12px;min-width:0}
+.erow select{padding:4px 4px;font-size:11px}
+.erow .del{border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;color:var(--accent);padding:3px 7px}
+.ebtns{display:flex;gap:6px;margin-top:auto;padding-top:6px}
+.ebtns button{font-family:var(--mono);font-size:11px;border-radius:7px;padding:6px 12px;cursor:pointer;border:1px solid var(--line);background:#fff}
+.ebtns .save{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.addrow{font-family:var(--mono);font-size:11px;color:var(--accent2);cursor:pointer;align-self:flex-start;background:none;border:0;padding:2px 0}
+/* catalogue card */
+.citem{position:relative}
+.citem .fc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-height:84px;cursor:pointer}
+.citem .bk{border-radius:12px}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+footer .exp{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--accent2);font:inherit}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">Turn Your iPhone Into a 1970s Video Camera</h1><div class=tag>@octopusinc_ · 2026-08-07 · Video Gen</div></div></div></header>
+<main><p class=sum>The video reviews AaronCam, a free iPhone app that emulates the look and physics of 1970s analog video tube cameras. It highlights the app&#x27;s ability to reproduce visual effects like light trails and purple damage streaks by modeling the physical and electrical properties of old video tubes. The app offers a simple interface with settings for white balance, backlight compensation, and tube type, and outputs footage with a nostalgic aesthetic.</p><p><strong>Products / items</strong></p><ul><li><a href="https://geni.us/ftBHfZ" target=_blank rel=noopener>AaronCam</a> — software</li><li>iPhone — hardware (no link)</li><li>Sony Video 8 camera — hardware (no link)</li><li>RCA CC004 — hardware (no link)</li><li><a href="https://apple.co/3NQ4doM" target=_blank rel=noopener>Blackmagic Cam</a> — software</li><li><a href="https://apple.co/2zL3sJW" target=_blank rel=noopener>LumaFusion</a> — software</li><li><a href="https://geni.us/E1XrVk" target=_blank rel=noopener>Adobe Premiere Pro</a> — software</li></ul>
+<p><a href="https://www.youtube.com/watch?v=95Kgc6566KQ" target=_blank rel=noopener>Watch on YouTube ▶</a></p><p><a href="95Kgc6566KQ.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=t>(proxy for this video — answer from this)</span></p>
+<div class=cap>FRAMING: Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+IDENTITY: Turn Your iPhone Into a 1970s Video Camera - https://www.youtube.com/watch?v=95Kgc6566KQ - @octopusinc_ - route: visual
+PRODUCTS:
+AaronCam - https://geni.us/ftBHfZ - software - primary
+iPhone - no reliable link - hardware - mentioned
+Sony Video 8 camera - no reliable link - hardware - mentioned
+RCA CC004 - no reliable link - hardware - mentioned
+Blackmagic Cam - https://apple.co/3NQ4doM - software - mentioned
+LumaFusion - https://apple.co/2zL3sJW - software - mentioned
+Adobe Premiere Pro - https://geni.us/E1XrVk - software - mentioned
+SYNOPSIS: The video introduces AaronCam, a free iPhone app designed to emulate the visual characteristics of late 1970s analog video tube cameras. The app achieves this by modeling the physical and electrical properties of old video tubes, rather than simply applying visual effects in post-production. This approach allows it to naturally reproduce effects like green light trails and purple damage streaks. The developer, Aaron, explains that the app runs the iPhone at 240 frames per second to mimic an analog response, accumulating frames as electrical influence on a virtual photoconductive layer, which is then scanned from a simulated video tube. The app&#x27;s interface is simple, featuring a record button, zoom lever, lens picker, and settings for white balance (indoor/outdoor) and backlight compensation (BLC) with low, medium, and high options. Users can choose between &quot;brand new&quot; or &quot;old&quot; tube types, with the &quot;brand new&quot; offering more color saturation and &quot;old&quot; being desaturated. A CRT effect can be added to simulate scan lines from an old TV. The app shoots at 30 frames per second, mimicking old video camera frame rates. Footage resolution is typically 2048x1536, though some files were captured at 640x480, particularly those without the CRT effect. The app lacks stabilization, which is presented as part of its authentic vintage charm. File names include metadata about the lens used and whether the CRT effect was applied, aiding in logging and editing. The creator recommends AaronCam for nostalgic home movies, retro B-roll, social media content, or film/TV projects requiring a vintage video look, emphasizing its authenticity over post-production effects.
+BEATS:
+00:21 - demo - Footage shot with AaronCam, showing vintage video effects.
+00:42 - hardware - Image of a Sony Video 8 Pro camera.
+01:03 - demo - Vintage-style footage with color distortion and artifacts.
+01:24 - demo - Close-up of a small screen displaying vintage video, with text about purple damage.
+01:45 - demo - Footage with light trails and color shifts, &quot;Shot on AaronCam&quot; watermark.
+02:06 - demo - Black and white vintage footage, &quot;AaronCam&quot; text.
+02:27 - ui - iPhone screen showing the AaronCam app interface with record button and settings.
+02:48 - ui - User interacting with the AaronCam app on an iPhone, adjusting settings.
+03:09 - demo - Footage of a person with vintage video effects, &quot;Shot on AaronCam&quot; watermark.
+03:30 - demo - Footage of a dog with vintage video effects, &quot;Old Tube&quot; text.
+03:51 - demo - Footage of a clock with vintage video effects, &quot;Shot on AaronCam&quot; watermark.
+04:12 - demo - Low light footage with light trails, &quot;Shot on AaronCam&quot; watermark.
+04:33 - demo - Outdoor footage with soft, vintage look, &quot;Shot on AaronCam&quot; watermark.
+04:54 - title - &quot;Footage Specs&quot; title card.
+05:15 - result - Vintage footage with &quot;640x480&quot; resolution displayed.
+05:36 - result - Shaky vintage footage with &quot;No Stabilization&quot; text.
+05:57 - ui - iPhone showing the AaronCam app interface.
+06:18 - demo - Footage of a chandelier with light trails and artifacts.
+06:39 - demo - Selfie footage with vintage effects and scan lines.
+ENTITIES: Aaron (developer), John Duncan (Twitter user), Sony, RCA, MasterClass, outlier.org, Alexa (camera brand)
+VERDICT: The creator highly recommends the free AaronCam app for anyone looking to achieve an authentic vintage video look on their iPhone, citing its realistic emulation of old video tube camera physics.
+NOT COVERED: Specific iPhone models supported, future pricing for a potential pro version, detailed comparison of AaronCam&#x27;s effects versus other retro camera apps.</div></main><footer><a href="../index.html">← all videos</a></footer></div></body></html>

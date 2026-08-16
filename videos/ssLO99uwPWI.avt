@@ -1,0 +1,364 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: 15 Python Libraries That Deserve More Attention
+channel: @octopusinc_
+duration: 18:48
+source: https://www.youtube.com/watch?v=ssLO99uwPWI
+upload_date: 20260814
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'Today, I\'ll show you 15 Python libraries that can improve configuration, serialization, dependency injection, scheduling, UI building, testing, and even code quality. One of these libraries fixes a bug that\'s been in Python for over 20 years. We\'ll get to'
+
+[00:13] [scene:talk]
+VISUAL: 
+AUDIO: 'that one later. I\'ll go through this pretty fast, so let\'s get started. The first thing that I want to show you is one of my all-time favorites, and that\'s Pantic settings. This gives you typed application settings using Pideantic'
+
+[00:26] [scene:talk]
+VISUAL: 
+AUDIO: 'models. Instead of manually reading environment variables and hoping they\'re correct, you describe the configuration once with a podantic model. Here\'s what that looks like. I have a settings class with a couple of settings in it. But the'
+
+[00:39] [scene:talk]
+VISUAL: 
+AUDIO: 'interesting thing is that it has quite a few features to control how those settings are being read and parsed. For example, I\'m reading the configuration values from a N file. It also uses a prefix that will then remove from the'
+
+[00:53] [scene:talk]
+VISUAL: 
+AUDIO: 'variables in the N file. Here\'s what that file looks like. And I remove the app underscore prefix automatically. There\'s also this which is really interesting as well. So this allows you'
+
+[01:05] [scene:talk]
+VISUAL: 
+AUDIO: 'to create nested value. So for example here I have database settings which is a separate model that has a host port user etc etc. And in my n file I use these double underscores to provide these'
+
+[01:18] [scene:talk]
+VISUAL: 
+AUDIO: 'values as well. And podantic is going to read them and put them automatically in this database settings object. Here\'s what happens when I run that code example. So, as you can see, we have the'
+
+[01:31] [scene:talk]
+VISUAL: 
+AUDIO: 'full settings right here, which is really useful. In essence, configuration is part of your application boundary. Treat that as a typed interface, not as a random dictionary of strings. If you want to learn how to design software in'
+
+[01:44] [scene:talk]
+VISUAL: 
+AUDIO: 'a way that keeps boundaries like configuration, domain, logic, and infrastructure clean, you\'ll like my new program, Software Design Mastery. This is a complete system for understanding software design fundamentals, learning how to make better architectural'
+
+[01:57] [scene:talk]
+VISUAL: 
+AUDIO: 'decisions while AI helps you write the actual code. If you want to learn more, join the waiting list at iron.codes/mastery. Link is also in the video description. Next up is message spec, a fast serialization and validation library.'
+
+[02:11] [scene:talk]
+VISUAL: 
+AUDIO: 'It\'s kind of a leaner, simpler alternative to pantic. Uh, in particular useful when your main job is reading and writing data. Here\'s what it looks like. I inherit from this strct class from message spec and then I define the'
+
+[02:25] [scene:talk]
+VISUAL: 
+AUDIO: 'fields and here\'s some data that I can then parse and put it into a user object. What\'s interesting about this particular library is that it parses validates and constructs the object in a single optimized step. That\'s why it\'s'
+
+[02:38] [scene:talk]
+VISUAL: 
+AUDIO: 'often two to five times faster than pedantic v2 for typical JSON workloads. A nice feature of this library is that validation errors that point directly to the offending field. Here\'s the output from script. As you can see,'
+
+[02:54] [scene:talk]
+VISUAL: 
+AUDIO: 'there is an error being reported. And that\'s because in the object ID is supposed to be an integer. But in the second example, I\'m providing it with a string. And that\'s nice about the message spec that we actually get the'
+
+[03:07] [scene:talk]
+VISUAL: 
+AUDIO: 'field name so we can easily find the problem. Now, honestly, if you need anything more than these kind of basic encoding and decoding options, I\'d still pick over message spec. But if civilization is really the only thing'
+
+[03:20] [scene:talk]
+VISUAL: 
+AUDIO: 'you want to do, message spec is definitely worth a look. If your data has already been validated, the site solves a slightly different problem. It maps dictionaries to nested data classes. Here you see an example of how'
+
+[03:33] [scene:talk]
+VISUAL: 
+AUDIO: 'that works. So I have a couple of data classes, some enoms, and then I have some data in a dictionary. As you can see, this is nested as well. And then I can simply create the order by using from dict which is the function that the'
+
+[03:47] [scene:talk]
+VISUAL: 
+AUDIO: 'site exposes. And inside that I can provide some configuration object. So that\'s going to automatically do these casts to different types that it knows about. So that for example the total'
+
+[03:59] [scene:talk]
+VISUAL: 
+AUDIO: 'amount here this is not being cast to a float but to a decimal. And it also uses a currency for this particular field which is also nice. Let me run this just to show you what I mean. So here you can'
+
+[04:12] [scene:talk]
+VISUAL: 
+AUDIO: 'see the output of this script. Now the interesting thing about the site is that it explicitly says it\'s not a validation library. And I kind of like that philosophy. Good libraries often solve one problem really well. Next up is auto'
+
+[04:24] [scene:talk]
+VISUAL: 
+AUDIO: 'registry. Imagine that you have an application that supports lots of different payment providers. Stripe, Molly, PayPal, and more. Now instead of maintaining a growing factory'
+
+[04:36] [scene:talk]
+VISUAL: 
+AUDIO: 'autoregistry that\'s classes register themselves. Here\'s what it looks like. I import the registry class from auto registry and create an object and then I can use that as a decorator to'
+
+[04:49] [scene:talk]
+VISUAL: 
+AUDIO: 'automatically register different in this case payment providers. So we have stripe molly others and then what I can do is get a provider by simply accessing it with the square brackets. uh create'
+
+[05:01] [scene:talk]
+VISUAL: 
+AUDIO: 'an instance of that and then call a method on it then it\'s going to call this particular payment provider. This is what happens when I run this. And obviously if I change this now to'
+
+[05:13] [scene:talk]
+VISUAL: 
+AUDIO: 'Molly like so and I run the code again, you see that now we\'re paying with Molly. It\'s that easy. What\'s nice about this pattern is that if you want to add a new provider, you don\'t have to modify the'
+
+[05:26] [scene:talk]
+VISUAL: 
+AUDIO: 'existing registration code. You can simply use this decorator and you\'re done. Don\'t overuse this though if you only have like two or three implementations. Probably just a dictionary is simpler. Now, payment'
+
+[05:38] [scene:talk]
+VISUAL: 
+AUDIO: 'processing [clears throat] is also a great example of a state machine. And there\'s a nice library for that as well. Instead of scattered boolean flags, you can model the workflow explicitly by using states and transitions. Here\'s'
+
+[05:51] [scene:talk]
+VISUAL: 
+AUDIO: 'what that looks like. I have a state and a state machine that I import from the state machine library. I then create my class with different payment states that I define as part of the class. Then you can specify the transitions and it\'s'
+
+[06:04] [scene:talk]
+VISUAL: 
+AUDIO: 'really easy to do that. And then finally these transitions I can call as methods like so I can do payment.authorize for example. When I run this then this is what we get as a result. Now the library also lets you run code before and after'
+
+[06:17] [scene:talk]
+VISUAL: 
+AUDIO: 'transitions. So you can see here I have a bunch of method that do things before authorizing or before after capturing or cancelling. So overall pretty nice library if you need a state machine in'
+
+[06:29] [scene:talk]
+VISUAL: 
+AUDIO: 'Python. Next up is Diskar. If you ever want a dependency injection without half your code base turning into decorators, take a look at Diskar. This is what it looks like. I have a simple example here'
+
+[06:41] [scene:talk]
+VISUAL: 
+AUDIO: 'with a payment object. I have a payment repository and a Stripe payment gateway. And then finally a payment service that needs those things. Well, what I can then do with this guy is that I import'
+
+[06:53] [scene:talk]
+VISUAL: 
+AUDIO: 'the provider and then uh make container function and the provide decorator. And then what I can do is define a class like so. So these methods are going to provide the objects. You can even'
+
+[07:05] [scene:talk]
+VISUAL: 
+AUDIO: 'identify a scope which is really neat. So that means you can make your object lifetimes explicit instead of relying on globals all over the place. And the way to use this is that we can make a container using the app provider class.'
+
+[07:17] [scene:talk]
+VISUAL: 
+AUDIO: 'And then with that container which is a context manager, I can then get my surface that I need and pass it to the function that requires it. And when I run this then this is what we'
+
+[07:31] [scene:talk]
+VISUAL: 
+AUDIO: 'get. This got pretty neat for dependency injection. Next also one of my favorites is duct DB. That\'s basically SQL light for analytics. It lets you query CSV files, paret files directly with SQL'
+
+[07:45] [scene:talk]
+VISUAL: 
+AUDIO: 'queries, which is really cool. Here you can see what that looks like. I simply define a query. I can use any SQL uh logic that I want. I supply the CSV file and it\'s going to read it and it\'s going'
+
+[07:57] [scene:talk]
+VISUAL: 
+AUDIO: 'to perform the query on it just like if it\'s a full database. There\'s no need to import the file. You can just query it directly, which is awesome. Then once you\'ve done that, you can really easily convert it to a data frame or you can'
+
+[08:10] [scene:talk]
+VISUAL: 
+AUDIO: 'just directly query from the file and show it immediately on the console. This is what the output looks like. It\'s great for local analytics data exploration. Next up is schedule. This'
+
+[08:23] [scene:talk]
+VISUAL: 
+AUDIO: 'is a lightweight inprocess scheduleuler. Here\'s an example of how it works. Let\'s say I have a couple of functions here. One to sync orders, one to send some daily report. of course not implemented'
+
+[08:35] [scene:talk]
+VISUAL: 
+AUDIO: 'here, but it\'s just do it as an example. Then what I can do is create a scheduleuler and then create a trigger. For example, I want this trigger every 15 minutes and between 9:00 a.m. and'
+
+[08:47] [scene:talk]
+VISUAL: 
+AUDIO: '5:00 p.m. And then I can create my job where I supply the trigger and the function that needs to be called. I can also directly define the trigger. Simply say, well, did we need this every day?'
+
+[09:00] [scene:talk]
+VISUAL: 
+AUDIO: 'And then you can calluler.run run pending in a loop. Here I just have some code that creates some moments in time and then simply runs a scheduleuler at that particular moment just to show you'
+
+[09:12] [scene:talk]
+VISUAL: 
+AUDIO: 'what it does. So when I run this then you see it runs all of these tasks depending on the time where we\'re at. So for example here it sends a daily report. Here it syncs the orders because it\'s between 9:00 a.m. But here it'
+
+[09:26] [scene:talk]
+VISUAL: 
+AUDIO: 'doesn\'t because it was already run at 9:00 a.m. Here it syncs it again, etc. etc. What I like about this library is the flexibility of how you can define the triggers. For example, here you can use this boolean logic to define pretty'
+
+[09:40] [scene:talk]
+VISUAL: 
+AUDIO: 'complicated triggers and that\'s I think a really neat thing. This is perfect just for an internal tool or script where you don\'t want to have a full salary setup. That would be complete overkill. Next library is whenever.'
+
+[09:53] [scene:talk]
+VISUAL: 
+AUDIO: 'Remember that bug that I mentioned at the beginning? This lives in Python\'s standard date time library around daylight saving time. Adding 8 hours doesn\'t always mean 8 hours later in the'
+
+[10:06] [scene:talk]
+VISUAL: 
+AUDIO: 'way most people expect. And that\'s exactly the problem whenever was designed to solve. Here\'s what it looks like. It\'s pretty simple to use. Now unlike the standard library, this correctly handles daylight saving'
+
+[10:18] [scene:talk]
+VISUAL: 
+AUDIO: 'transitions and clearly separates local time, UTC and zoned time because you create these object explicitly like so. So if your application deals with let\'s'
+
+[10:30] [scene:talk]
+VISUAL: 
+AUDIO: 'say bookings, billing, scheduling, calendars, this is a library that\'s really useful. And as you can see, this is pretty easy to use. We can add hours to it. We can uh compute durations. We can convert it to another time zone. So'
+
+[10:44] [scene:talk]
+VISUAL: 
+AUDIO: 'that\'s all really neat. Let me run this. And this is what we get as a result. Whenever is a really useful feature for dealing with time, but pint next library on the list does the same'
+
+[10:56] [scene:talk]
+VISUAL: 
+AUDIO: 'thing for physical units. Here\'s what it looks like. I import unit registry from the pint library. And then I can specify units like so by multiplying the number with them. So for example here I can'
+
+[11:10] [scene:talk]
+VISUAL: 
+AUDIO: 'specify distance in kilometers or duration in hours and then I can do computations with these things and you can do all sorts of interesting things with this like a unit conversion for example. So here I\'m converting the'
+
+[11:23] [scene:talk]
+VISUAL: 
+AUDIO: 'distance to miles. Uh it also performs dimensional analysis. So you can do things like this. Let me run that just to show you what it outputs. So as you can see the weight force it computes'
+
+[11:35] [scene:talk]
+VISUAL: 
+AUDIO: 'correctly based on these dimensions. Also, it rejects invalid calculation. So, for example, if you want to add distance and duration, well, we\'re going to get an exception. That\'s what you see right here. Can convert from kilometers'
+
+[11:48] [scene:talk]
+VISUAL: 
+AUDIO: 'to hours. Obviously, this is a really neat library if you\'re dealing with various units and you want to make sure that the results are not nonsense. Next up is Geopi. This makes working with geographic data really easy. Here\'s what'
+
+[12:01] [scene:talk]
+VISUAL: 
+AUDIO: 'it looks like. I can build a geocoder by creating an instance of this class like so. And then I can use that locator provided an address and then we\'re going to get an actual geo location with a'
+
+[12:14] [scene:talk]
+VISUAL: 
+AUDIO: 'latitude and a longitude. Then once I have that I can do useful things like computing a distance or I can also provide the latitude and longitude and then get back a geocoded address.'
+
+[12:26] [scene:talk]
+VISUAL: 
+AUDIO: 'Here\'s the result I get when I run this script. Interesting feature is that this provides multiple geocoding providers behind the same API which makes it easy'
+
+[12:38] [scene:talk]
+VISUAL: 
+AUDIO: 'to switch services later. If you need a quick dashboard or internal tool, nice gooey is definitely worth a look. This is really easy to use. Here I\'m importing a UI from the nice gooey'
+
+[12:50] [scene:talk]
+VISUAL: 
+AUDIO: 'library. And then I define the user interface directly in my Python script by providing some labels, cards, a button, a table, a chart. You can add all of these things and I simply call'
+
+[13:02] [scene:talk]
+VISUAL: 
+AUDIO: 'UI.run to actually launch the UI. So when I run this, as you can see, this is now a web- based app. And here you can see what it looks like. So I can now use the interface directly'
+
+[13:16] [scene:talk]
+VISUAL: 
+AUDIO: 'and work with it. And it\'s going to build the chart. It\'s going to show this kind of notification. So it\'s all really neat. I mean it doesn\'t look extremely'
+
+[13:28] [scene:talk]
+VISUAL: 
+AUDIO: 'fancy or something but if you just need something quick then this is really a great way to go because updating Python objects for example my list of orders here if I update the object that basically happens here then the browser'
+
+[13:41] [scene:talk]
+VISUAL: 
+AUDIO: 'UI is also immediately updated you don\'t need to write any JavaScript or something like that so nice really simple really nice now there are three more libraries I want to share with you but first if you enjoyed this video so'
+
+[13:54] [scene:talk]
+VISUAL: 
+AUDIO: 'far don\'t forget to give it a like and YouTube also has hypes. I don\'t know what that is, but maybe you can try it and we can see what happens. And finally, subscribe to the channel so you don\'t miss out on any of my upcoming'
+
+[14:06] [scene:talk]
+VISUAL: 
+AUDIO: 'videos. Next library is Faker. Realistic test data makes demos and tests much more convincing. And with Faker, that\'s really easy to do. So, import the Faker class here. And then I have some data'
+
+[14:18] [scene:talk]
+VISUAL: 
+AUDIO: 'class device in this particular example. But then I can use Faker to create all sorts of things like host names, company names, cities. It can do lots of different things, persons, addresses,'
+
+[14:31] [scene:talk]
+VISUAL: 
+AUDIO: 'etc., etc. And the cool thing about Faker is that it even supports local. For example, here I have a US faker and a Dutch faker. And then I can create a US device and I can create a Dutch'
+
+[14:44] [scene:talk]
+VISUAL: 
+AUDIO: 'device as well by simply providing the Faker instance with that particular local. Let me just cancel that nice gooey because we don\'t need that anymore. And when I run this, then this is what we get as a result. As you can'
+
+[14:57] [scene:talk]
+VISUAL: 
+AUDIO: 'see, Cheryl Wise, that\'s apparently a pretty uh US style name. I have no idea. Uh this is not very Dutch, but this is a Dutch town. I never been there, but if'
+
+[15:10] [scene:talk]
+VISUAL: 
+AUDIO: 'you\'ve been to Monica, do let me know. But as you can see, it easily switches locals like this, which is really useful. And at least this way not everybody is called John Smith in your data. Next library I want to show you is'
+
+[15:24] [scene:talk]
+VISUAL: 
+AUDIO: 'Zenicle and this is a modern documentation site generator coming from the creators of material for make docs. Here\'s an overview of the project file uses toml. So you can specify things like a theme. You can specify the port,'
+
+[15:37] [scene:talk]
+VISUAL: 
+AUDIO: 'the folders where your site will be located that\'s being generated and the documentation folder description etc etc. And then you can simply write markdown files like here for example I'
+
+[15:50] [scene:talk]
+VISUAL: 
+AUDIO: 'have some payment service. There are some Python code in there. There is a link to the payments markdown file which then again has more documentation. When I run this we have the site being served'
+
+[16:03] [scene:talk]
+VISUAL: 
+AUDIO: 'on local host just like with nice. Here I\'m viewing it inside VS Code. And as you can see this looks pretty neat right out of the box. And links also work as expected. So if you want a quick'
+
+[16:15] [scene:talk]
+VISUAL: 
+AUDIO: 'documentation website as part of your library or project then Zensle is a really nice way to do it. Finally we have complexify and this measures cognitive complexity. Basically it\'s an'
+
+[16:28] [scene:talk]
+VISUAL: 
+AUDIO: 'indication of how easy to read your code is. Now I\'m going to use this on my own script so that I can actually prove to you that what I do in terms of refactoring on the channel actually'
+
+[16:41] [scene:talk]
+VISUAL: 
+AUDIO: 'improves the code. Uh, of of course this is an n equals one example, but you know details. But here\'s the before version where we have some uh classes and then we have a pretty annoyingly big generate'
+
+[16:54] [scene:talk]
+VISUAL: 
+AUDIO: 'customer report. This from one of my older videos and also have an after version here that actually splits up this really complicated function that we have here in lots of smaller functions'
+
+[17:06] [scene:talk]
+VISUAL: 
+AUDIO: 'that are much easier to read obviously. So if I run this on the before version then as you can see we uh get a failed message on the generate customer report'
+
+[17:19] [scene:talk]
+VISUAL: 
+AUDIO: 'function. It\'s basically built on these numbers that it computes based on uh nested values data complexity all sorts of things. And this apparently gets a score of 23 which is pretty bad. But if'
+
+[17:33] [scene:talk]
+VISUAL: 
+AUDIO: 'I run this on the after version then here\'s what we get. we all get ones and twos and threes. So according to this tool, the after version is a lot less'
+
+[17:45] [scene:talk]
+VISUAL: 
+AUDIO: 'cognitively complex. There\'s some nice features that you can also define some configuration while you\'re running complexity. For example, you could specify a value for max complexity'
+
+[17:58] [scene:talk]
+VISUAL: 
+AUDIO: 'allowed. And let\'s say we put that to 25. And now our generate customer report passes. So that\'s the easy fix. But of course the harder fix is to actually refactor it and uh use a lower maximum'
+
+[18:10] [scene:talk]
+VISUAL: 
+AUDIO: 'of allowed complexity. And in the end of course it\'s not about the scores. So don\'t optimize for that but optimize for code that humans or AI coding monkeys can understand. Many of the libraries in'
+
+[18:23] [scene:talk]
+VISUAL: 
+AUDIO: 'today\'s list came from your suggestions. So thank you so much for sharing these. I learned about a couple of new really cool libraries myself. I\'d love to hear from you. Which of these was new to you? And which other libraries do you think'
+
+[18:36] [scene:talk]
+VISUAL: 
+AUDIO: 'deserve to be on a future list? Let me know in the comments. YouTube thinks you\'ll enjoy this video next. Thanks for watching and see you next time.'
