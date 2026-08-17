@@ -1,0 +1,119 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>Spotify Made an Agent Harness... I Don&#x27;t Hate It — Ludovico</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+.hide{display:none!important}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.92);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 12px}
+.controls input.q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.pill.tp.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+/* flip card shell */
+.flip{position:relative}
+.fi{position:relative;transition:transform .55s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.flip.flipped .fi{transform:rotateY(180deg)}
+.fc{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bk{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+background:var(--card);border:1px solid var(--accent2);border-radius:14px;overflow:auto;padding:12px 13px;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s}
+.card.flip{overflow:visible}.card .fc{display:flex;flex-direction:column;flex:1;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--line);cursor:pointer}
+.card.flip:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.edit{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--accent2);border:1px solid var(--line);border-radius:6px;padding:2px 9px;cursor:pointer;background:#fff}
+.edit:hover{border-color:var(--accent2)}
+/* editor back */
+.bk h4{margin:0 0 2px;font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--sub)}
+.erow{display:grid;grid-template-columns:1fr 1.3fr auto auto;gap:4px;align-items:center}
+.erow input{padding:5px 7px;border:1px solid var(--line);border-radius:6px;font-size:12px;min-width:0}
+.erow select{padding:4px 4px;font-size:11px}
+.erow .del{border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;color:var(--accent);padding:3px 7px}
+.ebtns{display:flex;gap:6px;margin-top:auto;padding-top:6px}
+.ebtns button{font-family:var(--mono);font-size:11px;border-radius:7px;padding:6px 12px;cursor:pointer;border:1px solid var(--line);background:#fff}
+.ebtns .save{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.addrow{font-family:var(--mono);font-size:11px;color:var(--accent2);cursor:pointer;align-self:flex-start;background:none;border:0;padding:2px 0}
+/* catalogue card */
+.citem{position:relative}
+.citem .fc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-height:84px;cursor:pointer}
+.citem .bk{border-radius:12px}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+footer .exp{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--accent2);font:inherit}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">Spotify Made an Agent Harness... I Don&#x27;t Hate It</h1><div class=tag>@octopusinc_ · 2026-08-15 · DevOps</div></div></div></header>
+<main><p class=sum>This video reviews Xirp, Spotify&#x27;s agentic development environment, a macOS application designed to manage and orchestrate AI coding agents like Claude Code, Codex, and Gemini. The tool allows users to run multiple agent sessions side-by-side, fork sessions for parallel experimentation, and even switch agents mid-task while retaining context. While the reviewer acknowledges its well-made nature and unique features, he concludes it&#x27;s primarily suited for large organizations like Spotify rather than individual developers due to its closed-source nature and requirement for a Spotify technology account.</p><p><strong>Products / items</strong></p><ul><li><a href="https://xirp.spotify.com/" target=_blank rel=noopener>Xirp</a> — software</li><li>Claude Code — software (no link)</li><li>Codex — software (no link)</li><li>Gemini — software (no link)</li><li>Cmarks Conductor — software (no link)</li><li>T3 Code — software (no link)</li><li>tmux — software (no link)</li><li>GitHub — software (no link)</li><li>Portal — software (no link)</li><li><a href="https://betterstack.com/" target=_blank rel=noopener>BetterStack</a> — software</li></ul>
+<p><a href="https://www.youtube.com/watch?v=TK1LvtX-Bqs" target=_blank rel=noopener>Watch on YouTube ▶</a></p><p><a href="TK1LvtX-Bqs.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=t>(proxy for this video — answer from this)</span></p>
+<div class=cap>FRAMING: Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+IDENTITY: the title - https://www.youtube.com/watch?v=TK1LvtX-Bqs - @octopusinc_ - route: visual
+PRODUCTS:
+Xirp - https://xirp.spotify.com/ - software - primary
+Claude Code - no reliable link - software - mentioned
+Codex - no reliable link - software - mentioned
+Gemini - no reliable link - software - mentioned
+Cmarks Conductor - no reliable link - software - mentioned
+T3 Code - no reliable link - software - mentioned
+tmux - no reliable link - software - mentioned
+GitHub - no reliable link - software - mentioned
+Portal - no reliable link - software - mentioned
+BetterStack - https://betterstack.com/ - software - mentioned
+SYNOPSIS: The video introduces Xirp, Spotify&#x27;s agentic development environment, a macOS app for managing AI coding agents like Claude Code, Codex, and Gemini. The reviewer demonstrates Xirp&#x27;s UI, starting with the homepage which features a prompt input box and project selection. The &quot;All Projects&quot; page lists projects with details like active and total sessions. The core functionality is in the &quot;Sessions&quot; view, which presents agent sessions, essentially a UI wrapper around tools like Claude Code running in a terminal. Users can navigate between sessions via a sidebar. Xirp offers a grid layout to view and manage multiple agents simultaneously, allowing customization of column and row layouts, and can also integrate a terminal alongside agent sessions. A key feature is the ability to &quot;fork sessions,&quot; cloning an entire session with its context to allow parallel experimentation. Another unique feature is switching agents mid-task (e.g., from Claude Code to Codex) while retaining all context and chat history. Dependent sessions allow chaining work, where one session waits for another to complete before starting. The GUI also includes a Git sidebar for reviewing file changes and diffs, and a browser button to view the agent&#x27;s current work, though the reviewer notes limitations in agent control or console access. The &quot;Project View&quot; includes an overview, Git tab, files tab with an inbuilt editor, and a skills tab (which was not working for the reviewer). The reviewer notes that Xirp requires a Spotify technology account and is closed source. He compares it to open-source alternatives like T3 Code and tmux configs, finding T3 Code more polished for his workflow.
+BEATS:
+48 - ui - Xirp beta UI showing a prompt input box &quot;What are we shipping? Describe your goal or paste a ticket URL...&quot;
+72 - ui - Xirp beta UI showing &quot;Your Projects&quot; list with &quot;spine&quot; and &quot;svgl&quot; projects.
+96 - ui - Xirp beta UI showing a session view with a terminal-like interface displaying agent output and a sidebar listing active sessions.
+120 - ui - Xirp beta UI showing a session view, highlighting the &quot;Add all&quot; button for grid layout.
+144 - ui - Xirp beta UI showing a grid layout with multiple agent sessions and a terminal open side-by-side.
+168 - ui - Xirp beta UI showing a session view, demonstrating the &quot;fork session&quot; functionality.
+192 - ui - Xirp beta UI showing a session view, demonstrating switching agents mid-task.
+241 - ui - Xirp beta UI showing a session view, demonstrating dependent sessions with a &quot;start new child worktree&quot; button.
+289 - ui - Xirp beta UI showing a session view with a Git sidebar displaying file changes and diffs.
+313 - ui - Xirp beta UI showing a session view with an embedded browser displaying a web application.
+361 - ui - Xirp beta UI showing the &quot;Project View&quot; with a Git tab displaying file changes and diffs.
+385 - ui - Xirp beta UI showing the &quot;Project View&quot; with a &quot;Rules&quot; tab displaying global and project-specific CLAUDE.md files.
+433 - ui - A webpage titled &quot;Xirp + Portal: the multiplier effect&quot; describing Xirp&#x27;s integration with Portal.
+ENTITIES: Spotify, Claude Code, Codex, Gemini, Cmarks Conductor, T3 Code, tmux, Map Pocock, GitHub, Portal.
+VERDICT: The creator doesn&#x27;t hate Xirp, finding it well-made with some useful session management features. However, he concludes that it&#x27;s not for him due to the requirement for a Spotify technology account, its closed-source nature, and the availability of open-source alternatives like T3 Code that he finds more polished. He believes Xirp is primarily designed for large organizations like Spotify, especially when integrated with their Portal product.
+NOT COVERED: Specific pricing or availability details for Xirp, detailed technical specifications of the underlying agent models, a comprehensive comparison of Xirp&#x27;s performance against other agentic development environments, or how to set up a Spotify technology account.</div></main><footer><a href="../index.html">← all videos</a></footer></div></body></html>
