@@ -1,0 +1,92 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Antithesis in less than 5 minutes
+channel: @octopusinc_
+duration: 04:20
+source: https://www.youtube.com/watch?v=yT049p6ZQ9c
+upload_date: 20260817
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:intro]
+VISUAL: Title card: "Antithesis in less than 5 minutes with Akshay Shah"
+AUDIO: 'In this video, I\'m going to show you Antithesis, the best way for your team to quickly ship bug-free distributed systems. Antithesis runs your system in a deterministic virtual machine, intelligently exploring your system\'s behavior while injecting realistic faults, like packet loss or CPU starvation.'
+
+[00:14] [scene:talk]
+VISUAL: 
+AUDIO: 'Antithesis finds your deepest bugs, makes them perfectly reproducible, and identifies root causes before production. Let\'s see what that looks like.'
+
+[00:26] [scene:ui]
+VISUAL: GitHub UI showing a pull request for "Refactor Smithy error checks #9" with code changes.
+AUDIO: 'Imagine that we\'re building a distributed key-value database. One of my teammates has opened this pull request to refactor some error handling code. At first glance, these changes look fine. When I look at our GitHub actions results, our standard Go unit and integration tests are passing,'
+
+[00:40] [scene:talk]
+VISUAL: 
+AUDIO: 'but our Antithesis tests are failing, which means that this innocent looking pull request has broken our database badly. Let\'s click the view details link to see what happened. The details link takes me to the triage report,'
+
+[00:52] [scene:ui]
+VISUAL: Antithesis triage report UI, showing "Utilization" and "Findings" sections, with "Properties" displaying passed and failed assertions. "Clients can always read their own writes" is failing.
+AUDIO: 'my entry point to Antithesis. All our test assertions are here in the property section. The "clients can always read their own writes" property is failing. This is very bad because it means that our key-value store'
+
+[01:04] [scene:ui]
+VISUAL: Antithesis report UI, scrolled down to show "Some examples found on 2025-09-26" with multiple failing entries.
+AUDIO: 'is losing data. Antithesis found not one, but three different sequences of events that lead to data loss. Because they\'re executing in a deterministic virtual machine,'
+
+[01:17] [scene:ui]
+VISUAL: Antithesis report UI, showing logs for a failing example, resembling a console output.
+AUDIO: 'each of these timelines is 100% reproducible. Anyone on my team can replay this failure and see exactly what I\'m seeing now. Right here in the report,'
+
+[01:29] [scene:ui]
+VISUAL: Antithesis report UI, showing options for "Logs", "Artifacts", and "Details" for a failing example.
+AUDIO: 'I can explore my cluster\'s logs at the moment the test failed, like a lightweight Kibana or Splunk. I can also download artifacts from this failed run. In addition to the default logs tarball, you can include anything that\'s useful to your system:'
+
+[01:41] [scene:ui]
+VISUAL: Antithesis bug report UI, displaying a "Bug Probability" graph over time with a 90% credible interval.
+AUDIO: 'core dumps, database snapshots, or anything else. Usually, the triage report is enough to root cause bugs, but sometimes your system is just too noisy to figure out what\'s going on.'
+
+[01:54] [scene:ui]
+VISUAL: Antithesis bug report UI, showing the "Bug Probability" graph.
+AUDIO: 'To dig deeper into a single failing example, we can use the Antithesis bug report. Right here at the top, Antithesis is showing me the likelihood of this bug as time goes on and the events in the test play out. There are two clear change points in this graph,'
+
+[02:07] [scene:ui]
+VISUAL: Antithesis bug report UI, with a tooltip showing axis values on the "Bug Probability" graph.
+AUDIO: 'here and here. These are moments when the bug becomes much more likely, until at the end, it\'s guaranteed to happen. This is a familiar story in distributed systems. It\'s rarely just one hiccup that takes down your system.'
+
+[02:21] [scene:ui]
+VISUAL: Antithesis bug report UI, showing the "Bug Probability" graph.
+AUDIO: 'It\'s a leader election followed by abrupt power loss, or a container restart followed by a partition, or any one of a million other independently recoverable insults that combine in unexpected ways. By zooming in on these change points,'
+
+[02:36] [scene:ui]
+VISUAL: Antithesis bug report UI, zoomed in on a section of the "Bug Probability" graph, showing "Original Bug Session Logs" below.
+AUDIO: 'I can explore the logs from just these critical moments. And in a similar report, Antithesis can even pinpoint the exact lines of code involved in each of these moments. This is almost always enough to find the bug.'
+
+[02:48] [scene:ui]
+VISUAL: Antithesis Debugging UI, a notebook-like interface with Python code to list containers and execute commands.
+AUDIO: 'But if it\'s not, we have one more trick up our sleeves. We can debug live. Remember, this failing test run is fully deterministic and reproducible, so we can treat it like a git history,'
+
+[03:01] [scene:ui]
+VISUAL: Antithesis Debugging UI, showing a `redis-cli` command being executed to set a key-value.
+AUDIO: 'complete with branching, editing, and resetting. We call this the Multiverse Debugger. It\'s a live, programmable notebook connected to the containers in my test cluster at a frozen moment in time, just as the bug is occurring.'
+
+[03:15] [scene:ui]
+VISUAL: Antithesis Debugging UI, showing the `redis-cli` command and its output.
+AUDIO: 'I can execute any command I like in any container in the cluster. For example, here, I\'m writing some new data to my key-value store. I could instead attach a debugger, take a heap dump, or explore the file system.'
+
+[03:29] [scene:talk]
+VISUAL: 
+AUDIO: 'I can even fast forward and rewind time, so it\'s safe to do destructive operations. In just a few minutes, that is Antithesis. I\'ve taken a rare production heisenbug, one that might have taken weeks to reproduce and fix with'
+
+[03:42] [scene:talk]
+VISUAL: 
+AUDIO: 'traditional approaches, and found it before the buggy code is even merged. Antithesis has made the bug perfectly reproducible. It\'s guided me right to the problematic moments in the test run. It\'s pinpointed the lines of code involved,'
+
+[03:56] [scene:outro]
+VISUAL: Quote from Glauber Costa, Co-Founder & CEO, Turso, about rewriting a core component with Antithesis.
+AUDIO: 'and it\'s even let me debug my test cluster interactively. Turso, etcd, Ethereum, Confluent, and many others use Antithesis to squash bugs, reduce toil, and deliver ambitious projects quickly.'
+
+[04:11] [scene:talk]
+VISUAL: 
+AUDIO: 'If you\'d like to join them, book a demo at Antithesis.com. We\'d love to talk.'
