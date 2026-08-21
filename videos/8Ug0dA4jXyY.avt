@@ -1,0 +1,652 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: How to Train a MiniMax H3 Ref2VA LoRA with AI Toolkit
+channel: @octopusinc_
+duration: 34:32
+source: https://www.youtube.com/watch?v=8Ug0dA4jXyY
+upload_date: 20260820
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:15] [scene:talk]
+VISUAL: 
+AUDIO: 'Hello and welcome back. It has been a little bit. I\'ve been busy. There\'s so many new models coming out constantly. I\'m in constant development. But we\'re gonna take a break. We have to look at Miniax H3.'
+
+[00:27] [scene:talk]
+VISUAL: 
+AUDIO: 'This model is a video model. It is probably one of my favorite models that\'s been released since Stable Diffusion 1. It is so incredible. It does audio with video. It can do'
+
+[00:42] [scene:talk]
+VISUAL: 
+AUDIO: 'references. You can reference audio. You can reference images. You can reference other video. You can like have a video of someone talking and it mimics that character so well. It is an incredible model. It\'s fast. It has been a complete'
+
+[00:54] [scene:talk]
+VISUAL: 
+AUDIO: 'gift to the community. Um, one problem with this model, it\'s distilled guidance distilled. It probably had some reward learning done on it as well. But this'
+
+[01:07] [scene:talk]
+VISUAL: 
+AUDIO: 'makes it kind of hard to train. It makes it awesome on an inference though on inference. Super fast because you don\'t have to do CFG. So, we\'re going to take a look at it. We\'re going to train it today. Um, it came in two variants. One variant can do text to video or it can'
+
+[01:20] [scene:talk]
+VISUAL: 
+AUDIO: 'do, you know, first frame, last frame or first frame and last frame text to video and then the other one does reference to video audio. So you can do text, you can do different reference images. Um, so'
+
+[01:32] [scene:talk]
+VISUAL: 
+AUDIO: 'you can say put this character in here, whatever. It works really good. Of course, just like any model, it\'s not going to be perfect all the time. And that\'s where fine-tuning comes in. So I have a lot of requests on this one. I\'m'
+
+[01:44] [scene:talk]
+VISUAL: 
+AUDIO: 'not going to be able to handle all of them today, obviously. You know, we could do a character one. I\'ve done character ones. We could do a training in the style. I mean, all the stuff we\'ve done before. And I do want to go over like how to do it for this model'
+
+[01:56] [scene:talk]
+VISUAL: 
+AUDIO: 'cuz this model is hard to train. There\'s been a lot of updates. I\'ve had to try a lot of stuff. I mean, it\'s been a week of uh me and a bunch of people from the Discord community. Thank all you guys just going to town trying to figure out'
+
+[02:08] [scene:talk]
+VISUAL: 
+AUDIO: 'how to train this model the best. We have training adapters. We have guidance distillation. And I\'ll go through all that as we hit it in the config cuz we\'re still experimenting with the best ways to do it. And what I do in this'
+
+[02:21] [scene:talk]
+VISUAL: 
+AUDIO: 'video may change. So keep that in mind. But what I want to do today, I want to train video to video. So I want to train where we can edit videos using the reference to video audio model. I want'
+
+[02:33] [scene:talk]
+VISUAL: 
+AUDIO: 'to do fun stuff. You know, we could do something like, oh, we\'re going to correct blemishes on people\'s faces. No, no, no, no, no, no, no. That\'s not that\'s not fun. I\'m not going to do that. We\'re going to make people buff and not just a little buff. I want to'
+
+[02:45] [scene:talk]
+VISUAL: 
+AUDIO: 'make them super buff. So to get started, we have to build our data set first. Okay, so here\'s the problem. We want to train an edit model that can go from video to video. The problem is in order to do one of these type trainings, I'
+
+[03:00] [scene:talk]
+VISUAL: 
+AUDIO: 'know I\'ve done tutorials on this before, you have to handedit a bunch of your controls and your target. That\'s hard to do with video. I mean, editing 20 videos is going to be very difficult. Um, so we'
+
+[03:12] [scene:talk]
+VISUAL: 
+AUDIO: 'have to trick the model. Here\'s what we\'re going to do. Uh, I\'m going to head over to Pixels so we can grab us some images, some nice royalty-free images. Let\'s take one of this guy for instance. I\'ve already kind of built some of the'
+
+[03:24] [scene:ui]
+VISUAL: ComfyUI workflow with text prompts for image editing, including "Make this person super buff with huge muscles."
+AUDIO: 'data set, but I\'m just going to show you how I did it. So, we\'re come in here. I\'m going to download it. Don\'t need it that big. That one\'s fine. We\'re going to head over to Comfy. I already have one in here. Hey, first of all, this image is too has too much top on it. So,'
+
+[03:36] [scene:talk]
+VISUAL: 
+AUDIO: 'I\'m just going to go ahead and just kind of trim that a little bit. I don\'t want to do it too much where it\'s just him because we want to be able to grab people in the middle of the scene, too. Okay, I\'ll trim it like that. Let\'s pop'
+
+[03:49] [scene:talk]
+VISUAL: 
+AUDIO: 'this in. I\'ll show you what I\'m doing. So, we have our first image. We\'re going to use an edit model already. I\'m going to use Quinn imageedit 2511. Amazing model. And we\'re just gonna we\'re gonna'
+
+[04:03] [scene:talk]
+VISUAL: 
+AUDIO: 'try to really prompt it to try to make it muscular. So, you know, make this person super buff with huge muscles. Do not change anything else. Same clothes, just extremely large muscles. Comically large muscles on on just we really want'
+
+[04:16] [scene:talk]
+VISUAL: 
+AUDIO: 'those muscles to pop. You know, they\'re not popping. They\'re not doing it for me. Okay. Other than that, it\'s pretty simple. We\'re using the Turbo Laura here. I have it checked on. This is the base comfy workflow for Quinn image.'
+
+[04:28] [scene:talk]
+VISUAL: 
+AUDIO: 'That\'s it. I kind of added a few things like slider and whatnot. We\'ll run that through and let\'s see what it does. All right, perfect. So, it took him from the tiny twink you see before you to'
+
+[04:41] [scene:talk]
+VISUAL: 
+AUDIO: 'this muscle bound freak. All right. And it\'s not perfectly aligned, but that\'s that\'s fine. I mean, you want it to be as good as you can, but I mean, this is great, right? He\'s muscular now, and I want to make sure he stays in his clothes. They\'re just'
+
+[04:54] [scene:talk]
+VISUAL: 
+AUDIO: 'tight. Um, you want those big muscles to pop, etc. All right, this this is perfect. I got to download both of these. I have them both exported over here. So, we\'re going to have this one\'s going to be our control or input and'
+
+[05:07] [scene:ui]
+VISUAL: File browser showing "muscular" images, some with people made "jacked."
+AUDIO: 'this is going to be our target. We don\'t need to caption these because we\'ll do a trigger word to just make this person ripped or buffed or jacked or something like that. So, but we do need to make sure we save these with the exact same'
+
+[05:20] [scene:talk]
+VISUAL: 
+AUDIO: 'file name. All right. And so, I have a few here. Now, these are just some images I pulled off pixels. How many do we have here? 22 total. Um sometimes like on this guy I had trouble. It kept trying to remove his sleeves. So see'
+
+[05:33] [scene:talk]
+VISUAL: 
+AUDIO: 'yeah I just made everyone super jacked, right? But it kept trying to remove his sleeves so I had to prompt for that. Uh what depending on what you\'re doing I mean you may have to handedit all these. What you may be noticing is we have images here. Will it work if we just do'
+
+[05:46] [scene:talk]
+VISUAL: 
+AUDIO: 'image to image and that the video will just get it? No, it\'s not going to work. So why are we bothering? And the point is what we\'re going to do is'
+
+[05:58] [scene:talk]
+VISUAL: 
+AUDIO: 'we\'re going to trick the model. So the model doesn\'t know currently what to do with the reference images or reference videos. It\'ll try to take that person and generally it\'s going to try to do something else with them. So it\'s going to completely change this entire scene.'
+
+[06:11] [scene:talk]
+VISUAL: 
+AUDIO: 'Um and it\'s not going to make them super ripped and it\'ll probably make them doing something else, you know, where there\'s other people in the scene or they\'re moving differently than they are in our reference video. But that\'s not'
+
+[06:24] [scene:talk]
+VISUAL: 
+AUDIO: 'what we want. We want to say keep it exactly like it was just like here like this guy. Except we want him to be jacked. Like super jacked. Vein riddle'
+
+[06:37] [scene:talk]
+VISUAL: 
+AUDIO: 'jacked. So how do we get it to maintain? How do we tell it like hey throughout the whole video we want everything to be the same except the person needs to be'
+
+[06:49] [scene:ui]
+VISUAL: Hugging Face page for Fudan-VIGEN-1M dataset.
+AUDIO: 'jacked. What I have found in experimenting is we\'re basically saying anything that\'s not a person, you\'re going to leave the same in the video. So, how do we teach the model that? Well, let\'s just feed it in a bunch of'
+
+[07:01] [scene:talk]
+VISUAL: 
+AUDIO: 'videos without people in it. No people, you don\'t need to change anything. So, it keeps everything else the same. And then we\'re going to serve the images in as our edit. So, it\'s like, oh, here\'s a person. You edit them to be jacked. But'
+
+[07:14] [scene:talk]
+VISUAL: 
+AUDIO: 'all the videos are going to be just normal, not people. So, we need some videos that don\'t have people in them, don\'t have any kind of character we want, jacked. So, you don\'t want to use this one. Um, and we need stuff that has'
+
+[07:26] [scene:talk]
+VISUAL: 
+AUDIO: 'movement. And importantly, we need sound so that we can regulate. You want the sound to be the same. You want the scene, you want every single frame and every single sound to be exactly the same. Uh, just anytime there\'s a person,'
+
+[07:39] [scene:talk]
+VISUAL: 
+AUDIO: 'they\'re jacked. We just happen to not have them in our videos. Uh, but they\'re in our pictures and we can trick the model into knowing, okay, make this person jacked in the video. That\'s the only thing that changes. I\'m going to'
+
+[07:51] [scene:talk]
+VISUAL: 
+AUDIO: 'hop over to hugging face. I\'m going to grab like this is Vid Gen 1 million. You can come in here. You can just download one of the zips. Um, because you only need like 10 videos. I mean, they have a million. You don\'t need a million'
+
+[08:03] [scene:talk]
+VISUAL: 
+AUDIO: 'videos. Um, but these do have sound. I have already gone through. I\'ve downloaded just a few of the zip files from Video Gen. Um, these have sound. It\'s one of the reasons I really like it. So, we\'re we\'re going to want to'
+
+[08:15] [scene:talk]
+VISUAL: 
+AUDIO: 'focus on ones like this, for instance. You have hands, but you don\'t have like the part that\'s going to be ripped, you know, the body. &gt;&gt; So, that\'s the treasure chest. And let\'s see how it turns.'
+
+[08:28] [scene:ui]
+VISUAL: File browser showing video files, including one of a Rubik's cube.
+AUDIO: 'Okay, that one\'s perfect. 5 seconds. We can copy that one over. We And you want to make sure you have audio and you want to have movement and you want to have nothing you want to edit. So, I\'m trying to edit muscles. So, I don\'t want'
+
+[08:41] [scene:talk]
+VISUAL: 
+AUDIO: 'anything of like their chest or their legs or anything that\'s we want muscular. I already have a few videos. Um, all these, you know, there\'s some hands in them. There may be some like feet and stuff, but it\'s not enough to'
+
+[08:53] [scene:talk]
+VISUAL: 
+AUDIO: 'like really affect it. Uh, probably I\'d be better off to not have the legs and all that in there. In fact, since I just added one, I\'m going to delete this one. So, I have 10 and they\'re all just kind of'
+
+[09:07] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; they\'re all about five seconds &gt;&gt; sound. Okay, so that\'s what we want. 5 seconds sound doesn\'t show the person\'s body. And I\'m going to say with these, we don\'t need captions. It\'s just going'
+
+[09:19] [scene:talk]
+VISUAL: 
+AUDIO: 'to say make this person buff RIP Jack, whatever our trigger is. And since there\'s not a person to make Jack, it\'s just going to keep everything the same. And then we\'re going to feed in our images.'
+
+[09:31] [scene:talk]
+VISUAL: 
+AUDIO: 'these people and we\'re gonna now we\'re going to say make this person super jacked as an image and it\'s going to make them jacked. So that\'s the secret sauce port on. Let\'s'
+
+[09:44] [scene:talk]
+VISUAL: 
+AUDIO: 'eat this thing. All right, we\'re going to head over to AI toolkit. GitHub\'s having an issue right now. Don\'t worry about it. Um we\'re going to scroll down here. All the models it supports. Got to get Oh, wait. What\'s this? Ostress'
+
+[09:57] [scene:talk]
+VISUAL: 
+AUDIO: 'cloud. All right. I guess we might as well use that. Let\'s click on it. So, you can train on RunPod, you can train on modal, you can train on a lot of different things. Any cloud provider, I don\'t care. You do you. Whatever works'
+
+[10:09] [scene:talk]
+VISUAL: 
+AUDIO: 'best. You can train locally. Um, with full offload, you can actually train this on a 5090, especially if you keep your videos short. Um, I actually have an RTX 6000 Pro at home. Thanks to Comfy for providing that for me. Um, but, uh,'
+
+[10:22] [scene:talk]
+VISUAL: 
+AUDIO: 'I\'m going to do it on Austria Cloud today. So, let\'s go over here. Ostress Cloud. This is mine, but you will see this when you sign up for Ostris Cloud. So cool. So, let\'s go over to machines.'
+
+[10:34] [scene:talk]
+VISUAL: 
+AUDIO: 'I\'m going to spin up a machine. Um, and again, you can use other services. Train it at home. Uh, I don\'t care if you want to help support me. Austri cloud that the small margin it makes, it goes'
+
+[10:46] [scene:talk]
+VISUAL: 
+AUDIO: 'directly to me. It is a small margin. Don\'t think I\'m actually pulling in all this money because compute\'s expensive. I want to do an RTX 6000 Pro. Um, I\'ll just do a workstation edition. That\'s'
+
+[10:58] [scene:talk]
+VISUAL: 
+AUDIO: 'fine. All this should be okay. I\'m just going to launch the machine. Machine\'s spinning up. Everything\'s good. We\'re just going to wait for that to boot up. All right, it\'s ready to go. It\'s that easy. Simple. Click. Click.'
+
+[11:11] [scene:talk]
+VISUAL: 
+AUDIO: 'Boom. And I already have my password set up in Ashers Cloud. You can do that in the settings. Otherwise, it\'s password here. Perfect. All right. We got our RTX Pro 6000. First thing we have to do is'
+
+[11:23] [scene:talk]
+VISUAL: 
+AUDIO: 'make a data set. So, we\'re going to have three different folders here. Let\'s go ahead and make them out. So, we\'re going to have we\'ll just call it jacked.'
+
+[11:36] [scene:talk]
+VISUAL: 
+AUDIO: 'That\'s what we\'re going to be doing is getting jacked. Okay. So, jacked is going to be our people who are jacked. Let\'s drag that in. Oh man, look at these beautiful people. I mean, they\'re not just like a little'
+
+[11:50] [scene:talk]
+VISUAL: 
+AUDIO: 'muscular. I mean, they are jacked. Uh, which is what we\'re going for. We\'re going to go to a new data set. And now we want to have just like Yeah, just normal, I guess. Don\'t want to body'
+
+[12:02] [scene:ui]
+VISUAL: AI Toolkit interface, showing video files being uploaded to a dataset.
+AUDIO: 'shame people that don\'t have these big beautiful muscles. There we go. Just your normies. Now, we don\'t need to caption either one because we\'re going to use a trigger word. And the trigger word, we\'ll just put the caption for every single one of them. You don\'t'
+
+[12:15] [scene:talk]
+VISUAL: 
+AUDIO: 'caption this data set, though. This is your control. This is your input. Um, you\'ll want to do your target. So our target would be this. So if you do want to have captions, if you want to have make this woman jacked or or if you\'re doing instead of just one thing here,'
+
+[12:29] [scene:talk]
+VISUAL: 
+AUDIO: 'you\'re like, you know, make this person super jacked or make this person kind of jacked, you know, you could do your captions here. Um I\'m going to do everything with a trigger word. One trigger for all these. That\'ll be fine.'
+
+[12:42] [scene:talk]
+VISUAL: 
+AUDIO: 'Man, these people are jacked. Okay, next we need to go to our other data set. And this is going to be our videos. And I just have our I think it was 10'
+
+[12:55] [scene:talk]
+VISUAL: 
+AUDIO: 'videos here. These also don\'t need to be captioned because these same thing. We\'re going to say make this person jacked. It\'s just &gt;&gt; and a thing of dried chilies because we\'re going to be making something.'
+
+[13:08] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; All right. But there\'s not a person to make jacked. I mean the there is a person who be made jacked. They\'re just jacked behind the camera probably gripping it really hard with their jacked muscles. All we all we\'re doing here, we\'re not teaching it here much'
+
+[13:20] [scene:talk]
+VISUAL: 
+AUDIO: 'here. We\'re just teaching it like, hey, everything in this video, keep exactly the same. Just completely, this is our regularization data set. Make it exactly how it is. There\'s no people. There\'s no one to make jacked. So, just keep it how'
+
+[13:32] [scene:talk]
+VISUAL: 
+AUDIO: 'it is. When we send in these people, the normies, we\'re going to make them super jacked and then they become the muscle bound freaks you see before you. Let\'s see if that'
+
+[13:44] [scene:ui]
+VISUAL: AI Toolkit "New Training Job" configuration, showing model architecture as MiniMax H3 Ref2VA.
+AUDIO: 'works. We\'re going to go ahead and hop over and get us a new job. I\'m going to name this one Miniax H3. And we\'re doing the ref to video audio. And we\'re going to name it chat.'
+
+[13:57] [scene:talk]
+VISUAL: 
+AUDIO: 'Getting so many models in here. Look at this. Who\'s the Litech that coded all this? Okay. Ref 2V. That should say VA. I\'ll'
+
+[14:09] [scene:talk]
+VISUAL: 
+AUDIO: 'update that. Now, there\'s a lot of dippy dots happening here, and we\'re going to quickly go over it. This model\'s a little different if you\'re used to AI'
+
+[14:22] [scene:talk]
+VISUAL: 
+AUDIO: 'toolkit. I\'m trying to change the way models work. Um, this is actually using the comfy weights. You\'ll see here it\'s 8bit Convert. Um, and then we have uh NVFP4 uh for the text encoder. The these are'
+
+[14:34] [scene:talk]
+VISUAL: 
+AUDIO: 'actually the Comfy Weights. It\'s going to download from Comyorg Minmax. It\'ll download the pruned convert version and the NVF FP4 versions. So, we don\'t have to quantize them. It\'s just going to'
+
+[14:49] [scene:talk]
+VISUAL: 
+AUDIO: 'load them up the way they are. That\'s great. Uh, we have a training adapter here. These models are not turbo models, but they are guidance distilled. The guidance will break down if you straight train it. Now, there\'s a few ways to'
+
+[15:01] [scene:talk]
+VISUAL: 
+AUDIO: 'handle this. And I have distillation handling method here. It kind of explains what\'s happening. Uh and your options are you can use pure contrast of guidance, the training adapter or both. Um I started out with using just the'
+
+[15:16] [scene:talk]
+VISUAL: 
+AUDIO: 'training adapter, then we moved to just using contrastive guidance. Now we are actually doing both. I\'m noticing far superior results using both. Um it\'s kind of overkill, but overkill works. So'
+
+[15:29] [scene:ui]
+VISUAL: AI Toolkit "New Training Job" configuration, showing training parameters like optimizer and steps.
+AUDIO: 'uh this could change. The best way to do it could change. I mean, it\'s been in flux for a while now, going back and forth. Uh, for now, I\'m using both. And I already have training adapters trained'
+
+[15:44] [scene:talk]
+VISUAL: 
+AUDIO: 'up. They\'re up on Hugging Face. It\'ll auto download all this. You don\'t have to worry about going and grabbing stuff. Okay. All the defaults we\'re just going to leave the same. If you are on a 5090, uh, I don\'t know. You might be able to'
+
+[15:57] [scene:talk]
+VISUAL: 
+AUDIO: 'pull this off if you have small videos. Um, you might be able to pull it off on a smaller GPU. So, you can come here and click low VRAMm and you can do layer offloading. If you do 100% on both, you should be able to fit this maybe on a'
+
+[16:12] [scene:talk]
+VISUAL: 
+AUDIO: '4090 with these settings. Uh, but definitely 5090 will work. Um, be a little slow because that\'s the offload, but that\'ll work if you\'re doing that. I\'m on an RTX 6000 Pro, so I can turn all that off. Let\'s hop down.'
+
+[16:24] [scene:talk]
+VISUAL: 
+AUDIO: 'Contrastive guidance loss. Uh since this doesn\'t have guidance on inference, anytime you\'re training it, it breaks that down. So we have a training adapter that has been basically trained on its'
+
+[16:37] [scene:talk]
+VISUAL: 
+AUDIO: 'own images and own videos to break down the guidance. Um and then we use that during training and when we pull it out, the guidance comes back. At least that\'s the idea. Contrastive guidance loss.'
+
+[16:49] [scene:talk]
+VISUAL: 
+AUDIO: 'What it does is while you\'re training, you also do an unconditional pass during training, but then you have your unconditional and then you have your normal target path. And we basically just do the guidance on the training'
+
+[17:02] [scene:talk]
+VISUAL: 
+AUDIO: 'side. So instead of doing it on inference, you do it here. You have a guidance loss target at 3.5. And so we basically train the model to not need guidance. Since it\'s guidance distilled, this keeps it from breaking the guidance'
+
+[17:15] [scene:ui]
+VISUAL: AI Toolkit "New Training Job" configuration, showing dataset settings for "jacked" and "normal" images.
+AUDIO: 'down. I released a model Flex one and then Flex 2. Both of those were trained with this contrast of guidance loss um to actually train the guidance embedding on the fly. MiniaX came out. I was like, "Hey, I can throw that in there real'
+
+[17:28] [scene:talk]
+VISUAL: 
+AUDIO: 'quick." Uh it works pretty good. Nothing\'s perfect yet. We\'re still working out the kinks. All right, before we move on, we also have our trigger word that I forgot up here. We can say make them buff, make him look more like'
+
+[17:41] [scene:talk]
+VISUAL: 
+AUDIO: 'ostus, but I think we\'re just going to go with make this person Jack. We have cache text embeddings. It\'s going to cache the trigger word on every'
+
+[17:53] [scene:talk]
+VISUAL: 
+AUDIO: 'single prompt. Let\'s go down to our data sets. We have our target data set is jacked. That\'s people that are super buff. And the control data set, we\'re going to do normal. So, this is our'
+
+[18:06] [scene:talk]
+VISUAL: 
+AUDIO: 'input data set. I\'m going to remove the caption dropout because we don\'t need it here. Um, so these are images. We can actually go pretty big with the images. So, we want to cache latent. We will leave on autoframe count. We\'re not'
+
+[18:19] [scene:talk]
+VISUAL: 
+AUDIO: 'doing audio for this one because this is just images. Um, it\'ll automatically detect its images here now. So, just leave autoframe count on. It\'ll know it\'s an image. It\'ll know how many frames are in it. We\'re good. All right. And then we want to duplicate this. And'
+
+[18:33] [scene:talk]
+VISUAL: 
+AUDIO: 'we want to get rid of We don\'t want to control. Actually, we do want to control, but we\'re going to do videos. So, our videos are just our videos without people. So, we don\'t just want to run in the video because it\'ll learn'
+
+[18:45] [scene:talk]
+VISUAL: 
+AUDIO: 'the video. What we want to teach it is the control is the same folder. So, we\'re going to run the video in as the control video and say make this person jacked. and the output it\'s going to try'
+
+[18:59] [scene:ui]
+VISUAL: AI Toolkit "New Training Job" configuration, showing dataset settings for "videos" as a regularization dataset.
+AUDIO: 'to match is the exact same video with absolutely nothing changed because there\'s no one to make jacked in the video. So that way we\'ll teach the model you don\'t change anything and then when'
+
+[19:11] [scene:talk]
+VISUAL: 
+AUDIO: 'it sees a person makes them jacked even though we don\'t have videos of the people on this though we want to set this as a regularization data set. probably need to add an info box next to'
+
+[19:23] [scene:talk]
+VISUAL: 
+AUDIO: 'this. But how this is going to work when something\'s triggered as regularization, it\'ll go back and forth. So it does one step on this data set, non-regularizations. Even if you have 50 of them, it\'ll only pull one from one of'
+
+[19:35] [scene:talk]
+VISUAL: 
+AUDIO: 'those and then it\'ll pull one from a all the regularization data sets. You can have 50 regularization data sets, too. And it\'ll just go back and forth when you have a regularization. So it\'ll pull'
+
+[19:47] [scene:talk]
+VISUAL: 
+AUDIO: 'here, pull here, pull here, pull here. So, we don\'t need to actually teach it super high-res. I don\'t even think we need 512. That\'s going to be slow. We\'ll go down to 256 because all we\'re trying to teach it is just copy it. Just copy'
+
+[20:00] [scene:talk]
+VISUAL: 
+AUDIO: 'the sound. Copy the images. I mean, copy everything in the video. All right, let\'s scroll down to samples. We got to get our trigger word. I\'m only going to'
+
+[20:12] [scene:talk]
+VISUAL: 
+AUDIO: 'do five. Already have them prepared. Video samples get complicated. I\'ll go over it all first. Let\'s just go ahead and do make this person jacked. Make this person jacked. Make this person'
+
+[20:24] [scene:talk]
+VISUAL: 
+AUDIO: 'jacked. I\'m going to do four. Delete the other ones cuz videos take a long time to generate. Uh the other thing I don\'t think we need I\'ll leave it at 768. You probably don\'t need that'
+
+[20:37] [scene:ui]
+VISUAL: AI Toolkit "New Training Job" configuration, showing sample prompts and video settings like frame count.
+AUDIO: 'just locally, you know, just to see how things are going. You could drop that down to 512. 107 number of frames. Uh there\'s an actual equation to get the frames. It\'s not'
+
+[20:50] [scene:talk]
+VISUAL: 
+AUDIO: 'super simple. In fact, I I\'ll just pop up on the screen here right now. These are your sample times that you need for different video links. You have to get it right. I might make this easier because this is kind of a pain in the'
+
+[21:03] [scene:talk]
+VISUAL: 
+AUDIO: 'butt. But for me, I\'m going to do 3 second videos on all of these. 3se second videos is 73 frames. So that\'s going to give us our 3se secondond videos. And for the previews or samples, whatever you want to call them, the'
+
+[21:18] [scene:talk]
+VISUAL: 
+AUDIO: 'first one we\'re going to get this guy. &gt;&gt; Who are you talking to right now? &gt;&gt; Uh, the other one, if you grew up a millennial in the \'9s like I did, I\'m probably way too old for most of you'
+
+[21:31] [scene:talk]
+VISUAL: 
+AUDIO: 'guys, but if you did grow up then, you will know Wendy Peppercorn. &gt;&gt; She don\'t know what she\'s doing. You don\'t know what &gt;&gt; from the Sand Lot. All little boys in the 90s know who Wendy Peppercorn is.'
+
+[21:44] [scene:talk]
+VISUAL: 
+AUDIO: 'Next, Spider-Man. So, this is the original one where he\'s super buff or somewhat. Um, he\'s not that buff, though. We\'re going to fix'
+
+[21:56] [scene:talk]
+VISUAL: 
+AUDIO: 'that. We\'re going to make him super jacked here. One of my favorite alltime movie scenes ever, which can I didn\'t think could ever be improved, but everyone can be improved by being super jacked.'
+
+[22:09] [scene:talk]
+VISUAL: 
+AUDIO: 'Napoleon dynamite dancing. I think it\'s going to be great. Let\'s go make sure we got all the settings right. Go over what all we changed. Everything\'s pretty much the defaults.'
+
+[22:21] [scene:ui]
+VISUAL: AI Toolkit "Job Overview" showing a training job starting, with GPU and CPU load.
+AUDIO: 'We put a trigger here, though. Make this person jacked. We don\'t have captions. So, we need audio on these. Make sure that is clicked. I duplicated it. Normally, it\'s already on. Glad I caught that.'
+
+[22:33] [scene:talk]
+VISUAL: 
+AUDIO: 'This is why we do the double check, guys. Run through rank 16. We didn\'t change any of this. Um, make sure you have cache text embeddings on. We\'re doing contrastive guidance loss. We left all that the same. We\'re doing 3,000'
+
+[22:46] [scene:talk]
+VISUAL: 
+AUDIO: 'steps. I think that\'s plenty. Let\'s go ahead and bump that to 4,000 steps. Okay, that way it doesn\'t stop in the middle of the night or anything. And we\'re going to make this person jacked.'
+
+[22:58] [scene:talk]
+VISUAL: 
+AUDIO: 'Make this person jacked. Make this person jacked. And finally, make this person jacked. We are done. All looks good. I\'m tired of talking. Throat hurts. Great job. Sweet. And then we click the play button.'
+
+[23:11] [scene:talk]
+VISUAL: 
+AUDIO: 'And you can see over here to the bottom left, uh, it popped up here. And up here. Oh, what\'s that? Oh, support AI toolkit. I didn\'t realize that was there. You can click on that and probably support AI toolkit. That\'s You'
+
+[23:23] [scene:talk]
+VISUAL: 
+AUDIO: 'should click on that right there. All right, we got our first samples in. Let\'s go take a look. All right, some stuff has changed. Napoleon over there. Okay.'
+
+[23:36] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; Who are you talking to right now? &gt;&gt; All right. &gt;&gt; Who are you talking to right now? &gt;&gt; He\'s definitely not jacked. Wait a second. &gt;&gt; Who are you talking to right now? &gt;&gt; He\'s walking to the camera. &gt;&gt; Who are you talking to right now? &gt;&gt; He normally does. This is the the'
+
+[23:49] [scene:talk]
+VISUAL: 
+AUDIO: 'source. &gt;&gt; It actually &gt;&gt; Who are you talking to right now? &gt;&gt; Made him walk to the camera. This model\'s crazy. Like I I thought that was just the same video we put in. It\'s not. &gt;&gt; She don\'t know what she\'s doing. You don\'t know. She don\'t know what she\'s'
+
+[24:01] [scene:ui]
+VISUAL: AI Toolkit "Job Overview" showing training progress, including caching latents and encoding video chunks.
+AUDIO: 'doing. Uh, is that a volleyball? She normally doesn\'t have a volleyball. &gt;&gt; She\'s doing &gt;&gt; Okay. So, but yeah, but it looks like a a real scene with the volleyball. All right. Um, this one\'s definitely'
+
+[24:14] [scene:talk]
+VISUAL: 
+AUDIO: 'different. Interesting. So, this is our source video in case you don\'t remember. Like, look how good it is. I mean, at getting his face right and everything.'
+
+[24:26] [scene:talk]
+VISUAL: 
+AUDIO: 'This model is incredible. Um, like we have to fine-tune it completely different because it\'s like it knows so much. Doesn\'t know how to make people jack though. Like Napoleon over here. &gt;&gt; Glad that we didn\'t have a woman dancing'
+
+[24:43] [scene:talk]
+VISUAL: 
+AUDIO: 'here because I\'d have to redo my video. Um, anyway, so there\'s Napoleon &gt;&gt; kind of ripped. I guess it kind of jacked him a little bit maybe. All'
+
+[24:55] [scene:talk]
+VISUAL: 
+AUDIO: 'right, so those are our first samples. Let\'s pop back over. 22 seconds and we are currently doing 6.22 seconds in iteration. That\'s not bad. And that\'s that\'s an average of the'
+
+[25:08] [scene:talk]
+VISUAL: 
+AUDIO: 'two because remember the video steps are going to be slower. You can probably watch it and you\'ll know which ones are the video steps and which ones are the image steps. That\'s just the price we pay. But hopefully we are able to see it actually happening very quickly. Uh, I'
+
+[25:23] [scene:talk]
+VISUAL: 
+AUDIO: 'think the first sample we should be able to see some kind of, you know, at least we\'re telling it, hey, quit trying to change the whole frame like you\'re doing. Just do what we\'re trying to tell you to do. So, we\'ll come right back. Let\'s jump to the future right now. We'
+
+[25:36] [scene:talk]
+VISUAL: 
+AUDIO: 'have our first samples in. Okay. Okay. Okay. Okay. We\'ll get some pepperc corn. Uh, let\'s just see. &gt;&gt; Who are you talking to right now?'
+
+[25:48] [scene:result]
+VISUAL: AI Toolkit "Samples" view, showing a generated video of a woman made "jacked."
+AUDIO: 'Who are you talking to right now? &gt;&gt; Sorry.'
+
+[26:04] [scene:talk]
+VISUAL: 
+AUDIO: 'Oh man. Like that\'s a glow up right there. &gt;&gt; Who are you talking to right now? &gt;&gt; Look at that.'
+
+[26:17] [scene:talk]
+VISUAL: 
+AUDIO: 'Just like a quick flex. is a grower not a shower, guys. Okay, so it\'s working clearly. Okay, let\'s let\'s we got to check out Peppercorn. &gt;&gt; You don\'t know what she\'s doing. You'
+
+[26:30] [scene:talk]
+VISUAL: 
+AUDIO: 'don\'t know what you don\'t know what she\'s doing. You don\'t know what you don\'t know what she\'s doing. You don\'t know. Fear know what she\'s &gt;&gt; I\'m sorry, guys. Look at her leg,'
+
+[26:42] [scene:talk]
+VISUAL: 
+AUDIO: 'though. I just love this. This is my favorite thing I\'ve trained. Okay, next one. Where we at? Okay, let\'s see if it did'
+
+[26:56] [scene:talk]
+VISUAL: 
+AUDIO: 'anything here. It doesn\'t look like it, but we got surprised by Walt, so we\'ll see. Oh, it\'s so good.'
+
+[27:12] [scene:talk]
+VISUAL: 
+AUDIO: 'Oh my gosh. Like that\'s Look at his face. Even his forehead\'s muscular. That\'s This is so good. Okay,'
+
+[27:24] [scene:talk]
+VISUAL: 
+AUDIO: 'I don\'t know if I can handle this one, guys. I hope this one hasn\'t converged yet. At least I put his shirt back on, but I might pee my pants. So, okay. I\'m not ready for it. Here we go. &gt;&gt; Oh, yeah. I mean, it\'s not doing it'
+
+[27:44] [scene:talk]
+VISUAL: 
+AUDIO: 'great. He does kind of start getting some muscles there. And then boom. Look at that. Oh, yeah. All the way up to his face. I love it. I love it so much. Okay.'
+
+[28:02] [scene:talk]
+VISUAL: 
+AUDIO: 'Okay, guys. You know the routine if you\'re here probably. U We\'re going to let this train out for a little bit. Um and I\'ll see you guys in a few hours. Let\'s take a look. We\'re at 1,700 steps or 1750 roughly. That was our last'
+
+[28:16] [scene:talk]
+VISUAL: 
+AUDIO: 'sample. Let\'s take a look and see what we got. Okay. Got to brace myself. Hope this is good. It shouldn\'t need that. It shouldn\'t need that many. It doesn\'t look like it'
+
+[28:28] [scene:talk]
+VISUAL: 
+AUDIO: 'does. Okay. Oh, yeah. All right. Let\'s Let\'s go. Here we go. You guys ready? &gt;&gt; Who are you talking to right now? &gt;&gt; Oh, &gt;&gt; who are you talking to? &gt;&gt; That\'s so good. That\'s so good. Okay,'
+
+[28:40] [scene:talk]
+VISUAL: 
+AUDIO: 'next one. &gt;&gt; She don\'t know what she\'s doing. You don\'t know. She don\'t know what she\'s doing. &gt;&gt; I love how she\'s like rubbing her leg.'
+
+[28:52] [scene:talk]
+VISUAL: 
+AUDIO: 'You got to oil those beast. Okay. Okay. Peter Parker. Here we go. Oh yeah. See, he\'s nice and ripped. It\'s'
+
+[29:04] [scene:talk]
+VISUAL: 
+AUDIO: 'too much. And that\'s what we\'re going for. It\'s too much. No one\'s that veiny and that crazy. It\'s like too like oiled down and everything, but that\'s that\'s great. Okay. Love it, man. All right, let\'s check out Pedro. Here we go. Or'
+
+[29:19] [scene:result]
+VISUAL: AI Toolkit "Samples" view, showing a grid of generated videos with "jacked" characters.
+AUDIO: 'Napoleon. Here we go. &gt;&gt; Oh my gosh. &gt;&gt; This one was going to be hard because he\'s moving so much. These other ones'
+
+[29:31] [scene:talk]
+VISUAL: 
+AUDIO: 'are kind of still, but oh man, he\'s like having to cross his arms. I mean, first of all, how do you even cross those arms? Like, this model\'s awesome because he had to figure that out. Oh, look at that. He almost broke his back doing'
+
+[29:43] [scene:talk]
+VISUAL: 
+AUDIO: 'that. This is great. Okay, so we got a jacked Napoleon. Everyone\'s jacked. I think we\'re done. I don\'t think we\'re going to get any better. I mean, this is We\'re'
+
+[29:55] [scene:talk]
+VISUAL: 
+AUDIO: 'done here. The one thing we could do if you really want to make this better now, we could actually go generate some videos of people that are jacked now because we\'re not going to have 100%'
+
+[30:07] [scene:talk]
+VISUAL: 
+AUDIO: 'success rate with this method. But if you go generate some videos and then instead of doing your control data set, you could actually just use your um the jacked people data set. Um I\'m not going'
+
+[30:19] [scene:talk]
+VISUAL: 
+AUDIO: 'to do that today. Uh but if you you know you want better results, that\'s the way you could get them. But what I want to do now, I mean, let\'s stop this thing. Stop it. We\'re done. Sticking a fork in it. Um, I\'m gonna hop over in the Comfy.'
+
+[30:32] [scene:talk]
+VISUAL: 
+AUDIO: 'I\'m gonna download some videos real quick and I\'ll see you guys in a second. Okay, we got everything loaded up in the Comfy. I had to build a custom node here. I\'ll post a link to it. In order to do the references properly, you have'
+
+[30:44] [scene:talk]
+VISUAL: 
+AUDIO: 'to like space out the video just right, figure out its length, and then evenly cut and divide to make sure it lines up with what generation\'s going to do. Comfy doesn\'t do all of that built in. So, I have this custom node I built real'
+
+[30:56] [scene:ui]
+VISUAL: ComfyUI workflow showing a reference video of a man walking.
+AUDIO: 'quick that\'ll match how AI Toolkit does its samples. Um, so you can just use this. Uh, I\'ll post a link to it. Uh, but it\'s going to be real simple. So, we can just load in a video. It runs into'
+
+[31:08] [scene:talk]
+VISUAL: 
+AUDIO: 'here. This breaks out the frames. Uh, you can target your megapixels here, so you don\'t got to resize it. It\'ll kick out the width, the height, the length, and the audio comes out here. Uh, we feed the audio and video into the'
+
+[31:21] [scene:talk]
+VISUAL: 
+AUDIO: 'reference latence for the H3 reference. And, um, we\'re skipping the audio. We\'re not going to actually decode the audio. We\'ll just take the audio from our track. No point degrading it any more than it already is. And that\'s it. And'
+
+[31:35] [scene:talk]
+VISUAL: 
+AUDIO: 'then we\'ll output the video. So, for the first one, uh, I love Always Sunny in Philadelphia. So, uh, Fat Mac. We\'re going to make Fat Mac, not Fat Mac. Hey, what\'s up, ass? I did it. I\'m 200'
+
+[31:50] [scene:talk]
+VISUAL: 
+AUDIO: 'lb. I\'m as big as my avatar. &gt;&gt; Okay, so that\'s what we\'re going to do here. He comes in thinking he\'s super buff. And we\'re going to make him super buff hopefully. Fingers crossed. All right, so let\'s give this a run. Let\'s'
+
+[32:02] [scene:talk]
+VISUAL: 
+AUDIO: 'see what we got. Oh, I like the way it\'s looking so far here. Let\'s zoom in. &gt;&gt; Hey, what\'s up, I did it. I\'m 200 lb. I\'m as big as my avatar. Oh,'
+
+[32:16] [scene:talk]
+VISUAL: 
+AUDIO: 'it\'s working so good. Wow. Okay. Okay, let\'s We got to do some other ones. Okay, that\'s perfect. All right, I\'m gonna do like a little short one. So, this is Kelly from Married with'
+
+[32:28] [scene:talk]
+VISUAL: 
+AUDIO: 'Children. Little short clip &gt;&gt; here. It\'s here. &gt;&gt; It\'s here. &gt;&gt; I mean, the crowd\'s excited, but they\'re going to be way more excited when they see how ripped she\'s about to be.'
+
+[32:40] [scene:ui]
+VISUAL: ComfyUI workflow showing nodes for video processing and a reference video of people in a scene.
+AUDIO: 'Okay, we got it. Oh, yeah. She\'s ripped. Here we go. It\'s here. It\'s here. &gt;&gt; It\'s It\'s so much It doesn\'t look real.'
+
+[32:55] [scene:talk]
+VISUAL: 
+AUDIO: 'It looks like she\'s wearing like a muscle suit. Look how well it works though. Like when she runs and everything. I I really like the little glow up scenes. We\'re going'
+
+[33:07] [scene:talk]
+VISUAL: 
+AUDIO: 'to do this one from Miss Congeniality where she\'s walking out. Everyone\'s like in shock. They\'re going to be in a lot of shock. Okay, it looks like it worked. Let\'s see'
+
+[33:19] [scene:talk]
+VISUAL: 
+AUDIO: 'what we got. &gt;&gt; Oh, it was so perfect.'
+
+[33:32] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; Oh my god. Okay, I love it. I love it. That\'s great. Okay, I\'ll post a link to this workflow and I\'ll post a link to this special node that I created just to make all this flow seamlessly. And'
+
+[33:45] [scene:talk]
+VISUAL: 
+AUDIO: 'obviously, I\'ll post a link to this Laura so you can make anyone you want super buff cuz who wouldn\'t want to do that to every character. Well guys, that\'s it for me. Thanks for hanging out. That\'s how you can train a Miniax'
+
+[33:57] [scene:talk]
+VISUAL: 
+AUDIO: 'H3 ref to video Laura using pretty much only images. And if you appreciate this or you appreciate my work in general, please consider becoming a supporter. You can head over to'
+
+[34:10] [scene:talk]
+VISUAL: 
+AUDIO: 'ostress.com/support. There you can see all the amazing people who currently support me and you can see different ways you can help support this channel and the development of AI toolkit. All right guys, that\'s it for me. I\'m ostress and I will see you next'
+
+[34:23] [scene:talk]
+VISUAL: 
+AUDIO: 'time. Let\'s go hit the gym.'
