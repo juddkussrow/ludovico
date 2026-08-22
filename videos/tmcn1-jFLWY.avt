@@ -1,0 +1,696 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Getting the Same Results with Smaller "Cheaper" Dual Sparks AI as the More Expensive Clusters
+channel: @octopusinc_
+duration: 36:28
+source: https://www.youtube.com/watch?v=tmcn1-jFLWY
+upload_date: 20260821
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:hardware]
+VISUAL: Two Dell DGX Spark units are shown on a wooden desk.
+AUDIO: 'I don\'t think large AI companies realized just how cooked they might be. That tiny little cluster got the same result as a giant cluster that cost an order of magnitude more money. We have a lot of talk. [music]'
+
+[00:13] [scene:talk]
+VISUAL: 
+AUDIO: 'How do you want to break out of the high token cost that we seem to have gotten ourselves into? Well, you can always do'
+
+[00:26] [scene:talk]
+VISUAL: 
+AUDIO: 'local AI, but you know, local AI is very hard. It\'s very the affordability is a little bit difficult and the math doesn\'t always work out. But the math'
+
+[00:38] [scene:talk]
+VISUAL: 
+AUDIO: 'here is kind of astonishing, not just in terms of the tokens, but also the intelligence, how few watts it required, and how much ground we\'ve really covered in the last six months,'
+
+[00:50] [scene:talk]
+VISUAL: 
+AUDIO: 'in the last year. And I know that it\'s not you can\'t just, you know, buy a $1,000 machine and immediately be running a trillion parameter model at home. I know, I get it. I\'ve been working on it. Things have only gotten'
+
+[01:02] [scene:talk]
+VISUAL: 
+AUDIO: 'dramatically more expensive since I did the the video on running the OG DeepSk at home on 128 gig machine. 128 gig machine at home now is completely unreachable, whereas then it was like'
+
+[01:14] [scene:talk]
+VISUAL: 
+AUDIO: '$500 for 128 GB of memory. But still, something has changed. Things that were not possible six months ago are now possible. This dual DJX Spark'
+
+[01:27] [scene:talk]
+VISUAL: 
+AUDIO: 'system, it\'s the Intel Pro Max with GB10 product name. It\'s Nvidia\'s Spark platform, but it\'s from Dell. And I really expected to test this and say,'
+
+[01:40] [scene:ui]
+VISUAL: A website for "Thinking Machines" with "Capabilities" and a "Generalist model" section, displaying a radar chart of model performance.
+AUDIO: '"Yeah, it works, but it\'s for research. It\'s a toy. It\'s not going to give you exactly the same result or it\'s not going to give you as good of a a result as you can get from a giant AI machine, but this is my other AI machine. It\'s'
+
+[01:53] [scene:talk]
+VISUAL: 
+AUDIO: 'running four RTX Pro 6000s and I got largely the same result from that as compared with the DGX Spark, like the the dual DGX Spark. Okay. Yeah, the the RTX Pro 6000 system was about seven'
+
+[02:07] [scene:talk]
+VISUAL: 
+AUDIO: 'times faster, about seven times the cost as well, but this is usable and this will get a lot done. So, I started with benchmarks. Basically, just setting up benchmarks so'
+
+[02:20] [scene:talk]
+VISUAL: 
+AUDIO: 'that I could benchmark what we were looking at because there\'s benchmark results on hugging face. Uh, this is for Deepseek0731, but this would apply to any one of a number of open models. I\'ve got my eye on Inkling, which is another'
+
+[02:32] [scene:talk]
+VISUAL: 
+AUDIO: 'really strong looking open model, but it\'s a little too big to run in this setup. I\'m hoping that they\'ll they\'re doing a a smaller version of Inkling. Also, Quinn 3.8 is is right around the corner. But for this video and the the'
+
+[02:44] [scene:talk]
+VISUAL: 
+AUDIO: 'deep dive that I\'m doing here, it\'s DeepSeek0731. And I\'m sure a lot of people are going to be interested in this because it\'s like this is kind of validation. It\'s like, oh, your dual Spark setup is going to give you largely the same output as your RTX Pro 6000 setup. There\'s a'
+
+[02:57] [scene:talk]
+VISUAL: 
+AUDIO: 'couple caveats there that we need to talk about. There are some differences, but yeah, largely it\'s the same and there\'s some detail there. And with a small run of benchmarks being more well aligned than I thought. That\'s kind of a'
+
+[03:09] [scene:talk]
+VISUAL: 
+AUDIO: 'joke because everybody talks about AI alignment, but that I didn\'t use it in that context just then. I threw more benchmarks at it. Okay, let\'s do a 100 tests. A thousand tests. Yeah, except for that counting thing. The counting'
+
+[03:23] [scene:talk]
+VISUAL: 
+AUDIO: 'thing is weird. The Spark model seems to have trouble counting things in in the hay stack. I don\'t know. I don\'t know why. So then I tried, let\'s do a project. Okay, we\'ll do a breakout clone. All right, so first up, this is'
+
+[03:35] [scene:ui]
+VISUAL: A retro-style Breakout game clone is displayed on screen.
+AUDIO: 'posted on the level one forum. This is HTML and JavaScript. I created kind of an elaborate prompt for a breakout clone that has uh a bit of a a bit of a twist. There\'s an extra'
+
+[03:49] [scene:talk]
+VISUAL: 
+AUDIO: 'like phasing mechanic. And there\'s a it\'s like a 2500word specification for the breakout clone. And what I was curious about was DJX Spark. I mean, yeah, they\'re like'
+
+[04:01] [scene:talk]
+VISUAL: 
+AUDIO: '$4,000 each, $5,000 because of the pricing. Um, but could you get as good of a result with that running a 4-bit quantization in the FP4 as you can get'
+
+[04:13] [scene:talk]
+VISUAL: 
+AUDIO: 'from the same model running on four RTX Pro 6000s, which is an order of magnitude almost an order of magnitude more expensive? And the answer is yeah, it\'s actually pretty good. That was an'
+
+[04:26] [scene:talk]
+VISUAL: 
+AUDIO: 'unexpected result. And in some ways, a couple of ways, the DGX Spark result is better than the RTX Pro 6000 system. So, this has a lot of implications in terms'
+
+[04:39] [scene:talk]
+VISUAL: 
+AUDIO: 'of accessible AI and also a little bit of implications for utility for being able to run AI. I\'ve written a full guide on setting this up on your own stuff. Uh really'
+
+[04:52] [scene:talk]
+VISUAL: 
+AUDIO: 'it\'s on if you have dual GGX sparks. Like if you\'re going to you\'re going to do corporate purchasing or something like that, you can pick up two of these sparks and that\'s great. Um I wouldn\'t suggest that you do that unless you have'
+
+[05:04] [scene:talk]
+VISUAL: 
+AUDIO: 'a for work purpose for these. You shouldn\'t buy these as a toy or something to experiment with. may be useful for a student studying AI, but you know, it\'s really expensive and you'
+
+[05:17] [scene:person]
+VISUAL: The presenter stands in front of a large monitor displaying the Breakout game, gesturing with his hands.
+AUDIO: 'can get almost the same result from just cloud API if what you\'re using what you\'re doing for this is learning. And if you look at the source code that it produced for the breakout clone, one of the things that I baked into what I asked the AI to do was also to use it to'
+
+[05:29] [scene:talk]
+VISUAL: 
+AUDIO: 'uh teach you a little bit about HTML and JavaScript. And if I look at it, there\'s definitely a lot of things that aren\'t great. But if I look at how far we\'ve come a year ago and then a year before'
+
+[05:41] [scene:talk]
+VISUAL: 
+AUDIO: 'that, the trajectory here, it\'s it\'s getting really good. And it\'s getting really good as a tool for learning. It\'s not getting really good as a tool for human replacement. And if I think that everyone that is using it as a tool for'
+
+[05:54] [scene:talk]
+VISUAL: 
+AUDIO: 'human replacement is kind of missing the point. It\'s a it\'s it\'s human augmentation. Sure. in the same way that power tools are human augmentation. But I I see CEOs replacing hand drills with'
+
+[06:06] [scene:talk]
+VISUAL: 
+AUDIO: 'impact drills. You know, it\'s like a scene from the the IT Crowd TV show where Renholm is, you know, giving a pep talk, a speech to the employees and then'
+
+[06:18] [scene:talk]
+VISUAL: 
+AUDIO: 'the camera pans and instead of employees, it\'s all just a gallery of power drills. It\'s kind of where we are um with AI. But this setup kind of blows my mind because I wouldn\'t have thought'
+
+[06:30] [scene:talk]
+VISUAL: 
+AUDIO: 'that this was possible uh 6 months or even a year ago that you would get a result this good and this fast running on this hardware. Everybody pretty much universally agrees that DJX Spark is'
+
+[06:42] [scene:talk]
+VISUAL: 
+AUDIO: 'held back by its memory bandwidth. It doesn\'t have enough memory bandwidth. And yet this setup is only about seven times slower than a quad RTX Pro 6000 setup. It is entirely usable for a'
+
+[06:54] [scene:talk]
+VISUAL: 
+AUDIO: 'couple of people that want to use things uh agentically. And what\'s the difference between agentically and just using it like an interactive chatbot that you talk to and you rubber duck with as a programmer? Well, when you use'
+
+[07:07] [scene:talk]
+VISUAL: 
+AUDIO: 'it aentically, you can take a big task and split it up into a bunch of smaller tasks and you have a supervisor that\'s supervising smaller pieces that are working on this. That is exactly how the breakout task was executed using uh a harness called Turnstone. What\'s a'
+
+[07:20] [scene:talk]
+VISUAL: 
+AUDIO: 'harness? Well, a harness is a piece of software that\'ll interface with the running AI and do stuff. It\'s not enough that you you get an AI model like DeepSeek or Quinn or whatever running. You also have to then plug it into more'
+
+[07:33] [scene:talk]
+VISUAL: 
+AUDIO: 'software to be able to do things. And then OpenClaw was huge and then OpenClaw is kind of fading because it was just a random hot it\'s just a ball of software. Yeah, that\'s right. OpenClaw as a disorganized ball of software. It was'
+
+[07:45] [scene:talk]
+VISUAL: 
+AUDIO: 'exciting and it was fun. a little bit of a fat but the agentic thing not really a fat then Hermes and Hermes is sort of more organized and that works really well and yes I\'m working on a separate video on turn still working on that a'
+
+[07:57] [scene:talk]
+VISUAL: 
+AUDIO: 'lot of excitement for that in the forum a lot of excitement on the GitHub just pass a thousand stars and it\'s really effective for this kind of a task but this video is about being able to get things done with relatively small quants'
+
+[08:09] [scene:talk]
+VISUAL: 
+AUDIO: 'now I did a video in the past where uh when memory was more affordable if you have 128 gigs of DRAM at one point that like $500 of memory. Now it\'s not, but at one point it was. And a 24 gig gaming'
+
+[08:22] [scene:talk]
+VISUAL: 
+AUDIO: 'GPU, you could do meaningful things. That\'s still true. The Quen 35 billion parameter model, the mixture of experts model, that runs great on a setup like that. And you don\'t even need 128 gigs'
+
+[08:34] [scene:talk]
+VISUAL: 
+AUDIO: 'of memory. You can do it with a 24 gig GPU and like 32 gigs of VRAM. That\'s for a different video. But this is looking qualitatively and quantitatively at the output from a really big'
+
+[08:46] [scene:talk]
+VISUAL: 
+AUDIO: 'expensive system and two GGX Sparks running the same model. the upper quality was basically the same which was shocking to me because in the FP4 versus'
+
+[08:58] [scene:talk]
+VISUAL: 
+AUDIO: 'the native format of Deepseek the other like quantizing Deepseek in particular has proven to be challenging because the team behind Deepseek has done a really good job optimizing their model. It\'s a relatively small model. Um if you look'
+
+[09:11] [scene:talk]
+VISUAL: 
+AUDIO: 'at some of the other frontier models like GLM and uh just a lot of the larger models that are that are that score really well on Hugging Face, they\'re huge. There are 500 billion parameters,'
+
+[09:23] [scene:talk]
+VISUAL: 
+AUDIO: '600 billion parameters, a trillion parameters, more than a trillion parameters. This is running in 256 GB of VRAM across the two sparks or 256 GB of LPDDR5'
+
+[09:37] [scene:talk]
+VISUAL: 
+AUDIO: 'really to be particular and with over a million context. Well, it\'s a million context per stream, but you can do more than one stream at the same time and'
+
+[09:49] [scene:talk]
+VISUAL: 
+AUDIO: 'have over a million context aggregate. And those million tokens are shared. So, if you have a bunch running in parallel, like I did six up to six in parallel, you can split about a one and a half million uh token context window, which'
+
+[10:02] [scene:talk]
+VISUAL: 
+AUDIO: 'is a lot of working memory to be able to use something like this. The full breakdown of those benchmarks and the performance are on the level one text forum. So, what I did to test this was'
+
+[10:14] [scene:talk]
+VISUAL: 
+AUDIO: 'to put together a bunch of different kinds of tasks like count the thing or do this or here\'s a logic puzzle. And the performance was basically identical between the RTX Pro 6000 system, which'
+
+[10:26] [scene:talk]
+VISUAL: 
+AUDIO: 'is, you know, those are those are like $10,000 a GPU. It\'s it\'s nuts. And our our uh plucky little dual Spark system. The only thing that the Spark system'
+
+[10:38] [scene:talk]
+VISUAL: 
+AUDIO: 'seemed to struggle with with the Envy FP4 was counting tasks. things like count the number of RS and strawberries. The test suite had a bunch of tests like that. And for whatever reason, the the NVFP4 version uh of DeepSeek, the 4-bit version of Deepseek, in other words, was'
+
+[10:54] [scene:talk]
+VISUAL: 
+AUDIO: 'really struggling with those kinds of tasks. Uh for programming, put together a larger task, a larger programming task, and asked both models to come up with this breakout clone. Both of them have bugs. Both of them are not perfect.'
+
+[11:07] [scene:talk]
+VISUAL: 
+AUDIO: 'However, the system produced from the RTX Pro 6000 system wasn\'t as well documented. There wasn\'t as good comments in terms of helping a user that might not know like this aspect of'
+
+[11:20] [scene:talk]
+VISUAL: 
+AUDIO: 'programming or somebody that was just starting out with programming and had a little bit of experience but not a lot of experience. Uh the comments were not good and there were also a couple fatal bugs. Now, the [sighs and gasps] Deep Seek setup'
+
+[11:32] [scene:talk]
+VISUAL: 
+AUDIO: 'was using a slightly older version of VLM that I found out later. And so, I\'m going to have some updates on the forum as I sort of explore that because it may have been a bug in VLM or it may have been a setup. In order to get it to perform as well as it has on the dual'
+
+[11:45] [scene:talk]
+VISUAL: 
+AUDIO: 'spark system, it required a bunch of patches and those are documented on the forum as well. Uh there is another tutorial that this tutorial is based on.'
+
+[11:57] [scene:talk]
+VISUAL: 
+AUDIO: 'Like there\'s, you know, it\'s like it\'s just the turducken of tutorials, but um there\'s a lot of people out there that are working on optimizing the Spark platform. And so it\'s moved a lot since the time that it launched until today.'
+
+[12:09] [scene:talk]
+VISUAL: 
+AUDIO: 'And that\'s why the performance is kind of kind of nuts here because out of the box, just the baseline performance with VLM is only like 10 or 15 tokens per second. But with this setup, you can get upwards of 60 tokens per second on a'
+
+[12:22] [scene:talk]
+VISUAL: 
+AUDIO: 'couple of sessions with your RTX Spark setup. That is fast. That\'s really fast for such a a little system. Now, keep in mind that, you know, like I said, the'
+
+[12:35] [scene:talk]
+VISUAL: 
+AUDIO: 'RTX Pro 6000 system, seven times faster. And you could probably get it to be even a little faster than that with more optimizations and more tuning. But I\'m trying to keep the uh like for like'
+
+[12:47] [scene:talk]
+VISUAL: 
+AUDIO: 'as close as possible because the setup that I have with the RTX Pro 6000s are also going to be portable to an 8GPU and 8 RDNA GPU system that I\'m working on'
+
+[13:00] [scene:talk]
+VISUAL: 
+AUDIO: 'and some other systems that I\'m working on. But the point is to compare the output. Now, a lot of folks have been really excited about running that particular model on a single Spark, but'
+
+[13:12] [scene:talk]
+VISUAL: 
+AUDIO: 'to run the model on just one spark, you have to cut even more. So, we\'re talking about three bits or two bits. And my experience with Deep Seek is that you really lose a lot when you drop below NV FP4. I expected this video to be, yeah,'
+
+[13:25] [scene:talk]
+VISUAL: 
+AUDIO: 'NV FP4, I mean, it\'s okay, but it\'s really not as great as this, this, or this. or like there\'s some holes in it because there\'s a lot of people that'
+
+[13:37] [scene:talk]
+VISUAL: 
+AUDIO: 'get really excited and they benchmark max or they token max and then they say, "Oh, this is the performance." But it\'s like, "No, no, no. Real world task. We\'re going to clean up this git repository. Real world task. We\'re going to put some together some unit tests.'
+
+[13:49] [scene:talk]
+VISUAL: 
+AUDIO: 'We\'re going to audit this codebase for security issues, those kinds of tasks. This setup is actually super useful on a dual Spark setup, which is shocking. And the coherence is maintained with NVFP4'
+
+[14:01] [scene:talk]
+VISUAL: 
+AUDIO: 'which I think is also a testament to uh Nvidia with how good NVFP4 is because NVFP4 really is the star of the show on DGX Spark. I think NVFP4 is so good you'
+
+[14:13] [scene:talk]
+VISUAL: 
+AUDIO: 'would be remiss to run anything else on DGX Spark. If you were actually trying to get work done with DGX Spark or do something interesting with DGX Spark. Now you can use the other formats. That\'s fine. Um, but it\'s going to be'
+
+[14:26] [scene:ui]
+VISUAL: The presenter is shown with a large monitor behind him displaying code or text, likely related to the AI model comparison.
+AUDIO: 'slower and the trade-offs I think are not really there. And that\'s where the, you know, like a, you know, a GB300, a DGX station, those kinds of systems can be useful for that kind of stuff. But'
+
+[14:39] [scene:talk]
+VISUAL: 
+AUDIO: 'you can do a lot. You can do a shocking amount with two sparks. The two sparks are connected together with a QSFP cable that\'s 200 gigabit. It\'s a relatively low latency connection. And it doesn\'t really matter so much about the bandwidth because I\'ve been doing'
+
+[14:51] [scene:talk]
+VISUAL: 
+AUDIO: 'experiments with these kinds of models, these mixture of experts models, even all the way down to like 25 and 50 Gbit and it\'s perfectly fine as long as the latency is very low. The time that it takes one spark to communicate with'
+
+[15:04] [scene:talk]
+VISUAL: 
+AUDIO: 'another Spark and it\'s basically Infiniband and RDMA. And Infiniband and RDMA are very low latency technologies that make all this work. So, how do you compare the same model running on two different pieces of hardware? Isn\'t the result kind of'
+
+[15:16] [scene:talk]
+VISUAL: 
+AUDIO: 'randomized? Yeah, you can mess with the temperature and the seed though to ensure that things are kind of randomized the same way. But then the quantization also affects that. Remember quantization take like deepsek is'
+
+[15:28] [scene:talk]
+VISUAL: 
+AUDIO: 'natively um multiple number formats meaning you\'ve got stuff all the way from 16 bit you know all the way and other formats that are that are uh lower bits. And so'
+
+[15:41] [scene:talk]
+VISUAL: 
+AUDIO: 'when you look at hugging face and you find other quantized versions other people have put together like we have in the past. I mean we\'ve we\'ve done that for GPOSS and we\'ve we\'ve done that for the older Deep Seek. We\'ve done that for'
+
+[15:54] [scene:talk]
+VISUAL: 
+AUDIO: 'Quen. We there there\'s a lot of you know from past videos and experiments and fun stuff going on in the forum. And when you do that you\'re deleting things from the model. Is the model still useful with those things deleted? Yes,'
+
+[16:06] [scene:talk]
+VISUAL: 
+AUDIO: 'probably. Maybe. Possibly. you have to use it and run stuff on it. And so as this is an evolving thing and brand new, people build tools to do the evaluation.'
+
+[16:18] [scene:ui]
+VISUAL: A webpage titled "Dual Sparks in nvfp4 vs 4x RTX Pro 6000 with native DeepSeek V4 0..." is displayed, detailing systematic config differences and reproduction harness.
+AUDIO: 'I\'ve built a tool to help with the evaluation for DeepSeek. And so what this does is it sends identical prompts with identical sampling and it looks at the result. So the initial test we started with uh 16 different prompts'
+
+[16:30] [scene:talk]
+VISUAL: 
+AUDIO: 'across five or six categories and the only one that failed was the counting one. It\'s like how many basically how many Rs are in strawberry. I don\'t for whatever reason the uh Spark version of that it it has trouble'
+
+[16:44] [scene:talk]
+VISUAL: 
+AUDIO: 'counting things. That\'s pretty good. That was better than I expected. I figured it would be about about half like half of them there would be significant differences between the two, but no was pretty similar. Pretty much the same output from both models. Okay,'
+
+[16:57] [scene:talk]
+VISUAL: 
+AUDIO: 'so first 16 that\'s pass. Let\'s expand that to like a thousand. went through a thousand across six, seven different categories. And the only category that had trouble was counting'
+
+[17:10] [scene:talk]
+VISUAL: 
+AUDIO: 'and code code review, code development, security review, uh tool assistance, tool calling, running skills, all of that stuff that translated fine. That worked great. It worked great in either'
+
+[17:23] [scene:talk]
+VISUAL: 
+AUDIO: 'scenario and that was very impressive. From there, it was okay, let\'s do a breakout clone. Let\'s do a breakout clone with the project in this specific prompt and then let\'s evaluate on a bunch of different standardized criteria how each model did and the full writeup'
+
+[17:36] [scene:talk]
+VISUAL: 
+AUDIO: 'of that is on the forum. But basically the models performed pretty much identically with a slight edge to the dual DGX Spark system. Where I began this testing was the Tony D2 Wild GitHub repository. These outofree patches mean'
+
+[17:50] [scene:talk]
+VISUAL: 
+AUDIO: 'that you can\'t just use the stock version of VLM. There\'s a lot of tweaks and improvements to VLM for this specific scenario and this specific model. We need B12X mixture of experts'
+
+[18:02] [scene:talk]
+VISUAL: 
+AUDIO: 'uh math kernels in order to execute as efficiently as we can because we can actually do some fused work on the SM120 hardware in DGX Spark which is great because that\'s two operations for the'
+
+[18:15] [scene:talk]
+VISUAL: 
+AUDIO: 'price of one and you really feel that when you\'re working with the relatively limited memory bandwidth on DGX Spark. There\'s auler patch, NVFP4 envelope stage patch, another patch four which adds shared experts. Um there apparently'
+
+[18:28] [scene:talk]
+VISUAL: 
+AUDIO: 'there was 12 to dropped tensors. This might be the thing that is negatively impacting DeepSeek on the four RTX Pro 6000s. I\'m not sure yet. So stay tuned on the forum thread for updates there. I also added references to these issues in'
+
+[18:42] [scene:talk]
+VISUAL: 
+AUDIO: 'that forum thread, including the issues on the issue tracker for VLM, so you can read more about it and get more context if you\'re into that kind of thing. Bottom line, 84 tokens a second for our pecode uh decode peak, about 67 tokens per second for our uh mean decode. And'
+
+[18:57] [scene:talk]
+VISUAL: 
+AUDIO: 'this is even including like when we\'re talking over 100,000 context. That\'s really good for C6 concurrency with a relatively shallow uh context window. We\'re getting over'
+
+[19:09] [scene:talk]
+VISUAL: 
+AUDIO: '200 tokens per second on this setup. That\'s that\'s absurd. Now, I want to call your attention to a couple of really interesting things with the project interaction here. With AI, we\'re on a trajectory for something called'
+
+[19:22] [scene:talk]
+VISUAL: 
+AUDIO: 'RSI, recursive self-improvement. RSI basically means that you can tell the AI what success criteria looks like, and then it can continuously iterate and improve toward that goal. Now, the test'
+
+[19:35] [scene:talk]
+VISUAL: 
+AUDIO: 'harness that I set up here with the breakout clone wasn\'t designed to go on continuously, but if you look at the harness and you look at the prompt that the harness started with and then how the harness sort of, you know, used the'
+
+[19:48] [scene:talk]
+VISUAL: 
+AUDIO: 'sparkbased models to run and break the task down into pieces and let the the spark-based model analyze what the requirements were. It\'s'
+
+[20:00] [scene:person]
+VISUAL: The presenter is shown with the Breakout game paused on the screen behind him.
+AUDIO: 'the reasoning mode and burning a lot of tokens. uh it\'s easy to imagine it\'s easy to look at that and look at what\'s happening and imagine oh this could be a more automated process this could be uh a little bit further down the road and'
+
+[20:13] [scene:talk]
+VISUAL: 
+AUDIO: 'where we are right now is where personal computers were in the early 1980s and you know it\'s Steve Waznjak using you know very simple transistor logic to put something together and yet once it was'
+
+[20:27] [scene:talk]
+VISUAL: 
+AUDIO: 'put together it was really magical it\'s like I\'ve got green text on a television when I type things out on a keyboard. And that\'s sort of where the personal computer revolution began. As the software improves and as it becomes less'
+
+[20:39] [scene:talk]
+VISUAL: 
+AUDIO: 'effort to improve the software, the rate of improvement will accelerate. And that\'s what\'s going on here. That\'s why I\'m excited. That\'s what is demonstrabably true with this setup.'
+
+[20:51] [scene:talk]
+VISUAL: 
+AUDIO: 'This is much more useful now than it was 6 months ago. And this is a large frontier model, a frontier class model. It used to be that the delay between the giant cloud model of insanity and what'
+
+[21:03] [scene:talk]
+VISUAL: 
+AUDIO: 'you could run locally was a year behind or two years behind and it\'s getting slowly smaller. 8 months, 6 months, four months. But also don\'t forget that even if it\'s not the smartest AI in the'
+
+[21:17] [scene:talk]
+VISUAL: 
+AUDIO: 'world, you could still actually do useful things with it, useful work, help you organize a project or help you learn or help you put something together or help you have a breakout clone that helps teach you JavaScript and HTML or'
+
+[21:30] [scene:talk]
+VISUAL: 
+AUDIO: 'at least gives you some nuts and bolts. You can go to a part of the code and you can ask the AI about this like, hey, this part of this file, what does this do? Why does it work this way? Is this really the best way to do this? And there\'s lots of stuff in here that is'
+
+[21:43] [scene:talk]
+VISUAL: 
+AUDIO: 'definitely not the best way to do this, but you can learn from it. And uh automating that and you get the recursive self-improvement. Any human being that wants to go in and learn and understand what\'s happening and'
+
+[21:55] [scene:talk]
+VISUAL: 
+AUDIO: 'understand the optimizations. The model also can explain yes, I did this thing in order to optimize this and get a better outcome. There it is. That\'s uh happening very fast now, very fast at a large scale.'
+
+[22:09] [scene:talk]
+VISUAL: 
+AUDIO: 'and that is benefiting the small and offline scale. If not for the sheer demand, this would be available now for reasonable prices. The other point I want to drive home here is that this as a tool to do things, not code, not'
+
+[22:23] [scene:talk]
+VISUAL: 
+AUDIO: 'creation, to just follow the steps, run the skill, help with debugging, help with whatever it happens to be. This is super cheap, Chewy laptop.'
+
+[22:35] [scene:talk]
+VISUAL: 
+AUDIO: 'It did not have working Linux support for the audio. But you hear that. This is kernel 7.1. And I knew that'
+
+[22:49] [scene:talk]
+VISUAL: 
+AUDIO: 'Colonel 7.2 had support for this. So, it was really just a matter of backporting it from 7.2 to 7.1. I knew the structures hadn\'t changed all that much in colonel 7.1. Colonel 6 had a bunch of changes. But once I\'ve got the patch,'
+
+[23:01] [scene:talk]
+VISUAL: 
+AUDIO: 'it\'s like, oh, no, no, AI, you know, whatever AI. But once I get the patch, then it is let\'s do some testing on different distros, different kernels, different parameters. Put together a'
+
+[23:14] [scene:talk]
+VISUAL: 
+AUDIO: 'couple skill files, tell the the model what I want to accomplish, and boom, our dual Spark setup can run through and test a bunch of different kernel configurations on this hardware. Things that I would have'
+
+[23:28] [scene:talk]
+VISUAL: 
+AUDIO: 'to do manually normally that is annoying and tedious and kind of a waste of time. the model can do 75 to 95% of that work without me having I mean yes I know'
+
+[23:40] [scene:talk]
+VISUAL: 
+AUDIO: 'there are things like anible and like Tinkerbell I can boot off of the network and we can automate it to the nth degree and there are arguments for doing that in kind of a durable fashion but this is a little bit more open-ended of a task. I don\'t really necessarily want to code'
+
+[23:52] [scene:talk]
+VISUAL: 
+AUDIO: 'that to the nth degree as a an assistant for carrying out this kind of testing as long as you can record and evaluate the results. Boom. That is insanely powerful. If you had told me six months ago this kind of thing was possible with'
+
+[24:04] [scene:talk]
+VISUAL: 
+AUDIO: 'a setup like this, I I wouldn\'t have thought it possible. But all of the nonAI software around this has made this possible. So that a relatively uncomplicated module can handle this.'
+
+[24:16] [scene:talk]
+VISUAL: 
+AUDIO: 'And that works really well with the DeepCo 731, but it also works really well with the Quinn models. I\'ve been using the 27B dense as well as the eight the 35 billion parameter version of Quinn 3.6. And all of these models work'
+
+[24:28] [scene:talk]
+VISUAL: 
+AUDIO: 'really well for these kinds of use the tool, run the skill, do the thing. And that\'s why I think these, you know, companies that are selling us $25'
+
+[24:41] [scene:talk]
+VISUAL: 
+AUDIO: 'per million tokens, you know, the the cost here, if you even with a couple of RTX 6000s, you know, that setup can can produce uh just it\'s about 20 25 minutes for a million tokens. If that has 100%'
+
+[24:56] [scene:talk]
+VISUAL: 
+AUDIO: 'utilization, that machine\'s going to pay for itself in a matter of weeks, not months, not years, at at least at $25 a token. And so you could do $125 per million tokens. And 12.5 dollars per'
+
+[25:09] [scene:talk]
+VISUAL: 
+AUDIO: 'million tokens. Okay, that\'s like the batch cost for Opus 4.8, but this is close to as good as Opus 4.8. If you look at the model card, that\'s'
+
+[25:21] [scene:ui]
+VISUAL: A document or code review interface is displayed, showing "KDE audio device labels - fixed & documented" and a list of tasks.
+AUDIO: 'mind-blowing. And that also uh that should be good for the return of costs of things to normaly I think. Now remember when I was doing the security auditing and the security setup we\'re'
+
+[25:33] [scene:talk]
+VISUAL: 
+AUDIO: 'testing things like our ROG stricks BE 18000. This is a pretty solid Wi-Fi 7 wireless access point. There\'s a whole bunch of content on that. Well, I have a bunch of scripts and work that I\'ve done. It\'s like here are the steps that'
+
+[25:45] [scene:talk]
+VISUAL: 
+AUDIO: 'we can go through and audit it. If you remember from the analysis, the Netgear Nighthawk had some pretty severe security issues, including you could go to a special URL. You could do a special thing, special packet really, and'
+
+[25:57] [scene:talk]
+VISUAL: 
+AUDIO: 'activate uh an SSH section. So, like you could turn on an SSH service and remote into the router sort of surreptitiously, hard-coded password, that kind of thing. Now, I was doing that, I was doing the testing with a much simpler, smaller'
+
+[26:10] [scene:talk]
+VISUAL: 
+AUDIO: 'model. We were using the Quen model to help with that. And I had, you know, it was not an open-ended task like go hack the router. It\'s nothing. It doesn\'t work like that. It\'s like here\'s the steps, here\'s the skills, here\'s the'
+
+[26:22] [scene:talk]
+VISUAL: 
+AUDIO: 'stuff that you run through, here are the things to look for, look for anomalies, flag the anomalies for me, help me look through the logs, look through the data. That\'s what it\'s really good at. Well, now it\'s like I\'ve unlocked a whole another layer of functionality there'
+
+[26:34] [scene:talk]
+VISUAL: 
+AUDIO: 'because we\'re moving up from a a usable 27 billion parameter model to a usable almost 300 billion parameter model at uh you know at speed on this platform. And'
+
+[26:46] [scene:talk]
+VISUAL: 
+AUDIO: 'so that\'s just a software upgrade on the existing hardware that\'s here. And now it\'s able to carry out those kinds of tasks even a little bit more efficiently or help me refine the scripts or help me'
+
+[26:59] [scene:talk]
+VISUAL: 
+AUDIO: 'put together the nonAI tools that make it more possible to do that or make it more efficient to do that. And so that\'s why I\'m excited because I wasn\'t expecting that much of a leap in software generation to work on the'
+
+[27:12] [scene:talk]
+VISUAL: 
+AUDIO: 'hardware like it like it\'s doing. Like it\'s it\'s genuinely it\'s shocking how much things have improved since the launch of DJX Spark. And to be clear, this benefits not just DGX Spark, the whole ecosystem. Basically, if you have'
+
+[27:24] [scene:talk]
+VISUAL: 
+AUDIO: 'anything that will run AI, you benefit from these updates and upgrades that are going on with the software stack. More and smarter models, newer models, newer models that are able to run on lesser hardware are outperforming giant models'
+
+[27:36] [scene:talk]
+VISUAL: 
+AUDIO: 'from just 6 months ago. That\'s the exciting part. Unless you\'re Mark Zuckerberg or Daario Emodi or Sam Alman, it\'s exciting for you and me. And it\'s exciting toward the future of having'
+
+[27:49] [scene:talk]
+VISUAL: 
+AUDIO: 'some pretty smart local AI. I mean, there\'s probably always going to be super intelligent cloud AI that you may need to solve a particular problem, but the days of $25 for a million tokens, [laughter] this ain\'t it. So, a little'
+
+[28:02] [scene:talk]
+VISUAL: 
+AUDIO: 'bit of an addendum here. Since I shot the video talking to one of our forum members, three, who has a lot of expertise in this or is a rando on a slightly different track, I don\'t know. This is our quad RTX Pro'
+
+[28:16] [scene:talk]
+VISUAL: 
+AUDIO: '6000 system. SM120 is the math kernel that this uses. And math is math, right? No, that\'s the rabbit hole that I\'ve gone down. And this really should be a whole separate video, but there are'
+
+[28:28] [scene:talk]
+VISUAL: 
+AUDIO: 'writeups on the forum if you want to look at that. And I\' I\'ve learned so much. I mean, I knew that math wasn\'t math, but I hadn\'t learned it in a way that uh is experiential, I guess, because there\'s there\'s theory and then'
+
+[28:42] [scene:talk]
+VISUAL: 
+AUDIO: 'there\'s reality. And theory and reality are um uh very often different things, as a lot of people will tell you. But SM120, it\'s like, oh, we\'re doing BF-16. It\'s BF16 to BF16. No, there it it turns'
+
+[28:55] [scene:talk]
+VISUAL: 
+AUDIO: 'out that the way that the math kernels are implemented does not guarantee things like the floatingoint operations go in the same order because you know like floatingoint addition the order of'
+
+[29:09] [scene:ui]
+VISUAL: A YouTube video titled "GH200: The Super-Server the US Government Doesn't Want You To Have! ft. Supermicro ARS-111GL" from Level1Techs is playing.
+AUDIO: 'operands matter because the lower bits may get lost depending on which order things happen in. Uh and that\'s just the magic of floating point arithmetic. And so that\'s kind of some of the things that are happening now. That\'s that\'s'
+
+[29:23] [scene:talk]
+VISUAL: 
+AUDIO: 'also like if you go deep enough down this rabbit hole, that\'s also why some people are saying that we\'re there\'s hints of recursive self-improvement here because you have a working math kernel and you use that to recursively test'
+
+[29:36] [scene:talk]
+VISUAL: 
+AUDIO: 'things like, oh, here\'s the SM120 version. Now, the Blackwell should be the latest and greatest thing, right? No, it turns out so remember the system that I borrowed from Super Micro, the'
+
+[29:49] [scene:talk]
+VISUAL: 
+AUDIO: 'GH200, I pressed it into service to help test this as well. And so this Super Micro GH200 is an absolute beast. And you know, Hopper generation stuff is generally more available because, you'
+
+[30:02] [scene:talk]
+VISUAL: 
+AUDIO: 'know, Blackwell, Blackwell, Blackwell. But the uh performance characteristics and the math kernel like the validation stuff is a lot better on the uh like the GH200 on the hopper generation than'
+
+[30:14] [scene:talk]
+VISUAL: 
+AUDIO: 'SM120 Blackwell which is different than the Blackwell that\'s in like a GB300 or GB200. Those are entirely different math kernels. So whenever I\'ve gotten access'
+
+[30:28] [scene:talk]
+VISUAL: 
+AUDIO: 'to a DGX spark system, the kernels there are also going to be different. And so there\'s a forum thread on that. uh threes put together a visualizer and it\'s it makes it really clear what\'s happening because as you step through'
+
+[30:43] [scene:talk]
+VISUAL: 
+AUDIO: 'it\'s like okay we\'re going to run we could run BF-16 but we could run BF16 where the only variable is the math kernel and when you get a few thousand tokens deep token that\'s being predicted will vary a'
+
+[30:55] [scene:talk]
+VISUAL: 
+AUDIO: 'little bit depending on your hardware and this has big implications for home lab people as well because these retroconverted 3090s and 4090s or you\'re running you know like a like a Q4 quant and exactly what way does it uh lose its'
+
+[31:08] [scene:talk]
+VISUAL: 
+AUDIO: 'coherence? Well, yeah, the visualizer will help you with that. So, what\'s a real world example of how a defect like this will manifest? Well, remember we\'re not really using'
+
+[31:21] [scene:talk]
+VISUAL: 
+AUDIO: 'chat bots here. I mean, the chatbot aspect of it is not interesting. We\'re using harnesses like Turnstone and in Thre\'s example, he\'s using the LLM to assist with the Cisco configuration. And a single bit flip here can result in the'
+
+[31:35] [scene:talk]
+VISUAL: 
+AUDIO: 'model picking the wrong interface to operate on. But remember, there\'s multiple models running in parallel here for comparison. Like you wouldn\'t do this like this isn\'t good for performance or anything else. This is just to understand the differences of'
+
+[31:48] [scene:talk]
+VISUAL: 
+AUDIO: 'what\'s going on with the math and how the math is executing. Now this this bit flip could happen with all parameters being equal just running on different hardware because of how the math kernels'
+
+[32:00] [scene:talk]
+VISUAL: 
+AUDIO: 'are implemented. But the reality is that things like NCCL and VLM version and the hardware and like KV cache and whether or not you\'ve quantized your KV cache, a lot of factors like that contribute to'
+
+[32:12] [scene:talk]
+VISUAL: 
+AUDIO: 'those kind of defects. And that\'s why I say this is uh this is probably something for another video. This is where I should go next. So, as mind-blowing as this is, I would also caution you that things are moving insanely fast. I love being able to run'
+
+[32:25] [scene:talk]
+VISUAL: 
+AUDIO: 'AI offline, which is why I was doing videos about that before the price crunch and everything else. But now might not be the time to buy hardware to run it offline unless you have like you need it for your job or you\'re doing'
+
+[32:37] [scene:talk]
+VISUAL: 
+AUDIO: 'commercial work or something like that because almost certainly I mean this is technically like first generation hardware but the Dell Proax GB10s running this are incredibly impressive. So if you have a commercial use for it,'
+
+[32:50] [scene:talk]
+VISUAL: 
+AUDIO: 'this is what you can expect. And this is miles ahead of what you could expect when these devices first launched. And some of that is the model, but there are other models other than DeepSeek. There'
+
+[33:03] [scene:talk]
+VISUAL: 
+AUDIO: 'are uh many many many NVFP4 models. Uh Nvidia has their fully open and now okay for commercial use Neotron models. The Neotron models are astonishing and they are directly from Nvidia and they\'re'
+
+[33:17] [scene:talk]
+VISUAL: 
+AUDIO: 'open and you can use them. You can incorporate them into commercial stuff and they move really quickly. uh if you want to add vision and document processing and retrieval augmented generation stuff, this model doesn\'t'
+
+[33:29] [scene:talk]
+VISUAL: 
+AUDIO: 'really do stuff with with vision and and comprehension for that. But if you use a harness like Hermes or Turnstone, you can add Neotron Omni. Neotron Omni is very very good at image processing and'
+
+[33:42] [scene:talk]
+VISUAL: 
+AUDIO: 'that sort of stuff and you can combine its powers with this in one cohesive unit. And you can actually do that on dual sparks. Now, you might have to give up a little bit of that million context'
+
+[33:54] [scene:talk]
+VISUAL: 
+AUDIO: 'token window, but you can do it and it\'ll run and it\'ll and it\'s it\'s pretty good without spending, you know, $50,000 to $75,000 to $120,000 and on up. You know, if it\'s'
+
+[34:07] [scene:talk]
+VISUAL: 
+AUDIO: 'like, oh, we\'ll just keep adding sparks. Might I suggest looking at the RTX Pro 6000 or DJX Station? It\'s probably a better better choice. Uh if you have'
+
+[34:20] [scene:talk]
+VISUAL: 
+AUDIO: 'this hardware or you\'re experimenting on this hardware or you have questions or any one of a number of other things, level one text form good resource for this sort of stuff. Come hang out, ask'
+
+[34:33] [scene:talk]
+VISUAL: 
+AUDIO: 'questions. Uh but don\'t feel like you\'re missing out because of the macroeconomic conditions and everything being you know uh completely on fire. You can like open router. You can just get a cloud account at like Open Router, not Enthropic or'
+
+[34:45] [scene:talk]
+VISUAL: 
+AUDIO: 'OpenAI, and have your stuff routed somewhere. If you\'re just using it for learning and you don\'t care about what you\'re uploading to the cloud, it\'s not going to be personal information or documents or anything like that, then'
+
+[34:57] [scene:talk]
+VISUAL: 
+AUDIO: 'Open Router is pretty affordable. I mean, you know, you you spend $20 a month, you can get intelligence as good as or better than this because these models are also really inexpensive to run on cloud systems. And so for what'
+
+[35:11] [scene:talk]
+VISUAL: 
+AUDIO: 'DeepSk like for what you would pay, let\'s say Claude Opus 4.6, this is probably a model that is as good as Opus 4.6 was. And this is an order of magnitude less cost as well. And that is'
+
+[35:25] [scene:talk]
+VISUAL: 
+AUDIO: 'a huge thing that is probably also going to have macroeconomic implications. But that\'s enough rambling for this one. I\'m one of those level one. This is this is a fun project and you can live vicariously through the work that I\'m I'
+
+[35:38] [scene:talk]
+VISUAL: 
+AUDIO: 'and others are doing. come to the forum. But the faster the race to the bottom this is, the more uh widely distributed this hardware will become. And that\'s really exciting because I I worry I worry about policy and I worry about'
+
+[35:52] [scene:talk]
+VISUAL: 
+AUDIO: 'restrictions on software, but once the genie\'s out of the bottle and the genie out of the bottle in a widespread kind of a way, I think that this kind of thing benefits us all because you can run it locally. You can see the recipe.'
+
+[36:04] [scene:talk]
+VISUAL: 
+AUDIO: 'You can see how it\'s put together. You can use it for really interesting things. All right, I\'m signing out and I\'ll see you in the'
