@@ -1,0 +1,232 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: New Local AI Engine Everyone Will Be Using in 2027 ? (FreeToken)
+channel: @octopusinc_
+duration: 11:47
+source: https://www.youtube.com/watch?v=Mlo16hrA5wQ
+upload_date: 20260822
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'one graphics card, one desk, and a model with 753 billion parameters running on it. There is no cluster behind it, and no rented node in somebody\'s data center. One workstation card serving all of it. 15 tokens a second in the team\'s'
+
+[00:12] [scene:talk]
+VISUAL: 
+AUDIO: 'own measurements. Slow enough that you notice, fast enough that you would sit and watch it work. The same software puts a 35 billion model on an 8 GB laptop at 39 tokens a second. That paper went up on the archive 5 days ago. The'
+
+[00:26] [scene:talk]
+VISUAL: 
+AUDIO: 'code behind it had gone public 6 days earlier. 11 names are on it. Ion Stoka, Mate, Zaharia, Sanghan, people whose earlier work you already use. Stoka co-wrote the paper behind VLLM, the'
+
+[00:39] [scene:talk]
+VISUAL: 
+AUDIO: 'engine underneath a great deal of the inference you pay for. So this is not a weekend project. The crowd who built the cloud serving stack just turned around and aimed it at your desk. The engine is called free token. Apache licensed 11'
+
+[00:52] [scene:talk]
+VISUAL: 
+AUDIO: 'days old in public written by two contributors. What it has to beat is Llama.cpp gorgi gurgenoff\'s engine three and a half years old and what you run today. Free token wins the benchmark and it'
+
+[01:05] [scene:talk]
+VISUAL: 
+AUDIO: 'wins it clearly and the benchmark is not the thing it had to beat. That gap is the whole video. Start with the part that sounds impossible because that part is the clever bit. 753 billion parameters do not fit in 96 GB of card'
+
+[01:18] [scene:talk]
+VISUAL: 
+AUDIO: 'memory. That is not a near miss. Even quantized down to 4 bits, the weights on disc come to 433 GB. You are off by a factor of 4 and a half before you start. They fit because of how the model is'
+
+[01:32] [scene:talk]
+VISUAL: 
+AUDIO: 'built. It is a mixture of experts and the word doing the work in that phrase is mixture. Instead of one enormous feed forward layer, each layer holds hundreds of small ones and a router picks a handful per token. Deepseek\'s V4 flash'
+
+[01:44] [scene:talk]
+VISUAL: 
+AUDIO: 'has 256 of them in each of its 43 layers. I did not take that from a blog post. It is in the model\'s own configuration file, which anyone can open in about 10 seconds. For any single'
+
+[01:56] [scene:talk]
+VISUAL: 
+AUDIO: 'token, six of those 256 fire, six. The other 25 sit there doing nothing. And then the next token arrives and the router picks six again, possibly a completely different six. So of 284'
+
+[02:09] [scene:talk]
+VISUAL: 
+AUDIO: 'billion parameters, roughly 13 billion do the work for any given token. Under 5% of the model is awake at once. That is why a desktop is in this conversation at all. But sparse compute is not sparse'
+
+[02:21] [scene:talk]
+VISUAL: 
+AUDIO: 'memory. All 284 billion parameters still have to exist somewhere you can reach in a couple of milliseconds because you cannot know which six the next token wants. So they live in your system memory and the card holds whichever ones'
+
+[02:34] [scene:talk]
+VISUAL: 
+AUDIO: 'it can. Every time a token routes to an expert that is not already on the card, that expert has to cross the bus or be computed where it sits. That crossing is the entire game. Every design decision'
+
+[02:46] [scene:talk]
+VISUAL: 
+AUDIO: 'in either engine is a different answer to one question. What do you do in the microcond after a token asks for an expert you do not have? Llama.cpp has an answer and it has had one for a long'
+
+[02:58] [scene:talk]
+VISUAL: 
+AUDIO: 'time. You can tell it to keep the expert weights on the processor instead of the card and it will run them there rather than shipping them back and forth. The flag is minus n minus cpu minus and the documentation for it is one line long'
+
+[03:12] [scene:talk]
+VISUAL: 
+AUDIO: 'which is unusual because that one line is also the entire strategy. Keep the mixture of experts weights of the first end layers on the processor. The first end layers that phrasing does all the work here and it is the easiest thing in'
+
+[03:24] [scene:talk]
+VISUAL: 
+AUDIO: 'the sentence to skim past. It is a split by layer number and you pick the number before the model has seen a single token. You pick it, the split is fixed and it stays fixed for the entire run, which would be fine if routing were'
+
+[03:38] [scene:talk]
+VISUAL: 
+AUDIO: 'fixed. Routing is not fixed. Routing changes token by token and the model decides it at runtime long after you picked your number. A split by layer index cannot see any of that. It is not a bad heristic. It is a fast,'
+
+[03:50] [scene:talk]
+VISUAL: 
+AUDIO: 'predictable, sensible heristic. It is simply blind to the one signal that decides everything. Free Tokens paper measures what that blindness costs and it measures it the fair way by replaying identical routing traces through all'
+
+[04:03] [scene:talk]
+VISUAL: 
+AUDIO: 'three engines placement policies at the same cache size. Same traces, same memory, different policy at the memory of 5090 can spare. Free tokens cache misses 16% of expert reads. The static'
+
+[04:15] [scene:talk]
+VISUAL: 
+AUDIO: 'split misses 62. That is a 46 point gap. Near enough four times the miss rate. And a miss is not a rounding error. A miss is the bus every single time. Which raises the question I want you holding'
+
+[04:29] [scene:talk]
+VISUAL: 
+AUDIO: 'for the rest of this. If the fix is that legible, why has llama.cpp not simply done it? A clever mechanism that does not show up in the numbers is just a nice paragraph. This one shows up. Then we come back to that question. On a 5090'
+
+[04:42] [scene:talk]
+VISUAL: 
+AUDIO: 'serving Quen 35B, the paper reports 77 to 83 tokens a second. That is between 1.8 8 and 2.3 times the strongest engine it tested against depending on the workload. On Deepseek V4 Flash, 22 to 25'
+
+[04:55] [scene:talk]
+VISUAL: 
+AUDIO: 'tokens a second, 1.5 to 1.9 times. And on the workstation card running GLM, 5.2, 14.9 tokens a second against llama.cpps'
+
+[05:08] [scene:talk]
+VISUAL: 
+AUDIO: '7.3. The one I keep coming back to is the laptop. 8 GB of card memory, a half width bus, 39.3 tokens a second, which the paper puts at 92% of what a desktop 4090 manages. That is the machine most'
+
+[05:22] [scene:talk]
+VISUAL: 
+AUDIO: 'people actually own. Now, the caveat, and I would rather say it plainly than bury it in a corner of the frame. Every one of those numbers was produced by the people who wrote the engine. That is normal for a systems paper. It is still'
+
+[05:34] [scene:talk]
+VISUAL: 
+AUDIO: 'not independent. To their credit, they did the rigorous version. Every engine served bit identical weights which is the step most comparisons skip without saying so and it is the difference between a benchmark and an'
+
+[05:46] [scene:talk]
+VISUAL: 
+AUDIO: 'advertisement. But on the day I wrote this, I could not find a single third party benchmark of free token anywhere. And the result I would make a decision on is the tail, not throughput. Not how fast it goes when it goes well, but how slow it gets when it goes badly. Free'
+
+[05:59] [scene:talk]
+VISUAL: 
+AUDIO: 'Token\'s worst single turn stays under 44 seconds. The paper reports llama.cpp CPP crossing 232 seconds somewhere. Alama 179 and K Transformers 946'
+
+[06:11] [scene:talk]
+VISUAL: 
+AUDIO: 'almost 16 minutes on one turn. And the papers point about that is sharper than a speed comparison. Open claw ships a 2minute idle watchdog. A turn that takes 232 seconds does not run slowly. It gets'
+
+[06:25] [scene:talk]
+VISUAL: 
+AUDIO: 'killed. Tail latency is not a latency statistic there. It is whether the software works. So the case is strong, which is exactly when you should look harder. And there is a crack in how it'
+
+[06:37] [scene:talk]
+VISUAL: 
+AUDIO: 'is presented worth seeing because it is the kind of thing that decides whether you trust the rest of the chart. Across its headline figure, the paper draws a dashed line marking what a cloud coding agent actually delivers measured from real production traces. 33 tokens a'
+
+[06:50] [scene:talk]
+VISUAL: 
+AUDIO: 'second against bars at 77 and above that reads like a route. So I went and read the trace paper it cites. 33.9 is its normalized decode speed. And by that paper\'s own definition, the figure'
+
+[07:03] [scene:talk]
+VISUAL: 
+AUDIO: 'includes time to first token and all the reasoning in between. It is an endto-end number. The same paper\'s pure decode median for OpenAI\'s codeex is 61.3. That is the figure that belongs next to a'
+
+[07:16] [scene:talk]
+VISUAL: 
+AUDIO: 'decode throughput bar because that is the same measurement. Put those two side by side and the like forl like ratio is about 1.3, not 2.4. Still a win, a much smaller one than the chart implies. Both figures sit in the source correctly'
+
+[07:30] [scene:talk]
+VISUAL: 
+AUDIO: 'cited. So, this is not deception, but a comparison is only as good as its denominator. And this one changes the size of the claim by nearly half. None of which would matter much if you could just install it tonight. So, look at'
+
+[07:42] [scene:talk]
+VISUAL: 
+AUDIO: 'what the repository looked like in the 24 hours after that launch post went up. Eight issues. Please support older hardware 1080 and 2080 series. Support for dual GPU Docker support. GGUF support. The engine install fails on'
+
+[07:56] [scene:talk]
+VISUAL: 
+AUDIO: 'Windows. and the one with the most comments on it. Feature request, Mac OS, Apple silicon support. Those eight requests are things llama.cpp already ships 17 hardware backends, Apple\'s metal, AMD, Vulcan, even a Snapdragon'
+
+[08:10] [scene:talk]
+VISUAL: 
+AUDIO: 'phone. Quantization from 1 and a half bits up to 8. Apple silicon described in its own readme as a first class citizen. Free token\'s own packaging says the same thing with no spin at all. Its published'
+
+[08:22] [scene:talk]
+VISUAL: 
+AUDIO: 'classifiers read development status beta environment Nvidia CUDA operating system Pix Linux. That is the supported world written by the people who built it. There is no Mac build, not a slow one,'
+
+[08:35] [scene:talk]
+VISUAL: 
+AUDIO: 'not a fallback. The download pages own platform list offers Windows, Abuntu, Arch, and an app image and hands a Mac visitor nothing at all. Two contributors, 30 commits of public history, 408 stars on the day I checked'
+
+[08:48] [scene:talk]
+VISUAL: 
+AUDIO: 'against llama.cpp\'s CPP\'s 446 contributors and 25,000 downloads of one nightly build in its first day, which leaves the argument that will get'
+
+[09:00] [scene:talk]
+VISUAL: 
+AUDIO: 'repeated most, the one in the launch post itself. Run your coding agent against a Frontier model for $0. So, I priced it from a real trace rather than a VIP. Researchers released 4,200 real coding agent sessions. The median step'
+
+[09:14] [scene:talk]
+VISUAL: 
+AUDIO: 'reads about 119,000 tokens of context and writes 214. They measured what that step cost them. 11 cents on Anthropics Claude or OpenAI\'s codeex. The same step on DeepS\'s own published price list for'
+
+[09:28] [scene:talk]
+VISUAL: 
+AUDIO: 'the exact model free token demonstrates costs somewhere between a tenth of a cent and 5 cents depending on caching and the hour of the day. The model you would buy a graphics card to run at home is also the cheapest thing on the menu.'
+
+[09:41] [scene:talk]
+VISUAL: 
+AUDIO: 'And the card is not free. One tracked 5090 listing sat above $4,000 all through July against a $2,000 list price. $4,000 buys about 500 median agent sessions at Claude prices and'
+
+[09:55] [scene:talk]
+VISUAL: 
+AUDIO: 'somewhere between a,000 and 40,000 at Deep Seeks prices. The invoice was never the argument, which means the argument has to be something else. And it is. Nothing you type leaves the room. Nothing rate limits you at the worst'
+
+[10:07] [scene:talk]
+VISUAL: 
+AUDIO: 'possible moment. Your model does not get deprecated out from under you 6 months into a project built on it. None of that shows up on an invoice and all of it is real. So, which one runs local AI better? Llama.cpp'
+
+[10:20] [scene:talk]
+VISUAL: 
+AUDIO: 'for most people watching this and it is not close because the first thing an engine has to do is run on the hardware you already own. And that is the one benchmark nobody plots. But free token wins outright for one specific person.'
+
+[10:33] [scene:talk]
+VISUAL: 
+AUDIO: 'And if that is you, it is not a marginal win. You own a recent Nvidia card. You have plenty of system memory. You run mixture of experts models. and you point a coding agent at them all day. For that person, 44 seconds against 232 is not a'
+
+[10:46] [scene:talk]
+VISUAL: 
+AUDIO: 'percentage on a chart. It is the difference between an agent that finishes the task and one that gets killed halfway through. And I would install it today at twice the setup pain for that alone. The title says everyone'
+
+[10:58] [scene:talk]
+VISUAL: 
+AUDIO: 'will be using this in 2027. I do not think that is how this ends. So here is the version I will be judged on. By the end of 2027, llama.cpp CPP will have merged a routing aware expert cache and'
+
+[11:12] [scene:talk]
+VISUAL: 
+AUDIO: 'a measured split between the bus and the processor. Free Tokens ideas running inside the engine you already have. I lose that bet if free tooken ships Apple silicon and passes 10,000 stars first. Their own paper names the precedent.'
+
+[11:25] [scene:talk]
+VISUAL: 
+AUDIO: 'Fiddler proposed treating a missed expert as work rather than data. K Transformers made that fast. Neither is a household name and both of those ideas are table stakes today. Which is the part I keep turning over. If the winning'
+
+[11:37] [scene:talk]
+VISUAL: 
+AUDIO: 'move in open source is always to fold the good new idea back into the old engine, what is left for anyone who writes a new one?'

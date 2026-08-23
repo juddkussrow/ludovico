@@ -1,0 +1,248 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Run Ornith 1.5 35B Locally: 155 Tokens/Sec on Your GPU?
+channel: @octopusinc_
+duration: 12:35
+source: https://www.youtube.com/watch?v=iOLF9T6aoV8
+upload_date: 20260820
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:ui]
+VISUAL: Comparison of RTX 4090 (24GB VRAM) and RTX 3060 (12GB VRAM, 16GB System RAM) specifications.
+AUDIO: 'One forum title, four numbers, a 35 billion parameter coding model running on a consumer graphics card. 155 tokens a second on an RTX 4090. That is the first number and it is the loudest. Then a second machine entirely, an RTX 3060.'
+
+[00:13] [scene:talk]
+VISUAL: 
+AUDIO: '12 GB of video memory, 16 of system RAM, 170,000 tokens of context. 53 tokens a second coming out, 900 going in. That 3060 launched in February of 2021 at'
+
+[00:26] [scene:ui]
+VISUAL: Text overlay "WHAT THE MACHINE ALLOCATES TOKENS OF CONTEXT" vs "WHAT THE MODEL ACTUALLY USES" with "TRUE" and "MISLEADING" labels.
+AUDIO: '$329. So the claim on the table is that a 5-year-old budget card runs a frontier-shaped coding agent at speed. Every one of those four numbers can be checked against the file, not argued'
+
+[00:38] [scene:talk]
+VISUAL: 
+AUDIO: 'about on a forum, checked with arithmetic. One of them holds up almost exactly. One is off by a whole card class. One has no post behind it that a search can find. And the fourth, the 170,000, is true and misleading at the same time,'
+
+[00:52] [scene:talk]
+VISUAL: 
+AUDIO: 'which is the worst of the four because the context window a machine can hold and the context window a model can actually use are two different numbers. The screenshots going round this week measure the first one. So let us do the'
+
+[01:04] [scene:ui]
+VISUAL: Diagram showing a loop of "PROPOSE", "SCAFFOLD", and "ROLLOUT" with text "The loop writes its own homework".
+AUDIO: 'arithmetic properly. Ornith 1.5 went up on Hugging Face on the 18th of August and the team announced it the next day. Three models, a 9B dense, a 35B mixture of experts, and a 397B.'
+
+[01:17] [scene:talk]
+VISUAL: 
+AUDIO: 'All MIT licensed, so the weights are yours and there is no bill per token. The training pitch is the unusual part. According to the team\'s own write-up, the model was not fed a fixed pile of human-written tasks. It proposes'
+
+[01:30] [scene:talk]
+VISUAL: 
+AUDIO: 'progressively harder tasks itself, generates a scaffold for each one, instructions, tools, decomposition, and then produces a solution rollout. Reward from that rollout flows back through all three stages. Better policy, harder'
+
+[01:43] [scene:ui]
+VISUAL: Text "Underneath all of it, a fine-tune" with "Qwen 3.5 x GEMMA 4" and "Qwen3_5MoeForConditionalGeneration" in a config.json.
+AUDIO: 'tasks, better scaffolds, better training signal, round and round. It is also the kind of paragraph that makes a forum immediately suspicious. One commenter said the write-up deserved a Nobel Prize in vague, but wildly grandiose promises,'
+
+[01:56] [scene:talk]
+VISUAL: 
+AUDIO: 'which is unkind and not entirely wrong. Underneath all of it, this is a fine-tune. The config file names the architecture as Qwen 3.5 mixture of experts, and the community read is that'
+
+[02:08] [scene:talk]
+VISUAL: 
+AUDIO: '1.5 is post-trained on Qwen 3.6. Ornith puts that base model in its own comparison table, which answers the usual complaint about fine-tuners hiding what they started from. The 35B is where this story lives, 36 billion parameters'
+
+[02:21] [scene:ui]
+VISUAL: Table showing coding benchmark scores for Ornith-1.5-35B-A3B and other models on Terminal-Bench 2.1 and SWE-Bench.
+AUDIO: 'in total. 256 experts, eight of them fire on any given token, which works out to roughly 3 billion parameters doing actual work. That ratio is the entire trick. You pay for 36'
+
+[02:33] [scene:talk]
+VISUAL: 
+AUDIO: 'billion in storage, and you pay for 3 billion in speed. Hold on to that, because in about 4 minutes it becomes the whole answer. The scores the vendor publishes are strong. 67.8 on Terminal Bench 2.1 under one harness, 68.5 under'
+
+[02:47] [scene:talk]
+VISUAL: 
+AUDIO: 'another, 79 on SWE-Bench verified, 59.6 on S WeBench Pro. Against the base model it started from, those are wide margins, not rounding. And credit where it is'
+
+[03:00] [scene:ui]
+VISUAL: Screenshot of the Terminal-Bench public leaderboard with various models and their scores.
+AUDIO: 'due, because this is rarer than it should be. The footnotes under that table name the harness for each row, the temperature, the context window, and the fact that every result is the mean of five runs. The SWE-Bench rows even state'
+
+[03:12] [scene:talk]
+VISUAL: 
+AUDIO: 'that Git history was stripped and network access disabled, so the model could not look up its own answers. It is still the vendor\'s own measurement. Terminal Bench keeps a public leaderboard of agent and model cares,'
+
+[03:24] [scene:talk]
+VISUAL: 
+AUDIO: 'and as of the 20th of August, Ornith does not appear on it. Not 1.5, not 1.0, not one row, which brings us to the part you can settle for yourself, file sizes. The official GGML repository lists the'
+
+[03:37] [scene:ui]
+VISUAL: Bar chart showing 21.71 GB of weights on an RTX 4090 24 GB VRAM, leaving ~2.3 GB spare.
+AUDIO: 'Q4KM build of the 35B at 21.71 GB. Full precision is 71. And for a sense of what you have escaped, the 397B at the same quantization is 240 GB an'
+
+[03:50] [scene:talk]
+VISUAL: 
+AUDIO: 'hour. TX4090 has 24 GB of video memory, so the weights land with about 2.3 to spare, which is comfortable until you remember you have not loaded any contacts yet.'
+
+[04:03] [scene:talk]
+VISUAL: 
+AUDIO: 'The 3060 has 12. The weights do not fit. Roughly 10 GB of this model has to live in ordinary system memory and get read back across the bus while it works. Now put 170,000 tokens of context on top of'
+
+[04:15] [scene:ui]
+VISUAL: Mathematical breakdown of KV cache cost per token: "2 x 256 x 2 x 2B FP16".
+AUDIO: 'that and the whole arrangement should collapse. It does not and the reason is sitting in the config file in plain text, 40 layers and the layer list says only every fourth one is full attention.'
+
+[04:27] [scene:talk]
+VISUAL: 
+AUDIO: '10 layers keep a cache that grows as you talk. The other 30 are linear attention and their state does not grow with the conversation at all. Two key value heads, head dimension 256 keys and values, 2 bytes each at half precision.'
+
+[04:41] [scene:talk]
+VISUAL: 
+AUDIO: 'Multiply it out across the 10 layers that care and one token of context costs about 20 KB. So 170,000 tokens is about 3 and 1/2 GB. Quantize that cache to 8 bits, which'
+
+[04:53] [scene:ui]
+VISUAL: Bar chart showing total memory usage (weights + KV cache) of 23.45 GB on an RTX 4090 24 GB.
+AUDIO: 'most local setups do and it is under two. Had all 40 layers kept a cache, the same window would have cost close to 14 GB, more than a 3060 has in total, four times the memory for the same'
+
+[05:05] [scene:talk]
+VISUAL: 
+AUDIO: 'conversation. That one architectural choice is the difference between a video and a joke, so the memory claim survives. 21.7 of weights plus under two of cache is 23 and 1/2 and a 4090 holds 24. It fits.'
+
+[05:17] [scene:talk]
+VISUAL: 
+AUDIO: 'Barely and only if you quantize the cache. Leave it at half precision and you are over the card by more than a gigabyte. Speed is harder because speed needs somebody who owns the card and is'
+
+[05:30] [scene:ui]
+VISUAL: Bar chart illustrating prompt processing (650-700 t/s) and sustained generation speed.
+AUDIO: 'willing to publish what they ran. On the 20th of August, somebody did. A full run of Ornith 1.5 on an RTX 4070 Ti, 12 GB of video memory, the same class as the'
+
+[05:42] [scene:talk]
+VISUAL: 
+AUDIO: 'card in our title, 32 GB of system RAM, Q4KM llama.cpp, build number and flags all in the post. Prompt processing, 650 to 700 tokens a second.'
+
+[05:56] [scene:talk]
+VISUAL: 
+AUDIO: 'Generation sustained, 50 to 56. In an isolated bench with no context to carry, 65. 50 to 56. The title said 53. On a different card, in a different house, on'
+
+[06:08] [scene:ui]
+VISUAL: Text "And the hundred and fifty-five on a 4090?" with "0 t/s" and "NO SOURCE FOUND".
+AUDIO: 'a different day, the headline decode number lands inside a measured range. That is the one claim in this title that survives contact with somebody else\'s hardware. Prefill is where it comes apart. 900 tokens a second on a 3060 against 650'
+
+[06:21] [scene:talk]
+VISUAL: 
+AUDIO: 'measured on a 4070 Ti, a card with 40% more memory bandwidth. The slower card is supposed to be faster by a third, and there is no configuration in the post that explains'
+
+[06:33] [scene:talk]
+VISUAL: 
+AUDIO: 'it. And the 155 on a 4090? A 4090 moves 1,000 GB a second, and 3 billion active parameters at this quantization is under 2 GB of reading per token. Divide one by the other, and'
+
+[06:45] [scene:ui]
+VISUAL: Comparison of "--ctx-size" values: 170,000 (title) vs 32,768 (run).
+AUDIO: 'the physical ceiling is somewhere near 550. So, 155 is entirely plausible. It simply has no post behind it. Plausible and sourced are not the same word, and a title is not a citation, which raises'
+
+[06:59] [scene:talk]
+VISUAL: 
+AUDIO: 'the question the whole genre keeps skipping. If the number is right, what exactly did it measure? Go back to that 4070 Ti run for one detail. The context is set to 32,000 tokens, not 170,000. 32. And the author says so himself in'
+
+[07:14] [scene:talk]
+VISUAL: 
+AUDIO: 'the post. The context is admittedly tight. Same model, same quantization, same 12 GB as the card in our title, and he allocated less than a fifth of the window the title quotes. He is not being'
+
+[07:27] [scene:ui]
+VISUAL: Diagram showing a "CONTEXT WINDOW" filling up with "FILES 1-5" and steps "ANALYSE > FIX > REWRITE > NEXT".
+AUDIO: 'modest. He has used it. For why? Open the model\'s own community tab. On the 29th of June, a user opened a thread on the 1.0 repository with a title that is the entire problem in one line.'
+
+[07:40] [scene:talk]
+VISUAL: 
+AUDIO: 'Reasoning degradation and tool calling failures at 70 to 80,000 context tokens. His method is the part worth stealing. 20 files, 200,000 tokens in total, loaded one at a time, analyze, fix,'
+
+[07:52] [scene:talk]
+VISUAL: 
+AUDIO: 'rewrite, move to the next. Gradually filling the window instead of declaring it in a launch flag and calling that a benchmark. Up to 65,000 tokens, fully functional, everything works. 70 to'
+
+[08:04] [scene:ui]
+VISUAL: Bar charts comparing "20-FILE REFACTOR" and "OPENCODE WORKLOAD" showing context usage up to 70-80K.
+AUDIO: '80,000, noticeable degradation. 90 and above, completely broken, looping, rechecking the same file it had already finished, describing tool calls instead of making them. A second user running an'
+
+[08:18] [scene:talk]
+VISUAL: 
+AUDIO: 'entirely different job on entirely different work hit the same threshold independently. Though he added that it does eventually reason its way back out, which the first thread had not seen. Two strangers, one number, no'
+
+[08:30] [scene:talk]
+VISUAL: 
+AUDIO: 'coordination. That is Ornith 1.0 tested in June and pinning it on 1.5 without a rerun would be unfair. What is fair is the shape it exposes because that shape is not about Ornith'
+
+[08:43] [scene:ui]
+VISUAL: Text "None of which makes this a bad" with "155 THE MODEL t/s" and "THE NUMBERS AROUND IT".
+AUDIO: 'at all. A context window is a memory allocation. The number in your launch flag says how much cash you are willing to buy. It says precisely nothing about whether the model can still think at the far end of it. The throughput post'
+
+[08:55] [scene:talk]
+VISUAL: 
+AUDIO: 'measured the allocation. That is benchmark worship wearing a hobbyist clothes and it is why the same readers are disappointed by the same model month after month. None of which makes this a bad model. It makes the'
+
+[09:07] [scene:talk]
+VISUAL: 
+AUDIO: 'numbers around it soft and those are different problems with different fixes. So here is the ledger, both directions. A commenter lined Ornith 35B up against Qwen 3.8 27B on every benchmark where both had published figures. Terminal'
+
+[09:22] [scene:ui]
+VISUAL: Bar chart comparing Ornith-1.5-35B and Qwen 3.8-27B across various benchmarks like TERMINAL-BENCH 2.1 and DEEPSWE.
+AUDIO: 'bench, 73 against 68.5, Qwen. Deep SWE, 42 against 22, Qwen, badly. Humanities last exam without tools, 30.8 against 25.6, Qwen again. GPQA diamond ties.'
+
+[09:35] [scene:talk]
+VISUAL: 
+AUDIO: 'Ornith takes NL2 repo. Three losses, one tie, one win, and the man who compiled it flagged that several Quinn cells have no official figure at'
+
+[09:47] [scene:talk]
+VISUAL: 
+AUDIO: 'all. And deep SWE is the road to squint at. Ornith 1.0 scored a flat zero. 1.5 scores 22. One commenter\'s read was blunt. That jump is the public deep SOEE data set'
+
+[09:59] [scene:ui]
+VISUAL: Grid of 12 cards, with 7 marked with an 'X', indicating refusal at stock settings.
+AUDIO: 'arriving in the training mix, not new debugging ability. That is an accusation, not a finding, but a jump from exactly zero is the right place to make it. Then there is the setting that announcement thread skipped. An'
+
+[10:13] [scene:talk]
+VISUAL: 
+AUDIO: 'independent tester ran 1.0 against 1.5 on his own task battery. 12 tests, five runs each. At stock settings, the new model refused eight of the 12. Its package default temperature is not 0.8.'
+
+[10:25] [scene:talk]
+VISUAL: 
+AUDIO: 'The model card itself recommends not 0.6. Retune to the older model sampling parameters, the same weights went 12 for 12 and faster with less memory overhead. The upgrade is real. It is just not a'
+
+[10:38] [scene:ui]
+VISUAL: Graph comparing AD-Q4_K-IQ4_XS (20.13 GB, 92.71%) and Q4_K_M (21.17 GB, 91.01%) quantization quality.
+AUDIO: 'drop-in, and the launch day screenshots left that out. One last thing for anyone about to download this. A team that quantizes models for a living measured each build against full precision. The stock Q4KM holds 91% top'
+
+[10:50] [scene:talk]
+VISUAL: 
+AUDIO: 'one agreement. Their alternative is a gigabyte smaller and holds 92.7. Of the six builds they measured, the file most people will grab is the worst quality per byte on the shelf. So, where'
+
+[11:03] [scene:talk]
+VISUAL: 
+AUDIO: 'does that leave the card on your desk? Ornith 1.5 35B is the model to put on a 12 to 24 gigabyte card this week, and I would take it over waiting for something tidier to arrive. Three receipts. 21.7'
+
+[11:15] [scene:ui]
+VISUAL: Three bullet points summarizing the license (MIT), measured tokens/second (50-56 tok/s on 12 GB), and weights + cache at 170K (23.45 GB).
+AUDIO: 'gigabytes of weights plus under two of cash at 170,000 tokens. A memory shape that would have cost four times as much on a conventional layout. 50 to 56 tokens a second measured by a stranger'
+
+[11:29] [scene:talk]
+VISUAL: 
+AUDIO: 'on 12 GB config published in M. It so it cannot be taken back metered or read on the way past. The concession is real and it is not small. At stock settings it refuses. QN beats it on three of the'
+
+[11:42] [scene:talk]
+VISUAL: 
+AUDIO: 'five benchmarks where both show up. Its own predecessor came apart between 70 and 90,000 tokens of filled context and no rerun on 1.5 has been published. If your work really lives at 100,000'
+
+[11:55] [scene:ui]
+VISUAL: Text "The villain here is Ornith" with "155 tok/s" and "170K CONTEXT SETTING" over a terminal-like UI showing "AN ALLOCATION".
+AUDIO: 'tokens, this is not your model yet. Take the 9B at 5.6 GB. But the villain in this story is not Ornith. It is the screenshot. A tokens per second figure printed beside a context size measures how much memory somebody was willing to'
+
+[12:09] [scene:talk]
+VISUAL: 
+AUDIO: 'buy and the local scene reads it as a measure of what a model can do. We built a culture of receipts and then agreed not to read them. Which leaves one question worth sitting with. If a 5-year-old $300 card can hold something this capable, hardware stopped being the'
+
+[12:23] [scene:talk]
+VISUAL: 
+AUDIO: 'interesting constraint a while ago. So who publishes the first local benchmark that reports its number as the context fills and gets worse on camera?'

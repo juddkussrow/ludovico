@@ -1,0 +1,188 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: This Free Harness Just Broke GitHub (+150K Stars)
+channel: @octopusinc_
+duration: 09:10
+source: https://www.youtube.com/watch?v=aaMM2HQqKKs
+upload_date: 20260818
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'Deep Seek have just open-sourced their own harness to rival Claude code, and it already has over 150,000 stars on GitHub in just a few days because of its unique underlying architecture that makes everything a plugin. The tools, the'
+
+[00:12] [scene:talk]
+VISUAL: 
+AUDIO: 'sandbox, the agent loop, all swappable and replaceable while the program is still running. It also has super detailed traces of each run that other harnesses tend to hide. But, is this enough to move people away from Claude\'s'
+
+[00:24] [scene:talk]
+VISUAL: 
+AUDIO: 'code? Let\'s find out. And guys, if you like these type of videos, be sure to like this video and hit subscribe. It really does help. Back in January 25, Deep Seek shook up'
+
+[00:36] [scene:talk]
+VISUAL: 
+AUDIO: 'the whole AI world with the release of R1, an opening reasoning model that\'s been trained on self-taught reinforcement learning, essentially meaning the model trained itself. This'
+
+[00:48] [scene:talk]
+VISUAL: 
+AUDIO: 'drastically cut the cost of training, and it was borrowed by other labs within months to do the same thing. But, it looks like Deep Seek may have done it again with the release of their own'
+
+[01:00] [scene:talk]
+VISUAL: 
+AUDIO: 'harness. By building the whole thing on Cordis, their own plugin framework that makes every module replaceable and loadable at runtime without restarting. But, there are some drawbacks to this'
+
+[01:12] [scene:talk]
+VISUAL: 
+AUDIO: 'technique, which I\'ll go through later on in the video. But for now, let\'s take a look at the actual harness. So, this is the Deep Seek harness running locally on my machine. Now, the team have heavily focused on the web UI. So, if'
+
+[01:24] [scene:talk]
+VISUAL: 
+AUDIO: 'you\'re an open code, a pie, or closed code user like me, this may put you off, but there\'s a very good reason for this. Let me show you. So, I\'ll go through all this a bit later on, but let\'s give it a basic prompt of how many files are in'
+
+[01:37] [scene:talk]
+VISUAL: 
+AUDIO: 'this directory. Now, instead of staying in the chat view, I\'m going to click trajectory, and we can see every single thing that\'s happening in the background. So, first, the initial system prompt, which contains all of'
+
+[01:49] [scene:talk]
+VISUAL: 
+AUDIO: 'this text, and also the tools that are available for the harness to use. So, the write tool, web search, sub agents, and so on. Then, this is the user prompt, so what I typed in. And then, we have two context values here, which is'
+
+[02:02] [scene:talk]
+VISUAL: 
+AUDIO: 'the value that gets given to the model by the harness itself. So, here it\'s giving the model some permissions information, and here it\'s giving the harness some information about some skills that already exist on this'
+
+[02:14] [scene:talk]
+VISUAL: 
+AUDIO: 'machine. Now, with that information, the model has done some thinking and has decided to use two tools. Then, it\'s executed both of these tools before finally responding with the number of'
+
+[02:26] [scene:talk]
+VISUAL: 
+AUDIO: 'files inside this directory and the number of files inside the subdirectories. Now, this already is insanely useful when it comes to debugging agents, but we can take it a step further by either clicking here to'
+
+[02:38] [scene:talk]
+VISUAL: 
+AUDIO: 'download the session or running the export slash command, which will do the same thing, allowing us to view the full session in JSON. Now, of course, the chat menu also allows us to view some of'
+
+[02:50] [scene:talk]
+VISUAL: 
+AUDIO: 'the things that were done, like both of the context injections, the reasoning, and the tools that were used. But, there\'s also a section over here that contains a lot of useful information, like the number of turns, the average'
+
+[03:03] [scene:talk]
+VISUAL: 
+AUDIO: 'reasoning time of the model, the time to first token, and so on. And we can even click here to see how much context has been used from the system prompt, the tools, and some of our messages. Now, if we turn our focus to the input box, and'
+
+[03:16] [scene:talk]
+VISUAL: 
+AUDIO: 'actually let me create a brand new chat to do that, we can see over here that we can change the model, and I\'ve already connected my open router as well as my open AI and my Anthropic keys. We can change the permissions over here, as'
+
+[03:30] [scene:talk]
+VISUAL: 
+AUDIO: 'well as the mode over here, which I\'ll talk about later. And most of that was done in the settings menu by going to models and choosing a provider. Now, if you already have an API key in your shell for a specific provider, then the harness will use that, meaning we don\'t'
+
+[03:43] [scene:talk]
+VISUAL: 
+AUDIO: 'have to type in keys over here. Also, if you use something local like Ollama, you can add that by adding a custom provider. Now, let\'s move on to plugins. But, before we do that, focusing on the plugin configuration section here, down'
+
+[03:56] [scene:talk]
+VISUAL: 
+AUDIO: 'in web search, right now you need to have a Deep Seek API key in order to search the web. And because I haven\'t added one, I\'ll get this error whenever I need to do a search. And let\'s say, for some reason, you don\'t want to use'
+
+[04:08] [scene:talk]
+VISUAL: 
+AUDIO: 'Deep Seek for web searching. Well, there are many ways you can get around that, and one of those is to use the official Firecrol plugin for the Deep Seek Harness, which you can install with the following command if you\'re running Deep Seek with MPX. Keep a note of the'
+
+[04:21] [scene:talk]
+VISUAL: 
+AUDIO: 'version number because this may change by the time you\'re watching this video, and you may have to install PNPM if you don\'t have it already because that\'s how the Harness installs plugins in the background. You also might have to open up this file and add these two lines to'
+
+[04:34] [scene:talk]
+VISUAL: 
+AUDIO: 'expose a generic web search tool since it\'s off by default. And then you\'ll have to restart the Harness. Hang on, didn\'t I say earlier that plugins can be loaded and unloaded dynamically at runtime without needing to restart the'
+
+[04:48] [scene:talk]
+VISUAL: 
+AUDIO: 'Harness? Well, that is true for dynamic plugins, but for these type of plugins, the presets are frozen at session start, so you\'ll have to restart in order to enable them. So, we can click here to view the list of plugins. And if we do a'
+
+[05:01] [scene:talk]
+VISUAL: 
+AUDIO: 'search for Firecrol, we should see the plugins we just installed over here. It now uses Firecrol to do web searches, and we can click here to see everything it searched for, which all works without a Deep Seek API key. Now, if we go back'
+
+[05:14] [scene:talk]
+VISUAL: 
+AUDIO: 'to the plugin list, we can see all the plugins the Harness uses from this menu. You can\'t enable or disable certain plugins. You\'d have to do that in the configuration file, but these aren\'t dynamic plugins. In order to trigger'
+
+[05:26] [scene:talk]
+VISUAL: 
+AUDIO: 'those, we\'ll have to create a new session, making sure we have a workspace selected, and then we\'ll change from standard mode to creator mode. Now, there\'s also PTC mode, which is great for coding, and minimum mode for less'
+
+[05:38] [scene:talk]
+VISUAL: 
+AUDIO: 'complex tasks, but creator mode is what\'s used to create the plugins. So, I could say something like change the Harness theme to be black and orange instead of black and blue. And now that it\'s finished, I can approve the plugin'
+
+[05:50] [scene:talk]
+VISUAL: 
+AUDIO: 'over here, which means the theme has changed. Now, it doesn\'t look that obvious, so I\'ll create a new session for you to see it. And now if I toggle the plugin off or on, you can see it\'s changed the theme to be black and a bit of orange. Now, this is what\'s known as'
+
+[06:03] [scene:talk]
+VISUAL: 
+AUDIO: 'a dynamic plugin because I created it in the model and I can toggle it on or off without needing to restart the whole harness. However, if I do restart the harness, then that plugin disappears.'
+
+[06:15] [scene:talk]
+VISUAL: 
+AUDIO: 'The only way to keep it is to tell the model to add it to the configuration file. So, this archive link here is actually a plugin I created. It doesn\'t exist inside your harness. And this persists after restarts because I asked'
+
+[06:27] [scene:talk]
+VISUAL: 
+AUDIO: 'the model to save it in the configuration file. It created its own to-do list to do so and enabled this archive chats plugin over here. A few final things about this harness before we wrap up. It has some common slash'
+
+[06:39] [scene:talk]
+VISUAL: 
+AUDIO: 'commands you\'d expect like go and compact. You can also activate skills with slash commands and skills like other harnesses can be installed through for cells skills.sh and will be picked up here. You can also create your own'
+
+[06:51] [scene:talk]
+VISUAL: 
+AUDIO: 'custom agent presets using creator mode. And this harness has a feature I haven\'t seen from many other harnesses, which is the ability to change the enter busy behavior. So, it can either be a queue, which means when a model is processing a'
+
+[07:05] [scene:talk]
+VISUAL: 
+AUDIO: 'response, you can type in another prompt and it will wait for that previous prompt to finish before working on it. Or it could be a steer, which means it will interrupt the previous prompt to listen to your current prompt. But you can toggle this behavior while prompting'
+
+[07:18] [scene:talk]
+VISUAL: 
+AUDIO: 'by pressing command or control enter instead of pressing just enter. So, that\'s a quick overview of the Deep Sea harness and how to use it with Fire Cru. I would say it\'s a great start, but there are a few things about the harness'
+
+[07:31] [scene:talk]
+VISUAL: 
+AUDIO: 'that need to be improved. For example, the whole process of installing plugins is a bit fiddly. There\'s no mention of tool discoverability like the tool search tool from Claude, but the biggest'
+
+[07:43] [scene:talk]
+VISUAL: 
+AUDIO: 'problem of all is that Codium so the whole plugin architecture is solving a problem I\'d say never existed. I\'ve used a many harnesses in the past and the issue has never been the way plugins are'
+
+[07:56] [scene:talk]
+VISUAL: 
+AUDIO: 'loaded and unloaded. I actually don\'t mind restarting my harness whenever I install a new plugin or whenever I need to do an update. And yes, it is pretty cool that technically the AI agent can'
+
+[08:08] [scene:talk]
+VISUAL: 
+AUDIO: 'completely reform and reshape the harness to its own needs, but at what cost? Because right now the plugin architecture is completely different from sandboxing, meaning every plugin gets full shell access and access to'
+
+[08:20] [scene:talk]
+VISUAL: 
+AUDIO: 'your file system. Now considering plugins are found and installed via GitHub, this means that you can install a rogue plugin that can find access to your API keys. Now the job of a harness is to prevent prompt injection, not make'
+
+[08:34] [scene:talk]
+VISUAL: 
+AUDIO: 'it easy for people to do so. But then again, this harness is in developer preview and I\'m sure the team are working to fix all of these issues. But until then, I\'ll stick to using'
+
+[08:46] [scene:talk]
+VISUAL: 
+AUDIO: 'Firecrawl inside of Claude\'s code. Speaking of Firecrawl, if you do choose to sign up, you can use this code to get 500 extra credits. And if you want to see how I use Grok Bot and the Firecrawl plugin to build a flight booking app'
+
+[09:00] [scene:talk]
+VISUAL: 
+AUDIO: 'using the Next.js design system, then check out the next video.'
