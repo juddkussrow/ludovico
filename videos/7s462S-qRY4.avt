@@ -1,0 +1,152 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: This Tool Runs Real AWS Services on Your Laptop For Free (Floci)
+channel: @octopusinc_
+duration: 07:38
+source: https://www.youtube.com/watch?v=7s462S-qRY4
+upload_date: 20260823
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'So, if you\'ve ever worked with AWS, sometimes you just don\'t want to do experiments on production servers. So, in those cases, you would use something like LocalStack, which helps you validate your code before sending it to the cloud. But, a few weeks ago,'
+
+[00:12] [scene:talk]
+VISUAL: 
+AUDIO: 'LocalStack quietly changed their free tier, which is a bummer because a lot of developers genuinely liked it and used it to get around testing things in the real AWS environment. But, luckily, now there is a new open-source project out'
+
+[00:25] [scene:talk]
+VISUAL: 
+AUDIO: 'there, which is called Floki, which is completely free, and it basically does the same things as LocalStack, and it might even genuinely hold up better, to be honest. So, in this video, we\'ll take a look at Floki, see how it works, and'
+
+[00:38] [scene:talk]
+VISUAL: 
+AUDIO: 'do a little test of our own. Let\'s dig into it. Quick contacts, if you\'ve never touched LocalStack before, the way it works is'
+
+[00:50] [scene:talk]
+VISUAL: 
+AUDIO: 'that you basically run a fake version of AWS services in Docker on your own machine, so you can develop and test services like S3, DynamoDB, Lambda, whatever, and you don\'t need an AWS'
+
+[01:03] [scene:talk]
+VISUAL: 
+AUDIO: 'account in the loop at all. But, Floki\'s specific claim is that it does all of this without gating half of the useful services behind a paid tier, the way LocalStack does right now. Now, looking at their benchmarks, they\'re stating'
+
+[01:17] [scene:talk]
+VISUAL: 
+AUDIO: 'some pretty bold claims here. 24 ms of startup time, just 13 MiB of idle memory, and just 19 MiB for the Docker image size. Now, if it really holds up to what they\'re claiming, then that is a'
+
+[01:30] [scene:talk]
+VISUAL: 
+AUDIO: 'genuinely big deal for anyone running this in CI because container setup time is real money when you\'re spinning these up hundreds of times a day. So, I ran a little benchmark script to verify these'
+
+[01:42] [scene:talk]
+VISUAL: 
+AUDIO: 'claims. So, judging by my numbers, neither of them hit their own readme numbers exactly. Floki took about 129 ms to start up instead of the claimed 24, and LocalStack took almost 7 seconds'
+
+[01:56] [scene:talk]
+VISUAL: 
+AUDIO: 'instead of their stated 3.3. So, both benchmarks were clearly measured on some sort of best-case setup. But, looking at the comparison itself, Floki is still starting up over 50 times faster than'
+
+[02:08] [scene:talk]
+VISUAL: 
+AUDIO: 'LocalStack, using about 20th of the memory, and the image is quarter of the size. So, even with all the marketing optimism included, the actual gap between these two is enormous, and it\'s'
+
+[02:20] [scene:talk]
+VISUAL: 
+AUDIO: 'in Floki\'s favor. So, they do indeed have really good numbers as they listed. Okay, so the numbers mostly check out, so that\'s awesome. But, now let\'s test it out with a real scenario. So, you can get started with Floki by just running'
+
+[02:33] [scene:talk]
+VISUAL: 
+AUDIO: 'the simple one-liner Docker command, and this will create a new AWS environment on your local machine. And now that we have it up, we can do most of the things you would normally do in an AWS CLI'
+
+[02:45] [scene:talk]
+VISUAL: 
+AUDIO: 'console. I can run AWS S3 MB, I can spin up a new S3 demo bucket, and I can also run AWS DynamoDB create table, and this will create a new demo table with'
+
+[02:59] [scene:talk]
+VISUAL: 
+AUDIO: 'DynamoDB. And then, just to double-check, if we run AWS DynamoDB list tables, there it is, our table that we just created. So, if you\'ve used LocalStack before, this is going to feel'
+
+[03:11] [scene:talk]
+VISUAL: 
+AUDIO: 'very similar. But, basic bucket creation on an empty DynamoDB table isn\'t really an interesting test case. The actual pitch Floki is making against LocalStack is that a bunch of their services aren\'t'
+
+[03:25] [scene:talk]
+VISUAL: 
+AUDIO: 'just shallow mocks, they\'re running the real thing in a container. So, to test it out end-to-end, I built a little image thumbnail generator project, and this is basically the kind of unified AWS pipeline you\'d actually build in a'
+
+[03:37] [scene:talk]
+VISUAL: 
+AUDIO: 'real project. You drop an image into an S3 bucket, that triggers a Lambda function, the Lambda resizes it, and writes the thumbnail to a second bucket, and logs the metadata, like dimensions,'
+
+[03:50] [scene:talk]
+VISUAL: 
+AUDIO: 'file size, timestamp, into DynamoDB. So, let\'s actually run this thing. I\'ve got two terminals open here. One is going to run Flokky Docker setup, and the other is going to be where I fire up all the'
+
+[04:03] [scene:talk]
+VISUAL: 
+AUDIO: 'execution commands. So, when you run Docker Compose up, Flokky pulls its image and starts right up. And over here, I\'m running a setup script that builds out the actual architecture. Nothing too fancy, just a classic file'
+
+[04:16] [scene:talk]
+VISUAL: 
+AUDIO: 'uploader pattern. It creates two S3 buckets, one for uploads and one for thumbnails, a DynamoDB table to hold the metadata, and it deploys a real Lambda function that\'s supposed to generate the'
+
+[04:28] [scene:talk]
+VISUAL: 
+AUDIO: 'thumbnails of our images. So, let\'s actually test it. So, I\'m uploading a photo of a dog here straight into that upload bucket. And this is the part I actually like. Flokky isn\'t faking the Lambda execution. If you watch the other'
+
+[04:40] [scene:talk]
+VISUAL: 
+AUDIO: 'terminal, it\'s pulling the real Lambda Python runtime image and spinning up an actual Docker container to run the function in, the same way Lambda would on AWS. Then, it runs it, and then it'
+
+[04:52] [scene:talk]
+VISUAL: 
+AUDIO: 'tears the container down right after. So, that is a proper emulation. So, the function resized the image, wrote the metadata record into DynamoDB. So, we can see original size, thumbnail size,'
+
+[05:04] [scene:talk]
+VISUAL: 
+AUDIO: 'dimensions, timestamp, and then it dropped the actual thumbnail into the second bucket. Now, Flokky also ships a web UI where you can browse everything you just spun up. So, right now, on the storage, you can see the three buckets'
+
+[05:18] [scene:talk]
+VISUAL: 
+AUDIO: 'that we created. And if we click into the thumbnails bucket, there\'s the file that Lambda actually generated, 3.7 kilobytes, timestamped, exactly like you\'d see in a real S3 console.'
+
+[05:31] [scene:talk]
+VISUAL: 
+AUDIO: 'Switching over to DynamoDB, and here\'s the metadata table with the one record we just wrote. Same JSON that we saw in the terminal, just fully visible here in the browser now. And on the serverless'
+
+[05:43] [scene:talk]
+VISUAL: 
+AUDIO: 'section, there\'s an actual Lambda function config, memory, timeout, the deployment package, plus a built-in way to invoke it directly from the browser with a custom JSON payload if you want to test it without touching the CLI at'
+
+[05:55] [scene:talk]
+VISUAL: 
+AUDIO: 'all. So, there you go. We have successfully emulated a full AWS stack locally on our machine. And if you\'re already on LocalStack and thinking about switching over to Flow Key, the'
+
+[06:07] [scene:talk]
+VISUAL: 
+AUDIO: 'migration is really straightforward. You just need to grab the Docker Compose file that was already pointed at your LocalStack setup, swap one line, and that\'s it. And if you\'re testing lambda functions specifically and you use test'
+
+[06:20] [scene:talk]
+VISUAL: 
+AUDIO: 'containers, Flow Key ships a module for that, too, so you can spin this whole thing up and tear it down inside an actual test suite instead of managing a separate container yourself. So, there'
+
+[06:32] [scene:talk]
+VISUAL: 
+AUDIO: 'you have it, folks. That is Flow Key in a nutshell. It really looks like a very promising alternative to LocalStack, and [music] I love that it is fully open source and free to use. But, in order'
+
+[06:44] [scene:talk]
+VISUAL: 
+AUDIO: 'for them to grow and maintain a good product, they do need some sponsorships. So, if you\'re genuinely interested in the project, consider donating to their cause. That\'s how we\'re all able to keep the open source community thriving. But,'
+
+[06:57] [scene:talk]
+VISUAL: 
+AUDIO: 'what do you folks think about Flow Key? Have you used it? What are your impressions? Do you see any downsides to Flow Key over LocalStack? Let us know in the comment section down below. And [music] folks, if you like these types'
+
+[07:10] [scene:talk]
+VISUAL: 
+AUDIO: 'of technical breakdowns, please let me know by smashing that like button underneath the video. And also, don\'t forget to subscribe to our channel. This has been Andras from Better Stack, and I will see you in the next videos. &gt;&gt; [music]'

@@ -1,0 +1,248 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: MiniMax H3 Face Swap & Body Swap in Comfy UI | Complete Workflow
+channel: @octopusinc_
+duration: 14:31
+source: https://www.youtube.com/watch?v=2IxKL3-Igh4
+upload_date: 20260823
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:01] [scene:talk]
+VISUAL: 
+AUDIO: 'In this video, we’ll be looking at the Face&nbsp; Swap and Body Swap workflows for the MiniMax&nbsp;&nbsp; H3 model. The Face Swap result looks good to&nbsp; me. Let’s quickly go through the workflow.&nbsp;&nbsp; Before we proceed, the custom node used here is&nbsp; from Able Jones. Click here to get the required&nbsp;&nbsp;'
+
+[00:24] [scene:talk]
+VISUAL: 
+AUDIO: 'custom nodes, and while you’re there, give&nbsp; the project a star. As we always do, just&nbsp;&nbsp; clone the project into the custom_nodes folder.&nbsp; You should also pay a visit to this contributor&nbsp;&nbsp; here. Some of you may already know him, since he&nbsp; has released multiple custom nodes in the past,&nbsp;&nbsp;'
+
+[00:39] [scene:ui]
+VISUAL: Detailed view of the ComfyUI workflow, showing nodes for reference image, Comfy UI Kitchen Attention, and LoRA.
+AUDIO: 'and they work really well. For the second&nbsp; workflow, the custom node used is from this&nbsp;&nbsp; repository. And it looks like the project has&nbsp; been updated again — for the third time since&nbsp;&nbsp;'
+
+[00:51] [scene:talk]
+VISUAL: 
+AUDIO: 'I started looking at the code four days ago. Alright, back to the workflow. In this section,&nbsp;&nbsp; the nodes and connections you see are pretty&nbsp; common for reference-to-video workflows.&nbsp;'
+
+[01:03] [scene:talk]
+VISUAL: 
+AUDIO: 'I have the model selected for reference.&nbsp; Next is the Comfy UI Kitchen Attention,&nbsp;&nbsp; and then I’m using the 8-step LoRA. You can&nbsp; also use the 4-step LoRA. I just wanted to&nbsp;&nbsp; check the difference in quality. Below is the condition node with the&nbsp;&nbsp;'
+
+[01:18] [scene:ui]
+VISUAL: Focus on the background removal model node and image composition.
+AUDIO: 'reference image of the girl, and the image is&nbsp; coming from the left section of the workflow.&nbsp; These images were generated using the Flux&nbsp; Klein workflow that I showed, and shared in&nbsp;&nbsp;'
+
+[01:30] [scene:talk]
+VISUAL: 
+AUDIO: 'one of my previous videos. The prompt used&nbsp; here is for generating a character sheet.. The image then goes through a background&nbsp; remover node. And this is a small model, used&nbsp;&nbsp;'
+
+[01:42] [scene:talk]
+VISUAL: 
+AUDIO: 'for background removal. I will add the download&nbsp; link later, place it inside the model\'s and then&nbsp;&nbsp; the "background_removal" folder. Both images are&nbsp; stitched together, which you can preview here.&nbsp;&nbsp; The conditioning then goes into the KSampler, and&nbsp; the output is decoded to get the final result. The&nbsp;&nbsp;'
+
+[02:00] [scene:ui]
+VISUAL: Nodes for loading video, setting duration, and VAEs.
+AUDIO: 'main difference here is the empty latent used for&nbsp; the video, which comes from the node group below.&nbsp; So, we have an LTX node that&nbsp; prepares the video latent by&nbsp;&nbsp;'
+
+[02:13] [scene:talk]
+VISUAL: 
+AUDIO: 'taking both the pixel frames and the audio. These three nodes are responsible for creating&nbsp;&nbsp; the video latent, while the three below are&nbsp; responsible for the audio latent. The audio comes&nbsp;&nbsp; from the left side of the workflow. This is where&nbsp; the original video is uploaded. The video is then&nbsp;&nbsp;'
+
+[02:28] [scene:talk]
+VISUAL: 
+AUDIO: 'resized using the Resize V2 node, and there’s some&nbsp; mathematical calculation happening inside this&nbsp;&nbsp; subgraph. So, that takes care of the audio. Above that, we have the video latent,&nbsp;&nbsp;'
+
+[02:41] [scene:talk]
+VISUAL: 
+AUDIO: 'which is the output from the Set Latent Noise&nbsp; Mask node. The pixel video is taken above,&nbsp;&nbsp; while the face mask is taken in the below node.&nbsp; This allows the diffusion process to work on the&nbsp;&nbsp;'
+
+[02:53] [scene:ui]
+VISUAL: Workflow showing the diffusion model, LoRA, and conditioning nodes.
+AUDIO: 'masked area while using the given image as the&nbsp; condition. You do need to give some guidance&nbsp;&nbsp; to the video generation by pointing to the&nbsp; reference image using the label “Picture 1”,&nbsp;&nbsp;'
+
+[03:05] [scene:talk]
+VISUAL: 
+AUDIO: 'just like I explained in my older video&nbsp; on the H3 model. Both the audio VAE and&nbsp;&nbsp; video VAE are placed below and connected to&nbsp; the conditioning node, as required. Then,&nbsp;&nbsp;'
+
+[03:17] [scene:talk]
+VISUAL: 
+AUDIO: 'in the latent section, where we encode&nbsp; the audio, video, and mask. Finally,&nbsp;&nbsp; at the decoding stage, to get the final video.&nbsp; And that’s pretty much how this workflow works. On the right, we saw the original video being&nbsp; resized, along with the math calculation happening&nbsp;&nbsp;'
+
+[03:33] [scene:ui]
+VISUAL: Latent processing nodes, including VAE encode and Set Latent Noise Mask.
+AUDIO: 'inside the node group. You can leave this as it&nbsp; is. The number of frames used by the conditioning&nbsp;&nbsp; node comes from here, and the width and height&nbsp; of the video are also provided here. These are&nbsp;&nbsp;'
+
+[03:46] [scene:talk]
+VISUAL: 
+AUDIO: 'required connections for the node to work.&nbsp; However, the empty latent output from this&nbsp;&nbsp; conditioning node is not actually being used.&nbsp; The empty latent used to generate the video&nbsp;&nbsp; comes from the node groups below. Now, let’s&nbsp; look at what happens to the original video and&nbsp;&nbsp;'
+
+[04:00] [scene:talk]
+VISUAL: 
+AUDIO: 'the nodes responsible for creating the mask. The video frames coming from above are used&nbsp;&nbsp; in two sections. This is the first one, and then&nbsp; the second one. Here, I’m using the SAM 3 model.&nbsp;&nbsp;'
+
+[04:12] [scene:ui]
+VISUAL: SAM 3 model in action, showing a segmented face with object ID and confidence.
+AUDIO: 'I’ve provided the link to the model below;&nbsp; place it inside the `checkpoints` folder. Next, we have the prompt used for segmentation.&nbsp; It’s a simple one-word prompt — **“Head”,** and&nbsp;&nbsp; it works. The tracking happens inside this&nbsp; node, and below, you can see the head being&nbsp;&nbsp;'
+
+[04:30] [scene:talk]
+VISUAL: 
+AUDIO: 'identified in every frame along with its object&nbsp; ID. These IDs correspond to the color assigned&nbsp;&nbsp; to each object detected in a frame. If the&nbsp; tracking breaks across multiple frames,&nbsp;&nbsp;'
+
+[04:42] [scene:talk]
+VISUAL: 
+AUDIO: 'a new color and ID are assigned to the detected&nbsp; object in the next frame. The smaller number&nbsp;&nbsp; shown below is the object’s detection&nbsp; confidence, displayed as a percentage.&nbsp;&nbsp; It’s only shown when the confidence is below&nbsp; 100 percent. The tracking data is then converted&nbsp;&nbsp;'
+
+[04:56] [scene:ui]
+VISUAL: Mask cleanup node parameters and their functions.
+AUDIO: 'into a normal Comfy UI mask, and after that,&nbsp; we have a cleanup node to clean up the mask. The SAM 3 model tracks a person but occasionally&nbsp; it may select a small patch of wall or background.&nbsp;&nbsp;'
+
+[05:09] [scene:talk]
+VISUAL: 
+AUDIO: 'This Cleanup node maintains the person stays&nbsp; selected, and removes the temporary false&nbsp;&nbsp; selections. So, it helps prevent the model from&nbsp; changing areas you never intended to. There are&nbsp;&nbsp; two methods to do this, first is the shrink_grow,&nbsp; this is a general choice. It removes tiny and thin&nbsp;&nbsp;'
+
+[05:24] [scene:talk]
+VISUAL: 
+AUDIO: 'noise, then restores the surviving object’s&nbsp; original shape. It works if you have some&nbsp;&nbsp; random spot or mark that appears around the&nbsp; subject. Another option is Components which&nbsp;&nbsp;'
+
+[05:36] [scene:talk]
+VISUAL: 
+AUDIO: 'remove blobs that are small and are detected and&nbsp; removed if found inconsistently in a few frames.&nbsp;&nbsp; This threshold, if you understand the mask, which&nbsp; is about brightness level. It works based on the&nbsp;&nbsp;'
+
+[05:48] [scene:ui]
+VISUAL: Subject Crop node settings, including `threshold`, `shrink`, `min_frames`, and `edge_grow`.
+AUDIO: 'same brightness level and decides what counts&nbsp; as part of the subject. The shrink works with&nbsp;&nbsp; unwanted details. Min_frames remove unwanted blobs&nbsp; unless it lasts for these many frames, it affects&nbsp;&nbsp; the video flicker. Edge_grow slightly expands the&nbsp; retained subject to protect soft mask edges, the&nbsp;&nbsp;'
+
+[06:07] [scene:talk]
+VISUAL: 
+AUDIO: 'value recommended is 4 but I had to increase it.&nbsp; I don’t think you need to go into details on these&nbsp;&nbsp; settings unless you are a developer, the default&nbsp; value works, and this is the only change I made. So, after cleanup, the subject area is cropped.&nbsp; This node crops the video frame around the masked&nbsp;&nbsp;'
+
+[06:25] [scene:ui]
+VISUAL: Explanation of the Subject Crop node's purpose and modes.
+AUDIO: 'subject, such as close-up of the person, and it&nbsp; keeps the crop stable from frame to frame. When&nbsp;&nbsp; processing the video in the k-sampler, the focus&nbsp; should be on the person instead of processing&nbsp;&nbsp;'
+
+[06:37] [scene:talk]
+VISUAL: 
+AUDIO: 'the entire frame. A smaller focused area can&nbsp; make results more consistent and can reduce&nbsp;&nbsp; the workload needed for the result, which&nbsp; is more efficient. It also helps avoiding&nbsp;&nbsp; the jumpy camera effect that happens when the&nbsp; mask moves a few pixels from frame to frame.&nbsp;'
+
+[06:53] [scene:talk]
+VISUAL: 
+AUDIO: 'There are three modes to crop : Combined&nbsp; does a fixed crop that covers everywhere&nbsp;&nbsp; the subject travels during the whole&nbsp; clip. It should give a stable camera&nbsp;&nbsp; framing if the subject does not travel too&nbsp; far. Next is tracked, it follows the subject,&nbsp;&nbsp;'
+
+[07:08] [scene:ui]
+VISUAL: Visual representation of `cropped_images` and `bboxes` outputs from the Subject Crop node.
+AUDIO: 'but moves the crop only when needed. It is like a&nbsp; general choice for a walking or moving person, it&nbsp;&nbsp; will maintain the subject in view. Zoomed follows&nbsp; both the subject’s position and apparent size. It&nbsp;&nbsp; can be useful when the subject is moving toward&nbsp; or away from the camera. It can feel more like&nbsp;&nbsp;'
+
+[07:24] [scene:talk]
+VISUAL: 
+AUDIO: 'an automatically controlled camera, so preview&nbsp; it for unwanted zoom movement. After cropping,&nbsp;&nbsp; the “b-boxes” and the “cropped_masks” from this&nbsp; node, can be used to place the processed result&nbsp;&nbsp; back to where it belongs, with a feathered edge. The other settings with noticeable effect are:&nbsp;&nbsp;'
+
+[07:40] [scene:talk]
+VISUAL: 
+AUDIO: 'Crop_scale, it is about how much space to leave&nbsp; around the subject. 1.0 is very tight; 1.5 gives&nbsp;&nbsp; a safer margin; larger value will show more&nbsp; background. Aspect_ratio locks the crop shape,&nbsp;&nbsp;'
+
+[07:53] [scene:ui]
+VISUAL: Discussion of `upscale_megapixels` and its impact on results and performance.
+AUDIO: 'such as 1.78 for 16:9 aspect ratio. Leave it at&nbsp; 0 to size the crop naturally, from the subject.&nbsp;&nbsp; Padding controls how strongly the node tries to&nbsp; keep a margin around the subject during tracked&nbsp;&nbsp;'
+
+[08:06] [scene:talk]
+VISUAL: 
+AUDIO: 'movement. Upscale_megapixels improves the&nbsp; result, and the effect is noticeable because&nbsp;&nbsp; it enlarges the cropped area and gives more&nbsp; pixels to work with, but it has a significant&nbsp;&nbsp; effect on generation time and memory usage. After making these changes, disable the k-sampler&nbsp;&nbsp;'
+
+[08:22] [scene:talk]
+VISUAL: 
+AUDIO: 'and other final nodes, to check the preview&nbsp; here. And this is just to preview the B-Box.&nbsp; So, after cropping the video mask, this&nbsp; node converts the mask into a smaller&nbsp;&nbsp;'
+
+[08:35] [scene:ui]
+VISUAL: Preview of the animation after cropping, showing the subject within a bounding box.
+AUDIO: 'representation. As we know, the diffusion&nbsp; model internally works on a compressed&nbsp;&nbsp; representation called the **latent space**.&nbsp; The conversion of a normal black-and-white&nbsp;&nbsp; mask is translated onto an internal grid so that&nbsp; the model can work only on the selected area.&nbsp;'
+
+[08:50] [scene:talk]
+VISUAL: 
+AUDIO: 'Actually it does more than what we can see&nbsp; from above, a normal mask may look correct in&nbsp;&nbsp; the preview, but it can shift slightly or even&nbsp; disappear in the first few frames. Sometimes,&nbsp;&nbsp;'
+
+[09:02] [scene:talk]
+VISUAL: 
+AUDIO: 'this can also affect nearby areas after Comfy UI&nbsp; resizes it for the Video VAE. This node keeps the&nbsp;&nbsp; mask aligned with the model’s actual editing&nbsp; grid. There’s also a note from the developer&nbsp;&nbsp;'
+
+[09:15] [scene:ui]
+VISUAL: Comparison of original and processed images, demonstrating face swap.
+AUDIO: 'about **`grow_spatial`**. This value controls&nbsp; the safety margin around the selected area&nbsp;&nbsp; before the conversion. Positive values enlarge&nbsp; the selected area, while negative values shrink&nbsp;&nbsp; it. **`grow_temporal`** works in a similar way,&nbsp; but in the time dimension. The important thing&nbsp;&nbsp;'
+
+[09:30] [scene:talk]
+VISUAL: 
+AUDIO: 'to understand is that these values do not&nbsp; improve the mask, it helps with accuracy.&nbsp; I think that is all in this workflow, the values&nbsp; you saw works best on my 5060 TI 16 gigabyte. You&nbsp;&nbsp; can increase the Upscale_megapixels for&nbsp; better results if you have a better GPU.&nbsp;'
+
+[09:48] [scene:talk]
+VISUAL: 
+AUDIO: 'This is the second workflow, and the custom node&nbsp; used here is from another repository we saw at&nbsp;&nbsp;'
+
+[10:06] [scene:ui]
+VISUAL: Second workflow for body swap, showing different custom nodes and model loading.
+AUDIO: 'the beginning. The character’s movement here&nbsp; was a bit challenging, but I got this result&nbsp;&nbsp; in a single attempt. The workflow is mostly the&nbsp; same as before: the model, followed by Attention,&nbsp;&nbsp; then the LoRA, which goes into the Guider&nbsp; node. The audio and video VAEs are on the left,&nbsp;&nbsp;'
+
+[10:26] [scene:talk]
+VISUAL: 
+AUDIO: 'and the conditioning node takes the image.&nbsp; Everything then goes into the samplers,&nbsp;&nbsp; but the sampler selected here is&nbsp; different, and this node as well. In the previous workflow, I talked about using&nbsp; the B-Box to place the cropped video back in&nbsp;&nbsp;'
+
+[10:45] [scene:ui]
+VISUAL: Latent processing for the second workflow, highlighting `grow_spatial` and `grow_temporal`.
+AUDIO: 'its original place. After the VAE decode, the&nbsp; cropped result is placed back using the B-Box,&nbsp;&nbsp; so the final video visually retains the&nbsp; same background objects as the original&nbsp;&nbsp; video. The logic for providing the mask latent&nbsp; is also the same, but this one node replaces&nbsp;&nbsp;'
+
+[11:00] [scene:talk]
+VISUAL: 
+AUDIO: 'all the nodes we saw here. Just exclude&nbsp; this one. And this "mask option" node is&nbsp;&nbsp; working similar to this node we saw earlier. The Subject Crop node is the same as before,&nbsp;&nbsp;'
+
+[11:14] [scene:talk]
+VISUAL: 
+AUDIO: 'and the SAM 3 workflow is also the&nbsp; same. And that was the second workflow. To select and replace the full body, change&nbsp; the prompt for the SAM model to something&nbsp;&nbsp; like “full body”, and the body should be&nbsp; selected. The result looks pretty good.&nbsp;&nbsp;'
+
+[11:28] [scene:ui]
+VISUAL: Video loading parameters, including `frame_load_cap` and `skip_first_frames`.
+AUDIO: 'Next, let’s quickly look at how we can&nbsp; select one person from a crowd. First,&nbsp;&nbsp;'
+
+[11:41] [scene:talk]
+VISUAL: 
+AUDIO: 'I’ll find a good frame where the character is&nbsp; clearly visible. We can do this by skipping a&nbsp;&nbsp; few frames from the beginning and putting a cap&nbsp; on the total number of frames, such as 97. Testing&nbsp;&nbsp; with 97 frames will be much faster. So, this test&nbsp; will use the first 97 frames after skipping the&nbsp;&nbsp;'
+
+[11:56] [scene:talk]
+VISUAL: 
+AUDIO: 'first 24 frames of the video. After making a few&nbsp; adjustments because of the character’s dialogue,&nbsp;&nbsp; I’ll use this subgraph to get the first frame&nbsp; of the video, which is previewed here. The&nbsp;&nbsp;'
+
+[12:09] [scene:ui]
+VISUAL: Preview of a video frame from "The Wolf of Wall Street" for crowd selection.
+AUDIO: 'subgraph expects a video connection, so I’ll&nbsp; make a new connection for the image frames,&nbsp;&nbsp; and now this should work. Disable these processing&nbsp; nodes and run the workflow to get the first frame. So, this is the first frame,&nbsp; this example has become way&nbsp;&nbsp;'
+
+[12:38] [scene:talk]
+VISUAL: 
+AUDIO: 'tougher than it was already due&nbsp; to the number of people standing. The black region of this head will be a problem. Right now, the value for max object is zero,&nbsp;&nbsp;'
+
+[12:51] [scene:talk]
+VISUAL: 
+AUDIO: 'which means it will select all&nbsp; the bodies found in one frame. I will change the value and make it 1, then&nbsp; connect the mask created for the target subject.&nbsp; The detection_threshold, when the value is higher,&nbsp; means stricter detection and fewer false objects;&nbsp;&nbsp;'
+
+[13:05] [scene:talk]
+VISUAL: 
+AUDIO: 'lower values will find more objects but may&nbsp; include mistakes. The Detect_interval with&nbsp;&nbsp; the value 1 means check for objects&nbsp; in every frame. A value of 5 means,&nbsp;&nbsp;'
+
+[13:17] [scene:talk]
+VISUAL: 
+AUDIO: 'check every fifth frame, which&nbsp; also makes the process faster. The SAM model worked, but I am not sure the H3&nbsp; model will generate the person from the reference.&nbsp;'
+
+[13:30] [scene:talk]
+VISUAL: 
+AUDIO: 'You should use a better quality&nbsp; image then the one I am using,&nbsp; I will let the prompt be as it is for your&nbsp; reference and write a different one above.'
+
+[13:42] [scene:ui]
+VISUAL: Result of SAM 3 tracking, showing a person selected in blue.
+AUDIO: 'Enable the processing nodes and run the workflow.&nbsp; The result was a failure, the old man&nbsp; appeared after the first second of the video.&nbsp; This is the second attempt, the number of frames&nbsp; skipped are 9, the actor is now more visible,&nbsp;&nbsp;'
+
+[13:57] [scene:talk]
+VISUAL: 
+AUDIO: 'but still it is not an easy selection. The mask is connected, and the SAM 3 workflow,&nbsp;&nbsp; which worked as always. And this is the result. So, that was it in this video, I hope the&nbsp; video was interesting and informative,&nbsp;&nbsp;'
+
+[14:21] [scene:talk]
+VISUAL: 
+AUDIO: 'thanks for watching and I&nbsp; wish you an excellent day.'
