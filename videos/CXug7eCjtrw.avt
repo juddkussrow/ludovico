@@ -1,0 +1,476 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Build A Krea 2 Character LoRA From Scratch Using ComfyUI
+channel: @octopusinc_
+duration: 24:22
+source: https://www.youtube.com/watch?v=CXug7eCjtrw
+upload_date: 20260822
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'What\'s up everyone? Laura Techch here with another video for you guys and today we are covering data set creation and Laura training for Craya 2. I\'ve been seeing a ton of you guys in the Discord struggling to get a clean Craya 2 character Laura. A lot of you asking the same questions and so today I\'m'
+
+[00:12] [scene:talk]
+VISUAL: 
+AUDIO: 'showing you exactly how I\'ve been successfully training Craya 2 Lura start to finish. That covers creating a data set from a reference photo, how I caption the images in the training toolkit, and the actual training'
+
+[00:24] [scene:talk]
+VISUAL: 
+AUDIO: 'configuration. By the end of this video, you\'ll have the workflow to go from one reference photo to a train character, Laura, that actually holds up across different poses and angles and has great character consistency across all of your generations. And all the resources that'
+
+[00:38] [scene:talk]
+VISUAL: 
+AUDIO: 'I use in this video are going to be able to be found for free in my Discord. All the workflows that I use in Comfy UI will be in the free workflow section. And on screen right now, you will see the steps that we are going to go through today. So, we\'re going to be'
+
+[00:50] [scene:talk]
+VISUAL: 
+AUDIO: 'starting out with creating a face portrait using the face creator workflow that I have made for you guys. And then you\'re going to find or generate a body reference photo as well. So we have both the face reference photo and the body reference photo which we will be'
+
+[01:02] [scene:talk]
+VISUAL: 
+AUDIO: 'combining together. And then we\'re going to be using the data set generator workflow that I have created for you guys and installing the required models which are going to be flux 2 klein the matching text encoder matching VAE and'
+
+[01:14] [scene:talk]
+VISUAL: 
+AUDIO: 'then Z image turbo for the refining/quality pass through in the same workflow plus the corresponding text encoder and VAE for that. And then we are also using the segment anything model for segmentation for face and eye'
+
+[01:26] [scene:talk]
+VISUAL: 
+AUDIO: 'detailer. And then for step number four, we will be running five test prompts to see how well the face and body hold up. And once the face and body are up to your standards, we\'re going to be generating a 50prompt run data set. And then we\'re going to be uploading that'
+
+[01:40] [scene:talk]
+VISUAL: 
+AUDIO: 'data set to ostressi toolkit. You can use that through runpod or locally. if you have the hardware for it and prefer to train locally. We\'re going to be generating our hugging face access token, accepting the Cray 2 license, and then pasting that token into the'
+
+[01:54] [scene:talk]
+VISUAL: 
+AUDIO: 'toolkit, and then obviously uploading the data set and captioning in the toolkit itself. I will show you guys how to do that. Moving down to step number nine, we will be setting up the training configuration. So, all of the different settings that I use for Craya 2'
+
+[02:07] [scene:talk]
+VISUAL: 
+AUDIO: 'specifically, and then we will be starting the training and running the 3000step process. And then we will finally be testing all of the checkpoints that we download and picking the best checkpoint and then you will have a fully trained Laura. So, let\'s'
+
+[02:19] [scene:talk]
+VISUAL: 
+AUDIO: 'get into it. Real quick, guys, before we get into the video, I just want to take a minute to shout out my Discord and Patreon. If you want direct guidance or a custom workflow or a custom node built for you, I\'ve got a brand new system for that. Now, that\'s on top of the free workflows already sitting in the server, no strings attached, ready for you to'
+
+[02:31] [scene:talk]
+VISUAL: 
+AUDIO: 'download. I also run giveaways in there regularly. Plus, there\'s a ton of other channels like a support channel where a 2,000 plus person community of members are helping each other troubleshoot in real time. And if you guys want to support me even further, my Patreon\'s got exclusive workflows and node packs'
+
+[02:43] [scene:talk]
+VISUAL: 
+AUDIO: 'you won\'t find anywhere else, like this insanely customizable prompt builder node. It\'s honestly one of the most useful things I\'ve ever made. And there\'s also the metadata forge, which strips and swaps your ex data so every image looks camera authentic for your social media posts. I really appreciate it, guys. Thank you for taking the time'
+
+[02:56] [scene:talk]
+VISUAL: 
+AUDIO: 'to support me. And let\'s get into the video. So, before you can build a data set, you need one clean, consistent reference photo of your character\'s face. That\'s what this face creator workflow on screen is used for. You will also need a reference photo of an ideal body for your character as well. And I\'m'
+
+[03:09] [scene:talk]
+VISUAL: 
+AUDIO: 'not going to be going through how you can generate that. But you should be able to find one or generate one without any issue. So this is the face creator workflow I\'ll be using to modify an existing face and create my own completely unique face for the character'
+
+[03:21] [scene:talk]
+VISUAL: 
+AUDIO: 'I\'m making. And this is running on Craya 2 Turbo. So what you\'ll be doing is feeding it a reference photo and then it runs that image through Gemma 4, which is basically just a local language model that has built-in image analysis and a system prompt here that forces a'
+
+[03:35] [scene:talk]
+VISUAL: 
+AUDIO: 'forensic level breakdown of the face. So it gathers things like the ethnicity, the skin tone, the face shape, eye color, eyebrows, nose, lips, jawline, so on so on. So you\'ll need to find a photo of an already existing face that you'
+
+[03:48] [scene:talk]
+VISUAL: 
+AUDIO: 'want to take and then you\'ll be creating your own unique character from that face. So here we can see that the face has generated. I ran the workflow and this is the output that I got and it looks good. You can see that most of the facial features look pretty different'
+
+[04:01] [scene:talk]
+VISUAL: 
+AUDIO: 'than the original reference photo. Obviously, we still have the same eye color and so on, but if I wanted to stray away further from the original reference photo\'s face, I could just go up in the D noiseis here. And if I wanted to be a little bit closer to the original reference photos face, then I'
+
+[04:15] [scene:talk]
+VISUAL: 
+AUDIO: 'can just go down in the D noiseis as well. So depending on how accurate to the original reference photo you want the face to be, you can just mess around with that D noiseis value, but I\'m going to use this because I think this is fine. So on screen now is the data set creation workflow that I\'m going to be'
+
+[04:29] [scene:talk]
+VISUAL: 
+AUDIO: 'using to create the entire data set that I will use to train the Laura. This workflow runs on two models. I\'ve included the download links to the models as markdown notes that are actually inside of the workflow so that way you can download all the models that'
+
+[04:41] [scene:talk]
+VISUAL: 
+AUDIO: 'you\'ll need. But the first model that we\'re going to be using is Flux 2 Klein 9B. And this handles all the actual image editing, which is taking your reference face and placing it into each pose and outfit for the prompts and putting it on the reference body. But'
+
+[04:54] [scene:talk]
+VISUAL: 
+AUDIO: 'Flux 2 Klein on its own struggles with fine skin detail. So there\'s actually a second pass which is further on down the line in the pipeline of the workflow. And this second pass uses Z image turbo at a very low D noiseise to sharpen the'
+
+[05:06] [scene:talk]
+VISUAL: 
+AUDIO: 'skin detail because it does really well at actually creating good realism. And Z image turbo is also feeding into the face and eye detailer subgraph here. And we can see in this subgraph that it\'s'
+
+[05:18] [scene:talk]
+VISUAL: 
+AUDIO: 'using the YOLO V face detector and eye detector from Eiffel V2. And this pass through is basically just to recover the skin texture that Flux 2 client loses. You\'re going to drop your reference'
+
+[05:30] [scene:talk]
+VISUAL: 
+AUDIO: 'photos into this workflow. We can see here that one load image is for our face selfie and the second load image is for the body. And I recommend cropping out the face in the second load image pass that loads the body. So that way there\'s no confusion for the model when creating'
+
+[05:43] [scene:talk]
+VISUAL: 
+AUDIO: 'the fully polished full body POV images. And for the actual pose list after you drop your reference photos in, I\'ve got a 50 prompt master list built for data set generation. So, this has 15 face'
+
+[05:55] [scene:talk]
+VISUAL: 
+AUDIO: 'selfies, 25 frontward- facing shots, and 10 backward facing shots. And that mix isn\'t random. It\'s based on how character lor is actually learned. So, if you have too many close-ups and the Laura nails the face, but the body falls apart in full body generations, that\'s'
+
+[06:08] [scene:talk]
+VISUAL: 
+AUDIO: 'because you didn\'t have enough full body POV images in your data set. And if there\'s too few backward facing shots and it has no idea what the back of your character or their outfit looks like, then it\'s also going to struggle with that. But this split gives it enough of each to generalize instead of'
+
+[06:21] [scene:talk]
+VISUAL: 
+AUDIO: 'overfitting to one angle. But before you commit to the full 50, there\'s a fiveprompt quick test in the prompt list node by default. So you can run some test generations on only five photos instead of 50, so you can make sure the character looks how you want it to.'
+
+[06:34] [scene:talk]
+VISUAL: 
+AUDIO: 'There\'s one prompt per major category. So once you\'ve uploaded the face and body reference photos, run this first. Check that the face and body hold up the way you want to and then paste the full 50 in when you\'re content. And one more thing on this workflow, there\'s a prepen'
+
+[06:47] [scene:talk]
+VISUAL: 
+AUDIO: 'field on the CR prompt list that I\'ve just pulled up. And by default, it just has the reference photo calls, but if you want to push the body proportions stronger than what comes out naturally, that\'s something you can add into the prepen field yourself. And I have a template that exaggerates body features'
+
+[07:00] [scene:talk]
+VISUAL: 
+AUDIO: 'here in a markdown note that you will just add on to this prepen text field. So, here it is right here. And I have that. If you want to just go for an insane body, basically what you can do is copy and paste this last bit of this'
+
+[07:13] [scene:talk]
+VISUAL: 
+AUDIO: 'markdown note. Copy this, come over to the prompt list node, and basically just paste it onto the end of this prepen text. And what that will do is apply those body modifications to each and'
+
+[07:26] [scene:talk]
+VISUAL: 
+AUDIO: 'every one of these prompts. All right. So, we can see that my five preview images have generated. And I think I\'m relatively happy with the way that the person looks. It seems that maybe she doesn\'t have the blue eyes in all of these generations. So before I go ahead'
+
+[07:39] [scene:talk]
+VISUAL: 
+AUDIO: 'and run all 50 prompts, I am actually going to go back and write that she has blue eyes in the prepen text within our CR prompt list to make sure that the blue eyes come through in every single generation. But quick note before I get'
+
+[07:51] [scene:talk]
+VISUAL: 
+AUDIO: 'into generating all 50 of my data set images. The data set generator that I\'m using right now is the YouTube friendly version. I\'ve got a separate version which will be set up by default for you guys in the free workflow section of my Discord with more explicit preset'
+
+[08:03] [scene:talk]
+VISUAL: 
+AUDIO: 'prompts built in automatically, but everything you\'re about to see works exactly the same way. The only difference is going to be the outfits that will be generated. I\'m playing it on the safe side to comply with the YouTube guidelines, but the one that you'
+
+[08:15] [scene:talk]
+VISUAL: 
+AUDIO: 'guys will be downloading will have those more explicit prompts built into it by default. So right here, what I\'m going to do in the prepended section of the prompt list is I\'m going to write in the beginning of the prompt where it says'
+
+[08:27] [scene:talk]
+VISUAL: 
+AUDIO: 'take the face, head, eyes, blah blah blah, so on. I\'m going to write blue eyes there. So now we can see I changed the prepen text so that it says blue eyes. So now every generation should have blue eyes. And then what I\'m going to do is take all of our five reset demo'
+
+[08:40] [scene:talk]
+VISUAL: 
+AUDIO: 'prompts and I\'m going to erase these. And then I\'m going to come over to this prompt list here. Double click into it and I\'m going to copy all of these face selfie prompts. So every single one of'
+
+[08:53] [scene:talk]
+VISUAL: 
+AUDIO: 'these I\'m going to copy. Paste. And then I\'m going to take all of the frontward facing POVs. Copy those.'
+
+[09:06] [scene:talk]
+VISUAL: 
+AUDIO: 'Paste them. And then I\'m going to take the backward facing POVs, copy all of those and add them to the end of our list. And'
+
+[09:18] [scene:talk]
+VISUAL: 
+AUDIO: 'now we have all 50 prompts for our full data set generation within the prompt list. And now we can run this and this will generate 50 images. They will all be saved with the file name prefix data set. So when you go into your local output folder in your Comfy UI'
+
+[09:32] [scene:talk]
+VISUAL: 
+AUDIO: 'directory, you can find them with a preset file name data set or you can change this to whatever you\'d like. All right, so my generation has finished and it should go without saying that it\'s going to take quite a while since you\'re generating 50 different images and'
+
+[09:44] [scene:talk]
+VISUAL: 
+AUDIO: 'you\'re passing through two different models and then a face and eye detailer pass for each of those images. But it\'s worth it because you get a really quality data set out of it. You can see here that on my 5090, so 32 GB VRAM with 64 GB of system RAM, it took 13 minutes'
+
+[09:58] [scene:talk]
+VISUAL: 
+AUDIO: 'and 7 seconds. So actually it\'s really not that bad. But we can see that we have a ton of images of different expressions, different angles, different POVs, getting the full scope of my character\'s body and identity and'
+
+[10:11] [scene:talk]
+VISUAL: 
+AUDIO: 'features. So now what I\'m going to do is I\'m going to comb through the images and I\'m just going to delete any that I don\'t want. Maybe she has three arms in one picture or maybe the eyes are a different color in a different picture.'
+
+[10:24] [scene:talk]
+VISUAL: 
+AUDIO: 'And I\'m just going to get rid of those images that I obviously don\'t want. And I highly suggest that you do the same thing. You don\'t want to just dump all of them straight into the training. Go through every single one and pull anything that came out wrong. So, if'
+
+[10:36] [scene:talk]
+VISUAL: 
+AUDIO: 'there\'s extra fingers, a warped hand, a body that reads as distorted or dysmorphic, a face that drifted off identity, because when you\'re generating a data set with AI, it\'s not going to nail every single generation. And that\'s normal. But it\'s important that you come'
+
+[10:48] [scene:talk]
+VISUAL: 
+AUDIO: 'through your data set generations because if you train on a data set with a handful of broken bodies or faces mixed in, the Laura will learn those broken proportions right along with everything else. I always say that a clean data set of 40 images beats a data'
+
+[11:01] [scene:talk]
+VISUAL: 
+AUDIO: 'set of 50 images with five bad ones or 10 bad ones in it every single time. There\'s no magic number. 50 is not the magic number. 40 is not the magic number. It\'s just a matter of good quality input going into your training'
+
+[11:14] [scene:talk]
+VISUAL: 
+AUDIO: 'means good quality output from the training. And the same goes for bad quality input. Bad quality input, bad quality output. I am going to be using Astress AI toolkit through RunPod today for the lower training process. Although'
+
+[11:26] [scene:talk]
+VISUAL: 
+AUDIO: 'I have a 5090 and could do this training locally, I would rather put all the stress on my hardware that Laura training typically comes with onto a cloud services hardware instead. So that way my GPU stays nice and cool throughout the training process, which'
+
+[11:38] [scene:talk]
+VISUAL: 
+AUDIO: 'can take upwards of 2 to 3 hours or more depending on the GPU that you use or have. And I can use my computer for other tasks while the Laura trains. Because if I were to train this locally, this would put a lot of stress on my'
+
+[11:50] [scene:talk]
+VISUAL: 
+AUDIO: 'hardware and basically make my computer unusable during the entire training process. So, I\'m just going to use a throwaway pod for this by selecting a GPU with at least 32 GB of VRAM. I\'m going to be using the L40S for this'
+
+[12:02] [scene:talk]
+VISUAL: 
+AUDIO: 'video. First, I\'m going to select the L40S. And then, I\'m going to change the template. I\'m going to select the officially verified Ostris AI toolkit template. By default, network volume is going to be selected for this and it'
+
+[12:14] [scene:talk]
+VISUAL: 
+AUDIO: 'won\'t let you deploy that pod. So, what you\'re going to have to do is switch over to volume disk and then you\'ll be able to deploy this. In the description, there is a link to RunPod where you can deploy your own GPUs via their cloud service, and it\'s pretty affordable. I'
+
+[12:28] [scene:talk]
+VISUAL: 
+AUDIO: 'recommend that pretty much everyone should do this for their Laura training because this way you don\'t have to download a bunch of models that you\'re not going to use onto your device and stress out your hardware. It\'s worth the money. But if you want to use OstriSi'
+
+[12:40] [scene:talk]
+VISUAL: 
+AUDIO: 'Toolkit locally on your device, you can do that. If you\'re using something that has less than 32 GB of VRAM anyway on your local device, this training process is going to take forever. So, I really recommend using this. So, so in the'
+
+[12:52] [scene:talk]
+VISUAL: 
+AUDIO: 'description there is a link using my referral code. If you add $10 in credits, you will get an extra $5 in credits for free and that helps me out by giving me $5 of credits as well. So, go ahead and add credits through the referral link and you will get a free'
+
+[13:04] [scene:talk]
+VISUAL: 
+AUDIO: '$5. So, I\'m going to deploy this and then this is going to take a few minutes to initialize here. So, my pod is spun up and ready to go. So, what I\'m going to do is open the AI toolkit UI. And for the password, you\'ll be prompted for a'
+
+[13:17] [scene:talk]
+VISUAL: 
+AUDIO: 'password here, but you can just type in a password. And this will open up the ostrich AI toolkit UI. Now, before doing anything else, I\'m going to go into the settings tab in AI toolkit. And I\'m going to get my hugging face access token set in for the training process.'
+
+[13:30] [scene:talk]
+VISUAL: 
+AUDIO: 'The steps to generate that token are as follows. Created 2 is a gated model, and because of this, we need to grant access to the model before generating our access token. So, head over to HuggingFace. A link to their official site for Craya 2 is in the description.'
+
+[13:43] [scene:talk]
+VISUAL: 
+AUDIO: 'Once there, log in or create an account and navigate to the Craya 2 official repository through the link and grant access to the model shown on screen highlighted now. And then you\'re going to click the profile icon in the top right corner and scroll down to access'
+
+[13:56] [scene:talk]
+VISUAL: 
+AUDIO: 'tokens and click that. From there, you\'ll see the create new token option. Click that. Once that interface is open, write any name in for the token name and select readon as well, both highlighted on screen. And once you\'ve done that,'
+
+[14:09] [scene:talk]
+VISUAL: 
+AUDIO: 'create the token and then copy and paste that token into the settings tab on AI toolkit and click save to save the access token. Now we can go ahead with uploading our data set. So in the data set tab on the AI toolkit interface, I\'m going to click new data set in the top'
+
+[14:23] [scene:talk]
+VISUAL: 
+AUDIO: 'right corner. And then I\'m going to write a name for the data set. So I\'m literally just going to write data set for this. And then I\'m simply going to drag and drop the folder that has all my data set images from my Comfy UI directory on my local device right into'
+
+[14:35] [scene:talk]
+VISUAL: 
+AUDIO: 'there. and it\'s going to upload every single image. This should take only a few seconds. And now that the data set is fully uploaded, I am going to autocaption these images. So using the auto caption feature in the top right,'
+
+[14:47] [scene:talk]
+VISUAL: 
+AUDIO: 'we can see a button for that. I\'m going to use the Quen 3 VL captioner built into AI toolkit. Now you can see here that there is a custom system prompt that we need to modify because obviously by default it is not going to do what we'
+
+[14:59] [scene:talk]
+VISUAL: 
+AUDIO: 'want it to do. The system prompt I will be using can be found in the description of the video. This is basically going to instruct the Quen 3VL captioning model on how to caption our data set images and it\'s going to caption them in the'
+
+[15:12] [scene:talk]
+VISUAL: 
+AUDIO: 'way that is preferred for character lura training. So now that I have that pasted in there, I\'m just going to add this to Q. We can see that the auto captioning process has begun and it\'s going to have to download the Quen 3VL model and then caption these images. So this may take a'
+
+[15:26] [scene:talk]
+VISUAL: 
+AUDIO: 'few minutes. All right, so we can see that the captioning here has been completed. And if we take a look at the captioning, we can see that we have very short and concise captions. And the general rule of thumb for captions that you use on your images is this. The'
+
+[15:38] [scene:talk]
+VISUAL: 
+AUDIO: 'things you described get marked as variable. So the model learns that they can change. So you want to describe things like the outfit, the setting, and so on. And the things that you do not describe get absorbed silently into the'
+
+[15:50] [scene:talk]
+VISUAL: 
+AUDIO: 'trigger words identity. The model learns that they are fixed. And this is intentional and important. If you want the hair color locked into your character permanently, do not caption it. If you want the user to be able to change the hair color at generation time'
+
+[16:03] [scene:talk]
+VISUAL: 
+AUDIO: 'when using the Laura in a workflow, then caption it. The face should never be captioned because it\'s part of the subject\'s identity and must be learned inside of the trigger token. So, do not caption things like eye color, skin'
+
+[16:15] [scene:talk]
+VISUAL: 
+AUDIO: 'complexion, hair color, and so on if you do not want them to be changed. So, now that we have our data set uploaded and captioned, it\'s time to move on to the meat and potatoes, so to speak, of lura training that will actually get your'
+
+[16:28] [scene:talk]
+VISUAL: 
+AUDIO: 'lura looking right. So, we\'re going to click new job on the lefth hand side of the ostrich AI toolkit. And the first thing that we are going to be changing here is the model that we are training the Laura on. So, I use Crea 2 Turbo when generating images with all my character lures. But even with that'
+
+[16:41] [scene:talk]
+VISUAL: 
+AUDIO: 'being true, I am not going to train on Craya 2 Turbo. I am going to train on Craya 2 RAW. Training on Craya 2 Turbo is bad. Never do that. It does not provide good results at all. Something is wrong with it. I don\'t know what\'s'
+
+[16:53] [scene:talk]
+VISUAL: 
+AUDIO: 'wrong with it, but I learned that the hard way. So, I am going to select create it to raw. And we can see here that it is a gated model, but we have already accepted the license for the gated model and uploaded our hugging'
+
+[17:05] [scene:talk]
+VISUAL: 
+AUDIO: 'face token. So, you don\'t need to worry about that. Now, let\'s move on to some config settings. So, the first thing I\'m going to do is change the name of the file. So, something like Alyssa Prey 2. And then I\'m going to change or'
+
+[17:17] [scene:talk]
+VISUAL: 
+AUDIO: 'make a trigger word. And the trigger word should be a completely unique string that will be used in captions or prompts to trigger the Laura. So since I have made her name Alyssa, I will make the trigger word something like this, which is basically Alyssa but with'
+
+[17:30] [scene:talk]
+VISUAL: 
+AUDIO: 'numbers. And what this does is avoids the prompts generating any photos of someone who may be famous and named Alyssa because we don\'t want our prompts to get confused with anybody else named'
+
+[17:42] [scene:talk]
+VISUAL: 
+AUDIO: 'Alyssa. So, use a unique string that maybe has some numbers in it as the trigger word. I\'m going to leave low VRAM ticked on. Even though I\'m using a GPU that has 48 GB of VRAM, I believe I\'m just going to leave that on. It'
+
+[17:55] [scene:talk]
+VISUAL: 
+AUDIO: 'doesn\'t really change anything at all. There\'s no point to turn it off. Moving on, I\'m going to keep save every at 250, but I\'m going to change the max steps to save to 10. So, this way, the maximum amount of checkpoints that we can save and are available for us to download is'
+
+[18:08] [scene:talk]
+VISUAL: 
+AUDIO: 'at least 10. Leaving everything at the top the same, we\'re going to move down and I\'m going to check cache text embeddings. So, let\'s turn that on. And scrolling down from that, under data sets, I\'m going to make sure that our'
+
+[18:20] [scene:talk]
+VISUAL: 
+AUDIO: 'data set is selected here. And I\'m basically going to leave everything else here the same. Make sure that you have at least 512, 768, and 1024 all selected as resolutions. This should be good enough. If you tick any of these higher'
+
+[18:32] [scene:talk]
+VISUAL: 
+AUDIO: 'resolution settings, it\'s going to make the training process take exponentially longer. I don\'t think it\'s worth it at all. Some people even recommend turning both of these off and this will make the training process a lot faster, but it will train on lower quality images. So,'
+
+[18:45] [scene:talk]
+VISUAL: 
+AUDIO: 'I\'m just going to leave these on. And moving down from data sets, we\'re going to take a look at the sampling section. Now, what this is is basically a way to generate samples throughout the training process at every x amount of steps. So,'
+
+[18:57] [scene:talk]
+VISUAL: 
+AUDIO: 'by default, it\'s set at 250. So, every 250 steps, it\'s going to generate sample images to see how well the Laura has been trained. But this does not work with Craya. and it\'s a waste of time as well. I\'m going to show you a way to'
+
+[19:10] [scene:talk]
+VISUAL: 
+AUDIO: 'check each one of your checkpoints using Comfy UI instead of using this built-in sampling because it does not do a great job and for Cray 2 in particular, it just doesn\'t work at all. I\'m going to completely disable sampling. We\'re going'
+
+[19:22] [scene:talk]
+VISUAL: 
+AUDIO: 'to turn this off. And finally, I forgot to mention in data sets, I\'m also going to turn on cache latent. Make sure that you check that on. And aside from that, everything else can pretty much remain the same. Some people recommend using a'
+
+[19:34] [scene:talk]
+VISUAL: 
+AUDIO: 'different training optimizer here. Atomw8 bit is selected by default and that\'s what I use. Some people say that automagic is good, but I\'ve tried it and the results did not come out as good as'
+
+[19:46] [scene:talk]
+VISUAL: 
+AUDIO: 'the default Atomw8 bit. So, I\'m going to leave that and I\'m just going to create the job now. Now, once the job is created, you will see a play button in the top right corner and I am going to press the play button and this will'
+
+[19:58] [scene:talk]
+VISUAL: 
+AUDIO: 'begin the training process and it will start downloading all of the models. And once the models are downloaded, it will begin the training process. So we can see here that it is loading the Cray 2 model and downloading them and they are quite large in size. So this is why this'
+
+[20:11] [scene:talk]
+VISUAL: 
+AUDIO: 'is another benefit to using run pod and just using a throwaway pod is that you can download these models and it won\'t take up space on your local device. The best way to tell that the training process has begun is that you will see'
+
+[20:24] [scene:talk]
+VISUAL: 
+AUDIO: 'here a progress bar at the very bottom of this terminal in the toolkit. and you\'ll see that the steps have begun iterating through the 3000step process of training the Laura. It can be argued that 3,000 steps is way more than what'
+
+[20:36] [scene:talk]
+VISUAL: 
+AUDIO: 'you\'ll actually need to get a properly trained Laura. So, we are going to start downloading checkpoints at around step 1,500. And we\'re going to start testing those checkpoints, but we have quite a ways to go. We\'re only on step 21 out of'
+
+[20:49] [scene:talk]
+VISUAL: 
+AUDIO: '3,00. So, I\'ll see you guys when we get higher up in the step count. All right. So, we can see that I\'m only on step 1,266 out of 3,00. But for demonstration purposes, I am going to download the'
+
+[21:01] [scene:talk]
+VISUAL: 
+AUDIO: 'last four checkpoints. So, 500, 750, 1,000, and 1250. I\'m going to put all four of those checkpoints into the lore folder in my comfy UI directory. And then I\'m going to use the checkpoint'
+
+[21:14] [scene:talk]
+VISUAL: 
+AUDIO: 'tester workflow on screen now to test all four of these. So on screen you can see here that in each one of these checkpoints I have from step 500 all the way down to 1250 which are the ones that we just downloaded. And in the prompt I'
+
+[21:27] [scene:talk]
+VISUAL: 
+AUDIO: 'just have a general prompt with our trigger word in the beginning. I\'m going to run this and we\'re going to test these checkpoints. And my guess is that most of these are going to be undertrained if not all of them. But creeping towards that 1250 step mark, we should be able to notice that it pretty'
+
+[21:41] [scene:talk]
+VISUAL: 
+AUDIO: 'much looks like our character for the most part. So each one of these generations, well each one of the K samplers for each of these generations uses the same exact seed. And we can see here that even at checkpoint one at step 500, it looks shockingly like our'
+
+[21:54] [scene:talk]
+VISUAL: 
+AUDIO: 'character. Now, this may not be the case for you, and it really depends on how large your data set is, among other factors as well. But for me, it looks like for all of these, it looks pretty much exactly like our character throughout each of the generations. Now,'
+
+[22:07] [scene:talk]
+VISUAL: 
+AUDIO: 'I\'m going to continue the training process up until about step 2,250 or so, and I\'m going to download those final checkpoints. I\'m going to run one more test, and we should have our trained Lura, but I could probably stop now with'
+
+[22:19] [scene:talk]
+VISUAL: 
+AUDIO: 'step 1,250, and I\'d be content with the output of this training process. So, on second thought, looking at those generation tests that we did, it seems that I really don\'t need to go any further than about step 1500. That\'s the'
+
+[22:32] [scene:talk]
+VISUAL: 
+AUDIO: 'last checkpoint that I\'m going to download. So, I\'m just going to stop this pod and terminate. So, I\'m just going to close out the OstriSai toolkit. And what I\'m going to do is I\'m going to rerun the same test generation starting'
+
+[22:44] [scene:talk]
+VISUAL: 
+AUDIO: 'at step 750 and going through to step 1,500. And here\'s something very worth pointing out. We can see that in checkpoint one and two, we have different variations and the generations'
+
+[22:56] [scene:talk]
+VISUAL: 
+AUDIO: 'look slightly different in her pose and her facial expression. And then in checkpoint 3 at step 1,250, we see that we get a different variation from one and two, but from checkpoint 3 to checkpoint 4, they look almost the'
+
+[23:09] [scene:talk]
+VISUAL: 
+AUDIO: 'same, which means that the training process is basically complete around these steps for me. Again, this may be different for you, but we can see that it\'s not really learning anything different from step 1250 to step 1500. Again, here\'s another test. I think for'
+
+[23:22] [scene:talk]
+VISUAL: 
+AUDIO: 'my particular case with this Laura, I\'m going to be using step 1500. that seems to be providing the best results as far as overall realism and just how good the Allora turned out. And here\'s one more'
+
+[23:34] [scene:talk]
+VISUAL: 
+AUDIO: 'test result for you guys. It does seem that checkpoint one and two, so steps 750 and 1,000 do look slightly undertrained. So, it\'s a good thing that I went the extra 500 steps with 1250 and 1500 here. But yeah, that\'s going to'
+
+[23:48] [scene:talk]
+VISUAL: 
+AUDIO: 'pretty much do it for this video, guys. I really appreciate you watching. And if you enjoyed, please, all that I ask is that you like the video and subscribe. It does so much for me in getting my videos shown to a broader audience and'
+
+[24:00] [scene:talk]
+VISUAL: 
+AUDIO: 'getting them pushed into the algorithm. And if you want to support me further, the link to my Patreon is in the description below. And my Discord as well if you want to join up. The community is completely free and we provide help for a bunch of people every'
+
+[24:12] [scene:talk]
+VISUAL: 
+AUDIO: 'single day. We have almost 2,500 members and going strong. So, I really appreciate it, guys. Thank you for watching and have a good day. Peace.'
