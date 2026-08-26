@@ -1,0 +1,356 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: We Open Sourced World Generation
+channel: @octopusinc_
+duration: 17:55
+source: https://www.youtube.com/watch?v=eJuYBNrD8HI
+upload_date: 20260825
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'Imagine feeding your computer one image and watching AI generate a full 3D environment for you, all locally and free. With all the crazy progress in AI, you\'d think that generating a 3D world should be pretty easy by [music] now, right? But instead of finding a quick solution, we ended up spending weeks'
+
+[00:13] [scene:talk]
+VISUAL: 
+AUDIO: 'building our own custom pipeline and ComfyUI node pack. Along the way, we tested completely different approaches, dug through a lot of dense research papers, and found a couple of techniques that almost nobody is using [music] yet. The final method'
+
+[00:25] [scene:talk]
+VISUAL: 
+AUDIO: 'we landed on even involves piloting a virtual 360° AI drone to map out your scene, which is insanely fun. But before we fly drone, this video and the free workflows are made possible by our amazing Patreon supporters. If you want'
+
+[00:37] [scene:talk]
+VISUAL: 
+AUDIO: 'to get your hands on an advanced guide, the example files, and beta workflows, as well as our amazing Discord community, consider supporting and thanks for making weeks of R&amp;D possible. Ever since I started this channel, I\'ve'
+
+[00:49] [scene:talk]
+VISUAL: 
+AUDIO: 'been obsessed with the idea of generating entire worlds. 3 years ago, I actually hacked together a workflow for this. Like, I generated a 360° image, projected it onto a sphere, estimated the depth information, and distorted the'
+
+[01:01] [scene:talk]
+VISUAL: 
+AUDIO: 'sphere to create a rough 3D environment. I even generated deflickered normal map so I could relight myself in the scene. Now, it\'s all very clumsy, but at the time I thought it was pretty cool. And having a 3D environment like this to ground your scene has so many different'
+
+[01:14] [scene:talk]
+VISUAL: 
+AUDIO: 'applications. For example, in virtual production studios, or if you want to make AI movies. You could even build like a dummy scene like this in Blender with holdout characters to get your blocking exactly right. &gt;&gt; So, this is my garden. I put a lot of effort in it. Should I show you around?'
+
+[01:27] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; Grandpa, I live here, too. &gt;&gt; Now, what inspired me to get back into this project was Apple\'s December 2025 release called Sharp Monocular View Synthesis in less than a second. You just give it a 2D photograph, and in one'
+
+[01:40] [scene:talk]
+VISUAL: 
+AUDIO: 'single pass, a neural network predicts an entire 3D Gaussian representation of that scene. But wait, what actually is a Gaussian splat? In traditional 3D photogrammetry, you would take hundreds of thousands of'
+
+[01:52] [scene:talk]
+VISUAL: 
+AUDIO: 'pictures of your location, and the software then calculates the camera position and the final geometry as a polygon mesh. And that\'s like fine for like walls and buildings and stuff, but for soft things like hair, foliage, or even for like reflective or transparent'
+
+[02:05] [scene:talk]
+VISUAL: 
+AUDIO: 'surfaces, it will break. But Gaussian splatting throws out polygons entirely. Instead, the scene is a cloud of millions of tiny semi-transparent 3D blobs, and technically they\'re called ellipsoids, and each one of them stores'
+
+[02:17] [scene:talk]
+VISUAL: 
+AUDIO: 'a position, a size, a rotation, and an opacity. For color, it uses a math function called spherical harmonics, which is just a really fancy way of saying that the color and brightness change depending on the angle you look'
+
+[02:29] [scene:talk]
+VISUAL: 
+AUDIO: 'at the blob. And this is why all the like the specular and reflective properties of the scene still work using Gaussian splatting. And because there\'s no ray tracing or shaders, it\'s also super lightweight and runs in real time even on an iPhone. To train a Gaussian'
+
+[02:42] [scene:talk]
+VISUAL: 
+AUDIO: 'splat, an optimizer looks at all the blobs in your scene and adjusts their values until they match every camera position and image in your data set. And this can take a long time, so Apple'
+
+[02:54] [scene:talk]
+VISUAL: 
+AUDIO: 'doing it in like a second is really cool. But there\'s a catch. Apple\'s model can only turn a single image into 3D, but I want an entire 3D scene. So I had an idea. What if we take a 360° panorama, slice it up into multiple'
+
+[03:06] [scene:talk]
+VISUAL: 
+AUDIO: 'views, and then run Apple\'s sharp on each of them individually and stitch them all back together. Turns out it\'s not that easy. Like some angles, some parts of the scene look really good, but since everything generates individually,'
+
+[03:18] [scene:talk]
+VISUAL: 
+AUDIO: 'you get these really ugly seams. So my next idea was to estimate the scene geometry first using a model called Mogi, and then use it to correct and line up the different views by Apple sharp. And I was actually making some'
+
+[03:30] [scene:talk]
+VISUAL: 
+AUDIO: 'really good progress on this, but I ran into two problems that killed this approach. First of all, it\'s not flexible enough. Like the scene looks good from the initial perspective, but once you start moving around here, it\'s falling apart. And that\'s because sharp is designed to preserve the scene and'
+
+[03:43] [scene:talk]
+VISUAL: 
+AUDIO: 'not to generate too much new detail. And second, the license. I want to build a tool that is permissive, that our audience of small studios and individual CG artists can actually build upon and use for their commercial work. So, I'
+
+[03:55] [scene:talk]
+VISUAL: 
+AUDIO: 'went looking for another solution. UniSharp is a research project by Insta360, and it\'s basically the same idea as Apple\'s project, but for 360° world. It\'s super fast, but unfortunately, the world\'s fall apart'
+
+[04:08] [scene:talk]
+VISUAL: 
+AUDIO: 'really quickly once you start moving. Still a lot of fun to try out though, and there\'s even like a hugging face demo if you want to try it in your browser. Next, Honai and 2.0 looked really promising, but it demands two massive models loaded into memory at'
+
+[04:20] [scene:talk]
+VISUAL: 
+AUDIO: 'once, and it\'s designed to run on four GPUs. So, um next, then I tried Nvidia\'s Lyra. I actually managed to get it running, but it\'s 91 GB of checkpoints, Linux only, and starting it the first time uh took 6'
+
+[04:34] [scene:talk]
+VISUAL: 
+AUDIO: 'minutes alone. It\'s really cool, but not really for consumer hardware. But then I followed the white rabbit and found Matrix 3D, which is not a PS2 tie-in game for the movie. It\'s actually a really smart piece of engineering. You'
+
+[04:46] [scene:talk]
+VISUAL: 
+AUDIO: 'start with a single 360° panorama, estimate its depth, and then turn it into a rough 3D mesh. When you now move a camera through that mesh, it of course breaks, falls apart, because'
+
+[04:58] [scene:talk]
+VISUAL: 
+AUDIO: 'anything the original photo couldn\'t see becomes this black hole. But then you feed this into the 12.1 video model, which then hallucinates all the missing pieces and more. Skywork did two brilliant things here. First of all,'
+
+[05:10] [scene:talk]
+VISUAL: 
+AUDIO: 'they used a nice mix of real 3D geometry with clever inpainting to maximize consistency, and second of all, they didn\'t train a whole new model for this. They just trained a lightweight Laura on top of the 12.1 video model. But to'
+
+[05:23] [scene:talk]
+VISUAL: 
+AUDIO: 'train that Laura, they needed a massive data set of 360° video with perfect camera tracking along custom paths. And since that didn\'t exist, they built it themselves inside of Unreal Engine 5. They programmed a virtual 360° drone to'
+
+[05:37] [scene:talk]
+VISUAL: 
+AUDIO: 'autonomously fly through 500 different video game environments hundreds of thousands of times. So, using the model that they trained, we can now set our own custom path, and the model will generate perfect 360° videos. So, what I'
+
+[05:50] [scene:talk]
+VISUAL: 
+AUDIO: 'find strange about this paper is that it dropped in August 25th, but almost nobody built anything around it. Maybe because it\'s not that easy to install. So, we rebuilt the entire thing inside of ComfyUI. Getting it to work was a bit'
+
+[06:03] [scene:talk]
+VISUAL: 
+AUDIO: 'tricky, like the Laura didn\'t match ComfyUI\'s format, and we had to build a few custom nodes for it to work. But, once we converted everything, we realized we could use this with a Light X2B speed up model, which massively speeds up render times. We also built'
+
+[06:16] [scene:talk]
+VISUAL: 
+AUDIO: 'our own custom path editor on top of it. This gives you a top-down and side preview of your scene, letting you become a virtual drone pilot. And one funny thing is that you can even fly through walls. The model will actually generate a new fitting scene on the'
+
+[06:28] [scene:talk]
+VISUAL: 
+AUDIO: 'other side. But, I can instantly tell the resolution is too low. And that\'s because one maxes out at 720p video, and imagine stretching this across a full 360° field of view. So, if we trained a Gaussian splat on this data, the'
+
+[06:42] [scene:talk]
+VISUAL: 
+AUDIO: 'structure would work really well, but you can see it\'s like really soft. The first thing we tried to improve this was upscaling all the different views using Seed VR. And this helped, but it\'s so slow, and it also didn\'t do too much.'
+
+[06:54] [scene:talk]
+VISUAL: 
+AUDIO: 'So, I figured it was time for some industrial espionage. I checked out Marble by World Labs, a closed-source model for generating 3D worlds. And I was really impressed by how fast it was and how crisp the results were. But, you'
+
+[07:06] [scene:talk]
+VISUAL: 
+AUDIO: 'can see the movement area is still really restricted, and there are also no working reflections, which is something that I would really like to keep. But, that gave us the idea to reproject the original high-quality renderings onto'
+
+[07:18] [scene:talk]
+VISUAL: 
+AUDIO: 'the Mogi environment. All the drone shots we created start from the same position. And for this position, we have a high-quality image. So, what if we just reproject the original high-resolution image back on top of the'
+
+[07:30] [scene:talk]
+VISUAL: 
+AUDIO: '360° videos at a high resolution. I mean, we have the camera data and the 3D environment, so in theory, we should know exactly how every single pixel moves. And this worked so well. The'
+
+[07:44] [scene:talk]
+VISUAL: 
+AUDIO: 'transitions between full resolution and one are now much smoother, and overall quality improved dramatically. So, let me show you step-by-step how you can run this on your own computer. First, we need a 360° start image, and'
+
+[07:56] [scene:talk]
+VISUAL: 
+AUDIO: 'this can be a real image you download from Poly Haven or take yourself with a 360° camera, or you can generate this image. There are a lot of AI tools that can do this, but I created this free'
+
+[08:08] [scene:talk]
+VISUAL: 
+AUDIO: 'Creality workflow. So, once you started ComfyUI, just drag and drop the workflow into the ComfyUI interface, and install the missing custom nodes. Now, you need to come to the left here and download'
+
+[08:20] [scene:talk]
+VISUAL: 
+AUDIO: 'these models. And you can find all the download links for the models and where to put them in your ComfyUI folder structure right in these nodes to the left of the model order nodes. You\'ll also need these two LoRAs right here'
+
+[08:32] [scene:talk]
+VISUAL: 
+AUDIO: 'that I trained for this workflow. And of course, these will be download links once I publish this video. So, let\'s come to the top here. If this is set to true, the workflow will create a panorama based on your text prompt. If it\'s set to false, you can upload your'
+
+[08:44] [scene:talk]
+VISUAL: 
+AUDIO: 'own image. So, let\'s start with the text prompt. For this, I created my own 360° Creality LoRA by showing Creality 2 hundreds of different images of 360° images so the model could learn what'
+
+[08:57] [scene:talk]
+VISUAL: 
+AUDIO: 'they look like. The trigger caption for this LoRA is this beginning right here, so leave that, and after that, you can fill out your own prompt. Right now, it\'s this creepy cave here, so maybe let\'s just try that and click run. And'
+
+[09:09] [scene:talk]
+VISUAL: 
+AUDIO: 'what will happen then is first, the image will be created, but sometimes the seam is not perfect, so this second group right here fixes the seam. And you can see that pretty well here in the'
+
+[09:22] [scene:talk]
+VISUAL: 
+AUDIO: 'preview. [clears throat] So, it only regenerates this seam area right here. Once that is done, you have a seamless image, but it\'s not high resolution enough, so it gets fed into this group right here, and this is the upscaling group. You can find all your saved out'
+
+[09:35] [scene:talk]
+VISUAL: 
+AUDIO: 'panoramic images in ComfyUI output panorama and uh then there they are. And below here, you also have this preview node that allows you to just take a look around. But it\'s a bit creepy, so let me'
+
+[09:47] [scene:talk]
+VISUAL: 
+AUDIO: 'try something else. Maybe like this Alpine Village. Click run. And here you can see the seam fix working really well, so it\'s only denoising that part of the image. Now, let me stop this and change the'
+
+[09:59] [scene:talk]
+VISUAL: 
+AUDIO: 'upscaling prompt. Usually, you should keep this very uh simple. For now, I will just change this to high-resolution photography and don\'t even put in uh scene detail. And yeah, this scene looks so cool. I love that it added this'
+
+[10:11] [scene:talk]
+VISUAL: 
+AUDIO: 'little cute pond here and the windmill. So, all of my elements in the prompts are here. But maybe you already have an image and you want to generate the full environment around that. For this, go to the top here and change the workflow'
+
+[10:24] [scene:talk]
+VISUAL: 
+AUDIO: 'mode to folds. And then come down here to this red group. Upload an image right here. And what will then automatically happen is this image will be distorted according to the lens and placed on this green background. Now, I created a'
+
+[10:37] [scene:talk]
+VISUAL: 
+AUDIO: 'dataset of thousands of these crops in front of a green background with the corresponding real 360° image. Over the course of 16 hours, I was able to retrain Creaya 2 to understand that if'
+
+[10:49] [scene:talk]
+VISUAL: 
+AUDIO: 'it sees an image like this, it should replace only the green with the rest of the scene as 360° image. So, now all you need to do is come here to this prompt group and describe the surrounding'
+
+[11:01] [scene:talk]
+VISUAL: 
+AUDIO: 'scene. And if we click run, you can see that the middle stays the same and then around that there is the village. And here you can see the seamless image. But of course, some areas look really weird because they are stretched out like'
+
+[11:14] [scene:talk]
+VISUAL: 
+AUDIO: 'that. So, make sure to check them out in this node right here. The lamp, for example, doesn\'t look half as bad. And here\'s the part of the original scene that it kept really well. Now that we have our panorama, we can drag and drop in the dataset creation workflow into'
+
+[11:27] [scene:talk]
+VISUAL: 
+AUDIO: 'the ComfyUI interface. Again, make sure to install the missing custom nodes, especially Splat Kit and the Make Mopeds node, and then come to the left of the workflow and download all these models and put them in the correct folder in'
+
+[11:39] [scene:talk]
+VISUAL: 
+AUDIO: 'your ComfyUI folder structure. Double-check if the correct models are loaded in this model loader group right here. And then you can upload your image right here. Below the image, you can set an output folder for your scene. Next,'
+
+[11:52] [scene:talk]
+VISUAL: 
+AUDIO: 'scroll to the right and on this node, click compute geometry. Now you get this rough preview of your scene from the top and from the side. This little star here is the starting position of your drone.'
+
+[12:04] [scene:talk]
+VISUAL: 
+AUDIO: 'And now you can just change these paths and send the drone off to different areas in your scene. There are different modes. Let\'s start with the look forward mode. Here the drone will just always look in the direction of the path. But'
+
+[12:18] [scene:talk]
+VISUAL: 
+AUDIO: 'you can also change it to per point look, and then you have these yellow points right here, and you can actually make the drone look in different directions. And I\'m sending the drone'
+
+[12:30] [scene:talk]
+VISUAL: 
+AUDIO: 'into this alley here. We can also change the height a little bit, so maybe we want to to go a bit higher. And once you have set the path, you can click on the save video node right here and click'
+
+[12:42] [scene:talk]
+VISUAL: 
+AUDIO: 'play. This will then give you this preview video right here, so you can check out if the camera is flying in the correct way. And you can see I\'m crashing into this building here, so let me fix that. Ah, right here. That was a mistake. So I'
+
+[12:54] [scene:talk]
+VISUAL: 
+AUDIO: 'want to keep flying forward like this. So this looks pretty good. Now let\'s scroll down to this next drone right here. This one I want to send off in a different direction. Maybe this one\'s'
+
+[13:06] [scene:talk]
+VISUAL: 
+AUDIO: 'circling around the pond in the middle of the market square here. And yeah, pretty pretty close to that house, but this works. And let\'s create the next drone. And maybe let\'s make it fly like really'
+
+[13:20] [scene:talk]
+VISUAL: 
+AUDIO: 'high up. And this looks pretty cool. We\'re flying way up in the air before crashing down into this alleyway. And you can really be creative with your camera paths here. Make sure to capture the areas that are important to your'
+
+[13:33] [scene:talk]
+VISUAL: 
+AUDIO: 'scene. Now we have four different drones flying through that village. And if you want to add more, you could unmute this group right here. And every time you run this, this clip will be added to the'
+
+[13:46] [scene:talk]
+VISUAL: 
+AUDIO: 'data set. But these four clips are usually more than enough. So now what we can do is just click run. And this will then get sent over to the One Inpainting group where all the missing pieces will be filled in with the One video model'
+
+[13:59] [scene:talk]
+VISUAL: 
+AUDIO: 'and the Laura. And this looks pretty cool. Like it invented the roofs. All this is not in the original image. Okay, I might have overdone it with this camera move. That\'s a bit too crazy. But one cool thing you can see here is that'
+
+[14:12] [scene:talk]
+VISUAL: 
+AUDIO: 'the pond is actually not just a flat surface, but it\'s reflecting. So it\'s actual water. And so if we train the splat, the pond will also have reflections. Oh, and since this workflow is One based, you can do all the typical'
+
+[14:24] [scene:talk]
+VISUAL: 
+AUDIO: 'optimizations that you can do with the One video model. For example, you can install Sage Attention and Triton, which are ways to speed up the workflow immensely. Uh we have free installers that will set everything up'
+
+[14:36] [scene:talk]
+VISUAL: 
+AUDIO: 'automatically for your ComfyUI installation. Make sure to check that out. But it\'s important that if you use it with this workflow, that you also install the Sage Attention patch because otherwise it will break the workflow and it will generate only black frames. So'
+
+[14:49] [scene:talk]
+VISUAL: 
+AUDIO: 'if you get any black frames, make sure to install that one as well. Once the final video is generated, it is fed into the high-res composite where the original 8K texture is projected back onto this video. Now here are a lot of'
+
+[15:02] [scene:talk]
+VISUAL: 
+AUDIO: 'settings, but you don\'t need to change anything here. If you want more information, you can find this in the advanced guide. But usually for this workflow, you just drag and drop your image, set the output folder, create your paths, and then you can just click'
+
+[15:15] [scene:talk]
+VISUAL: 
+AUDIO: 'run and leave the workflow alone. The final step, once all these videos is done, it will get fed to this node right here. Again, you don\'t really have to do anything and this will build your actual data set for training. So, it creates'
+
+[15:27] [scene:talk]
+VISUAL: 
+AUDIO: 'different views from these panoramic videos in the cool map format, which is a format that most Gaussian Splat trainers can understand. Once it\'s done, you can come to your ComfyUI output folder and here you find the folder with'
+
+[15:39] [scene:talk]
+VISUAL: 
+AUDIO: 'all the information that you need for training. Now, you can take this data set to pretty much any Gaussian Splat trainer that you like. There are some great paid ones like Postshot, for example. We used a lot of Lichtfeld for training, which is an open source tool,'
+
+[15:53] [scene:talk]
+VISUAL: 
+AUDIO: 'but the easiest one is probably Brush. To install it, you just need to go to the GitHub page, click on releases and down here you can find the different versions. Go into the folder and start the app. Now, I can click directory,'
+
+[16:07] [scene:talk]
+VISUAL: 
+AUDIO: 'go to output and select the Bavarian Village that we just created and now we have a few settings. But for now, I don\'t change anything and I just click start. And now it starts training and'
+
+[16:19] [scene:talk]
+VISUAL: 
+AUDIO: 'you can see on the top here, you can see the Gaussians point cloud and down below, you can see the actual image that this view is training against. Now, training\'s only like half done yet, but we can already start floating around and'
+
+[16:32] [scene:talk]
+VISUAL: 
+AUDIO: 'exploring the scene. Now, you can see the areas where we sent our drone to look better than the rest of the scene, of course, because these are mapped out properly. If you want like a really high'
+
+[16:44] [scene:talk]
+VISUAL: 
+AUDIO: 'quality large scene that you want from multiple angles, just send in a few more drones and map out this area even more. And here is the Italian like alleyway that we generated earlier as well. So,'
+
+[16:57] [scene:talk]
+VISUAL: 
+AUDIO: 'just so you see some realistic scene as well. Again, thank you to our lovely Patreon supporters for making this possible. As an additional thank you for your support, our advanced Patreon supporters get a super in-depth step-by-step guide for this whole'
+
+[17:09] [scene:talk]
+VISUAL: 
+AUDIO: 'process, all the example data and splats we trained and the workflow files we created for this video, as well as the advanced and beta versions of this workflow. Right now, for example, we\'re playing around with segmentation to'
+
+[17:22] [scene:talk]
+VISUAL: 
+AUDIO: 'improve quality of reflections. Massive thanks also to the amazing researchers and open-source teams publishing their papers and open weights models. Projects like this truly stand on the shoulders of open research, and none of this would'
+
+[17:34] [scene:talk]
+VISUAL: 
+AUDIO: 'have been possible without the incredible work coming out of teams like Skywork AI and the creators behind Moge and Wand 2.1. And, of course, the entire open-source community. So, thank you to you all, and thanks for watching. See'
+
+[17:47] [scene:talk]
+VISUAL: 
+AUDIO: 'you next time.'

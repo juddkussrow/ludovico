@@ -1,0 +1,208 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Unlazy: The SIMPLE Skill that actually improves PERFORMANCE of ALL AI AGENTS!!
+channel: @octopusinc_
+duration: 10:24
+source: https://www.youtube.com/watch?v=gFgQiUPLGUk
+upload_date: 20260826
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:02] [scene:talk]
+VISUAL: 
+AUDIO: '[music] &gt;&gt; Hi. Welcome to another video. Before starting the video, I\'d like to tell you that I have become more active on my AIC King channel now. I am posting some new stuff and some developer-related tools that I don\'t'
+
+[00:14] [scene:talk]
+VISUAL: 
+AUDIO: 'cover here. So, you can go ahead and check it out as well. I\'ll put the link to it in the description. So, today I want to talk about a GitHub repo that attacks what is probably the single most annoying problem in AI coding right now.'
+
+[00:27] [scene:talk]
+VISUAL: 
+AUDIO: 'You give your agent a big task, it works for a while, and then it comes back with a super confident done. Everything is implemented and tested, and then you actually look at the code and half of it is placeholders. The tests were never'
+
+[00:39] [scene:talk]
+VISUAL: 
+AUDIO: 'run, and two of the five things you asked for are just missing. The repo is called Unlazy by Leon X LNX, and it is basically completion discipline for AI agents backed by runnable checks. The'
+
+[00:51] [scene:talk]
+VISUAL: 
+AUDIO: 'tagline is, "Write the acceptance ledger first, execute reviewed checks, re-verify returned work, and report only what the evidence supports." And I think this is one of the more'
+
+[01:03] [scene:talk]
+VISUAL: 
+AUDIO: 'thoughtful takes on this problem that I have seen yet. So, let\'s get right into it. At its core, Unlazy is a skill. It works with Claude code and Codex CLI, and the whole thing is built on plain node with zero'
+
+[01:15] [scene:talk]
+VISUAL: 
+AUDIO: 'third-party runtime packages. You just need Node 16 or newer. The current source targets version 2.1.0, and it is MIT licensed. The main idea is that instead of trusting the agent\'s own'
+
+[01:27] [scene:talk]
+VISUAL: 
+AUDIO: 'done report, you make completion testable. Before the agent does any real work, it has to write a file called gates.md. This is the acceptance ledger. Each gate in it is one observable outcome, and every runnable gate gets two things: a'
+
+[01:40] [scene:talk]
+VISUAL: 
+AUDIO: 'check line, which is an actual shell command, and an expect line, which is a success marker that has to show up in the output. A gate only counts as met when two conditions are true. The check command exits with code zero, and the'
+
+[01:52] [scene:talk]
+VISUAL: 
+AUDIO: 'expect text actually matches the combined output. When that happens, the checker writes an evidence line into the ledger with the resolved shell, the working directory, the exit status, a path fingerprint, and the decisive'
+
+[02:05] [scene:talk]
+VISUAL: 
+AUDIO: 'output. So, the agent cannot just tick a checkbox and call it a day. A checkbox with missing or pending evidence counts as unmet. And if a gate turns out to be genuinely impossible,'
+
+[02:17] [scene:talk]
+VISUAL: 
+AUDIO: 'the agent is not allowed to silently delete it. It has to add an abandon line with a non-empty reason, and that abandon abandonment surfaced in the final report. This is kind of great because it flips the whole dynamic. The model does not get to grade its own'
+
+[02:30] [scene:talk]
+VISUAL: 
+AUDIO: 'homework anymore, the ledger does. Now, let me show you how to install it. The easiest way is through the skills CLI from Vercel Labs. You just run NPX skills add leong x/unlazy. You can add the dash g flag for a user-level install'
+
+[02:44] [scene:talk]
+VISUAL: 
+AUDIO: 'or the dash dash all flag to install it for every detected agent on your machine. If you want to do it manually, you just clone the repo into your skills folder. For Claude Code, that is the dot Claude skills folder in your home directory.'
+
+[02:56] [scene:talk]
+VISUAL: 
+AUDIO: 'For CodeX, it is the dot CodeX skills folder. Once it is in there, you can invoke it with the slash unlazy command in Claude Code or dollar unlazy in CodeX. It also has natural language triggers. So, phrases like tree five'
+
+[03:08] [scene:talk]
+VISUAL: 
+AUDIO: 'gates or literally do not stop until it is done will activate it as well. Now, let\'s talk about how a solo run actually works because the workflow here is pretty careful. And honestly, the security thinking is one of my favorite'
+
+[03:21] [scene:talk]
+VISUAL: 
+AUDIO: 'parts of this repo. You start by copying the leaf template into a gates.md file and filling in your gates. Then you run the gate check script with the dash dash status flag. This is a report only mode. It parses the ledger,'
+
+[03:34] [scene:talk]
+VISUAL: 
+AUDIO: 'tells you what is met and unmet, and it is guaranteed to never execute anything. And here is the important bit. Check lines are shell code. The readme is very explicit about this. So, before anything runs, you are supposed to actually read'
+
+[03:46] [scene:talk]
+VISUAL: 
+AUDIO: 'every command and every script those commands call. When you do a normal run on a fresh Oracle that has no approval record yet, the checker does not execute it. Instead, it prints the resolved command, the expectation, the working'
+
+[03:59] [scene:talk]
+VISUAL: 
+AUDIO: 'directory, the shell, and the path, and leaves it unexecuted. Once you have read everything and you\'re happy, you run it again with the {dash} {dash} approve flag, and that approves each exact pending command and then runs it. These'
+
+[04:11] [scene:talk]
+VISUAL: 
+AUDIO: 'approvals are stored outside your repository under a {dot} unlazy folder in your home directory. And each approval is bound to the exact ledger, the exact gate, the exact check and expect text, the resolved working'
+
+[04:23] [scene:talk]
+VISUAL: 
+AUDIO: 'directory and shell, the timeout, the platform, and the full inherited path. If any of those change even slightly, it needs approval again. So, if you pull an inherited ledger from some untrusted repo and a command got swapped out, it does not just silently'
+
+[04:36] [scene:talk]
+VISUAL: 
+AUDIO: 'run. That is really good design, to be honest. There is also a {dash} {dash} reverify flag, which reruns every runnable gate, including the ones already marked complete, because old'
+
+[04:48] [scene:talk]
+VISUAL: 
+AUDIO: 'evidence is not re-execution. This matters a lot for the orchestration side, which we will get to in a second. One more thing I want to highlight is the section on authoring gates that can fail honestly. The docs openly admit'
+
+[05:00] [scene:talk]
+VISUAL: 
+AUDIO: 'that the checker can only prove the command Oracle you declare. It cannot know whether your English gate title and your shell command actually mean the same thing. So, it pushes you toward gates that read the real'
+
+[05:12] [scene:talk]
+VISUAL: 
+AUDIO: 'artifact, print a success only marker after all assertions pass, and test negative checks against a known positive control. It even tells you not to copy a supplied number into expect as its own proof, but to measure it independently.'
+
+[05:24] [scene:talk]
+VISUAL: 
+AUDIO: 'That is the kind of nuance most make the AI less lazy prompts completely miss. Anyway, now let\'s come to the orchestration side, because this is where the repo gets really interesting for bigger work. Unlazy has three modes: solo, which is the single gates file we'
+
+[05:38] [scene:talk]
+VISUAL: 
+AUDIO: 'just covered, orchestrated, and parallel. For big builds, it uses something called the depth tree. You can trigger it with something like {slash} unlazy tree five, refactor the'
+
+[05:50] [scene:talk]
+VISUAL: 
+AUDIO: 'payment module, and verify every migration path. The idea is that layer one is the requested task, and you split it at real domain and component boundaries into leaves, where each leaf is one coherent deliverable with a narrow contract,'
+
+[06:03] [scene:talk]
+VISUAL: 
+AUDIO: 'exact file ownership, and its own gates file. Everything lives under a {dot} unlazy scope folder in your project. There is a plan {dot} md that fixes the interfaces, dependencies, conventions, and file ownership before anything gets'
+
+[06:16] [scene:talk]
+VISUAL: 
+AUDIO: 'dispatched. Then each leaf gets its own ledger, and branches get integration gates on top for interface compatibility, end-to-end behavior, and regressions. And I like that the docs are honest here, too. They explicitly say, "Do not add empty hierarchy just to'
+
+[06:28] [scene:talk]
+VISUAL: 
+AUDIO: 'satisfy a number." If your requested tree depth would create filler leaves, the skill is supposed to state the mismatch and use the closest honest decomposition instead. For parallel work, leaves have to declare OWNS paths,'
+
+[06:40] [scene:talk]
+VISUAL: 
+AUDIO: 'which are repository relative globs of the files they are allowed to write. Two concurrent leaves can never own the same path, and each leaf has to claim its paths through the checker before running. Dispatch is rolling. So, when a verified leaf unblocks another one, the'
+
+[06:53] [scene:talk]
+VISUAL: 
+AUDIO: 'newly ready leaf starts immediately without waiting for unrelated work. And crucially, when a leaf comes back and claims it is done, the parent does not just take its word for it. It reruns the leaf\'s gates with {dash} {dash} re-verify. Verification flows from the'
+
+[07:05] [scene:talk]
+VISUAL: 
+AUDIO: 'leaves upward, and the final report only happens after the root ledger is satisfied, with every number remeasured right before reporting. Each leaf is also supposed to be worked in four passes. Implement the complete deliverable with no placeholders.'
+
+[07:17] [scene:talk]
+VISUAL: 
+AUDIO: 'Re-rate it as a domain expert, and replace the cheap version of each part. Hunt for correctness, integration, portability, and performance defects, and then apply low-cost polish, and repeat until a full improvement pass'
+
+[07:30] [scene:talk]
+VISUAL: 
+AUDIO: 'finds nothing. There is also one optional extra for Claude code specifically, which is a stop hook. Once installed, whenever the session\'s ledger still has unmet gates, the hook returns a block decision. So, Claude literally'
+
+[07:42] [scene:talk]
+VISUAL: 
+AUDIO: 'cannot stop and declare victory early. It does not execute any checks itself, and it has a built-in escape valve. After six consecutive blocks with zero ledger progress, it releases, so you cannot get stuck in an infinite loop.'
+
+[07:56] [scene:talk]
+VISUAL: 
+AUDIO: 'And the skill is instructed to never install this hook without your consent, which is the right call. Now, one thing I really respect about this repo is the research section. It cites actual papers on LLM laziness,'
+
+[08:08] [scene:talk]
+VISUAL: 
+AUDIO: 'underthinking and overthinking, and long horizon degradation. Stuff like slob code bench, where the best tested agent passed only about 14.8% of checkpoints on long iterative tasks, and maybe ours time horizon work. But, the readme also'
+
+[08:22] [scene:talk]
+VISUAL: 
+AUDIO: 'plainly says that this research supports the failure modes that motivate the design. It does not prove that unlazy produces some fixed improvement. Earlier versions apparently cited an internal six-run comparison, and the current readme'
+
+[08:34] [scene:talk]
+VISUAL: 
+AUDIO: 'straight-up admits the raw artifacts are not in the repo. So, those numbers should be treated as design history, not a benchmark guarantee. There is even a validation protocol file describing how a defensible rerun would'
+
+[08:47] [scene:talk]
+VISUAL: 
+AUDIO: 'work. In a space full of prompt repos claiming 10x results with zero evidence, that level of honesty is chef\'s kiss. So, what is my overall take? I think unlazy is genuinely one of the smartest'
+
+[08:59] [scene:talk]
+VISUAL: 
+AUDIO: 'approaches to the half-done work problem right now, because it moves the definition of done out of the model\'s head and into a file with runnable proof. The approval system shows real security thinking. The whole thing is zero'
+
+[09:11] [scene:talk]
+VISUAL: 
+AUDIO: 'dependency, and the docs are refreshingly honest about what it can and cannot prove. The trade-off is ceremony. For a trivial edit or a quick question, writing a gate ledger is total overkill, and the skill itself says so.'
+
+[09:23] [scene:talk]
+VISUAL: 
+AUDIO: 'This is for substantial work, long refactors, audits, and parallel builds, where the cost of quiet and completeness is way higher than the cost of the ledger. Also, keep in mind that approval is consent, not a sandbox. The checks still'
+
+[09:36] [scene:talk]
+VISUAL: 
+AUDIO: 'run with full access to your machine, so the read before you approve step is is not optional. But for the kind of multi-hour agent runs people are doing these days, this is a really good option for sure.'
+
+[09:48] [scene:talk]
+VISUAL: 
+AUDIO: 'The repo will be linked below and it is free and open source, so definitely give it a try. Overall, it\'s pretty cool. Anyway, let me know your thoughts in the comments. If you [music] like this video, consider donating through the Super Thanks option'
+
+[10:00] [scene:talk]
+VISUAL: 
+AUDIO: 'or becoming a member by clicking the join button. Also, give this [music] video a thumbs up and subscribe to my channel. I\'ll see you in the next one. Until then, bye.'
