@@ -1,0 +1,212 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: This Tool Finds the Perfect AI Model for Your Hardware (llmfit)
+channel: @octopusinc_
+duration: 10:47
+source: https://www.youtube.com/watch?v=zf8jpD77sKY
+upload_date: 20260826
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:ui]
+VISUAL: Hugging Face UI showing hardware compatibility options for a model, with different quantization levels and sizes.
+AUDIO: 'Uh, quick question. Do you know how many AI models are out there right now? Well, according to HuggingFace, there are over 3 million publicly available models out there. And let\'s say you chose a model that you really like. You go to their'
+
+[00:12] [scene:talk]
+VISUAL: 
+AUDIO: 'HuggingFace page. You try to download it, and there\'s like nine different quantizations, four different parameter sizes, and no indication on whether any of that will actually run on your'
+
+[00:24] [scene:ui]
+VISUAL: llmfit terminal UI showing a list of models with scores, tokens/second, quantization, disk, memory, context, and fit.
+AUDIO: 'particular machine. Ideally, you would want to know if this model is going to throw an outofmemory error on you before you download the full 8 gigabytes. So, how do you decide which one to use? Well, luckily there is a tool for that'
+
+[00:36] [scene:talk]
+VISUAL: 
+AUDIO: 'now. It\'s called LLM fit and it looks at your actual hardware, your GPU, your RAM, your CPU, and then it tells you out of hundreds of models which ones will genuinely run well on your machine and'
+
+[00:49] [scene:talk]
+VISUAL: 
+AUDIO: 'how well will they perform. And as you can see here, I got a bunch of different devices on the table. So, in this video, we\'re going to take a look at LLM Fit, see how it works, and then I\'m going to test it out on a bunch of these machines'
+
+[01:02] [scene:ui]
+VISUAL: llmfit terminal UI on a Mac, showing system information (Apple M2 Max, 25.8 GB GPU avail) and a list of models.
+AUDIO: 'and see which models fit each of them. It\'s going to be a lot of fun. So, let\'s dive into it. Now, at its core, LLM fit is just a simple terminal tool. You run one'
+
+[01:16] [scene:talk]
+VISUAL: 
+AUDIO: 'command and then it detects your system, your CPU cores, RAM and GPU, including multi-GPU setups and then it scores your setup against a bunch of available models from their database. And not only'
+
+[01:28] [scene:intro]
+VISUAL: Creator speaking to the camera, introducing the problem of choosing AI models.
+AUDIO: 'that, but it also gives you an indication how many tokens per second you can expect on your local setup when running this particular model. And of course to properly estimate your hardware capabilities, it uses the best'
+
+[01:40] [scene:talk]
+VISUAL: 
+AUDIO: 'tools for the job depending on your GPU cards and your infrastructure. Plus, it also evaluates if you have any acceleration backend installed on your machine. And it also tries to estimate'
+
+[01:52] [scene:talk]
+VISUAL: 
+AUDIO: 'the best quantization level of that particular model based on your hardware requirements. And each model is scored against four criteria, quality, speed, fit, and context. and then those get'
+
+[02:04] [scene:explanation]
+VISUAL: Creator explaining how llmfit determines speed numbers.
+AUDIO: 'combined into a composite score. But the way they are weighted against each other isn\'t always fixed. So for example, chat cares more about speed while reasoning weighs quality much higher. So the same'
+
+[02:16] [scene:talk]
+VISUAL: 
+AUDIO: 'model can rank differently depending on what you\'re actually trying to do with it. But how does LLM fit actually determine those speed numbers? Well, the way it works is that every token means reading the entire model\'s weights off'
+
+[02:29] [scene:talk]
+VISUAL: 
+AUDIO: 'your VRAMm once. So speed really comes down to how fast your VRAMm can feed the GPU. LLM fit identifies the real memory bandwidth from your specific card. So it takes that number and then runs it'
+
+[02:42] [scene:talk]
+VISUAL: 
+AUDIO: 'against the model size to estimate how many tokens per second you\'ll actually get. And if you want to get into the weeds of all that, there\'s also an advanced config panel where you can tune all of that yourself. And they added'
+
+[02:54] [scene:talk]
+VISUAL: 
+AUDIO: 'that after someone on GitHub pointed out that token per second estimates were coming in too high for certain models. And if you have some other GPU that is not in the bandwidth table, it falls back to per backend constants. CUDA,'
+
+[03:07] [scene:ui]
+VISUAL: llmfit terminal UI showing a "Community Leaderboard" with simulated results for an Apple M1 Max.
+AUDIO: 'Metal, Rockm, and so on. So you\'re never left with a zero estimate. You might just get a slightly less precise one. And one more cool thing is that they have a community leaderboard where you'
+
+[03:19] [scene:talk]
+VISUAL: 
+AUDIO: 'can check performance results from real users using the same hardware as you. So you can actually compare it against a practical benchmark and not a theoretical one. All right, this tool sounds great. So I want to test it out'
+
+[03:32] [scene:talk]
+VISUAL: 
+AUDIO: 'on a bunch of different devices because I\'m really curious what kind of models can you actually run on older devices. So we\'re going to start with this first gen Raspberry Pi and this thing is from 2012. single core 700 MGHertz and 512'
+
+[03:46] [scene:hardware]
+VISUAL: A 2012 Raspberry Pi (first generation) connected to a monitor.
+AUDIO: 'megabytes of RAM. A couple of months ago, I did a video where I successfully deployed a 19 million parameter model on it. So, let\'s see if LLM Fit will suggest something similar in our test.'
+
+[03:59] [scene:talk]
+VISUAL: 
+AUDIO: 'So, a couple of things actually happened here. First, it did run, but it was so painfully slow. This board just doesn\'t have the horsepower to run a Rust TUI comfortably. But anyway, let\'s look at'
+
+[04:12] [scene:ui]
+VISUAL: Close-up of llmfit UI on Raspberry Pi, showing DeepSeek R1 as the top recommendation with 396.8B params, 0.8 tok/s.
+AUDIO: 'the recommendations, and they are genuinely hilarious. First of all, it recommends DeepSeek R1 as the best choice with almost 400 billion parameters, and that would take 230 GB'
+
+[04:24] [scene:talk]
+VISUAL: 
+AUDIO: 'of disk space. But at least it\'s being honest when calculating tokens per second, putting it at only 0.8. And the memory percentage needed for this thing'
+
+[04:36] [scene:talk]
+VISUAL: 
+AUDIO: 'is also bonkers. Now, as I said, I did test out this board before running a model called Falcon H1 Mini. So, I tried to search up the same model and see if it\'s in the database, and it actually is'
+
+[04:49] [scene:result]
+VISUAL: Terminal output showing actual tokens per second (0.50 and 0.35) during a model run on the Raspberry Pi.
+AUDIO: 'there. But, oddly enough, it only gives us a score of 51 compared to the enormous DeepSk R1. And this is the funniest part. It says that it can reach 241 tokens per second. Now, in my'
+
+[05:01] [scene:talk]
+VISUAL: 
+AUDIO: 'original video, it clocked around 0.3 tokens per second. So, this is what, 800 times more than that. So, obviously, something is wrong here. And I guess for'
+
+[05:13] [scene:hardware]
+VISUAL: A Luckfox Pico Ultra W board with on-screen text: "Cortex A7 1.2GHz, 256MB DDR3L RAM".
+AUDIO: 'boards as old as this one, it just can\'t calculate a realistic candidate, which is fair. I didn\'t even think this app would run on a Raspberry Pi at all, so I\'m not too concerned about that. Now,'
+
+[05:25] [scene:talk]
+VISUAL: 
+AUDIO: 'we\'re going to move on to a Lockfox Pico Ultra W. This is not even really a computer in the normal sense. It\'s a tiny embedded board built for camera modules, security systems, that kind of'
+
+[05:38] [scene:talk]
+VISUAL: 
+AUDIO: 'thing, but it does have Linux on it. And it\'s single core Cortex A7, 256 MGB of RAM. So, since this Lock Fox board comes with a specific Linux version'
+
+[05:50] [scene:ui]
+VISUAL: llmfit UI on Luckfox Pico Ultra W, showing similar recommendations to Raspberry Pi, with DeepSeek R1 at the top.
+AUDIO: 'pre-installed on it, I could just SSH into it from my MacBook and run LLM FIT remotely. And here we see something similar to the Raspberry Pi board. It recommends the same DeepSseek R1 model'
+
+[06:02] [scene:talk]
+VISUAL: 
+AUDIO: 'with 400 billion parameters and it sets the same score. So, I\'m not sure. I feel like this app is just not meant to calculate model recommendations for such small development boards. Next, we\'re'
+
+[06:14] [scene:talk]
+VISUAL: 
+AUDIO: 'going to test it on a 2015 13-in MacBook Pro, 8 gigs of DDR3 RAM, Intel Core i5. This is actually the first one in the list that is a real computer people use'
+
+[06:27] [scene:ui]
+VISUAL: llmfit UI on a 2015 MacBook Pro, showing a list of models with "Good" fit, including smaller models.
+AUDIO: 'to do real work on. So I\'m curious whether it will find anything worth running at all or if this is still going to be a dead end. So as expected, this is the first machine where the lineup of recommendations actually starts looking'
+
+[06:40] [scene:talk]
+VISUAL: 
+AUDIO: 'quite usable. So now we get a list full of small models that are all flagged as being good. So that\'s a great sign. Mostly all of them are quantized down to 8 bits estimated anywhere from 40 to 170'
+
+[06:53] [scene:ui]
+VISUAL: Close-up of llmfit UI on 2015 MacBook Pro, highlighting models like AlignmentResearch/Llama 75M and Mol-llama-3.1-8B-Ins 172M with high tok/s.
+AUDIO: 'tokens per second depending on the model. But you know to be honest I think this is too generous of an estimate. I don\'t actually think Llama 3 could reach that high of a token count on such an'
+
+[07:07] [scene:talk]
+VISUAL: 
+AUDIO: 'old 20150 MacBook. But I don\'t know. Let me know in the comments down below if you\'ve actually tested a model like Llama 3 on such an old MacBook. And another cool thing you can do in this tool is to filter down use cases to'
+
+[07:20] [scene:talk]
+VISUAL: 
+AUDIO: 'check if there are any good coding models for example. And when I strip that down, we get the best recommendation being coen 3.6 with 12 billion parameters and two bit'
+
+[07:32] [scene:hardware]
+VISUAL: A 16-inch 2023 MacBook Pro with Apple M2 Max and 32 GB RAM.
+AUDIO: 'quantization. Although I\'m not too happy about 2.3 tokens a second, but I guess that\'s a trade-off you\'re making for running 12 billion parameters on such an old laptop. Next, we\'re going to test it on my M2 Max MacBook Pro with 32 GB of'
+
+[07:45] [scene:talk]
+VISUAL: 
+AUDIO: 'unified memory. And this is where things should start looking a lot more normal. It has real GPU cores and real memory bandwidth. And LLM Fit actually'
+
+[07:57] [scene:ui]
+VISUAL: llmfit UI on M2 Max MacBook Pro, showing "Perfect" fit for many models, with Deepseek R1 at the top.
+AUDIO: 'understands Apple silicon properly. So, I want to see what it recommends here and how close the speed estimate comes to what I actually get normally. So, on my M2 MacBook, as we can see, the best recommendation is Deepseek R1. Although'
+
+[08:11] [scene:talk]
+VISUAL: 
+AUDIO: 'I\'m not sure what kind of model this is. It says DeepSeek R1, but it also has Quen tied to it. So I\'m not sure. Is this some kind of a symbiotic model of some sorts? But judging by this tool, I guess this is the best case scenario for'
+
+[08:23] [scene:talk]
+VISUAL: 
+AUDIO: 'my MacBook. But once again, if we filter down looking specifically at the best coding model, we can see the Gemma 4 12 billion version comes out on top. And I actually do agree because I recently did a video on this model and it was a'
+
+[08:36] [scene:hardware]
+VISUAL: A custom PC with an Intel Core Ultra 9 285K, Nvidia RTX 5090, and Kingston Fury Beast 64GB DDR5 RAM.
+AUDIO: 'beast, especially on MLX setups. So, I do agree with that result. And finally, I\'ll test it on my beefiest machine, the RTX5090, 64 GB of DDR5 RAM, Intel Core Ultra 9,'
+
+[08:48] [scene:talk]
+VISUAL: 
+AUDIO: '285K. This is the one where I actually expect LLM Fit to start recommending the big models. So, let\'s see what it thinks I can get away with. So, on my beefy'
+
+[09:01] [scene:ui]
+VISUAL: llmfit UI on the RTX 5090 PC, showing numerous Quen 3.8 versions with "Perfect" fit and high tok/s.
+AUDIO: 'machine, I get a bunch of recommendations for different Quen 3.8 versions. And as you can see, this time I\'m getting a perfect score on almost all of them. So there\'s plenty of models to choose from. And amongst all the Quen'
+
+[09:13] [scene:talk]
+VISUAL: 
+AUDIO: 'versions, we also get Gemma 4 12 billion version. But here I also want to filter out to see what are the best coding models. And even with this filter, I\'m still getting a bunch of Quen 3 models. But then if I sort it by context size,'
+
+[09:27] [scene:talk]
+VISUAL: 
+AUDIO: 'we can see that there\'s actually Kimmy K2.7D flash version which was released by Nvidia. So, that is really interesting. And this is something closer to the actual model that I would choose for'
+
+[09:40] [scene:conclusion]
+VISUAL: Creator speaking to the camera, giving final thoughts on llmfit.
+AUDIO: 'this specific task. Not trying to be harsh on Quen, but I\'m going to be honest, I\'m not the biggest fan of their models. So, Kim K 2.7 would probably be a better pick in my opinion based on these. So, there you have it, folks.'
+
+[09:52] [scene:talk]
+VISUAL: 
+AUDIO: 'That is LLM fit in a nutshell. I think nowadays when there are so many AI models to choose from out there, we tend to get in an analysis paralysis mode. So, it\'s nice that there are some tools out there that can at least make this'
+
+[10:05] [scene:outro]
+VISUAL: Creator speaking to the camera, with his name and title "Andris Gauracs, Developer Advocate at Better Stack" on screen.
+AUDIO: 'task of choosing the right AI model a bit easier for us. So, what do you folks think about this tool? Have you tried it? Will you use it? Let us know in the comment section down below. And folks, if you like these types of technical'
+
+[10:18] [scene:talk]
+VISUAL: 
+AUDIO: 'breakdowns, please let me know by smashing that like button underneath the video. And also, don\'t forget to subscribe to our channel. This has been Andrris from Better Stack, and I will see you in the next videos.'

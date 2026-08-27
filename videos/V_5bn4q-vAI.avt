@@ -1,0 +1,312 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: How We Got LLMs to Recommend Our Open Source Library — Christopher Burns, Inth
+channel: @octopusinc_
+duration: 16:27
+source: https://www.youtube.com/watch?v=V_5bn4q-vAI
+upload_date: 20260826
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:01] [scene:talk]
+VISUAL: 
+AUDIO: '[music] &gt;&gt; The talk title, we\'ll see if it lines up by the end of it, but when we put this'
+
+[00:15] [scene:talk]
+VISUAL: 
+AUDIO: 'talk title in just to be honest with you, so much changes in like 3 days at this point. We\'ll see how it goes. So, yeah, the whole point of it was that'
+
+[00:27] [scene:talk]
+VISUAL: 
+AUDIO: 'how I got LLMs to understand my open source library and what I did to do it well. Is it some kind of scientific background? Am I from a lab? No. That\'s'
+
+[00:43] [scene:intro]
+VISUAL: Speaker Christopher Burns, founder of Inth, with c15t logo and GitHub stars.
+AUDIO: 'My slidey clicky thing\'s not working. So, I just like to say again, I\'m just like you. I\'m just this side of the stage. I\'ve just hacking hacking it together, figuring out what is useful, what is token efficient, these kind of'
+
+[00:57] [scene:talk]
+VISUAL: 
+AUDIO: 'things. And again, I am British. Please don\'t think my accent makes me an expert. So, for quick contacts, I\'m Christopher Burns. I\'m the founder of Inth. I'
+
+[01:09] [scene:talk]
+VISUAL: 
+AUDIO: 'created a open source cookie banner library called C15T. That really annoying thing on the internet. That is me. Uh I spoke at Next Conf uh after it started taking off and it had 1.2'
+
+[01:23] [scene:talk]
+VISUAL: 
+AUDIO: 'thousand downloads at the time. Now it\'s closer to 2 million. In terms of like statistics, so we just checked that, you know, this is not theoretical. This is actual uh something that is succeeding.'
+
+[01:37] [scene:data]
+VISUAL: Slide showing "Claude" as #1 signup source for c15t, with 543 sources and first Claude answer on Apr 13.
+AUDIO: 'We have 3 million NPM downloads. 4.5 uh 4.5 45% month-on-month growth. 2.8 thousand websites using it in production from Minify to Z to'
+
+[01:49] [scene:talk]
+VISUAL: 
+AUDIO: 'Inphysical. And the whole concept of this talk was uh it goes back to we were doing all these things to make our library more efficient. You know, we were batting'
+
+[02:03] [scene:talk]
+VISUAL: 
+AUDIO: 'upwards compared to every other tool. Every other tool was built for marketers and lawyers. We were built for the developer. So, we had to make sure we had a very good developer experience.'
+
+[02:15] [scene:talk]
+VISUAL: 
+AUDIO: 'And we had an onboarding format said, "How did you hear about this?" And we started to get spikes that from April 13th, you know, now it is our number one source of inbound is'
+
+[02:30] [scene:talk]
+VISUAL: 
+AUDIO: 'Claude, ChatGPT, Codex, that is ChatGPT, Gemini recommending us. And I like to think of this as, you know, the iceberg. You know, we start'
+
+[02:42] [scene:talk]
+VISUAL: 
+AUDIO: 'with the top of C15T and there\'s many many tools that go into it from, you know, LLMs.txt to site maps to RSS feeds to robot.txts.'
+
+[02:54] [scene:talk]
+VISUAL: 
+AUDIO: 'So many micro optimizations that you can do from old methods of running the internet to new methods. And uh how many of you have, you know, made these kind of tools? How many of'
+
+[03:09] [scene:analogy]
+VISUAL: Comic comparing "The wizard will now install your software" to "The agent will now install your software."
+AUDIO: 'you have, really put simply, said, "Hey, agents, we need to this to be done." And yeah, it said, "We should install this'
+
+[03:21] [scene:talk]
+VISUAL: 
+AUDIO: 'library." And you\'ve gone, "Okay." Raise your hands. How many people have done this? Pretty much most people. That\'s a lot of hands. So, what\'s really funny is that we went'
+
+[03:34] [scene:talk]
+VISUAL: 
+AUDIO: 'from wizards installing our software to agents installing them. And I just went through Y Combinator. And what\'s really interesting is it if you know who these two people are. These'
+
+[03:48] [scene:talk]
+VISUAL: 
+AUDIO: 'are the co-founders of Stripe, the Collison brothers, and they had a really classic saying of like a Collison brothers install. And they would hand you their laptop, and they would install Stripe. These'
+
+[04:01] [scene:analogy]
+VISUAL: Illustration of Batman's utility belt, symbolizing many small tools for different problems.
+AUDIO: 'days, it\'s kind of like just a prompt. Being in Y Combinator, we just give people a prompt. And really what that means is that our very good developer experience primitives are now hitting'
+
+[04:14] [scene:talk]
+VISUAL: 
+AUDIO: 'agent primitives. So, as we was pulling all these things together, there is no one tool that fixes everything. I like to think about'
+
+[04:26] [scene:talk]
+VISUAL: 
+AUDIO: 'these problems like, you know, Batman\'s utility belt. Loads of really small things targeted in different areas to get it done. And we built all of these things into'
+
+[04:38] [scene:talk]
+VISUAL: 
+AUDIO: 'C15T because we wanted C15T to be the best developer framework in this tool. Think of it like Stripe Docs. And as we was building more and more tools, more'
+
+[04:50] [scene:ui]
+VISUAL: Diagram showing `docs/*.mdx` input to `npx leadtype generate` producing `llms.txt`, `sitemap.xml`, `AGENTS.md` bundle, and other agent-optimized outputs.
+AUDIO: 'and more documentation websites, we actually started abstracting these tools into a side quest that we call Lead Type. So, all of the things that we\'re going to talk about'
+
+[05:03] [scene:talk]
+VISUAL: 
+AUDIO: 'now are things that we have already solved with this open source framework. We have our friends at other developer companies implementing it and seeing similar results about how to like optimize for the agent experience.'
+
+[05:16] [scene:talk]
+VISUAL: 
+AUDIO: 'So, again, this isn\'t a magic SEO tool. It\'s actually a very non-sexy title, but a framework-neutral docs pipeline. Complex.'
+
+[05:30] [scene:talk]
+VISUAL: 
+AUDIO: 'But really, all it basically does is take your .mdx files, you run Lead Type generate, and it will spit out everything for um optimized agent experience for your websites.'
+
+[05:43] [scene:ui]
+VISUAL: Screenshot of `c15t.com/llms.txt` in a browser, displaying a hand-written summary of the library.
+AUDIO: 'And the rest of this talk is going to look a bit like a BuzzFeed list, to put simply, of these problems, because again, not everybody knows even how to put an LLM.txt on their website. So, you know,'
+
+[05:56] [scene:talk]
+VISUAL: 
+AUDIO: 'that comes to the first problem of if your docs have hundreds of pages, and how can it navigate them to find the right questions? The first solution is obviously an'
+
+[06:10] [scene:talk]
+VISUAL: 
+AUDIO: 'LLM.txt. What we found in our research is that it\'s much better not to just generate this. It is much better to write your LLM.txt from hand. Obviously,'
+
+[06:22] [scene:talk]
+VISUAL: 
+AUDIO: 'AutoRaptor, but write it as you are trying to get the answers across to the LLMs. For about 40 good lines beats 1,000 lines of noise from our testing.'
+
+[06:36] [scene:talk]
+VISUAL: 
+AUDIO: 'And that comes to the second issue of agents don\'t know how to browse. They know how to fetch. So, you then need the second part of the solution of the LLMs full.'
+
+[06:49] [scene:talk]
+VISUAL: 
+AUDIO: 'Again, think of this as a sitemap, where it takes the actual page and the links and a short description of what each page is for the LLMs to reference.'
+
+[07:01] [scene:talk]
+VISUAL: 
+AUDIO: 'Again, most people have heard these two solutions. But, where things are starting to get very complicated and we\'re seeing a lot of optimizations right now, is that HTML is expensive, and why can\'t we just ship'
+
+[07:14] [scene:code]
+VISUAL: Code snippet showing HTML `<link rel="alternate" type="text/markdown" href="/docs/nextjs/quickstart.md" />` for an agent twin.
+AUDIO: 'markdown to the agents? And we can. And you\'ve seen that everybody has started creating twin MDs. So, that\'s taking the normal website,'
+
+[07:28] [scene:talk]
+VISUAL: 
+AUDIO: 'such as Next.js quick start, and then having a dot MD on the end of it. And when you load that, it goes to the markdown'
+
+[07:40] [scene:talk]
+VISUAL: 
+AUDIO: 'But, what\'s really important here, and it\'s really worth noting, is this line at the bottom. If you look at all the best documentation websites, Minify, Vercel, C15T, pat myself on the back. Um'
+
+[07:53] [scene:talk]
+VISUAL: 
+AUDIO: 'they all have this in the header. This is saying to the agents whenever they visit the website that there is an alternative version of this in mark markdown. Again,'
+
+[08:05] [scene:code]
+VISUAL: Slide detailing three ways to access markdown: `.md` twin, `curl -H "Accept: text/markdown"`, and `?mode=agent` query parameter.
+AUDIO: 'who actually supports it? Don\'t ask me. Perplexity, some of the agents, it\'s all up in the air. And then, the second thing as well'
+
+[08:17] [scene:talk]
+VISUAL: 
+AUDIO: 'is that taking the .mds, you need to make sure that they\'re available through multiple methods. So, one of them is like the .md, so as you like copy it to an agent, you say .md.'
+
+[08:31] [scene:talk]
+VISUAL: 
+AUDIO: 'Another one is just taking the normal um link and then adding a uh redirect into your like your Next.js config, so that if it detects an agent has the'
+
+[08:44] [scene:talk]
+VISUAL: 
+AUDIO: 'header of accepting markdown, instead of returning the HTML, it will return the markdown. And then, the third one is that not all agents can append header'
+
+[08:56] [scene:problem]
+VISUAL: Slide stating "An agent can't ask your site anything."
+AUDIO: 'tags. So, there\'s also a URL query of mode equals agent. So, they\'re the ones that pretty much everybody knows. Um and it\'s pretty'
+
+[09:08] [scene:talk]
+VISUAL: 
+AUDIO: 'basic internet knowledge at this point. Um but one of the really interesting ones is where we\'re going next. And our tooling is also helping this is that an'
+
+[09:20] [scene:talk]
+VISUAL: 
+AUDIO: 'agent can\'t ask your website anything. So, we need to think about the web MCP. And this is still very early, but our tool is already uh'
+
+[09:34] [scene:talk]
+VISUAL: 
+AUDIO: 'um exposing three different tools to WebMCP. Search docs, get pages, and ask docs. Again, um our library lead type is pulling all of that context together so'
+
+[09:48] [scene:problem]
+VISUAL: Slide stating "Coding agents never visit your website" and "They read node_modules. What they remember about your API is from training. Months stale."
+AUDIO: 'an agent can easily ask it the right questions. I think we\'ll even see a future where communication happens over email and there\'s companies in San Francisco building that today.'
+
+[10:00] [scene:talk]
+VISUAL: 
+AUDIO: 'But this is actually the most interesting one and I think the most important one that anybody who has any type of developer module surface, NPM'
+
+[10:12] [scene:talk]
+VISUAL: 
+AUDIO: 'modules, cargo, Python, whatever. Is that the uncomfortable truth is that coding agents are actually never visiting the website if you have a'
+
+[10:24] [scene:talk]
+VISUAL: 
+AUDIO: 'library. They\'re actually visiting the node modules. They read the repo and they read the node modules. They They have previous stale training data'
+
+[10:36] [scene:code]
+VISUAL: File tree showing `node_modules/@c15t/nextjs/` containing `AGENTS.md` and `docs/` with markdown files.
+AUDIO: 'and they\'re trying to work it out on what it can do from the the compiled source. So, again, following what people like Vercel are doing and people who are'
+
+[10:49] [scene:talk]
+VISUAL: 
+AUDIO: 'thought leaders in this industry is that we take the bundled markdown documents and then we also put them in the node modules'
+
+[11:02] [scene:talk]
+VISUAL: 
+AUDIO: 'with an agents.md file. And the agents.md file basically says, "If you\'ve got a problem, if you\'ve got a question, all the documents are here. Grab them." And we actually see that this has'
+
+[11:16] [scene:talk]
+VISUAL: 
+AUDIO: 'surprisingly real effects. We can see that between many different models almost 50% token saving on instead of trying to search the web, find the right'
+
+[11:28] [scene:result]
+VISUAL: Slide showing "One pointer line: 29% -> 90-100%" with an example `your-app/AGENTS.md` file instructing agents to read bundled docs.
+AUDIO: 'tools, pulling the markdown files from your code base. So, if you have a library that\'s forever changing, then having the node modules built in is'
+
+[11:40] [scene:talk]
+VISUAL: 
+AUDIO: 'a very effective solution. This is also working without any skills, but if you want as well, you can add skills to it to say, "Look at the node modules and go from that."'
+
+[11:52] [scene:talk]
+VISUAL: 
+AUDIO: 'And again, just uh doubling down into this point, looking at like the agents.ai and DFile, you can say like when working with Z15 T Next.js library, read the bundles and'
+
+[12:04] [scene:talk]
+VISUAL: 
+AUDIO: 'verify that they match and go from there. So, that\'s really like how we\'ve done it. I don\'t want to say this is like'
+
+[12:16] [scene:terminal]
+VISUAL: Terminal output of `npx leadtype generate` converting 48 docs in 74ms.
+AUDIO: 'prescriptive, that I know the answers. If you have documentation websites, or if you have any type of markdown, if you\'re running your own blog, you know, I\'ve been using our package as well on our marketing website. Every part of our'
+
+[12:29] [scene:talk]
+VISUAL: 
+AUDIO: 'marketing website also has a markdown file. It can be something that\'s used for many things. We\'re currently just um most people are just using it for documentation.'
+
+[12:41] [scene:talk]
+VISUAL: 
+AUDIO: 'But, you can literally run it and it will pull out all of these extra files. And one of the big things was when I put this talk together, you know, we were seeing the results that Claude was recommending, but there'
+
+[12:54] [scene:talk]
+VISUAL: 
+AUDIO: 'was not really any like test suites yet, or test harnesses, on like is your site agent ready? And Cloudflare brought one of them out. But, my favorite'
+
+[13:07] [scene:ui]
+VISUAL: Screenshot of `ora.ai` showing a score of 59/100 for inth.com, with categories like Discovery, Identity, and Experience.
+AUDIO: 'is actually one called Aura AI. Um this is brand new and it tests a lot. I\'m happy to show off score of 59 because it\'s constantly changing. 3'
+
+[13:20] [scene:talk]
+VISUAL: 
+AUDIO: 'weeks ago, it was a lot higher. And again, this is a forever changing area. So, aura.ai, put in your website, and it will start giving you recommendations. It\'s forever changing. Again, we can'
+
+[13:33] [scene:talk]
+VISUAL: 
+AUDIO: 'just stay on top of it. And yeah, this is like one of my final slides is that the slide the the market agents, LLMs, everything is forever changing. There is no such thing'
+
+[13:46] [scene:talk]
+VISUAL: 
+AUDIO: 'as perfection. When I started making these slides, I got so caught up of like, everyone expects me to be the expert here, but I\'ve just been hacking on this problem a little more than you guys have so far. So, never get caught'
+
+[13:58] [scene:outro]
+VISUAL: Speaker on stage, slide is black.
+AUDIO: 'with being perfect. Every small little increase really does matter. Every small little thing you add really does matter. Thank you so much. You can find me on X,'
+
+[14:11] [scene:talk]
+VISUAL: 
+AUDIO: 'Burn Chris, and LinkedIn, and everywhere. &gt;&gt; [applause] &gt;&gt; WOO! I THINK I THINK WE HAVE TIME for one or two questions. Yeah, of course.'
+
+[14:23] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; So, if you were building um uh we\'re a website agency. We work with'
+
+[14:35] [scene:talk]
+VISUAL: 
+AUDIO: 'a lot of startups building like their own websites. &gt;&gt; Mhm. &gt;&gt; If you were just building a website, not necessarily like developer tool, but just a website to be found, which of these methods like would you concentrate on if you\'re starting from scratch?'
+
+[14:47] [scene:outro]
+VISUAL: Speaker on stage, Q&A session.
+AUDIO: '&gt;&gt; Yeah, I think the most important ones, and we\'re starting to see this more and more, is trying to provide a dot md file for every single page. A lot of CMSs are not'
+
+[14:59] [scene:talk]
+VISUAL: 
+AUDIO: 'built in this way. Um and we see this optimization happening more and more where I didn\'t put in the slide, but we\'re seeing more and more websites being visited by agents instead of real'
+
+[15:13] [scene:talk]
+VISUAL: 
+AUDIO: 'humans. So, in terms of even like trying to be proactive and token efficient, you should provide a markdown file if you can. Again, a lot of CMS\'s are not built this way. I actually built my own CMS.'
+
+[15:27] [scene:outro]
+VISUAL: Speaker on stage, Q&A session.
+AUDIO: 'My name is Chris and I built ChrisCMS, short for Christmas. It\'s a whole It\'s a whole thing my team wishes I never built. But, it does work and it does bring this like token efficiency up. So, yeah, I'
+
+[15:41] [scene:talk]
+VISUAL: 
+AUDIO: 'would say llms.txt is your first shout. llms.txt full form .txt. Second, if you if you can, just do them manually. Say you\'re not even'
+
+[15:55] [scene:talk]
+VISUAL: 
+AUDIO: 'working on systems that have markdown, I still recommend them. But, you can always get creative with creating these files on the on on the go.'

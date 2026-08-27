@@ -1,0 +1,224 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Real-time AI voice cloning with OmniVoice
+channel: @octopusinc_
+duration: 11:20
+source: https://www.youtube.com/watch?v=WENMgQE9tws
+upload_date: 20260825
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:intro]
+VISUAL: Creator introducing the video's goals: cleaning audio and faster TTS.
+AUDIO: 'Let\'s take another look at AI voice cloning. There\'s two things I want to accomplish in this episode. Number one, we\'ve had problems in past episodes trying to find a completely clean reference audio sample for cloning purposes. By clean, I mean that there\'s no background noise, there\'s no background sound effects, there\'s no'
+
+[00:12] [scene:talk]
+VISUAL: 
+AUDIO: 'background music. Uh you have to find a clip where someone is just talking and it\'s just their voice. It\'s really hard to do that sometimes. Many viewers have pointed out that there are tools we can use to isolate the voice in a noisy sample and we can uh clean up that'
+
+[00:24] [scene:intro]
+VISUAL: "no place like localhost" title card.
+AUDIO: 'background noise automatically. That makes it in theory a lot easier to do this. So, let\'s take a look at that. And let\'s take a look at a TTS engine that has been suggested by a few viewers that claims to be much faster than the ones we\'ve looked at so far. Let\'s build that'
+
+[00:36] [scene:talk]
+VISUAL: 
+AUDIO: 'into our Star Trek AI group chat application and see if we can get something approaching a real-time conversation. Let\'s take a look at it. &gt;&gt; [music] &gt;&gt; Okay, part one. We\'re going to look at'
+
+[00:51] [scene:talk]
+VISUAL: 
+AUDIO: 'how to clean up reference audio. Uh let\'s take a look at a couple of noisy reference audio samples that result in uh not very good voice clones. Let\'s take a look at these. Uh first, I\'ve got Mr. Spock from uh the original uh Star Trek show.'
+
+[01:05] [scene:ui]
+VISUAL: MusicPlayer 4.1 showing "spock_noisy.wav" and "seven_noisy.wav" waveforms.
+AUDIO: '&gt;&gt; Unable to raise Starfleet Command due to heavy subspace interference. She was attacked by what appears to be essentially a robot, an automated weapon of immense size and power. &gt;&gt; Okay. Sounds like Mr. Spock, but you can hear in the background there\'s uh sound'
+
+[01:18] [scene:talk]
+VISUAL: 
+AUDIO: 'effects, there\'s ambient like computer beeping and booping from the uh from the That show was really bad about layering in ambient sound in almost every scene. Almost any line of dialogue you grab from that show has got some kind of'
+
+[01:30] [scene:talk]
+VISUAL: 
+AUDIO: 'background noise and or music in it, which makes it hard to get a good clear voice clone. A similar problem in uh other Star Trek shows. Let\'s take a look at this one. &gt;&gt; Seven of Nine, Tertiary Adjunct of Unimatrix 01. But you may call me Seven'
+
+[01:42] [scene:terminal]
+VISUAL: Command line showing `speak.py` script being run with `spock_noisy.wav` as reference audio.
+AUDIO: 'of Nine. We are Borg. &gt;&gt; Okay, so uh not so much sound effects in that uh clip, but music. You can hear music in the background and we don\'t want that. It results in uh unclear uh voice clones. Let\'s take a look at it.'
+
+[01:56] [scene:talk]
+VISUAL: 
+AUDIO: 'Okay, so I\'m going to try to clone Mr. Spock\'s voice from that noisy reference audio. Let\'s hear what the voice cloner comes up with. &gt;&gt; My name is Mr. Spock.'
+
+[02:08] [scene:terminal]
+VISUAL: Command line showing `speak.py` script being run for both Spock and Seven of Nine, with "Sending synthesis request..." and "Processing audio..." messages.
+AUDIO: '&gt;&gt; And you can hear the boops and beeps in the background of that audio because the voice cloner it listens to the reference audio and it thinks that that background noise is part of what you\'re asking it to clone. It isn\'t. We want to filter that stuff'
+
+[02:20] [scene:talk]
+VISUAL: 
+AUDIO: 'out, but the voice cloner isn\'t smart enough. Similar, if we clone Seven of Nine\'s voice from the noisy reference audio, we get something that sounds like this. &gt;&gt; The Borg will assimilate your entire world.'
+
+[02:32] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; And you can kind of hear it\'s it\'s it\'s not crystal clear that some of that comes through some of that background music comes through in the in the audio in the in the voice clone. So, wouldn\'t it be nice if we could filter that out and clean up these reference audio samples? And so, let\'s'
+
+[02:44] [scene:intro]
+VISUAL: Creator discussing the problem of background noise in voice cloning.
+AUDIO: 'take a look at this. Ultimate Vocal Remover comes highly recommended. Now, I\'m going to go on a little bit of a side rant here. This was hugely painful to get running on a Linux system. There\'s a Windows installer for this. There\'s a Mac OS installer for this, but'
+
+[02:56] [scene:talk]
+VISUAL: 
+AUDIO: 'if you\'re on Linux, good luck to you. This is This was really it Seriously, I spent over an hour on this. You The setup instructions on their GitHub are like 2 years out of date. Nobody\'s maintaining this repo. It looks like it\'s been abandoned, which is'
+
+[03:08] [scene:talk]
+VISUAL: 
+AUDIO: 'unfortunate. You can still get it to run, but it was very very finicky to the point where [snorts] I was downloading dependencies and like extracting them manually, patching the code, and and repackaging them up, and installing them'
+
+[03:20] [scene:ui]
+VISUAL: Ultimate Vocal Remover (UVR5) interface, showing input/output paths, MDX-Net process method, and "GPU Conversion" and "Vocals Only" selected.
+AUDIO: 'manually, and dealing with all of it. Python version discrepancy. It was just a nightmare to get this running, but it is possible to get it up and running. Okay, so once it\'s up and running, we select our input file. Let\'s take the noisy Spock sample. You select your'
+
+[03:32] [scene:talk]
+VISUAL: 
+AUDIO: 'output directory. That\'s fine. You pick your model. There\'s a bunch of models to choose from. I just picked one more or less at random. Choose GPU conversion to to execute it on the GPU. I\'ve got it running on the server behind me there. And you can I think this was intended for pulling'
+
+[03:44] [scene:talk]
+VISUAL: 
+AUDIO: 'vocals out of songs. You have the option of uh just the music or just the vocals or you can extract them both separately. I only care about the vocals. I only care about the voice in this particular case, so I\'m just going to say just grab the'
+
+[03:56] [scene:ui]
+VISUAL: MusicPlayer 4.1 showing "spock_clean.wav" waveform, with an on-screen overlay "AI voice NOT a real voice!" and a picture of Spock.
+AUDIO: 'vocals, it\'s fine. Then you hit start processing. It\'ll run that, clean up the sample, and saves it. Okay. We do the same for 7 of 9, and what we end up with sounds like this. Let\'s'
+
+[04:09] [scene:talk]
+VISUAL: 
+AUDIO: 'listen to Mr. Spock now. &gt;&gt; Unable to raise Starfleet Command due to heavy subspace interference. She was attacked by what appears to be essentially a robot, an automated weapon of immense size and power.'
+
+[04:21] [scene:ui]
+VISUAL: MusicPlayer 4.1 showing "seven_clean.wav" waveform.
+AUDIO: '&gt;&gt; So it didn\'t get all of it. I heard one or two beeps or boops still in the background, but it got about 90% of it. It cleaned it up quite well. Let\'s listen to 7 cuz there was music in the background of that clip. Let\'s listen to the clean up version of that clip.'
+
+[04:33] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; Seven of Nine, tertiary adjunct of Unimatrix 01. But you may call me Seven of Nine. We are Borg. The proper instrument was part of my thoracic assembly before the doctor removed it. I suggest a radical dislocation.'
+
+[04:46] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; Excellent. Excellent. It stripped it out completely, so it\'s just her voice now. These are excellent uh reference audio samples now that we can clone from. So let\'s try it. &gt;&gt; My name is Mr. Spock. &gt;&gt; Okay, perfectly clear. Uh let\'s try 7.'
+
+[04:58] [scene:intro]
+VISUAL: Creator transitioning to the second part: a new TTS engine.
+AUDIO: '&gt;&gt; The Borg will assimilate your entire world. &gt;&gt; Crystal clear. Okay, great. Great. We can clean up our reference audio samples now. This is preprocessing, you\'ll have to do it once per voice that you want to clone. Uh and then what you can we can'
+
+[05:11] [scene:talk]
+VISUAL: 
+AUDIO: 'use those cleaned up samples uh as part of our voice cloner. So uh step two, now let\'s look at a new TTS engine that promises to be faster than the ones we\'ve looked at so far. Just as a quick recap, we have looked at'
+
+[05:23] [scene:talk]
+VISUAL: 
+AUDIO: 'dots.tts, which is very high quality but also very slow, and we\'ve looked at quin3 tts, which is similar similar high quality but also quite slow. There\'s a lot of lag time in our chat application. So let\'s see if we can speed it up with a new TTS engine.'
+
+[05:35] [scene:ui]
+VISUAL: OmniVoice Demo web interface in a browser, with sections for "Text to Synthesize", "Output Audio", "Reference Audio", and "Status".
+AUDIO: 'Okay, part two. Let\'s look at a new TTS engine. This was suggested by multiple viewers. It\'s called Omnivoice. Uh you can grab this off GitHub. The instructions to set it up are pretty straightforward. It\'s just a Python project. You download it, Uh set up a'
+
+[05:48] [scene:talk]
+VISUAL: 
+AUDIO: 'VM, install dependencies, and you can just fire it up. It comes with a built-in demo application, which is great. We can play around with that a little bit. Let\'s drag our newly cleaned reference audio into place. Here\'s Mr. Spock.'
+
+[06:01] [scene:talk]
+VISUAL: 
+AUDIO: 'We supply a transcript of whatever he was saying in the reference audio, and then we can type up a script that we want him to say. Okay, and then we scroll down here and accept the defaults here and then'
+
+[06:14] [scene:ui]
+VISUAL: OmniVoice Demo showing generated audio waveform and "Done" status after synthesizing text with Spock's cloned voice.
+AUDIO: 'generate. And almost immediately, I didn\'t edit that. That was I mean, that\'s how quickly it generated. That was really, really fast. Let\'s give this a listen. &gt;&gt; Captain, I recommend we energize the Polaroid matrix and invert the warp core assembly, and then ask Optimus Prime for'
+
+[06:26] [scene:talk]
+VISUAL: 
+AUDIO: 'help. &gt;&gt; Excellent. I mean, that\'s that\'s really good. So, it\'s a high-quality clone, and we get it much faster than dots.tts or quin3.tts. That\'s That\'s pretty good. Let\'s try that again with the Seven of'
+
+[06:39] [scene:intro]
+VISUAL: Creator discussing the speed and quality of OmniVoice.
+AUDIO: 'Nine sample. Drop the audio into place, apply the reference transcript, and hit generate, and boom, it\'s ready. &gt;&gt; Captain, I recommend we energize the'
+
+[06:52] [scene:talk]
+VISUAL: 
+AUDIO: 'Polaroid matrix and invert the warp core assembly, and then ask Optimus Prime for help. &gt;&gt; And it works. Great. Okay. So, now we can stand up a REST API in front of this exactly the same as what we did for'
+
+[07:05] [scene:talk]
+VISUAL: 
+AUDIO: 'dots.tts and quin3.tts, and then we can wire it up to our Star Trek group chat application and see if we can have a conversation in something a little bit closer to real time. Let\'s see what we get.'
+
+[07:18] [scene:ui]
+VISUAL: TalkWithMe v4.0 application interface, displaying a list of Star Trek personas (Worf, Troi, Data, Picard, Captain Kirk, Mr. Spock, Evil Kirk, Seven of Nine).
+AUDIO: 'Okay, final segment. So, as a recap, we have cleaned up our reference audio, we have installed Omnivoice. With Quinn\'s help just now, I was able to take my existing server script, the one that I\'ve used in previous episodes in front'
+
+[07:30] [scene:talk]
+VISUAL: 
+AUDIO: 'of dots.tts and quin3.tts, and modify it to work in front of Omnivoice. Let\'s go now to talk with me. There were no code changes needed in this application because the server script uses the same REST API. So, if we go to servers, I\'ve'
+
+[07:44] [scene:talk]
+VISUAL: 
+AUDIO: 'got OmniVoice set up on port 6666 on Saturn. We can see it\'s returning a server type of OmniVoice now. Talk with me doesn\'t see the difference between this server and other servers that we\'ve used in the'
+
+[07:57] [scene:talk]
+VISUAL: 
+AUDIO: 'past. That\'s great. I\'ve got everything else set up. I\'ve got streaming mode sentence by sentence enabled. We\'re in the Star Trek room. It\'s getting kind of crowded in here, but that\'s great. Let\'s let\'s pick Seven and ask a question like uh Seven, how do you feel about being human'
+
+[08:09] [scene:talk]
+VISUAL: 
+AUDIO: 'again now that you\'re no longer a Borg? &gt;&gt; Being human is inefficient. Your emotions are chaotic and serve no practical purpose. Yet, the sensation of individual connection is unexpected. It is a conflict I have yet to resolve. I'
+
+[08:23] [scene:ui]
+VISUAL: TalkWithMe v4.0 showing a chat exchange with Seven of Nine, displaying her AI-generated response.
+AUDIO: 'miss the collective. &gt;&gt; Okay. I I didn\'t edit that. That was That\'s how quickly it came in. Let\'s go in here and turn up the max persona replies a little. Let\'s Let\'s say two people can reply to me.'
+
+[08:36] [scene:talk]
+VISUAL: 
+AUDIO: 'And I\'m going to say LLM can decide. So, I\'m not going to edit this. This is going to What you see on the screen is how quickly it\'s actually coming back from this server from OmniVoice. Let\'s try this out. If we encounter an enemy vessel, what'
+
+[08:49] [scene:talk]
+VISUAL: 
+AUDIO: 'should we do? &gt;&gt; Raise shields immediately. Charge the photon torpedoes and and prepare to engage at maximum power. Do not hesitate.'
+
+[09:02] [scene:ui]
+VISUAL: TalkWithMe v4.0 showing a multi-persona chat with Worf and Mr. Spock responding, with an "AI voice NOT a real voice!" overlay.
+AUDIO: 'A warrior meets their foe with strength, not hesitation. Victory or death. &gt;&gt; Emotional outbursts are highly illogical. We must first determine the nature of the vessel and its intent.'
+
+[09:14] [scene:talk]
+VISUAL: 
+AUDIO: 'Once intelligence is gathered, we shall proceed with a calculated tactical response. Hesitation is unnecessary. Precision is paramount. &gt;&gt; Good. High quality voices that come back really super fast. It\'s It\'s almost real'
+
+[09:27] [scene:ui]
+VISUAL: On-screen text displaying GitHub links for TalkWithMe and Server scripts.
+AUDIO: 'time. That\'s That\'s really really good. I did notice a little bit of weirdness in Worf\'s second sentence here. &gt;&gt; Charge the photon torpedoes and and prepare to engage at maximum power. &gt;&gt; Okay, there\'s a little bit of stuttering'
+
+[09:39] [scene:talk]
+VISUAL: 
+AUDIO: 'in there, but I mean that\'s that\'s still pretty good. It\'s still pretty good. High quality voices, super fast, almost real time. Great. Uh and there were no changes required in Talk with me. It\'s entirely on the server. So, I\'m'
+
+[09:52] [scene:talk]
+VISUAL: 
+AUDIO: 'going to make the server script available for Omni Voice. Uh this I think is an improvement. Also, the TTS is still my overall favorite in terms of quality, but uh this one is much faster to the point where you\'re not sitting there for 5 to 15 seconds waiting for a reply. This is really,'
+
+[10:05] [scene:outro]
+VISUAL: Creator summarizing the video's achievements and future plans.
+AUDIO: 'really good. And with our audio cleanup script now with uh the What was that? Vocal cleanup Whatever that software is called. I\'ll put it on screen. Uh with our our audio reference cleanup thing uh we can generate really good,'
+
+[10:17] [scene:talk]
+VISUAL: 
+AUDIO: 'high-quality, crystal-clear voices, voice clones even if our reference audio contains music or sound effects in the background. So, this is a huge step forward. Uh great. So, thank you so much if you\'ve already'
+
+[10:29] [scene:talk]
+VISUAL: 
+AUDIO: 'become a channel member and or hit me up on Patreon. Really appreciate it. It supports the channel. Uh you can download Talk with me from my GitHub. It\'s MIT licensed. It\'s free. You can do whatever you like with it. Uh and uh there are more changes coming to this application. I think we\'re just'
+
+[10:41] [scene:outro]
+VISUAL: "No p" text on a black screen, likely an outro animation.
+AUDIO: 'kind of building up momentum here now and starting to turn it into something really, really cool. Uh and it\'s not tied to Star Trek. You can clone whatever voices you like. So, if you do grab the application and do something with it, post screenshots on our Discord or post down in the comments down below.'
+
+[10:54] [scene:talk]
+VISUAL: 
+AUDIO: 'Tell me what you\'re building with it. I think it\'s really cool. Uh and yeah, I hope you enjoyed that one. We will see you next time. Let\'s see if we can speed it up with a new TTS engine.'

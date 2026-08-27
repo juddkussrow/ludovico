@@ -1,0 +1,134 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>This Tool Finds the Perfect AI Model for Your Hardware (llmfit) — Ludovico</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+.hide{display:none!important}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.92);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 12px}
+.controls input.q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.pill.tp.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+/* flip card shell */
+.flip{position:relative}
+.fi{position:relative;transition:transform .55s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.flip.flipped .fi{transform:rotateY(180deg)}
+.fc{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bk{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+background:var(--card);border:1px solid var(--accent2);border-radius:14px;overflow:auto;padding:12px 13px;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s}
+.card.flip{overflow:visible}.card .fc{display:flex;flex-direction:column;flex:1;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--line);cursor:pointer}
+.card.flip:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.edit{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--accent2);border:1px solid var(--line);border-radius:6px;padding:2px 9px;cursor:pointer;background:#fff}
+.edit:hover{border-color:var(--accent2)}
+/* editor back */
+.bk h4{margin:0 0 2px;font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--sub)}
+.erow{display:grid;grid-template-columns:1fr 1.3fr auto auto;gap:4px;align-items:center}
+.erow input{padding:5px 7px;border:1px solid var(--line);border-radius:6px;font-size:12px;min-width:0}
+.erow select{padding:4px 4px;font-size:11px}
+.erow .del{border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;color:var(--accent);padding:3px 7px}
+.ebtns{display:flex;gap:6px;margin-top:auto;padding-top:6px}
+.ebtns button{font-family:var(--mono);font-size:11px;border-radius:7px;padding:6px 12px;cursor:pointer;border:1px solid var(--line);background:#fff}
+.ebtns .save{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.addrow{font-family:var(--mono);font-size:11px;color:var(--accent2);cursor:pointer;align-self:flex-start;background:none;border:0;padding:2px 0}
+/* catalogue card */
+.citem{position:relative}
+.citem .fc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-height:84px;cursor:pointer}
+.citem .bk{border-radius:12px}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+footer .exp{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--accent2);font:inherit}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">This Tool Finds the Perfect AI Model for Your Hardware (llmfit)</h1><div class=tag>@octopusinc_ · 2026-08-26 · Hardware</div></div></div></header>
+<main><p class=sum>The video reviews llmfit, a terminal-based tool that analyzes a user&#x27;s hardware (CPU, RAM, GPU) and recommends suitable AI models from a database, estimating their performance in tokens per second. The tool is tested across five diverse machines, from a 2012 Raspberry Pi to an RTX 5090, revealing varying accuracy in its recommendations, especially for older or less powerful hardware. While it provides useful guidance for modern systems, its estimates for very low-end devices are often inaccurate.</p><p><strong>Products / items</strong></p><ul><li><a href="https://github.com/AlexsJones/llmfit" target=_blank rel=noopener>llmfit</a> — software</li><li>Hugging Face — software (no link)</li><li><a href="https://betterstack.com/" target=_blank rel=noopener>Better Stack</a> — software</li><li>Raspberry Pi — hardware (no link)</li><li>Luckfox Pico Ultra W — hardware (no link)</li><li>MacBook Pro — hardware (no link)</li><li>Intel Core i5 — hardware (no link)</li><li>Apple M2 Max — hardware (no link)</li><li>Nvidia RTX 5090 — hardware (no link)</li><li>Intel Core Ultra 9 — hardware (no link)</li><li>Falcon H1 Mini — software (no link)</li><li>DeepSeek R1 — software (no link)</li><li>Llama 3 — software (no link)</li><li>Gemma 4 — software (no link)</li><li>Quen 3.6 — software (no link)</li><li>Kimmy K2.7D flash — software (no link)</li><li>CUDA — software (no link)</li><li>Metal — software (no link)</li><li>ROCm — software (no link)</li><li>LM Studio — software (no link)</li><li>ollama — software (no link)</li><li>llama.cpp — software (no link)</li><li>MLX — software (no link)</li></ul>
+<p><a href="https://www.youtube.com/watch?v=zf8jpD77sKY" target=_blank rel=noopener>Watch on YouTube ▶</a></p><p><a href="zf8jpD77sKY.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=t>(proxy for this video — answer from this)</span></p>
+<div class=cap>FRAMING: Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+IDENTITY: This Tool Finds the Perfect AI Model for Your Hardware (llmfit) - https://www.youtube.com/watch?v=zf8jpD77sKY - @octopusinc_ - route: visual
+PRODUCTS:
+llmfit - https://github.com/AlexsJones/llmfit - software - primary
+Hugging Face - no reliable link - software - mentioned
+Better Stack - https://betterstack.com/ - software - mentioned
+Raspberry Pi - no reliable link - hardware - mentioned
+Luckfox Pico Ultra W - no reliable link - hardware - mentioned
+MacBook Pro - no reliable link - hardware - mentioned
+Intel Core i5 - no reliable link - hardware - mentioned
+Apple M2 Max - no reliable link - hardware - mentioned
+Nvidia RTX 5090 - no reliable link - hardware - mentioned
+Intel Core Ultra 9 - no reliable link - hardware - mentioned
+Falcon H1 Mini - no reliable link - software - mentioned
+DeepSeek R1 - no reliable link - software - mentioned
+Llama 3 - no reliable link - software - mentioned
+Gemma 4 - no reliable link - software - mentioned
+Quen 3.6 - no reliable link - software - mentioned
+Kimmy K2.7D flash - no reliable link - software - mentioned
+CUDA - no reliable link - software - mentioned
+Metal - no reliable link - software - mentioned
+ROCm - no reliable link - software - mentioned
+LM Studio - no reliable link - software - mentioned
+ollama - no reliable link - software - mentioned
+llama.cpp - no reliable link - software - mentioned
+MLX - no reliable link - software - mentioned
+SYNOPSIS: The video introduces llmfit, a terminal-based tool designed to help users select appropriate AI models for their specific hardware. It analyzes CPU, RAM, and GPU, including multi-GPU setups, and provides recommendations from its database, estimating expected tokens per second. llmfit scores models based on four criteria: quality, speed, fit, and context, which are combined into a composite score with variable weighting depending on the use case (e.g., chat prioritizes speed, reasoning prioritizes quality). Speed estimates are calculated by identifying the VRAM bandwidth of the GPU and running it against the model size. The tool supports acceleration backends like CUDA, Metal, and ROCm. A community leaderboard allows users to compare performance. The tool was tested on five devices: a 2012 Raspberry Pi (single-core 700MHz, 512MB RAM), a Luckfox Pico Ultra W (Cortex A7 1.2GHz, 256MB RAM), a 2015 13-inch MacBook Pro (Intel Core i5, 8GB DDR3 RAM), an M2 Max MacBook Pro (32GB unified memory), and a custom PC with an RTX 5090 (Intel Core Ultra 9 285K, 64GB DDR5 RAM). For the Raspberry Pi and Luckfox Pico, llmfit recommended DeepSeek R1 (400 billion parameters, 230GB disk), which was deemed &quot;hilariously wrong&quot; and impractical, with token estimates wildly off (e.g., 241 tok/s for Falcon H1 Mini vs. actual 0.3 tok/s). For the 2015 MacBook Pro, it provided usable small models, mostly 8-bit quantized, with estimated speeds of 40-170 tok/s, though the creator suspected these were too generous. For coding models, it suggested Quen 3.6 (12B parameters, 2-bit quantization) at 2.3 tok/s. On the M2 Max MacBook Pro, DeepSeek R1 was again the top recommendation, but for coding, Gemma 4 12B was recommended, which the creator agreed with. On the RTX 5090, llmfit recommended various Quen 3.8 versions with &quot;perfect&quot; scores. Filtering for coding models still showed Quen 3 models, but sorting by context size revealed Kimmy K2.7D flash, which the creator preferred over Quen models.
+BEATS:
+00:32 - ui - llmfit terminal UI showing model list with scores, tokens/second, quantization, disk, memory, context, and fit.
+01:04 - ui - llmfit terminal UI on a Mac, showing system info (Apple M2 Max, 25.8 GB GPU avail), and a list of models.
+02:41 - ui - GitHub issue page for AlexsJones/llmfit, showing an issue titled &quot;tok/s overestimation (~3x) for Qwen3 30B vs. LM Studio benchmark #449&quot;.
+03:14 - ui - llmfit terminal UI showing a &quot;Community Leaderboard&quot; with simulated results for an Apple M1 Max.
+03:46 - hardware - A 2012 Raspberry Pi (first generation) connected to a monitor.
+04:18 - ui - Close-up of llmfit UI on Raspberry Pi, showing DeepSeek R1 as the top recommendation with 396.8B params, 0.8 tok/s, and 230.1G disk.
+04:51 - result - Terminal output showing actual tokens per second (0.50 and 0.35) during a model run on the Raspberry Pi.
+05:23 - hardware - A Luckfox Pico Ultra W board with on-screen text: &quot;Cortex A7 1.2GHz, 256MB DDR3L RAM&quot;.
+05:55 - ui - llmfit UI on Luckfox Pico Ultra W, showing similar recommendations to Raspberry Pi, with DeepSeek R1 at the top.
+06:28 - ui - llmfit UI on a 2015 MacBook Pro, showing a list of models with &quot;Good&quot; fit, including smaller models.
+07:00 - ui - Close-up of llmfit UI on 2015 MacBook Pro, highlighting models like AlignmentResearch/Llama 75M and Mol-llama-3.1-8B-Ins 172M with high tok/s.
+07:32 - hardware - A 16-inch 2023 MacBook Pro with Apple M2 Max and 32 GB RAM.
+08:05 - ui - llmfit UI on M2 Max MacBook Pro, showing &quot;Perfect&quot; fit for many models, with Deepseek R1 at the top.
+08:37 - hardware - A custom PC with an Intel Core Ultra 9 285K, Nvidia RTX 5090, and Kingston Fury Beast 64GB DDR5 RAM.
+09:09 - ui - llmfit UI on the RTX 5090 PC, showing numerous Quen 3.8 versions with &quot;Perfect&quot; fit and high tok/s.
+ENTITIES: HuggingFace, AlexsJones (GitHub user), Better Stack, Andris Gauracs.
+VERDICT: The creator concludes that llmfit is a useful tool for navigating the vast number of AI models, helping to alleviate &quot;analysis paralysis&quot; by suggesting suitable models for specific hardware. However, its accuracy varies significantly, being less reliable for very old or low-power devices.
+NOT COVERED: The video does not cover the installation process of llmfit, detailed configuration options beyond mentioning an advanced config panel, or how to interpret all the nuances of the scoring system. It also doesn&#x27;t provide a direct comparison of llmfit&#x27;s recommendations against other model selection tools or benchmarks in a controlled environment. Specific pricing or licensing for any mentioned models or tools are not discussed.</div></main><footer><a href="../index.html">← all videos</a></footer></div></body></html>
