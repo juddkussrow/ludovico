@@ -1,0 +1,248 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: MiniMax H3 ComfyUI Workflow: Video Inpainting & Object Replacement
+channel: @octopusinc_
+duration: 12:45
+source: https://www.youtube.com/watch?v=L5mreKEfyTw
+upload_date: 20260827
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:intro]
+VISUAL: ComfyUI workflow with nodes and a video preview of a car on a snowy road.
+AUDIO: 'Hey guys, MiniMax H3 can now edit video, not just generate it. But the result depends almost entirely on your mask. So, in this video I\'ll show you how to get a good one. And this test was much harder. My first attempts failed, and the settings that'
+
+[00:14] [scene:talk]
+VISUAL: 
+AUDIO: 'fixed it were not what I expected. So, as you know, MiniMax H3 is a video generation model. Normally, you give it a prompt or a reference image, and it generates a new clip. But I created this'
+
+[00:26] [scene:talk]
+VISUAL: 
+AUDIO: 'workflow to use H3 in a different way. ComfyUI now supports masking with MiniMax H3. So, instead of regenerating the whole video, I can point to one area'
+
+[00:38] [scene:ui]
+VISUAL: ComfyUI graph showing NKD Timeline node and mask processing nodes.
+AUDIO: 'and say, "Change this part, and leave everything else alone." To make that work properly, there are a few stages here. So, first, SAM3 finds the object I want to edit. Then, Mask with Experiments'
+
+[00:52] [scene:talk]
+VISUAL: 
+AUDIO: 'cleans the tracking mask and creates a stable crop around it. After that, another group prepares the mask in the way H3 needs to see it. And I have also added Gamma4, which'
+
+[01:05] [scene:ui]
+VISUAL: ComfyUI nodes for SAM3 tracking and mask cleanup, with a car video.
+AUDIO: 'writes the generation prompt for you. For this workflow, I\'m using the MiniMax H3 ref 2 VAE INT8 model. For the text encoder, I\'m using the Qwen1.5 VL 32 BAWQ'
+
+[01:19] [scene:talk]
+VISUAL: 
+AUDIO: 'file, then two VAEs, one for video and one for audio. If you have watched my older H3 videos, you probably already have most of these. So, what\'s new here is the masking side. There are three custom node packs you'
+
+[01:34] [scene:talk]
+VISUAL: 
+AUDIO: 'need: Mask with Experiments, ComfyUI NKD Basic Tools, and ComfyUI NKD Preview Tools. You also need two more model files. That is, SAM 3.1, which does the tracking, and Gamma4, which writes the prompt.'
+
+[01:49] [scene:ui]
+VISUAL: NKD Timeline node settings visible, showing video input and frame count.
+AUDIO: 'All the links are in the description. So, let\'s start with the NKD Timeline. This node prepares your source clip for H3. You can control the resolution using the megapixel setting. If you are low on'
+
+[02:02] [scene:talk]
+VISUAL: 
+AUDIO: 'VRAM, bring it down from here. You can also see the output size is aligned to a multiple of 32. Now, the frame count. H3 doesn\'t accept every frame count. It'
+
+[02:15] [scene:talk]
+VISUAL: 
+AUDIO: 'works with a 17 n + 5 x structure. So, here I select minimax H3 17 n + 5, and the timeline prepares the clip'
+
+[02:27] [scene:ui]
+VISUAL: NKD Timeline's video trimming interface, showing a selected segment.
+AUDIO: 'around that. If you set the frame count to zero, it takes the complete clip and handles the model compatible count for you. So, here I loaded a 15-second video. Inside the timeline, I can trim it and'
+
+[02:40] [scene:talk]
+VISUAL: 
+AUDIO: 'choose how much I actually want to use. So, instead of editing the source somewhere else first, I adjust the working section right here. I can also type a frame count manually,'
+
+[02:53] [scene:talk]
+VISUAL: 
+AUDIO: 'and here I set it to 272. And the timeline shows me the resulting section. That makes this node very useful, because it prepares the resolution, frame count, aspect ratio, frame rate,'
+
+[03:06] [scene:ui]
+VISUAL: SAM3 Video Track node with "car" as the prompt and detection_threshold at 0.35.
+AUDIO: 'and audio before the video reaches the rest of the workflow. Now, let\'s move to SAM 3. For the mask, I\'m using the SAM 3 support inside ComfyUI. So, in this example, I want to replace a'
+
+[03:20] [scene:talk]
+VISUAL: 
+AUDIO: 'car. So, in the SAM 3 tracking prompt, I simply write car. That\'s all. &gt;&gt; [snorts] &gt;&gt; You do not need to write your generation prompt here. Keep the two separate in your head, because they do completely'
+
+[03:33] [scene:talk]
+VISUAL: 
+AUDIO: 'different jobs. The SAM 3 prompt answers, "What object am I looking for?" The H3 prompt answers, "What do I want to create?" So, here SAM 3 only needs to find the'
+
+[03:46] [scene:ui]
+VISUAL: SAM3.1 Tracker Model node connected to SAM3 Video Track.
+AUDIO: 'car. Now, the detection threshold. The default is 0.5, but for this example, I changed it to 0.35, which makes the detection a little more'
+
+[03:58] [scene:talk]
+VISUAL: 
+AUDIO: 'permissive. For some difficult moving objects, I might test another value, but I do not assume one threshold is always better. I check the tracking preview instead. I only have one target here, so I keep'
+
+[04:12] [scene:talk]
+VISUAL: 
+AUDIO: 'the maximum object count at one. Now, we have the first mask. But the raw sentry mask is not what I want to send into H3. That is why the next node is mask cleanup node. Its job'
+
+[04:25] [scene:ui]
+VISUAL: MaskVidExperiments nodes for mask cleanup and MVEx Subject Crop.
+AUDIO: 'is to clean the tracked mask. It removes small unstable areas and short mask noise, and it pushes the mask edge outward a little. So, sentry decides which object we\'re'
+
+[04:38] [scene:talk]
+VISUAL: 
+AUDIO: 'tracking, mask cleanup makes that tracking mask more stable. After that, we come to the crop. This is MVEX subject crop, and it\'s very important. Because it decides which part'
+
+[04:51] [scene:talk]
+VISUAL: 
+AUDIO: 'of the source video H3 will actually work on. Instead of giving H3 the complete frame with a small object somewhere inside it, this node creates a stable crop around the tracked object.'
+
+[05:03] [scene:ui]
+VISUAL: MVEx Subject Crop node with "zoomed" mode selected.
+AUDIO: 'So, there are three modes here. Tracked, combined, and zoomed. Tracked is useful when the subject moves across the frame, like this car. Combined keeps one crop covering the'
+
+[05:16] [scene:talk]
+VISUAL: 
+AUDIO: 'subject\'s whole movement, which helps when the scene is fairly stable. And zoomed follows stronger changes in the subject size. For this moving car, I start with'
+
+[05:28] [scene:talk]
+VISUAL: 
+AUDIO: 'tracked. Then crop scale. This controls how much extra area we keep around the object. A larger crop scale gives H3 more surrounding context and more room to work.'
+
+[05:41] [scene:ui]
+VISUAL: MVEx Subject Crop node with "tracked" mode and H3-Aligned Face Update node.
+AUDIO: 'A smaller one keeps the generation tightly focused on to So, we\'ll come back to the setting because it made a visible difference in my tests. After the crop, we still need to prepare the mask for H3. This is where NKD Mask'
+
+[05:54] [scene:talk]
+VISUAL: 
+AUDIO: 'Ops comes in. This is not about making the edge look pretty. H3 works in compressed latent space, so the mask has to line up with the way the video VA and H3 model represent in the'
+
+[06:07] [scene:talk]
+VISUAL: 
+AUDIO: 'video. This node cleans small mask problems. Fills holes, closes gaps, expands the mask through space and time, smooths temporal flicker, and produces the'
+
+[06:19] [scene:ui]
+VISUAL: H3-Aligned Face Update node showing "Feather" parameter set to 0.
+AUDIO: 'latent mask H3 actually uses. In simple terms, this mask tells H3, "This is the area you are allowed to regenerate, and everything outside it stays protected."'
+
+[06:33] [scene:talk]
+VISUAL: 
+AUDIO: 'For this mask, I keep the feather at zero. I do not want a soft edge here because this mask is controlling where generation happens. Then I create a second mask for the final composite. That is why you see two'
+
+[06:46] [scene:talk]
+VISUAL: 
+AUDIO: 'mask stages. The first is for generation, and the second is for blending the generated crop back into the original video. So, here in NKD Mask Ops lane, I use a'
+
+[06:58] [scene:demo]
+VISUAL: ComfyUI showing the original car, a blue masked car, and a reference image of a gray car.
+AUDIO: 'feather of eight. Now you can see the final mask as the pink area around the car. That pink region is what gets blended back into the original source.'
+
+[07:10] [scene:talk]
+VISUAL: 
+AUDIO: 'So, that is the masking system. Sam finds the object, Mask Cleanup stabilizes the tracking, Subject Crop gives HTS stable working area, NKD Mask Ops prepares the generation mask, and'
+
+[07:23] [scene:talk]
+VISUAL: 
+AUDIO: 'the feathered mask controls how the edit blends back. Now the Auto Prompt section, where I added gamma 4. In this box, you only write a simple description of what you want. For'
+
+[07:36] [scene:ui]
+VISUAL: Auto Prompt node with text "Replace the tracked car with the car Picture 1. Keep him black sport car same has in the Picture 1 same color llook and everything."
+AUDIO: 'example, here I wrote, "Replace the tracked car with the car from picture one. Keep it the same black sports car, same color, and same look. So, you do not need perfect English'
+
+[07:48] [scene:talk]
+VISUAL: 
+AUDIO: 'here. Even if I write it roughly, Game-A-Four turns it into a much clearer H3 prompt. And you can see the generated prompt here before it goes into Ref-to-VA. Now, the reference setup.'
+
+[08:01] [scene:talk]
+VISUAL: 
+AUDIO: 'I connect my reference image as picture one and the cropped source video as video one. So, picture one provides the appearance I want and video one provides the source motion and performance I want'
+
+[08:13] [scene:result]
+VISUAL: Generated video showing a black sports car replacing the original car.
+AUDIO: 'to follow. Now, I can run it. And here is the first result. You can see it replaced the original car with the car from my reference. But, there is still a problem.'
+
+[08:26] [scene:talk]
+VISUAL: 
+AUDIO: 'At this point in the shot, part of the edit doesn\'t hold. The working area is too tight around the moving car. So, instead of changing everything at once, I change one thing.'
+
+[08:38] [scene:talk]
+VISUAL: 
+AUDIO: 'I increase the crop scale to give H3 more areas around the subject. For this test, I tried four. Now, H3 has more context and more room where the car moves. And you can see the'
+
+[08:51] [scene:ui]
+VISUAL: ComfyUI showing the original car with a pink overlay mask.
+AUDIO: 'problem is much better in the next result. This is why crop scale matters. If the crop scale is too small, the subject gets too close to the'
+
+[09:03] [scene:talk]
+VISUAL: 
+AUDIO: 'working boundary. But, I do not want it unnecessarily large either. Because then H3 has to process more of the scene. So, I adjust it based on that chart. Now, you may notice something else.'
+
+[09:16] [scene:talk]
+VISUAL: 
+AUDIO: 'My reference image shows a gray car, but the generated car is black. And that is because I asked for a black sports car in my prompt. So, even though picture one is the'
+
+[09:28] [scene:demo]
+VISUAL: ComfyUI showing a blue masked dragon in a snowy mountain scene.
+AUDIO: 'visual reference, the prompt still influences the appearance. &gt;&gt; Now, let\'s look at a much harder'
+
+[09:43] [scene:talk]
+VISUAL: 
+AUDIO: 'example. This time, I\'m tracking and replacing a dragon. So, here I started with a detection threshold at 0.35. But, in this shot, SAM tree doesn\'t track the dragon correctly while it\'s'
+
+[09:56] [scene:talk]
+VISUAL: 
+AUDIO: 'entering the scene. For the first part of the shot, the detection is unstable. Once the dragon is clearly the tracking starts working. So, I tested another value.'
+
+[10:09] [scene:demo]
+VISUAL: ComfyUI showing a blue masked dragon and a reference image of a red dragon.
+AUDIO: 'For this clip, I increased it to 0.7. And that gave me a cleaner mask over the dragon. That doesn\'t mean 0.7 is always better. It only means it worked for this shot.'
+
+[10:21] [scene:talk]
+VISUAL: 
+AUDIO: 'This is why I look at the SAM tree preview instead of copying one threshold value. Now, look closely at the mask. You can see flickering and areas where the dragon is not completely covered.'
+
+[10:35] [scene:talk]
+VISUAL: 
+AUDIO: 'That is exactly why the later mask nodes are useful. They expand and smooth the tracked region. So, small tracking gaps do not become broken areas in the edit.'
+
+[10:48] [scene:ui]
+VISUAL: NKD Timeline showing a trimmed video segment for the dragon.
+AUDIO: 'For my first dragon test, I used a crop scale of around two. The dragon was replaced once it became clearly visible, but the opening was still not working. So, I made another change. The selected'
+
+[11:01] [scene:talk]
+VISUAL: 
+AUDIO: 'section was around 15 seconds. And I shortened it to 14.38. So, the working section matched the part of the shot I wanted. I also tried a much larger crop going up'
+
+[11:14] [scene:talk]
+VISUAL: 
+AUDIO: 'to four. That helped me understand that the problem was not simply about resolution. It was about tracking, mask coverage, crop area, and how much useful context'
+
+[11:26] [scene:ui]
+VISUAL: ComfyUI nodes for dragon tracking and mask processing, with a pink overlay mask on the dragon.
+AUDIO: 'edge tree had around the dragon. Then I made one more change. Instead of tracked, I switched subject crop to combined. This shot is fairly static and the'
+
+[11:39] [scene:talk]
+VISUAL: 
+AUDIO: 'dragon is entering it. So, one stable crop covering its travel worked better than a crop that keeps following it. I also increased the mask expand to 10. So, the generation area covered more'
+
+[11:53] [scene:talk]
+VISUAL: 
+AUDIO: 'around the dragon. And I brought the crop scale back down from four to 2.25. That combination gave me a better result. So, my final settings for the dragon'
+
+[12:06] [scene:result]
+VISUAL: Final generated video with the red dragon replacing the original blue dragon.
+AUDIO: 'were not simply make everything bigger. I changed the crop mode to combined, expanded the mask more, and used a crop scale of 2.25. And now you can see the result.'
+
+[12:18] [scene:talk]
+VISUAL: 
+AUDIO: 'The dragon replacement stays much more consistent through the shot, including the head and the body. This was a harder test than the car because the dragon enters the scene,'
+
+[12:30] [scene:talk]
+VISUAL: 
+AUDIO: 'changes its visible shape, and gives Sam 3 a much harder tracking problem. That\'s it for today. If you found this workflow were useful, subscribe for more Mini Mix HT and ComfyUI videos. Thank you. Bye-bye. Have a good day.'
