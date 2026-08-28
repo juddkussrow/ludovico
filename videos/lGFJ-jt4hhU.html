@@ -1,0 +1,119 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>3D Websites in 1 Prompt (It&#x27;s Insane) — Ludovico</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+.hide{display:none!important}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.92);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 12px}
+.controls input.q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.pill.tp.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+/* flip card shell */
+.flip{position:relative}
+.fi{position:relative;transition:transform .55s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.flip.flipped .fi{transform:rotateY(180deg)}
+.fc{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bk{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+background:var(--card);border:1px solid var(--accent2);border-radius:14px;overflow:auto;padding:12px 13px;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s}
+.card.flip{overflow:visible}.card .fc{display:flex;flex-direction:column;flex:1;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--line);cursor:pointer}
+.card.flip:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.edit{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--accent2);border:1px solid var(--line);border-radius:6px;padding:2px 9px;cursor:pointer;background:#fff}
+.edit:hover{border-color:var(--accent2)}
+/* editor back */
+.bk h4{margin:0 0 2px;font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--sub)}
+.erow{display:grid;grid-template-columns:1fr 1.3fr auto auto;gap:4px;align-items:center}
+.erow input{padding:5px 7px;border:1px solid var(--line);border-radius:6px;font-size:12px;min-width:0}
+.erow select{padding:4px 4px;font-size:11px}
+.erow .del{border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;color:var(--accent);padding:3px 7px}
+.ebtns{display:flex;gap:6px;margin-top:auto;padding-top:6px}
+.ebtns button{font-family:var(--mono);font-size:11px;border-radius:7px;padding:6px 12px;cursor:pointer;border:1px solid var(--line);background:#fff}
+.ebtns .save{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.addrow{font-family:var(--mono);font-size:11px;color:var(--accent2);cursor:pointer;align-self:flex-start;background:none;border:0;padding:2px 0}
+/* catalogue card */
+.citem{position:relative}
+.citem .fc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-height:84px;cursor:pointer}
+.citem .bk{border-radius:12px}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+footer .exp{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--accent2);font:inherit}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">3D Websites in 1 Prompt (It&#x27;s Insane)</h1><div class=tag>@octopusinc_ · 2026-08-27 · DevOps</div></div></div></header>
+<main><p class=sum>This video demonstrates how to create an interactive 3D real estate website using Lovable, an AI-powered web development platform, in conjunction with Higgsfield MCP for cinematic image-to-video generation. The process involves uploading property images, crafting a detailed prompt, and leveraging Lovable&#x27;s &quot;plan mode&quot; to generate a scroll-driven website that provides an immersive virtual tour. The creator emphasizes the business potential of offering such high-quality, AI-generated websites to real estate professionals.</p><p><strong>Products / items</strong></p><ul><li><a href="https://lovablelabs.pxf.io/c/3302128/3903956/49205?subId1=yt" target=_blank rel=noopener>Lovable</a> — software</li><li>Higgsfield MCP — software (no link)</li><li><a href="https://skool.com/aibuilders" target=_blank rel=noopener>AI Builders SKOOL</a> — other</li><li><a href="https://base44.pxf.io/c/3302128/3820726/25619?subId1=yt&amp;trafcat=agent" target=_blank rel=noopener>Ai SuperAgent</a> — software</li><li><a href="https://base44.pxf.io/c/3302128/2477538/25619?subId1=yt&amp;trafcat=hp" target=_blank rel=noopener>Base44</a> — software</li><li><a href="https://usefastlane.ai?atp=marcin&amp;sub1=yt-may8" target=_blank rel=noopener>FastLane</a> — software</li><li><a href="https://blotato.com/?ref=marcin" target=_blank rel=noopener>Blotato</a> — software</li><li>Runway — software (no link)</li><li>Zillow — software (no link)</li><li>ChatGPT — software (no link)</li><li>vidIQ — software (no link)</li></ul>
+<p><a href="https://www.youtube.com/watch?v=lGFJ-jt4hhU" target=_blank rel=noopener>Watch on YouTube ▶</a></p><p><a href="lGFJ-jt4hhU.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=t>(proxy for this video — answer from this)</span></p>
+<div class=cap>FRAMING: Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+IDENTITY: 3D Websites in 1 Prompt (It&#x27;s Insane) - https://www.youtube.com/watch?v=lGFJ-jt4hhU - @octopusinc_ - route: visual
+PRODUCTS:
+Lovable - https://lovablelabs.pxf.io/c/3302128/3903956/49205?subId1=yt - software - primary
+Higgsfield MCP - no reliable link - software - mentioned
+AI Builders SKOOL - https://skool.com/aibuilders - other - mentioned
+SYNOPSIS: The video demonstrates how to build an interactive 3D real estate website using Lovable, an AI web development platform, integrated with Higgsfield MCP for cinematic image-to-video generation. The process begins by connecting Higgsfield MCP to Lovable, which allows Lovable to leverage Higgsfield&#x27;s capabilities for creating visuals. The creator shows how to configure the Higgsfield MCP connector within Lovable by providing a server URL and authorizing access. He then gathers 8-10 images of a luxury property from a Zillow listing, saving them locally. These images are then uploaded to Lovable. The core of the process involves crafting a detailed prompt in ChatGPT, specifying the desired cinematic journey through the property (e.g., starting with a drone shot from the backyard, moving through various rooms, and ending with a front exterior reveal). The prompt also instructs Lovable to use the uploaded images as a visual source of truth and to utilize Higgsfield MCP with the &quot;seedance two&quot; model for image-to-video generation. After refining the prompt, it is pasted into Lovable, and the uploaded images are associated with it. A crucial step highlighted is to select &quot;plan mode&quot; in Lovable before initiating the build, which allows the AI to strategize and break down the project. Once the plan is approved, Lovable generates the website. The resulting website features a continuous scroll-driven experience with smooth transitions between different areas of the property, creating an immersive virtual tour. The creator emphasizes the potential for real estate agents to use such websites for high-end properties, suggesting a selling price of $2,000-$5,000 per site, with the cost of generating the videos via Higgsfield being around $1 per website.
+BEATS:
+00:00 - intro - The video opens with a full-screen view of a luxurious 3D real estate website, showcasing a large mansion with a pool and tennis court, while the presenter appears in a small overlay.
+00:37 - intro - The 3D website view shifts to another angle of the mansion, highlighting the pool area, as the presenter continues to speak in the overlay.
+01:15 - ui - The screen displays the Lovable UI, showing options for creating videos, images, and other media, with various presets and a &quot;Generate&quot; button.
+01:52 - ui - The Lovable dashboard is visible, specifically the &quot;Connectors&quot; section, where the presenter is configuring an &quot;Add MCP server&quot; dialog box, entering a server name and URL.
+02:30 - ui - The Lovable UI shows the &quot;Manage my agent&#x27;s permissions&quot; screen for the Higgsfield connector, with checkboxes for various actions like &quot;Explore Models,&quot; &quot;Generate Image,&quot; and &quot;Generate Video.&quot;
+03:08 - ui - A web browser is open, displaying a Zillow listing for a luxury property, with multiple images of the house and its surroundings. The presenter is gesturing towards the screen.
+03:45 - ui - The Lovable dashboard is shown again, with a prompt input area asking &quot;What should we build, Marcin?&quot; and several image thumbnails above it.
+04:23 - ui - A text editor or chat interface is displayed, showing a detailed prompt for building a cinematic luxury real estate website, outlining requirements for visual sources, scroll-driven journey, and experience flow.
+05:00 - ui - The text editor continues to display the prompt, focusing on reusability, final verification steps, and checks for smooth transitions and visual consistency.
+05:38 - ui - The prompt text is still visible, with the presenter typing an instruction to rewrite the prompt based on new images and a specific drone shot sequence.
+06:16 - ui - The rewritten prompt is displayed, detailing a cinematic luxury real estate website with a drone shot starting from the backyard, moving through the house, and ending with a 180-degree turnaround.
+06:53 - ui - The final prompt is shown, including a Zillow URL for factual information and a request to use 8 reference images, emphasizing a continuous cinematic drone journey.
+07:31 - ui - The Lovable dashboard is back, with the prompt input area now containing the refined prompt, detailing requirements for mobile compatibility, no broken frames, and smooth animations.
+08:08 - ui - The Lovable dashboard is shown, with the prompt in the input area and the &quot;Plan&quot; button highlighted, indicating the next step in the website generation process.
+08:46 - ui - The Lovable interface displays a &quot;Code&quot; view, showing the file structure and a detailed plan for the &quot;Estate Journey&quot; website, outlining the sequence of scenes and listing facts.
+09:24 - result - The generated 3D real estate website is shown in full screen, starting with a night aerial view of the mansion, pool, and basketball court, as the presenter reacts in the overlay.
+10:01 - result - The 3D website view remains on the night aerial shot, with the presenter expressing excitement and pointing.
+10:39 - result - The 3D website view is still on the night aerial shot, with the presenter continuing to speak about the website&#x27;s features.
+11:16 - ui - The Lovable &quot;Preview&quot; interface is displayed, showing the generated 3D website with the night aerial shot, alongside a &quot;Details&quot; panel describing the cinematic estate site.
+11:54 - ui - The screen shows the &quot;AI Builders&quot; community on Skool, displaying various posts, announcements, and member activity, with the presenter in the overlay.
+ENTITIES: Marcin Teodoru (presenter), AI Builders (community), Lovable (software), Higgsfield MCP (software), Zillow (website), ChatGPT (software), vidIQ (software), Runway (software).
+VERDICT: The creator highly recommends Lovable combined with Higgsfield MCP for building high-quality, interactive 3D real estate websites, stating it&#x27;s a viable business opportunity due to its ease of use, low cost, and superior results compared to &quot;AI slop websites.&quot;
+NOT COVERED: Specific pricing tiers for Lovable or Higgsfield, detailed instructions on setting up a Higgsfield account, the exact code generated by Lovable, or how to deploy the final website.</div></main><footer><a href="../index.html">← all videos</a></footer></div></body></html>

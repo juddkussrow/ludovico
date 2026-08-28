@@ -1,0 +1,76 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: How To Remotely Connect Ollama With Coding Agents
+channel: @octopusinc_
+duration: 03:18
+source: https://www.youtube.com/watch?v=kazaWbZoKcY
+upload_date: 20260827
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'Pangolin is a tunneled AI gateway that provides easy access to local AI clusters like Ollama or vLLM for engineering teams running things like open code or cloud code. It sits in the middle and provides keyless authentication, access control, and logging so that you can keep track of'
+
+[00:12] [scene:talk]
+VISUAL: 
+AUDIO: 'what your team is doing and make connectivity easy. In this video, I\'ll show you how to set up Ollama with Pangolin AI gateway and get access from any computer. Pangolin will create an outbound only VPN tunnel between a private network and the gateway so that'
+
+[00:24] [scene:talk]
+VISUAL: 
+AUDIO: 'you can access any privately hosted AI model or cluster. I\'m going to demonstrate Ollama. I already have Ollama installed on this computer and I can run Ollama run tiny llama. This will serve an OpenAI compatible endpoint locally on this computer, but if I want'
+
+[00:37] [scene:talk]
+VISUAL: 
+AUDIO: 'other users to be able to access this, I would typically have to set up a VPN or give them network access to my computer. With the Pangolin gateway, we just bring it into the gateway as any other provider. So, I\'ll show you how to create the provider. If we just go back to providers, add a new provider. In'
+
+[00:49] [scene:talk]
+VISUAL: 
+AUDIO: 'this case, because it\'s Ollama, it\'s not one of the presets we already have, we\'ll add a custom provider. We\'ll call it Ollama. Ollama again serves an OpenAI compatible endpoint, so we\'ll add the two OpenAI capabilities. If Ollama was accessible to the Pangolin server'
+
+[01:01] [scene:talk]
+VISUAL: 
+AUDIO: 'without a tunnel connection, you could just simply insert the upstream URL, but because we need to tunnel this connection in, I\'ll have to set up a site. So, we\'ll head to the sites tab and we\'ll click add site. We\'ll call this site Ollama and it\'ll give us a very easy install command here to run'
+
+[01:13] [scene:talk]
+VISUAL: 
+AUDIO: 'Nute. I\'ll select Windows since I\'m on Windows. I\'ve already installed the command. I\'ll just copy this and click create site. If I head back to the terminal and add a new terminal tab, I can simply paste this in and it\'ll establish an outbound only WireGuard connection between this computer and the'
+
+[01:26] [scene:talk]
+VISUAL: 
+AUDIO: 'Pangolin server. We head back to Pangolin and back to the provider, we can now add a target on the site for Ollama to connect to. Let\'s click add target. Ollama is listening on localhost and the Ollama port is 11434. Ollama doesn\'t require any authentication, so'
+
+[01:38] [scene:talk]
+VISUAL: 
+AUDIO: 'we can choose no auth and then we just have to show the list of models. We know that we\'re running tiny llama, so we\'ll enter that in and click create. So, now we can attach this provider to either our public or private resource in order to give our clients access to it. I\'ll'
+
+[01:50] [scene:talk]
+VISUAL: 
+AUDIO: 'elect to connect to the private resource. I can simply head to the AI gateway tab and click add provider and add Ollama. Click save settings. Now, we can test this. In order to test this, we need to have the VPN client connected, so I\'ll choose connect under the client and wait until it connects successfully.'
+
+[02:03] [scene:talk]
+VISUAL: 
+AUDIO: 'You can also see under preferences and status the successful connection to the Pangolin server when there\'s an AI gateway resource that this client has access to. For Ollama, I\'ll use Postman to demonstrate the access locally. If we head again to the launcher into our'
+
+[02:15] [scene:talk]
+VISUAL: 
+AUDIO: 'internal AI gateway resource, we are provided with the access URL. I\'ll copy that and head to Postman. At the top, I\'ll just enter this URL. I already have the view on chat completions endpoint. Under the body tab, I have a very simple'
+
+[02:27] [scene:talk]
+VISUAL: 
+AUDIO: 'chat completion request just to see what the model responds with. Notice under authorization, I don\'t need any auth because we\'re using the Anglin client to provide the authentication. So, I should be able to send this request and we should get a response from the tiny'
+
+[02:39] [scene:talk]
+VISUAL: 
+AUDIO: 'llama model from Ollama. So, this was going through the VPN client to the Pangolin gateway and then back down to the site down to the same laptop. As you can imagine, in a production situation, the site would be on your production cluster. Pangolin keeps detailed session logs and usage information about each'
+
+[02:52] [scene:talk]
+VISUAL: 
+AUDIO: 'request through the gateway. In this situation, you can see all of our tests between all of our gateways. You can see the resource that was used from, whether it was streaming or not streaming, and the actor. If it was a virtual API key, you can see that here. When expanding'
+
+[03:04] [scene:talk]
+VISUAL: 
+AUDIO: 'the request, you can see the tokens, cost, and the actual chat session that occurred. In this situation, you can see the pre-prompt, my prompt, and its response. This also works for Ollama. You can see here the full log for that was sent and the tokens used.'

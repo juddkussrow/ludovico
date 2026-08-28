@@ -1,0 +1,144 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>Your AI Coding Agent Forgets Everything. Mine Doesn&#x27;t — Ludovico</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+.hide{display:none!important}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.92);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 12px}
+.controls input.q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.pill.tp.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+/* flip card shell */
+.flip{position:relative}
+.fi{position:relative;transition:transform .55s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.flip.flipped .fi{transform:rotateY(180deg)}
+.fc{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bk{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+background:var(--card);border:1px solid var(--accent2);border-radius:14px;overflow:auto;padding:12px 13px;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s}
+.card.flip{overflow:visible}.card .fc{display:flex;flex-direction:column;flex:1;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--line);cursor:pointer}
+.card.flip:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.edit{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--accent2);border:1px solid var(--line);border-radius:6px;padding:2px 9px;cursor:pointer;background:#fff}
+.edit:hover{border-color:var(--accent2)}
+/* editor back */
+.bk h4{margin:0 0 2px;font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--sub)}
+.erow{display:grid;grid-template-columns:1fr 1.3fr auto auto;gap:4px;align-items:center}
+.erow input{padding:5px 7px;border:1px solid var(--line);border-radius:6px;font-size:12px;min-width:0}
+.erow select{padding:4px 4px;font-size:11px}
+.erow .del{border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;color:var(--accent);padding:3px 7px}
+.ebtns{display:flex;gap:6px;margin-top:auto;padding-top:6px}
+.ebtns button{font-family:var(--mono);font-size:11px;border-radius:7px;padding:6px 12px;cursor:pointer;border:1px solid var(--line);background:#fff}
+.ebtns .save{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.addrow{font-family:var(--mono);font-size:11px;color:var(--accent2);cursor:pointer;align-self:flex-start;background:none;border:0;padding:2px 0}
+/* catalogue card */
+.citem{position:relative}
+.citem .fc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-height:84px;cursor:pointer}
+.citem .bk{border-radius:12px}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+footer .exp{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--accent2);font:inherit}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">Your AI Coding Agent Forgets Everything. Mine Doesn&#x27;t</h1><div class=tag>@octopusinc_ · 2026-08-25 · DevOps</div></div></div></header>
+<main><p class=sum>This video introduces Hindsight, a self-hosted central memory layer for AI agents, designed to provide persistent, shared context about projects, preferences, and infrastructure. It demonstrates how Hindsight integrates with various AI coding assistants like Droid and OMIP, allowing them to access and reflect on past experiences and project details. The tool offers features for managing memories, configuring extraction models, and setting guardrails to enhance agent performance and personalization.</p><p><strong>Products / items</strong></p><ul><li><a href="https://www.bitdoze.com/hindsight-docker-deploy/" target=_blank rel=noopener>Hindsight</a> — software</li><li>Droid — software (no link)</li><li>OMIP — software (no link)</li><li>Claude Code — software (no link)</li><li>Hermes — software (no link)</li><li>N8N — software (no link)</li><li>Obsidian — software (no link)</li><li>Arno Chat GPT — software (no link)</li><li>Cloud Codex — software (no link)</li><li>Groq — software (no link)</li><li>Antigravity — software (no link)</li><li>Devin — software (no link)</li><li>Klein — software (no link)</li><li>Cursor — software (no link)</li><li>Kilo — software (no link)</li><li><a href="https://go.bitdoze.com/opencode-go" target=_blank rel=noopener>OpenCode Go</a> — software</li><li>Docker — software (no link)</li><li>pgvector — software (no link)</li><li>PostgreSQL — software (no link)</li><li>Pluton — software (no link)</li><li>Zerobyte — software (no link)</li><li>Cloudflare Tunnel — software (no link)</li><li>Tailscale — software (no link)</li><li>Caddy — software (no link)</li><li>Nginx — software (no link)</li><li>OpenAI — software (no link)</li><li>OpenRouter — software (no link)</li><li>Cogni — software (no link)</li></ul>
+<p><a href="https://www.youtube.com/watch?v=6FiOydr9D2Y" target=_blank rel=noopener>Watch on YouTube ▶</a></p><p><a href="6FiOydr9D2Y.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=t>(proxy for this video — answer from this)</span></p>
+<div class=cap>FRAMING: Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+IDENTITY: the title - https://www.youtube.com/watch?v=6FiOydr9D2Y - @octopusinc_ - route: visual
+PRODUCTS:
+Hindsight - https://www.bitdoze.com/hindsight-docker-deploy/ - software - primary
+Droid - no reliable link - software - mentioned
+OMIP - no reliable link - software - mentioned
+Claude Code - no reliable link - software - mentioned
+Hermes - no reliable link - software - mentioned
+N8N - no reliable link - software - mentioned
+Obsidian - no reliable link - software - mentioned
+Arno Chat GPT - no reliable link - software - mentioned
+Cloud Codex - no reliable link - software - mentioned
+Groq - no reliable link - software - mentioned
+Antigravity - no reliable link - software - mentioned
+Devin - no reliable link - software - mentioned
+Klein - no reliable link - software - mentioned
+Cursor - no reliable link - software - mentioned
+Kilo - no reliable link - software - mentioned
+OpenCode Go - https://go.bitdoze.com/opencode-go - software - mentioned
+Docker - no reliable link - software - mentioned
+pgvector - no reliable link - software - mentioned
+PostgreSQL - no reliable link - software - mentioned
+Pluton - no reliable link - software - mentioned
+Zerobyte - no reliable link - software - mentioned
+Cloudflare Tunnel - no reliable link - software - mentioned
+Tailscale - no reliable link - software - mentioned
+Caddy - no reliable link - software - mentioned
+Nginx - no reliable link - software - mentioned
+OpenAI - no reliable link - software - mentioned
+OpenRouter - no reliable link - software - mentioned
+Cogni - no reliable link - software - mentioned
+SYNOPSIS: The video demonstrates Hindsight, a self-hosted central memory layer for AI agents, which aims to provide personalized and persistent context. The presenter shows Hindsight integrated with Droid and OMIP, where agents can query a central memory bank to retrieve details about the user&#x27;s projects, preferences, and infrastructure. Hindsight stores &quot;word facts,&quot; &quot;experiences,&quot; and &quot;observations,&quot; and can create knowledge bases and mental models. It differentiates between &quot;recall&quot; for quick retrieval and &quot;reflect&quot; for aggregating deeper insights. The UI for Hindsight shows a &quot;Memories&quot; section with a graph view and a list of entries, categorized by tags like &quot;Droid agent.&quot; Configuration options include setting extraction models (e.g., &quot;concise&quot;), chunk size, and &quot;missions&quot; to guide what information is stored (e.g., &quot;technical facts only&quot;). Observations can be enabled to focus on &quot;durable facts about projects, infrastructure, preferences, recurring problems.&quot; Reflection settings allow adjusting &quot;acceptism,&quot; &quot;literalism,&quot; and &quot;empathy&quot; for the agent&#x27;s personality. Hindsight can be deployed via Docker Compose, with options for a &quot;full&quot; image (9GB, local embeddings) or a &quot;slim&quot; image (500MB, links to external LLM providers for embeddings). The presenter uses the slim image, linking to OpenCode Go for LLM and OpenAI for embeddings. The deployment requires a PostgreSQL database with pgvector. The video also highlights API clients for Python and NodeJS, and a CLI for backup and querying. Backup options include using the CLI or tools like Pluton and Zerobyte. Hindsight can be integrated with various AI tools like Claude Code, Hermes, N8N, and Obsidian. The presenter states Hindsight is the &quot;best option&quot; compared to other memory systems like Cogni, despite adding a layer of complexity.
+BEATS:
+0s - ui - The video opens with a terminal showing the DROID AI agent interface, with the command &quot;tell me about me and my projects&quot; entered.
+69s - ui - The DROID agent is shown processing the command, displaying &quot;HINDSIGHT: list_tags limit: 100&quot; and &quot;HINDSIGHT: reflect budget: &#x27;mid&#x27;, max_tokens: 6000&quot;.
+138s - ui - The DROID agent&#x27;s response is displayed, detailing the user&#x27;s projects, stack, and values, demonstrating its personalized knowledge.
+207s - ui - The Hindsight web UI is shown, specifically the &quot;Memories&quot; section with &quot;World Facts,&quot; &quot;Experience,&quot; and &quot;Observations&quot; tabs, and a graph visualization of memories.
+276s - ui - The Hindsight web UI displays a list of individual memory entries, showing tags like &quot;Droid agent&quot; and &quot;project:buzz.&quot;
+345s - ui - The Hindsight web UI shows the &quot;Bank Configuration&quot; section, specifically the &quot;LLM Resources&quot; tab, displaying call volume and status of LLM operations.
+414s - ui - A BitDoze article page titled &quot;Deploy Hindsight Agent Memory&quot; is shown, detailing integration with various AI agents and memory storage.
+484s - ui - The BitDoze article continues, showing Docker image variants for Hindsight (Full 9GB, Slim 500MB) and deployment prerequisites.
+553s - ui - The Hindsight web UI shows the &quot;Welcome to Hindsight&quot; screen, prompting the user to select or create a memory bank.
+622s - ui - The BitDoze article displays a `docker-compose.yml` file snippet, showing environment variables for Hindsight configuration, including LLM provider and API keys.
+691s - terminal - A terminal window displays Docker logs, showing Hindsight processing requests, including &quot;HINDSIGHT_API_ENGINE_MEMORY_ENGINE&quot; and &quot;REFLECT_MENTAL_MODEL&quot; operations.
+760s - ui - The Hindsight web UI shows the &quot;Configuration&quot; tab within &quot;Bank Configuration,&quot; with settings for &quot;Retain,&quot; &quot;Extraction Mode&quot; (e.g., &quot;Concise&quot;), and &quot;Chunk Size.&quot;
+829s - ui - The Hindsight web UI continues to show configuration options, including &quot;Free Form Entities,&quot; &quot;Entry Labels,&quot; and &quot;Observations&quot; settings with a mission prompt.
+898s - ui - The Hindsight web UI displays &quot;Reflect&quot; configuration, including a mission prompt for the agent&#x27;s identity and purpose, and sliders for &quot;Skepticism,&quot; &quot;Literalism,&quot; and &quot;Empathy.&quot;
+968s - ui - The BitDoze article shows &quot;Small VPS performance tweaks&quot; and instructions for &quot;Using the Hindsight API&quot; with Python, NodeJS, and CLI clients.
+1037s - ui - The BitDoze article details &quot;Using OpenCode Go&quot; as an LLM provider and shows a `docker-compose.yml` snippet for configuring it.
+1106s - ui - The BitDoze article discusses backup options for Hindsight, including CLI and full backup with Pluton or Zerobyte.
+1175s - ui - The BitDoze article concludes with &quot;What&#x27;s next&quot; steps for Hindsight, including setting missions, wiring agents, and creating memory banks.
+1244s - ui - The DROID agent&#x27;s detailed response about the user&#x27;s projects and stack is shown again, emphasizing the personalized context provided by Hindsight.
+1313s - ui - The DROID agent&#x27;s response is still on screen, highlighting specific projects like `bitdoze.com`, `testemap.ro`, and `hindsight-skills`.
+ENTITIES: Droid, OMIP, Hindsight, Claude Code, Hermes, N8N, Obsidian, Arno Chat GPT, Cloud Codex, Groq, Antigravity, Devin, Klein, Cursor, Kilo, OpenCode Go, Docker, pgvector, PostgreSQL, Pluton, Zerobyte, Cloudflare Tunnel, Tailscale, Caddy, Nginx, OpenAI, OpenRouter, Cogni.
+VERDICT: The creator highly recommends Hindsight as the best memory system they&#x27;ve found, despite adding complexity, because it provides personalized and persistent context to AI agents, preventing them from repeating mistakes and making them smarter.
+NOT COVERED: Specific pricing for Hindsight or OpenCode Go, detailed technical architecture of Hindsight&#x27;s components beyond Docker and pgvector, a direct comparison of Hindsight&#x27;s performance metrics against other memory systems, or a step-by-step live deployment of Hindsight.</div></main><footer><a href="../index.html">← all videos</a></footer></div></body></html>

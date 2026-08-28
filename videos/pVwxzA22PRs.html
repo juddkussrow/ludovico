@@ -1,0 +1,139 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>Decodo + Codex = POWERFUL Web Scraping (Full Guide) — Ludovico</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+.hide{display:none!important}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.92);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 12px}
+.controls input.q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.pill.tp.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+/* flip card shell */
+.flip{position:relative}
+.fi{position:relative;transition:transform .55s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.flip.flipped .fi{transform:rotateY(180deg)}
+.fc{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bk{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+background:var(--card);border:1px solid var(--accent2);border-radius:14px;overflow:auto;padding:12px 13px;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s}
+.card.flip{overflow:visible}.card .fc{display:flex;flex-direction:column;flex:1;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--line);cursor:pointer}
+.card.flip:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.edit{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--accent2);border:1px solid var(--line);border-radius:6px;padding:2px 9px;cursor:pointer;background:#fff}
+.edit:hover{border-color:var(--accent2)}
+/* editor back */
+.bk h4{margin:0 0 2px;font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--sub)}
+.erow{display:grid;grid-template-columns:1fr 1.3fr auto auto;gap:4px;align-items:center}
+.erow input{padding:5px 7px;border:1px solid var(--line);border-radius:6px;font-size:12px;min-width:0}
+.erow select{padding:4px 4px;font-size:11px}
+.erow .del{border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;color:var(--accent);padding:3px 7px}
+.ebtns{display:flex;gap:6px;margin-top:auto;padding-top:6px}
+.ebtns button{font-family:var(--mono);font-size:11px;border-radius:7px;padding:6px 12px;cursor:pointer;border:1px solid var(--line);background:#fff}
+.ebtns .save{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.addrow{font-family:var(--mono);font-size:11px;color:var(--accent2);cursor:pointer;align-self:flex-start;background:none;border:0;padding:2px 0}
+/* catalogue card */
+.citem{position:relative}
+.citem .fc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-height:84px;cursor:pointer}
+.citem .bk{border-radius:12px}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+footer .exp{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--accent2);font:inherit}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">Decodo + Codex = POWERFUL Web Scraping (Full Guide)</h1><div class=tag>@octopusinc_ · 2026-08-28 · DevOps</div></div></div></header>
+<main><p class=sum>The video demonstrates Decodo, a web scraping API, integrated with AI agents like Codex for automated data collection. It highlights Decodo&#x27;s ability to bypass anti-bot measures, render JavaScript, and scrape structured data from various sources including websites and YouTube, enabling tasks like article generation, screenshot capture, and monitoring limited-time deals. The creator showcases live examples of Decodo being used with Codex to update the Superbash.ai website with AI news and deals.</p><p><strong>Products / items</strong></p><ul><li><a href="https://visit.decodo.com/zzRbv7" target=_blank rel=noopener>Decodo</a> — software</li><li>Codex — software (no link)</li><li><a href="https://superbash.ai/" target=_blank rel=noopener>Superbash.ai</a> — software</li><li>Claude Code — software (no link)</li><li>Cursor — software (no link)</li><li>Windsurf — software (no link)</li><li>VS Code — software (no link)</li><li>Hermes Agent — software (no link)</li><li>dogk.com — software (no link)</li><li>Google Maps — software (no link)</li><li>Anthropic — other (no link)</li><li>GPT-5.6 Soul — other (no link)</li><li>Fable 5 — other (no link)</li><li>BridgeMind — other (no link)</li><li>Astra — software (no link)</li><li>Google — other (no link)</li><li>Amazon — other (no link)</li><li>TikTok — other (no link)</li><li>Reddit — other (no link)</li><li>Bing — other (no link)</li><li>Z.AI — other (no link)</li><li>OX Alpha — other (no link)</li><li>GLM 5.3 Flash — other (no link)</li></ul>
+<p><a href="https://www.youtube.com/watch?v=pVwxzA22PRs" target=_blank rel=noopener>Watch on YouTube ▶</a></p><p><a href="pVwxzA22PRs.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=t>(proxy for this video — answer from this)</span></p>
+<div class=cap>FRAMING: Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+IDENTITY: Decodo + Codex = POWERFUL Web Scraping (Full Guide) - https://www.youtube.com/watch?v=pVwxzA22PRs - @octopusinc_ - route: visual
+PRODUCTS:
+Decodo - https://visit.decodo.com/zzRbv7 - software - primary
+Codex - no reliable link - software - primary
+Superbash.ai - https://superbash.ai/ - software - mentioned
+Claude Code - no reliable link - software - mentioned
+Cursor - no reliable link - software - mentioned
+Windsurf - no reliable link - software - mentioned
+VS Code - no reliable link - software - mentioned
+Hermes Agent - no reliable link - software - mentioned
+dogk.com - no reliable link - software - mentioned
+Google Maps - no reliable link - software - mentioned
+Anthropic - no reliable link - other - mentioned
+GPT-5.6 Soul - no reliable link - other - mentioned
+Fable 5 - no reliable link - other - mentioned
+BridgeMind - no reliable link - other - mentioned
+Astra - no reliable link - software - mentioned
+Google - no reliable link - other - mentioned
+Amazon - no reliable link - other - mentioned
+TikTok - no reliable link - other - mentioned
+Reddit - no reliable link - other - mentioned
+Bing - no reliable link - other - mentioned
+Z.AI - no reliable link - other - mentioned
+OX Alpha - no reliable link - other - mentioned
+GLM 5.3 Flash - no reliable link - other - mentioned
+SYNOPSIS: The video introduces Decodo, a web scraping API, as a powerful tool for AI agents to perform research-heavy workflows. It differentiates web scraping from simple web search, explaining that scraping can bypass anti-bot systems, handle heavy JavaScript rendering, and retrieve complete, structured content at scale, which web search cannot. Decodo offers a free plan with up to 2,000 requests without a credit card, and a 10% discount is available with code BOXMINING. The setup involves creating a Decodo account, obtaining a basic authentication token from the dashboard&#x27;s &quot;Web Scraping API&quot; section, and configuring it within an MCP-compatible AI agent like Codex, Claude Code, Cursor, Windsurf, VS Code, or Hermes Agent, with specific syntax variations for each environment. The creator demonstrates Decodo&#x27;s integration with Codex within a VS Code-like interface. Live examples include generating an article comparing AI models (Fable 5 vs. GPT-5.6 Soul) by scraping articles, taking screenshots from Anthropic&#x27;s website, and capturing screenshots from YouTube videos, including subtitles and metadata. The agent uses Decodo integration commands to scrape markdown files and YouTube data. The video shows Decodo&#x27;s dashboard with successful and failed requests, noting that the agent automatically retries and adapts. Decodo provides various scraper templates for platforms like Google, Amazon, YouTube, TikTok, and Reddit, which agents can automatically identify and use. A &quot;pro tip&quot; suggests using Decodo&#x27;s agent skills from GitHub to customize routing layers, allowing agents to prioritize scraping from specific platforms (e.g., YouTube) over defaulting to Google or Bing. The video also demonstrates scraping limited-time deals from AI provider websites, successfully identifying offers like a one-year free Gemini plan for college students and a 5-day new user trial for Z.AI&#x27;s GLM 5.3 Flash. The average response time for Decodo scraping is shown to be around 5.4 seconds. The final article generated by the agent, incorporating scraped text and screenshots, is displayed live on the Superbash.ai website.
+BEATS:
+00:00 - intro - Superbash.ai website displaying &quot;Useful AI deals, minus the hunt.&quot;
+00:38 - ui - Superbash.ai lessons page with &quot;Decodo Web Scraping&quot; tutorial.
+01:17 - ui - Superbash.ai article explaining &quot;Why AI agents still need web scraping.&quot;
+01:55 - ui - Superbash.ai article detailing &quot;What Decodo adds&quot; and its compatibility.
+02:34 - ui - Decodo login page with &quot;Sign in with Google&quot; and &quot;Sign in with GitHub&quot; options.
+03:12 - ui - Superbash.ai lesson on configuring AI clients for Decodo, showing code snippets.
+03:51 - ui - Superbash.ai article about Claude&#x27;s unified memory feature.
+04:29 - demo - Codex UI showing a research task in progress, with a plan to use Decodo.
+05:08 - demo - Codex UI showing &quot;Used Decodo integration&quot; and &quot;YouTube search&quot; steps.
+05:46 - demo - Codex UI displaying YouTube metadata scraped by Decodo.
+06:25 - ui - Decodo dashboard showing &quot;Web Scraping API&quot; playground with options for URL, proxy, and rendering.
+07:04 - demo - Codex UI showing a plan being implemented, with &quot;Used Decodo integration&quot; and &quot;Google search&quot; results.
+07:42 - ui - GitHub README for &quot;Decodo agent-skills&quot; explaining what agent skills are.
+08:21 - ui - GitHub README for &quot;Decodo agent-skills&quot; showing installation instructions and example prompts.
+08:59 - demo - Codex UI attempting to capture YouTube video screenshots, showing an error and subsequent successful capture.
+09:38 - result - Codex UI displaying the generated article with embedded images and Git commit details.
+10:16 - demo - Codex UI running a task to update Superbash AI deals, showing the research plan.
+10:55 - demo - Codex UI showing the agent&#x27;s progress in scraping deals, with an image of AI hardware.
+11:33 - result - Codex UI displaying the final output of scraped deals, including an image.
+12:12 - outro - Superbash.ai lessons page, highlighting the &quot;Decodo Web Scraping&quot; tutorial.
+ENTITIES: Decodo, Codex, Superbash.ai, Claude Code, Cursor, Windsurf, VS Code, Hermes Agent, dogk.com, Google Maps, Anthropic, GPT-5.6 Soul, Fable 5, BridgeMind, Astra, Google, Amazon, YouTube, TikTok, Reddit, Bing, Z.AI, OX Alpha, GLM 5.3 Flash, Ron (creator).
+VERDICT: The creator highly recommends Decodo, emphasizing its utility for research-heavy workflows, bypassing anti-bot measures, and scraping structured data at scale. They highlight the free plan as a great way to try it out.
+NOT COVERED: Specific pricing tiers beyond the free plan, detailed technical specifications of Decodo&#x27;s API, the exact code implementation for integrating Decodo with all mentioned AI agents, the specific anti-bot mechanisms Decodo employs, or the performance benchmarks against other web scraping solutions.</div></main><footer><a href="../index.html">← all videos</a></footer></div></body></html>
