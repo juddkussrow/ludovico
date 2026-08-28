@@ -1,0 +1,176 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: MiniMax H3 Video Inpainting on 8GB VRAM! Free ComfyUI Workflow
+channel: @octopusinc_
+duration: 09:32
+source: https://www.youtube.com/watch?v=58ydJUg5aR8
+upload_date: 20260825
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:03] [scene:talk]
+VISUAL: 
+AUDIO: '[music] &gt;&gt; I generated all these clips using my RTX'
+
+[01:12] [scene:talk]
+VISUAL: 
+AUDIO: '5060 laptop with 8 gigs of VRAM and 32 gigs of system RAM. This is the workflow I created to get these in painting results. As always, make sure you\'re fully up to date before using the'
+
+[01:24] [scene:ui]
+VISUAL: ComfyUI interface showing a "Note: Model Links" section with file paths for VAE, diffusion models, text encoders, and checkpoints.
+AUDIO: 'workflow. If you have any missing nodes, click the install missing custom nodes option and install them. These are the links to all the models you need to run this workflow. First, you need both of these VAE files and they go inside the'
+
+[01:37] [scene:talk]
+VISUAL: 
+AUDIO: 'VAE folder. For the diffusion model, I used the INT8 model and you should place your diffusion model inside the diffusion models folder. Next is the text encoder. Again, you only need one'
+
+[01:49] [scene:ui]
+VISUAL: Hugging Face page for "MiniMax H3" model, highlighting that the NVFP4 text encoder does not require a Blackwell GPU.
+AUDIO: 'model here. If you have a Blackwell GPU like my RTX 5060, you can use the NVFP4 text encoder for a speed boost. If you have an older generation GPU, download'
+
+[02:01] [scene:talk]
+VISUAL: 
+AUDIO: 'the INT4 version. However, the official MiniMax H3 model card says the NVFP4 encoder isn\'t restricted to Blackwell GPUs, and it might work with older GPUs as well. The text encoder goes inside'
+
+[02:15] [scene:ui]
+VISUAL: ComfyUI workflow overview, showing various connected nodes and a preview of a woman in a dress.
+AUDIO: 'the text encoder\'s folder. Next, SAM 3.1 goes inside the checkpoints folder. If you aren\'t familiar with the storage locations, head to your ComfyUI directory and open the ComfyUI folder.'
+
+[02:27] [scene:talk]
+VISUAL: 
+AUDIO: 'The folders you need are inside the models folder. These are the exact folders where you need to place the downloaded models. This first group is the low VRAM backbone of this workflow. I route the model through Comfy'
+
+[02:40] [scene:ui]
+VISUAL: Detailed view of ComfyUI nodes for "Ref2VA Model and Memory Patches," including "Comfy Kitchen Attention" and "Feed-forward Chunk."
+AUDIO: 'Kitchen\'s optimized attention path, then use two beta memory patches to divide the heaviest calculations into smaller pieces. The feed-forward layers are split into two chunks when the sequence becomes large, while the attention heads'
+
+[02:52] [scene:talk]
+VISUAL: 
+AUDIO: 'are processed in two groups. These are memory-saving controls rather than speed boosts. They reduce peak VRAM pressure with a small amount of extra processing overhead, helping the complete workflow run on my 8GB GPU. Here\'s where you can'
+
+[03:05] [scene:talk]
+VISUAL: 
+AUDIO: 'upload your source video. This is the H3 timeline node. Here\'s the resolution I used for all the eight second generations. I found it ideal for my 8GB VRAM system. You need to swap these'
+
+[03:18] [scene:ui]
+VISUAL: ComfyUI interface showing "Source Video and H3 Timeline" node with video preview and timeline settings like aspect ratio, width, height, and frame count.
+AUDIO: 'values depending on whether you\'re generating a vertical or landscape clip. I\'ve attached the list of resolutions supported by MiniMax H3 for your reference. The 192 frame range gives me the full 8-second clip. Selecting'
+
+[03:31] [scene:talk]
+VISUAL: 
+AUDIO: 'MiniMax H3 mode also keeps the frame count compatible with H3\'s required 17N + 5 structure. If you only want to edit a specific part of the clip, you can change the start frame by clicking and'
+
+[03:44] [scene:ui]
+VISUAL: Close-up of the video timeline in ComfyUI, showing audio waveform and controls for marking start and end points.
+AUDIO: 'holding the mouse, then dragging your cursor to the right. You\'ll see the timeline below shrink. You can do the same with the frame count value below, but this time drag the cursor to the left. Now we have a section like this'
+
+[03:57] [scene:talk]
+VISUAL: 
+AUDIO: 'instead of the full clip in the timeline, and only that part will be used for the in-painting process. There\'s an even easier way to pinpoint a specific part of your uploaded clip. Just play the clip by clicking the play'
+
+[04:09] [scene:ui]
+VISUAL: ComfyUI timeline controls, highlighting the button to enable the full length of the clip.
+AUDIO: 'button here, find the starting point, and click this button to mark it. Then keep playing until you find the ending point and click this button to mark it. Now you\'ve pinpointed the exact part you want to in-paint. For my generations, I'
+
+[04:21] [scene:talk]
+VISUAL: 
+AUDIO: 'used the entire clip. Now this part is important. If you upload a clip in the timeline displays only part of it, make sure to click this button to enable the full length of the clip. Next, we have the SAM 3.1 object tracking section.'
+
+[04:35] [scene:ui]
+VISUAL: ComfyUI nodes for "SAM 3.1 Video Track," showing inputs for model, prompt, detection threshold, max objects, and detect interval.
+AUDIO: 'This is where we create the mask for the object we actually want to replace throughout the video. First, select the SAM 3.1 model we downloaded earlier. Then, in this tracking prompt node,'
+
+[04:47] [scene:talk]
+VISUAL: 
+AUDIO: 'describe the exact object you want it to follow. I\'m using a detection threshold of 0.35. Increasing it makes SAM more selective, while lowering it can help if the object is difficult to detect.'
+
+[05:00] [scene:talk]
+VISUAL: 
+AUDIO: 'I\'ve set max objects to one because I only want to track this single outfit. SAM assigns each tracked object an index. Since we have only one object here, its index is zero. If you track multiple objects, you can'
+
+[05:13] [scene:ui]
+VISUAL: ComfyUI nodes for "SAM 3 Track to Mask," demonstrating how to input multiple object indices (e.g., "0,1").
+AUDIO: 'select the required object indices here instead. Now if you want to track two objects like I did here, first set the object indices value to 0,1 inside the SAM 3 track to mask node, so'
+
+[05:26] [scene:talk]
+VISUAL: 
+AUDIO: 'the model understands that it needs to track two objects. Then clearly specify which objects you want to track inside the tracking prompt. In this clip, I wanted to track the'
+
+[05:38] [scene:ui]
+VISUAL: ComfyUI workflow showing the "Clean Tracking Mask" node connected to the main workflow, with a video preview.
+AUDIO: 'swimming pool and the coconut tree. After that, set the max objects value to two inside the SAM 3 video track node. For this specific clip, I set the detect interval value to one.'
+
+[05:51] [scene:talk]
+VISUAL: 
+AUDIO: 'After clicking run and before sampling starts, you can use the tracking preview to check the object IDs and make sure SAM is following the correct object or objects before continuing.'
+
+[06:03] [scene:ui]
+VISUAL: Close-up of the "Clean Tracking Mask" node parameters: threshold (0.50), method (shrink_grow), shrink (8), min_frames (2), edge_grow (4).
+AUDIO: 'Once tracking is finished, I use this unload SAM 3 node so the SAM model doesn\'t need to remain loaded while the rest of the workflow runs. This is especially useful when working with limited VRAM.'
+
+[06:15] [scene:talk]
+VISUAL: 
+AUDIO: 'Finally, I pass the tracked mask through this clean tracking mask node. I\'m using a threshold of 0.5 with the shrink grow method. The shrink value is eight, which temporarily removes very thin regions'
+
+[06:28] [scene:talk]
+VISUAL: 
+AUDIO: 'and small tracking artifacts while preserving the shape of the main tracked object. I also use a minimum of two frames, so very brief mask artifacts are less likely to survive.'
+
+[06:40] [scene:ui]
+VISUAL: Tooltip for "Clean Tracking Mask" node explaining its function: "Removes specks and brief flickering blobs from a video mask batch..."
+AUDIO: 'And an edge grow value of four to retain a little extra coverage around the edges of the object. These cleanup values worked well for this clip, but depending on your object and the quality of the tracking, you can'
+
+[06:52] [scene:talk]
+VISUAL: 
+AUDIO: 'adjust them if your mask is either missing details or covering too much of the surrounding area. Next, we have the crop and color check section. This is where the workflow creates a smaller working area around the objects'
+
+[07:04] [scene:ui]
+VISUAL: ComfyUI nodes for "Crop + Color Check," showing "Tracked Edit Crop," "H3-Aligned Update Mask," and "Feathered Composite Mask."
+AUDIO: 'we want to change. Instead of regenerating the entire video frame, MiniMax H3 processes only the area surrounding the tracked objects. This reduces the number of pixels it'
+
+[07:16] [scene:talk]
+VISUAL: 
+AUDIO: 'needs to handle and makes the workflow much more practical on an 8 GB GPU. For this clip, the resulting working area is 320 by 576 pixels across all 192 frames.'
+
+[07:31] [scene:ui]
+VISUAL: Editing the "White Point" value in the "H3-Aligned Update Mask" node to 0.50.
+AUDIO: 'This is much smaller than the complete source frame, but still retains enough context for a convincing edit. The H3 aligned update mask prepares the tracked area for Min Max H3\'s spatial and temporal structure.'
+
+[07:45] [scene:talk]
+VISUAL: 
+AUDIO: 'This is the firm mask that controls which parts of the cropped video can be regenerated. The black point and white point are both set to 0.5 creating a clear boundary between the protected and editable regions.'
+
+[07:58] [scene:ui]
+VISUAL: Close-up of "H3-Aligned Update Mask" node parameters, showing "Expand / Contract" set to 6 and "Feather" set to 8.
+AUDIO: 'Expand in time is set to two. This extends the mask using information from the two neighboring frames on either side helping to cover brief tracking gaps or delays. Smooth in time is also set to two'
+
+[08:12] [scene:talk]
+VISUAL: 
+AUDIO: 'reducing flickering and sudden changes along the mask edges. The mask is expanded outward by six pixels. This gives H3 enough coverage to replace the complete object instead of leaving a'
+
+[08:24] [scene:ui]
+VISUAL: ComfyUI "Final Composite Area (Magenta Overlay)" node, displaying the video preview with a magenta overlay indicating the blended region.
+AUDIO: 'thin outline of the original around its edges. The block coverage threshold is set to 0.05. This allows partially covered H3 blocks to be included reducing the chance of'
+
+[08:36] [scene:talk]
+VISUAL: 
+AUDIO: 'small pieces of the original object surviving the edit. Next, the feathered composite mask creates a softer version of the mask for blending the generated result back into the video. The magenta overlay shows the final area that will'
+
+[08:49] [scene:talk]
+VISUAL: 
+AUDIO: 'be blended into the original video. The magenta color and its opacity are only visual aids. Changing them won\'t affect the mask or the final generation. Here\'s where you can enter your main prompt and prompting is really important here. If'
+
+[09:01] [scene:ui]
+VISUAL: ComfyUI text input field showing a detailed prompt for transforming a beetle into a crimson sports car.
+AUDIO: 'you want to turn this beetle into a small car and mention in the prompt that you want to turn the beetle into a car, you\'ll get a result like this. Never mention the original object you want to replace in the prompt. Mention the beetle only in the tracking prompt. This'
+
+[09:13] [scene:talk]
+VISUAL: 
+AUDIO: 'is the prompt I used to turn the beetle into a small car. Here\'s the sampling node group. I used the res multi-step sampler and the simple scheduler with 20 steps for all my generations. Please leave a thumbs up, subscribe to the'
+
+[09:25] [scene:talk]
+VISUAL: 
+AUDIO: 'channel if you haven\'t already, and share your experience in the comments below. See you in the next video.'
