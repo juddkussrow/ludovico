@@ -1,0 +1,248 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Herdr (AI Agent Multiplexer)r: You're not a PRO AI Coder if you're not using THIS OPENSOURCE Tool!
+channel: @octopusinc_
+duration: 12:52
+source: https://www.youtube.com/watch?v=6WU-7Tgacug
+upload_date: 20260829
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:05] [scene:talk]
+VISUAL: 
+AUDIO: 'Hi, welcome to another video. Before starting the video, I\'d like to tell you that I have become more active on my AIC King channel. Now, I am posting some new stuff and some developer related tools that I don\'t cover here. So, you can go ahead and check it out as well. I\'ll put'
+
+[00:18] [scene:talk]
+VISUAL: 
+AUDIO: 'the link to it in the description. So, if you run AI coding agents, seriously, your setup probably looks something like this. one clawed code session doing a refactor, one codec session fixing a bug, maybe an open code or Gemini CLI'
+
+[00:32] [scene:talk]
+VISUAL: 
+AUDIO: 'session doing research, and all of it spread across a bunch of terminal tabs or T-max panes. And the real problem is not running the agents. The real problem is knowing what they are doing. Is that agent still working? Is it sitting there'
+
+[00:45] [scene:talk]
+VISUAL: 
+AUDIO: 'blocked on a permission prompt for the last 10 minutes while you were looking at another pane? Did it finish 20 minutes ago? T-M has no idea because to T-Mox an AI agent is just another process and that is exactly the problem'
+
+[00:58] [scene:talk]
+VISUAL: 
+AUDIO: 'Herder is built to solve. So Herder is basically an agent multiplexer that lives in your terminal. It is written in Rust. It runs inside your existing terminal instead of replacing it. And the whole point of it is that it'
+
+[01:10] [scene:talk]
+VISUAL: 
+AUDIO: 'actually understands AI coding agents. It knows when an agent is working, when it is blocked and waiting on you, when it is idle and when it is done. And on top of that, it gives your agents a CLI and a socket API so they can orchestrate'
+
+[01:22] [scene:talk]
+VISUAL: 
+AUDIO: 'each other, which is where things get really interesting for prousers. If you ask me, this is one of the most agent native takes on terminal multipplexing that I have seen yet. So, let\'s get right into it. Now, the first thing to understand is what Herder actually is.'
+
+[01:35] [scene:talk]
+VISUAL: 
+AUDIO: 'Think of it like T-milt from scratch for the agent era. You get workspaces, which Herder calls spaces. You get tabs, you get split panes, and you get persistent sessions that survive'
+
+[01:48] [scene:talk]
+VISUAL: 
+AUDIO: 'disconnects. So all the normal multiplexor stuff is there, but then there is a sidebar that lists every agent it has detected across all your pains along with its live state. So instead of cycling through PES like a'
+
+[02:00] [scene:talk]
+VISUAL: 
+AUDIO: 'helicopter parent to check on each agent, you just glance at the sidebar and immediately see which one needs you. That alone changes how many agents you can realistically run in parallel. And the agent support is genuinely broad. Herder detects around 20 agent CLIs out'
+
+[02:14] [scene:talk]
+VISUAL: 
+AUDIO: 'of the box. Claude code, Codeex, Open Code, Cursor Agent, Copilot CLI, Gro CLI, Quen Code, Kilo Code, Droid AMP, Devonro, and a bunch more. Gemini CLI and Klein are also detected, although'
+
+[02:28] [scene:talk]
+VISUAL: 
+AUDIO: 'those are a bit less tested. And even if your agent is not on the list, it still runs fine as a normal terminal process. You just do not get the rich state tracking for it. So, it is not locking you into any one vendor\'s stack, which I'
+
+[02:40] [scene:talk]
+VISUAL: 
+AUDIO: 'always like to see. Installation is simple too. On a Mac, you can just run brew install herder. On Linux, there is a oneline curl install script from their website. There is a PowerShell script for Windows. And if'
+
+[02:52] [scene:talk]
+VISUAL: 
+AUDIO: 'you are a Rust person, you can also do cargo install herder. Once it is installed, you just type her in your terminal and you are in. And because it renders inside your existing terminal, your fonts, your colors, and your shell'
+
+[03:04] [scene:talk]
+VISUAL: 
+AUDIO: 'config all stay exactly as they are. The interface itself is honestly quite friendly. If you have used T-Max, you already know the basics because the prefix key is controlB by default. CtrlB and a question mark shows you all the'
+
+[03:18] [scene:talk]
+VISUAL: 
+AUDIO: 'key bindings and you can split PES, create tabs, and make new spaces from there. But unlike T-Mux, the mouse is a first class citizen. You can click PES to focus them, drag to resize, and'
+
+[03:30] [scene:talk]
+VISUAL: 
+AUDIO: 'rightclick for context menus to split or close panes. So you get T-M style muscle memory if you want it, without the usual prefix key gymnastics if you do not. Now let\'s talk about the state tracking because this is the core feature and it'
+
+[03:43] [scene:talk]
+VISUAL: 
+AUDIO: 'is worth understanding how it actually works. Herd tracks four states for each agent. Working means the agent is actively processing. Blocked means it is waiting on you. So a permission prompt, a question, an approval. Idle means it is sitting there ready for a prompt. And'
+
+[03:56] [scene:talk]
+VISUAL: 
+AUDIO: 'done means it finished a task and you have not looked at it yet. That last one is a nice detail because the difference between idle and done is basically whether you have actually seen the result. So a finished agent stays flagged until you review it instead of'
+
+[04:08] [scene:talk]
+VISUAL: 
+AUDIO: 'quietly blending back into the noise. And under the hood, there are two detection mechanisms. For some agents, Herger uses proper life cycle hooks where the agent itself reports its state directly. That is the most accurate signal. For agents that do not have full'
+
+[04:21] [scene:talk]
+VISUAL: 
+AUDIO: 'hooks like Claude code, it watches the bottom of the terminal buffer and matches it against known UI patterns using detection rules. So when Claude code throws up a permission prompt, Herd recognizes that visually and marks the'
+
+[04:33] [scene:talk]
+VISUAL: 
+AUDIO: 'agent as blocked. and they have deliberately made blocked detection conservative so it only fires when it actually matches a known approval or question UI instead of spamming you with false alarm. To get the best tracking, you can install per agent integrations.'
+
+[04:46] [scene:talk]
+VISUAL: 
+AUDIO: 'You just run her integration install claude and it wires up the claude code integration for you. There is also a herder integration status command to see what is active and once integrations are in place. You can also get notifications'
+
+[04:59] [scene:talk]
+VISUAL: 
+AUDIO: 'when an agent in a background pane changes state. So you can be heads down in one pane and when your background agent finishes or gets blocked her pings you no more babysitting. This is pretty'
+
+[05:11] [scene:talk]
+VISUAL: 
+AUDIO: 'amazing for parallel work to be honest. Now let\'s come to the part that I think pro agent users will care about the most which is the automation layer. Herder exposes a CLI and a local socket API. And here is the key thing. Your agents'
+
+[05:24] [scene:talk]
+VISUAL: 
+AUDIO: 'can call it too. So an agent running inside Herder can split PES, start other agents, prompt them, wait for them to finish, and read their output. Which means Herder is not just a viewer for your agents. It is an orchestration'
+
+[05:37] [scene:talk]
+VISUAL: 
+AUDIO: 'surface. Let me walk you through what that looks like. There are pain commands. So pain split with a direction. Pain run to execute a command. Pain send text and send keys for raw input. Pain weight output to wait for a pattern. and pain read to'
+
+[05:49] [scene:talk]
+VISUAL: 
+AUDIO: 'grab the output back. Then there are agent commands. Agent start launches a supported agent in a pane with the d-kind flag. So codeex cla gemini cursor and so on. Agent prompt submits a prompt'
+
+[06:02] [scene:talk]
+VISUAL: 
+AUDIO: 'and you can add the d-wait flag to block until it reaches a target state. Agent waits for a state like idle, done or blocked. Agent read pulls the agents recent output and agent rename gives an'
+
+[06:15] [scene:talk]
+VISUAL: 
+AUDIO: 'agent a stable name like reviewer or tester. So you can address it by name instead of by pane ID. So here\'s a concrete workflow. You are in claude code and you tell it something like implement this feature and when you\'re'
+
+[06:29] [scene:talk]
+VISUAL: 
+AUDIO: 'done spin up a codeex agent in a new pane and have it review your diff. Claude code can then literally run herder pane split to create a pane on the right. Run her agent start reviewer with the d--kind codeex flag. Then'
+
+[06:42] [scene:talk]
+VISUAL: 
+AUDIO: 'herder agent prompt reviewer with the review instructions and the d-wait flag. And once the reviewer is done, it runs herder agent red reviewer to pull the feedback back in and address it. One'
+
+[06:54] [scene:talk]
+VISUAL: 
+AUDIO: 'prompt from you and two agents coordinated the whole thing between themselves. This is the kind of multi-agent pipeline that people usually duct tape together with team send keys and a prayer. Here it is just a'
+
+[07:06] [scene:talk]
+VISUAL: 
+AUDIO: 'supported first class API. Chef\'s kiss. Really good stuff. Now, let me quickly show you how this fits into my actual workflow because I do not run everything in the terminal. The way I split things these days is pretty simple. The bigger'
+
+[07:19] [scene:talk]
+VISUAL: 
+AUDIO: 'well- definfined project work goes to Verdant and the faster terminal native tasks live in my herder setup. So, on one side I have Verdant deck open. I give it a bigger goal like building out a whole feature and it plans the project'
+
+[07:31] [scene:talk]
+VISUAL: 
+AUDIO: 'properly, breaks it down into tasks and then runs its own parallel agents on it each in an isolated session. It keeps the whole project in context and I just review the diffs when the tasks are ready. I do not have to wire any of that'
+
+[07:44] [scene:talk]
+VISUAL: 
+AUDIO: 'up myself because that planning and delegation layer is just built in. And if I\'m away from my desk, I can even send it instructions from Slack or Telegram and it keeps working. You can also use it through their VS Code or Jet Brains extensions if you prefer that.'
+
+[07:57] [scene:talk]
+VISUAL: 
+AUDIO: 'and it lets you pick between different top models including some free ones. And on the other side, Herder is running my terminal herd. Claude code doing a refactor codeex on review duty a pain with tests and logs. The herder sidebar'
+
+[08:10] [scene:talk]
+VISUAL: 
+AUDIO: 'tells me when a terminal agent is blocked or done and verdant tells me when its tasks are ready for review. So between those two, I am basically never babysitting anything. Verdant handles the planned delegated work and Herder'
+
+[08:23] [scene:talk]
+VISUAL: 
+AUDIO: 'keeps the ad hoc terminal work visible. And honestly, this combination is what parallel agent work is supposed to feel like. If you want to try that setup, Verdant has a free trial right now and it is linked below. Anyway, now let\'s'
+
+[08:36] [scene:talk]
+VISUAL: 
+AUDIO: 'come to the other big pillar of Herder, which is persistence. And this one matters a lot. If you run long agent sessions, Herder uses a client server model. So the server holds the real terminals and your client just attaches'
+
+[08:49] [scene:talk]
+VISUAL: 
+AUDIO: 'to it. You can detach with controlB, close your laptop, come back later, run Herder again, and everything is still running. Your agents never stopped. And if the server itself restarts, Herder restores your session shape. So your'
+
+[09:02] [scene:talk]
+VISUAL: 
+AUDIO: 'spaces, tabs, PES, working directories, and layout all come back. But here is the part I really like. Herder also does native agent session restore. So for supported agents after a restart it can resume the actual agent conversation'
+
+[09:16] [scene:talk]
+VISUAL: 
+AUDIO: 'automatically using things like the resume functionality in clawed code under the hood which means a server restart does not mean losing your agents context that is enabled by default and you can turn it off in the config if you want. There is also an experimental pain'
+
+[09:28] [scene:talk]
+VISUAL: 
+AUDIO: 'history replay feature that saves terminal output across restarts although it is off by default because your scroll back can contain secrets and tokens which is a fair call. And then there\'s remote mode which extends all of this to other machines. You can run her with the'
+
+[09:41] [scene:talk]
+VISUAL: 
+AUDIO: 'd-- remote flag pointing at an SSH host and the server runs on the remote box while the client stays local. So your agents run on your beefy dev server or your VPs with its files and its compute,'
+
+[09:54] [scene:talk]
+VISUAL: 
+AUDIO: 'but your local key bindings and themes still apply and you can detach and reattach from anywhere. Combine that with the persistent story and you can basically leave a herd of agents running on a server overnight and check on them'
+
+[10:06] [scene:talk]
+VISUAL: 
+AUDIO: 'from any machine. There is even an experimental live handoff feature that can keep processes alive across server updates. So they are clearly taking the always running angle seriously. Configuration is pretty straightforward'
+
+[10:19] [scene:talk]
+VISUAL: 
+AUDIO: 'as well. Everything lives in a config file in your config herder folder. You can change the prefix key to something like control space if you want. Tweak the sidebar, configure notifications and scroll back and pick from built-in themes like capacian, groovebox, nord,'
+
+[10:32] [scene:talk]
+VISUAL: 
+AUDIO: 'and dracula. And you can reload the config in a running session without restarting anything. There is also a plug-in system with the marketplace where plugins are basically local executables with manifest actions and event hooks. It is still early but the'
+
+[10:44] [scene:talk]
+VISUAL: 
+AUDIO: 'direction is nice. Now I do have to mention the limitations because there are some. First, this is pre 1.0 software. It is moving fast and protocol upgrades between versions can require'
+
+[10:56] [scene:talk]
+VISUAL: 
+AUDIO: 'stopping the running server which kills your pains. That is exactly the kind of rough edge you accept with young tools. Second, for agents without life cycle hooks, including clawed code, right now state detection is based on screen'
+
+[11:10] [scene:talk]
+VISUAL: 
+AUDIO: 'matching. It is conservative and works well in practice, but it is still heruristics, not a direct signal. Third, Windows support is behind Mac and Linux and a Windows machine cannot be a remote target yet. And fourth, if you run Timox'
+
+[11:23] [scene:talk]
+VISUAL: 
+AUDIO: 'inside a herder pane, agent detection inside that Timmuk session breaks, which makes sense, but it means you should let her be the multiplexer instead of nesting things. So it is not perfect, but none of these are dealbreakers for'
+
+[11:36] [scene:talk]
+VISUAL: 
+AUDIO: 'what it is trying to do. Overall, I think Herder nails a very real problem. The bottleneck with parallel agents was never starting them. It was tracking them and coordinating them. And Herder gives you state awareness in a sidebar, notifications when something needs you,'
+
+[11:49] [scene:talk]
+VISUAL: 
+AUDIO: 'an API that lets agents orchestrate each other, sessions that survive disconnects and restarts with the agent context intact, and remote mode on top. Plus, it is free and open source, works with basically every terminal agent out there, and takes a couple of minutes to'
+
+[12:02] [scene:talk]
+VISUAL: 
+AUDIO: 'set up. If you only ever run one agent at a time, Timmucks or even a plane terminal is honestly fine, and you do not need this. But if you are the kind of person who has three or four agents'
+
+[12:15] [scene:talk]
+VISUAL: 
+AUDIO: 'going in parallel, this is the closest thing to a proper mission control for them that I have seen in the terminal. Overall, it\'s pretty cool. Anyway, let me know your thoughts in the comments. If you like this video, consider donating through the super thanks option'
+
+[12:27] [scene:talk]
+VISUAL: 
+AUDIO: 'or becoming a member by clicking the join button. Also, give this video a thumbs up and subscribe to my channel. I\'ll see you in the next one. Until then, bye.'
