@@ -1,0 +1,528 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: The Anywhere Network is Here
+channel: @octopusinc_
+duration: 27:02
+source: https://www.youtube.com/watch?v=V-sh-v6aZK0
+upload_date: 20260830
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'Your phone starts losing signal the moment you venture too far into the backcountry. [music] Ask me how I know. But soon, it\'ll offer 100% global pole-to-pole coverage anywhere with a clear view [music] of the sky and connect through an open-source network'
+
+[00:12] [scene:talk]
+VISUAL: 
+AUDIO: 'instead of another closed satellite messaging service. [music] This is a first-of-its-kind Reticulum Iridium relay bridge built around Ground Control\'s tiny new satellite modem, the Rock Block 9704, [music]'
+
+[00:24] [scene:talk]
+VISUAL: 
+AUDIO: 'controlled by an old Raspberry Pi Zero I bought in 2018, [music] which still had lying around the office. These two blue things are supercapacitors, which means they release stored energy quickly'
+
+[00:36] [scene:talk]
+VISUAL: 
+AUDIO: 'enough to power the modem\'s short data bursts through Iridium satellites. [music] From there, the message enters Iridium\'s global constellation in low Earth orbit, about 500 mi in the sky. [music] It\'s the same network behind Garmin inReach'
+
+[00:49] [scene:talk]
+VISUAL: 
+AUDIO: 'and some satellite phones. But my job is to make it work with Reticulum, so it can carry encrypted messages over an open-source network anyone can build on from places ordinary phones just can\'t'
+
+[01:01] [scene:talk]
+VISUAL: 
+AUDIO: 'reach. And to put this idea to the ultimate test, 7 days from now, I\'m carrying this on a 14-mi trail run through the Colorado Rockies, climbing to [music] 13,000 ft, to see if I can text my mom back home in Florida and get'
+
+[01:14] [scene:talk]
+VISUAL: 
+AUDIO: 'her reply without any [music] cell service. And I think that\'s where the next internet has to go, community infrastructure we build and [music] own together, rather than another service we rent from a gatekeeper. Now, I spend a'
+
+[01:27] [scene:talk]
+VISUAL: 
+AUDIO: 'fair bit of time behind the computer, but I\'m actually a big proponent of balancing that with time out in nature. There\'s actually a paper from Harvard called Your Brain on Nature that talks about all the health benefits of getting'
+
+[01:40] [scene:talk]
+VISUAL: 
+AUDIO: 'into nature. As I get older, the physical challenge is a great way to maintain some level of fitness in a sustainable way. So, I signed up for the Aspen Backcountry Heavy Half Trail Run, a 14-mi trek through the Rockies that'
+
+[01:53] [scene:talk]
+VISUAL: 
+AUDIO: 'Amelia and I will be running. And what better place to test a remote satellite reticulam instance than trailside in the mountains 13,000 ft up. So, here\'s the goal. While I\'m on the trail, I want to'
+
+[02:05] [scene:talk]
+VISUAL: 
+AUDIO: 'have a normal two-way conversation with my mom back home in Florida. She\'ll be there doing us a huge favor by watching our 7-month-old baby Chase and our dog Bruno. And I\'ll leave her an Android burner phone with no SIM card and no'
+
+[02:18] [scene:talk]
+VISUAL: 
+AUDIO: 'network connection other than our home Wi-Fi. It\'ll be running Columba, which is an Android app for reticulam. There\'s no setup for her to figure out. She just opens the app and sends me a message. But, I gave myself one rule. Mom was not'
+
+[02:32] [scene:talk]
+VISUAL: 
+AUDIO: 'becoming tech support because if this only works for someone who understands the entire stack, then it doesn\'t work. If I can receive her message and reply from the mountains, then this works. Now, the race is only 7 days away and'
+
+[02:44] [scene:talk]
+VISUAL: 
+AUDIO: 'none of this works yet. So, we need to get moving. The irony is I signed up for this race to get away from my computer and now I\'m planning to wire one up in my backpack for 14 miles. If I spend the entire run watching signal bars, I might'
+
+[02:57] [scene:talk]
+VISUAL: 
+AUDIO: 'prove that the network works while completely missing the reason I came here. And that assumes I finish. Amelia has run marathons and I\'ve done some long arduous hikes, but neither of us have attempted anything like this at'
+
+[03:10] [scene:talk]
+VISUAL: 
+AUDIO: 'altitude. The thinner air is the wild card that\'s been making me nervous. I don\'t even know if I\'ll be in any condition to troubleshoot this thing while on the trail. To make matters worse, I\'d also been dealing with stomach issues for several days leading'
+
+[03:22] [scene:talk]
+VISUAL: 
+AUDIO: 'up to the race. But, if what I learn up there helps one of you stay connected somewhere an ordinary phone can\'t, then it\'s worth it. So, we got to get going if we actually want this thing to work. Let\'s start with the satellite modem.'
+
+[03:34] [scene:talk]
+VISUAL: 
+AUDIO: 'Now, this is the key to the puzzle. I originally picked it up after I came across a project called Mesh Sat. Its founder, Kyriakos, got on a call with me and walked me through the whole system. Mesh Sat uses it to provide backhaul for'
+
+[03:46] [scene:talk]
+VISUAL: 
+AUDIO: 'a Meshtastic network. And that was my original plan. But, honestly, I find hacking Reticulum a lot more interesting, so I pivoted to getting this working with the Reticulum network. Now, for those of you coming in cold,'
+
+[03:59] [scene:talk]
+VISUAL: 
+AUDIO: 'Reticulum is an open-source networking stack that uses cryptography to create autonomous, unstoppable, censorship-resistant networks of networks. It can use just about any medium capable of moving ones and zeros.'
+
+[04:11] [scene:talk]
+VISUAL: 
+AUDIO: 'It\'s designed to be uncentralizable. Anyone can offer a path through the network, but nobody gets to own the network itself. A message can move across whatever path Reticulum can find, radio, Wi-Fi, the internet, or the'
+
+[04:25] [scene:talk]
+VISUAL: 
+AUDIO: 'satellite link, and no matter how many nodes the message hops through, only the holder of the destination\'s private key can decrypt the message. So, nodes carrying it don\'t explicitly need to be'
+
+[04:37] [scene:talk]
+VISUAL: 
+AUDIO: 'trusted. And I\'m clearly not the only one interested, because when I load this Reticulum app Columba on my phone, it\'s not uncommon that the RNS service discovers more than 10,000 nodes in the network. Now, the Rock BLOCK itself'
+
+[04:49] [scene:talk]
+VISUAL: 
+AUDIO: 'costs $280, which is definitely not nothing, but if you want to do this kind of thing, there\'s not a whole lot of other options. And the board is pretty approachable. It has an SMA connector where we\'ll attach our antenna, and this'
+
+[05:02] [scene:talk]
+VISUAL: 
+AUDIO: 'antenna is a bit more advanced than the other ones we usually work with. It\'s a helical RHCP antenna, as opposed to a linearly polarized antenna like this. And one advantage of circular polarization is that it\'s less'
+
+[05:15] [scene:talk]
+VISUAL: 
+AUDIO: 'susceptible to orientation-related nulls. That\'s one reason this form factor is common on FPV drones, where antenna orientation changes constantly. Its frequency range is 616 to 1626.5 MHz, which is part of the L band. And'
+
+[05:30] [scene:talk]
+VISUAL: 
+AUDIO: 'something unique about this board is these two supercapacitors. They don\'t get a lot of airtime, but they can store energy and release it very quickly, supplying the brief power spike the modem needs to send an IMT message to'
+
+[05:42] [scene:talk]
+VISUAL: 
+AUDIO: 'Iridium. And there\'s a ton of innovation happening around supercapacitors. When I made that first video about building a cheap Raspberry Pi mini radio, a military contractor reached out to me. And one interesting thing he said was'
+
+[05:54] [scene:talk]
+VISUAL: 
+AUDIO: 'that if sensitive tech ever fell into enemy hands overseas, they would actually use supercapacitors to fry the circuits. So apparently that self-destruct Mission Impossible stuff is actually real. Now to program this'
+
+[06:06] [scene:talk]
+VISUAL: 
+AUDIO: 'we\'re using a Raspberry Pi Zero with a standard Raspberry Pi OS installation. From there ground control gives you some example Python scripts for sending and receiving messages. And I\'ll be able to use Codex to generate scripts on demand.'
+
+[06:19] [scene:talk]
+VISUAL: 
+AUDIO: 'We\'ll still need a fair bit of programming to make everything work, but the idea is that people like me could deploy these bridges so less technical users can simply use them. And that\'s one of Reticulum\'s strength. Okay, so'
+
+[06:31] [scene:talk]
+VISUAL: 
+AUDIO: 'the Pi is connected to the Rock Block and sitting outside with a clear view of the sky. Now I\'m able to log into the Raspberry Pi over SSH because it\'s on my home network, which means I can program it from here in my office. And this is'
+
+[06:43] [scene:talk]
+VISUAL: 
+AUDIO: 'exactly the kind of local AI workflow I teach in the Parallel Primer. Connect to the Pi, use AI to build against the real hardware, and turn an idea into a working system fast. I\'ll put a link to that in the description below. Now the'
+
+[06:56] [scene:talk]
+VISUAL: 
+AUDIO: 'ground control documentation includes an example Python script for sending and receiving messages. You can use any runtime though as long as it issues the AT commands that the modem expects. So if I run this it should send a message.'
+
+[07:08] [scene:talk]
+VISUAL: 
+AUDIO: 'And we can verify that that message made it out by logging into Cloud Loop, which is basically Iridium\'s cloud hub. It lets you manage your fleet, configure integrations, and monitor your satellite traffic. And there it is. We have the'
+
+[07:22] [scene:talk]
+VISUAL: 
+AUDIO: 'timestamp and the full payload in the message log. MO means modem originated, MT means modem terminated. So basically those are the two directions, send and receive. Okay, so that worked. We\'ve'
+
+[07:34] [scene:talk]
+VISUAL: 
+AUDIO: 'proven the first leg, the Pi can handle a message to the Rock Block, and Iridium can deliver it to Cloud Loop. But a Reticulum conversation requires two more pieces. The first is a true Reticulum Iridium interface so that I can chat'
+
+[07:47] [scene:talk]
+VISUAL: 
+AUDIO: 'through a regular Reticulum client instead of running Python scripts every time I want to send a message. And this is one of the reasons that I forked MeshChat so I could go rogue and build weird things like this. We\'ll use my MeshChat fork Crosstalk in order to do'
+
+[08:00] [scene:talk]
+VISUAL: 
+AUDIO: 'that. The second is a cloud bridge that can carry messages between CloudLoop and the Reticulum network. So now it\'s time to build that missing path. After going through Ground Control\'s Resource Center, it looks like the cleanest'
+
+[08:12] [scene:talk]
+VISUAL: 
+AUDIO: 'option is going to be using a CloudLoop webhook that can forward each message to my private server. Now in the last video we set up a public Reticulum TCP node at rns1.buildwithparallel.com.'
+
+[08:24] [scene:talk]
+VISUAL: 
+AUDIO: 'So I can just add some middleware and an Iridium interface to its RNS instance. That\'ll let the server accept the webhook, inject the message into Reticulum, and pass it to nodes connected through its TCP interface. So'
+
+[08:37] [scene:talk]
+VISUAL: 
+AUDIO: 'I connected to the VM over SSH and explained the architecture to Codex and it got the gist of what I was trying to do. After some testing and some hardening to prevent abuse, a message from the modem made it through Iridium'
+
+[08:49] [scene:talk]
+VISUAL: 
+AUDIO: 'and arrived on my Android phone in Colomba. But a conversation has to work in both directions. My mom\'s reply has to make that entire trip in reverse. And the return path can\'t use the same architecture. So I added logic to the'
+
+[09:02] [scene:talk]
+VISUAL: 
+AUDIO: 'GCP instance that listens for traffic on the outgoing Iridium interface and uses CloudLoop\'s API to queue the message for the RockBLOCK. From there, Iridium delivers it to the RockBLOCK and it appears in Crosstalk on my Raspberry Pi.'
+
+[09:15] [scene:talk]
+VISUAL: 
+AUDIO: 'Now each direction worked on its own. What I still hadn\'t completed was one continuous round trip through the entire system. And I recognize that the system is a bit complex, but I\'m not trying to reinvent text messaging. I\'m trying to'
+
+[09:29] [scene:talk]
+VISUAL: 
+AUDIO: 'show the art of the possible when it comes to Reticulum. But we still aren\'t out of the woods yet because there\'s a catch. Every trip across the satellite has a toll. Ground control charges $15 a month to keep the modem on the network,'
+
+[09:41] [scene:talk]
+VISUAL: 
+AUDIO: 'and then you have to buy data top-ups. A short message like this costs roughly 10 cents one way. So, if our balance reaches zero, the service stops carrying messages until we add more money. So, I can\'t let routine Reticulum traffic'
+
+[09:53] [scene:talk]
+VISUAL: 
+AUDIO: 'flood the modem because every packet now has a price tag. So, to prevent that, I added an allow list to the GCP bridge. It\'ll only forward messages addressed to the LXMF hash assigned to my Iridium device. Everything else gets dropped'
+
+[10:06] [scene:talk]
+VISUAL: 
+AUDIO: 'before it can hit the paid satellite link. But, that raises a question. What happens when the bridge receives a message, but Reticulum doesn\'t have a path to the recipient? The answer is that the message waits. Oh, yeah. Have we talked about delay tolerance yet?'
+
+[10:19] [scene:talk]
+VISUAL: 
+AUDIO: 'We\'ve got to talk about delay tolerance for a second here because it\'s one of the subtler and coolest ideas behind Reticulum. Most communication is designed around synchronous contact. The sender, the recipient, and a working path between them all need to exist at'
+
+[10:32] [scene:talk]
+VISUAL: 
+AUDIO: 'roughly the same time. A phone call is the obvious example. If I call you while you\'re unreachable, we don\'t get to talk. If you send a text message without a signal, you\'ll get one of those red'
+
+[10:44] [scene:talk]
+VISUAL: 
+AUDIO: 'exclamation marks and a notification saying it wasn\'t delivered. With these systems, you\'re kind of either online or broken. But, Reticulum can operate asynchronously through store and forward. If the recipient is offline or'
+
+[10:56] [scene:talk]
+VISUAL: 
+AUDIO: 'there simply isn\'t a path to them, an encrypted message can wait on a propagation node, and it can wait for seconds, hours, days, or theoretically even years if the node is configured to retain it that long. And when that'
+
+[11:09] [scene:talk]
+VISUAL: 
+AUDIO: 'destination resurfaces on the mesh and a path becomes available, the message can continue on its way. The sender, the recipient, and every link between them never have to be online simultaneously. Mark writes about this in The Zen of'
+
+[11:22] [scene:talk]
+VISUAL: 
+AUDIO: 'Reticulum. We\'ve become accustomed to communication happening right now, but Reticulum is designed around asynchronous time, meaning you send a message, it moves whenever it can, and it arrives when the network can carry'
+
+[11:34] [scene:talk]
+VISUAL: 
+AUDIO: 'it. And by designing around delay, temporary disconnection becomes part of the system instead of something that breaks it, which is perfect for this project since Iridium satellites whiz overhead for windows usually on the'
+
+[11:46] [scene:talk]
+VISUAL: 
+AUDIO: 'order of minutes before disappearing behind the horizon. But as long as we can egress during a window of strong signal, Reticulum can handle the rest. By the time we left for Colorado, both pieces were in place. Crosstalk could'
+
+[11:58] [scene:talk]
+VISUAL: 
+AUDIO: 'hand an LXMF message to the rock block, and the GCP bridge can move messages between Cloud Loop and Reticulum. Each half worked on its own. The one thing I had not completed was a full round trip through both of them. Okay, so we\'re'
+
+[12:10] [scene:talk]
+VISUAL: 
+AUDIO: 'flying up to Colorado tomorrow, and the full round trip is the last thing I still need to prove. So, I\'ll try to knock that out when we get to the condo in Aspen. So, we flew into Denver and rented a car to make the 4-hour drive'
+
+[12:22] [scene:talk]
+VISUAL: 
+AUDIO: 'out to Aspen. And another fun side experiment was renting a Rivian R1SEV for the drive into Aspen on Turo. Now, I have a Model Y at home, so I had something to compare it with, but I also just love tech and wanted to take it for'
+
+[12:35] [scene:talk]
+VISUAL: 
+AUDIO: 'a spin. Coming through the mountains, past Leadville, and over Independence Pass, something started happening. We had about an hour of driving through the mountains left. Our battery was at about 46%, but the system estimated we would'
+
+[12:48] [scene:talk]
+VISUAL: 
+AUDIO: 'arrive with 45%, which made no sense. An hour of driving should drain more like 30 to 40% of the battery, and that could leave us without enough charge to make it into Aspen, which was making me a bit'
+
+[13:01] [scene:talk]
+VISUAL: 
+AUDIO: 'nervous. As we drove up the mountain, the battery started ticking down pretty rapidly, about 1% every 5 minutes. At the top of the mountain range, we were at about 40% battery. And here\'s where things got interesting. Once we started'
+
+[13:14] [scene:talk]
+VISUAL: 
+AUDIO: 'descending, we weren\'t accelerating much. We were really relying on the brakes. And because the Rivian has regenerative braking, after about 15 minutes of driving, we hadn\'t lost any charge. Then suddenly I noticed the'
+
+[13:27] [scene:talk]
+VISUAL: 
+AUDIO: 'battery actually went up, and it continued to do this. And sure enough, we got into Aspen at 45%. I guess I was just used to the flat terrain back in Florida, where driving always uses battery. But out here, you can literally'
+
+[13:39] [scene:talk]
+VISUAL: 
+AUDIO: 'charge your car by descending a mountain. Of course, we were crossing some of the best scenery in Colorado, and here I was completely absorbed in why the battery estimate wasn\'t behaving the way I expected. Apparently, even'
+
+[13:51] [scene:talk]
+VISUAL: 
+AUDIO: 'surrounded by all of this, I can always find an engineering problem to obsess over. Once we got in, the night before the race, I tried to validate the entire system one last time. The Iridium Reticulum rig on my end, sending messages to the Android phone I had left'
+
+[14:04] [scene:talk]
+VISUAL: 
+AUDIO: 'at home for my mom, while she watched Chase. Inside the condo, the modem was reading zero out of five, and it grades signal on a scale from zero to five. And in this pocket between the mountains, I was getting usable signal for roughly'
+
+[14:16] [scene:talk]
+VISUAL: 
+AUDIO: 'seven minutes at a time, as each Iridium satellite crossed my little slice of open sky. Once it slipped behind a ridge or below the horizon, the reading dropped again until another path opened. So, I carried the rig outside to wait'
+
+[14:28] [scene:talk]
+VISUAL: 
+AUDIO: 'for the next window. And while I was standing there staring at the signal readout, two deer quietly snuck up on me. And I\'m ashamed to admit they kind of startled me. I was so focused on trying to reach something 500 miles'
+
+[14:40] [scene:talk]
+VISUAL: 
+AUDIO: 'above me that I almost missed what was right beside me. Back home though, Mom was having trouble with the phone. It wasn\'t charging, and since it was a jailbroken Android, and she\'s firmly on team iPhone, she couldn\'t seem to get it'
+
+[14:53] [scene:talk]
+VISUAL: 
+AUDIO: 'working, even though I\'d walked her through it many times before. But I\'ll cut her some slack, since she was already doing us a favor by looking after an 8-month-old and Bruno. I wasn\'t going to turn her night into tech support, too. At that point, I had two'
+
+[15:06] [scene:talk]
+VISUAL: 
+AUDIO: 'bad options. Keep my mom on the phone troubleshooting and lose the final hours I had before the race, or stop chasing a live connection and trust a store-and-forward system I had never tested end to end. So, I chose the'
+
+[15:18] [scene:talk]
+VISUAL: 
+AUDIO: 'latter. Instead of asking my mom to adapt to the network, I changed the GCP node to store the incoming Iridium messages there instead of immediately forwarding them. I also programmed the GCP node to announce itself every 5'
+
+[15:30] [scene:talk]
+VISUAL: 
+AUDIO: 'minutes from 11:00 a.m. to noon Mountain Time, giving the pie a 1-hour window to rediscover the route during the race. That way my mom and I wouldn\'t need to coordinate an elaborate handshake and'
+
+[15:42] [scene:talk]
+VISUAL: 
+AUDIO: 'announce ourselves at roughly the same time. Instead, the message could wait for a path exactly like we just talked about. But, it also meant I was heading into the race without ever completing a full end-to-end test, which definitely'
+
+[15:54] [scene:talk]
+VISUAL: 
+AUDIO: 'wasn\'t ideal. At the starting line, I was excited to finally be there, but between the altitude, my stomach, and a system I had never tested end-to-end, I was definitely pretty nervous about the whole thing. But, with the energy of the'
+
+[16:06] [scene:talk]
+VISUAL: 
+AUDIO: 'other runners, I tried to keep a positive headspace, and we set out. Less than a tenth of a mile into the race, those stomach problems caught up with me, and I had to take an emergency detour off the trail, and thank god Amelia packed some paper towels. That'
+
+[16:20] [scene:talk]
+VISUAL: 
+AUDIO: 'was an experience. Not exactly the start I had imagined. As the trail climbed toward 13,000 ft, each breath delivered less oxygen, and everything just became more taxing. But, this is really why I signed up. I spend so much time behind a'
+
+[16:33] [scene:talk]
+VISUAL: 
+AUDIO: 'computer that I need challenges on the calendar that force me to train and take care of my health, and really do something physically difficult. But, just as important, I wanted to spend a day doing something memorable and epic with Amelia. We\'re on the trail. All'
+
+[16:47] [scene:talk]
+VISUAL: 
+AUDIO: 'right. Actually, &gt;&gt; [laughter] &gt;&gt; looks like there is a network here. It\'s cuz we\'re so close to Aspen. Most of the hikes I do are pretty far out, like 60 mi to the trailhead type deal. There were pockets of cell coverage this close to Aspen. So, this wasn\'t a completely'
+
+[17:00] [scene:talk]
+VISUAL: 
+AUDIO: 'cell dead course. So, instead, I kept my phone in airplane mode. We\'re going to send messages over Reticulum. So, the way it\'s set up is I\'m going to power on the pie, and then the pie is going to spin up a Wi-Fi network. I\'m going to'
+
+[17:12] [scene:talk]
+VISUAL: 
+AUDIO: 'connect to the Wi-Fi network over my iPhone. It\'s also going to start an instance of a mesh chat network I created called Crosstalk. There\'s only one interface on Crosstalk and it\'s going to be a custom Iridium modem interface for sending and receiving of'
+
+[17:25] [scene:talk]
+VISUAL: 
+AUDIO: 'packets over the satellite. I want to prove how dynamic Reticulum is. I don\'t think anyone\'s done satellite Reticulum yet. &gt;&gt; The Raspberry Pi acts as a Wi-Fi access point and runs the Crosstalk web server. When I open Crosstalk in my phone\'s'
+
+[17:39] [scene:talk]
+VISUAL: 
+AUDIO: 'browser, the page loads directly from the Pi over the local Wi-Fi connection. My phone is just the interface. Crosstalk\'s only route beyond the Pi is through Iridium.'
+
+[17:51] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; It\'s 10:57, so if all goes well, starting at 11:00, those announces are going to be sent every 5 minutes from the sky. I need to get it uh GCP\'s announce. GCP needs to get my announce, so I\'ll also be sending some announces from Crosstalk. Basically, Reticulum will report a valid path and it\'ll let'
+
+[18:04] [scene:talk]
+VISUAL: 
+AUDIO: 'me send messages if those announces do in fact get through. Anyways, I\'m going to pull out the gear. We\'re going to see what we can do. All right, so we\'re going to power with this thing. Better to get a bank with good amperage rather than risk it. I mean, I\'ve seen Pis run on nothing, but'
+
+[18:18] [scene:talk]
+VISUAL: 
+AUDIO: 'not out here. So, we\'ll plug this in here. I\'m going to go to Wi-Fi, turn on Wi-Fi. I\'m still on airplane mode. We\'re going to see if our Aspen Iridium network shows up. It was taking a while to spin up yesterday, but I see the LEDs'
+
+[18:30] [scene:talk]
+VISUAL: 
+AUDIO: 'on. Here we go. Aspen Iridium Pi and we are connected. Okay, so Crosstalk is serving up dealing with trees, but okay, I got two bars, so let\'s go for it. Okay, announce sent to the network. So, that\'s something that GCP could pick up on. So, that message is going up to'
+
+[18:43] [scene:talk]
+VISUAL: 
+AUDIO: 'Cloud Loop and hopefully Cloud Loop is relaying it to um the GCP. Problem is these trees. Uh yeah, two bars, so like there is some signal. Cloud Loop knows to retry and stuff, but it doesn\'t retry forever. Oh,'
+
+[18:56] [scene:talk]
+VISUAL: 
+AUDIO: 'hold on. Trying to send it. That means it has a path. &gt;&gt; The local network was working and Reticulum had preserved the route from the night before. Part I couldn\'t control was the sky. Every time the signal came back, I tried again. And'
+
+[19:08] [scene:talk]
+VISUAL: 
+AUDIO: 'over the next 7-minute window, I sent four messages and received zero acknowledgements. &gt;&gt; We get a signal from the card, but we\'re not able to send messages through yet. So, I don\'t know what the disconnect is. It could be like satellites passing'
+
+[19:20] [scene:talk]
+VISUAL: 
+AUDIO: 'really quickly. Could be something on the other node\'s receiver. Who knows? But hopefully in the next four miles potentially we\'ll get something across. This was kind of hastily put together. I had it working at home, partially'
+
+[19:32] [scene:talk]
+VISUAL: 
+AUDIO: 'working yesterday night. I should have been sleeping probably. The problem is like we were taking we have to do this announce handshake so I can establish paths and all that. Hard to get all those stars to align. No pun intended on this one because so many moving'
+
+[19:44] [scene:talk]
+VISUAL: 
+AUDIO: 'variables. Frankly, a lot of that can be resolved with better software. Like retry logic, better acknowledgement, more intelligent delivery, like don\'t send messages if the signal\'s not there. Not insurmountable problems, but'
+
+[19:56] [scene:talk]
+VISUAL: 
+AUDIO: 'definitely making a little bit tricky out here. &gt;&gt; At home, I had proven each half independently. I still hadn\'t completed the entire round trip. Those were solvable software problems, but I had four miles left, no acknowledgements,'
+
+[20:09] [scene:talk]
+VISUAL: 
+AUDIO: 'and a race I still needed to finish. Every retry was costing me race time, physical energy, battery, and the experience I\'d come all this way for. Around mile 10, we reached a rest stop'
+
+[20:21] [scene:talk]
+VISUAL: 
+AUDIO: 'where the race organizers had their own field communications setup. &gt;&gt; You can see the whole rig they have out in the field here. Starlink mini, Pelican case, a couple receivers, transceivers, things'
+
+[20:33] [scene:talk]
+VISUAL: 
+AUDIO: 'like that. Couple ethernet cords. I don\'t know how everything works, but cool rig out here. &gt;&gt; These two systems were solving different problems. Their field station stayed put and supported race operations. Mine had to fit inside a running pack and keep a'
+
+[20:45] [scene:talk]
+VISUAL: 
+AUDIO: 'thin message path open while I moved through the course. That was when I realized I was standing in the Rockies staring at signal bars. The exact thing I said I didn\'t want to do. So, with zero acknowledgements and no evidence'
+
+[20:57] [scene:talk]
+VISUAL: 
+AUDIO: 'that a single message had escaped the mountain, I made the difficult decision to power down the bridge and put it back in my pack. The goal was a two-way conversation with my mom from the trail, and that test had failed. But, the race'
+
+[21:09] [scene:talk]
+VISUAL: 
+AUDIO: 'wasn\'t over. Admittedly, I had spent all day trying to reach someone across the country. Once I put the radio away, I could finally give my attention to the person beside me. And earlier, I\'d actually suggested to Amelia that maybe'
+
+[21:21] [scene:talk]
+VISUAL: 
+AUDIO: 'we could reach the first peak and just turn around. I really wasn\'t feeling super confident in terms of the water we had, potential weather changes, and just navigating the Rockies. But, she was determined to finish. So, we walked the'
+
+[21:33] [scene:talk]
+VISUAL: 
+AUDIO: 'final miles together. &gt;&gt; [music] &gt;&gt; It turns out that the run organizers, Aravaipa, did a really good job marking the trail, and even set up aid stations. So, my whole concern about water was not an issue at all. And once I realized'
+
+[21:47] [scene:talk]
+VISUAL: 
+AUDIO: 'that, and we passed the most elevated portion of the trail, I began to relax quite a bit. We talked about Chase, the little boy at the end of a much longer path than most people knew, and how in only 7 months he had rearranged our'
+
+[21:59] [scene:talk]
+VISUAL: 
+AUDIO: 'entire life, and we were grateful for every bit of it. And of course, Bruno was waiting for us, too. [music] 7 months after giving birth to Chase, Amelia was the one pulling us toward the finish line of a 15-mile run through the Rockies, and I had to give her credit'
+
+[22:12] [scene:talk]
+VISUAL: 
+AUDIO: 'for that. As we descended, our breathing got easier. We kept walking and talking until we crossed the finish line together. After passing the finish line, we collapsed on the lawn, and for the first time on the trip, I wasn\'t trying to reach anything [music] beyond where I'
+
+[22:24] [scene:talk]
+VISUAL: 
+AUDIO: 'already was. By the next morning, my stomach was finally back on my side, and I made a point of enjoying the area a little bit more, and even took a quick dunk in the Roaring Fork River along the Rio Grande Trail. And we just spent the'
+
+[22:36] [scene:talk]
+VISUAL: 
+AUDIO: 'rest of the trip enjoying Aspen in the summertime. When we finally got home, I opened the GCP node and expected to find nothing. Instead, four messages had made it from my backpack through Iridium into Cloud Loop and all the way to my server.'
+
+[22:49] [scene:talk]
+VISUAL: 
+AUDIO: 'I just never saw the acknowledgements on the trail. Now, I could have called that a success. Four messages had crossed Iridium from the Rockies, which is impressive on its own, but the goal wasn\'t to upload packets. It was a'
+
+[23:01] [scene:talk]
+VISUAL: 
+AUDIO: 'complete conversation, and I still hadn\'t done that. Still, the whole system hadn\'t failed where I thought it had. The satellite uplink worked. Somewhere in the acknowledgement or return path, the conversation broke. Those four messages changed the'
+
+[23:14] [scene:talk]
+VISUAL: 
+AUDIO: 'question. The satellite uplink had actually worked from the trail. What I had never proven was whether a message could complete the entire round trip. On the mountain, I couldn\'t tell which layer was failing, and I couldn\'t keep troubleshooting while running at 13,000'
+
+[23:26] [scene:talk]
+VISUAL: 
+AUDIO: 'ft. But I had two main suspects. Most of the trails had trees overhead, so the modem rarely had a completely clear view of the sky, and may not have held the satellite link long enough for the return trip. Or the problem could have'
+
+[23:38] [scene:talk]
+VISUAL: 
+AUDIO: 'been the GCP bridge software I had rushed to finish before the race. But this time back home, I could retest in a perfect environment and figure out exactly what went wrong. For the retest, I used the same RockBLOCK and a'
+
+[23:50] [scene:talk]
+VISUAL: 
+AUDIO: 'Raspberry Pi I\'d carried through Aspen, connected to the same GCP bridge. Now, I couldn\'t pull my mom back into the test, so Amelia stood in for her with the Android burner phone running Columba. Her entire job was to open the app and'
+
+[24:03] [scene:talk]
+VISUAL: 
+AUDIO: 'type a message. I handled everything underneath. With the rig set back up to send messages across Reticulum, I drove out with Bruno, found a spot with a clear view of the sky, and set the Iridium rig on the tripod. My phone'
+
+[24:15] [scene:talk]
+VISUAL: 
+AUDIO: 'connected to the Wi-Fi network created by the Raspberry Pi. We should be able to chat to Amelia. It says no internet connection, and that\'s actually to be expected. This address here. Okay,'
+
+[24:27] [scene:talk]
+VISUAL: 
+AUDIO: 'there\'s cross talk. So now the question is, can we talk to Amelia? The peer that we care about, it still says Tim\'s mom, cuz that\'s what I had earlier, but really it\'s Amelia. I\'m going to try to send her a message and see if it gets'
+
+[24:39] [scene:talk]
+VISUAL: 
+AUDIO: 'through. Actually, this is kind of cool. You can see the Iridium signal in real time there, which is nice because the satellites pass overhead pretty quickly. So, I\'m going to try to announce myself first. Okay, and see what happens. If it'
+
+[24:52] [scene:talk]
+VISUAL: 
+AUDIO: 'goes through, Amelia should be able to respond. So, we are chatting with Amelia over the Iridium modem right here. Nothing else.'
+
+[25:06] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; And this is the part that surprised me. It felt completely natural. Crosstalk felt like a normal messaging app. I opened the conversation, typed a message, tapped send, and Amelia\'s reply appeared in the same thread. Within a'
+
+[25:18] [scene:talk]
+VISUAL: 
+AUDIO: 'few exchanges, I stopped thinking about packets, routes, and satellites. I was just chatting with Amelia. But every time I tapped send, that message left my phone, crossed the Piez\'s local Wi-Fi'
+
+[25:30] [scene:talk]
+VISUAL: 
+AUDIO: 'network, moved through Reticulum and the RockBLOCK, traveled over Iridium to the GCP bridge, and reached Amelia through Columba. And her replies survived that entire path in reverse. All of that'
+
+[25:42] [scene:talk]
+VISUAL: 
+AUDIO: 'complexity disappeared behind a conversation that felt fluid and familiar. After everything it took to build this, the final proof barely looked like a tech demo. It just looked like two people texting. One message'
+
+[25:54] [scene:talk]
+VISUAL: 
+AUDIO: 'would have proved that I can move a packet. The natural back and forth proved that I could use it as a real communication link. That\'s the round trip Aspen couldn\'t complete. It wasn\'t the conversation with my mom that I originally set out to have, and the'
+
+[26:07] [scene:talk]
+VISUAL: 
+AUDIO: 'trail test remains a failure, but the bridge works, and Crosstalk makes using it feel ordinary. Aspen reminded me of the value of being fully present with the people beside us while still keeping a quiet path open to the people who'
+
+[26:20] [scene:talk]
+VISUAL: 
+AUDIO: 'matter back home. For now, Iridium gives isolated networks a bridge beyond local radio range, but it\'s paid, proprietary, [music] and still ultimately someone else\'s network. The larger goal is a'
+
+[26:32] [scene:talk]
+VISUAL: 
+AUDIO: 'free, open internet that connects community-run networks over those distances without sacrificing their privacy or independence, [music] and stays simple enough for ordinary people to use. Which means the hunt for a'
+
+[26:44] [scene:talk]
+VISUAL: 
+AUDIO: 'long-haul link we can actually own is still on. But a rented signal can only take this network so far. The next link needs to belong to the people using it. And maybe the longest link begins with a very short wave. For more, click here.'

@@ -1,0 +1,368 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Vibe Coding Has A Security Problem (And How To Fix It)
+channel: @octopusinc_
+duration: 18:40
+source: https://www.youtube.com/watch?v=NfctRQhMMdI
+upload_date: 20260829
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'Vibe coding has a serious security problem. Now, I built this internal dashboard using AI in about 10 minutes. And you can see here that I\'m logged in as one mentor who should only be able to see their own students. But, if I just change one number here in the request, you\'ll see that I\'m able to view an'
+
+[00:14] [scene:talk]
+VISUAL: 
+AUDIO: 'entire different mentor\'s private conversation with the student. And this isn\'t just some edge case that I made up here. This is pretty much exactly what happened to over 170 real apps that were built with one of the most popular AI tools that\'s out there. So, let me show'
+
+[00:28] [scene:talk]
+VISUAL: 
+AUDIO: 'you why this keeps happening and how you can fix the problems with vibe coded apps. Let\'s talk finally about security. Here\'s what changed. Someone builds an app in an afternoon and it\'s reading production data by dinner with no review'
+
+[00:40] [scene:talk]
+VISUAL: 
+AUDIO: 'step in between and nobody owning it afterwards. Most companies can\'t tell you how many of these are running right now. If you run a platform team or you\'re on security or you\'re the person who gets the call when customer data leaks, stay until the end because I\'m'
+
+[00:53] [scene:talk]
+VISUAL: 
+AUDIO: 'going to show you three ways that this breaks then what it looks like when the platform enforces the rules instead of hoping the model remembered. Okay. So, to understand why this keeps happening, you have to understand a term'
+
+[01:05] [scene:talk]
+VISUAL: 
+AUDIO: 'that\'s been floating around for a while now. And that\'s called shadow AI. It sounds kind of scary and technical, but it\'s really pretty simple. If you think back about 10 years ago, your company gives you some slow, clunky, unofficial'
+
+[01:17] [scene:talk]
+VISUAL: 
+AUDIO: 'software to do your job. So, what do you do? Well, you just quietly start using Dropbox or Google Sheets or whatever, right? On your own software without asking anyone. Now, IT has no idea and that\'s basically what\'s called shadow'
+
+[01:30] [scene:talk]
+VISUAL: 
+AUDIO: 'IT. Employees that are using tools that the company never approved and to be honest, they never even knew about. Now, shadow AI is pretty much the exact same thing. Except now, it\'s not Dropbox or Google Drive, it\'s AI, right? And here\'s'
+
+[01:42] [scene:talk]
+VISUAL: 
+AUDIO: 'the part that makes this a much bigger deal. People aren\'t just using an app anymore. They\'re actually building their own apps using AI. In an afternoon, they\'re plugging in real company data and putting that into a production app.'
+
+[01:55] [scene:talk]
+VISUAL: 
+AUDIO: 'So, someone in operations is throwing together, you know, a quick internal dashboard to make their week easier and they\'re connecting it to real customer data, a real database, and now there\'s a live application that\'s running on sensitive data that nobody ever'
+
+[02:08] [scene:talk]
+VISUAL: 
+AUDIO: 'approved, security never reviewed, and the IT department doesn\'t even know exists. And the reason this is everywhere right now is that these tools are genuinely really good. Like Lovable, Replitable, whatever, I use them and'
+
+[02:20] [scene:talk]
+VISUAL: 
+AUDIO: 'they\'re really good at turning an idea into a working app extremely fast. But that\'s the thing. They were built to get one person a quick working prototype. They were really not designed to safely run all of your company\'s data. And the'
+
+[02:32] [scene:talk]
+VISUAL: 
+AUDIO: 'problem is that these prototypes don\'t end up being prototypes. Somebody builds a quick demo, you know, it gets a link, that link gets shared, and then a couple of months later that little demo is just quietly running part of the business'
+
+[02:44] [scene:talk]
+VISUAL: 
+AUDIO: 'with a real data in it, and nobody ever made the decision to actually let that happen. And this is not just me making this up. When one security firm scanned around 1,400 of these AI apps, about 65% of them had real security holes. So,'
+
+[02:58] [scene:talk]
+VISUAL: 
+AUDIO: 'exposed data, passwords sitting in the open, all of that kind of stuff. So, this is happening at scale right now and probably inside of your company or the tools that you\'re building yourself. So, what I want to do is show you how easy'
+
+[03:10] [scene:talk]
+VISUAL: 
+AUDIO: 'it is to actually build one of these types of apps, and then I\'m going to break it for you. So, I\'m actually going to hack my own AI app and show you all of the mistakes that really commonly show up, especially when you use these kind of low-code or no-code app'
+
+[03:22] [scene:talk]
+VISUAL: 
+AUDIO: 'builders. Okay, so before this video, I built the exact kind of tool that someone would actually build inside of their own company. I built this for a coding program, but you\'ve seen this app before. Every company has one, a support rep opens a customer account, reads the'
+
+[03:36] [scene:talk]
+VISUAL: 
+AUDIO: 'billing history in the ticket log, and the only thing keeping them out of accounts that aren\'t theirs is a rule that somebody remembered to write. It\'s the same story for a sales dashboard or whatever internal tool your ops team lives in. Now, what you see here, I\'m'
+
+[03:49] [scene:talk]
+VISUAL: 
+AUDIO: 'going to go back to students, is an internal dashboard for a coding program that I used to run. Now, all of the information is fake here. I just kind of, you know, anonymized it so you can\'t actually see it. But, the basic idea is that different mentors or coaches can'
+
+[04:01] [scene:talk]
+VISUAL: 
+AUDIO: 'log into the platform and they can see all of the students that are assigned into them. So, for example, they can click into someone here, they can see the payment status, they can see the full conversation that they\'ve had, and they can kind of keep track of what\'s'
+
+[04:13] [scene:talk]
+VISUAL: 
+AUDIO: 'going on with the actual student. Now, the prompt that I used to build this was super reasonable. You know, I didn\'t say anything reckless. I didn\'t actually ask it to make all of these mistakes. I just used a lower-tier model and I simply said, "Hey, you know, mentors should be'
+
+[04:25] [scene:talk]
+VISUAL: 
+AUDIO: 'able to see their own students and there should be a separate admin role for different staff who want to see everyone." So, that\'s all I asked for, right? I didn\'t do a super detailed prompt, but I tried to simulate what a normal user would kind of ask. I\'ll be up front. I used a lower-tier model here'
+
+[04:38] [scene:talk]
+VISUAL: 
+AUDIO: 'so that this is easy to reproduce. But, it doesn\'t really change the outcome. The model has to get authorization right on every prompt forever with no help from the platform underneath it. A better model fails less often, but not'
+
+[04:51] [scene:talk]
+VISUAL: 
+AUDIO: 'never. And from the outside, you can\'t tell which one you got. Now, the dashboard works completely fine. All of the stuff I asked for is here. And actually, for this uh specific mentor, it showed the correct students, only the'
+
+[05:03] [scene:talk]
+VISUAL: 
+AUDIO: '43 that they\'re actually assigned. And we even have authentication, for example, if I go back to the main page. So, anyways, let\'s dig into this here and let me show you the security holes that were built into this app and how I can easily hack those and I would never know unless I was a developer. All'
+
+[05:16] [scene:talk]
+VISUAL: 
+AUDIO: 'right. So, I\'m signing in with this account here and you\'ll see that it loads up the students just like I was showing it to you before. Now, generally, this is fine, right? It\'s only showing me the students that are actually assigned to me. And if I click into one, I can see the info, I can see like my logs with the student as I\'m'
+
+[05:29] [scene:talk]
+VISUAL: 
+AUDIO: 'signed in as Priya here, and you get the idea. The issue is the way that these students are actually loaded is simply by a URL. At a company, this is a support rep reading billing history on an account that nobody is assigned to them.'
+
+[05:42] [scene:talk]
+VISUAL: 
+AUDIO: 'So, if I just change the URL here, like you saw in intro, it can change to a completely different student. Now this student is Anders Vega or whatever, and this is not one of Priya\'s students or the you know mentor that I\'m signed in'
+
+[05:55] [scene:talk]
+VISUAL: 
+AUDIO: 'as. If we go back to the student list, you won\'t see it showing up here anywhere, right? If I search for Vega, that student\'s not in the list, but I still was able to access that. The reason for that is that what this app did is it followed the prompt that I'
+
+[06:08] [scene:talk]
+VISUAL: 
+AUDIO: 'asked for where it only showed me the students that I\'m actually in charge of, right? Or mentoring. But it didn\'t add access controls so that I can\'t view other students. So if I go back to that student here, I can view a private'
+
+[06:20] [scene:talk]
+VISUAL: 
+AUDIO: 'conversation, I can view payment information, and stuff that I shouldn\'t have access to, at least the way that I designed this app. Now it actually gets even worse than this. For example, I can just change the URL here to actually be an API URL, and you\'ll see that all of'
+
+[06:33] [scene:talk]
+VISUAL: 
+AUDIO: 'the students pop up right here. So the database or the API is just fully available. I didn\'t need any authentication, I didn\'t need to have, you know, the token or whatever, and all of the students are just available purely from here. So again, if I\'m'
+
+[06:46] [scene:talk]
+VISUAL: 
+AUDIO: 'clever enough and I know to go to this URL, I just have all of these students\' data. And even though there is authentication to sign into the app and identify the mentor, the API is not protected by that, which means I can view all of this information from just a'
+
+[06:58] [scene:talk]
+VISUAL: 
+AUDIO: 'standard curl request. And it keeps getting worse. For example, if I go into the inspect tab here, let\'s zoom in a little bit, and we go over to the sources, and we go over to something like this page, if I scroll down, first of all, the code is'
+
+[07:12] [scene:talk]
+VISUAL: 
+AUDIO: 'horrible, but you\'re going to notice something right here. This is the full database URL, including my username and the password for the database, that\'s showing up directly on the front end of the website. So even though there is a back end API, the front end is just'
+
+[07:25] [scene:talk]
+VISUAL: 
+AUDIO: 'using the database directly without going through the API, which means anyone now can grab this URL, nuke my database, and do anything they want with it because it\'s purely showing up in the front end. Now you might think some of'
+
+[07:37] [scene:talk]
+VISUAL: 
+AUDIO: 'these errors are things that AI would never do, but I promise you if you chat with an AI model long enough, if you have context that\'s spilling into the higher percentages of context window, it can make these mistakes. And the key thing is, you will never know unless'
+
+[07:50] [scene:talk]
+VISUAL: 
+AUDIO: 'you\'re actually reading the code and you\'re a software developer. Now, in most cases, this is probably going to be okay and hopefully no one\'s going to discover my app. But all they need to do is see some live URL here and all of a sudden all of this data is completely'
+
+[08:03] [scene:talk]
+VISUAL: 
+AUDIO: 'exposed. Now, look, if you\'re technical here, just like I am, you can fix all of these issues with just a few prompts. You can go in and manually adjust them. But this is kind of the trap, right? The people who are building these types of apps, they don\'t know to look for that.'
+
+[08:16] [scene:talk]
+VISUAL: 
+AUDIO: 'They don\'t even know that this is a problem. They don\'t know the difference between a back end and a front end in the first place. And even if they do know, they have to remember to do that every single time perfectly for every app that they build forever with every'
+
+[08:28] [scene:talk]
+VISUAL: 
+AUDIO: 'prompt that they give. At any point in time, the AI can make a mistake and if they\'re blindly trusting it, you\'re going to get stuff like this. And this is just really not how people work, right? Security depends on the fact that everyone is remembering to add all of'
+
+[08:41] [scene:talk]
+VISUAL: 
+AUDIO: 'these features. And then really, the problem is that people don\'t do that. They want things to get done quickly. They\'re just prompting the AI model and as soon as they get what looks like a functioning result, they\'re done. So, the real question becomes, what would'
+
+[08:53] [scene:talk]
+VISUAL: 
+AUDIO: 'this app actually look like if the safety was just on by default? If it didn\'t depend on the AI getting it right or, you know, a person remembering to check. And that\'s exactly what I want to show you next, how you can fix this problem when you\'re doing these types of'
+
+[09:05] [scene:talk]
+VISUAL: 
+AUDIO: 'vibe coded apps. Now, this video is sponsored by Superblocks. And the link\'s in the description, you can check it out. Now, normally this is where I\'d tell you the sponsor is great and we\'d move on, but honestly, this lines up with everything that I just showed you,'
+
+[09:17] [scene:talk]
+VISUAL: 
+AUDIO: 'so I want to show you how it actually works. So, here\'s the simplest way to think about this. For the last couple of years, if you were in charge of security, for example, you had two options with all of this vibe coding stuff. And to be honest,'
+
+[09:29] [scene:talk]
+VISUAL: 
+AUDIO: 'both of the options were not great. You could either ban it, which just doesn\'t work because people are going to do it anyways on their own personal accounts, or you could allow it and just accept everything that I just showed you. Or, you know, manually review all of the code yourself.'
+
+[09:41] [scene:talk]
+VISUAL: 
+AUDIO: 'Now, Superblocks is this third option. So, you can build apps by prompting the same way that you would with like Lovable or Replit, but the apps that you deploy actually go inside of your own AWS account with its own database inside of your own VPC. So, it inherits your'
+
+[09:54] [scene:talk]
+VISUAL: 
+AUDIO: 'network, your identity, your encryption, and all of your audit controls, and your users come in through the SSO that you already use. Now, with Lovable or Replit, your app runs on their infrastructure. Here, it runs on your'
+
+[10:07] [scene:talk]
+VISUAL: 
+AUDIO: 'own. Now, that\'s the whole difference. You get real code that you actually own, and the important stuff like logins, the permission, who\'s allowed to see what, you know, full record audit log of everything that\'s going on, all of that'
+
+[10:19] [scene:talk]
+VISUAL: 
+AUDIO: 'is enforced automatically with every single application, whether AI gets the app correct or not. So, instead of me just telling you all of that, I\'m actually going to build the exact same application again, this time inside of Superblocks, and I\'m going to try the'
+
+[10:31] [scene:talk]
+VISUAL: 
+AUDIO: 'exact same attacks that you just saw, and we\'re going to see what happens when we use this type of tool with security built in. So, I\'m inside of Superblocks right now, and I\'m going to build out this full app for you in just 1 second. Now, you\'ll notice, if you go to the'
+
+[10:43] [scene:talk]
+VISUAL: 
+AUDIO: 'admin tab, you have all of the security and the architecture built in. So, it looks just like AWS with all of the different features that you\'d be familiar with. You have your access control, you have your databases, you have skills, policies, you guys get the idea, monitoring, billing, whatever,'
+
+[10:56] [scene:talk]
+VISUAL: 
+AUDIO: 'right? Everything that you actually need if you want to build a real and importantly secure production application. So, let me start by connecting the same database that I had before, but this time in a secure manner, and then I\'m going to give the exact same prompt that I gave before and'
+
+[11:08] [scene:talk]
+VISUAL: 
+AUDIO: 'build everything out. Now, the first real thing that\'s different here when I create this database is that instead of the app holding the password, the connection actually lives inside of the platform, and the app just asks the platform for data. So, that password'
+
+[11:21] [scene:talk]
+VISUAL: 
+AUDIO: 'actually never touches the browser, it never goes to the AI model, right? So, it\'s gated off, and it\'s controlled in this environment. Then, I can basically just give the same prompt as you\'re going to see in 1 second. I also can control who can access this database if'
+
+[11:33] [scene:talk]
+VISUAL: 
+AUDIO: 'I want to have other people building with me. So for now, let\'s go continue and let\'s start building our app. All right, so I\'ve got pretty much the same prompt as before, right? Build me an internal admin dashboard for my coding boot camp, connect to my MongoDB'
+
+[11:45] [scene:talk]
+VISUAL: 
+AUDIO: 'database, and then just the basic things that I want in terms of the mentors only being able to see their assigned students. So let\'s run it here and see what we get. All right, so it started building this already and one thing you\'re going to notice here is that Superblocks doesn\'t just throw this at'
+
+[11:57] [scene:talk]
+VISUAL: 
+AUDIO: 'one AI agent or one AI model. It actually breaks it into a lot of smaller tasks and then sends the simple ones to cheaper models and the hard ones to kind of the top models here, right? Which obviously is going to cut the cost quite'
+
+[12:09] [scene:talk]
+VISUAL: 
+AUDIO: 'a bit without you really having to do anything. It also means it\'s going to do things like automatically create databases for you because it has the security built in, so it\'s doing this properly. So you can see it\'s spinning this up directly inside of my own cloud environment and not on somebody else\'s'
+
+[12:22] [scene:talk]
+VISUAL: 
+AUDIO: 'computers. So if I keep going here, you\'ll see it\'s connected to MongoDB, it\'s found the tables, and then actually going to ask me some questions here. So I\'m going to say mentors can compose. Let\'s just go read only messages for right now and continue. Okay, so it took'
+
+[12:34] [scene:talk]
+VISUAL: 
+AUDIO: 'a few minutes here, but it did now build all of this out. And you\'ll notice that actually I kind of like the, you know, look of this application better, but that doesn\'t really matter in this example. But you can see we have all of the students cuz I\'m signed in as the'
+
+[12:46] [scene:talk]
+VISUAL: 
+AUDIO: 'admin view, but I could change the view to be a different user. We actually have all the API requests, which I like to see down here so we can see what\'s actually going on. And then of course, if we want, we can go into the code and we can view everything and see, you know, whatever is going on and make sure'
+
+[12:59] [scene:talk]
+VISUAL: 
+AUDIO: 'that it\'s not leaking any sensitive values. If we go back here, of course, you know, we can click into a student, we can view their information, and you get the idea here as well as the message history, which is loading up. But what I want to do now is publish this. So let\'s'
+
+[13:11] [scene:talk]
+VISUAL: 
+AUDIO: 'go to publish and let\'s see what happens. So you\'ll notice that what\'s actually happening here is that it\'s doing a full scan of the application to find any security holes that might exist, exactly like the ones we had in the previous application. So there\'s a'
+
+[13:24] [scene:talk]
+VISUAL: 
+AUDIO: 'bunch of policies that it needs to go through. We can view the details here if we want to make sure that this is going to be secure. And also, you\'re going to see in a second that by default, there\'s authentication to even access this application. So, everyone that wants to'
+
+[13:37] [scene:talk]
+VISUAL: 
+AUDIO: 'be able to even view the deployed app needs to be a part of our organization, use the default SSO, or whatever we configure here inside of Superblocks. This is built in by default. I didn\'t have to ask for it, and you\'re going to'
+
+[13:49] [scene:talk]
+VISUAL: 
+AUDIO: 'see that in just 1 second. So, you can see right here, it actually didn\'t even let us publish the application because there was a bunch of holes that it found right here. You can see that it refused to ship. The first app was already live by this point with the database password'
+
+[14:02] [scene:talk]
+VISUAL: 
+AUDIO: 'sitting completely in the front end. These are fixed policy checks. They run the same way on every app every single time. So, yes, it is still possible for the AI agent to make mistakes, but if it does, we can fix them. So, what I can do'
+
+[14:15] [scene:talk]
+VISUAL: 
+AUDIO: 'is just fix all of the findings or select all of these and go with the fix, and now it\'s going to change all of this, make sure that it\'s all good, and we don\'t have things like what we have here, SQL injection or token commits, or you know, you get the idea.'
+
+[14:27] [scene:talk]
+VISUAL: 
+AUDIO: 'So, let\'s fix those, and then let\'s go live. All right, so you can see it was able to fix all of these issues here, and then what I can do is just go to publish, and let\'s get it live. All right, so looks like the app is live, so let\'s click into it here and see what we'
+
+[14:39] [scene:talk]
+VISUAL: 
+AUDIO: 'get. All right, so I\'m in the deployed app now, and let\'s try to break it the same way that we did before. Now, first, you\'ll notice that I only have 10 students, right? So, I just adjusted a little bit so that I have like a limited view because I\'m no longer an admin. So,'
+
+[14:52] [scene:talk]
+VISUAL: 
+AUDIO: 'I should just be able to view these 10 students. So, if I click into one of them, it should be fine. I should be able to view it, and we can see all of the network requests happening here. Also, notice there\'s logs and traceability of everything going on. Okay, but so we load it up, we can see'
+
+[15:05] [scene:talk]
+VISUAL: 
+AUDIO: 'that it\'s here. Now, if I change this to another student who I don\'t have access to, and I press enter, we should see here that we\'re not able to view this. And there we go, you can see that we get access denied, and we\'re not able to'
+
+[15:17] [scene:talk]
+VISUAL: 
+AUDIO: 'view this student because we don\'t have permission to do so. Now, that access denied came from the permission that I set in the admin panel, not from the code that AI wrote. The app can\'t override it, and the next app anyone builds is going to inherit'
+
+[15:29] [scene:talk]
+VISUAL: 
+AUDIO: 'this as well. Now, let\'s also have a look at the sources here. So, let\'s go to, for example, yeah, our source, and let\'s try to look at our application code. Now, if we go here, we\'ll notice that we get a full bundle, and if I'
+
+[15:41] [scene:talk]
+VISUAL: 
+AUDIO: 'start scrolling through and I look for anything like the MongoDB URL, so let\'s go for example, we\'ll see if that exists, and I\'m pretty sure that now again, it\'s no longer actually leaking'
+
+[15:53] [scene:talk]
+VISUAL: 
+AUDIO: 'the database URL directly in the front end. Of course, I\'d have to scan through that more to verify that, but I\'m pretty sure that\'s not showing up. Now, the other thing that I want to show you is the authentication. So, let\'s say I open a new incognito tab, and I try to go to,'
+
+[16:05] [scene:talk]
+VISUAL: 
+AUDIO: 'let\'s go back to the dashboard, so let\'s just go back to this maybe main app here. And if I copy this now, which should load the main dashboard, and I paste this into new browser window, watch what happens. And this time, you see I hit a'
+
+[16:18] [scene:talk]
+VISUAL: 
+AUDIO: 'real company login screen, where I can\'t just sign in to this with a random account. It needs to be authenticated directly from Superblocks, and I can\'t even view the application until this auth is complete. So, forget just the internal auth we built, the whole'
+
+[16:31] [scene:talk]
+VISUAL: 
+AUDIO: 'platform, the whole actual application is gated off, and I can handle all of that from my settings here directly in Superblock. So, even if I have one of my employees building an application, they can\'t change any of these authentication'
+
+[16:43] [scene:talk]
+VISUAL: 
+AUDIO: 'details unless I set that myself. Now, another interesting thing to look at here is the login. So, if we go to audit for example, everything that happens in all of these applications is fully logged. So, we can see when apps'
+
+[16:55] [scene:talk]
+VISUAL: 
+AUDIO: 'were deployed, when something was read, when people signed in, and everything that\'s gone on the entire time, so we know every single event, and it\'s all tracked automatically. Now, I\'m not going to go through every single feature here, but the point is this is built for'
+
+[17:07] [scene:talk]
+VISUAL: 
+AUDIO: 'secure, reliable applications by default, and this is the way that you can five code applications without worrying about all your company\'s sensitive data being leaked. Okay. So, let me go to my honest take here.'
+
+[17:20] [scene:talk]
+VISUAL: 
+AUDIO: 'Who is this type of application actually for? Well, this is really for companies that are past the point where one person can look over every single app. So, if you\'re a real team, you\'re in an industry with rules that you actually have to follow, or honestly, if your ops'
+
+[17:32] [scene:talk]
+VISUAL: 
+AUDIO: 'team is already running half of the business out of a spreadsheet, and everyone\'s afraid to touch it, this is something that you might want to look at. It solves a real problem, and again, with security at the forefront. Now, with that in mind, this isn\'t for'
+
+[17:44] [scene:talk]
+VISUAL: 
+AUDIO: 'everyone. If you\'re a solo developer, and you\'re building a quick side project on a weekend, you definitely don\'t need this, right? And using something like Lovable or Replit is going to be a better fit, that\'s totally fine. The bigger point here is that vibe coding is'
+
+[17:56] [scene:talk]
+VISUAL: 
+AUDIO: 'not going away. Trying to ban it is probably not going to work. So, the question has really stopped becoming is AI code safe, and it\'s becoming what\'s actually sitting between the AI and the real data that needs to be secure. So,'
+
+[18:09] [scene:talk]
+VISUAL: 
+AUDIO: 'for most companies right now, there\'s nothing there, and this is a real security problem, which is why tools like this actually exist. So, if you\'re the person who\'s going to end up owning this at your company, then the link to check out Superblocks is down below. You'
+
+[18:22] [scene:talk]
+VISUAL: 
+AUDIO: 'can also book a demo with them, and they\'ll walk through everything on the platform. Anyways, guys, that\'s all that I have for you. If you enjoyed, leave a like, subscribe, and I will see you in the next one. &gt;&gt; [music]'

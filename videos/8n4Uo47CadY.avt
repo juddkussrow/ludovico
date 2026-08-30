@@ -1,0 +1,192 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: How They Fixed AI's Biggest Local Hardware Problem (with FreeToken)
+channel: @octopusinc_
+duration: 09:36
+source: https://www.youtube.com/watch?v=8n4Uo47CadY
+upload_date: 20260829
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'Did you know you can run mixture of experts models three times faster than Ollama on the same GPU setup? There\'s a tool out there called Free Token and it uses some clever tactics to optimize state-of-the-art mixture of experts models on consumer hardware. So, in'
+
+[00:13] [scene:talk]
+VISUAL: 
+AUDIO: 'today\'s video, we\'ll take a look at Free Token, see how it works, and we\'ll do a live test demo to see if this claim is actually as good as [music] it sounds. It\'s going to be a lot of fun, so let\'s'
+
+[00:25] [scene:talk]
+VISUAL: 
+AUDIO: 'dive into it. So, Free Token is an open-source inference engine and you can think of it as an alternative to Llama.cpp or Ollama, but it\'s built specifically for'
+
+[00:39] [scene:talk]
+VISUAL: 
+AUDIO: 'serving mixture of experts models on consumer hardware. It\'s made by a team of researchers from Berkeley and University of Texas and it\'s based on their research paper that they recently published. So, here\'s the core idea.'
+
+[00:51] [scene:talk]
+VISUAL: 
+AUDIO: 'Let\'s take a mixture of experts model like DeepSeek-V4-Flash, for example, which has a total of 284 billion parameters and only 13 billion are active per token. Since mixture of'
+
+[01:03] [scene:talk]
+VISUAL: 
+AUDIO: 'experts models only activate a few of the total parameters available, that is small enough to hold in your GPU, in theory. But, that only makes the compute faster for those parameters. You still have a massive memory problem because'
+
+[01:15] [scene:talk]
+VISUAL: 
+AUDIO: 'you still need to place those 284 billion parameters somewhere. And another problem is that in advance, you don\'t know which experts you\'re going to need for the next token. So, the full model has to live in regular RAM and the'
+
+[01:28] [scene:talk]
+VISUAL: 
+AUDIO: 'GPU has to keep fetching whichever experts get picked on the fly over PCIE. Existing tools like Llama.cpp handle this by nailing certain layers to the GPU and certain layers to the CPU'
+
+[01:40] [scene:talk]
+VISUAL: 
+AUDIO: 'permanently at load time. The problem is which experts get used changes every single token. So, a fixed preloaded layout like that misses most of the'
+
+[01:52] [scene:talk]
+VISUAL: 
+AUDIO: 'traffic and everything just slows down. But, Free Token\'s fix is to stop treating this as a placement problem and start treating it as a scheduling problem. So, if we think of our GPUs memory as a cache, the way it works with'
+
+[02:05] [scene:talk]
+VISUAL: 
+AUDIO: 'Mixture of Experts is that the most recently used experts usually stay in this cache. The full multi-billion parameter model always lives in your regular system RAM as the source of'
+
+[02:17] [scene:talk]
+VISUAL: 
+AUDIO: 'truth, and the GPU just keeps the most used experts nearby. And it turns out that alone helps a lot because experts tend to be very local. Token after token, the router tends to reuse a lot'
+
+[02:29] [scene:talk]
+VISUAL: 
+AUDIO: 'of the same experts. So, most of the requests hit the cache. But, there are two areas in the execution where this still creates problems. The first is right when you send a prompt. This is called prefill. Since a long prompt'
+
+[02:42] [scene:talk]
+VISUAL: 
+AUDIO: 'tends to touch almost every expert across all those tokens, the sparsity basically disappears and the engine has to stream nearly the entire model in from RAM. But, Free Token hides this by'
+
+[02:54] [scene:talk]
+VISUAL: 
+AUDIO: 'doing double buffering. While the GPU is crunching the current layer, it\'s already streaming the next layer\'s experts in the background over PCIE. So, compute and transfer happens at the same'
+
+[03:06] [scene:talk]
+VISUAL: 
+AUDIO: 'time instead of one after the other, so you\'re not just sitting there waiting. And the second problem is during actual generation where the cache inevitably misses sometimes. And that\'s when the model requests an expert that isn\'t'
+
+[03:19] [scene:talk]
+VISUAL: 
+AUDIO: 'loaded on the GPU at that moment. And this is where the researchers came up with a clever idea. It\'s something they call the Q-star policy. So, the way it works is that when there is a cache miss, you\'ve got two options. You either'
+
+[03:32] [scene:talk]
+VISUAL: 
+AUDIO: 'pull the expert over from RAM to the GPU, or you just run the calculation directly on the CPU where the data already sits. Neither option is necessarily always better. It depends'
+
+[03:44] [scene:talk]
+VISUAL: 
+AUDIO: 'entirely on your specific hardware\'s balance between the PCIE speed and RAM speed. So, Free Token actually measures both of those bandwidths on your machine to split each batch of missing experts'
+
+[03:56] [scene:talk]
+VISUAL: 
+AUDIO: 'between sending it to the GPU and just computing it on the CPU. Whichever mix finishes faster on your exact setup. So, a laptop with a narrow PCIE link and a desktop with a fast RAM get two'
+
+[04:10] [scene:talk]
+VISUAL: 
+AUDIO: 'completely different splits automatically without you needing to configure that manually. And on top of that, they use a custom weight format which they call FTW. So, the model loads straight off of disk into exactly the'
+
+[04:23] [scene:talk]
+VISUAL: 
+AUDIO: 'memory layout the engine needs, skipping the repackaging step that most tools do on startup. That\'s why loading a huge model doesn\'t take forever, either. So, that\'s how it works in theory, but I'
+
+[04:35] [scene:talk]
+VISUAL: 
+AUDIO: 'wanted to test it out on my own workstation with an RTX 5090 and 64 GB of DDR5 RAM to see how it performs. So, I ran the same task with the same model using both Ollama and Free Token to see'
+
+[04:49] [scene:talk]
+VISUAL: 
+AUDIO: 'how these tools differ. And in my case, the whole comparison comes down to one line. Does this model fit into my 32 GB VRAM space or not? So, in my particular case, the problem is that I loaded Qwen'
+
+[05:02] [scene:talk]
+VISUAL: 
+AUDIO: '3.6 35 billion parameter model at 8-bit quantization, which is about 38 GB. And that is 6 GB over what the card can actually hold. So, Ollama\'s answer to'
+
+[05:14] [scene:talk]
+VISUAL: 
+AUDIO: 'this problem is to split the model by layer. Roughly 70% of it stays on the GPU and 30% gets pushed onto the CPU, which sounds fine except every single token has to pass through every layer,'
+
+[05:28] [scene:talk]
+VISUAL: 
+AUDIO: 'so every token takes a detour through the slow CPU. But Free Token keeps the math entirely on the GPU and it just streams whatever experts are missing over PCIE. So, in theory, this means I'
+
+[05:40] [scene:talk]
+VISUAL: 
+AUDIO: 'should get a much faster token speed using Free Token. So, I ran a little task. I asked the model to add some test cases to a sample Python project I have lying around, and I hooked up both'
+
+[05:52] [scene:talk]
+VISUAL: 
+AUDIO: 'Ollama and free token in my open code configuration, so I can do the same task on open code and then compared the results. And it took Ollama 14 minutes and 20 seconds to finish the task. And'
+
+[06:04] [scene:talk]
+VISUAL: 
+AUDIO: 'then I pulled up the statistics from the run, and if we look at it, we see that the model using Ollama was streaming at around 58 tokens a second. When I ran the same task with free token, it'
+
+[06:16] [scene:talk]
+VISUAL: 
+AUDIO: 'finished in 4 minutes 40 seconds. And indeed, we got a much faster speed of 132 tokens per second. And another cool thing is that free token allows you to resize its GPU expert cache live on a'
+
+[06:29] [scene:talk]
+VISUAL: 
+AUDIO: 'running server in about a second without restarting it. So, I shrank it down step by step to see how much cache it actually needs. And as we can see here, the dropping from 58% of the model cache'
+
+[06:41] [scene:talk]
+VISUAL: 
+AUDIO: 'down to 40% only cost about 7% of the speed. But if we keep shrinking it past 20% though, then it starts falling off a cliff because the PCIe link gets too'
+
+[06:54] [scene:talk]
+VISUAL: 
+AUDIO: 'oversaturated. So, this is a nice visual proof that usually only a small slice of the hot experts are doing almost all of the work. And it\'s also worth noting that free token is not a silver bullet.'
+
+[07:07] [scene:talk]
+VISUAL: 
+AUDIO: 'It only works for specific cases. So, for example, in my case, I also tested a 4-bit version that actually fits inside the 32 GB of VRAM with room to spare. And in this case, Ollama just loads the'
+
+[07:21] [scene:talk]
+VISUAL: 
+AUDIO: 'whole thing onto the card, and that actually achieves a higher speed of 240 tokens per second versus free tokens 225. Because in this case, free token\'s streaming architecture has nothing to'
+
+[07:34] [scene:talk]
+VISUAL: 
+AUDIO: 'stream, so it\'s just pure engineering overhead. So, long story short, if your model comfortably fits on your GPU, Ollama is most definitely the faster choice. Free tokens advantage only shows up once you cross your graphics card\'s'
+
+[07:48] [scene:talk]
+VISUAL: 
+AUDIO: 'VRAM threshold. And it\'s worth noting that I conducted all my tests in this video using their CLI version, but they also have a very user-friendly desktop app. But it is only available on Windows'
+
+[08:00] [scene:talk]
+VISUAL: 
+AUDIO: 'and Linux at the moment. But it does give you a nice overview of which models your system is able to run. For example, I wanted to run DeepSeek V4 Flash, but it straight out told me that even my'
+
+[08:12] [scene:talk]
+VISUAL: 
+AUDIO: 'workstation is too weak to run such a large Frontier model locally. And I tried running the same test with Qwen 3.6 on the desktop app, and it couldn\'t really go into any project folder or'
+
+[08:24] [scene:talk]
+VISUAL: 
+AUDIO: 'modify any of the files. So, the app is quite limited at the moment, but it does give you a nice visual overview of what\'s happening in Free Token behind the scenes. So, there you have it, folks. That is Free Token in a nutshell.'
+
+[08:36] [scene:talk]
+VISUAL: 
+AUDIO: 'I think the biggest advantage of this tool is that it is adaptive. It can automatically profile your machine and adapt a better streaming strategy depending on your hardware setup. But'
+
+[08:48] [scene:talk]
+VISUAL: 
+AUDIO: 'remember, this only works for mixture-of-experts models, and it is only effective if the experts do not fit comfortably inside your GPU\'s VRAM, which for many consumer setups might actually be the case. But what do you'
+
+[09:01] [scene:talk]
+VISUAL: 
+AUDIO: 'think about Free Token? Have you tried it? Will you use it? Let us know in the comment section down below. And folks, if you like these types of technical breakdowns, please let me know by smashing that like button underneath the video. And also, don\'t forget to'
+
+[09:13] [scene:talk]
+VISUAL: 
+AUDIO: 'subscribe to our channel. This has been Andres from BetterStack, and I will see you in the next videos. [music] &gt;&gt; [music]'

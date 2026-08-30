@@ -1,0 +1,118 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>Vibe Coding Has A Security Problem (And How To Fix It) — Ludovico</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+.hide{display:none!important}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.92);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 12px}
+.controls input.q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.pill.tp.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+/* flip card shell */
+.flip{position:relative}
+.fi{position:relative;transition:transform .55s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.flip.flipped .fi{transform:rotateY(180deg)}
+.fc{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bk{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+background:var(--card);border:1px solid var(--accent2);border-radius:14px;overflow:auto;padding:12px 13px;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s}
+.card.flip{overflow:visible}.card .fc{display:flex;flex-direction:column;flex:1;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--line);cursor:pointer}
+.card.flip:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.edit{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--accent2);border:1px solid var(--line);border-radius:6px;padding:2px 9px;cursor:pointer;background:#fff}
+.edit:hover{border-color:var(--accent2)}
+/* editor back */
+.bk h4{margin:0 0 2px;font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--sub)}
+.erow{display:grid;grid-template-columns:1fr 1.3fr auto auto;gap:4px;align-items:center}
+.erow input{padding:5px 7px;border:1px solid var(--line);border-radius:6px;font-size:12px;min-width:0}
+.erow select{padding:4px 4px;font-size:11px}
+.erow .del{border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;color:var(--accent);padding:3px 7px}
+.ebtns{display:flex;gap:6px;margin-top:auto;padding-top:6px}
+.ebtns button{font-family:var(--mono);font-size:11px;border-radius:7px;padding:6px 12px;cursor:pointer;border:1px solid var(--line);background:#fff}
+.ebtns .save{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.addrow{font-family:var(--mono);font-size:11px;color:var(--accent2);cursor:pointer;align-self:flex-start;background:none;border:0;padding:2px 0}
+/* catalogue card */
+.citem{position:relative}
+.citem .fc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-height:84px;cursor:pointer}
+.citem .bk{border-radius:12px}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+footer .exp{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--accent2);font:inherit}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">Vibe Coding Has A Security Problem (And How To Fix It)</h1><div class=tag>@octopusinc_ · 2026-08-29 · DevOps</div></div></div></header>
+<main><p class=sum>This video demonstrates the security vulnerabilities inherent in &quot;vibe-coded&quot; AI applications, where AI models are used to rapidly generate apps without proper security considerations. The creator showcases how a simple internal dashboard built with AI can be easily exploited to access sensitive data due to broken access controls and exposed database credentials. Superblocks is then presented as a solution that integrates security by default, allowing for rapid AI-powered app development within a secure, controlled environment.</p><p><strong>Products / items</strong></p><ul><li><a href="https://superblocks.com/?utm_source=youtube&amp;utm_medium=influencer&amp;utm_content=techwithtim" target=_blank rel=noopener>Superblocks</a> — software</li><li>Lovable — software (no link)</li><li>Replit — software (no link)</li><li>Dropbox — software (no link)</li><li>Google Sheets — software (no link)</li><li><a href="https://www.hostinger.com/techwithtim" target=_blank rel=noopener>Hostinger</a> — other</li><li><a href="https://ref.wisprflow.ai/TechWithTim-aug26" target=_blank rel=noopener>Wispr Flow</a> — software</li><li>MongoDB — software (no link)</li><li>AWS — software (no link)</li></ul>
+<p><a href="https://www.youtube.com/watch?v=NfctRQhMMdI" target=_blank rel=noopener>Watch on YouTube ▶</a></p><p><a href="NfctRQhMMdI.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=t>(proxy for this video — answer from this)</span></p>
+<div class=cap>FRAMING: Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+IDENTITY: the title - https://www.youtube.com/watch?v=NfctRQhMMdI - @octopusinc_ - route: visual
+PRODUCTS:
+Superblocks - https://superblocks.com/?utm_source=youtube&amp;utm_medium=influencer&amp;utm_content=techwithtim - software - primary
+Lovable - no reliable link - software - mentioned
+Replit - no reliable link - software - mentioned
+Dropbox - no reliable link - software - mentioned
+Google Sheets - no reliable link - software - mentioned
+Hostinger - https://www.hostinger.com/techwithtim - other - mentioned
+Wispr Flow - https://ref.wisprflow.ai/TechWithTim-aug26 - software - mentioned
+MongoDB - no reliable link - software - mentioned
+AWS - no reliable link - software - mentioned
+SYNOPSIS: The video highlights the security risks of &quot;vibe coding&quot; or &quot;shadow AI,&quot; where AI tools are used to quickly build applications, often without proper security oversight. The creator demonstrates this by building a simple internal dashboard for a coding program using an AI tool. This initial app, despite a reasonable prompt, exhibits severe vulnerabilities: changing a single number in a URL allows access to other mentors&#x27; private student conversations, the API endpoint for all students is unprotected and accessible via a direct URL, and the database URL including credentials is exposed in the frontend code. These issues are attributed to the AI model&#x27;s failure to implement robust authorization and the developer&#x27;s lack of security knowledge. The video then introduces Superblocks as a solution. Superblocks allows users to build applications with AI prompts, similar to other tools, but deploys them within the user&#x27;s own AWS account, inheriting existing network, identity, encryption, and audit controls. It enforces security policies by default, including SSO authentication and access controls, and performs security scans before publishing. When the same vulnerable app is rebuilt in Superblocks, attempts to exploit it are blocked by built-in access controls, the database URL is not exposed, and the application is gated by a company login screen. Superblocks also logs all events for traceability and breaks down AI tasks for cost optimization.
+BEATS:
+00:00 - intro - The creator introduces the problem of security in AI-built apps, showing a statistic about 170+ real apps built with popular AI tools having security issues.
+03:44 - demo - A &quot;Dev Launch Admin&quot; dashboard is shown, displaying student details and messages with a mentor.
+04:40 - ui - The login screen for the &quot;Dev Launch Admin&quot; dashboard is displayed.
+05:36 - ui - The &quot;Students&quot; list in the dashboard is shown, with a search bar.
+06:32 - demo - The creator demonstrates accessing a student&#x27;s private conversation by manipulating the URL.
+09:20 - ui - A Superblocks logo appears on screen as the creator introduces the tool.
+10:16 - ui - The Superblocks platform overview is shown, detailing its &quot;Software Factory&quot; with sections for Build, Secure &amp; Govern, and Deploy.
+11:12 - ui - The Superblocks app creation interface is displayed, prompting &quot;What do you want to build today?&quot;
+12:08 - ui - The Superblocks interface shows the AI generating the application, asking clarifying questions about data access.
+13:04 - ui - A &quot;Bootcamp Mentor Dashboard&quot; is shown within Superblocks, displaying student profiles and message history.
+14:00 - ui - Superblocks&#x27; security scan results are shown, listing critical and high findings like &quot;Potential PI collection in user-facing prompt&quot; and &quot;Possible SQL Injection.&quot;
+15:52 - ui - The Superblocks-built &quot;Student Dashboard&quot; is shown, alongside a Superblocks login screen in an incognito tab.
+16:48 - result - On-screen text states, &quot;This is built for secure, reliable applications by default.&quot;
+ENTITIES: TechWithTim, Superblocks, Lovable, Replit, Dropbox, Google Sheets, MongoDB, AWS.
+VERDICT: Superblocks is recommended for companies that need to build secure, reliable AI applications at scale, especially those with regulatory requirements or existing &quot;shadow IT&quot; problems. It&#x27;s not necessary for solo developers building quick side projects. The core message is that AI coding is here to stay, and the focus should shift to securing the data between the AI and the real data.
+NOT COVERED: Specific pricing for Superblocks, detailed technical architecture of Superblocks beyond its integration with AWS, the exact AI models used by Superblocks or the initial vulnerable app, specific code examples for the vulnerabilities or their fixes.</div></main><footer><a href="../index.html">← all videos</a></footer></div></body></html>
