@@ -1,0 +1,115 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>How to Use Antigravity Studio — Ludovico</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+.hide{display:none!important}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.92);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 12px}
+.controls input.q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.pill.tp.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+/* flip card shell */
+.flip{position:relative}
+.fi{position:relative;transition:transform .55s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.flip.flipped .fi{transform:rotateY(180deg)}
+.fc{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bk{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+background:var(--card);border:1px solid var(--accent2);border-radius:14px;overflow:auto;padding:12px 13px;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s}
+.card.flip{overflow:visible}.card .fc{display:flex;flex-direction:column;flex:1;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--line);cursor:pointer}
+.card.flip:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.edit{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--accent2);border:1px solid var(--line);border-radius:6px;padding:2px 9px;cursor:pointer;background:#fff}
+.edit:hover{border-color:var(--accent2)}
+/* editor back */
+.bk h4{margin:0 0 2px;font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--sub)}
+.erow{display:grid;grid-template-columns:1fr 1.3fr auto auto;gap:4px;align-items:center}
+.erow input{padding:5px 7px;border:1px solid var(--line);border-radius:6px;font-size:12px;min-width:0}
+.erow select{padding:4px 4px;font-size:11px}
+.erow .del{border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;color:var(--accent);padding:3px 7px}
+.ebtns{display:flex;gap:6px;margin-top:auto;padding-top:6px}
+.ebtns button{font-family:var(--mono);font-size:11px;border-radius:7px;padding:6px 12px;cursor:pointer;border:1px solid var(--line);background:#fff}
+.ebtns .save{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.addrow{font-family:var(--mono);font-size:11px;color:var(--accent2);cursor:pointer;align-self:flex-start;background:none;border:0;padding:2px 0}
+/* catalogue card */
+.citem{position:relative}
+.citem .fc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-height:84px;cursor:pointer}
+.citem .bk{border-radius:12px}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+footer .exp{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--accent2);font:inherit}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">How to Use Antigravity Studio</h1><div class=tag>@octopusinc_ · 2026-02-11 · Hardware</div></div></div></header>
+<main><p class=sum>This video provides a tutorial on Antigravity Studio, a software designed for editing 360-degree footage captured with the Antigravity A1 drone. It demonstrates how to import, preview, and edit individual clips in the Media tab, covering stabilization, viewing angles, stitching, and color adjustments. The tutorial also explains how to combine multiple clips, add text, music, and transitions in the Project tab, culminating in the export process.</p><p><strong>Products / items</strong></p><ul><li>Antigravity Studio — software (no link)</li><li>Antigravity A1 — hardware (no link)</li><li>Quicklook plugin — software (no link)</li></ul>
+<p><a href="https://www.youtube.com/watch?v=7QlDdE9P5sg" target=_blank rel=noopener>Watch on YouTube ▶</a></p><p><a href="7QlDdE9P5sg.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=t>(proxy for this video — answer from this)</span></p>
+<div class=cap>FRAMING: Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+IDENTITY: the title - https://www.youtube.com/watch?v=7QlDdE9Psg - @octopusinc_ - route: visual
+PRODUCTS:
+Antigravity Studio - no reliable link - software - primary
+Antigravity A1 - no reliable link - hardware - mentioned
+Quicklook plugin - no reliable link - software - mentioned
+SYNOPSIS: The video is a tutorial for Antigravity Studio, a software used to edit 360-degree footage from the Antigravity A1 drone. The software can be downloaded from the official website and optionally includes a Quicklook plugin for instant footage preview. The interface has two main tabs: Media and Project. The Media tab is for individual clip editing and is divided into Library, Monitor, Function Panel, and Timeline Panel. The Library automatically recognizes and imports footage from a connected drone or memory card, allowing users to open files by clicking or dragging. The Monitor section enables users to adjust viewing angles and field of view, and select aspect ratios. The Function Panel offers options for stabilization, goggle view, stitching methods (including AI stitching and optical flow stitching), recalibration, image processing (brightness, color), and displaying flight information via dashboard styles. The Timeline Panel allows for clip preview, duration adjustment, keyframe addition for parameter changes (rotation, field of view), depth tracking to center subjects, and an ND filter effect for motion blur. After editing, clips can be exported. The Project tab is for combining multiple clips and adding creative elements. Users can create new projects, rename them, set save paths, adjust aspect ratios and frame rates, and enable proxy mode for smoother editing on lower-performance devices. The Project tab&#x27;s library includes music, text templates, and transitions. Music can be previewed and downloaded, text templates customized, and transitions applied between clips. 360 transitions are noted as being usable with 360 footage, while other transitions can be used freely. The final edited video can be exported with specified parameters.
+BEATS:
+00:22 - ui - The Antigravity Studio UI is shown with a 360-degree video playing, featuring wind turbines in the ocean.
+00:45 - ui - The Media tab of Antigravity Studio is displayed, highlighting the Library and Monitor sections with a 360-degree video.
+01:08 - ui - The Library section of the Media tab is shown, demonstrating how to import files from a local directory.
+01:31 - ui - The Monitor section is highlighted, showing controls for adjusting the viewing angle of the 360-degree footage.
+02:17 - ui - The Function Panel is displayed, showing options for stitching optimization, including AI Stitching and Dynamic Stitching.
+02:40 - ui - The Function Panel shows the dashboard tab with various data display options like speed, altitude, and distance.
+03:03 - ui - The Timeline Panel is shown, with controls for playing, pausing, and adjusting clip duration.
+03:26 - ui - The Timeline Panel displays preset view options for the 360-degree footage, such as &quot;Tail view.&quot;
+03:49 - ui - The Timeline Panel shows the depth tracking feature being used to keep a subject centered.
+04:34 - ui - The &quot;New Project&quot; dialog box is shown, allowing users to name a project, set its path, ratio, and frame rate.
+04:57 - ui - The Project tab interface is displayed, showing imported media clips and a timeline.
+05:20 - ui - The Project tab&#x27;s library is shown, featuring options for media, music, text, and transitions.
+05:43 - ui - The Project tab&#x27;s timeline is shown with multiple clips arranged, demonstrating video editing.
+06:29 - ui - The Project tab&#x27;s text template library is displayed, offering various text styles like &quot;VLOG&quot; and &quot;Travel.&quot;
+06:52 - ui - The Project tab&#x27;s transitions library is shown, with options like &quot;Tiny Planet&quot; and &quot;Glitch&quot; effects.
+07:15 - ui - The export dialog box is shown, allowing users to set file name, path, export mode, resolution, and encoding format.
+ENTITIES: Antigravity Studio, Antigravity A1, Quicklook plugin
+VERDICT: The video provides a comprehensive guide to using Antigravity Studio for 360-degree video editing, covering both basic clip adjustments and more advanced project creation with creative assets.
+NOT COVERED: The video does not cover the pricing of Antigravity Studio or the Antigravity A1 drone, specific system requirements for the software, or where to download the software from the official website (only mentions &quot;official website&quot;). It also doesn&#x27;t detail the differences or advantages of AI Stitching versus Optical Flow Stitching.</div></main><footer><a href="../index.html">← all videos</a></footer></div></body></html>

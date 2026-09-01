@@ -1,0 +1,860 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: 360 Camera vs 360 Drone for Gaussian Splatting
+channel: @octopusinc_
+duration: 45:19
+source: https://www.youtube.com/watch?v=121YL6v7JZw
+upload_date: 20260603
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'We\'re trying to make a on one click solution where you can drop an Insta 360 file and you get the result. And we couldn\'t even predict the use cases people are uploading the footage and gaze in 3D for. Many of the cases just curiosity, like how do I get 3D from my'
+
+[00:13] [scene:talk]
+VISUAL: 
+AUDIO: 'visit to Rome. So I have a few examples of [music] the the same scene collected with the drone and with the Insta 360, if I can show it to you right now. &gt;&gt; The comparison of an Insta 360 versus an'
+
+[00:27] [scene:talk]
+VISUAL: 
+AUDIO: 'Anti-Gravity A1 for the capturing and reconstruction of Gaussian splatting is only one of the many topics I discuss today with Andrey Shelomentsev. Andrey is the co-founder of Splatika, a London-based startup building the'
+
+[00:41] [scene:talk]
+VISUAL: 
+AUDIO: 'infrastructure for physical AI. At Splatika, he leads commercial strategy and partnership with Insta 360 and Anti-Gravity, helping define what good spherical grade reality capture actually looks like in practice. We will'
+
+[00:53] [scene:talk]
+VISUAL: 
+AUDIO: 'look at what you can realistically achieve with just an Insta 360. &gt;&gt; You just walk with the camera and sometimes we see people uploading the footage of the regular walk around. I mean, not even made specifically for 3D'
+
+[01:06] [scene:talk]
+VISUAL: 
+AUDIO: 'and they got a beautiful result and I\'m like still stunned how it\'s possible. &gt;&gt; What you can expect when you get a 360 camera up in the sky? &gt;&gt; It\'s a Perast in Montenegro and if you look at it from the top, you can see the'
+
+[01:18] [scene:talk]
+VISUAL: 
+AUDIO: 'perfect streets layer, like everything is just without the distortion, just perfectly geometrical layout. &gt;&gt; But what if [music] you want the best of both worlds? &gt;&gt; We actually get this a lot given that cameras and sensors are the same.'
+
+[01:31] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; And we then look at the various applications, including what is truly needed to unlock the full potential of these digital worlds. &gt;&gt; And we can decompose the scene into separate objects. We can understand'
+
+[01:43] [scene:talk]
+VISUAL: 
+AUDIO: 'their their mass, their density, their physical properties. Robots does not require just visual simulation, they require all of these like spatial relationships between the objects and the scene [music] understanding and the'
+
+[01:57] [scene:talk]
+VISUAL: 
+AUDIO: 'and the graph. &gt;&gt; But before we get into it, I wanted to let you know that if you want to learn more about how to turn 360 footage into Gaussian splatting, I recently wrote a comprehensive article on my newsletter that goes over the flight experience'
+
+[02:10] [scene:talk]
+VISUAL: 
+AUDIO: 'with the anti-gravity A1, three pipelines I tested for the reconstruction of Gaussian splatting, and some tips [music] and tricks to simplify your splats and bring it in VR. So, make sure to check out the first'
+
+[02:23] [scene:talk]
+VISUAL: 
+AUDIO: 'link in the episode description and subscribe to the newsletter to get the quick start guide on Gaussian splatting with plenty more good stuff you are going to certainly love. And now, it\'s time to roll the title,'
+
+[02:35] [scene:talk]
+VISUAL: 
+AUDIO: 'Awaka on day under the spotlight. Andrei, I wanted to start with uh'
+
+[02:50] [scene:talk]
+VISUAL: 
+AUDIO: 'um one of the major questions, and I think people are asking right now when it comes to capturing reality. And that is what are the trade-off between the tools, hardware, and'
+
+[03:04] [scene:talk]
+VISUAL: 
+AUDIO: 'pipeline that professional needs to take into account when they are going to capture the environment. I\'m talking about a DSLR versus a scanner versus an Insta360. What is the landscape and what'
+
+[03:16] [scene:talk]
+VISUAL: 
+AUDIO: 'do you advise when picking a solution suitable for a certain application? &gt;&gt; Mhm. Yeah, thanks for the question, and I I I\'d push I I would push back gently on the'
+
+[03:28] [scene:talk]
+VISUAL: 
+AUDIO: 'framing. So, it\'s not uh which tool wins question. It\'s actually they are optimized for different problems. And if you\'re doing heritage documentation where the only thing that'
+
+[03:40] [scene:talk]
+VISUAL: 
+AUDIO: 'matters is sub-millimeter geometry, then you would need a lidar, right? And uh if you\'re doing some 3D reconstruction to BIM model, then you would also need some more professional grade equipment or you\'re'
+
+[03:52] [scene:talk]
+VISUAL: 
+AUDIO: 'doing some professional work on the bridge. But there are many times like thousands of times when you don\'t need this. You don\'t need the quality, you need the speed and efficiency and'
+
+[04:04] [scene:talk]
+VISUAL: 
+AUDIO: 'availability of the tools. So, uh we\'re not competing directly with the uh with the guys with the liars and more professional equipment. We allowing the regular people to'
+
+[04:16] [scene:talk]
+VISUAL: 
+AUDIO: 'capture 3D using what they already have, 360 camera. And using 360 unlocks a completely different point on the cost versus skills level.'
+
+[04:29] [scene:talk]
+VISUAL: 
+AUDIO: 'You literally don\'t need anything. You just walk with the camera and sometimes we see people uploading the footage of the regular walk around. I mean, not even made specifically for 3D. We provide a lot of guidance, but people'
+
+[04:42] [scene:talk]
+VISUAL: 
+AUDIO: 'just walk with the camera on the shoulder and they get a beautiful result. And I\'m like still stunned how it\'s possible. Uh So, I\'d say it\'s just the different ends of the spectrum.'
+
+[04:55] [scene:talk]
+VISUAL: 
+AUDIO: 'Uh &gt;&gt; So, when when do you think the let\'s say an an Insta360? And we\'re we\'re going to talk about drone later, because that is another dimension, literally a different height, so to say. But when we are'
+
+[05:07] [scene:talk]
+VISUAL: 
+AUDIO: 'thinking about uh 360 camera, what are you think that is use cases, right? The end goal that fit very well with something that is so accessible? &gt;&gt; We originally launched our public'
+
+[05:20] [scene:talk]
+VISUAL: 
+AUDIO: 'pipeline on the web just to see what people are using it for, because the imagination is uh endless. And we couldn\'t even predict the use cases people are uploading the footage and getting 3D for. Many of the cases just'
+
+[05:33] [scene:talk]
+VISUAL: 
+AUDIO: 'curiosity, like how do I uh get 3D from my uh visit to Rome, for example, or any other ancient city. But also we see examples from the industrial landscape.'
+
+[05:46] [scene:talk]
+VISUAL: 
+AUDIO: 'People trying to digitize their warehouse and factory and trying to do things in spatial AI perspective. Trying to understand the space before'
+
+[05:58] [scene:talk]
+VISUAL: 
+AUDIO: 'like working with architects for example is they would need to see the place before even making a quote for for the pre-sales before they even take the money they need to understand the space'
+
+[06:10] [scene:talk]
+VISUAL: 
+AUDIO: 'not just pictures. So there\'s a lot of use cases where ground level footage actually means a lot for for the special understanding of the place. Does that answer the question? &gt;&gt; It does. It does. What I wanted to share is maybe some examples that are'
+
+[06:23] [scene:talk]
+VISUAL: 
+AUDIO: 'available on your on your website, right? So this is like some of the the scan that people have made and you could kind of like navigate in it and I encourage everybody to kind of like give'
+
+[06:35] [scene:talk]
+VISUAL: 
+AUDIO: 'it a look to see the kind of &gt;&gt; right? &gt;&gt; And it is it is actually pretty impressive. And one thing that I usually like to do is when uh since you guys gave this opportunity here on the top'
+
+[06:47] [scene:talk]
+VISUAL: 
+AUDIO: 'right, there is even the opportunity to see what kind of path people have taken. So this is basically like walking in circle a few time, right? &gt;&gt; Yeah, two times around around the space.'
+
+[06:59] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; Yes. &gt;&gt; we provide a guidance to to make a capture on three different levels. Um what this trajectory does not show is that we also recommend to point cameras um vertically versus horizontally. So'
+
+[07:12] [scene:talk]
+VISUAL: 
+AUDIO: 'when you do the different scans, you you turn the camera 90°. So you capture more details which is not on the edge of the cameras. &gt;&gt; Stitching line.'
+
+[07:26] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; directly, yeah, not the stitching line. But yeah, this is the best learning tool. I mean to explore existing scenes and the trajectories. So you can see how it was collected. &gt;&gt; Mhm. &gt;&gt; Absolutely. And this was actually this struck me because it\'s a very'
+
+[07:39] [scene:talk]
+VISUAL: 
+AUDIO: 'it feels like a dark scene, right? And that has one of the challenges that there are with with the let\'s say Easter so &gt;&gt; Moreover, it\'s not just dark scene. You see it\'s a combination of dark and very'
+
+[07:51] [scene:talk]
+VISUAL: 
+AUDIO: 'bright scene. So that\'s where the biggest problem is like it that that\'s the that\'s where you see sometimes um a fog like artificial elements that falsely are constructing.'
+
+[08:04] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; Yeah. Yeah, those floaters and actually here there is almost none I have to say. In the middle of the scene. So that\'s that\'s &gt;&gt; of the most beautiful scenes. I made it myself in Leighton House in London.'
+
+[08:17] [scene:talk]
+VISUAL: 
+AUDIO: 'Um I think that amazing stuff that like even I\'m working on this technology it still amazes me every time. Like I was in the museum not for the reason to collect the'
+
+[08:30] [scene:talk]
+VISUAL: 
+AUDIO: 'data. I was just there to visit the museum. And I\'ve got my camera with you with me and I\'ve just recorded like a few minutes of walk around and no one noticed. I mean people don\'t care that'
+
+[08:43] [scene:talk]
+VISUAL: 
+AUDIO: 'you walk in with the Insta360 just like a crazy tourist filming everything. So no one even knew that I\'m making this &gt;&gt; Yeah. &gt;&gt; And a question here because you'
+
+[08:55] [scene:talk]
+VISUAL: 
+AUDIO: 'mentioned that you were there. Were there people in the scene? Do you guys have some &gt;&gt; Yeah. Yeah, there were people. &gt;&gt; Okay. So do you would also do some masking out of people that are walking, standing? &gt;&gt; Correct. Yeah. Yeah, so we'
+
+[09:08] [scene:talk]
+VISUAL: 
+AUDIO: 'in the pipeline we specifically masking all the people. Um so not just walking or moving. We we mask out all the people that we see in the scene. So we just remove them from the scene.'
+
+[09:21] [scene:talk]
+VISUAL: 
+AUDIO: 'Sometimes you see the ghosts. So like in this scene in the in the far end you can see some &gt;&gt; Yeah, here they are I think. There is some ghosts. &gt;&gt; And sometimes sometimes it play tricks with the monuments because'
+
+[09:35] [scene:talk]
+VISUAL: 
+AUDIO: 'they also resemble people. So, this one is fine, but sometimes we see like false positives when monuments are being not the best quality. But, this peacock is amazing. Can you Can you just zoom in?'
+
+[09:47] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; Of course. &gt;&gt; Did you know you can click on an object and that that would become like a new center? &gt;&gt; All right. Here we go. &gt;&gt; rotation. Yeah. &gt;&gt; I keep learning things from from the platform, you know.'
+
+[10:00] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; [laughter] &gt;&gt; That\'s nice. Yes. And of course, I mean, let Let\'s be honest. What happens is that you haven\'t walked on the back of the stairs so the &gt;&gt; I haven\'t been I haven\'t I I think you can show the trajectory. That clearly shows that I I haven\'t been'
+
+[10:12] [scene:talk]
+VISUAL: 
+AUDIO: 'there. So, I haven\'t seen this part. &gt;&gt; You have stayed just in the center of it and of course. Yeah. We are not there yet, let\'s say, where the AI hallucinate and imagine the rest. It\'s coming. I think it\'s coming'
+
+[10:24] [scene:talk]
+VISUAL: 
+AUDIO: 'at some point, but So, these are I think one thing that I want to um So, these are great example. And I want to ask is this ball only to Insta360 footage because 360 camera'
+
+[10:38] [scene:talk]
+VISUAL: 
+AUDIO: 'there are now I would say dozens. How does that work? &gt;&gt; Yeah. Uh we are practically can work with any footage. We can work with DSLR cameras. You can work with any'
+
+[10:51] [scene:talk]
+VISUAL: 
+AUDIO: 'any 360 cameras, but we choose Insta360 because of the quality and stability and we choose to optimize for one particular camera. It\'s very widespread on the'
+
+[11:04] [scene:talk]
+VISUAL: 
+AUDIO: 'market. I mean, it\'s probably one of the best-selling cameras on in the world of the 360 cameras. So, the better we optimize for the specific vendor, the better quality result we\'ve'
+
+[11:17] [scene:talk]
+VISUAL: 
+AUDIO: 'got. So, there was a strategic decision way behind even before we approached Insta360 for the first time. So, we we we chosen camera because of the quality of the coverage. And um I think that paid off because we we see'
+
+[11:31] [scene:talk]
+VISUAL: 
+AUDIO: 'constant improvements on the camera side and hopefully they will release a bigger sensor and a better um a few more megapixels. &gt;&gt; So,'
+
+[11:44] [scene:talk]
+VISUAL: 
+AUDIO: '360 cameras, uh now there are flying 360 cameras, right? I mean, let\'s be honest, that\'s the those those are that\'s exactly what they are. Uh and uh we\'ve seen like uh I have also got an'
+
+[11:56] [scene:talk]
+VISUAL: 
+AUDIO: 'Anti-Gravity A1 and this some first test that I can actually share here and &gt;&gt; amazing. I mean, your scene is just one of the best examples I\'ve seen. &gt;&gt; It came up pretty well and you know, the'
+
+[12:08] [scene:talk]
+VISUAL: 
+AUDIO: 'fact is that here, and I think as a good practice, as we have done with the other, we can also show the path. Um and in this case, we do have again,'
+
+[12:21] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; Mhm. &gt;&gt; one orbit around the windmill. And basically, that\'s it. So, this was like I think 2 minutes 2 minutes footage. So, and it came out pretty well. What I was also actually pretty impressed by and as I noticed here, we'
+
+[12:33] [scene:talk]
+VISUAL: 
+AUDIO: 'are on SD, so just to make it easy to to stream [clears throat] and walk around, but we can always increase a little bit the quality. So, go there and check it. Uh you will find the link in the episode description, but then here you see how the let\'s see the fine details uh got'
+
+[12:46] [scene:talk]
+VISUAL: 
+AUDIO: 'captured, the rope, uh for example. So, um oops, got out. Press R. R. Reset. &gt;&gt; Yeah.'
+
+[12:58] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; Reset learning. So, here it is. Yeah, that\'s what I wanted to try to do. Here I am and uh yeah, so this was actually quite &gt;&gt; Is it like some rope on &gt;&gt; Yeah, yeah, yeah. So, this is you see'
+
+[13:11] [scene:talk]
+VISUAL: 
+AUDIO: 'like even even these fine details like again, this this rope that ties this, it\'s again being kept in some way or form even though I was pretty far from the from the from the windmill. And of course,'
+
+[13:24] [scene:talk]
+VISUAL: 
+AUDIO: 'there are other incredible examples that people have made like for example there is a whole plant structure here that I found very impressive and here looks also extremely methodical the path. This is'
+
+[13:37] [scene:talk]
+VISUAL: 
+AUDIO: 'This was like okay, someone had a very clear impression of what he wanted to capture and how and I think it shows really on the results to be honest. So &gt;&gt; Yeah. Well what I like as well if you'
+
+[13:50] [scene:talk]
+VISUAL: 
+AUDIO: 'press X Gabriele Um you will see the structure and uh turn off the the path for a second. &gt;&gt; Yes. I really like &gt;&gt; seeing the 3D point cloud which is'
+
+[14:03] [scene:talk]
+VISUAL: 
+AUDIO: 'underneath any any 3D reconstruction. So Splat is background is in 3D reconstruction from motion. So we originally built the pipeline the'
+
+[14:15] [scene:talk]
+VISUAL: 
+AUDIO: 'SLAM engine to accurately reconstruct 3D. So Gaussian Splats came later and on top of existing experience working with 3D. So I think that defines the the quality'
+
+[14:28] [scene:talk]
+VISUAL: 
+AUDIO: 'of reconstructions we built. Because we\'re trying to um extract as many um features and reconstruct the 3D in the best way possible and that\'s why I\'m I\'m'
+
+[14:40] [scene:talk]
+VISUAL: 
+AUDIO: 'always looking what\'s underneath the Splat because some of the GenAI models they uh of course like they don\'t they don\'t have this. &gt;&gt; Of course of course. And uh this is what actually I seen that I found like also'
+
+[14:54] [scene:talk]
+VISUAL: 
+AUDIO: 'super impressive here and it\'s like this. &gt;&gt; Yeah it\'s a it\'s a Perast in Montenegro. Also just I mean it\'s like 5 or less minutes of footage'
+
+[15:06] [scene:talk]
+VISUAL: 
+AUDIO: 'and I was uh specifically flying around this uh I think it\'s a church or the bell tower. And if you look at the from the top and one more trick I\'m going to teach you. Uh if you press press X'
+
+[15:19] [scene:talk]
+VISUAL: 
+AUDIO: 'and press C. So C is a orthogonal view. So it\'s without any camera distortion. If you look from the top at the city,'
+
+[15:32] [scene:talk]
+VISUAL: 
+AUDIO: 'you can see the perfect streets layer and like everything is just without the distortion, just perfectly geometrical layout. &gt;&gt; Yeah. Yeah.'
+
+[15:44] [scene:talk]
+VISUAL: 
+AUDIO: 'So since we are talking about this and you mentioned about the accuracy of the point cloud. When we talk about that, how accurate are these created with for example a 360 drone or the Insta360? I\'m talking about measurement accuracy,'
+
+[15:57] [scene:talk]
+VISUAL: 
+AUDIO: 'alignment and all that. Do you have some standards to evaluate that? &gt;&gt; Um yeah, we we measure the accuracy of the reconstructed scenes and typically with Insta360\'s IMU, which is um inertial sensor.'
+
+[16:13] [scene:talk]
+VISUAL: 
+AUDIO: 'Uh we got one 1 cm accuracy on all of like every 100 cm we\'ve got 1 cm error. But keep in mind this is just IMU,'
+
+[16:25] [scene:talk]
+VISUAL: 
+AUDIO: 'right? Like we don\'t have any visual reference or any metric reference. So it\'s purely based on estimation of the camera movement, which is I think is quite exciting. If we have some'
+
+[16:37] [scene:talk]
+VISUAL: 
+AUDIO: 'markers in the scene and I think I\'ve got an example of one here. Um We got these markers'
+
+[16:49] [scene:talk]
+VISUAL: 
+AUDIO: 'and uh if they if we have them somewhere in the scene, we can improve accuracy by uh millimeter level. So it\'s going to be much more accurate. And it\'s not just by by measuring'
+
+[17:04] [scene:talk]
+VISUAL: 
+AUDIO: 'distance between those markers, but by the marker natural scale. Is it this? And we can also estimate the drift between different points. So if we see that one marker is moved slightly, we know that this is the whole scene is'
+
+[17:17] [scene:talk]
+VISUAL: 
+AUDIO: 'probably just uh a little bit uh distorted. So, yeah, and and with uh anti-gravity, we also have GPS data. So, uh keep in mind, Insta360 does not have GPS unit. It It'
+
+[17:30] [scene:talk]
+VISUAL: 
+AUDIO: 'can only get GPS from the app. But, with anti-gravity, we can have a terrestrial linkage by by GPS. &gt;&gt; I have a thought. When using the'
+
+[17:42] [scene:talk]
+VISUAL: 
+AUDIO: 'anti-gravity, I realized that what I was doing was not the best thing. In the sense that capturing having an object-centric capture, I don\'t think it makes a lot of sense using a a 360 drone. I'
+
+[17:56] [scene:talk]
+VISUAL: 
+AUDIO: 'feel, for example, that again, the example of the plant here, &gt;&gt; Mhm. &gt;&gt; it is a much better example because um in here, you have the advantage of'
+
+[18:09] [scene:talk]
+VISUAL: 
+AUDIO: 'having that extra coverage, right? That you wouldn\'t get for example, from just using a standard drone. I mean, I could have flew a standard, let\'s say, DJI drone around that'
+
+[18:21] [scene:talk]
+VISUAL: 
+AUDIO: 'uh around that windmill. I might I might have gotten I would argue even better results. But, here instead, you get the whole breadth, the whole, let\'s say, environment and surrounding that you'
+
+[18:34] [scene:talk]
+VISUAL: 
+AUDIO: 'would never get in a comparison with something like something like a standard drone. So, do you think that there are specific use cases for these 360 drones? Or or do you think that it\'s not that'
+
+[18:48] [scene:talk]
+VISUAL: 
+AUDIO: 'relevant? Like, what\'s your take on this? &gt;&gt; You know, personally, um I like objects in the environment and the surroundings, so it it it lets you understand how it\'s positioned'
+
+[19:00] [scene:talk]
+VISUAL: 
+AUDIO: 'um inside the landscape. And I personally prefer this, like it\'s aesthetically better to me personally. But, I understand like when you need a better details, you probably choose the'
+
+[19:12] [scene:talk]
+VISUAL: 
+AUDIO: 'DSLR and the drone footage that allows you to create much more detailed scenery construction. And also like one caveat on 360 footage.'
+
+[19:24] [scene:talk]
+VISUAL: 
+AUDIO: 'Because algorithms, they they don\'t really know what you\'ve been focusing on, right? So you\'re flying around, you have this like 360 coverage of everything around, and sometimes we see that the surroundings are better'
+
+[19:37] [scene:talk]
+VISUAL: 
+AUDIO: 'reconstructed than the object of interest. Uh and that\'s sometimes not what the author intended to be. So we don\'t know the intent. Unfortunately,'
+
+[19:49] [scene:talk]
+VISUAL: 
+AUDIO: 'when someone is doing photogrammetry, they\'re selecting the best shots for the object of interest, and therefore they got better budget on the spot scenery construction, and they they got better result. So sometimes like we'
+
+[20:02] [scene:talk]
+VISUAL: 
+AUDIO: 'hear people complain, like I I I wanted to have this pipe in really good quality. See, so if I manually would do it, I would select the best shots to cover the the pipe specifically. Um I think from the technological'
+
+[20:16] [scene:talk]
+VISUAL: 
+AUDIO: 'perspective, we\'re working on the fully automated pipeline, so the user does not really need to uh think about like the whole uh like technicalities. And we\'d like to implement a small'
+
+[20:31] [scene:talk]
+VISUAL: 
+AUDIO: 'feature which allows you to keep focused on the on the object which is probably in the interest of the operator. So that\'s like small tweaks that we\'ve got in the pipeline that'
+
+[20:45] [scene:talk]
+VISUAL: 
+AUDIO: 'would allow to provide a better budget, more budget on the reconstruction on the object that probably that the interest of the scene. &gt;&gt; And because I mean, these honestly, I I think this is one of the point that is'
+
+[20:57] [scene:talk]
+VISUAL: 
+AUDIO: 'on having um fully a cloud-based solution like Splatika, right? There are of course always advantages and the I mean, the advantage is that literally you get the INSV file that you get from the drone or the camera, you drop it in,'
+
+[21:11] [scene:talk]
+VISUAL: 
+AUDIO: 'you forget it, done. And that\'s I think pretty insane. The other bit the disadvantage is that of course you don\'t get much control on what comes out, right? You cannot set up for example the top number of splats. Maybe you get 4 million splats and you'
+
+[21:24] [scene:talk]
+VISUAL: 
+AUDIO: 'say like whoa, maybe it\'s too much for what I wanted it to do. And so, do you envision to opening this black box a bit? Like what are the opportunities that you think people might need or what can you'
+
+[21:37] [scene:talk]
+VISUAL: 
+AUDIO: 'tell us about what\'s happening behind the curtains, let\'s say. &gt;&gt; Yeah, we deliberately managed pipeline not at all. So, we\'re not trying to provide a tool for professionals to'
+
+[21:50] [scene:talk]
+VISUAL: 
+AUDIO: 'tweak with the results. We are rather trying to make a one one-click solution where you can drop INSV file and you get the result. So, there might be some add-ons on for'
+
+[22:02] [scene:talk]
+VISUAL: 
+AUDIO: 'example we\'re thinking about adding super resolution. So, we know how to improve the quality. So, what we provide is somewhat average result, right? So, we speed versus quality and something that you would expect to see overnight.'
+
+[22:16] [scene:talk]
+VISUAL: 
+AUDIO: 'And you\'re right about like the fully automated pipeline. What it allows to do for example I came back on Saturday night from Prague and I was filming like a lot of nice city locations. I dropped them in the cloud'
+
+[22:29] [scene:talk]
+VISUAL: 
+AUDIO: 'and next morning I was enjoying the result and like a super cool. And from there you can go and increase the quality of specific points of interest. Like you can improve from the'
+
+[22:42] [scene:talk]
+VISUAL: 
+AUDIO: 'first pipeline. I mean, not yet, but that\'s what we are working on. &gt;&gt; Exactly, that was my point. It was like wait, I don\'t see okay, it\'s coming, it\'s coming, okay. One more question. So, can you merge or stitch Insta360'
+
+[22:54] [scene:talk]
+VISUAL: 
+AUDIO: 'ground footage with aerial footage? &gt;&gt; That\'s amazing question. We we actually got this a lot given that cameras and sensors are the same and we can set up the same'
+
+[23:08] [scene:talk]
+VISUAL: 
+AUDIO: 'settings on both the drone and and and a camera. Well, it\'s not automatic yet. So, we\'re working on a fully automated solution where you need just to start from the same point, track you start the drone'
+
+[23:21] [scene:talk]
+VISUAL: 
+AUDIO: 'footage and the camera footage from the same point. And that\'s from where we can stitch them together in a single pipeline. And also some technical settings just to make it more, let\'s say,'
+
+[23:35] [scene:talk]
+VISUAL: 
+AUDIO: 'similar overlapping quality and brightness and contrast settings that needs like more granular control over both the cameras. &gt;&gt; Yeah, because I mean, I\'ve seen also sometimes that even lidar scanner, they'
+
+[23:47] [scene:talk]
+VISUAL: 
+AUDIO: 'do have alignment problems when they capture object from very different perspective. So, sometimes things are just not aligned. And I can imagine how that could be a case. Of course, the other problem is that you would need'
+
+[23:59] [scene:talk]
+VISUAL: 
+AUDIO: 'very stable light conditions because, I mean, if the drone was captured in a way when there was fully bright and then a cloud passes and you get those are extra, I think, challenges for the algorithm, for the alignment, for the'
+
+[24:11] [scene:talk]
+VISUAL: 
+AUDIO: 'color grading, I think. But the opportunities, it\'s it\'s pretty insane because when you walk, you always miss that top view. You always Oh, you\'re right. I\'m watching a splat. This is not full 3D model. And having that'
+
+[24:23] [scene:talk]
+VISUAL: 
+AUDIO: 'instead, I think it\'s it\'s pretty appealing to people. But then again, look forward to see how how you guys pull it off. &gt;&gt; Um I don\'t know, like if you have a couple of minutes, I have a few examples of the the same scene collected with the'
+
+[24:36] [scene:talk]
+VISUAL: 
+AUDIO: 'drone and with the Insta360. If I can show it to you right now. &gt;&gt; Please do. You can share the screen and uh &gt;&gt; So, you have all these cool cars inside the garage, but then'
+
+[24:48] [scene:talk]
+VISUAL: 
+AUDIO: 'you\'d like to go out. And this is the cloud I was talking about, like when you change uh radically the the lighting conditions. &gt;&gt; Right. &gt;&gt; And so this is the drone footage.'
+
+[25:01] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; But wait, the indoor was captured also with a drone? &gt;&gt; Yeah. Um I can show &gt;&gt; the drone was flying in and then went out.'
+
+[25:13] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; Yes. &gt;&gt; Okay. &gt;&gt; And that\'s a big challenge for for any footage. And let me show you the trajectory here. So again, this is like pretty much'
+
+[25:26] [scene:talk]
+VISUAL: 
+AUDIO: 'experimental trying to to do both at the same time. And you see I was flying the drone inside this uh garage and then was flying out. And for the comparison, by the way, uh'
+
+[25:38] [scene:talk]
+VISUAL: 
+AUDIO: 'the difference between SD and HD, we we we load uh different amount of splots. So HD is much more granular and detailed.'
+
+[25:51] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; Yeah, yeah. &gt;&gt; So the same the same garage, the same &gt;&gt; cool cars. &gt;&gt; You see it\'s like a slightly better handling of the um in and out uh transition. &gt;&gt; Transition, yeah. &gt;&gt; But then'
+
+[26:04] [scene:talk]
+VISUAL: 
+AUDIO: 'you don\'t you don\'t have the roof, right? Because you don\'t see it from the coverage. &gt;&gt; Yep. &gt;&gt; And that\'s exactly what you\'re talking about. How do you combine the two? Because on the drone footage we have better roof reconstruction and the whole surrounding.'
+
+[26:17] [scene:talk]
+VISUAL: 
+AUDIO: 'And here we like missing some of the details that we have. Uh it\'s just this is just a cool example of what\'s uh I mean probably for the viewers to to understand better the'
+
+[26:29] [scene:talk]
+VISUAL: 
+AUDIO: 'um the difference between the two. &gt;&gt; of the same thing. And yeah, I mean the best would be just to crop, paste, remove the floaters. And this brings me to another question, and that is the editing capabilities. Because I mean'
+
+[26:41] [scene:talk]
+VISUAL: 
+AUDIO: 'So and editing it also relates with final use case in a way. I mean, I think that very often you would want to maybe crop, remove, uh remove some floaters, uh or do some type of this work. And usually'
+
+[26:54] [scene:talk]
+VISUAL: 
+AUDIO: 'what I\'m doing, like I mentioned many more, is export the PLY, bring it to, for example, Super Splat, and continue that editing workflow. Where do you stand with that? Yeah. Is that an idea that you would'
+
+[27:06] [scene:talk]
+VISUAL: 
+AUDIO: 'build something like this, or that\'s not your core focus? Maybe not so like some simplified tools for um decluttering the result and uh making like a smart crop in the sphere or'
+
+[27:18] [scene:talk]
+VISUAL: 
+AUDIO: 'rectangular crop. But not something crazy. I mean, we are not trying to to build a tool for um editing the splats and then uh trying to'
+
+[27:31] [scene:talk]
+VISUAL: 
+AUDIO: 'perfect perfect them. We are first of all ingestion tool. So, we\'re trying to give the the best and the easiest possible reconstruction from 360 camera for regular consumers. You can always download PLY file and edit it elsewhere.'
+
+[27:45] [scene:talk]
+VISUAL: 
+AUDIO: 'Luckily, we have Super Splat and some other cool uh tools available. But we\'ll probably focus on understanding the scene deeper. And that\'s where we come into the'
+
+[27:59] [scene:talk]
+VISUAL: 
+AUDIO: 'physically AI question. I think it\'s one of your uh topics that you you wanted to cover. Indeed, it is on the list because the I mean, first of all, we need to a bit agree on what is this physically AI,'
+
+[28:11] [scene:talk]
+VISUAL: 
+AUDIO: 'right? I mean, I think everybody nowadays is &gt;&gt; We Everyone wants physically AI these days. &gt;&gt; Exactly. From games that to GPS to everything right now, it\'s it\'s physically AI. So, let\'s say that if we'
+
+[28:23] [scene:talk]
+VISUAL: 
+AUDIO: 'think about using this reconstruction as a way that I would assume is to train AI, right? And this could be a car walking in a street, a robot understanding an'
+
+[28:35] [scene:talk]
+VISUAL: 
+AUDIO: 'indoor environment. What are the kind of like use cases? Are these spaces used for some of these spaces used for that? Are they good enough? Can you tell about that specific view of how you'
+
+[28:47] [scene:talk]
+VISUAL: 
+AUDIO: 'intend &gt;&gt; Yeah. &gt;&gt; let\'s say this reconstruction to be used. &gt;&gt; You know, so Gaussian splatting is just a technology, right? And it\'s a it\'s a very cool medium for understanding the physical world because it gives you'
+
+[28:59] [scene:talk]
+VISUAL: 
+AUDIO: 'photorealistic representation of the splats. It gives you an immersive view. If you place the virtual camera inside the scene'
+
+[29:11] [scene:talk]
+VISUAL: 
+AUDIO: 'and you collect like you record the video from inside the simulation, it\'s going to be almost indistinguishable from the real video collected from the real world. That\'s mind-blowing. I mean, that\'s like'
+
+[29:23] [scene:talk]
+VISUAL: 
+AUDIO: 'almost like a matrix. And one of the advantages that you can create as many trajectories as you want within the simulation. So, you collected data once and then you run like thousands and tens of thousand different'
+
+[29:36] [scene:talk]
+VISUAL: 
+AUDIO: 'scenarios inside the scene. And it would feel like a real environment. So, for the robot, it wouldn\'t make any difference whether it this data was collected from the real world versus the simulation except'
+
+[29:49] [scene:talk]
+VISUAL: 
+AUDIO: 'maybe moving parts, right? So, that the parts are not moving. It\'s just static. So, that\'s just a video layer. I mean, this is just a image layer, the perception. To navigate within the space, it needs to know the ground level'
+
+[30:02] [scene:talk]
+VISUAL: 
+AUDIO: 'like the floor, the obstacles, walls so it cannot go through um collision avoidance. So, you have the physical like barriers where you walk. Well, that\'s like the next layer. And'
+
+[30:17] [scene:talk]
+VISUAL: 
+AUDIO: 'the next layer is trying to move the objects. So, like to move the objects or even like know whether you can move this box or not, you need to understand the weight and the friction and the material.'
+
+[30:29] [scene:talk]
+VISUAL: 
+AUDIO: 'So, what we are working on is extracting all these physical features from the understanding of the scene from the visual visuals of what we see on the'
+
+[30:42] [scene:talk]
+VISUAL: 
+AUDIO: 'scene. And thankfully for visual language models, we now have an ability to do so and the computer vision, I mean, we we\'re standing on the shoulders of the giants, right? Like the'
+
+[30:55] [scene:talk]
+VISUAL: 
+AUDIO: 'whole industry was working for for the last decades trying to do so. So, what we can do right now is amazing things that we can capture a 360 video. And we can decompose the scene into'
+
+[31:08] [scene:talk]
+VISUAL: 
+AUDIO: 'separate objects. We can remove them from the scene. We can understand their their mass, their density, their physical properties, and even go beyond that in replacing those with articulated'
+
+[31:20] [scene:talk]
+VISUAL: 
+AUDIO: 'objects, like somewhere where you can press the button and interact with with with an object. So, that\'s where it gets interesting. I mean, robots does not require just'
+
+[31:33] [scene:talk]
+VISUAL: 
+AUDIO: 'visual simulation. They require all of this like spatial relationships between the objects and the scene understanding and the and the graph. And I mean,'
+
+[31:46] [scene:talk]
+VISUAL: 
+AUDIO: 'this is like a very common phrase, right? Like we we\'ve had a lot of text data to train large language models. We had Wikipedia, we had Reddit, we had like a Stack Overflow. But we don\'t have this for the physical'
+
+[31:59] [scene:talk]
+VISUAL: 
+AUDIO: 'world. And the key is not just have the YouTube videos that you can train on. You need some spatial understanding of the space, the distance, the &gt;&gt; 3D data.'
+
+[32:12] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; 3D data. And not just 3D, the structured 3D. Like the annotated with metadata, the really like understanding of the space. And that\'s the key. So, we don\'t have that kind of data. And also it should be'
+
+[32:24] [scene:talk]
+VISUAL: 
+AUDIO: 'perfectly accurate. I mean, representing the the real world. So, this is the next challenge for for the reconstruction. &gt;&gt; Hey, hey, you brought up an important point because on one side there is that'
+
+[32:36] [scene:talk]
+VISUAL: 
+AUDIO: 'huge challenge with huge potential, right? In the sense that, okay, now we want to label everything. We want to be able to understand how that object specific moves, if it\'s a door, if it\'s a window, if it\'s, you know? So, there'
+
+[32:48] [scene:talk]
+VISUAL: 
+AUDIO: 'are different layers to this. And on the other side there are instead what seems to be closer use cases for discussions particularly. For example, real estate tours, or maybe reconstruction of'
+
+[33:00] [scene:talk]
+VISUAL: 
+AUDIO: 'cultural heritage, right? Capturing. So, this feels closer in a way in terms of feasibility. And then there is that big far away challenge that seems to be'
+
+[33:13] [scene:talk]
+VISUAL: 
+AUDIO: 'where really that the big goals are of this technology. You as Splat where do you see navigating these two objectives? Because maybe one just revolves around the visual quality and the speed of which goes and the other is like, okay,'
+
+[33:27] [scene:talk]
+VISUAL: 
+AUDIO: 'we need to build our own visual model and refine it and annotating as a startup, right? How do you navigate that? &gt;&gt; You either go horizontally or vertically, right? And it very much depends on the capital and the goal you'
+
+[33:40] [scene:talk]
+VISUAL: 
+AUDIO: 'pursue. So, we specifically chosen physical AI because we we like the hard challenge from one side and a second point is that with the speed of technology right now'
+
+[33:55] [scene:talk]
+VISUAL: 
+AUDIO: 'and the vibe coding and all the tools available and the whole Gaussian splat pipelines are open sourced with the thanks to Super Splat and Playcanvas and 3GS and World Labs. All these companies'
+
+[34:09] [scene:talk]
+VISUAL: 
+AUDIO: 'are doing amazing jobs in pushing forward the technology. So, it\'s like almost anyone can make over the weekend project in making like itself that a viewer or some kind of tool based on the technology.'
+
+[34:23] [scene:talk]
+VISUAL: 
+AUDIO: 'And it\'s scary from one side and on the other side we can do things that were not possible before. I mean, we can think about the larger things like something that was never done'
+
+[34:35] [scene:talk]
+VISUAL: 
+AUDIO: 'before, something grand, like something very cool. So, we think the physical AI is actually how to enable all the people in the world with the tool to create 3D, like shift'
+
+[34:47] [scene:talk]
+VISUAL: 
+AUDIO: 'the medium. Sometimes I feel like we are in the era of going from film cameras to digital cameras. And you have'
+
+[35:00] [scene:talk]
+VISUAL: 
+AUDIO: 'um all the super skilled people who done 3D for quite a long time and they prefer, I mean, they know all the like um which you need the details about the 3D reconstruction and they\'ve been very'
+
+[35:12] [scene:talk]
+VISUAL: 
+AUDIO: 'precious about this. And on the other hand, we see this coming like world of technology where impressive cloud pipelines can can regenerate everything for you in one click.'
+
+[35:25] [scene:talk]
+VISUAL: 
+AUDIO: 'So, it feels scary. Like we we have like overflowed with the technology bubble. But it also means that we can do so much more. We can we can map every heritage object. We can do snapshots in time. We can see the evolution of the physical'
+
+[35:37] [scene:talk]
+VISUAL: 
+AUDIO: 'space. There are so many more to to tackle. So, we as a Splatika, we focus on physical AI and it\'s not just a buzzword. It\'s actually about the the world around us which is physical'
+
+[35:49] [scene:talk]
+VISUAL: 
+AUDIO: 'and like the world goes down to atoms and molecules, we also going down to understanding of the relationships between the objects and the materials around us.'
+
+[36:02] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; There is one thing that we haven\'t mentioned once and I think we should. And that is XR. In a sense that I am whenever I see I get a splat out of something, I always try, okay, but does it run on a headset?'
+
+[36:15] [scene:talk]
+VISUAL: 
+AUDIO: 'Can I run it inside a headset? And it\'s me and I realize that I\'m not the only one in a way. There\'s like many people are trying to get, okay, but now that I can capture anything, can I experience it at scale? Can I walk through it? And'
+
+[36:27] [scene:talk]
+VISUAL: 
+AUDIO: 'these splats are right now coming out directly from Splat Diga. They are big, like a 3 million splats is not something that runs on a headset. That is for'
+
+[36:40] [scene:talk]
+VISUAL: 
+AUDIO: 'sure. Now, of course, we need to also look at the whole thing, right? One thing is just the windmill, one thing is the whole scene around it, right? So, it is totally possible and I\'ve done it to, for example, crop some stuff and then'
+
+[36:52] [scene:talk]
+VISUAL: 
+AUDIO: 'reduce the number of splats using some tools. But what is your take? Like is do you see that as being part of one of your objective or thoughts? Where do you stand when it comes to bringing the'
+
+[37:05] [scene:talk]
+VISUAL: 
+AUDIO: 'splats in an immersive environment? &gt;&gt; That\'s a super important and also a very good challenge for us to optimize the splat viewer for VR experience. So, it\'s coming to the technical'
+
+[37:17] [scene:talk]
+VISUAL: 
+AUDIO: 'challenges and how do you make the sort order at 90 h to optimize the view and experience while also preserving the level of details. And LOD, like level of details, is the one of the technologies to'
+
+[37:30] [scene:talk]
+VISUAL: 
+AUDIO: 'keep streaming the scene onto the viewer without overwhelming with the number like of millions of splats. So, there are some cool technologies that we are working on and'
+
+[37:43] [scene:talk]
+VISUAL: 
+AUDIO: 'we are looking for some of the technologies provided for companies like PlayCanvas that are constantly innovating in the space. Hopefully,'
+
+[37:55] [scene:talk]
+VISUAL: 
+AUDIO: 'we\'ll see this without any extra um optimizations or actions taken on the user side. So, the same scene you can open in the browser can be opened on the headset and be available immediately in XR. Um'
+
+[38:09] [scene:talk]
+VISUAL: 
+AUDIO: 'Again, thanks to the technologies, not the uh not because like not just because we are great, just because the technologies are moving forward and that\'s going to be possible very soon. &gt;&gt; So, I are you saying basically that it\'s'
+
+[38:21] [scene:talk]
+VISUAL: 
+AUDIO: 'possible to use some of the file compression of the LOD or RAD format for example that Spark is pushing out and you can implement some form of those technologies into the viewers that you'
+
+[38:33] [scene:talk]
+VISUAL: 
+AUDIO: 'have available. &gt;&gt; All all of them actually. All of these technologies are optimized in the viewer to uh to get decent quality reconstruction even uh'
+
+[38:45] [scene:talk]
+VISUAL: 
+AUDIO: 'not on the the most powerful hardware in uh XR. And we doing some experiments in house. We haven\'t released this yet. Um I mean they\'re probably uh VR button if you open from the Meta Quest are seen'
+
+[38:57] [scene:talk]
+VISUAL: 
+AUDIO: 'but it\'s not usable right now. It\'s just like far too heavy. So, we waiting for the implementation of this latest bits. &gt;&gt; So, keep me in the loop because you know who who can stress test that. Of course.'
+
+[39:10] [scene:talk]
+VISUAL: 
+AUDIO: 'And Andre, I do have another point that I think also people are asking. And that is with this view that anybody can kind of like come in and start processing, capturing and and have their splat ready overnight from a trip that they did'
+
+[39:24] [scene:talk]
+VISUAL: 
+AUDIO: 'yesterday because that is real. That is what\'s possible. What is the price tag that comes with that? Is that really like for everybody or are you targeting more businesses or prosumers when you associate that with the price point of Splatiga?'
+
+[39:37] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; Um again, I think our pipeline is more experimental. So, it\'s not with we\'re not trying to build software as a service. Uh we trying to justify the cost for the cloud processing. And we experimenting with the price. We giving discounts as'
+
+[39:51] [scene:talk]
+VISUAL: 
+AUDIO: 'part of the anti-gravity campaign uh eternal. You still can get uh thousand credits. I think it\'s live right now on the website and you can experiment uh with anti-gravity drone and Insta360 footage'
+
+[40:05] [scene:talk]
+VISUAL: 
+AUDIO: 'for free just to try out the technology. We justifying the cost of compute. I think the scale is not there yet. So, we\'re looking for the industrial use cases with more dedicated tool set and'
+
+[40:17] [scene:talk]
+VISUAL: 
+AUDIO: 'more coverage on the industrial sides and understanding the physically eye space and also creating this library of the assets. I mean, what people typically capture is'
+
+[40:29] [scene:talk]
+VISUAL: 
+AUDIO: 'the heritage objects, churches, like all the cool stuff. Which surprisingly have less value for robotics and understanding of typical human'
+
+[40:41] [scene:talk]
+VISUAL: 
+AUDIO: 'spaces, right? Restaurants, hospitals, warehouses, all the things that are going to be um automated in the first place with robots. So, we kind of we like all the beautiful'
+
+[40:53] [scene:talk]
+VISUAL: 
+AUDIO: 'stuff that people are building, but our industrial focus on uh different kind of spaces. &gt;&gt; And so, then how do you plan to kind of like'
+
+[41:07] [scene:talk]
+VISUAL: 
+AUDIO: 'Because yeah, the point is like what do you do technically with those data, right? So, in because people are also asking very often, like do I still own it? Are they going to use it for their own training? Like can you maybe &gt;&gt; That\'s all in the privacy policy and'
+
+[41:20] [scene:talk]
+VISUAL: 
+AUDIO: 'terms of use of the Spotica service. The data which is upload to the service is fully owned by the whoever captured this data. We are not making it public. We are not including this data in the data set. We'
+
+[41:33] [scene:talk]
+VISUAL: 
+AUDIO: 'can can use this data to improve our models on reconstruction. And how to improve the whole process of making this 3D from from 360 video. And uh we also use this data to understand the special'
+
+[41:48] [scene:talk]
+VISUAL: 
+AUDIO: 'relationships between the objects and and the world. So, this is like the core value for us is like more internal process which is does not expose the data itself. Neither we use gen AI to reconstruct or use some of this data to'
+
+[42:01] [scene:talk]
+VISUAL: 
+AUDIO: 'then come up with the new objects. I think it\'s it\'s a very good question in terms of the the privacy and uh how people typically use it. Whenever someone uploads a scene,'
+
+[42:13] [scene:talk]
+VISUAL: 
+AUDIO: 'um there is an explicit button to make it public. And when a person makes it public, then it\'s available in the gallery, and it\'s available for other users.'
+
+[42:25] [scene:talk]
+VISUAL: 
+AUDIO: 'Um and unless you do so, like it\'s it\'s it\'s private, and it\'s only available to you. And if you don\'t know if you if you delete the scene, it\'s going to be deleted from our servers as well. So, we we don\'t retain the data.'
+
+[42:38] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; Great. Indeed. I saw Indeed, there is a toggle you can decide if it\'s public or not. So, that is one thing that you can do, but indeed, thanks also for sharing some light on what do you do with the with the type of data that people'
+
+[42:51] [scene:talk]
+VISUAL: 
+AUDIO: 'capture. So, to end up, I was curious, what\'s the direction now with Splattinga? So, in a market that is getting ever more crowded, right? With these kind of like services, new scanners, right? new way to capture,'
+
+[43:05] [scene:talk]
+VISUAL: 
+AUDIO: 'because that is also what is happening. Like, do you intend to what\'s on the road map of 2026? &gt;&gt; As I said before, I think instead of like being scared of this technology, we\'re trying to boil'
+
+[43:18] [scene:talk]
+VISUAL: 
+AUDIO: 'the ocean. Imagine like the new medium is coming. Like, instead of the videos and photos, you now have 3D, and my personal view is that 3D is going to be the new medium from which you derive'
+
+[43:30] [scene:talk]
+VISUAL: 
+AUDIO: 'photo and video. I think that\'s a that\'s a surprisingly unusually idea, right? But already, if you have a 3D reconstruction of the'
+
+[43:42] [scene:talk]
+VISUAL: 
+AUDIO: 'scene, and it\'s recently released by Sony, I mean, they\'re using it for the backdrops, um a reconstruction. You can make any photo or video with any lighting conditions.'
+
+[43:55] [scene:talk]
+VISUAL: 
+AUDIO: 'So, it seems like we might be coming into the into an era of 3D being the the number one source of data and then everything else derives from it and'
+
+[44:09] [scene:talk]
+VISUAL: 
+AUDIO: 'we\'re going to see more 3D scenes in our iPhones and you already see support and some of the cool technologies coming to Apple. So, I think we with like with a blink of an eye, we\'re going to be in the new'
+
+[44:21] [scene:talk]
+VISUAL: 
+AUDIO: 'world where where 3D is dominant and there\'s going to be so many use cases around this where so we are just scratching the surface. &gt;&gt; Andrei, thank you very much. Looking forward to seeing you what\'s coming up'
+
+[44:34] [scene:talk]
+VISUAL: 
+AUDIO: 'for from uh Splat again. It was a real pleasure to have you. &gt;&gt; Thank you very much, Gabriele. &gt;&gt; Thank you very much for listening in. If you like the show, remember to leave a rating on Spotify, Apple Podcast, or a thumbs up on YouTube. It [music] really'
+
+[44:46] [scene:talk]
+VISUAL: 
+AUDIO: 'helps me keep doing this and shine the spotlight on the greatest founders and makers pushing the boundaries of XR and AI. Also, make sure to check out the show page xraispotlight.com'
+
+[44:58] [scene:talk]
+VISUAL: 
+AUDIO: 'where you can find more [music] conversation like this one. Till next time.'

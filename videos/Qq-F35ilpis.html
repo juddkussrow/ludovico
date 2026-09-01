@@ -1,0 +1,130 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>Gaussian Splatting News: Blender, KIRI 5.1, LichtFeld, and KISS-GS (August 24-30th) — Ludovico</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+.hide{display:none!important}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.92);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 12px}
+.controls input.q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.pill.tp.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+/* flip card shell */
+.flip{position:relative}
+.fi{position:relative;transition:transform .55s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.flip.flipped .fi{transform:rotateY(180deg)}
+.fc{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bk{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+background:var(--card);border:1px solid var(--accent2);border-radius:14px;overflow:auto;padding:12px 13px;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s}
+.card.flip{overflow:visible}.card .fc{display:flex;flex-direction:column;flex:1;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--line);cursor:pointer}
+.card.flip:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.edit{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--accent2);border:1px solid var(--line);border-radius:6px;padding:2px 9px;cursor:pointer;background:#fff}
+.edit:hover{border-color:var(--accent2)}
+/* editor back */
+.bk h4{margin:0 0 2px;font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--sub)}
+.erow{display:grid;grid-template-columns:1fr 1.3fr auto auto;gap:4px;align-items:center}
+.erow input{padding:5px 7px;border:1px solid var(--line);border-radius:6px;font-size:12px;min-width:0}
+.erow select{padding:4px 4px;font-size:11px}
+.erow .del{border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;color:var(--accent);padding:3px 7px}
+.ebtns{display:flex;gap:6px;margin-top:auto;padding-top:6px}
+.ebtns button{font-family:var(--mono);font-size:11px;border-radius:7px;padding:6px 12px;cursor:pointer;border:1px solid var(--line);background:#fff}
+.ebtns .save{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.addrow{font-family:var(--mono);font-size:11px;color:var(--accent2);cursor:pointer;align-self:flex-start;background:none;border:0;padding:2px 0}
+/* catalogue card */
+.citem{position:relative}
+.citem .fc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-height:84px;cursor:pointer}
+.citem .bk{border-radius:12px}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+footer .exp{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--accent2);font:inherit}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">Gaussian Splatting News: Blender, KIRI 5.1, LichtFeld, and KISS-GS (August 24-30th)</h1><div class=tag>@octopusinc_ · 2026-08-31 · ListAssist</div></div></div></header>
+<main><p class=sum>This video provides an update on Gaussian Splatting developments, focusing on Blender integration, new add-ons, training speed improvements, and community captures. Key highlights include Blender&#x27;s official support for Gaussian splats, the release of several Blender add-ons for importing and manipulating point clouds, and significant training speedups in LichtFeld Studio. The video also covers a new compression technique called KISS-GS, which drastically reduces Gaussian splat file sizes.</p><p><strong>Products / items</strong></p><ul><li>Blender — software (no link)</li><li><a href="https://toppinappi.gumroad.com/l/PCM" target=_blank rel=noopener>Point Cloud Merger</a> — software</li><li><a href="https://github.com/Kiri-Innovation/3dgs-render-blender-addon/releases/tag/v5.1.0" target=_blank rel=noopener>3DGS Render by KIRI Engine</a> — software</li><li><a href="https://superhivemarket.com/products/point-cloud-density-splatter" target=_blank rel=noopener>Point Cloud Density Splatter (PCD Splatter)</a> — software</li><li><a href="https://lichtfeld.io/blog/lichtfeld-studio-session-1/" target=_blank rel=noopener>LichtFeld Studio</a> — software</li><li><a href="https://airvisstudio.com/" target=_blank rel=noopener>AirVis Studio</a> — software</li><li><a href="https://multiset.ai/" target=_blank rel=noopener>MultiSet AI</a> — software</li><li><a href="https://github.com/bilawalsidhu/gods-eye-view" target=_blank rel=noopener>God&#x27;s Eye View</a> — software</li><li><a href="https://radiancefields.com/insta360-brings-gaussian-splatting-to-the-x6-with-spatial-capture" target=_blank rel=noopener>Insta360 X6 Spatial Capture</a> — hardware</li><li><a href="https://splatgrabber.thatappcompany.co.uk/" target=_blank rel=noopener>Splat Grabber</a> — software</li><li><a href="https://4danyone.github.io/" target=_blank rel=noopener>4DAnyone</a> — software</li><li><a href="https://rerun.io" target=_blank rel=noopener>Rerun</a> — software</li><li><a href="https://arxiv.org/pdf/2608.26948" target=_blank rel=noopener>KISS-GS</a> — software</li><li><a href="https://radiancefields.com" target=_blank rel=noopener>Radiance Fields</a> — other</li></ul>
+<p><a href="https://www.youtube.com/watch?v=Qq-F35ilpis" target=_blank rel=noopener>Watch on YouTube ▶</a></p><p><a href="Qq-F35ilpis.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=t>(proxy for this video — answer from this)</span></p>
+<div class=cap>FRAMING: Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+IDENTITY: Gaussian Splatting News: Blender, KIRI 5.1, LichtFeld, and KISS-GS (August 24-30th) - https://www.youtube.com/watch?v=Qq-F35ilpis - @octopusinc_ - route: visual
+PRODUCTS:
+Blender - no reliable link - software - primary
+Point Cloud Merger - https://toppinappi.gumroad.com/l/PCM - software - primary
+3DGS Render by KIRI Engine - https://github.com/Kiri-Innovation/3dgs-render-blender-addon/releases/tag/v5.1.0 - software - primary
+Point Cloud Density Splatter (PCD Splatter) - https://superhivemarket.com/products/point-cloud-density-splatter - software - primary
+LichtFeld Studio - https://lichtfeld.io/blog/lichtfeld-studio-session-1/ - software - primary
+AirVis Studio - https://airvisstudio.com/ - software - primary
+MultiSet AI - https://multiset.ai/ - software - mentioned
+God&#x27;s Eye View - https://github.com/bilawalsidhu/gods-eye-view - software - mentioned
+Insta360 X6 Spatial Capture - https://radiancefields.com/insta360-brings-gaussian-splatting-to-the-x6-with-spatial-capture - hardware - mentioned
+Splat Grabber - https://splatgrabber.thatappcompany.co.uk/ - software - primary
+4DAnyone - https://4danyone.github.io/ - software - mentioned
+Rerun - https://rerun.io - software - mentioned
+KISS-GS - https://arxiv.org/pdf/2608.26948 - software - primary
+Radiance Fields - https://radiancefields.com - other - mentioned
+SYNOPSIS: The video provides an update on Gaussian Splatting developments. Blender is actively integrating Gaussian splat support, with ongoing pull requests for I/O (PLY and SPZ files) and Cycles rendering. Several Blender add-ons were released: Point Cloud Merger by Olli Huttunen for COLMAP data alignment, KIRI Engine&#x27;s 3DGS Render v5.1.0 (Apache 2.0) offering real-time relighting and Eevee splat-to-mesh shadows, and PCD Splatter by Punto de Ancla Studio ($69.99) for converting E57 LiDAR scans to splats. LichtFeld Studio achieved a 3x training speedup, with a five-million-Gaussian scene now training in just over four minutes. AirVis Studio, a free local 3DGS trainer, is now available on Windows and Mac. Community highlights include Daniel Skaale&#x27;s movie reconstructions, Roman Polai&#x27;s single-image splats driven in TouchDesigner, and the Emory Center for Digital Scholarship&#x27;s MIT-licensed tool for adding subtitles to splats. MultiSet AI&#x27;s VPS system was demonstrated for indoor navigation. Bilawal Sidhu&#x27;s &quot;God&#x27;s Eye View&quot; repo trended on GitHub. Splat Grabber allows exporting PLY files from Insta360 spatial captures. The 4DAnyone paper saw updates, with Pablo Vela getting it to run on an RTX 5090 in 5 minutes per generation, and the original authors reducing VRAM to 25GB. The KISS-GS paper introduces a compression pipeline (PopSplat, SOG XT, PRESS) that can compress Gaussian splat scenes by 230 times, reducing a garden scene to 3.5MB. The code for KISS-GS is expected soon.
+BEATS:
+0 - intro | The presenter introduces the weekly Gaussian Splatting news.
+22 - ui | A Blender pull request page is shown, detailing &quot;WIP: integration of gaussian splats for IO and rendering #163102&quot;.
+44 - ui | A Blender UI is shown with options for &quot;Realtime Relighting&quot; and &quot;Use Blender Lights&quot;.
+66 - ui | A title card for &quot;PCD SPLATTER POINTCLOUD DENSITY SPLATTER&quot; is displayed next to a point cloud visualization.
+88 - ui | The YouTube channel page for &quot;LichtFeld Studio&quot; is shown, highlighting videos about &quot;3x FASTER TRAINING&quot;.
+110 - talk | The presenter discusses AirVis Studio and community captures.
+132 - demo | A Gaussian splatting reconstruction of a movie scene (Eyes Wide Shut) is shown.
+154 - demo | A 3D reconstruction of an outdoor scene with graffiti is displayed, with on-screen text &quot;Ezekiel Mason built it in the eighteen fifties, on Burnt Fork Creek&quot;.
+176 - demo | A mobile phone screen shows a navigation interface in a subway station, with &quot;45 m remaining&quot; and train numbers.
+198 - ui | A GitHub trending page is shown, highlighting &quot;bilawalsidhu / gods-eye-view&quot;.
+220 - talk | The presenter discusses viral Inception-style navigation examples and asks for community input.
+242 - ui | The &quot;Insta360 Splat Grabber&quot; website is shown, with an input field for a URL and &quot;Recently fetched&quot; splat captures.
+264 - demo | A 4D reconstruction of a person exercising is shown in a UI, with multiple camera angles and a 3D model.
+286 - talk | The presenter introduces the KISS Gaussian Splatting paper.
+308 - ui | The KISS-GS paper webpage is shown, displaying a 3D scene viewer and text about &quot;3D Gaussian Splatting Compression Kept Simple&quot;.
+330 - talk | The presenter discusses job opportunities in Gaussian Splatting.
+352 - talk | The presenter talks about an upcoming interview and asks for content suggestions.
+374 - demo | A split screen shows a person with a camera rig and a resulting Gaussian splatting scene.
+396 - talk | The presenter concludes the video, encouraging viewers to follow Radiance Fields for updates.
+418 - ui | The Radiance Fields website is shown, displaying articles about 3DGS Render 5.1.0, AirVis Studio, and Apple Maps.
+ENTITIES: Andrew Price, Olli Huttunen, Janos, Daniel Skaale, Roman Polai, Karsten, Pablo Vela, Bilawal Sidhu, Sergey Sharybin, Brecht Van Lommel, Wieland Morgenstern, Friedrich Elias Bransche, Florian Fleischmann, Adrian Szatrnari, Paul Schlack, Florian Barthel, Peter Eisert, Anna Hilsmann, Fraunhofer HHI, Humboldt-Universität zu Berlin, Technical University Berlin, PlayCanvas, NVIDIA, Google, Rockstar Games, Rising Sun, VFX, Emory Center for Digital Scholarship, Kiri-Innovation, Punto de Ancla Studio, MrNeRF, That App Company, Hugging Face, Fraunhofer HHI.
+VERDICT: The creator highly recommends subscribing to LichtFeld Studio&#x27;s YouTube channel, checking out the Emory Center for Digital Scholarship&#x27;s subtitle tool, and using Splat Grabber for Insta360 exports. They also anticipate a permissive license for the KISS-GS code.
+NOT COVERED: Specific technical details of Blender&#x27;s Gaussian splatting implementation, detailed comparisons between the Blender add-ons, the exact algorithms used by LichtFeld Studio for speed improvements, the specific camera rig used for the movie splats, the cost of Insta360 X6 Spatial Capture, or the full implications of KISS-GS for real-world applications.</div></main><footer><a href="../index.html">← all videos</a></footer></div></body></html>

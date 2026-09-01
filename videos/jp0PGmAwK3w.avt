@@ -1,0 +1,176 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: This 600M Model Fixes What Whisper Leaves Behind
+channel: @octopusinc_
+duration: 08:40
+source: https://www.youtube.com/watch?v=jp0PGmAwK3w
+upload_date: 20260827
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'Speech to text is good enough now that transcription usually isn\'t the problem, but the cleanup still is. You can throw GPT or Claude at every messy transcript or use a 600 million parameter model built exactly for this job. Super'
+
+[00:12] [scene:talk]
+VISUAL: 
+AUDIO: 'Whisper just released S1 Mini. It runs fully local, clean fillers, corrections, numbers, and formatting. Plus, it\'s small enough to drop straight into your own ASR pipeline. I tested it and it\'s'
+
+[00:24] [scene:talk]
+VISUAL: 
+AUDIO: 'time to show you where all this is headed. &gt;&gt; [music] &gt;&gt; S1 Mini. It\'s all about the pipeline, so think of it like this. Your speech goes'
+
+[00:38] [scene:talk]
+VISUAL: 
+AUDIO: 'into whatever transcription system you\'re already using. Whisper, Whisper CPP, Parakeet, your own ASR service. That gives you raw text. Then S1 Mini sits directly after it. Raw transcript'
+
+[00:51] [scene:talk]
+VISUAL: 
+AUDIO: 'in, clean text out. It removes those fillers like um, uh. It resolves false starts and self-corrections. It formats numbers, dates, and email addresses. You'
+
+[01:03] [scene:talk]
+VISUAL: 
+AUDIO: 'can even control the tone of the output. And none of that requires sending your transcript to another API. I think that most of the core value is all this. I\'m not replacing a transcription stack. I\'m'
+
+[01:16] [scene:talk]
+VISUAL: 
+AUDIO: 'just adding one tiny cleanup layer to all of it. Super Whisper also released S1 Voice and S1 Language, but those are their cloud models. For us, S1 Mini is the interesting one because this one is'
+
+[01:29] [scene:talk]
+VISUAL: 
+AUDIO: 'the open one. And this one can run completely locally. So, let\'s see if it actually works. If you enjoy coding tools to speed up your workflow, be sure to subscribe. We have videos coming out all the time. All right. Now, I\'m'
+
+[01:41] [scene:talk]
+VISUAL: 
+AUDIO: 'running this on my Mac M4 Pro. And the first surprise is the size. I don\'t have to download some giant local model. The quantized version I\'m using is around 462 megabytes. I just grabbed it from Hugging Face and ran a curl to install'
+
+[01:55] [scene:talk]
+VISUAL: 
+AUDIO: 'it. And because GGML versions are available, you can run it with the normal local tooling. So, llama.cpp, Ollama, LM Studio, it\'s really your choosing. Whatever already fits your'
+
+[02:07] [scene:talk]
+VISUAL: 
+AUDIO: 'workflow. But here I chose Ollama as I already had it going. After I installed the model and made a simple model file on my desktop too, I can serve it up and run it with Ollama. Now, keep in mind'
+
+[02:19] [scene:talk]
+VISUAL: 
+AUDIO: 'this is a transcription cleaner. So, let\'s see how the cleanup here is and how we can integrate that into our workflow. Let me give it something intentionally just bad, all right? Here\'s the raw transcript. You can see'
+
+[02:32] [scene:talk]
+VISUAL: 
+AUDIO: 'here that I stumbled over a bunch of things. I had uh it\'s broken. All this stuff is really going on. And at the very end I say email support@betterstack.com. This has basically everything that makes speech-to-text annoying. It has a filler'
+
+[02:45] [scene:talk]
+VISUAL: 
+AUDIO: 'at the beginning, a correction halfway through, there\'s spoken numbers, there\'s just a bunch going on. And that email address that is said out loud. All this is where a general LLM could easily do too much. Let\'s see what S1 Mini does'
+
+[02:59] [scene:talk]
+VISUAL: 
+AUDIO: 'instead. Run it through the model and boom, there we go. And those fillers disappear instantly with no lag at all. It understands that I changed my mind partway into it. The email address gets'
+
+[03:11] [scene:talk]
+VISUAL: 
+AUDIO: 'formatted properly and the result reads much more like something I actually meant to type. Sure. Here are a few other real quick ones I can run through. We got one here. Okay, quick. Another one here.'
+
+[03:24] [scene:talk]
+VISUAL: 
+AUDIO: 'Looking good. And this one here. You can see all those were near instant and you can see the output of all them with a quick cleanup. It doesn\'t suddenly turn one sentence into just a long rambling email. It leaves most of'
+
+[03:37] [scene:talk]
+VISUAL: 
+AUDIO: 'the meaning alone. It just cleans up the mess around it. And for transcript cleanup, that\'s exactly what I want. Now, let me work this into a quick flow here cuz it would be cool to put this in another real layer with some live'
+
+[03:51] [scene:talk]
+VISUAL: 
+AUDIO: 'speech. I have some pre-recorded audio just here on my Mac. It\'s around 10 seconds. I\'ll just use MLX Whisper since it\'s clean to run on my Mac. First, we\'ll transcribe it here with this run. Then when I run this command here, it'
+
+[04:05] [scene:talk]
+VISUAL: 
+AUDIO: 'does the cleanup just as good and outputs it into text. That was taking my real audio file and working with it. And because S1 mini probably shouldn\'t be the main model in your application. We don\'t really want that. It makes more'
+
+[04:18] [scene:talk]
+VISUAL: 
+AUDIO: 'sense as a tiny layer between two other things. Imagine you\'re building a completely local dictation setup. Whisper CPP handles the audio. S1 mini handles the cleanup. Then the final text'
+
+[04:30] [scene:talk]
+VISUAL: 
+AUDIO: 'goes straight into your editor, so nothing leaves our machine. That\'s it, and that\'s where S1 mini should go. Raw text is coming in, clean text is going out. And there are a bunch of places where that matters more than it sounds,'
+
+[04:44] [scene:talk]
+VISUAL: 
+AUDIO: 'right? So, I don\'t know. Take coding agents. Clean the correction before it reaches the agent, and the instruction becomes much clearer. Same thing with voice-written Slack messages, email, support tickets, meeting notes, anywhere you\'re speaking the input, but you want'
+
+[04:57] [scene:talk]
+VISUAL: 
+AUDIO: 'the result to look like written text. Every cleanup pass can stay local. There\'s no extra API call and transcript going somewhere else. And there is the obvious question here. If big models'
+
+[05:09] [scene:talk]
+VISUAL: 
+AUDIO: 'already do this well, why are we even bothering with this tiny one? Sure, yeah, you could absolutely send the transcript to GPT or Claude or a local llama model, and they would probably clean it up just fine. But that\'s also'
+
+[05:22] [scene:talk]
+VISUAL: 
+AUDIO: 'the problem here, cuz all those models can actually do too much. A general LLM can rewrite your transcript, summarize it, expand it. You\'ve all seen this happen before. You know what happens when we give an LLM something like that.'
+
+[05:35] [scene:talk]
+VISUAL: 
+AUDIO: 'It can basically take the text in any direction it wants. S1 mini has a much smaller job. Take messy speech, normalize it. That\'s really it. So, now we\'re using a 600 million parameter'
+
+[05:47] [scene:talk]
+VISUAL: 
+AUDIO: 'model designed for exactly this kind of transformation. So, for this one task, you\'re potentially getting lower resource usage, lower latency, and if you\'re doing this at scale, there\'s no cleanup API bill. It\'s also worth'
+
+[05:59] [scene:talk]
+VISUAL: 
+AUDIO: 'separating S1 Mini from something like local Whisper. Whisper solves one problem. Audio becomes text. S1 Mini solves the next one. That text becomes something that looks like a human'
+
+[06:12] [scene:talk]
+VISUAL: 
+AUDIO: 'intentionally typed it or wrote it out. So, the pipeline is really simple. Speech, raw transcript, clean text. Super Whisper now has models for both sides of that workflow. But, the'
+
+[06:24] [scene:talk]
+VISUAL: 
+AUDIO: 'important part is that you don\'t need to use their entire stack. You can take S1 Mini, drop it into your own. And I think that\'s why this model is more interesting than another tiny LLM release. But, hey, this isn\'t perfect. There are a few limits we got to know'
+
+[06:36] [scene:talk]
+VISUAL: 
+AUDIO: 'before dropping it into anything important. Now, the good stuff. Well, the good stuff. It\'s tiny. It\'s fast. It can run fully locally. So, once transcription is done, there\'s no network round trip just to clean up the text. This is a huge win. This is'
+
+[06:48] [scene:talk]
+VISUAL: 
+AUDIO: 'especially strong on the obvious stuff. Fillers, self-correction, spoken numbers, basic formatting. But, now we get to the first really big limitation. It\'s English only right now. So, if your workflow needs multilingual transcript'
+
+[07:01] [scene:talk]
+VISUAL: 
+AUDIO: 'cleanup, this isn\'t the tool today. Second, don\'t mistake its narrow focus for a weakness. You\'re not downloading S1 Mini to replace Claude or anything else. If you want reasoning, summarization, or a general local agent,'
+
+[07:13] [scene:talk]
+VISUAL: 
+AUDIO: 'use Claude. Use a general model. S1 Mini only cleans transcripts. That\'s the job. And there\'s another distinction that\'s easy to make. S1 Mini is not S1 Voice. S1 Voice is Super Whisper\'s cloud speech'
+
+[07:26] [scene:talk]
+VISUAL: 
+AUDIO: 'recognition model. That\'s a separate part of the stack from what I\'m testing here. The whole S1 family is also very new. It dropped on August 19th. So, I would still treat it as early software.'
+
+[07:38] [scene:talk]
+VISUAL: 
+AUDIO: 'The model itself can run standalone. So, the simple question becomes pretty simple. Who should actually use this? If you already run local speech-to-text, S1 Mini makes a lot of sense, especially if'
+
+[07:51] [scene:talk]
+VISUAL: 
+AUDIO: 'you\'re using Whisper CPP, Parakeet, or your own ASR system, and you\'ve been wondering what to do with the transcript afterward. Instead of sending everything to a full general-purpose LLM, which a lot of us already do, you can put this'
+
+[08:04] [scene:talk]
+VISUAL: 
+AUDIO: 'small model right after transcription and let it handle the cleanup. If privacy matters, this gets more useful. It\'s local. Anything worth sending the transcript to another cloud model just for formatting feels unnecessary. If you\'re processing a lot of speech, that'
+
+[08:18] [scene:talk]
+VISUAL: 
+AUDIO: 'makes sense. All these little cleanups, they\'re API calls, so we don\'t actually need those if we\'re using S1 Mini. I\'ll put the S1 Mini Hugging Face page in the description if you want to check it out yourself. If you enjoy coding tips and tricks like this, be sure to subscribe'
+
+[08:30] [scene:talk]
+VISUAL: 
+AUDIO: 'to the Better Stack channel. We\'ll see you in another video. &gt;&gt; [music]'

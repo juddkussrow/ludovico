@@ -1,0 +1,168 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: This Open-Source Tool Fixes Browser History (Hister)
+channel: @octopusinc_
+duration: 08:18
+source: https://www.youtube.com/watch?v=NMk9XVNTygA
+upload_date: 20260829
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'I read this in a GitHub issue, but Chrome history is useless. The browser remembers every page you visit, but never the part we actually care about. What was even on that page? So, if you forgot the title or URL, good luck finding it again. This is Hister, and it'
+
+[00:13] [scene:talk]
+VISUAL: 
+AUDIO: 'fixes all that. It quietly indexes the full text of every page you read locally, so you can search your own browsing history like a private Google. Let me show you. All right. So, browser history stores'
+
+[00:30] [scene:talk]
+VISUAL: 
+AUDIO: 'exactly two things about a page. The title and the URL. That\'s the whole record. The content, the part you and I actually remember was never saved. So, the moment you forgot the exact title,'
+
+[00:43] [scene:talk]
+VISUAL: 
+AUDIO: 'that page is gone. And on Firefox, it\'s worse because the default history expiry is about 90 days. There are two kinds of searches. Discovery search is finding something new. Heck, that\'s Google\'s'
+
+[00:55] [scene:talk]
+VISUAL: 
+AUDIO: 'job. And Google is really good at it. Recall search is finding something you already read. And basically, nobody is building for recall. So, you end up doing this ridiculous thing where you Google your way back to a page you'
+
+[01:08] [scene:talk]
+VISUAL: 
+AUDIO: 'already read, hoping you remember enough of the phrasing to find it again. This is what history is for. And let me get it going. If you enjoy coding tools that speed up your workflow, be sure to subscribe. We have videos coming out all'
+
+[01:20] [scene:talk]
+VISUAL: 
+AUDIO: 'the time. All right, let me actually set this thing up from nothing. I\'m on an Apple Mac M4, so I\'m grabbing the Darwin ARM64 binary. I\'ll just rename it to Hister here. Make it an executable with'
+
+[01:32] [scene:talk]
+VISUAL: 
+AUDIO: 'our nifty command and then run hister listen. That\'s it. Hister starts a server locally on port 4433. So if I open the port, here\'s the entire'
+
+[01:44] [scene:talk]
+VISUAL: 
+AUDIO: 'interface. Right now, there\'s basically nothing in it because we haven\'t given it anything to index yet. The second piece of this puzzle is the browser extension. There\'s one for Chrome and one for Firefox. I\'m using Chrome here though. So now let\'s actually browse'
+
+[01:58] [scene:talk]
+VISUAL: 
+AUDIO: 'normally. I\'ll open this GitHub issue. I\'ll open a documentation page. I\'m going to fire up and open up an article here and maybe just open up another page. I\'m not bookmarking anything. I\'m'
+
+[02:10] [scene:talk]
+VISUAL: 
+AUDIO: 'not clicking save. I\'m just doing what I would normally be doing by just visiting these pages and reading. And back inside Hister, those pages are already showing up. Now, the cool thing with all this is'
+
+[02:22] [scene:talk]
+VISUAL: 
+AUDIO: 'this isn\'t just another read later app where you have to remember to save the page first. The browser extension is building the index while you browse. Now, let\'s see whether that index is actually useful. Here\'s an article I visited earlier. I\'m just going to grab'
+
+[02:35] [scene:talk]
+VISUAL: 
+AUDIO: 'a sentence from somewhere in the middle of the page. Not the headline, not the URL, just some random text buried inside the article. I\'m going to close down that page that was on it earlier. And I\'m going to search that phrase in history.'
+
+[02:47] [scene:talk]
+VISUAL: 
+AUDIO: 'There it is. The result gives me the page, the matching text around it, and I can jump straight back to what I was actually reading in that moment. Now, let\'s run the exact same search in Chrome\'s history. I\'m going to drop it'
+
+[02:59] [scene:talk]
+VISUAL: 
+AUDIO: 'in here. What do you expect? Yeah, we\'re not really getting anything back because Chrome knows I\'d visited the page. It just doesn\'t know what was inside of it. And Hister isn\'t limited to basic'
+
+[03:11] [scene:talk]
+VISUAL: 
+AUDIO: 'keyword search either. There\'s actually a query language. So I can do like domain github.com and now I\'m only looking through GitHub pages that I visited or I can search text memory leak text whatever you\'re searching for. And'
+
+[03:25] [scene:talk]
+VISUAL: 
+AUDIO: 'now that phrase specifically has to appear inside the body of the page. You can combine these two. So if I vaguely remember reading about a memory problem inside a GitHub issue, but I have absolutely no idea which repo it was in,'
+
+[03:37] [scene:talk]
+VISUAL: 
+AUDIO: 'I can narrow my own history down instead of going back to Google and starting from scratch. There\'s also a terminal interface. So I can run hister search and now I can search the exact same'
+
+[03:50] [scene:talk]
+VISUAL: 
+AUDIO: 'personal index without actually leaving my terminal. That is probably the interface I\'d actually use most here in a workflow. And here\'s something else I initially missed. You don\'t necessarily have to start with an empty database.'
+
+[04:02] [scene:talk]
+VISUAL: 
+AUDIO: 'Hister can import your existing browser history. On current versions, that\'s Hister import browser. It detects browser databases on those machines and pulls those URLs into history. There is one important distinction here though.'
+
+[04:15] [scene:talk]
+VISUAL: 
+AUDIO: 'For old browser history, your browser never stored the original page content. So, Hister has to revisit those URLs and index whatever is there now. But from the moment the extension is running, it captures the rendered page you\'re'
+
+[04:28] [scene:talk]
+VISUAL: 
+AUDIO: 'actually looking at. So, after using this for a while, you\'re basically building your own full text search engine out of your normal browsing. And all this is still running on my laptop. So, how does it even pull this off? A browser extension reads each page after'
+
+[04:41] [scene:talk]
+VISUAL: 
+AUDIO: 'JavaScript finishes rendering. Your company wiki, your internal dashboards, private repos. Google can\'t index any of that. Your own machine, it can. The extension packages up the URL, the'
+
+[04:53] [scene:talk]
+VISUAL: 
+AUDIO: 'title, the extracted text, the entire HTML document, and posts it to a server running on your laptop. Believe a pure Go inverted index does the searching. Full HTML gets gzipped and stored locally. So you can get fully offline'
+
+[05:07] [scene:talk]
+VISUAL: 
+AUDIO: 'copy of all this. That runs about 100 kilobytes per page. 10,000 pages, roughly a gigabyte. Storage is not actually a problem here. Now this space isn\'t empty. Parakeep has 28,000 stars. Archive box is here too. And honestly,'
+
+[05:21] [scene:talk]
+VISUAL: 
+AUDIO: 'Archive Box archives far more better than a lot of things. W ARC files, screenshots, video, the whole thing. While a bag\'s been around forever, Readwise Reader has a really good experience for about 120 bucks a year.'
+
+[05:34] [scene:talk]
+VISUAL: 
+AUDIO: 'But every single one of those tools has the same problem with it. You have to decide to save something before you actually need it. And there\'s one piece I genuinely didn\'t expect. It ships an'
+
+[05:46] [scene:talk]
+VISUAL: 
+AUDIO: 'MCP endpoint, so you can point a coding agent at your own index and ask it questions against everything you\'ve actually read, not everything the model was trained on. So instead of connecting your agent to GitHub and six doc sites'
+
+[05:59] [scene:talk]
+VISUAL: 
+AUDIO: 'separately, you pointed out one index of things you already read and already been authenticated for. Okay, now I\'m going to be straight with you here. Safari, it does not work. There\'s a proof of concept pull request. It\'s been open'
+
+[06:11] [scene:talk]
+VISUAL: 
+AUDIO: 'since February, I think, and it\'s been untouched since February as well. So if you\'re a Safari only Mac user, this is not a tool that\'s going to work. But I think a lot of us are using Chrome.'
+
+[06:23] [scene:talk]
+VISUAL: 
+AUDIO: 'That\'s the biggest downfall here. The index is not encrypted. And I want to be fair on that. The docs say this outright. They don\'t actually hide it. But think about what that file actually is. It\'s the full text of everything you\'ve read. That\'s a sharper object'
+
+[06:37] [scene:talk]
+VISUAL: 
+AUDIO: 'than your browser history ever was. So use disk encryption. The Docker path is really messy, too. Run the binary and it binds to local host only. Fine. Okay. But the compost file that ships with the'
+
+[06:49] [scene:talk]
+VISUAL: 
+AUDIO: 'project binds 0000 and maps the port and the default config requires no authentication. Okay, bit of an issue. The Mac binary isn\'t notorized. It\'s ad hoc signed. Download it in a browser and'
+
+[07:02] [scene:talk]
+VISUAL: 
+AUDIO: 'Gatekeeper will stop you. It\'s pre 1.0 and well that means it. 18 minor releases in 7 months with breaking changes documented between them. Read the change log before you upgrade or maybe even install this. of 47'
+
+[07:14] [scene:talk]
+VISUAL: 
+AUDIO: 'contributors are on paper, but roughly 78% of those are by the actual maintainer. This is a really cool project. Check it out maybe. But it has been helpful. So here\'s the actual decision. Run it if you\'re on Firefox or'
+
+[07:27] [scene:talk]
+VISUAL: 
+AUDIO: 'Chrome. You read a lot of documentation and GitHub issues and you\'re already comfortable self-hosting. Especially run it if you want a private corpus your coding agent can actually query back to. Don\'t run it if you\'re Safari only cuz'
+
+[07:40] [scene:talk]
+VISUAL: 
+AUDIO: 'it\'s not going to work. And if you put it on a network, configure the off first, not later. The setup was genuinely three commands. I downloaded the binary. I ran hyster listen. And it comes up with the port in about 2'
+
+[07:52] [scene:talk]
+VISUAL: 
+AUDIO: 'seconds. Super easy. There\'s a multiarchc Docker image and a proper Nyx flake with a Darwin module. There\'s no homebrew yet, so don\'t go looking for the formula for that one. I\'ve dropped everything down in the description so'
+
+[08:04] [scene:talk]
+VISUAL: 
+AUDIO: 'you can check it out more. If you enjoy coding tips and tricks like this, be sure to subscribe to the Better Stack channel. We\'ll see you in another video.'
