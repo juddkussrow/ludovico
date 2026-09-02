@@ -1,0 +1,816 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Gaussian Splatting Hosting and Streaming Explained
+channel: @octopusinc_
+duration: 42:23
+source: https://www.youtube.com/watch?v=igf3NXq7-hI
+upload_date: 20260715
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'Anywhere above 2 and 1/2 million, that\'s where we are starting to enter dangerous territory. It will work very nicely on the machine of the creator, but it will not work as nicely on, you know, a smartphone or tablet of your client. &gt;&gt; That is Martin Palla, CEO and co-founder'
+
+[00:13] [scene:talk]
+VISUAL: 
+AUDIO: 'of Blurry. And that number, 2 and 1/2 million, is the world [music] most people don\'t even know exist. Because the gap between creating a Gaussian Splatting model and actually sharing it with someone else on the web is wider'
+
+[00:26] [scene:talk]
+VISUAL: 
+AUDIO: 'than most people think. That is part of the magic that Blurry is bringing to the table. &gt;&gt; This is This is, I believe, 43 million splats in total. The raw file for for this model is around 20 GB.'
+
+[00:38] [scene:talk]
+VISUAL: 
+AUDIO: 'So, this is the kind of the magic we\'re trying to do behind the scene. Like, we will look at the back end and how the team makes this magic happens. You don\'t need to download the whole YouTube video to start watching it. And the same thing'
+
+[00:50] [scene:talk]
+VISUAL: 
+AUDIO: 'you kind of want to do with with a Gaussian Splatting files. &gt;&gt; Some of the important aspects people do not consider when uploading splats on the web. &gt;&gt; And how secure is the data? Is it encrypted? And so on. People are'
+
+[01:02] [scene:talk]
+VISUAL: 
+AUDIO: 'scanning like your government or like, you know, critical infrastructure, which, you know, can be hosted on just about any server. You need to make sure it\'s secure. &gt;&gt; And what are the main ways 3DGS has been actively adopted within professional organizations?'
+
+[01:15] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; I think the main ones is And those are essential the professional use cases that we see the most. &gt;&gt; But before we get into it, I wanted to remind you that if you don\'t have the time to watch the full interview and want to learn from other founders and'
+
+[01:27] [scene:talk]
+VISUAL: 
+AUDIO: 'creators at the intersection between XR and AI, you should definitely check out the XR AI Spotlight newsletter. By subscribing, you will get [music] weekly interviews like this directly in your inbox and access to a list of tools and'
+
+[01:40] [scene:talk]
+VISUAL: 
+AUDIO: '[music] apps that allow you to experience Gaussian Splatting in VR, on Quest, and Vision Pro. Just check the first link in the show [music] description. And now it\'s time to roll the title and'
+
+[01:52] [scene:talk]
+VISUAL: 
+AUDIO: 'welcome Martin under the spotlight. Martin, it is a real pleasure to have'
+
+[02:07] [scene:talk]
+VISUAL: 
+AUDIO: 'you here. &gt;&gt; Likewise, thank you very much Gabriel for having me. I\'m so excited for for for this episode. &gt;&gt; Gaussian splatting and the web, I think it\'s a marriage made in heaven, right? So, we all agree, I think it\'s the place where we are seeing this new 3D paradigm'
+
+[02:21] [scene:talk]
+VISUAL: 
+AUDIO: 'landing and having the most success. Yet, there are different ways in which these models, environments, scene, object can be displayed. So, let\'s say that I\'m capturing Gaussian'
+
+[02:35] [scene:talk]
+VISUAL: 
+AUDIO: 'splatting today. &gt;&gt; Mhm. Mhm. &gt;&gt; What are the parameters or things that I need to consider when publishing, sharing, and hosting these splats, this scene on the web?'
+
+[02:47] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; Well, if you want to host and share your Gaussian splatting models on the web, well, I would I would advise you to, you know, pick your viewer or pick the partner that you trust very very very'
+
+[02:59] [scene:talk]
+VISUAL: 
+AUDIO: 'well. Um there\'s like a lot of different viewers out there and well, the the biggest and the, you know, the most important factor you you might want to consider is whether the viewer of your choice can even support the files that'
+
+[03:12] [scene:talk]
+VISUAL: 
+AUDIO: 'you that you are producing in terms of their size and quality cuz you might have a ginormous files uh which not every browser or every viewer can handle and there\'s only really a handful of'
+
+[03:24] [scene:talk]
+VISUAL: 
+AUDIO: 'viewers out there that can handle really really big files, especially if you\'re scanning like a whole factory or a warehouse or, you know, parts of a city, essentially. So, I think that that is that is the main one. &gt;&gt; Yeah. &gt;&gt; So,'
+
+[03:36] [scene:talk]
+VISUAL: 
+AUDIO: 'good. When you\'re talking about ginormous, what are we talking about? Uh because I think there was also another aspect that is like the ginormous is like file size, splat count, because there are different elements to it.'
+
+[03:48] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; Yeah, exactly. I think, you know, they are they\'re both related. Uh the more splats you have, the bigger file you have. So, in a in a sense, they are related, even though the splats might be organized a little bit differently in'
+
+[04:00] [scene:talk]
+VISUAL: 
+AUDIO: 'the file, which makes the file smaller or bigger. Uh but really, what we care about is the splat count, because the splat count is what makes it really difficult to render in browser, especially on, you know, older smartphones or laptops or, you'
+
+[04:13] [scene:talk]
+VISUAL: 
+AUDIO: 'know, weaker devices, essentially. So, when we then go back to ginormous, when is things gets challenging to be taken into account? Are we talking about 1 million, 3 million, 10 million splats?'
+
+[04:25] [scene:talk]
+VISUAL: 
+AUDIO: 'Can you give us some benchmark so that people also can understand what they are dealing with? Yeah, this is this is an excellent question. I would say anywhere above, you know, 2 and 1/2 million. That\'s where we are starting to enter'
+
+[04:38] [scene:talk]
+VISUAL: 
+AUDIO: 'dangerous territory. Uh this dangerous because it will work very nicely on the on the machine of the creator, because usually people who create splats have really busy computers. So, it will it will work well, but it will not work as nicely on,'
+
+[04:51] [scene:talk]
+VISUAL: 
+AUDIO: 'you know, smartphones or tablets of your clients that you might be sending your splats to. So, I think that is roughly the region. It really depends on the viewer, but around 2 2 and 1/2 million is where I would start thinking about a'
+
+[05:03] [scene:talk]
+VISUAL: 
+AUDIO: 'proper solution. Yeah. So, you mentioned indeed, does it support these large file sizes? That\'s been, of course, one of the uh'
+
+[05:15] [scene:talk]
+VISUAL: 
+AUDIO: 'one of the parameters to be taken into account. What else? And how does that maybe the different viewers, like for example, Blurry or Super Splat maybe differs uh or maybe many more, right? Right now, there are so many solutions to follow us in it. So, what are the'
+
+[05:27] [scene:talk]
+VISUAL: 
+AUDIO: 'other things that should be taken into account? Yeah, so splat size is or, you know, the basic support for files is like the the bare minimum. Like, it has to work. It it can\'t it can\'t crash. It has to be smooth. Um other than that, I'
+
+[05:39] [scene:talk]
+VISUAL: 
+AUDIO: 'would recommend basically uh users to take a look at what exactly do they need from the viewer, and do they does the viewer support their use case? Um, you know, like stuff like can you add annotations? Can you add some'
+
+[05:52] [scene:talk]
+VISUAL: 
+AUDIO: 'comments? Can you collaborate on this plot? Um, can you send this to people in a like a shared way, maybe like in a password-protected manner? Um, and lastly, I think it is this one is very important, where is the data'
+
+[06:04] [scene:talk]
+VISUAL: 
+AUDIO: 'itself hosted, and how secure is the data? Is it encrypted and so on? Because, you know, people are scanning like a government uh or like, you know, critical infrastructure, which, you know, can be hosted on just about any'
+
+[06:17] [scene:talk]
+VISUAL: 
+AUDIO: 'server. You need to make sure it\'s secure. So. &gt;&gt; This is a very good point, right? Because we see, indeed, like when you go on, for example, Super Splat, I think that it\'s a place where, let\'s say,'
+
+[06:30] [scene:talk]
+VISUAL: 
+AUDIO: 'uh this either prosumer or, say, people that are um let\'s say creative or exploring with this technology, they upload it and they share it. But then, what are, let\'s say, their their hard requirements? So, if I\'m an architect or'
+
+[06:42] [scene:talk]
+VISUAL: 
+AUDIO: 'if I am, instead, someone in the real estate space, um would I be the hard requirements like you and people that use Blurry, what do they go'
+
+[06:54] [scene:talk]
+VISUAL: 
+AUDIO: 'for what reason? You provide certificate to So, where are the file hosted in your case? &gt;&gt; Yeah, sorry. Because we operate like a little bit different little PlayCanvas. Don\'t get'
+
+[07:06] [scene:talk]
+VISUAL: 
+AUDIO: 'me wrong, PlayCanvas and Super Splat is an amazing tool, and I love the open-source project of it. Um, but I think the the the two companies operate with a different purpose. Where we try to serve businesses and make sure that data their data is is always safe and'
+
+[07:19] [scene:talk]
+VISUAL: 
+AUDIO: 'secure, and we are working usually with the businesses themselves to figure out their own restrictions. It, you know, it I I can\'t give you like a single answer. It really depends on the country where'
+
+[07:31] [scene:talk]
+VISUAL: 
+AUDIO: 'the agency is from, because in Germany, there might be different laws than Italy or UK. So, we try to work with them to make sure that we host their data in a way that works for them and is matching the regulations our, you know,'
+
+[07:44] [scene:talk]
+VISUAL: 
+AUDIO: 'clients have to follow essentially. &gt;&gt; There was another thing when we mentioned about uh splats uh and I always like since you are so deep into it, it\'s also regarding the different, let\'s say,'
+
+[07:57] [scene:talk]
+VISUAL: 
+AUDIO: 'file types. Because right now the the it\'s getting also like a crowded space, right? We have of course the PLY, then we are having the the compressed PLY, then we are having ASOG, then we are having ASPZ. Uh so,'
+
+[08:09] [scene:talk]
+VISUAL: 
+AUDIO: 'do you can you, let\'s say, share your experience when it comes to maybe having those files, like maybe some high-level differences and why not always go for, if it makes sense, for the compressed'
+
+[08:22] [scene:talk]
+VISUAL: 
+AUDIO: 'version? &gt;&gt; Yeah. Uh amazing question. This is getting like a little like controversial topic, you know, like every company or like every viewer is using their own file format and it\'s really, as you said, getting'
+
+[08:34] [scene:talk]
+VISUAL: 
+AUDIO: 'getting really really crowded. Um we always recommend using the raw PLY file just because it retains all the original information and therefore we at Blurry, we can do our own compression'
+
+[08:46] [scene:talk]
+VISUAL: 
+AUDIO: 'and our own magic on the files because we have the files in their original quality and in their original format. Um you know, PLY on its own has its has its issues. It\'s not the perfect format for Gaussian splats, uh but it is the first'
+
+[09:00] [scene:talk]
+VISUAL: 
+AUDIO: 'format that came out that, you know, they came up with a research paper, so everyone adopted it. Um and yeah, there are there are compressed versions of of the PLY. Uh you know, we have the compressed PLY, ASPZ, LCC files and so'
+
+[09:12] [scene:talk]
+VISUAL: 
+AUDIO: 'on and so on. Um every company made their own. The issue with a compressed version is that in the vast majority of the cases, the compressed files are essentially'
+
+[09:24] [scene:talk]
+VISUAL: 
+AUDIO: 'compressed in a lossy manner. It\'s it\'s a lossy compression. Therefore, you\'re already losing a little bit of data, um which is not always desirable. So, you know, let\'s say we want to later on reprocess your files because we have a'
+
+[09:38] [scene:talk]
+VISUAL: 
+AUDIO: 'better compression. Well, if we don\'t have the original file, we can\'t do it anymore because we already compressed with the older version of the compression system and the data is lost forever. Um, and these days storage is cheap, so why'
+
+[09:50] [scene:talk]
+VISUAL: 
+AUDIO: 'not store a bigger file? I don\'t I don\'t see it like a huge reason. Um, yeah. &gt;&gt; That\'s my Yeah, I see the issue when we are want to when you want to upload this'
+
+[10:02] [scene:talk]
+VISUAL: 
+AUDIO: 'or make it viewable on a phone, right? Because if I need to download 500 megabytes or 50, then then of course it\'s it\'s a different story, of course. &gt;&gt; Exactly, exactly. So, so this is like a'
+
+[10:14] [scene:talk]
+VISUAL: 
+AUDIO: 'whole different problem altogether. Um, well, just storing the file, I\'d recommend everyone just, you know, keep the raw files. If you need to share it with someone, this is where it gets a little bit tricky.'
+
+[10:27] [scene:talk]
+VISUAL: 
+AUDIO: 'Um, this is where, you know, you can\'t just send over a 20 gigabyte file. It\'s not going to fly. Like, not everyone can can load it over the network. That\'s that\'s not possible. So, there you need a compressed version. But,'
+
+[10:40] [scene:talk]
+VISUAL: 
+AUDIO: 'at Blurry, uh, a shameless plug, that\'s what we try to essentially take care of. You give us the raw file, you upload it just once, and then we handle the compression and the streaming for you entirely. So, we have our own way of'
+
+[10:52] [scene:talk]
+VISUAL: 
+AUDIO: 'essentially chunking up the file and preparing the Gaussian splat for a streaming and serving it over the network. We have our own way of compressing the files and even our compression is evolving. Like, we have'
+
+[11:04] [scene:talk]
+VISUAL: 
+AUDIO: 'not arrived at a perfect algorithm just yet. And in 6 months we might be compressing the files completely differently than we do them today, essentially. Um, and that\'s why we prefer working with the raw file so we can keep improving'
+
+[11:17] [scene:talk]
+VISUAL: 
+AUDIO: 'how we compress, how we stream the data. I think it\'s very similar to, uh, when you\'re preparing a video for YouTube, well, you\'re also preparing the best possible quality and then upload it to YouTube once. And the file might be a'
+
+[11:30] [scene:talk]
+VISUAL: 
+AUDIO: '5 GB file, whatever. It\'s fine, because then YouTube takes care of the compression and streaming of the data effortlessly over the network. So, this is how I kind of like view it. &gt;&gt; This compression thing is fascinating,'
+
+[11:43] [scene:talk]
+VISUAL: 
+AUDIO: 'because I mean, like everybody\'s also trying to We also have Niantic, for example, that is doing their or SPZ. Well, we released SPZ 4. Okay, but who supports it? Like I don\'t know. &gt;&gt; Yeah.'
+
+[11:55] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; this is the I mean, it\'s it\'s not to diminish in any way &gt;&gt; not what I\'m saying. &gt;&gt; of all this, right? So, I\'m just trying to understand. So, can you maybe help us? Is the compression aspect, let\'s say, detached from the streaming? Are'
+
+[12:07] [scene:talk]
+VISUAL: 
+AUDIO: 'those two intertwined? So, the way you do the compression is also affecting the way you you stream it? Can you maybe get a little bit of details how'
+
+[12:19] [scene:talk]
+VISUAL: 
+AUDIO: 'this process works, what kind of um let\'s say um improvements you can get in in terms of um let\'s say shareability of the file, for example,'
+
+[12:33] [scene:talk]
+VISUAL: 
+AUDIO: 'and maybe if there is any also trade-off, because again, compression might lead to some trade-offs. &gt;&gt; Yeah, exactly. So, I think they go hand in hand, because what they are really trying to achieve,'
+
+[12:45] [scene:talk]
+VISUAL: 
+AUDIO: 'you know, when people are sharing awesome plots, the problem is not the compression. The problem they\'re trying to solve is not the compression. It\'s not the streaming. They just want the other party to see the file.'
+
+[12:58] [scene:talk]
+VISUAL: 
+AUDIO: 'And they don\'t care, you know, what happens in the process. So, these are kind of like all kind of like implementation details, like how it works under the hood. Uh but to give you kind of like a sneak peek, um they go hand in hand, because you are trying to solve that one big problem, you know,'
+
+[13:11] [scene:talk]
+VISUAL: 
+AUDIO: 'the other party wants to see the file. That\'s the problem you\'re solving. So, you are doing everything you have to do in in in in in order for that to happen. So, when we compress the files, we do it in and most of the companies, you know,'
+
+[13:25] [scene:talk]
+VISUAL: 
+AUDIO: 'even SPZ, even LCC, SOG is kind of similar in this fashion. They all have their own quirks. But what you really want to do is first, throw away any data that is bloating the'
+
+[13:37] [scene:talk]
+VISUAL: 
+AUDIO: 'file, but it\'s not really obvious when you when you view it. Like, you know, there\'s kind of like a little details in the file that we don\'t need to view the file, if you know what I mean. So, there there'
+
+[13:50] [scene:talk]
+VISUAL: 
+AUDIO: 'can be like little compression artifacts. That\'s fine, because you don\'t really humans can\'t really notice the little little little details. Like, you you won\'t be able to tell. And the second one is that you want to organize the file itself. And now I\'m going into like a very neat and gritty detail of of how'
+
+[14:03] [scene:talk]
+VISUAL: 
+AUDIO: 'these platforms work. &gt;&gt; I think people would love to hear that. &gt;&gt; Yeah, [snorts] you want to organize the file in in an order where you can load it efficiently and quickly and in a way where'
+
+[14:17] [scene:talk]
+VISUAL: 
+AUDIO: 'you already show something to people whilst you are loading the file. Because, you know, in a in a similar way I I I like this YouTube metaphor. You don\'t need to download the whole YouTube video or even like a Netflix movie to start watching it. No, no, no. All you'
+
+[14:30] [scene:talk]
+VISUAL: 
+AUDIO: 'need to do is to download download that little part of the, you know, the movie next 10 to 15 seconds, so you can start watching. And the same thing you kind of want to do with with a golf and spotting files.'
+
+[14:42] [scene:talk]
+VISUAL: 
+AUDIO: 'Wherever you are in that 3D world with your virtual camera, whatever you are looking at, well, those are the things you want to load first, so you can show something to the to the user and then stuff in the background while you can gradually load over time.'
+
+[14:55] [scene:talk]
+VISUAL: 
+AUDIO: 'But your files have to be ready. You need to know what part of the file represent what part of the scene. You need to prepare and pre-organize your data, so that you can stream it efficiently. If If this makes sense.'
+
+[15:08] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; Does that make sense? Are we talking about the LOD chunks? The Those are the kind of things that we\'re talking about or is something different? &gt;&gt; Yes, it it is it is it is very very much related. So, one way to do it, I mean'
+
+[15:20] [scene:talk]
+VISUAL: 
+AUDIO: 'you you mentioned it is essentially doing LOD. And even with LOD there are like a possibly like a three different variants how you do LODs. And one way to do LODs, I think it\'s like a rather'
+
+[15:32] [scene:talk]
+VISUAL: 
+AUDIO: 'simple simple to understand, is that you slice up the scene into a small cubes essentially. Like a slice up the whole model into like a tiny little little cubes and you can have you know hundreds'
+
+[15:44] [scene:talk]
+VISUAL: 
+AUDIO: 'maybe thousands of them. And then every cube in your scene will have different or like varying levels of quality. You can like a throw away some of the data to decrease the quality, reduce the'
+
+[15:57] [scene:talk]
+VISUAL: 
+AUDIO: 'size. And then when it comes to viewing your whole model, well, we\'ll load the high quality version of only what\'s close to the you close close to you as the as the viewer'
+
+[16:10] [scene:talk]
+VISUAL: 
+AUDIO: 'essentially close to the virtual camera. And stuff in the background, well, we can start loading lower and lower resolution versions of it which takes less data. It\'s faster, smaller, and we don\'t really care about the'
+
+[16:22] [scene:talk]
+VISUAL: 
+AUDIO: 'quality about stuff in the background. That\'s my take. So, it is it is very much related to it. &gt;&gt; Can you maybe share that in action, right? So that you can give us an example from the actual from blurring of uh'
+
+[16:34] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; Yeah, let me let me show like one of one of the bigger models that we were that we have. Um let me share my screen. So, this is one of the one of the models that we have on our platform. So,'
+
+[16:46] [scene:talk]
+VISUAL: 
+AUDIO: 'essentially anyone can try this on their own. This model is definitely too large to view in one go. It\'s like a whole part of a city, but I can simply like walk around. And maybe when I stop now,'
+
+[16:58] [scene:talk]
+VISUAL: 
+AUDIO: 'you can see like everything is popping into the detail. The the the higher resolution version of the model is loading because I\'m now viewing like a different part of the model if that'
+
+[17:10] [scene:talk]
+VISUAL: 
+AUDIO: 'makes sense. And &gt;&gt; And when when you say this is very large and it does look very large, Again, are we talking about 5 million, 10 million just to give people like a couple of &gt;&gt; This is I believe 43 million slots in total.'
+
+[17:24] [scene:talk]
+VISUAL: 
+AUDIO: 'So, this is one of the one of the bigger ones. &gt;&gt; Okay. &gt;&gt; Like the the raw the raw file for for this model is around 20 GB essentially just to put it into perspective. So, this is the kind of the magic we\'re'
+
+[17:36] [scene:talk]
+VISUAL: 
+AUDIO: 'trying to do behind the scene like there is no chance I can stream 20 GB of you know of data over the network just like this and that\'s where the whole compression is coming into into play and essentially'
+
+[17:48] [scene:talk]
+VISUAL: 
+AUDIO: 'what I\'m looking at that\'s what\'s loaded in the in the in a high quality but the stuff in the distance you know those building further down the street well we don\'t care whether they are really high or low'
+
+[18:00] [scene:talk]
+VISUAL: 
+AUDIO: 'low resolution because they\'re so far we you know we can\'t really see them anyway. So, that\'s the that\'s the that\'s the beauty essentially of of loading all this data gradually. &gt;&gt; Out of curiosity was this captured in the portal cam or'
+
+[18:13] [scene:talk]
+VISUAL: 
+AUDIO: 'let\'s say the SLR do you do you know? &gt;&gt; Yeah, I do I do know. It\'s actually captured by Andrew Shanko. You may you may know him. He\'s a very popular guy capturing all his floating files.'
+
+[18:26] [scene:talk]
+VISUAL: 
+AUDIO: 'He\'s providing us with some of the test files and I believe and I hope he\'s not going to correct me that I did I remember it wrong but I believe he he captured it with the portal cam. It took a little bit over an hour to capture'
+
+[18:38] [scene:talk]
+VISUAL: 
+AUDIO: 'everything. So, he basically walked up and down and captured the the city center of of Wroclaw but this one is most likely portal cam. Yeah. &gt;&gt; And'
+
+[18:50] [scene:talk]
+VISUAL: 
+AUDIO: 'since again now let\'s say people scanning and especially the one that does it more professionally or on a regular basis uh they take advantage of the speed of one of these slam scanners.'
+
+[19:03] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; Mhm. &gt;&gt; Do you actually also support the LCC file? Are there even advantages of supporting the LCC file compared to maybe a PLY. &gt;&gt; Yeah, we do actually support LCC files. It is It is a good thing to support. It'
+
+[19:16] [scene:talk]
+VISUAL: 
+AUDIO: 'does not necessarily give you too much extra quality over PLY files because it internally contains the same amount of data, but it is very convenient for users to essentially just drop one file'
+
+[19:29] [scene:talk]
+VISUAL: 
+AUDIO: 'into Blurry, and then you can do all kinds of like other magic because LCC file is not only about PLY file on the raw Gaussian splatting files. It\'s about'
+
+[19:41] [scene:talk]
+VISUAL: 
+AUDIO: 'the collision mesh that we get out of it. It\'s about a point cloud that we also have from inside the file, which are extra data we can essentially work with, which is which is absolutely amazing, and it\'s very convenient for people to just upload one thing and have'
+
+[19:54] [scene:talk]
+VISUAL: 
+AUDIO: 'all the goodies in Blurry already. &gt;&gt; So, there is another element to this, right? There is I have a PLY, right? And usually when I get the PLY, I get it from a software'
+
+[20:07] [scene:talk]
+VISUAL: 
+AUDIO: 'that could be let\'s say Links 12. It could be a post shot. It could be some online platform, right? Where I can get the processing. The thing that is usually needed is to do some cleaning.'
+
+[20:20] [scene:talk]
+VISUAL: 
+AUDIO: 'Cleaning, cropping, maybe I need to remove the floaters. And I was wondering, like do you see a set of specialized tool for editing and manipulating these files and one for publishing? Do you see these two'
+
+[20:33] [scene:talk]
+VISUAL: 
+AUDIO: 'merging? How What\'s What\'s your view on this? &gt;&gt; Um Yes, I think there there is like a whole pipeline that you that a you know, the author of a splat has to go through. You'
+
+[20:45] [scene:talk]
+VISUAL: 
+AUDIO: 'know, they capture it, process it, edit it, share it, and collaborate, and potentially analyze further down the road, and and work with the files. So, editing part is still like a like a big part of the workflow. Uh the same way'
+
+[20:58] [scene:talk]
+VISUAL: 
+AUDIO: 'you would edit a video, you you know, in splats you might want to remove a background, remove the floaters, everything you mentioned. And I do see there is a there is a big gap for a proper or like really good professional editing tool.'
+
+[21:11] [scene:talk]
+VISUAL: 
+AUDIO: 'Um at the moment, we don\'t really offer this in Blurry because just building a viewer and the whole infrastructure is is is a whole beast on its own. Um but over time, we will most likely offer these kind of editing tools. But'
+
+[21:25] [scene:talk]
+VISUAL: 
+AUDIO: 'this being said, we\'re already talking with developers of some similar editing tools and we\'re trying to essentially collaborate with them. We want to play nice with the with the industry. We want to build the best product for the users.'
+
+[21:37] [scene:talk]
+VISUAL: 
+AUDIO: 'So, if there is any other editing tool, well, we want to be able to directly get the data into the Blurry, make it very easy for for the end user essentially of this stuff.'
+
+[21:49] [scene:talk]
+VISUAL: 
+AUDIO: 'But but yeah, editing is is a huge part of the workflow, that\'s for sure. &gt;&gt; We have discussed a little bit, of course, about the let\'s say the the pipeline at the the back end in some way, right? But what happens in the from'
+
+[22:01] [scene:talk]
+VISUAL: 
+AUDIO: 'a user perspective? So, who is currently using Blurry uh and how? &gt;&gt; Yeah, amazing question. I think this is at the moment it is a mixed bag. I don\'t'
+
+[22:13] [scene:talk]
+VISUAL: 
+AUDIO: 'think there is like a single huge solution or like single huge like a killer problem for Gaussian splatting. There is like a thousand little ones if if that makes sense. I think the whole reality capture community is still'
+
+[22:25] [scene:talk]
+VISUAL: 
+AUDIO: 'picking up Gaussian splatting and learning how to work with it. So, at the moment we see we see all kinds of use cases and we try to support them all. We see people using Gaussian splatting for marketing purposes, you know, people'
+
+[22:37] [scene:talk]
+VISUAL: 
+AUDIO: 'scanning hotels or you know, the tiny Airbnbs where they want to show the Airbnb with a pool, with a treehouse next to it and like, you know, painting the picture essentially. We see people using Blurry for some sort of facility'
+
+[22:49] [scene:talk]
+VISUAL: 
+AUDIO: 'management where they where they scan the whole factory or a warehouse, add annotations, store where everything is in the free space and then either teach other people how to use it, or do some'
+
+[23:01] [scene:talk]
+VISUAL: 
+AUDIO: 'inspection and monitoring of the of the space. Speaking on inspection monitoring, people use Gaussian splatting and Blurry for like remote inspection and surveying of of of areas or or spaces.'
+
+[23:13] [scene:talk]
+VISUAL: 
+AUDIO: 'Instead of like visiting I don\'t know a food processing plant for a week, well, they scan everything in one day, and they can take the data and and and do all the surveys in their own'
+
+[23:25] [scene:talk]
+VISUAL: 
+AUDIO: 'office in a in a nice AC AC room essentially. So, these are kind of like the the use cases, and and there is also a little bit of a like a cultural heritage and art that we see on Blurry, too.'
+
+[23:37] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; I want to push it there. Is there one that you say has the majority of the use case compared to the other right now? &gt;&gt; Um I I actually don\'t think so. I think the'
+
+[23:50] [scene:talk]
+VISUAL: 
+AUDIO: 'main ones is the marketing and the like a surveys and inspection. Those are the main ones, at least what we see on Blurry. And those are like essentially the'
+
+[24:04] [scene:talk]
+VISUAL: 
+AUDIO: 'professional use cases that we see the most. But, I think the whole industry is kind of like a waiting for for everyone to pick up Gaussian splatting and start using it more essentially. Yeah. &gt;&gt; Because I think one of the distribution is one of the key factors. Because'
+
+[24:17] [scene:talk]
+VISUAL: 
+AUDIO: 'honestly, I think that right now capturing I wouldn\'t say it\'s a solved problem, but you could get some stunning reconstruction, some stunning scenes given all the tools that you can use'
+
+[24:29] [scene:talk]
+VISUAL: 
+AUDIO: 'from a portal camera. I mean, you can even start scanning with that Insta360 with with your phone. You you can use anything now. &gt;&gt; Mhm. &gt;&gt; Now, you publish it on Blurry, and then you get a URL. Correct, right?'
+
+[24:43] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; Yes. &gt;&gt; Correct. &gt;&gt; What happens with that right now? Because for example, you mentioned inspection. &gt;&gt; Mhm. &gt;&gt; Do people just attach it to do email and share with someone else? Do people sit'
+
+[24:56] [scene:talk]
+VISUAL: 
+AUDIO: 'around the table and have a meeting around it? Uh you mentioned Airbnb scanning. I mean, I don\'t think you can embed that in a in the Airbnb website. &gt;&gt; Not in Airbnb. Yeah.'
+
+[25:08] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; [laughter] &gt;&gt; Right. No, no, but Yeah, so but this is a bit the point. Like, what happened with that URL? &gt;&gt; Yeah, there\'s a there there there are two ways to kind of like use that, you know? Uh either you share it with your with your end client and they, you know,'
+
+[25:20] [scene:talk]
+VISUAL: 
+AUDIO: 'log it somewhere. People often share it via email or even WhatsApp, that kind of stuff. Uh that\'s like how it how it works. And and then the end customer has to store it uh somewhere and then there\'s the there\'s'
+
+[25:32] [scene:talk]
+VISUAL: 
+AUDIO: 'the there\'s the place or there\'s the way they can use to access the data. The second way, what is actually getting more and more popular, is uh is embedding Blurry into other software or like other web apps or or other even websites. So, I mentioned the hotels. Uh'
+
+[25:45] [scene:talk]
+VISUAL: 
+AUDIO: 'there are some hotels that are already embedding the Blurry viewer on their own website. So, it looks like a part of their own website. You know, there\'s like a white-labeled viewer, no Blurry logo, so it looks very nice and very'
+
+[25:59] [scene:talk]
+VISUAL: 
+AUDIO: 'seamless for for their end users. For professional use cases, well, most of these companies are doing reality capture. I mean, they have their own tools. They are they are already doing something. We don\'t want to change a whole workflow completely, you know, day'
+
+[26:12] [scene:talk]
+VISUAL: 
+AUDIO: 'one. So, they are usually embedding Blurry inside their workflows at the moment. And uh well, we\'ll see. My hunch is that from that point, the usage of Blurry will grow more and more and we might'
+
+[26:24] [scene:talk]
+VISUAL: 
+AUDIO: 'need to uh uh do something about it. &gt;&gt; Because it you mentioned also at the beginning about different, let\'s say, uh features that you would want from a viewer, right? One being, can you'
+
+[26:36] [scene:talk]
+VISUAL: 
+AUDIO: 'collaborate on something? Uh can you annotate something, right? Because if it\'s a hotel, maybe you want to show features of something or maybe give somehow a tour with some hotspot or navigation points.'
+
+[26:48] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; Exactly. &gt;&gt; What what of these features are currently uh let\'s say present in blurry and what are instead the features that people ask for the most? &gt;&gt; Yeah, so we do we do have a we do already have most of these features. You'
+
+[27:03] [scene:talk]
+VISUAL: 
+AUDIO: 'can You can leave annotations. You can leave annotations with images, links, videos, that kind of stuff. So you can really enrich your your 3D world. So this is once again one of the models by Andre Schramko that we have on our'
+
+[27:16] [scene:talk]
+VISUAL: 
+AUDIO: 'platform. Um I don\'t necessarily remember how big this one is, but it\'s once again like a tens of millions of splats. Um and here I can like show you the the annotations that we have in the platform. So So we have essentially'
+
+[27:28] [scene:talk]
+VISUAL: 
+AUDIO: 'annotation where we show you uh God You know, you can you can add images, you can add bunch of text, you can add links. So So this for example is supposed to be a little bit educational where you can learn a little bit more'
+
+[27:41] [scene:talk]
+VISUAL: 
+AUDIO: 'about uh the Marianplatz in in Munich and like in Munich city center. And you can you can embed all kinds of data. So you can you know, embed uh buttons, links,'
+
+[27:54] [scene:talk]
+VISUAL: 
+AUDIO: 'uh etc. etc. So So this is what this one of the collaboration features could essentially look like. Um So I can like essentially like uh learn more about about about these the these places essentially. So you can'
+
+[28:07] [scene:talk]
+VISUAL: 
+AUDIO: 'uh navigate through the &gt;&gt; when you mention about collaboration, right? Does that means that multiple people can have access to the file like a bit like a Google Doc? &gt;&gt; Uh yeah, as I mean essentially like you get a you get a URL and you can share it'
+
+[28:20] [scene:talk]
+VISUAL: 
+AUDIO: 'with anyone. So anyone can view it. At the moment, not everyone can create these annotations. At the moment, it\'s only the author that can create the annotations. Uh but you know, come back in a in a few weeks\' time and we\'ll most likely have'
+
+[28:33] [scene:talk]
+VISUAL: 
+AUDIO: 'this kind of like a collaboration feature where people can comment, edit, view, and so on and so on. &gt;&gt; But because that I think it it\'s something that makes a lot of sense, right? &gt;&gt; I do I with you. Yeah.'
+
+[28:45] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; Like because splats still remains like a it\'s hard to to let\'s say to a scale or expand within a company where everything stays within the people, the person that upload the file, right? But like you'
+
+[28:58] [scene:talk]
+VISUAL: 
+AUDIO: 'have a Google Doc and say, "Hey, here is the thing. Tell me where things are right. Tell me where things are wrong or what are the" That\'s the moment that I think also this use case kind of like expands within a company and more people'
+
+[29:10] [scene:talk]
+VISUAL: 
+AUDIO: 'can experience the value of something like this because otherwise it remains a bit like something shiny that you cannot touch. Yes. &gt;&gt; Yeah, exactly. I think I think it\'s the it is the next iteration of of how'
+
+[29:22] [scene:talk]
+VISUAL: 
+AUDIO: 'people are using all of this data and all of these products where they actually can come together and use it as an UI like a shared UI to work together. Uh yeah, coming soon. &gt;&gt; And when it comes to you said to the'
+
+[29:36] [scene:talk]
+VISUAL: 
+AUDIO: 'features, maybe this being one that people are asking more frequently. Mhm. What is that people are missing right now? &gt;&gt; So, I think the next big thing people are actually missing and as once again'
+
+[29:49] [scene:talk]
+VISUAL: 
+AUDIO: 'coming back to the professional workflows is is measurements and support for point clouds and like other essentially reality reality capture formats cuz at the moment Blurry unfortunately supports only Gaussian'
+
+[30:01] [scene:talk]
+VISUAL: 
+AUDIO: 'splatting files. It doesn\'t have no doesn\'t have has no support for for point clouds or meshes and this is something that especially reality capture professionals are asking about because that\'s what they are working with today. So, they'
+
+[30:14] [scene:talk]
+VISUAL: 
+AUDIO: 'want to use their old workflows as they are learning the new ones. And then there is another thing that especially when we are talking about Gaussian splatting and as we see also'
+
+[30:28] [scene:talk]
+VISUAL: 
+AUDIO: 'not just Gaussian splatting coming from captures but that are generated via AI via images. So, what we call let\'s say synthetic splats. &gt;&gt; Mhm. &gt;&gt; Have you seen any of those on people on blurry or maybe more broadly, what is'
+
+[30:42] [scene:talk]
+VISUAL: 
+AUDIO: 'your impression about this kind of like a parallel type of of 3D GS? &gt;&gt; Yes, so definitely there are'
+
+[30:54] [scene:talk]
+VISUAL: 
+AUDIO: 'like artificial gaussians splats made either from previous mesh models, which is basically like a way like people use it like as a way to show like their 3D files online.'
+
+[31:08] [scene:talk]
+VISUAL: 
+AUDIO: 'In like a very very simple way, but I think there is like a much bigger category than that, which is like a generative gaussian splatting, which is basically done by companies like World Labs,'
+
+[31:20] [scene:talk]
+VISUAL: 
+AUDIO: 'which is like a generative world models essentially. We did see quite a few of those models on Blurry already, but it\'s it\'s really it\'s really a minority at the moment, especially because we are not targeting this kind'
+
+[31:32] [scene:talk]
+VISUAL: 
+AUDIO: 'of this kind of workflows. We have seen quite a few models from Apple Sharp, which can also be considered a synthetic because it\'s you know, it takes one one image and generates like a 3D scene out of it a little bit,'
+
+[31:45] [scene:talk]
+VISUAL: 
+AUDIO: 'but once again, this is this is a minority. Um there is a there are two ways to look at like there are two problems that you are kind of like trying to solve with this or like trying to solve with gaussian splatting model. First one,'
+
+[31:57] [scene:talk]
+VISUAL: 
+AUDIO: 'uh you want to capture reality and and you want to make sure it\'s like exact one-to-one mapping from reality. That\'s what reality capture does. Those are the professional workflows for uh'
+
+[32:10] [scene:talk]
+VISUAL: 
+AUDIO: 'uh surveys, inspections, marketing. You want to show what it really looks like. And the second use case is more artistic where you want to envision a potentially non-existent scene, and that\'s more useful in in artistic workflows, film'
+
+[32:23] [scene:talk]
+VISUAL: 
+AUDIO: 'production, art production, games, and so and so on. Exactly like games are games are going to be like a huge use case for this. Um but I do have my my own opinions about it as well. And and here at Bloony'
+
+[32:35] [scene:talk]
+VISUAL: 
+AUDIO: 'we are more &gt;&gt; Yeah. So, games about about Gaussian splatting in games. &gt;&gt; Yes. &gt;&gt; Yeah, I think it will take a very It will take a very long time. It will take a while. I don\'t think it\'s coming'
+
+[32:47] [scene:talk]
+VISUAL: 
+AUDIO: 'anytime soon. It will It will It will come, not tomorrow. Yeah. &gt;&gt; You know what I Every time every time, you know, when I see these these games that are using Gaussian splatting in some way, I feel like, "Okay, I can make'
+
+[32:59] [scene:talk]
+VISUAL: 
+AUDIO: 'game a platformer shooter whatever that might be." &gt;&gt; Yeah. &gt;&gt; I see people, "Okay, now instead I can use a Gaussian splatting environment." I\'m not sure like'
+
+[33:11] [scene:talk]
+VISUAL: 
+AUDIO: 'it is like Is that really what the best we can do with this technology right now? Like I feel like why don\'t we use that type of format and its power to its best? For example, and create a gameplay'
+
+[33:24] [scene:talk]
+VISUAL: 
+AUDIO: 'or a mechanic or something that is not just Oh, now I can make a shooter and be in an abandoned building. And instead that abandoned building is made of'
+
+[33:37] [scene:talk]
+VISUAL: 
+AUDIO: 'Gaussian splatting. &gt;&gt; So, &gt;&gt; I think I agree with you in a sense that if we want to replicate what\'s been done with a let\'s say a standard mesh for a game, it\'s probably going to take a while because it has all limitation and'
+
+[33:49] [scene:talk]
+VISUAL: 
+AUDIO: 'I would rather play something that can break, for example, has has destruction mechanics and all that because people are now used to expect to do that. Yeah. I just hope that there will be someone out there'
+
+[34:03] [scene:talk]
+VISUAL: 
+AUDIO: 'that is going to come up with ideas where the power and the features of this 3D format is is let\'s say part of the gameplay. And for example, I want to come up with'
+
+[34:16] [scene:talk]
+VISUAL: 
+AUDIO: 'a stupid idea. I\'m making a racing game. &gt;&gt; Yeah. &gt;&gt; Now, why not making a racing game in my room? And every time I can make a new track based on what I scan in my room. I can go on somewhere else.'
+
+[34:28] [scene:talk]
+VISUAL: 
+AUDIO: 'And that\'s where it makes sense. Right? I am not And and that\'s the kind of thing that I hope also people will come up with. Or like workflows where you like scan yourself and suddenly you are playing as'
+
+[34:41] [scene:talk]
+VISUAL: 
+AUDIO: 'yourself in the game for like a more immersive experience or or you bring like a parts of the real world into the game itself. Yeah, that actually sounds good sounds quite interesting, yeah. &gt;&gt; That\'s that\'s an example, but again, I mean this is But can you imagine how'
+
+[34:55] [scene:talk]
+VISUAL: 
+AUDIO: 'many of these there might be, right? I think especially when you have let\'s say synthetic splats that could be generated with in a reasonable amount of time. Maybe that is part of the game, right? &gt;&gt; Totally. Totally. Well, you can create a'
+
+[35:08] [scene:talk]
+VISUAL: 
+AUDIO: 'lot of a lot of content. You know you know what Gabriel, I now you are giving me an idea. I think where it might be adopted first will be in the development process of the game where the game developers themselves and the you know, the storytellers behind'
+
+[35:21] [scene:talk]
+VISUAL: 
+AUDIO: 'the game when you\'re trying to make a really really good game and the experience builders behind it. Well, with Gaussian splatting with being able to generate a huge scene, I\'m pretty sure that they can use this to go over'
+
+[35:33] [scene:talk]
+VISUAL: 
+AUDIO: 'so many more variations of the game and different game mechanics until they land at something they really like and then they rebuild that properly for you know, for for the end users for the end'
+
+[35:46] [scene:talk]
+VISUAL: 
+AUDIO: 'audience. Basically use it as a kind of like a design tool. &gt;&gt; Yeah, it\'s like a prototyping let\'s say &gt;&gt; Exactly, prototyping. That\'s the that\'s the word I was looking for. Thank you. Yeah. So,'
+
+[35:58] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; Now, going back to let\'s say Gaussian splatting as we as we know it, right? &gt;&gt; Mhm. &gt;&gt; So, we mentioned a bit that agency studios, professional and the company that they serve usually they\'re'
+
+[36:12] [scene:talk]
+VISUAL: 
+AUDIO: 'still finding their way. So, what do you think is currently the bottleneck for for adoption of this format? &gt;&gt; Mhm. Currently the the bottleneck. Yeah, as you know, as a company operating in this space, we we'
+
+[36:25] [scene:talk]
+VISUAL: 
+AUDIO: 'thought about this a lot with my my co-founder Uh and from within the company. And from my experience, what seems to be the bottleneck is is is that the the feedback loop is not'
+
+[36:37] [scene:talk]
+VISUAL: 
+AUDIO: 'there yet in the Gaussian Splatting world. And now let me explain. Um companies hesitate to pick up Gaussian Splatting for the next project with a client because the tooling you know, that is'
+
+[36:50] [scene:talk]
+VISUAL: 
+AUDIO: 'out there is not yet mature enough and they are not sure if they can deliver the project as they envision it because the tooling is not there yet. But if companies don\'t pick up Gaussian Splatting for the'
+
+[37:02] [scene:talk]
+VISUAL: 
+AUDIO: 'projects and and use the tools, the tools will not get mature enough if if you know what I mean. So so then they kind of like waiting on each other if if that makes sense. So so we need we need like a way to break the cycle. We need'
+
+[37:16] [scene:talk]
+VISUAL: 
+AUDIO: 'like a a bit of a leap of trust or leap of faith and build the tool that companies will be able to use in the future and and a you know, a tool that they will love to pick up in the'
+
+[37:28] [scene:talk]
+VISUAL: 
+AUDIO: 'future and they will not hesitate to use it for the project. So I think I think this is really really slowing down the industry and this is something we are trying to break break through as a as a VC funded'
+
+[37:40] [scene:talk]
+VISUAL: 
+AUDIO: 'company essentially. I think that\'s the only way to do it really. &gt;&gt; Because the other questions that I think that that remains a bit is like would you bet everything on Gaussian Splatting? Because I mean, we had Nerfs'
+
+[37:54] [scene:talk]
+VISUAL: 
+AUDIO: 'before, right? So and this is like very rapidly evolving. So is this really let\'s say Gaussian Splatting the end game? Or do you see that there is something else coming and then all the'
+
+[38:08] [scene:talk]
+VISUAL: 
+AUDIO: 'progress that you have made by kind of like reset or slow down. How do you feel about this? &gt;&gt; Exactly. I mean, there\'s always a danger as a company invest all your money and all your time into you know, engineering over fully Gaussian Splatting and'
+
+[38:21] [scene:talk]
+VISUAL: 
+AUDIO: 'there\'s like a new research that comes out in a 6 months time that is 10x better and suddenly, you know, all your effort is gone because you can start all over. Um there\'s always a risk, but I think Gaussian Splatting or some'
+
+[38:34] [scene:talk]
+VISUAL: 
+AUDIO: 'version of Gaussian Splatting is here to stay with us. And the main reason for that is is because Gaussian Splatting essentially ticks all the check boxes that we need um for proper professional workflows. That\'s my'
+
+[38:48] [scene:talk]
+VISUAL: 
+AUDIO: 'That\'s my That\'s my understanding. That\'s my take right now. Uh you can create Gaussian Splatting models quickly enough. They look good. You can share them and you can render them on almost any device. It checks all the all the all the uh you'
+
+[39:01] [scene:talk]
+VISUAL: 
+AUDIO: 'know, all the all the check boxes for me. &gt;&gt; Um some people Some people would argue that they still don\'t, right? Because if I cannot change, if I cannot modify, if I cannot separate the window from the table, I\'m still not there. So, there'
+
+[39:15] [scene:talk]
+VISUAL: 
+AUDIO: 'are still people clearly that have &gt;&gt; Yeah. I think it\'s a fair &gt;&gt; Totally. &gt;&gt; Totally. &gt;&gt; You know, you know what what what I think will happen is we just build better tools to work with it. The beauty'
+
+[39:28] [scene:talk]
+VISUAL: 
+AUDIO: 'of Gaussian Splatting is that uh the model is not encoded in some, you know, black box like NeRF was. It is It is encoded in a very explicit Gaussian Splat, you know, these like tiny three-dimensional ellipsoids. I like to'
+
+[39:40] [scene:talk]
+VISUAL: 
+AUDIO: 'call them, you know, grains of rice. I think I think it looks like rice to me. &gt;&gt; [laughter] &gt;&gt; And you have you have hundreds of millions of of these tiny grains of rice. Well, we can work with them. We just need good tools. Now it Now it became more of an engineering problem.'
+
+[39:53] [scene:talk]
+VISUAL: 
+AUDIO: 'And I think it\'s a very similar to uh you know, 30 years ago when we didn\'t really have good tools to work with meshes either. And people were like trying trying to string something together to, you know,'
+
+[40:05] [scene:talk]
+VISUAL: 
+AUDIO: 'build CGI into movies and to build some games. Well, the tools were horrible. I think that\'s where we are right now with Gaussian Splatting. We just build better tooling. People use it. We expand and we go from there. Learn what works the best'
+
+[40:17] [scene:talk]
+VISUAL: 
+AUDIO: 'essentially. That\'s my That\'s my take on it. And &gt;&gt; So then along the along this journey, what can we expect from Blurry, right? How how you\'re going to help us all, let\'s say.'
+
+[40:30] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; Yeah, that\'s a that\'s a good good Yeah, so that\'s a that\'s a good question. We have we have very very big plans. We would try to be a like we will be like a serious player in the whole reality capture pipeline. That\'s that\'s our our take.'
+
+[40:43] [scene:talk]
+VISUAL: 
+AUDIO: 'Um there already are tools that are really good for creating those and spotting models, but we\'re trying to build like really professional tools for sharing and analyzing and essentially pardon'
+
+[40:55] [scene:talk]
+VISUAL: 
+AUDIO: 'anything that happens essentially for anything that happens after you create your model. So all that collaboration analysis that\'s on its own is such a big beast that that will take that will keep us'
+
+[41:07] [scene:talk]
+VISUAL: 
+AUDIO: 'busy for the next year or two most likely. And what will happen afterwards, well, we\'ll see. We\'ll most likely be partnering up with with other companies, you know, in the other stages of the of the reality capture pipeline.'
+
+[41:19] [scene:talk]
+VISUAL: 
+AUDIO: 'If if that makes sense. But we really want to make a really delightful uh way to view and share your splats essentially. &gt;&gt; Martin, then uh thank you very much. I\'m'
+
+[41:31] [scene:talk]
+VISUAL: 
+AUDIO: 'pretty sure that people know where to find you. You can find the link to Blurry in the episode description. Martin, it was a real pleasure to have you. &gt;&gt; Likewise. Thank you very much, Gabriel. Thanks for having me. Uh it\'s a nice conversation.'
+
+[41:43] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; Thank you very much for listening in. If you like the show, remember to leave a rating on Spotify, Apple Podcast, or a thumbs [music] up on YouTube. It really helps me keep doing this and shining spotlights on the greatest founders and makers pushing the boundaries of XR and'
+
+[41:56] [scene:talk]
+VISUAL: 
+AUDIO: 'AI. Also, make sure to check out the show page xrai spotlight.com where you can find more conversation like this one. Till next time.'
+
+[42:08] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; [music] &gt;&gt; Woo!'

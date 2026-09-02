@@ -1,0 +1,208 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: This Local AI Can Invent Any Voice From Text (VoxCPM)
+channel: @octopusinc_
+duration: 10:14
+source: https://www.youtube.com/watch?v=O4TMwZlUJvQ
+upload_date: 20260901
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'I shipped it. I actually shipped it. Don\'t touch anything. This will crush 11 Labs. &gt;&gt; I need you to say that again, slower, please. Did you say this will crush 11 Labs? How is that possible? &gt;&gt; Could you tell which audio was fake? News flash, they both were fake. They'
+
+[00:13] [scene:talk]
+VISUAL: 
+AUDIO: 'came from a 2 billion parameter model running locally on this machine. No 11 Labs, no audio upload. And the weird part is voice cloning might not even be the most useful thing this does. Let\'s'
+
+[00:25] [scene:talk]
+VISUAL: 
+AUDIO: 'get into it. &gt;&gt; [music] &gt;&gt; This is Vax CPM-2 from Open BMB. And instead of solving one tiny part of text'
+
+[00:37] [scene:talk]
+VISUAL: 
+AUDIO: 'to speech, it combines three things we normally end up stitching together. It can generate speech, it can create a completely new voice from a written description, and it can clone a voice you actually have permission to use. And'
+
+[00:51] [scene:talk]
+VISUAL: 
+AUDIO: 'the emotions here are actually really good. There\'s a lot going on, but the useful version is simple. Instead of turning speech into code tokens first, it works with continuous audio representations. That gives it a better shot at keeping the small things that'
+
+[01:04] [scene:talk]
+VISUAL: 
+AUDIO: 'make speech feel human, breathing, pacing, and changes in emotion halfway through a sentence. But none of that matters if you\'re just looking for better audio. If your app talks today, you\'re probably sending text to somebody'
+
+[01:16] [scene:talk]
+VISUAL: 
+AUDIO: 'else\'s API, hence 11 Labs. And the second you do that, you inherit three problems. Latency you don\'t fully control, a bill that grows with usage, and text sometimes reference audio too that actually leaves the network. Vax'
+
+[01:29] [scene:talk]
+VISUAL: 
+AUDIO: 'CPM-2 changes all this for us. The voice model can sit next to the app, so now we don\'t have to ask ourselves, does this sound cool? It\'s more along the lines of, can this remove a hosted dependency without making my stack worse? Now,'
+
+[01:43] [scene:talk]
+VISUAL: 
+AUDIO: 'we\'re going to install it and generate something useful, talk about turning into a service, and design a voice from text. I\'m even going to clone my own voice, and then we\'ll get to the part that actually decides whether you should use it, where it breaks down, and all'
+
+[01:56] [scene:talk]
+VISUAL: 
+AUDIO: 'the stuff in between. Let\'s run it. If you enjoy coding tools that speed up your workflow, be sure to subscribe. We have videos coming out all the time. Now, setup is easy, but you do need a few gigabytes of space. In your virtual'
+
+[02:08] [scene:talk]
+VISUAL: 
+AUDIO: 'environment, you can pip install PyTorch with torch audio along with vox cpm. The package is just vox cpm. The main checkpoint is open bmb/vox cpm 2. You\'ll want a newer version of Python and a'
+
+[02:23] [scene:talk]
+VISUAL: 
+AUDIO: 'reasonably recent PyTorch build. But, here\'s the first catch. On the normal path, this is a GPU model. I\'m on a Mac M4 Pro. If you go on Nvidia\'s path, that\'s about 8 gigs of VRAM. And that'
+
+[02:36] [scene:talk]
+VISUAL: 
+AUDIO: 'number still matters because if your only machine is a small laptop GPU, trying to self-host this first is backwards. I\'m on a Mac, so that\'s enough to answer the first question, or the question that I want to know. Does'
+
+[02:49] [scene:talk]
+VISUAL: 
+AUDIO: 'the voice actually sound good? It\'s not the machine that I\'d use in production, but to work here. So, before you touch infrastructure, use the hugging face demo, test your actual sentence. If the voice fails there, you just saved yourself from solving a deployment'
+
+[03:02] [scene:talk]
+VISUAL: 
+AUDIO: 'problem you never needed to have. So, let me answer this. Does the basic thing actually work? And I\'m not going to give it just "Hello" or "Hello world." We\'re going to give it some actual phrases here. Here you can see the Python script'
+
+[03:14] [scene:talk]
+VISUAL: 
+AUDIO: 'I wrote to handle all this. It\'s rather straightforward. I have my imports, then I built out a model with vox cpm. I set up some initial text here. This is where I can describe a lot of the detail how I'
+
+[03:27] [scene:talk]
+VISUAL: 
+AUDIO: 'want the voice to sound and what I want to output, but we\'ll touch on that in a second. Then finally, I generate everything down here with this method. Now, in a little bit, I\'ll give it some sample audio where I can actually clone'
+
+[03:39] [scene:talk]
+VISUAL: 
+AUDIO: 'myself, but let\'s just run the initial version. I\'m going to run the Python script. You can see it\'s compiling. It\'s doing its thing here. Then all we have to do is run it via I can run AFplay, type the'
+
+[03:51] [scene:talk]
+VISUAL: 
+AUDIO: 'name of the file. &gt;&gt; Deploy failed on US East 1. No problem. &gt;&gt; All right, so it does pretty good, right? We heard the output there. It can be better, but that was the boring path'
+
+[04:03] [scene:talk]
+VISUAL: 
+AUDIO: 'to all this. And sometimes boring is good. The text goes in, 48 kHz wave comes out. There\'s no speaker ID, there\'s no language parameter I dropped in, there\'s no external API. So, the'
+
+[04:15] [scene:talk]
+VISUAL: 
+AUDIO: 'first question is kind of closed here. Yes, it does work. If this is going to be in a real product, I\'m obviously not importing a giant model inside some random Django route. You want a service.'
+
+[04:27] [scene:talk]
+VISUAL: 
+AUDIO: 'You want to see how you can actually use this. And this is where Voxia PM2 starts to become much more interesting. The local script that proved the voice. This is how you turn that into something your app could actually handle. You could run'
+
+[04:39] [scene:talk]
+VISUAL: 
+AUDIO: 'this command right here on a GPU, that Nvidia GPU I talked about. Now, I\'m not running that here. That is a GPU host command. So, Linux or Nvidia. Enough VRAM to keep the model going. Not on'
+
+[04:51] [scene:talk]
+VISUAL: 
+AUDIO: 'this laptop here. But once it is running, your application can call the route. Right, V1 audio speech. That endpoint is OpenAI shape. So, if your app already talks to V1 audio speech,'
+
+[05:03] [scene:talk]
+VISUAL: 
+AUDIO: 'you\'re not rebuilding your entire audio layer. You change the base URL, maybe a couple parameters here and there, and you\'re done. What I just ran, that just proves the voice. This endpoint is what'
+
+[05:17] [scene:talk]
+VISUAL: 
+AUDIO: 'actually extends it. So, now we have normal TTS behind a normal service. Okay, pretty useful. But hosted APIs already do that extremely well. The real reason Voxia PM2 is interesting is what'
+
+[05:29] [scene:talk]
+VISUAL: 
+AUDIO: 'happens when you stop asking it for a normal voice. Now, first is the voice design. No reference recording, there\'s no speaker file here. You just describe the person you want. The emotions here are actually insanely good compared to'
+
+[05:43] [scene:talk]
+VISUAL: 
+AUDIO: 'something like Chatterbox that I had issues with. Let\'s just say some text right here, just right here. Hyped American on caffeine. Okay, good enough. And then we can drop in text after that. Let\'s say the migration is reversible.'
+
+[05:55] [scene:talk]
+VISUAL: 
+AUDIO: 'We are not running it on Friday. And this is probably the feature I underestimated the most. Normally, if you want a new voice, you go find one. Here we just describe one. The voice becomes the configuration, not an asset'
+
+[06:07] [scene:talk]
+VISUAL: 
+AUDIO: 'you have to record first. You can throw away a bad persona in literally 10 seconds instead of rebuilding an entire voice pipeline. &gt;&gt; The migration is reversible. We are not running it on Friday.'
+
+[06:19] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; Really good. All right. Then there\'s cloning. Here was about 8 seconds of my real voice. Now, Vax CPM 2 gets a completely different sentence. And this is the key difference. It isn\'t replaying the reference. It\'s taking the'
+
+[06:31] [scene:talk]
+VISUAL: 
+AUDIO: 'voice and applying it to new text. This is a clone of me talking through this thing. That was actually really good on the cloning part of it. But cloning is only half the problem. A voice can sound like'
+
+[06:44] [scene:talk]
+VISUAL: 
+AUDIO: 'the right person and still perform the line completely wrong. That\'s where a more complete cloning path comes in. If you also provide the transcript of the reference audio, the model gets more information about the actual performance, not just the sound of the'
+
+[06:57] [scene:talk]
+VISUAL: 
+AUDIO: 'speaker. And then the same pipeline can move across languages. Now, it can\'t translate, but you can give it a language and an output. So, take Arabic for example. Okay, that wasn\'t the best. Maybe it was'
+
+[07:11] [scene:talk]
+VISUAL: 
+AUDIO: 'cuz it was Arabic, but it did work. Then if we take French for example, That hat was a lot better. It handles around 30 languages including multiple Chinese dialects. So, this is the point'
+
+[07:24] [scene:talk]
+VISUAL: 
+AUDIO: 'where I stopped asking what it can do and started asking what I\'m actually giving up. Cuz picking a TTS model is still an engineering trade-off. Vax CPM 2 is interesting because it lands in a pretty unusual middle ground. It runs'
+
+[07:37] [scene:talk]
+VISUAL: 
+AUDIO: 'locally, the license is commercially friendly, it\'s multi-lingual, it clones, and it can design a new voice from scratch, from text, all from one checkpoint. But that does not automatically mean it wins. Chatterbox'
+
+[07:49] [scene:talk]
+VISUAL: 
+AUDIO: 'can be easier and lighter depending on the job, though emotions are tough. Quan 3 TTS is probably the other model I\'d look at directly if voice design matters. And 11 Labs, well, it\'s great,'
+
+[08:01] [scene:talk]
+VISUAL: 
+AUDIO: 'but again, this is a really good alternative. I don\'t want to send my text somewhere, I don\'t want to pay someone to use that. That convenience is what you\'re paying for, sure. With Voch Cpm 2, you\'re choosing to own the voice'
+
+[08:13] [scene:talk]
+VISUAL: 
+AUDIO: 'stack, and in return, three things change. Your data can stay inside your infrastructure, and one model can potentially replace separate systems for voice design, cloning, and multi-lingual speech. That sounds great until you'
+
+[08:26] [scene:talk]
+VISUAL: 
+AUDIO: 'start treating it like a production infrastructure. Now, this stuff was pretty easy to use, as you saw. 48 kHz output sounds good, text-based voice design is useful for prototyping personas. Apache 2.0 makes the'
+
+[08:38] [scene:talk]
+VISUAL: 
+AUDIO: 'commercial conversation easier, and the VLLM path means this can look like a normal service. There\'s also community paths around comfy UI, GGUF, and MLX if you\'re outside normal Nvidia setup. But'
+
+[08:50] [scene:talk]
+VISUAL: 
+AUDIO: 'now, the costs. First, VRAM. If we\'re doing this on Nvidia, 8 gigs might be enough to get the model running. That\'s different from saying 8 gigs is what I\'d want in production. Once you add KB cache, multiple requests, and'
+
+[09:03] [scene:talk]
+VISUAL: 
+AUDIO: 'concurrency, a 24 gig card gives you a lot more room. Then, the quality is not automatically state of the art for every prompt. Depending on the language, as you heard with Arabic, your reference audio, and what you ask for, people are'
+
+[09:15] [scene:talk]
+VISUAL: 
+AUDIO: 'still bouncing between Voch Cpm, Chatterbox, Quan, maybe 11 Labs. So, the wrong question is, does Voch Cpm 2 beat 11 Labs on every English sentence? Did really good. The better question is, can'
+
+[09:28] [scene:talk]
+VISUAL: 
+AUDIO: 'this replace the hosted API for about 80% of what we generate, and maybe keep a little bit that stays hosted. Now, that can actually help reduce costs and it makes a lot more sense. So, should you actually use this? Well, use it if'
+
+[09:40] [scene:talk]
+VISUAL: 
+AUDIO: 'you already have a GPU box. I did it on my Mac. It did really good, so it can still do certain things. If speech is a real product feature, not a one-off voice-over, if you need local speech, multiple languages, or custom personas,'
+
+[09:52] [scene:talk]
+VISUAL: 
+AUDIO: 'this is really good. But, remember, it depends on your setup. I dropped the repo down below so you guys can check it out. I\'m Josh from Better Stack. If you enjoy coding tips and tricks like this,'
+
+[10:04] [scene:talk]
+VISUAL: 
+AUDIO: 'be sure to subscribe. We have videos coming out all the time.'
