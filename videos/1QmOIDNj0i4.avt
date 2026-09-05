@@ -1,0 +1,184 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Master MiniMax H3: 10x Faster, Low VRAM & 2K Resolution | ComfyUI Workflow
+channel: @octopusinc_
+duration: 08:58
+source: https://www.youtube.com/watch?v=1QmOIDNj0i4
+upload_date: 20260903
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:intro]
+VISUAL: Video title card "Master MiniMax H3: 10x Faster, Low VRAM & 2K Resolution | ComfyUI Workflow"
+AUDIO: 'Hello everyone, I\'m So Tai. Welcome back to my channel. In my last video, I introduced Min Max H3 and put it head-to-head against LTX 2.5. It\'s truly an absolute powerhouse and has taken the ComfyUI community by surprise . However, if you\'ve had'
+
+[00:12] [scene:talk]
+VISUAL: 
+AUDIO: 'hands-on experience with it, you know that the official ComfyUI workflow still has quite a few bottlenecks. That\'s why I\'m starting a whole new series to help you master the Min Max H3 and'
+
+[00:24] [scene:intro]
+VISUAL: Call to action to subscribe to the channel.
+AUDIO: 'overcome every obstacle you might be facing with this model. In today\'s video, I\'ll guide you on how to speed up your workflow, reduce VRAM usage, and take your video resolution to the next level. Okay'
+
+[00:36] [scene:talk]
+VISUAL: 
+AUDIO: ', enough talk. Press that like button for me. Subscribe if you haven\'t already, and let\'s get straight to the point. Alright, here\'s the official Min Max H3 workflow straight from ComfyUI templates. All you need to do is'
+
+[00:49] [scene:ui]
+VISUAL: ComfyUI interface showing templates for MiniMax H3 workflows.
+AUDIO: 'update ComfyUI to the latest version and get it right here. To keep things super simple and easy to follow, I\'m going to start with this text-to-video workflow first. And the great news is that all the optimization tricks'
+
+[01:01] [scene:talk]
+VISUAL: 
+AUDIO: 'I\'m about to share will apply perfectly to other configurations like image to video or reference to video. Now, let\'s dive straight into our first problem , the generation speed. As I briefly mentioned in my'
+
+[01:13] [scene:ui]
+VISUAL: Detailed view of a ComfyUI graph for MiniMax H3 Text-to-Video generation.
+AUDIO: 'previous comparison, MiniMax H3\'s rendering times are notoriously slow. When I did a 1.5 megapixel rendering test, it took an incredible 30 minutes on an RTX 3090, which is considerably slower'
+
+[01:26] [scene:talk]
+VISUAL: 
+AUDIO: 'than LTX 2.5. To solve this bottleneck, the approach is almost the same as the solutions I\'ve shown you before. In theory, the first obvious way to speed up rendering is to reduce the number of inference steps instead of sticking with the'
+
+[01:38] [scene:ui]
+VISUAL: ComfyUI graph showing the workflow for MiniMax H3 Text-to-Video.
+AUDIO: 'default 20. However, if you simply reduce the step count in the standard way, the quality of your video completely falls apart and ends up being a blurry and distorted mess, just like you\'re seeing here. So how do'
+
+[01:50] [scene:talk]
+VISUAL: 
+AUDIO: 'we render with an ultra-low step count while maintaining all visual quality intact? The secret ingredient here is using a dedicated LoRA acceleration to recover those lost details. One of the most'
+
+[02:02] [scene:talk]
+VISUAL: 
+AUDIO: 'popular LoRAs recommended in the creator community for MiniMax H3 is this one right here, which promises full-quality rendering in just four steps. Seeing the huge number of downloads, it clearly speaks for'
+
+[02:15] [scene:talk]
+VISUAL: 
+AUDIO: 'itself, right? Now, once you go to the download page, you\'ll notice quite a few different versions available. So let me break it down to help you choose exactly the right one for your needs. Of course, we only'
+
+[02:27] [scene:talk]
+VISUAL: 
+AUDIO: 'want to focus on the latest updates, as previous versions were mostly experimental builds. First, I\'m going to load the four-step LoRA version 1.1 that came out just two weeks ago, connecting it directly to'
+
+[02:40] [scene:ui]
+VISUAL: ComfyUI graph highlighting the KSamplerSelect and BasicScheduler nodes with parameters.
+AUDIO: 'our MiniMax H3 model and the K sampler. And here\'s the result. Yes, it rendered in a flash with just four'
+
+[02:53] [scene:talk]
+VISUAL: 
+AUDIO: 'steps, and both the composition and movement follow the prompt really well. However, there is a notable flaw here. The character\'s skin looks too shiny and has a slightly plastic and'
+
+[03:05] [scene:ui]
+VISUAL: ComfyUI graph showing a "Load LoRA" node connected to the model and KSampler.
+AUDIO: 'unnatural feel. Many people suggest simply lowering the intensity of LoRA , but after much testing, I discovered that this does not actually solve the underlying problem. In fact, it hinders the benefits of'
+
+[03:18] [scene:talk]
+VISUAL: 
+AUDIO: 'acceleration and often introduces strange motion artifacts into the video. Fortunately, the creator just released an eight-step version 1.0 a week ago, specifically designed to solve this problem. Let\'s see how it works when'
+
+[03:30] [scene:comparison]
+VISUAL: Side-by-side comparison of video output quality between 4-step v1.1 and 8-step v1.0 LoRAs.
+AUDIO: 'I switch to eight-step compilation. Very good. Wow, the difference is'
+
+[03:44] [scene:talk]
+VISUAL: 
+AUDIO: 'huge. The skin texture looks much more natural, and that greasy, overly polished look has completely disappeared. Although you sacrifice a little rendering time compared to'
+
+[03:57] [scene:ui]
+VISUAL: ComfyUI graph showing a "Patch Sage Attention KJ" node.
+AUDIO: 'four steps, in my opinion, eight steps is the sweet spot between incredible speed and flawless visual quality, and it\'s definitely the version I recommend using for your actual projects. Okay, and our second speed trick comes down to the'
+
+[04:11] [scene:talk]
+VISUAL: 
+AUDIO: 'attention mechanism. In short, this optimizes how array data is calculated directly on your GPU instead of relying on PyTorch\'s default implementation. I\'m sure most of you in the'
+
+[04:24] [scene:comparison]
+VISUAL: Video comparison showing rendering times for "sageattn" and "int8-solt-attn".
+AUDIO: 'ComfyUI space are already very familiar with Sage attention, right? But today I want to show you a new mechanism called Soul attention, recently developed by Kijai. According to Kijai, Soul Attention is even faster than Sage Attention,'
+
+[04:36] [scene:talk]
+VISUAL: 
+AUDIO: 'taking generation speeds to another level and significantly reducing VRAM usage. On Reddit, the community has already conducted benchmark tests and confirmed truly impressive performance improvements'
+
+[04:48] [scene:ui]
+VISUAL: ComfyUI graph showing a "Patch Sol-Attn (MiniMax)" node with various parameters.
+AUDIO: '. However, in this video I will take things a step further with an advanced technique that combines Sage Attention and Solo Attention . Why use both? Well, Solo Attention achieves its incredible speed'
+
+[05:01] [scene:talk]
+VISUAL: 
+AUDIO: 'through sparse computing, which carries a slight risk of warping or compromising structural integrity during the initial compositing steps. That is why we are confident in the solid stability of Sage'
+
+[05:13] [scene:ui]
+VISUAL: ComfyUI graph showing the "Patch Sol-Attn (MiniMax)" node connected to "EasyCache".
+AUDIO: 'Attention in the initial phase. Once the core structure is fixed, we can seamlessly transfer the heavy lifting to Solo Attention to achieve that maximum speed boost. As you can see from my configuration right here, the first three blocks are run by'
+
+[05:26] [scene:talk]
+VISUAL: 
+AUDIO: 'Sage Attention and all subsequent blocks are handled by Solo Attention. And we don\'t stop there. I \'ve also added a block cache node to reuse redundant calculations, squeezing out every'
+
+[05:38] [scene:comparison]
+VISUAL: Side-by-side comparison of render times for "Turbo LoRA" vs. "Turbo LoRA + Attention + Cache".
+AUDIO: 'last drop of performance. And just look at the actual results on screen . Running these three solutions together on a 10-second clip reduced rendering time by almost two full minutes , making it nearly twice as'
+
+[05:51] [scene:talk]
+VISUAL: 
+AUDIO: 'fast as the standard setup, without any loss of visual quality or motion smoothness. Absolutely stunning, isn\'t it? That said, a quick heads-up for you. Solo Attention is still'
+
+[06:03] [scene:talk]
+VISUAL: 
+AUDIO: 'under active development and might be a bit temperamental with certain GPU architectures or environments. If you encounter installation problems on your machine, don\'t worry. Just ignore it. Combining Sage'
+
+[06:16] [scene:ui]
+VISUAL: ComfyUI graph showing a "Video Combine" node outputting a video.
+AUDIO: 'attention with block caching alone is more than enough to keep your workflow flawlessly smooth and save noticeably on VRAM. And here\'s another game-changing speed trick I want to share with'
+
+[06:28] [scene:talk]
+VISUAL: 
+AUDIO: 'you. The latent scaling technique , simply put, instead of forcing a render directly at a massive resolution, which consumes all of your system\'s resources and leaves them waiting forever, takes a much'
+
+[06:41] [scene:ui]
+VISUAL: ComfyUI graph showing an "Upscale" node with "Ultrasharp 4x" workflow selected.
+AUDIO: 'smarter approach. First, we render the base video at an ultra-low resolution just to fix the motion as quickly as possible, and only then do we run it through a dedicated scaling model or secondary pipeline to bring it up to our'
+
+[06:53] [scene:talk]
+VISUAL: 
+AUDIO: 'target resolution, saving an incredible amount of time. Historically, the biggest headache when upscaling video has always been frame distortion, visual flicker, or details'
+
+[07:05] [scene:ui]
+VISUAL: GitHub repository for "ComfyUI Minimax H3 Latent Upscaler".
+AUDIO: 'falling apart between frames. Fortunately for us, we have this dedicated custom scaling node , designed specifically for Minimax H3 by this creator here. Just look at that huge number'
+
+[07:18] [scene:talk]
+VISUAL: 
+AUDIO: 'of stars on GitHub and you\'ll see how much the community values ​​it. Let me show you a real example so you can see it in action. Let\'s say my ultimate goal is a crisp,'
+
+[07:30] [scene:ui]
+VISUAL: ComfyUI graph showing a "Minimax H3 Latent Upscaler (3D)" node with configuration options.
+AUDIO: 'clean 1.5-megapixel video. Instead of forcing the model to render natively at that resolution, I just render the initial base video at a mere 0.3 megapixels. From there, I feed that latent data'
+
+[07:42] [scene:talk]
+VISUAL: 
+AUDIO: 'directly into our scaling node to bring it up to 1.5 megapixels. And for the final detailing step, I only need to run one noise reduction pass with a light three steps, instead of going through a tedious 20 steps as in the'
+
+[07:54] [scene:comparison]
+VISUAL: Side-by-side comparison of render times and quality between "Latent Upscaler" and "ComfyUI Org Workflow".
+AUDIO: 'default workflow. And just look at the results on the screen. Our exported video reaches that super sharp 1.5 megapixel standard in just 2 minutes and 56 seconds. Compare that to the'
+
+[08:07] [scene:talk]
+VISUAL: 
+AUDIO: 'standard workflow, which, as I mentioned before, literally consumed 30 minutes of my life. When viewing the two clips side by side, the improved result remains completely solid and usable. A pretty'
+
+[08:20] [scene:outro]
+VISUAL: Patreon page for SOTAI, offering workflows, models, and resources.
+AUDIO: 'incredible solution, isn\'t it? However, I have to give you a small warning. Although this method saves them a huge amount of time, it does not save VRAM. At the end of the day, they are still processing latent'
+
+[08:33] [scene:talk]
+VISUAL: 
+AUDIO: 'high-resolution frames in memory, as the developer pointed out right here . And that concludes everything I wanted to share with you in today\'s video. I really hope you watched it all so you could pick up all these tips and tricks. I\'ll make sure to compile all the'
+
+[08:46] [scene:talk]
+VISUAL: 
+AUDIO: 'custom models and nodes into a dedicated Patreon post below, so you can easily set everything up . Thank you so much for watching, and I\'ll see you in the next video. Peace.'

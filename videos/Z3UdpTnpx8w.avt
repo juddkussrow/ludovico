@@ -1,0 +1,212 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: OpenCode + Ego Lite: Fewer Tool Calls, Lower Token Cost on Browser Automation
+channel: @octopusinc_
+duration: 10:03
+source: https://www.youtube.com/watch?v=Z3UdpTnpx8w
+upload_date: 20260901
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'Most browser agents "die" in the same place. Not on something difficult, but on something boring. You give a task, it opens an empty Chromium, and the very first page requires a login. And now you\'re'
+
+[00:12] [scene:talk]
+VISUAL: 
+AUDIO: 'inserting credentials into a terminal, entering two-factor authentication codes for a robot, or an agent hijacks your browser and takes control of your mouse while you\'re trying to read something else. And even when it works'
+
+[00:25] [scene:talk]
+VISUAL: 
+AUDIO: ', it works slowly. Click, screenshot, view, click again, screenshot again. After 40 tool calls, you get an answer that cost you more tokens than the task itself was worth. Ego light is'
+
+[00:38] [scene:talk]
+VISUAL: 
+AUDIO: 'another attempt to solve this problem. And the reason I wanted to talk about this is the approach. This is not a library that you install in your agent. This is a browser, a real Chromium browser, that you can use as your'
+
+[00:50] [scene:talk]
+VISUAL: 
+AUDIO: 'primary browser, and in which your AI agents get their own place to work. Created by the Citro Labs team, it is currently free, for now only for Mac. Versions for Windows and Linux are planned, but not yet released. The basic idea is'
+
+[01:03] [scene:talk]
+VISUAL: 
+AUDIO: 'that everything else in this area is moving in the opposite direction. Browser use and Vercel\'s Agent Browser are automation frameworks. They don\'t supply the browser, they manage it, which means the agent gets a " clean" profile without'
+
+[01:15] [scene:talk]
+VISUAL: 
+AUDIO: 'your sessions. And if you point it to your real Chrome, you usually have to close Chrome first. On the other hand, there are Atlas and Comet—they are real browsers with your logins, but they come with one built-in'
+
+[01:27] [scene:talk]
+VISUAL: 
+AUDIO: 'assistant, and only it has permission to control. Ego light takes a place in the middle. Your logins, your extensions, your browser for daily work, but it can be managed by any agent you already pay for. "'
+
+[01:39] [scene:talk]
+VISUAL: 
+AUDIO: 'Spaces" are what make it truly suitable for everyday use. A space is an isolated workspace within a single browser window. Your tabs live in'
+
+[01:51] [scene:talk]
+VISUAL: 
+AUDIO: 'your space. When an agent starts a task, it creates its own space and works there. Nothing jumps out before your eyes. Your mouse is not moving. Your attention is not distracted. In the upper right'
+
+[02:04] [scene:talk]
+VISUAL: 
+AUDIO: 'corner there is a space panel, and the one that glows blue is the space where the agent is currently working. You can click on it to observe, take control if the agent is stuck on login, or simply ignore it and continue working. And you can run'
+
+[02:16] [scene:talk]
+VISUAL: 
+AUDIO: 'many such processes at the same time. The site talks about running over 100 browser tasks in parallel, each in its own space, which is honestly a more interesting business case. Enriching 10 leads in'
+
+[02:28] [scene:talk]
+VISUAL: 
+AUDIO: '10 spaces simultaneously—this is a real workflow, not a demo. Migration occurs during the first launch. It scans your computer, asks which browser to transfer'
+
+[02:40] [scene:talk]
+VISUAL: 
+AUDIO: 'data from, and transfers cookies, login sessions, saved passwords, extensions, bookmarks, profiles, and open tab groups. At this point, it will also ask for your password, which is expected as it is'
+
+[02:53] [scene:talk]
+VISUAL: 
+AUDIO: 'needed to transfer keychain items and profiles. The practical result is that your agent enters Gmail, Notion, LinkedIn, your CRM, or dashboard already authorized. No captcha loops,'
+
+[03:05] [scene:talk]
+VISUAL: 
+AUDIO: 'single sign-on redirects, or re- authentication on every launch. Now the technical part. And this is the moment that I consider the most important. Most browser tools provide a'
+
+[03:17] [scene:talk]
+VISUAL: 
+AUDIO: 'command- line style interface to the agent. Transition, snapshot, click, fill, wait. Each action is a separate call to the tool, and between them the model must stop,'
+
+[03:29] [scene:talk]
+VISUAL: 
+AUDIO: 'read the result, and decide what to do next. Instead, Ego Light provides access to the browser through JavaScript functions. The agent writes one script in one pass, which opens a tab,'
+
+[03:41] [scene:talk]
+VISUAL: 
+AUDIO: 'reads a snapshot, fills in three fields, presses a button, waits for a response from the network, scans the table, and outputs the result. It runs in a real Chromium session via the Chrome DevTools protocol. This fits perfectly with what'
+
+[03:54] [scene:talk]
+VISUAL: 
+AUDIO: 'coding agents already know how to do well. They write code. Letting them create the entire workflow in the browser as code, instead of forcing them to think in small, discrete steps, is simply a better approach to'
+
+[04:06] [scene:talk]
+VISUAL: 
+AUDIO: 'solving the problem. And the numbers they publish confirm this. In their comparison with Vercel agent browser for four complex tasks, they claim in the GitHub README that tasks are performed up to 2.5'
+
+[04:18] [scene:talk]
+VISUAL: 
+AUDIO: 'times faster. And the website states that it is up to 3.45 times faster with a significant reduction in token costs. Their own formulation is that the gap increases with the complexity of the task. Which is logical,'
+
+[04:30] [scene:talk]
+VISUAL: 
+AUDIO: 'since the overhead for each request accumulates. I would treat any vendor tests with some suspicion, but the mechanism behind this claim is sound, and you can test it out fairly quickly in your own'
+
+[04:42] [scene:talk]
+VISUAL: 
+AUDIO: 'workflows. A snapshot is the second half of success. Instead of passing raw HTML to the model, Ego Light compresses the page into a semantic tree, where each interactive element is given a short sequence'
+
+[04:54] [scene:talk]
+VISUAL: 
+AUDIO: 'number. The agent sees the email field , the password field , the continue button—all labeled—and acts on the link instead of guessing CSS selectors. This is cheaper in terms of token count and more stable if'
+
+[05:06] [scene:talk]
+VISUAL: 
+AUDIO: 'the site changes class names. They claim that this snapshot is built into their own Chromium engine, rather than being a JavaScript add-on on top of regular Chrome, so it can'
+
+[05:18] [scene:talk]
+VISUAL: 
+AUDIO: 'access cross-origin iframes, shadow DOM, and third-party widgets like Stripe checkout, Salesforce, Intercom panels, and React portals. It is in such places that regular scrapers return emptiness'
+
+[05:30] [scene:talk]
+VISUAL: 
+AUDIO: ', and the agent starts retrying for content that was never there. One caveat about links that you should be aware of before debugging anything weird. The link is only valid for'
+
+[05:43] [scene:talk]
+VISUAL: 
+AUDIO: 'the last snapshot. Each new shot rebuilds the map. So, if the element goes out of view, the page refreshes, or the previous call only captured the viewport , you'
+
+[05:55] [scene:talk]
+VISUAL: 
+AUDIO: 'will get an unknown reference error . For anything that needs to be used in multiple loops, the snapshot also provides a location selector and you use that instead. I use Open Code for testing,'
+
+[06:07] [scene:talk]
+VISUAL: 
+AUDIO: 'and there is a specific reason for that . Ego Light is installed as an agent skill during onboarding. It writes the skill.md file to the agents/skills folder and the Claude skills folder, which'
+
+[06:19] [scene:talk]
+VISUAL: 
+AUDIO: 'means that every agent on the machine that adheres to the open skills standard picks it up automatically. Open code reads this standard, so there is no need to configure anything.'
+
+[06:31] [scene:talk]
+VISUAL: 
+AUDIO: 'Claude code, code X, cursor, Gemini CLI , Kiro, continue and proprietary corporate agents work the same way. You can also'
+
+[06:43] [scene:talk]
+VISUAL: 
+AUDIO: 'install the skill separately using a single NPX command from the GitHub repository if you don\'t want to run the installer path. In Open code, I type /ego browser to activate the skill. Then I'
+
+[06:56] [scene:talk]
+VISUAL: 
+AUDIO: 'just describe what I want in plain language . First, you need to set the Full Access permission, as the skill needs to launch a native Mac app that'
+
+[07:08] [scene:talk]
+VISUAL: 
+AUDIO: 'runs outside of the agent sandbox. If you leave the permissions restricted, the command will not work and the error will not be obvious. For the task itself, I chose something with a few moving parts, because'
+
+[07:20] [scene:talk]
+VISUAL: 
+AUDIO: 'scraping one page doesn\'t prove anything. I ask him to open a job site, filter for remote product roles posted in the last 7 days, sort by newest, open the top three, get the company name,'
+
+[07:32] [scene:talk]
+VISUAL: 
+AUDIO: 'position, salary range if available, and write the application link to a local markdown file. You can watch the work by switching to the agent space, while my own tabs remain in place. The experience saving feature'
+
+[07:44] [scene:talk]
+VISUAL: 
+AUDIO: 'is announced as " coming soon," and I wouldn\'t rush to get excited about it . The main idea is that after successfully completing a task on the site, the agent stores what worked as a reusable skill . So, similar tasks later skip the'
+
+[07:56] [scene:talk]
+VISUAL: 
+AUDIO: 'research phase and are executed up to five times faster. A good idea in theory. The difficulty is that websites are constantly changing, and cached page layout data quickly becomes outdated. Until this is'
+
+[08:09] [scene:talk]
+VISUAL: 
+AUDIO: 'tested on many complex real-world sites over months, take this as a promise, not a feature. A few honest limitations. It\'s currently only available for Mac, which cuts off a significant portion of users'
+
+[08:21] [scene:talk]
+VISUAL: 
+AUDIO: '. Ego light is not an agent in itself. So if you were hoping for a built-in assistant for communication, this isn\'t it. You provide your own model and pay for it separately . The'
+
+[08:33] [scene:talk]
+VISUAL: 
+AUDIO: 'browser binary is not open source, only the Ego runtime and skills, both under the MIT license. So, if closed source browsers are a definite no for you, this is your answer. Regarding'
+
+[08:45] [scene:talk]
+VISUAL: 
+AUDIO: 'privacy, browsing data does remain local. The only thing they capture during setup is whether you agreed to the migration, but once your agent reads the page, it sends its contents to the provider of the model you'
+
+[08:57] [scene:talk]
+VISUAL: 
+AUDIO: 'are using and their retention policy is applied. So be careful when directing this towards customer data or internal financial reports. Who this is really for—it depends on whether you\'ve already encountered this obstacle. If you are a developer working'
+
+[09:10] [scene:talk]
+VISUAL: 
+AUDIO: 'with Codex or Claude code and you constantly need to check the checkout process or control panel after changes to the code, this closes the last mile. If you are in sales , recruiting, or operations and'
+
+[09:22] [scene:talk]
+VISUAL: 
+AUDIO: 'half of your work happens in a SaaS tool with an incomplete API, this allows an agent to work in the tool like you without an integration project. If all your automation is already covered by Playwright tests running in CI'
+
+[09:34] [scene:talk]
+VISUAL: 
+AUDIO: ', this won\'t make much difference for you. I keep coming back to the fact that the approach is correct, even if this particular product doesn\'t win. A huge amount of valuable work is blocked by web interfaces that will never have a'
+
+[09:46] [scene:talk]
+VISUAL: 
+AUDIO: 'clean API, and agents that cannot reliably use these interfaces are only doing half the job. Building a browser around the agent, rather than attaching the browser to the agent, is a more honest answer to this. Whether'
+
+[09:58] [scene:talk]
+VISUAL: 
+AUDIO: 'Citro Labs is the team that will achieve this—we\'ll see.'

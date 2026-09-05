@@ -1,0 +1,216 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: ComfyUI Tutorial: MiniMax H3 Face Swap on 6GB VRAM! #minimaxh3 #comfyuitutorial
+channel: @octopusinc_
+duration: 10:25
+source: https://www.youtube.com/watch?v=dk9CgSrSZXw
+upload_date: 20260903
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'Hello everyone, welcome to the channel. Today I\'m excited to show you my new custom Min Max A3 workflow "reference in video". This time we go even further with AI face replacement using SAM 3 masking.'
+
+[00:12] [scene:talk]
+VISUAL: 
+AUDIO: 'With this process, you can take a video, provide a reference face, and automatically replace the face in the video while preserving the original motion and structure of the video. Best of all, I\'ve optimized the entire process for GPUs with'
+
+[00:24] [scene:talk]
+VISUAL: 
+AUDIO: 'low video memory, including users with 6GB of VRAM. In this guide, I\'ll show you how to get everything set up, set up your workflow by simply uploading your reference face and video, set up a'
+
+[00:36] [scene:talk]
+VISUAL: 
+AUDIO: 'SAM 3 masking query, and create your first face swap video. So if you want to see what\'s possible, stay tuned as we\'re going to put this workflow to the test. And without further ado, let\'s begin. So, this workflow'
+
+[00:50] [scene:talk]
+VISUAL: 
+AUDIO: 'is based on another version of Min Max A3, the "reference in video" model, which allows us to edit video from an input image or video. And for video editing, we will also'
+
+[01:02] [scene:talk]
+VISUAL: 
+AUDIO: 'need masking. The best way to do this is to use masking through the latest SAM 3 checkpoint. So you enter the query here, the model will try to'
+
+[01:14] [scene:talk]
+VISUAL: 
+AUDIO: 'create a mask like you see here, and that will allow you to edit just that part of the video. For example, here I chose the face, but you can choose hair, body, or'
+
+[01:26] [scene:talk]
+VISUAL: 
+AUDIO: 'anything else you want. But before using this workflow, you will need to install additional nodes and download a few models, starting with this SAM 3 model. So, following this link, you'
+
+[01:39] [scene:talk]
+VISUAL: 
+AUDIO: 'see that we are on the comfyui.org website. Just click download model. Once the model is downloaded, go to the root folder of ComfyUI and find the models subfolder. Here,'
+
+[01:51] [scene:talk]
+VISUAL: 
+AUDIO: 'go to the checkpoints subfolder and paste your model there. After that, you will need to install a few additional masking nodes to make everything work. All you need to'
+
+[02:04] [scene:talk]
+VISUAL: 
+AUDIO: 'do is copy the code here, go back to the ComfyUI root folder, and enter the custom nodes folder. I type CMD here, paste the code, press Enter, and everything will install automatically. Another'
+
+[02:16] [scene:talk]
+VISUAL: 
+AUDIO: 'important thing is the optimization node. If you are missing an optimization node, all you need to do is click on " install missing custom nodes" . Okay, now that we have everything ready,'
+
+[02:28] [scene:talk]
+VISUAL: 
+AUDIO: 'restart ComfyUI and we are ready to use this workflow. So, as you can see, for this workflow you will need a reference face or image, as well as a reference video. As a reference video we'
+
+[02:41] [scene:talk]
+VISUAL: 
+AUDIO: 'use this, you can see that it is a close-up video where a woman is looking directly into the camera. So, I want to do a face swap along with a head. I will use this image of a woman'
+
+[02:55] [scene:talk]
+VISUAL: 
+AUDIO: 'as a reference. However, to increase accuracy, I will also include other images with different viewing angles, like this and this. So if you are'
+
+[03:07] [scene:talk]
+VISUAL: 
+AUDIO: 'having trouble getting images with such angles, you can use this frog subset. This will help you a lot in creating other'
+
+[03:19] [scene:talk]
+VISUAL: 
+AUDIO: 'species. All you need to do is upload your main image here and click "run ". And the workflow will automatically create other versions for you. So, this is actually the first step. The next step is'
+
+[03:32] [scene:talk]
+VISUAL: 
+AUDIO: 'to add a prompt or keywords for masking. For example, here I add "face", " head". I will also include "hair" as it was not recognized during the last run.'
+
+[03:45] [scene:talk]
+VISUAL: 
+AUDIO: 'You can also see that we have another model. So, I\'m using the Minimax H3 INT8 Comverge version, which seems to work well for me, even better than the GGML version in terms of quality and'
+
+[03:58] [scene:talk]
+VISUAL: 
+AUDIO: 'speed. Next we have the CLIP Minimax H3 GGML version. We have a VAE, and the checkpoint here is needed for camouflage. Regarding the resolution , I didn\'t choose the resolution selector'
+
+[04:10] [scene:talk]
+VISUAL: 
+AUDIO: 'directly, and you can see the table here. If you want to increase the resolution, that will of course give better results. But right now I\'m working with a resolution of 0.3 megapixels'
+
+[04:23] [scene:talk]
+VISUAL: 
+AUDIO: 'because we\'re making a video of the process of eating and our model will only focus on the head. Next we will see what this subgraph consists of. You see, we have a lot going on here'
+
+[04:35] [scene:talk]
+VISUAL: 
+AUDIO: ': a model, input video preprocessing, SAM three masking, empty latent space creation, sampling, and an optimization node. So we\'ll start'
+
+[04:48] [scene:talk]
+VISUAL: 
+AUDIO: 'directly with this optimization node. You can see that I am using back-end attention and the Minimax sampling model. After that, we have the application of spectrum . And almost all of these nodes are here to'
+
+[05:00] [scene:talk]
+VISUAL: 
+AUDIO: 'increase or optimize the generation speed, including H3SLI and sole attention. However, for Minimax chunk feed forward, these nodes exist only to reduce the peak'
+
+[05:12] [scene:talk]
+VISUAL: 
+AUDIO: 'load on VRAM that may occur during initial startup or video generation. And finally, here we have an eight-step or four-step LoRA for transferring from a video link. You see, sometimes'
+
+[05:25] [scene:talk]
+VISUAL: 
+AUDIO: 'it is needed, but if you want the best result with the purest quality, I strongly advise you to bypass it. But if you want to test the model,'
+
+[05:37] [scene:talk]
+VISUAL: 
+AUDIO: 'be sure to enable this LoRA, then go to the steps in the sample group and change them to four. This way you will see what the model is capable of. You\'ll also get faster results'
+
+[05:49] [scene:talk]
+VISUAL: 
+AUDIO: 'because we only use four steps. After that, when you are satisfied, you can increase the number of steps to 20 and turn off LoRA to get the best quality. So, regarding the'
+
+[06:01] [scene:talk]
+VISUAL: 
+AUDIO: 'incoming video, it will be resized according to our resolution. It will then be used as a reference here for these MinMax A3 reference to'
+
+[06:14] [scene:talk]
+VISUAL: 
+AUDIO: 'video nodes. This is almost similar to the " picture in video" feature we\'ve seen in other MinMax tutorials. It contains the width, height, length of'
+
+[06:26] [scene:talk]
+VISUAL: 
+AUDIO: 'our video, and we will also add a reference image of zero, one, or two. And sometimes you can also add a reference video with audio and the video itself. So now I\'m'
+
+[06:39] [scene:talk]
+VISUAL: 
+AUDIO: 'just using a reference image to do the face swap. It works like this : first we try to create a mask here using a modified version of our input video. You will see that'
+
+[06:51] [scene:talk]
+VISUAL: 
+AUDIO: 'this 3D video work will attempt to create masking using tracking data and visualizes the results here using B-box tracking. Here we have a white mask, and'
+
+[07:04] [scene:talk]
+VISUAL: 
+AUDIO: 'here we have a mask with specific coordinates or tracking points. This data will then be used directly, as you see here, with this mask to latent space node'
+
+[07:16] [scene:talk]
+VISUAL: 
+AUDIO: 'to create a set latent noise mask. The workflow will also need to encode our video after resizing to create this latency. So, here we have the encoded video data and the mask'
+
+[07:28] [scene:talk]
+VISUAL: 
+AUDIO: 'created using SAM 3. Together, they will create the latent video data. For audio, we will also use this solid mask creation in conjunction with VAE encode audio to'
+
+[07:41] [scene:talk]
+VISUAL: 
+AUDIO: 'create audio latency as well. We will use this ATX video to combine both latencies and use the final data here in the sample. So, this technique is very efficient for'
+
+[07:53] [scene:talk]
+VISUAL: 
+AUDIO: 'video editing as it focuses only on a specific part of the video and consumes less video memory. So when we\'re all set up, our video will be saved here, outside of the subgraph. Now that'
+
+[08:05] [scene:talk]
+VISUAL: 
+AUDIO: 'you know how the workflow works, let\'s take a look at the results created with it. So, here are the results of the face deformation, and you can clearly see their quality. The'
+
+[08:17] [scene:talk]
+VISUAL: 
+AUDIO: 'face swap looks pretty good, and you can see the incredible video quality that is beautifully preserved in all three examples, including hair movement and facial details in the'
+
+[08:30] [scene:talk]
+VISUAL: 
+AUDIO: 'image. Based on this, I also tried to do a body swap and here are the results I got. You can see that sometimes we get good motion synchronization, but sometimes the model is'
+
+[08:42] [scene:talk]
+VISUAL: 
+AUDIO: 'unable to copy the exact motion of the original video. So it\'s also a pretty good way to replace the body. However, we still can\'t figure out how to copy the exact'
+
+[08:54] [scene:talk]
+VISUAL: 
+AUDIO: 'movement of the original video. Okay, that\'s all for today. I hope you learned how to do a face swap. So, you will need images, an input video, and if you are having difficulty with other images,'
+
+[09:06] [scene:talk]
+VISUAL: 
+AUDIO: 'you can also try using Flux to Client . This is a ready-to- use workflow. All you need to do is upload your media files. After that, if you want better quality or your'
+
+[09:19] [scene:talk]
+VISUAL: 
+AUDIO: 'PC has more video memory, you can try increasing the width and height according to this table and you will get different or better results. I highly recommend using this'
+
+[09:31] [scene:talk]
+VISUAL: 
+AUDIO: 'workflow for face replacement. However, it is not very accurate for body replacement, as it fails to copy all the movements of the reference video. Thanks to all these optimization techniques, we can get'
+
+[09:43] [scene:talk]
+VISUAL: 
+AUDIO: 'results faster. I managed to complete the face swap in 20 minutes, which is pretty good. By the way, I didn\'t try to compare, as this is my first experience using the'
+
+[09:55] [scene:talk]
+VISUAL: 
+AUDIO: '"reference to video" model, but overall this is an acceptable generation time for my 6GB RTX 3060 graphics card . If you enjoyed this video, please give it a like, subscribe to my channel, leave'
+
+[10:07] [scene:talk]
+VISUAL: 
+AUDIO: 'a comment below, and don\'t forget to become a patron on my Patreon page, where you can get early access to my workflows and ask for additional help . And if you can\'t access Patreon, you can also become a sponsor on'
+
+[10:19] [scene:talk]
+VISUAL: 
+AUDIO: 'YouTube to get early access to my content. So, thank you.'
