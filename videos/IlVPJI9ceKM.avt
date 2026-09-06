@@ -1,0 +1,288 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: ComfyUI: Fixing MiniMax H3 Motion Smearing with De-RoPE
+channel: @octopusinc_
+duration: 14:59
+source: https://www.youtube.com/watch?v=IlVPJI9ceKM
+upload_date: 20260906
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:intro]
+VISUAL: Creator on screen, a dark animated video plays in the background.
+AUDIO: 'Hello everyone. Welcome back. Today we will talk about video blurring in Min Max H3. I think we\'ve all seen this'
+
+[00:13] [scene:talk]
+VISUAL: 
+AUDIO: 'behavior in video models over the past few years, where the image gets smeared, torn, or blurry, whatever we call it. Here I have a video, and if I'
+
+[00:26] [scene:talk]
+VISUAL: 
+AUDIO: 'look at the footage, here it is. This shot is perfect. So today we\'re going to talk about how to fix these blurry, "torn" latencies, as I call them. Because, in'
+
+[00:38] [scene:explanation]
+VISUAL: Diagram titled "WHY FAST MOTION CAN SMEAR IN H3" explaining temporal compression.
+AUDIO: 'essence, that\'s exactly what\'s happening. But first we want to understand why this happens, right? Why is this shot almost'
+
+[00:51] [scene:talk]
+VISUAL: 
+AUDIO: 'perfect, and then it gets worse, worse and worse. Worse. We want to first understand what actually causes this. To do this, I made a diagram to'
+
+[01:03] [scene:talk]
+VISUAL: 
+AUDIO: 'visually show what exactly is happening in MiniMax H.264. So, MiniMax and most video models compress video both spatially—in terms of'
+
+[01:15] [scene:talk]
+VISUAL: 
+AUDIO: 'X and Y resolution—and temporally. And in MiniMax this equation looks like this. One frame is 4:4:4:4, which gives us this time compression in'
+
+[01:28] [scene:explanation]
+VISUAL: Close-up on the diagram showing "FAST ACTION PUTS MORE DETAIL INTO THE SAME TIME SPAN".
+AUDIO: 'five latencies. And that\'s why when you change the number of frames to render, they do so in increments so that the math converges'
+
+[01:40] [scene:talk]
+VISUAL: 
+AUDIO: 'when you create the video. But the problem is that everything works fine with smooth motion, right? The camera moves slightly. The difference between frames is'
+
+[01:54] [scene:talk]
+VISUAL: 
+AUDIO: 'subtle enough that the model can process it and reproduce this movement over time. Because we have to remember that these four frames are in the same representation. This is a condensed'
+
+[02:07] [scene:demo]
+VISUAL: Creator on screen, an animated video of a character running in a forest plays in the background.
+AUDIO: 'representation of the same thing . When the movement is fast, the model essentially averages it. If they\'re all on the grid, the motion is averaged out, and since there\'s a lot going on in those four'
+
+[02:19] [scene:talk]
+VISUAL: 
+AUDIO: 'frames , the model doesn\'t know which side to turn on, and the result is blurring, " smearing," tearing, and complete disappearance of objects in the video. So how do you fix this? How do'
+
+[02:32] [scene:talk]
+VISUAL: 
+AUDIO: 'we eliminate such things ? Because if I continue, even a slight movement here looks quite clear, right? But this frame right here,'
+
+[02:45] [scene:talk]
+VISUAL: 
+AUDIO: 'compared to the next one. This question is not about whether video models can output high resolution. Everyone wants to upscale, upscale, upscale. This is more of a temporary problem. Time.'
+
+[02:57] [scene:explanation]
+VISUAL: Diagram titled "HOW DE-ROPE WORKS" illustrating the four steps: Generate Baseline, Detect Fast Bursts, Stretch Time, Refine Motion.
+AUDIO: 'We need to improve the temporal resolution. Today I created a workflow for us, the idea of ​​which is very simple. We are going to perform a'
+
+[03:10] [scene:talk]
+VISUAL: 
+AUDIO: 'video generation derouping. And what does that mean? We\'ll take our generated video. We will use a tool to detect chaotic motion frames. We will essentially'
+
+[03:22] [scene:talk]
+VISUAL: 
+AUDIO: 'interpolate or add additional intermediate frames into this time span. We will then apply diffusion to this slow motion video. And then we\'ll use this'
+
+[03:34] [scene:ui]
+VISUAL: ComfyUI workflow graph with numerous interconnected nodes.
+AUDIO: 'time recovery to actually isolate the difference. That is, we will get rid of unnecessary frames, since we just added new ones, so the video will play slower. We will discard these frames and return the video to'
+
+[03:47] [scene:talk]
+VISUAL: 
+AUDIO: 'normal speed . So, that\'s the idea. This is what we are going to do. We already have a workflow that we can dive into, and it looks something like this . It looks quite complicated, but it\'s not'
+
+[04:01] [scene:talk]
+VISUAL: 
+AUDIO: '. This is a two-pass system. We do two passes, but we don\'t scale the image, not in the traditional sense, we scale in time. So, all the examples'
+
+[04:15] [scene:talk]
+VISUAL: 
+AUDIO: 'I\'m going to show you have the same resolution side by side. One is rendered or scaled in time, and the other is baseline. We have a pirate character,'
+
+[04:28] [scene:comparison]
+VISUAL: Side-by-side video comparison: "A | ORIGINAL BASELINE" vs "B | DE-ROPE" of a character running in a forest.
+AUDIO: 'and I\'m going to show you examples of him doing a lot of quick moves so we can compare them side by side. This character is just'
+
+[04:40] [scene:talk]
+VISUAL: 
+AUDIO: 'running through the forest, the original version is on the left, and the edited version is on the right. Let\'s play this a few times. Let\'s take a look, and then slow it down frame by frame to'
+
+[04:52] [scene:talk]
+VISUAL: 
+AUDIO: 'explore what\'s going on here. One more time. OK. Maybe'
+
+[05:06] [scene:comparison]
+VISUAL: Close-up of the running character comparison, showing motion blur on the left.
+AUDIO: 'it\'s a little hard to see. So we\'ll dig in and do it frame by frame. As I said , the video on the right is not'
+
+[05:20] [scene:talk]
+VISUAL: 
+AUDIO: 'scaled in the traditional sense, even though it went through the system. I\'m looking at the left side right now . Trying to find a blurry shot. Here is a great example. The frame on'
+
+[05:35] [scene:talk]
+VISUAL: 
+AUDIO: 'the left is completely mangled. This movement is very fast. Here are all three shots, actually. One, two, three. Very, very bad. You can see his'
+
+[05:47] [scene:talk]
+VISUAL: 
+AUDIO: 'face. Look at this. This guy\'s face is completely...I mean, it\'s not even...it\'s just not there. Yes, that was also a good example. You can see his boot.'
+
+[06:03] [scene:talk]
+VISUAL: 
+AUDIO: 'His boot is here. This is a good example. Look, look at this comparison. This whole hand. This is, in fact, what'
+
+[06:16] [scene:talk]
+VISUAL: 
+AUDIO: 'we do. We slow down the process and give the model more time to process these areas. Because we take a movement that'
+
+[06:33] [scene:comparison]
+VISUAL: Side-by-side comparison of the running character, showing overall clarity.
+AUDIO: 'happens very quickly and just stretch it out, we give the system more time to understand that moment, because it\'s so fleeting. And then we'
+
+[06:47] [scene:talk]
+VISUAL: 
+AUDIO: 'render on top, and the difference in clarity is just amazing, look at that. This is just incredible, right? Look at the detail of his hands compared to the other one. It\'s impossible to even'
+
+[06:59] [scene:talk]
+VISUAL: 
+AUDIO: 'compare, especially the face, you know? But this is not upscaling. That\'s the craziest thing about this. So let\'s look at another example. I\'ll play this video now. MiniMax is so cool, guys. The'
+
+[07:20] [scene:comparison]
+VISUAL: Side-by-side comparison of a character jumping on a ship, showing background detail improvements.
+AUDIO: 'fact that this runs locally still amazes me. OK. So, let\'s dive into this. As you can see, this system adds more movement in some cases because we are again slowing down the'
+
+[07:32] [scene:talk]
+VISUAL: 
+AUDIO: 'playback. You can see that there are more frames between these movements to make everything look logical. Let\'s find these fragments, here a lot of'
+
+[07:44] [scene:talk]
+VISUAL: 
+AUDIO: 'details gradually appear in the background. If you look here, notice the blur here and how sharp everything looks here. Not so much on the character itself, but on the background in general, right? This affects not only'
+
+[07:58] [scene:talk]
+VISUAL: 
+AUDIO: 'specific elements, but the entire video as a whole. And of course, here and here—the whole background looks much cleaner on the right. Let\'s continue.'
+
+[08:12] [scene:comparison]
+VISUAL: Side-by-side comparison of a sword fight, focusing on weapon and hand clarity.
+AUDIO: 'Look at all this, the detail on this guy\'s face, boom. You know, again, more clarity. Look at this guy\'s hand. What else is there? All this movement, the fall. If'
+
+[08:25] [scene:talk]
+VISUAL: 
+AUDIO: 'you look up here, all this noise, all this dirt, compared to this. Let\'s move on to another example. Sword fighting . Of course, some points here are not entirely'
+
+[08:47] [scene:talk]
+VISUAL: 
+AUDIO: 'clear, but let\'s figure out what\'s going on here. Both...it\'s a complicated case. There are a lot of fast movements in both videos. This is a good example. I really managed to clean all this " garbage" around the hand in the middle.'
+
+[08:59] [scene:ui]
+VISUAL: Full ComfyUI workflow graph.
+AUDIO: 'Look at all this. Same here. They both still hold their swords, unlike the one sword on this side. This is very good. Lots of clarity on the right, two swords. Here,'
+
+[09:11] [scene:talk]
+VISUAL: 
+AUDIO: 'for example, the guy has no arm at all. So, this is our workflow. At the top we have the query,'
+
+[09:24] [scene:talk]
+VISUAL: 
+AUDIO: 'aspect ratio, resolution in megapixels, and duration in seconds. The main idea of ​​the whole system is that we render the video in'
+
+[09:36] [scene:ui]
+VISUAL: Zoomed-in view of a section of the ComfyUI workflow, showing specific nodes.
+AUDIO: 'one pass. It gets here. The latent state is immediately transmitted to a kind of " motion oracle," which scans the video for'
+
+[09:49] [scene:talk]
+VISUAL: 
+AUDIO: 'rapid movements and identifies them and areas of intense activity. It then generates a hold map, which is encoded here, but we'
+
+[10:01] [scene:talk]
+VISUAL: 
+AUDIO: 'use this map later to discard extra frames. This is transcoded, and then there\'s a second pass, refinement, a partial second'
+
+[10:13] [scene:talk]
+VISUAL: 
+AUDIO: 'pass, where the video is stretched and we render the second video. We are stretching the video. We process these areas and then use a hold map to'
+
+[10:25] [scene:ui]
+VISUAL: Another zoomed-in section of the ComfyUI workflow, showing model loading and diffusion nodes.
+AUDIO: 'remove excess frames and return the video to a clean 24 frames per second. We then take these videos, tag them, and combine them for side-by-side comparison. So, this system does not'
+
+[10:39] [scene:talk]
+VISUAL: 
+AUDIO: 'use any Turbo LoRA. There\'s a lot that can be sped up here, but I wanted to give you a basic understanding of this technique. I wanted to give you some parameters to experiment with,'
+
+[10:51] [scene:talk]
+VISUAL: 
+AUDIO: 'as this is still very much a manual process. We have common planning steps. So, we use 25 steps again. The idea is that values ​​below 0.5'
+
+[11:03] [scene:ui]
+VISUAL: ComfyUI workflow showing prompt input, subject assets, and resolution settings.
+AUDIO: 'improve the image but do not change its overall structure. And anything above 0.5 will actually change the video. And change how the movement is interpreted'
+
+[11:19] [scene:talk]
+VISUAL: 
+AUDIO: 'in that part of the clip. Exactly the same way the denoise parameter works during upscaling. Okay, let\'s run some queries.'
+
+[11:31] [scene:talk]
+VISUAL: 
+AUDIO: 'Write another interesting query with fast movement to test this. Okay, we have our request. I\'m inserting it. Now we\'ll'
+
+[11:44] [scene:talk]
+VISUAL: 
+AUDIO: 'run the render and see you in a minute. It will go through the first pass and render. It will then go through a second stretch pass. So, I\'ll see you in a moment. Okay, we have our'
+
+[11:57] [scene:comparison]
+VISUAL: Side-by-side comparison of a character running through a market.
+AUDIO: 'video, let\'s see what happened . I\'ve already watched this initial part. It seems Oracle didn\'t touch it , because there are frames where the original video'
+
+[12:09] [scene:talk]
+VISUAL: 
+AUDIO: 'looked better. But if we move on to this section, to the running part, it\'s much more noticeable. This is where Oracle really'
+
+[12:21] [scene:talk]
+VISUAL: 
+AUDIO: 'came into play, catching this rapid movement and correcting it. Look at this first frame, the shoe. This all looks much, much better. This frame too.'
+
+[12:34] [scene:ui]
+VISUAL: ComfyUI workflow with a new prompt for a lunar paintball scene.
+AUDIO: 'Basically, this whole section with jumps, well, see for yourself. Huge difference. Maybe we\'ll just lose everything completely. The video, of course, is so-so, I won\'t'
+
+[12:51] [scene:talk]
+VISUAL: 
+AUDIO: 'lie, but it made the fast- moving part much more coherent. But let\'s run another example. Let\'s use a different prompt. Here is our prompt. We'
+
+[13:03] [scene:talk]
+VISUAL: 
+AUDIO: 'will copy it. Let\'s move it here and render it. See you in a second. So, we have a video. Let\'s play it and then review it. Is this the recording you are watching? Peace.'
+
+[13:15] [scene:talk]
+VISUAL: 
+AUDIO: 'The audio is just awful, so we\'ll turn it off . Okay, one more time. It\'s hard to say here. So, let\'s get started and walk through it.'
+
+[13:28] [scene:comparison]
+VISUAL: Side-by-side comparison of a lunar paintball scene, showing clearer projectiles in the De-RoPE version.
+AUDIO: 'This is a beautiful shot. It really cleaned up the frame well, and now there are two of them. Same with this. In fact, look at this shot at the beginning. The way the bullet, the'
+
+[13:42] [scene:talk]
+VISUAL: 
+AUDIO: 'shooting animation on the right, is much clearer. I don\'t even know what this even is? What is it? It looks so good. Yes, it is quite obvious to me , friends, that the'
+
+[13:55] [scene:talk]
+VISUAL: 
+AUDIO: 'temporal upscaling method will be extremely important . That\'s probably all . I will post this workflow on my Patreon. Come in and pick it up. Thanks to MAI nodes for the nodes for Comfy.'
+
+[14:07] [scene:outro]
+VISUAL: Creator on screen, GitHub page for ComfyUI-MAINodes visible in the background.
+AUDIO: 'I used their nodes to create this workflow. The deroping method. I think I\'ll be experimenting in the coming days to package this into an even more compact'
+
+[14:19] [scene:talk]
+VISUAL: 
+AUDIO: 'system. I find this method very interesting, but there is still room for development and improvement. But it\'s really'
+
+[14:31] [scene:talk]
+VISUAL: 
+AUDIO: 'promising, and it shows that most of the quality characteristics we expect from these video models lie not so much in the overall pixel density as before, but in the model\'s ability to interpret time.'
+
+[14:43] [scene:talk]
+VISUAL: 
+AUDIO: 'So yes, I\'ll leave a link to that in the description as well. But again , thank you all so much for watching. And again, the workflow will be on my Patreon, link in the'
+
+[14:55] [scene:talk]
+VISUAL: 
+AUDIO: 'description. Hope to see you in the next video.'

@@ -1,0 +1,196 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Video DeltaNet Minimax H3 in ComfyUI — Faster Base Model Without Losing Quality
+channel: @octopusinc_
+duration: 10:13
+source: https://www.youtube.com/watch?v=kqyPTv77j3g
+upload_date: 20260904
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'So, if you generate videos using MiniMax H3, you know about the main problem. The longer your video becomes, the slower the generation , and all this is due to the attention mechanism . Every frame interacts with every other frame, so the computational complexity grows quadratically.'
+
+[00:12] [scene:talk]
+VISUAL: 
+AUDIO: 'Double the length —and the work becomes much more than just double. But a new open-source project called Video Delta Net has emerged that solves this very problem. In this video, we\'ll see how it works compared to'
+
+[00:24] [scene:talk]
+VISUAL: 
+AUDIO: 'other attention modes. So, here\'s the idea. Instead of each frame interacting with every other, Video Delta Net divides attention into two branches. Full attention is maintained for neighboring frames , so'
+
+[00:36] [scene:talk]
+VISUAL: 
+AUDIO: 'local motion and sequence remain unchanged. And for the remote context, the model compresses it into a lightweight state that operates at a constant cost. Thus, attention changes from quadratic to'
+
+[00:48] [scene:talk]
+VISUAL: 
+AUDIO: 'linear depending on the length of the video. The longer your video, the bigger the win. And the result is almost lossless quality. According to their benchmark, VDNA H3 renders a 14.4- second clip in about 11 seconds'
+
+[01:00] [scene:talk]
+VISUAL: 
+AUDIO: 'on a cluster of 8 H200 GPUs. But we don\'t all have 8 H200 GPUs at hand, do we ? And here\'s the best part. Someone ported this to a native ComfyUI node format that runs on a single'
+
+[01:12] [scene:talk]
+VISUAL: 
+AUDIO: 'consumer graphics card , and I ran it on my Pro 6000. On long clips, you get about a 2.6x speedup over the regular model with the same eight-step turbo sampling. It\'s also very easy to connect. You simply'
+
+[01:24] [scene:talk]
+VISUAL: 
+AUDIO: 'put one node between the H3 loader and the sampler, load the branch weights—and you\'re done. No new base models, retraining, or additional Python packages. Let\'s take a look at this. So, both of the videos'
+
+[01:37] [scene:talk]
+VISUAL: 
+AUDIO: 'I\'m testing here use the quick video tuning that we talked about last time, and now VDNH3. And it is installed as a package of ComfyUI custom nodes. First of'
+
+[01:49] [scene:talk]
+VISUAL: 
+AUDIO: 'all, you go into the manager, and after installation you get two things. Advanced model node with more options and a basic node. For this test, I am using an advanced VDN H3 node.'
+
+[02:01] [scene:talk]
+VISUAL: 
+AUDIO: 'If you want to add it to your workflow, just search for the keyword VDN and these two nodes will appear. Essentially, it applies one patch node to the running kernel and then'
+
+[02:14] [scene:talk]
+VISUAL: 
+AUDIO: 'checkpoints the VDN. This is checkpoint stage DMD step 250, which is taken from the official VDN repository on Hugging Face. Go to the files section and you will see several'
+
+[02:26] [scene:talk]
+VISUAL: 
+AUDIO: 'versions there. The one that works with ComfyUI is at step 250. You download the entire folder with all the included files and it is placed in your ComfyUI models folder . The'
+
+[02:38] [scene:talk]
+VISUAL: 
+AUDIO: 'GitHub repository explains this. You create a folder called VDN, and the model weights are stored in this folder . The entire catalog is saved there. This is the installation. Then you plug this into the model pipeline. This'
+
+[02:50] [scene:talk]
+VISUAL: 
+AUDIO: 'purple dot here, as you can see, VDNH3 is connected to the model before anything else, which triggers the video generation. Now the sampling part uses the same'
+
+[03:02] [scene:talk]
+VISUAL: 
+AUDIO: 'settings for VDNH3 and the quick video test. The only difference is how the model is loaded, and you can see how both options handle different motion, even fast action vs. slow motion as a result. I added'
+
+[03:14] [scene:talk]
+VISUAL: 
+AUDIO: 'both on purpose. The seven-tailed fox runs, charging straight at its opponent, and you can see that there is no latent upsampling here. This is just the raw output of the first sampling'
+
+[03:26] [scene:talk]
+VISUAL: 
+AUDIO: 'so we can check what both video generations actually look like. You can choose which option you like best . So, let\'s go back'
+
+[03:53] [scene:talk]
+VISUAL: 
+AUDIO: 'here and generate another one using the text in the video, and then move on to the reference in the video, which gives better results for the characters. I inserted a similar game battle scene into a text query,'
+
+[04:05] [scene:talk]
+VISUAL: 
+AUDIO: 'generating 10 seconds at 0.8 megapixel resolution. Again, fast and slow motion are combined in one clip. And one thing that is very obvious: the original fast video'
+
+[04:17] [scene:talk]
+VISUAL: 
+AUDIO: 'is pixelated. In this second part of the video, it starts to pixelate when there is rapid movement. Then return to the VDN output. The same'
+
+[04:29] [scene:talk]
+VISUAL: 
+AUDIO: 'moment, and these actions are much smoother. Look at that big fan wave, and remember, there\'s no upsampling here either. This is the raw'
+
+[04:41] [scene:talk]
+VISUAL: 
+AUDIO: 'result of the first sampling without any graphics enhancement. I do this intentionally to test the true "raw" output of each model. I see some people using a lot of steps, a lot of improvements,'
+
+[04:53] [scene:talk]
+VISUAL: 
+AUDIO: 'special nodes and showing that as a result. But this does not reflect what the technology itself actually produces. Now, for reference in the video, I\'ve set up three different'
+
+[05:05] [scene:talk]
+VISUAL: 
+AUDIO: 'sampling methods with different techniques. The top one uses VDNH3, connected the same as in the previous workflow demonstration. Sampling has the same settings for all three. The second uses Turbo Laura with a focus on Sage, the usual'
+
+[05:17] [scene:talk]
+VISUAL: 
+AUDIO: 'way most people run a sampler with a small number of steps. And the third uses Turbo Laura with Comfy Kitchen attention plus Sol attention patch. This is another attention mode to test with this. I have two characters here again'
+
+[05:30] [scene:talk]
+VISUAL: 
+AUDIO: ', just like in those game scenes from text queries. Two characters are defined in the subject definitions, then a summary, content analysis, detailed description. All of this runs for 10 seconds at 0.8'
+
+[05:42] [scene:talk]
+VISUAL: 
+AUDIO: 'megapixels, fed to all three sampling settings. Let\'s try this one. Okay , the video is generated, and here we have all three results, obtained using the same queries and'
+
+[05:54] [scene:talk]
+VISUAL: 
+AUDIO: 'almost the same settings. And there is one thing we should remember. In the VDN startup, Turbo LoRA is not connected at all. This purely attention mode makes it faster, using the'
+
+[06:06] [scene:talk]
+VISUAL: 
+AUDIO: 'standard eight steps. The other two have both attention mode and Turbo LoRA activated. So, theoretically, launches with Sage attention and comfy kitchen should be a little faster. Of course, we can add LoRA to the VDN'
+
+[06:18] [scene:talk]
+VISUAL: 
+AUDIO: 'for even more speed, but by default this attention mode already supports eight-step sampling. And the concept behind this is almost zero loss from the initial'
+
+[06:30] [scene:talk]
+VISUAL: 
+AUDIO: 'model weights. It is much better at preserving the original weight data when creating the video. So, as you can see in the results, the first one is VDN, and it\'s 2 minutes 22 seconds without any LoRA . Only attention mode enabled in the sample.'
+
+[06:42] [scene:talk]
+VISUAL: 
+AUDIO: 'That\'s all there is. The second, Turbo LoRA with Sage attention, takes 1 minute 51 seconds. And the last one, Turbo LoRA with comfy kitchen attention, — 1 minute 54 seconds. The'
+
+[06:55] [scene:talk]
+VISUAL: 
+AUDIO: 'next test is VDN'
+
+[07:27] [scene:talk]
+VISUAL: 
+AUDIO: 'attention combined with the Turbo LoRA model. Attention mode plus LoRA together, let\'s see how it works. Because theoretically , according to research, VDN itself already copes with'
+
+[07:39] [scene:talk]
+VISUAL: 
+AUDIO: 'fast step sampling, and the numbers show that it provides better graphics quality. I will generate more examples, and the next thing I will test is VDN attention combined with Turbo LoRA. The same'
+
+[07:51] [scene:talk]
+VISUAL: 
+AUDIO: 'mechanism as in the other two groups. I don\'t think I need to separately test comfy kitchen with Turbo LoRA, as it\'s not faster than Sage attention, and the quality is almost the same as Turbo with Sage. So I will'
+
+[08:03] [scene:talk]
+VISUAL: 
+AUDIO: 'focus the comparison on these two combinations, both with Turbo LoRA and the corresponding attention modes activated. Okay, here\'s another example. I wanted to record this while'
+
+[08:15] [scene:talk]
+VISUAL: 
+AUDIO: 'making the video. This one used VDN. So the 2 minutes 19 seconds above were generated with this setting. Using Turbo LoRA doesn\'t make much difference for these 10- second scenes at the same'
+
+[08:27] [scene:talk]
+VISUAL: 
+AUDIO: 'resolution. This is a few seconds faster than the previous launch with LoRA enabled, but graphically it makes no difference in quality, as only the generation speed plays a role. But when I turn off Turbo LoRA and'
+
+[08:39] [scene:talk]
+VISUAL: 
+AUDIO: 'leave only the VDN connected, I see that the graphics sometimes render more clearly. Here, as you can see, both have just finished their work. Let\'s check the results. Obviously, the one on the right is Turbo with'
+
+[08:53] [scene:talk]
+VISUAL: 
+AUDIO: 'Sage attention without VDN. I see more pixelation during fast motion , whereas with VDN attention mode—look, the fox is rolling on the ground. You see,'
+
+[09:05] [scene:talk]
+VISUAL: 
+AUDIO: 'the picture is clearer than the one on the right. A. So yes, there are now'
+
+[09:30] [scene:talk]
+VISUAL: 
+AUDIO: 'many combinations for these AI video models and many different preferences. If you need video quality and at the same time generation speed, this VDN attention mode is a pretty good choice. Otherwise, for'
+
+[09:43] [scene:talk]
+VISUAL: 
+AUDIO: 'general setup, most people use Turbo Laura with Sage attention—it\'s the very first option on the market that many still trust. So, it depends on your outcome and how you want'
+
+[09:55] [scene:talk]
+VISUAL: 
+AUDIO: 'things to look. I will be creating more as I have designed several characters for these game scenes, so see you next time. This time.'
