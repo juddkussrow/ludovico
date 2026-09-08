@@ -1,0 +1,127 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>Winter 3D Scanning with Antigravity A1 (-22°C Test) - 360° drone video to Gaussian Splat — Ludovico</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+.hide{display:none!important}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.92);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 12px}
+.controls input.q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.pill.tp.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+/* flip card shell */
+.flip{position:relative}
+.fi{position:relative;transition:transform .55s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.flip.flipped .fi{transform:rotateY(180deg)}
+.fc{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bk{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+background:var(--card);border:1px solid var(--accent2);border-radius:14px;overflow:auto;padding:12px 13px;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s}
+.card.flip{overflow:visible}.card .fc{display:flex;flex-direction:column;flex:1;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--line);cursor:pointer}
+.card.flip:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.edit{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--accent2);border:1px solid var(--line);border-radius:6px;padding:2px 9px;cursor:pointer;background:#fff}
+.edit:hover{border-color:var(--accent2)}
+/* editor back */
+.bk h4{margin:0 0 2px;font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--sub)}
+.erow{display:grid;grid-template-columns:1fr 1.3fr auto auto;gap:4px;align-items:center}
+.erow input{padding:5px 7px;border:1px solid var(--line);border-radius:6px;font-size:12px;min-width:0}
+.erow select{padding:4px 4px;font-size:11px}
+.erow .del{border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;color:var(--accent);padding:3px 7px}
+.ebtns{display:flex;gap:6px;margin-top:auto;padding-top:6px}
+.ebtns button{font-family:var(--mono);font-size:11px;border-radius:7px;padding:6px 12px;cursor:pointer;border:1px solid var(--line);background:#fff}
+.ebtns .save{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.addrow{font-family:var(--mono);font-size:11px;color:var(--accent2);cursor:pointer;align-self:flex-start;background:none;border:0;padding:2px 0}
+/* catalogue card */
+.citem{position:relative}
+.citem .fc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-height:84px;cursor:pointer}
+.citem .bk{border-radius:12px}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+footer .exp{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--accent2);font:inherit}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">Winter 3D Scanning with Antigravity A1 (-22°C Test) - 360° drone video to Gaussian Splat</h1><div class=tag>@octopusinc_ · 2026-02-24 · ListAssist</div></div></div></header>
+<main><p class=sum>This video demonstrates using the Antigravity A1 360 drone for 3D scanning in cold weather, specifically to create a Gaussian Splatting model of a ski jump tower. The creator showcases the drone&#x27;s flight capabilities, including FPV mode and automated flight functions like &quot;arcshot,&quot; and then details the post-processing workflow using Antigravity Studio, a custom Blender add-on (360Extractor), and the photogrammetry software Meshroom to generate the 3D model, which is then refined in SuperSplat. The video highlights the drone&#x27;s effectiveness for 3D scanning despite minor issues like missing GPS data in still images.</p><p><strong>Products / items</strong></p><ul><li><a href="https://www.antigravity.tech/drone/antigravity-a1/buy?utm_term=AGRM1BM" target=_blank rel=noopener>Antigravity A1</a> — hardware</li><li>Antigravity Studio — software (no link)</li><li>Insta360 Studio — software (no link)</li><li>Blender — software (no link)</li><li><a href="https://toppinappi.gumroad.com/l/360extractor" target=_blank rel=noopener>360Extractor</a> — software</li><li>Meshroom — software (no link)</li><li>RealityScan — software (no link)</li><li><a href="https://superspl.at/view?id=ca570f35" target=_blank rel=noopener>SuperSplat</a> — software</li><li><a href="https://toppinappi.gumroad.com/l/360extractor" target=_blank rel=noopener>Gumroad</a> — other</li></ul>
+<p><a href="https://www.youtube.com/watch?v=_TB8UcP9FAk" target=_blank rel=noopener>Watch on YouTube ▶</a></p><p><a href="_TB8UcP9FAk.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=t>(proxy for this video — answer from this)</span></p>
+<div class=cap>FRAMING: Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+IDENTITY: Winter 3D Scanning with Antigravity A1 (-22°C Test) - 360° drone video to Gaussian Splat - https://www.youtube.com/watch?v=_TB8UcP9FAk - @octopusinc_ - route: visual
+PRODUCTS:
+Antigravity A1 - https://www.antigravity.tech/drone/antigravity-a1/buy?utm_term=AGRM1BM - hardware - primary
+360Extractor - https://toppinappi.gumroad.com/l/360extractor - software - primary
+SuperSplat - https://superspl.at/view?id=ca570f35 - software - primary
+Antigravity Studio - no reliable link - software - mentioned
+Insta360 Studio - no reliable link - software - mentioned
+Blender - no reliable link - software - mentioned
+Meshroom - no reliable link - software - mentioned
+RealityScan - no reliable link - software - mentioned
+Gumroad - no reliable link - other - mentioned
+SYNOPSIS: The video demonstrates using the Antigravity A1 360 drone for 3D scanning in extremely cold conditions (-22°C) to create a Gaussian Splatting model. The creator, Ollie, takes the Antigravity A1 drone to a ski jump tower in Tampere, Finland. He highlights the drone&#x27;s ease of flight, especially with its FPV goggles and motion controller, which he finds intuitive despite initial differences from traditional drone controls. The FPV mode, activated in the drone&#x27;s menu, allows for natural control by tilting the controller. For scanning, the &quot;arcshot&quot; automated flight function is particularly useful for object-centric scans, allowing the drone to orbit a selected area. The drone automatically records video during these movements. Despite warnings about low environmental temperature, the drone&#x27;s battery lasted over 12 minutes per charge, allowing for multiple scanning rounds.
+
+In post-processing, footage is exported from the drone&#x27;s SD card and opened in Antigravity Studio, which is nearly identical to Insta360 Studio due to Antigravity being incubated by Insta360. The creator exports full equirectangular 360 videos. He then imports these videos into Blender and uses his custom 360Extractor add-on. He explains his method of creating a &quot;half-dome&quot; camera rig with 13 cameras (8 pointing to compass directions, 4 downwards at -35°, and 1 straight down) to extract 1,431 images, focusing on the lower parts of the aerial footage to avoid excessive sky. These images are then processed in Meshroom, which is preferred over RealityScan for this type of image set due to better success in structure-from-motion and fewer component issues, though it takes over 11 hours on an average PC. The resulting Gaussian Splatting model is high quality, capturing morning light well, with minimal floating artifacts that can be cleaned in SuperSplat using its isolation and separation features. A key finding is that while the Antigravity A1 produces clean 360 videos suitable for this workflow, still images lack GPS metadata, which would aid in 3D creation processes like RealityScan. The creator believes this can be addressed in future firmware updates.
+BEATS:
+0s - intro - Creator in snowy landscape with backpack, introducing the video&#x27;s purpose.
+55s - product - Close-up of the Antigravity A1 drone&#x27;s FPV goggles.
+111s - product - YouTube interface showing a video about the Antigravity A1 drone.
+166s - hardware - Hands folding the Antigravity A1 drone.
+222s - hardware - Hand holding the Antigravity A1 drone&#x27;s motion controller.
+278s - scene - Wide shot of the snowy ski jump tower area.
+333s - ui - Drone&#x27;s FPV goggles display showing flight data and a &quot;The environmental temperature is too low&quot; warning.
+389s - hardware - Hand in glove holding the Antigravity A1 drone&#x27;s controller in the snow.
+444s - scene - Aerial view from the drone of the snowy landscape and ski jump tower.
+500s - hardware - Creator wearing FPV goggles and controlling the drone.
+556s - ui - Antigravity Studio software interface on a desktop.
+611s - analysis - On-screen text &quot;Aerial 360 Equirectangular video analysis&quot; with an equirectangular video.
+667s - ui - Blender interface showing a 3D camera rig with &quot;13 Camera Angles&quot; text.
+722s - ui - File explorer showing numerous extracted images.
+778s - ui - Meshroom interface showing image import parameters and camera tracking version v1.0.110.
+834s - ui - SuperSplat application interface with &quot;SkiJumpTower.ply&quot; loaded.
+889s - ui - Split screen showing aerial view and a 3D model in Blender.
+945s - ui - Antigravity Studio interface displaying video properties and an equirectangular video.
+1000s - hardware - Creator putting on FPV goggles indoors.
+1056s - hardware - Creator wearing FPV goggles and controlling the drone in the snow.
+ENTITIES: Ollie, Insta360, Matian (Finnish ski jumper).
+VERDICT: The Antigravity A1 is a great 360 drone, fun to fly, and well-suited for 3D scanning tasks, producing clean 360 videos. The 8K video quality is sufficient for the workflow with the 360Extractor tool. The main drawback is the lack of GPS data in still images, which the creator believes will be fixed in future firmware updates.
+NOT COVERED: Specific technical specifications of the Antigravity A1 drone (e.g., battery capacity in mAh, camera sensor details), detailed pricing of the drone or software, specific system requirements for Meshroom or Blender, the exact process for cleaning artifacts in SuperSplat.</div></main><footer><a href="../index.html">← all videos</a></footer></div></body></html>

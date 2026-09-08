@@ -1,0 +1,412 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: I Tested Every MiniMax H3 Speed Up So You Don't Have To
+channel: @octopusinc_
+duration: 20:25
+source: https://www.youtube.com/watch?v=BGpt57KBwU8
+upload_date: 20260906
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'I tested every Mini Max H3 speed optimization so you don\'t have to . Four attention modes, 13 turbo LoRA on the same GPU, with the same seed value, the same resolution and duration. And the table you see in the upper left corner will be'
+
+[00:12] [scene:talk]
+VISUAL: 
+AUDIO: 'filled with the generation results from worst to best throughout this video. And by the end, you\'ll know exactly which ones are worth your time and which ones you can skip. So, here are some short rules to keep things fair for all generations.'
+
+[00:24] [scene:talk]
+VISUAL: 
+AUDIO: 'Each clip in this video is 5 seconds long with a resolution of 1344 by 768. This resolution is important because most of these LoRAs were trained at 768p, so this is the size they should look best at. Again , the same sed-'
+
+[00:36] [scene:talk]
+VISUAL: 
+AUDIO: 'value for each run and the same initial image . The only thing that changes from clip to clip is what I test, namely speed optimizations. So, to establish a baseline, we generated a video, again 5'
+
+[00:48] [scene:talk]
+VISUAL: 
+AUDIO: 'seconds for everyone, and this is specifically at 20 steps without turbo-LoRA. So let\'s take a look. Pay attention to the quality, and then I\'ll show you how long it took. No turbo, no LoRA. 20 steps, normal'
+
+[01:00] [scene:talk]
+VISUAL: 
+AUDIO: 'attention. This is how this waiting felt before. So, now on the screen, in the upper left corner, we see that this baseline generation at 20 steps took 345 seconds, which is a very long time for a 5-second'
+
+[01:12] [scene:talk]
+VISUAL: 
+AUDIO: 'video. And this is despite the fact that I\'m using a 5090 with 32GB of video memory and 64GB of system RAM, and it still took this long. Let \'s go back to ComfyUI and look at some of these optimizations that'
+
+[01:25] [scene:talk]
+VISUAL: 
+AUDIO: 'you can use to speed up generation, and I\'ll walk you through them and explain them so that everything is clear to you. I will use the standard Min Max "from first to last frame" template directly in ComfyUI, and do the same for the'
+
+[01:38] [scene:talk]
+VISUAL: 
+AUDIO: '" video reference" mode. Secondly, I just want to say that I know I probably don\'t use every speed optimization method in this video because I already know someone will come in'
+
+[01:51] [scene:talk]
+VISUAL: 
+AUDIO: 'the comments or some of you will write, "Well, there\'s actually a Chudmaster 4000 accelerator that you didn\'t use." Listen, leave me alone. Please. There is too much new stuff coming out of Minimax every day'
+
+[02:04] [scene:talk]
+VISUAL: 
+AUDIO: '. Every time I go on Twitter , there\'s something new. So, I know I didn\'t use everything, but I took what was most important. So thank you for not bothering me. Quick guys, before we get to the video,'
+
+[02:16] [scene:talk]
+VISUAL: 
+AUDIO: 'I want to take a minute to promote my Discord and Patreon. If you need a direct consultation, a custom workflow, or a custom- built node, I now have a new system for that, and that\'s in addition to the free workflows that are already on the server, no strings attached, ready to download. I also regularly hold'
+
+[02:28] [scene:talk]
+VISUAL: 
+AUDIO: 'raffles there. In addition, there are many other channels, such as the support channel, where a community of over 2,000 members helps each other solve problems in real time. And if you want to support me even more, my Patreon has exclusive workflows and node sets that you won\'t find anywhere else. Like this'
+
+[02:40] [scene:talk]
+VISUAL: 
+AUDIO: 'incredibly flexible query building node— honestly, it\'s one of the most useful things I\'ve ever done. And then there\'s Metadata Forge, which removes and replaces your Exif data to make every image look like it was taken with a camera for your social media posts. I really appreciate it, guys. Thank you for taking the'
+
+[02:52] [scene:talk]
+VISUAL: 
+AUDIO: 'time to support me, and let\'s move on to the video. So let\'s be clear, because I\'m going to name a lot of letters and numbers now, and I don\'t want it to sound like a chaotic set of symbols. So, Minimax H3 is a video model that generates images and audio together in a'
+
+[03:05] [scene:talk]
+VISUAL: 
+AUDIO: 'single pass, and it has different variants, where the name indicates the type of input data. FL2VA stands for "first and last frame in video and audio". You give it a starting image,'
+
+[03:17] [scene:talk]
+VISUAL: 
+AUDIO: 'optionally an ending image, and it animates the transition between them, filling in the gaps. If you don\'t provide anything, it\'s just text in the video, and another model that Minimax provides is "ref to VA", meaning "reference in video and audio". So'
+
+[03:29] [scene:talk]
+VISUAL: 
+AUDIO: 'instead of the initial frame with the video reference, you pass in a photo of a person, a character sheet, or multiple photos and say, "this person is doing this," tagging it with a specific tag, and then you can'
+
+[03:41] [scene:talk]
+VISUAL: 
+AUDIO: 'tag the second person as "person two," and so on. You can add videos and label them as "video one " or "video two", and audio by labeling them as "audio one" or "audio two", and the model preserves their identity when creating the entire frame.'
+
+[03:53] [scene:talk]
+VISUAL: 
+AUDIO: 'Let\'s move on to the steps. I know most of you understand what steps are, but for those who are a little confused about their purpose: when the model generates a video, it starts with static noise and gradually cleans it up over several passes. And each such passage'
+
+[04:05] [scene:talk]
+VISUAL: 
+AUDIO: 'is a step. So you can imagine static noise in the first step, and with each subsequent iteration, the model takes that blurry image and cleans it up a little bit until it recognizes what\'s going on, adds context based on that'
+
+[04:17] [scene:talk]
+VISUAL: 
+AUDIO: 'noise reduction, and then moves on to the next step. The basic H3 model requires about 20 steps, and each step takes time, so fewer steps means higher speed. Now, inside those blue nodes on the screen,'
+
+[04:29] [scene:talk]
+VISUAL: 
+AUDIO: 'we have Turbo LoRA. You see , we have quite a few of them, so I\'ll explain what they do. So, Turbo LoRA is a small additional file, usually up to 2 GB, that retrains the model to do the job, for example, in four or eight steps'
+
+[04:41] [scene:talk]
+VISUAL: 
+AUDIO: 'instead of the basic 20. This is where the names "four-step" and " eight-step" come from. They indicate how many passes the model was created for. There are also accelerators in the form of attention modes (attention mechanisms). Attention modes are much'
+
+[04:53] [scene:talk]
+VISUAL: 
+AUDIO: 'more complex than Turbo LoRA, but to put it simply: at each step, the model compares each part of the image with every other part to decide what should be where. This comparison is called attention, and'
+
+[05:05] [scene:talk]
+VISUAL: 
+AUDIO: 'it is the most resource-intensive process performed by the model. And attention mode is just another way to perform these calculations faster, and you can choose from several popular modes. They are'
+
+[05:17] [scene:talk]
+VISUAL: 
+AUDIO: 'popular because they speed up generation with minimal loss of quality. So, PyTorch attention, or SDPA, stands for scaled dot product attention . This is a standard'
+
+[05:29] [scene:talk]
+VISUAL: 
+AUDIO: 'option built into PyTorch. If you\'ve run video generation in ComfyUI before, you\'ve probably already used it . This is the standard default option . It\'s accurate, it always works , and it\'s the baseline against which everything else is compared . Sage attention was the'
+
+[05:41] [scene:talk]
+VISUAL: 
+AUDIO: 'next popular mode that appeared quite a while ago, and it actually performs calculations with less precision. It uses the int8 format instead of the full 16 bits. Therefore, it'
+
+[05:54] [scene:talk]
+VISUAL: 
+AUDIO: 'processes less data. It\'s faster, and the only question is whether you\'ll see a visual difference in quality. These two green nodes here are newbies to this. Comfy kitchen attention is a custom optimized version from ComfyUI. It performs'
+
+[06:06] [scene:talk]
+VISUAL: 
+AUDIO: 'the same calculations, but better organized on your GPU. And SLA, or sparse linear attention, is an aggressive method. It doesn\'t compare every part of the image to every other. He decides which'
+
+[06:18] [scene:talk]
+VISUAL: 
+AUDIO: 'comparisons are important and skips the rest. Of course, this is a subjective decision, and if you skip too much, strange artifacts will appear. So this is a knob, not a switch, and I\'m using its default settings'
+
+[06:30] [scene:talk]
+VISUAL: 
+AUDIO: ', but you can see a lot more options here, as the aggressiveness is adjustable. But by default, it does its job perfectly. So, before moving to any Turbo LoRA, we'
+
+[06:42] [scene:talk]
+VISUAL: 
+AUDIO: 'test which of these attention modes provides the fastest generation. Of course, I do n\'t want to wait 345 seconds of generation again for a 5-second clip. So I'
+
+[06:54] [scene:talk]
+VISUAL: 
+AUDIO: 'will apply this. I will use the basic four-step Turbo LoRA from Lightricks. So it connects here and we\'ll use the standard PyTorch attention that\'s built into all'
+
+[07:07] [scene:talk]
+VISUAL: 
+AUDIO: 'video generation by default, let\'s check that out. Okay, let\'s see which one of you is really fast. Okay, it\'s very noticeable that the quality immediately drops'
+
+[07:19] [scene:talk]
+VISUAL: 
+AUDIO: 'when switching to four-step LoRA. We are already seeing a significantly worse overall image and soundscape. But we see that the time has been reduced from 345 seconds to 98 seconds, which is'
+
+[07:32] [scene:talk]
+VISUAL: 
+AUDIO: 'impressive, but is it worth the loss of quality? Hmm. Well, let\'s run a few more tests. Next, we\'ll test one of the newer attention modes—comfy kitchen attention. Okay, let\'s see which one'
+
+[07:47] [scene:talk]
+VISUAL: 
+AUDIO: 'of you is really fast. Okay. I think the quality is a little better. I don\'t know. Maybe it\'s the same low quality, just'
+
+[07:59] [scene:talk]
+VISUAL: 
+AUDIO: 'modified differently, but we see that with kitchen attention, which was the only difference between the previous generation and this one, we saved an extra 30 seconds. So, simply by changing our attention mode,'
+
+[08:13] [scene:talk]
+VISUAL: 
+AUDIO: 'we save almost a third of our generation time. Next, we have Sage attention, which has also been around for some time, it is proven and definitely speeds up generation. Okay, let\'s see which one'
+
+[08:26] [scene:talk]
+VISUAL: 
+AUDIO: 'of you is really fast. Okay, again, it\'s not entirely clear how much the quality differs . Of course, it might be a little better or a little worse, and the time is about the same as when working with attention for the'
+
+[08:38] [scene:talk]
+VISUAL: 
+AUDIO: 'kitchen, but we have another option. Last but not least, we have the new MiniMax H3 SLA attention. Okay, let\'s see which one of you is really fast.'
+
+[08:50] [scene:talk]
+VISUAL: 
+AUDIO: 'You can immediately notice better skin quality, better audio quality, both voice and background noise. If we just switch between these last frames, we can see that these are the previous'
+
+[09:02] [scene:talk]
+VISUAL: 
+AUDIO: 'attention modes, and with H3 SLA attention everything looks much better. And that\'s not the only thing that\'s gotten much better. And this is also the fastest option, only by a second or two, but it is definitely worth noting that the quality is much higher with it.'
+
+[09:15] [scene:talk]
+VISUAL: 
+AUDIO: 'So, since it\'s the fastest option with decent quality, I consider it the clear winner. So, we\'re going to cross the other options off the list. H3 SLA attention is probably the attention mode you should'
+
+[09:28] [scene:talk]
+VISUAL: 
+AUDIO: 'use for all your H3 generations. We will start by testing these LoRAs one by one, I will start with the slowest and move on to the fastest, analyzing the quality throughout all the tests.'
+
+[09:40] [scene:talk]
+VISUAL: 
+AUDIO: 'And one more thing I want to make clear to you: when using these turbo LoRAs, you will have to apply model sampling shifts to your model pipeline. This means that if you'
+
+[09:52] [scene:talk]
+VISUAL: 
+AUDIO: 'are using four-step LoRA, some of them will require a video offset of 6 and an audio offset of 3, and some will require a video offset of 12 and an audio offset of 3. This depends entirely on'
+
+[10:04] [scene:talk]
+VISUAL: 
+AUDIO: 'which turbo LoRA you are using, so I recommend consulting the official documentation. I will leave links to all the repositories in the description of each one so you can choose the one that seems best to you in terms of appearance'
+
+[10:16] [scene:talk]
+VISUAL: 
+AUDIO: 'or performance. And you can figure out what your sampling bias should be . So, as you\'ve noticed, there are some LoRAs that have eight steps, and there are some that have four. And of course, since we\'re'
+
+[10:28] [scene:talk]
+VISUAL: 
+AUDIO: 'starting with the slowest, it\'s logical that the eight-step ones will be the slowest, but they can provide significantly better quality than the four-step ones. So, the five eight-step LoRAs we'
+
+[10:40] [scene:talk]
+VISUAL: 
+AUDIO: 'used for the generations are listed below. Larry VRH version 4 steps 600 in eight steps, exactly as the author recommends. So, our slowest generation for the first model "last frame in video" takes'
+
+[10:52] [scene:talk]
+VISUAL: 
+AUDIO: '93 seconds. Honestly, it\'s not that bad. The quality is also quite decent. It could have been much worse, that\'s for sure. But again, we\'re using eight steps, so that\'s expected. PDD from Alibaba is eight steps away, it is not LoRA. He'
+
+[11:04] [scene:talk]
+VISUAL: 
+AUDIO: 'has his own work schedule. So the quality is pretty good, to be honest , for an eight-step LoRA from Alibaba. I am impressed. The skin looks'
+
+[11:16] [scene:talk]
+VISUAL: 
+AUDIO: 'great. Not sure about the sound. Light X2V version 1.0 is eight steps, double the work, hopefully double the quality. Lightrix produces truly high-quality generation. Again, the skin'
+
+[11:29] [scene:talk]
+VISUAL: 
+AUDIO: 'looks pretty good for an eight-step LoRA. Of course, 20 steps would be better, but we are testing optimization speed, not quality. The eight-step Light X2V, build 544, is working well outside of its comfort'
+
+[11:41] [scene:talk]
+VISUAL: 
+AUDIO: 'zone. Again, not so bad. I think the skin here looks the best of all, and that\'s a plus. Larry VR arch, four steps, checkpoint 850, middle child in this family. And that was pretty'
+
+[11:54] [scene:talk]
+VISUAL: 
+AUDIO: 'bad. Definitely not worth using. It looks very bad. So if we look at our leaderboard for eight-step LoRA, we see a range from 93 to 67 seconds, but I wouldn\'t even consider the latter'
+
+[12:06] [scene:talk]
+VISUAL: 
+AUDIO: 'because the generation was practically unusable. So, from 93 to 86 seconds for a 5- second video. Not too bad for eight steps. Now let\'s move on to four-step LoRA.'
+
+[12:18] [scene:talk]
+VISUAL: 
+AUDIO: 'You may have heard the term "Larry" mentioned in these generations. That\'s because Larry\'s LoRA is a family of models that were trained, I'
+
+[12:30] [scene:talk]
+VISUAL: 
+AUDIO: 'assume, by Larry. So thank you Larry. But with them I selected all four LoRAs from Larry in this Power LoRA loader on the screen. And if you'
+
+[12:44] [scene:talk]
+VISUAL: 
+AUDIO: 'are using Larry LoRA loaders, you need to use this Mini Max H3 Turbo node, not the LoADER stack or any other LoRA LoADER node. And you need to use this special'
+
+[12:56] [scene:talk]
+VISUAL: 
+AUDIO: 'MiniMax H3 Turbo sampler. This is what they recommend. I don\'t think it will work without these nodes, but I thought I\'d point it out in case you like the look of the next generations. Let\'s take a look at them. Larry VRH, four steps,'
+
+[13:08] [scene:talk]
+VISUAL: 
+AUDIO: 'checkpoint 500. Same recipe, but less training. Okay, not so bad for four-step LoRA. Definitely better than Larry\'s previous LoRA that we generated. The skin looks decent. Larry VRH four-step'
+
+[13:20] [scene:talk]
+VISUAL: 
+AUDIO: 'EMA, first release. He brings his own sampler. So, the video quality is good, but the sound quality is just terrible. Light X2V version 0.1, four steps, trained'
+
+[13:32] [scene:talk]
+VISUAL: 
+AUDIO: 'on 544, running at a much higher resolution . So, the sound quality was significantly better in the four-step LoRA Light X2V that we just tested, but the skin quality definitely deteriorated.'
+
+[13:45] [scene:talk]
+VISUAL: 
+AUDIO: 'Light X2V version 1.2, four steps is the newest in the four-step line. Again, not too bad. The skin looked decent at first , but then deteriorated quite significantly.'
+
+[13:57] [scene:talk]
+VISUAL: 
+AUDIO: 'LyXe 2B version 1.1, four steps. Let\'s find out if newer actually means better. Okay, that was very good. Uh, very, very good. So LyXe 2B version 1.1, four'
+
+[14:10] [scene:talk]
+VISUAL: 
+AUDIO: 'steps. Let\'s find out if newer actually means better. Okay, after looking at this , yes, newer definitely doesn\'t mean better in this case. The sound was significantly better, and the video quality is'
+
+[14:22] [scene:talk]
+VISUAL: 
+AUDIO: 'actually amazing for four-bit LoRA. And we generated it in 63.9 seconds, which is very good, but not a huge increase in time compared to the'
+
+[14:34] [scene:talk]
+VISUAL: 
+AUDIO: 'previous ones we tested. But the quality, I think, is maybe even better than some of the eight-step LoRAs we tested. And finally, for this four-step LoRA section,'
+
+[14:47] [scene:talk]
+VISUAL: 
+AUDIO: 'we have the latest Lightricks LoRA. Light it up X2B version 1.0, four steps, 768. This is the one that everyone uses. And I\'m not sure why, because we saved 0.2 seconds, and version 1.1'
+
+[15:00] [scene:talk]
+VISUAL: 
+AUDIO: 'was still better, to be honest . Uh, yeah, I think I\'ll use 1.1 from now on . I definitely remember her. Okay, now we\'re going to move on'
+
+[15:13] [scene:talk]
+VISUAL: 
+AUDIO: 'to the reference-to-video model and test the seven LoRAs that I have for this model. Larry VRH version 4 steps 600 , eight steps on a model she never trained on. Well , it\'s not that'
+
+[15:26] [scene:talk]
+VISUAL: 
+AUDIO: 'bad, to be honest. VRH version 4 steps 600, eight steps on a model she never trained on. It definitely could be better for an eight-step'
+
+[15:38] [scene:talk]
+VISUAL: 
+AUDIO: 'model. Let\'s move on. Litex 2V from reference to video version 1.0, eight steps, 768 native. Again, not very good. By the way, we'
+
+[15:50] [scene:talk]
+VISUAL: 
+AUDIO: 'started at 81.5 seconds for that first video, and we dropped about 2 seconds by going here. Nothing significant. Alibaba PDD act, reference'
+
+[16:02] [scene:talk]
+VISUAL: 
+AUDIO: 'assembly, eight steps with its sigma schedule. Okay. The video was very bad, but the sound was exceptionally good, but the video was terrible. So, yes.'
+
+[16:14] [scene:talk]
+VISUAL: 
+AUDIO: 'Larry VRH four-step EMA trained for first-last, borrowed for reference. Oh my God, Larry, what are we doing, bro? No,'
+
+[16:27] [scene:talk]
+VISUAL: 
+AUDIO: 'sorry, Larry. I didn\'t mean to , sorry. Sorry, bro. But this is our first four-step LoRA, and we reduced the time by about 16 seconds compared to'
+
+[16:39] [scene:talk]
+VISUAL: 
+AUDIO: 'eight-step, but the result is completely unusable. And it seems that LoRA video links degrade the quality much more than our initial tests with the last frame.'
+
+[16:52] [scene:talk]
+VISUAL: 
+AUDIO: 'So be sure to take this into account. Light text to video, version 0.1, four steps, running at a resolution higher than the training resolution. Mhm. Yes. Not very. Not'
+
+[17:04] [scene:talk]
+VISUAL: 
+AUDIO: 'very. But we reduced the time to 58.1 seconds, so we continue. Larry VRH, four steps, checkpoint 500, also borrowed from the first-last'
+
+[17:16] [scene:talk]
+VISUAL: 
+AUDIO: 'frame tests. Well, I mean, we\'ve seen worse, that\'s for sure. At least here Larry was rehabilitated . Um, but still, in my opinion, the quality is not up to par. It doesn\'t look good, but'
+
+[17:29] [scene:talk]
+VISUAL: 
+AUDIO: 'we\'re moving on. Larry VRH, four steps, checkpoint 850. The community says he works here. Let\'s check. Okay, for our fastest generation and four-step LoRA,'
+
+[17:41] [scene:talk]
+VISUAL: 
+AUDIO: 'it wasn\'t that terrible. But overall, I\'m not impressed with the turbo LoRA acceleration with the video link. I would probably stay away from it. Or, if you are using'
+
+[17:53] [scene:talk]
+VISUAL: 
+AUDIO: 'four-step LoRA, increase the number to six or even eight steps. And if you\'re using eight-step LoRA, set it to 10 steps, because it really helps. So, to sum up the section with the video link, I honestly don\'t have any'
+
+[18:05] [scene:talk]
+VISUAL: 
+AUDIO: 'particular conclusions. I would like to choose a winner. Mm. But I just can\'t, honestly . They were all pretty bad. I don\'t think I would use any of them. But not everything is so gloomy, because we have a winner of the'
+
+[18:17] [scene:talk]
+VISUAL: 
+AUDIO: 'first screening. But before we announce the winner, let\'s take a look at the numbers and make a quick summary. So, first: speed is determined by steps, not LoRA, of course, but LoRA allows you to generate in fewer'
+
+[18:30] [scene:talk]
+VISUAL: 
+AUDIO: 'steps. Given this , each four-step file was within 7 seconds of each other. Each eight-step file was within 7 seconds of each other. And the difference between these two groups is'
+
+[18:42] [scene:talk]
+VISUAL: 
+AUDIO: 'more than 20 seconds each time. So going from eight steps to four saved us over 20 seconds each time. Second: your attention mode is more important than choosing LoRA. Switching from the standard'
+
+[18:54] [scene:talk]
+VISUAL: 
+AUDIO: 'attention mode to PyTorch attention saved us 30 seconds with little or no loss of quality . And switching between LoRA with the same number of steps saved 3 seconds. So, if you\'re'
+
+[19:06] [scene:talk]
+VISUAL: 
+AUDIO: 'going to change just one thing after this video, change attention. At number three, the real question is whether eight steps are worth spending 25 seconds on a clip, but you\'ve just seen the quality comparison, so make up your own mind. And of course,'
+
+[19:18] [scene:talk]
+VISUAL: 
+AUDIO: 'I\'ll note that this is my time on my 5090, 64GB RAM, one run for each, no repeats . So your generation time on your map will be different, and'
+
+[19:30] [scene:talk]
+VISUAL: 
+AUDIO: 'many other things will also affect this factor. So, it\'s just using the basic recommended configuration straight from the repository for Solora and for attention mode, which we\'ve determined to be the'
+
+[19:43] [scene:talk]
+VISUAL: 
+AUDIO: 'best. Our winners are SLA attention and LyTricks from first to last frame for video, turbo version 1.1 by four steps at 768p. It was a'
+
+[19:55] [scene:talk]
+VISUAL: 
+AUDIO: 'clear winner. I\'ll show the video for you again. LyTricks 2V version 1.1, four steps. Let\'s find out if newer actually means better. In my opinion, this one was the best. I think some of you'
+
+[20:07] [scene:talk]
+VISUAL: 
+AUDIO: 'will agree. This concludes this video. I hope you learned something new. I hope I was able to provide you with some information or perhaps help you decide. And if so , please like the video and subscribe. That\'s all I'
+
+[20:19] [scene:talk]
+VISUAL: 
+AUDIO: 'ask of you. This means a lot to me. Thank you for watching. Peace be upon you.'

@@ -1,0 +1,240 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Gaussian Point Splatting - SIGGRAPH Technical Paper Presentation
+channel: @octopusinc_
+duration: 11:34
+source: https://www.youtube.com/watch?v=2AWv_nIfp-U
+upload_date: 20260906
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'Hello everyone. My name is Joris and I\'m presenting Gaussian Point Splatting as shown at Siggraph Los Angeles 2026 . Some of you may know Gaussian Splatting because of its representation of realistic objects, as you see on the left. You can interactively'
+
+[00:12] [scene:talk]
+VISUAL: 
+AUDIO: 'move the camera through these scenes, which looks really cool, but it usually focuses on a single object, like this bike. As you can see on the edges of the screen close to the camera, grass or bushes may not be as clear. And it\'s very'
+
+[00:24] [scene:talk]
+VISUAL: 
+AUDIO: 'common for these scenes to focus on smaller objects. But we want more. We want to be able to recreate entire villages, as you see on the right. We want to be able to explore the campus before we even get there.'
+
+[00:37] [scene:talk]
+VISUAL: 
+AUDIO: 'Or maybe capture an entire forest and run a fire simulation there to make sure everything is safe. This is currently very difficult to achieve . Visualizing hundreds of millions of Gaussian components on a simple GPU like the 4070 TI'
+
+[00:49] [scene:talk]
+VISUAL: 
+AUDIO: 'Super is extremely difficult, especially without filtering them beforehand. But ideally, we want to see details up close and zoom out very far, while still preserving all of that detail without having to use,'
+
+[01:01] [scene:talk]
+VISUAL: 
+AUDIO: 'for example, levels of detail. So, to understand how it all works and why we are limited, let\'s take a quick look at the general overview of the pipeline. Therefore, Gaussian components are usually ordered first. This means that they are projected in 2D, and we calculate their'
+
+[01:14] [scene:talk]
+VISUAL: 
+AUDIO: 'colors depending on the viewing direction. We then sort them by depth and break them into fragments, each of which we assign to different tiles on the screen. This means that the screen areas do not have to consider every Gaussian component, but only those'
+
+[01:26] [scene:talk]
+VISUAL: 
+AUDIO: 'that intersect with them. Finally, we perform rasterization by iterating over each Gaussian component in each tile from foreground to background. But there are some problems with this. First, the Gaussian components'
+
+[01:38] [scene:talk]
+VISUAL: 
+AUDIO: 'must be sorted for proper display. As you can see, the red Gaussian component should be in front, but if we don\'t sort them, then as shown below, we will get an incorrect result. Sorting is an expensive operation, so we would prefer'
+
+[01:50] [scene:talk]
+VISUAL: 
+AUDIO: 'to avoid it. Another problem is the tiled rasterizer. While it is much better than considering each individual Gaussian component per pixel, we see that some tiles have significantly more components assigned to them than others, as can be seen'
+
+[02:02] [scene:talk]
+VISUAL: 
+AUDIO: 'in the heatmap on the bottom right. This means that during the rasterization stage, somewhere halfway through, the GPU is still working on a couple of such tiles, while most of the work has already been completed. This'
+
+[02:14] [scene:talk]
+VISUAL: 
+AUDIO: 'results in a significant reduction in GPU load, whereas we would prefer the GPU to be busy all the time to get the shortest frame time. Ideally, we eliminate both the sorting stage and the tile'
+
+[02:27] [scene:talk]
+VISUAL: 
+AUDIO: 'rasterization stage. One way to achieve this is to use order-independent transparency. In particular, stochastic order-independent transparency. With stochastic transparency, we do not mix fragments.'
+
+[02:39] [scene:talk]
+VISUAL: 
+AUDIO: 'Instead, we reject them with probability 1-alpha. As you can see, this results in a fairly noisy image, like in the middle, which is logical since it is a stochastic process and the error is quite high. But if we'
+
+[02:51] [scene:talk]
+VISUAL: 
+AUDIO: 'do this for several samples and average the final result, we will see that the error approaches zero and the image really becomes similar to the reference one. Another method has already implemented this for Gaussians, but if you read the article, you may find that the'
+
+[03:03] [scene:talk]
+VISUAL: 
+AUDIO: 'performance benefits are not as great as you might expect. And this happens because of this. Gaussians are actually mostly transparent. This Gaussian technically has 100% opacity, but that only really matters for the'
+
+[03:16] [scene:talk]
+VISUAL: 
+AUDIO: 'center pixel . Everything around it has an increasingly higher chance of being rejected, which leads to the fact that even in the best case scenario we have to reject 80% of the workload. Introducing Gaussian point splatting.'
+
+[03:29] [scene:talk]
+VISUAL: 
+AUDIO: 'Instead of generating all these fragments and discarding them, we want to generate only the points that we will actually use. And this is precisely the essence of our method. So every point you see here is'
+
+[03:42] [scene:talk]
+VISUAL: 
+AUDIO: 'generated directly, instead of us having to discard all the other points. To understand how this works, let\'s take another quick look at the pipeline overview. Overall, it\'s quite similar. We still have the'
+
+[03:54] [scene:talk]
+VISUAL: 
+AUDIO: 'training phase, but now , instead of breaking them into pieces and sorting by depth, we count the number of points we want to get from each Gaussian. So, as you might expect, Gaussians that are larger in screen space will require more'
+
+[04:06] [scene:talk]
+VISUAL: 
+AUDIO: 'points. Gaussians, which are more opaque, will also require more points. Then we distribute this workload. Each thread ideally runs the same amount of time. So, a Gaussian that has more points should be distributed'
+
+[04:18] [scene:talk]
+VISUAL: 
+AUDIO: 'among more streams. And finally, each thread draws a few points, and we get our first estimate. Of course, we accumulate this over time to get a noise-free image. Our method mainly'
+
+[04:30] [scene:talk]
+VISUAL: 
+AUDIO: 'focuses on the following three steps, as the preparation and accumulation stages are quite well documented in the scientific literature. And currently we only provide forward pass. So, let\'s take a closer'
+
+[04:42] [scene:talk]
+VISUAL: 
+AUDIO: 'look at some individual aspects of our method. First, splating points. This was presented by Schütz and others. in the previous article, but the idea is that we scatter the points from each Gaussian and'
+
+[04:54] [scene:talk]
+VISUAL: 
+AUDIO: 'treat them as 64- bit integers in a 64- bit frame buffer. The beginning of this 64-bit word is filled with depth. That is, the closer the object, the less its value.'
+
+[05:06] [scene:talk]
+VISUAL: 
+AUDIO: 'And the end of the 64-bit word is filled with color information. The nice thing is that we can now use 64- bit atomic operations to resolve any potential conflicts. If a point lands'
+
+[05:19] [scene:talk]
+VISUAL: 
+AUDIO: 'on a position in the frame buffer that is already occupied by another point, the one that is closer wins, and that is exactly what we need for rendering this point cloud. Next comes load distribution. I want to emphasize again'
+
+[05:32] [scene:talk]
+VISUAL: 
+AUDIO: 'that this is very important because we want to avoid the problem that we had before. We don\'t want the GPU to be idle half the time during the rasterization stage. So we really want to process one'
+
+[05:44] [scene:talk]
+VISUAL: 
+AUDIO: 'point per stream independently. We invented the following method. We start with Gaussian identifiers and the number of points. And we start with the classic scatter operation. The idea is that we first'
+
+[05:56] [scene:talk]
+VISUAL: 
+AUDIO: 'calculate the prefix sums of the number of points, and then use this information to allocate a unique memory area for each Gaussian so that they do not overlap. After you\'ve scattered'
+
+[06:09] [scene:talk]
+VISUAL: 
+AUDIO: 'the IDs, we\'re still left with a problem. There is a gap in our array. This final result should ideally point to the Gaussian identifier at each memory location. The idea is that we have as many entries of'
+
+[06:21] [scene:talk]
+VISUAL: 
+AUDIO: 'each Gaussian identifier as there are points it needs to scatter. Since the scattered result is guaranteed to be monotonically increasing, we can actually use the prefix maximum operation to fill in the gaps.'
+
+[06:33] [scene:talk]
+VISUAL: 
+AUDIO: 'Because the largest number up to a certain point in memory will be the current position. So , using this atomic maximum operation, we see that we can completely fill the array and'
+
+[06:45] [scene:talk]
+VISUAL: 
+AUDIO: 'get a zero or two zeros, and you get one one, four threes, and one five, just like in the input. So, we should finish, right? We have a way of spreading the points, we have a way of'
+
+[06:57] [scene:talk]
+VISUAL: 
+AUDIO: 'distributing the load. So let\'s do it. If we render this black Gaussian on a white background and average it over many samples, we get what you see in the middle, and it looks pretty good. But if we'
+
+[07:09] [scene:talk]
+VISUAL: 
+AUDIO: 'compare this to the reference image, we see that while the outer region of the Gaussian looks good, the center comes out gray instead of black, which is not what we want at all . The problem is that our points overlap'
+
+[07:21] [scene:talk]
+VISUAL: 
+AUDIO: 'independently of each other. Since stochastic transparency only has one attempt per pixel, this problem doesn\'t exist there. But here two different points can overlap on the same pixel. When this'
+
+[07:33] [scene:talk]
+VISUAL: 
+AUDIO: 'happens, the overall opacity of the Gaussian distribution decreases. So you might say, "Well, we can just add these dots together ." This may work in some cases, such as with a single'
+
+[07:46] [scene:talk]
+VISUAL: 
+AUDIO: 'Gaussian, but if we look at the rendered result of the scene, we will see that some points will result in brighter areas. This is because if points overlap, they no longer obscure'
+
+[07:58] [scene:talk]
+VISUAL: 
+AUDIO: 'those behind them, which is critical for stochastic transparency. Instead, we want to adjust our sampling distribution so that points overlap more often in the center rather than at the edges. This'
+
+[08:11] [scene:talk]
+VISUAL: 
+AUDIO: 'means we have to overlay more points overall, but it\'s worth it because we get the correct image . Let\'s take a quick look at this. We want to ensure that the probability of not superimposing any Gaussian points on a'
+
+[08:23] [scene:talk]
+VISUAL: 
+AUDIO: 'pixel is 1 minus alpha, just like in classical stochastic transparency. If we go through the math, we get a function that looks like this. So instead of fitting over the original Gaussian,'
+
+[08:35] [scene:talk]
+VISUAL: 
+AUDIO: 'which is actually the green line, this is what you get with alpha equal to zero. If our opacity is 100%, or the Gaussian is completely opaque, then we see a strong shift towards the average Gaussian, of course around'
+
+[08:47] [scene:talk]
+VISUAL: 
+AUDIO: 'radius zero. Then you might think we need a lot more points, but that\'s not so bad. Even at 100% opacity you only need up to 60% more points, which is not nearly as bad'
+
+[08:59] [scene:talk]
+VISUAL: 
+AUDIO: 'as having to remove 80% of the work in the best case, like with stochastic transparency. Furthermore, most Gaussians don\'t actually even come close to 100% opacity. Therefore, the total number of'
+
+[09:11] [scene:talk]
+VISUAL: 
+AUDIO: 'additional points required to render the scene is not dramatically large. Let\'s take a look at the results. Of course, our method is stochastic, so we expect a certain level of noise. But it\'s not nearly as strong as, say, path tracing methods. If you'
+
+[09:24] [scene:talk]
+VISUAL: 
+AUDIO: 'look on the left, this is our result at four samples per pixel. The rack, for example, in the lower left doesn\'t look as bad as the more specular areas, which is entirely logical since these Gaussians have less dynamic'
+
+[09:36] [scene:talk]
+VISUAL: 
+AUDIO: 'range in that area. If we evaluate the quality, we will see that our method matches 3D GS very well. There are some slight differences, like you see on bicycle spokes, but that\'s mostly due to the'
+
+[09:48] [scene:talk]
+VISUAL: 
+AUDIO: 'difference in smoothing, not because the method is actually different. Thanks to our way of mapping points, we integrate the Gaussian density over the entire area of ​​the pixel , and not just selectively'
+
+[10:00] [scene:talk]
+VISUAL: 
+AUDIO: 'in its center, as 3D GS does. Therefore, we get slightly different smoothing characteristics. Finally, let\'s look at frame rendering time. We applied the same camera path to different scenes for'
+
+[10:13] [scene:talk]
+VISUAL: 
+AUDIO: 'different visualizations. Let\'s look at a few examples. If we compare this camera path between our method with 2x2 per pixel sampling and 3DGS, we see that 3DGS is significantly slower in'
+
+[10:25] [scene:talk]
+VISUAL: 
+AUDIO: 'all cases, especially at zooming out. Our method actually handles overlay very well, as small Gaussians in screen space have negligible'
+
+[10:37] [scene:talk]
+VISUAL: 
+AUDIO: 'rendering overhead compared to the large overhead in 3DGS due to the large number of Gaussians in those pixels. We get really competitive rendering times at a distance. When compared to something like Splat Shop, we'
+
+[10:49] [scene:talk]
+VISUAL: 
+AUDIO: 'see that our method is not as competitive . It\'s sometimes faster, sometimes slower, especially when zooming out, but that\'s because Splat Shop is actually cheating and is quite biased. If we look at the'
+
+[11:02] [scene:talk]
+VISUAL: 
+AUDIO: 'example above, we can see that SplatShop is noticeably darker than our method. This is because SplatShop discards Gaussians before rendering if they are too small. So this means that instead of rendering'
+
+[11:14] [scene:talk]
+VISUAL: 
+AUDIO: 'all 100+ million Gaussians in this scene, it only processes less than 10 % of them, which I think is cheating. So, I introduced Gaussian Point Splatting—a method for interactively rendering hundreds of millions of Gaussians'
+
+[11:26] [scene:talk]
+VISUAL: 
+AUDIO: 'even on weak GPUs. Please visit the project page and read the article for more information.'
