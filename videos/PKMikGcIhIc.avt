@@ -1,0 +1,340 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: TrueForge: Anthropic's Managed Agent Harness, But Open Source
+channel: @octopusinc_
+duration: 17:43
+source: https://www.youtube.com/watch?v=PKMikGcIhIc
+upload_date: 20260909
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:intro]
+VISUAL: Diagram: "agent loop vs harness" showing a model, tools, and context.
+AUDIO: 'Agent loop versus agent harness. What is the difference and when you need which one? Look at this basic agent loop. The model asks for a tool. You call the tool. You shove the output back into the prompt and repeat. You can literally'
+
+[00:12] [scene:talk]
+VISUAL: 
+AUDIO: 'write this whole loop in 15 lines of Python code. Now, if your prompt is simple enough, say two or three turns, it works great. But the second you throw a real production task at it, this'
+
+[00:25] [scene:talk]
+VISUAL: 
+AUDIO: 'entire thing blows up in two specific cases. The first one is the context window. So models don\'t remember anything across calls. So every turn has to replay the entire history from'
+
+[00:38] [scene:talk]
+VISUAL: 
+AUDIO: 'scratch. This means every tool is going to be appended. Now, as you reach the limits of your context window, these models get dumber and dumber because the'
+
+[00:50] [scene:problem]
+VISUAL: Diagram: "the second way it breaks has nothing to do with tokens" showing tool timeouts and user closing tabs.
+AUDIO: 'signal to noise ratio diminishes since you\'re flooding the model with pure noise. So, its reasoning capability tanks. The longer an agent run, the dumber it\'s going to get. Now, context'
+
+[01:04] [scene:talk]
+VISUAL: 
+AUDIO: 'window management is just half of the problem. There are things like external API drops or times out. So who handles the retries? Then let\'s say if the user has a long running session and they go'
+
+[01:16] [scene:talk]
+VISUAL: 
+AUDIO: 'for an hour walk, where does the state is going to live? Then if your model generates say Python where you safely execute that and if the model or agent decides to drop a table from a database,'
+
+[01:30] [scene:talk]
+VISUAL: 
+AUDIO: 'who is actually stopping it? None of this actually lives in that 15 lines of Python code. All of this requires scaffolding around the loop. Now, in the rest of the video, I want to talk about'
+
+[01:43] [scene:solution]
+VISUAL: Diagram: "so you start adding pieces around it" showing sessions, streaming, retries, sandbox, approvals, context engineering surrounding "the loop".
+AUDIO: 'what that scaffolding actually looks like. And then later on, I\'ll show you a really good example of an opensource harness called True Forge, who is also the kind sponsor of this video. Okay, so'
+
+[01:55] [scene:talk]
+VISUAL: 
+AUDIO: 'around the loop, you need to add things like retry, back offs, isolated code sandboxes, and human in the loop approvals. Also, you need aggressive context management so the window doesn\'t'
+
+[02:07] [scene:talk]
+VISUAL: 
+AUDIO: 'overflow. This entire infrastructure layer is called harness. Today building that agent loop is trivial but building a really good harness is a very difficult task especially open-source'
+
+[02:20] [scene:talk]
+VISUAL: 
+AUDIO: 'ones. Okay. So with true forge as an example in mind we\'re going to break down the architecture. So the first question that you need to think about is what sits in the prompt before the user'
+
+[02:32] [scene:architecture]
+VISUAL: Diagram: "ops", "exa", "deepwiki" tools, "one tool definition", and "context window" with "schema.co" consuming tokens.
+AUDIO: 'even submits anything. This is along with the system message. So in standard setup, uh, hooking up a few server with tools automatically loads every single schema up front. That means you\'re going'
+
+[02:45] [scene:talk]
+VISUAL: 
+AUDIO: 'to be burning thousands of tokens even before the user sends a single message. Now, a cleaner alternative is deferred loading. You only pass the server names and say four tiny meta tools, letting'
+
+[03:00] [scene:talk]
+VISUAL: 
+AUDIO: 'the model discover schema on demand. This means you\'re not paying any upfront token cost. However, the model will have to do tool discovery which can potentially increase the latency. Now,'
+
+[03:14] [scene:talk]
+VISUAL: 
+AUDIO: 'the next problem is what happens when your API or tool call returns more data than you actually asked for. Now, the very naive approach is that you simply dump everything into the context of the'
+
+[03:26] [scene:architecture]
+VISUAL: Diagram: "get.logs" returning 29,694 characters, decision flow for sandbox or direct context entry.
+AUDIO: 'model and let the model figure out what is more important. What a solid harness does instead is stream the raw response straight to disk inside the sandbox. Then it only feeds the model a tiny'
+
+[03:40] [scene:talk]
+VISUAL: 
+AUDIO: 'preview and uh the local file path and you can let your agent use bash tools to grip the exact traces it needs. This is not only going to save you on token cost'
+
+[03:53] [scene:talk]
+VISUAL: 
+AUDIO: 'but also keep the signal high. Okay, so this brings us to the code mode which is probably the most practical pattern here. So typically a model calls an API, waits for the JSON, reads it into the'
+
+[04:07] [scene:talk]
+VISUAL: 
+AUDIO: 'memory and then triggers the next API call. But 90% of the time you don\'t need the raw JSON. You are just looking for exact numbers or patterns. So if you do that via regular tool calls, you burn'
+
+[04:23] [scene:talk]
+VISUAL: 
+AUDIO: 'context tokens and force an LLM to do sloppy mental math. With code mode, the agent writes a concise Python script that runs directly inside the isolated sandbox and then any tool calls inside'
+
+[04:37] [scene:talk]
+VISUAL: 
+AUDIO: 'that script gets bridged back to the harness. So you\'re not sending your API keys to the sandbox. You\'re only getting the final result. This brings up the'
+
+[04:49] [scene:talk]
+VISUAL: 
+AUDIO: 'question three. Where does all the code actually is running? Most of the shelf setups just package the whole agent into a single Docker container that includes the loop, the secrets and everything.'
+
+[05:03] [scene:talk]
+VISUAL: 
+AUDIO: 'That works, but it\'s wildly inefficient because every session holds an entire container hostage even when it\'s idle. The better approach is keeping your core loop on your server and treating'
+
+[05:16] [scene:architecture]
+VISUAL: Diagram: "where does the code actually run?" comparing "one container per session" vs. "the loop stays on the server" with ephemeral sandboxes.
+AUDIO: 'execution environment as ephemeral tools. You spin up a sandbox strictly on demand when code needs to execute and tear it down immediately because the'
+
+[05:29] [scene:talk]
+VISUAL: 
+AUDIO: 'orchestration loop stays outside your sensitive production tokens never uh are going to be leaked into the execution environment. So sandbox as a tool is not only great for execution but it\'s also'
+
+[05:43] [scene:talk]
+VISUAL: 
+AUDIO: 'great for security. Okay. Now what happens when a complex task inevitably stretches across dozens of turns. So there are two ways harnesses solve this. First keep the heavy lifting off of the'
+
+[05:56] [scene:talk]
+VISUAL: 
+AUDIO: 'primary thread completely. Now you spin off a dedicated sub aent with its own fresh window to run noisy research and it only reports back the distilled'
+
+[06:08] [scene:product_reveal]
+VISUAL: Text: "so which harness actually does all of this? trueforge open source, MIT from TrueFoundry".
+AUDIO: 'answer. Second is complex compaction when the window hits a specific token threshold. A background model summarizes the old returns and swap out the raw history. Just remember compaction is'
+
+[06:20] [scene:talk]
+VISUAL: 
+AUDIO: 'fundamentally lossy. You are explicitly trading away the fine details to preserve memory. Okay, so this brings us to what I actually wanted to break down today. This is true forge from two'
+
+[06:33] [scene:talk]
+VISUAL: 
+AUDIO: 'foundry an open source MIT license agent harness. Now what makes it stand out is that it ships all of these mechanism natively. We have deferred schema'
+
+[06:45] [scene:talk]
+VISUAL: 
+AUDIO: 'loading, file offloading, code mode, isolated sandboxing, sub aents and compaction. But since it\'s open source, it is vendor agnostic. Most agent platforms today lock you directly'
+
+[07:01] [scene:ui]
+VISUAL: TrueForge GitHub repository page, showing logo, description, and badges.
+AUDIO: 'into their proprietary models and cloud infrastructure. While True Forge talks to any OpenI compatible API, including local models running on your own hardware. And it\'s not just Python SDK'
+
+[07:14] [scene:talk]
+VISUAL: 
+AUDIO: 'either. It\'s a production server with an HTTP interface, built-in dashboard, and agent runtime. So let me show you how exactly it looks like and in the process I\'ll walk you through different'
+
+[07:27] [scene:talk]
+VISUAL: 
+AUDIO: 'capabilities. Okay. So in the rest of the video we\'re going to be looking at true forge which is an opensource harness that follows all the pattern that we have been discussing. This is more of a general'
+
+[07:39] [scene:talk]
+VISUAL: 
+AUDIO: 'purpose harness. So it\'s not coding specific. The best part is it\'s model agnostic. So you can bring in any model and their data shows that it is a lot cheaper can be up to 75%'
+
+[07:51] [scene:ui]
+VISUAL: TrueForge chat interface: "How can I help you today?" with an input field and model selection.
+AUDIO: 'lower cost compared to something like cloud managed agents. So it\'s a great tool for building general purpose agents. This is very close to cloud managed agents but everything lives on'
+
+[08:05] [scene:talk]
+VISUAL: 
+AUDIO: 'your own infrastructure. Okay. So in order to install it here\'s the command that you will need to run. It\'s a model agnostic MIT licensed. So they are not selling you anything. They were kind'
+
+[08:17] [scene:talk]
+VISUAL: 
+AUDIO: 'enough to make this video possible through their sponsorship. Okay. So here\'s how the interface looks like. Now you\'re going to be using the UI for building your agents, but then you can deploy them via their SDK or even just'
+
+[08:29] [scene:talk]
+VISUAL: 
+AUDIO: 'make calls to the server through the API that it provides. Now the very first thing that you want to look at is you want to go to settings. You have a'
+
+[08:41] [scene:ui]
+VISUAL: TrueForge settings page: "Skills" section with a list of available and enabled skills like "algorithmic-art", "skill-creator", "mcp-builder".
+AUDIO: 'number of different connectors. So by default it comes with connectors like XAR for web search parallel deep wiki and here is one of my own MCP server that I have connected. There are a'
+
+[08:54] [scene:talk]
+VISUAL: 
+AUDIO: 'number of other connectors available to different services. This is not just coding related. It\'s a general purpose agent that you can bring any service that you want. This also gives you the'
+
+[09:06] [scene:talk]
+VISUAL: 
+AUDIO: 'ability to connect different skills. Again, there are some predefined skills that you can use or you can just import them from GitHub. Now, most importantly, if you want to run code, you want to run'
+
+[09:19] [scene:talk]
+VISUAL: 
+AUDIO: 'it in a sandbox. By default, they use Daytona as a sandbox environment. This sandbox is used as a tool as we described earlier in the video. So you\'ll need to provide your own API key'
+
+[09:32] [scene:talk]
+VISUAL: 
+AUDIO: 'for this to work. It has support for all the major API providers. You can configure them through the API or you can bring your own local models. So in order to set up a local provider, you\'ll'
+
+[09:44] [scene:ui]
+VISUAL: TrueForge main UI with chat history, "Agents Library", "Sessions", and "Schedules" in the sidebar.
+AUDIO: 'just need to click on custom provider then provide the name base URL. So here I have a couple of different local models that I\'m running on two DGX sparks to show you how to effectively'
+
+[09:58] [scene:talk]
+VISUAL: 
+AUDIO: 'use this. There are two different steps. The first one is you build your agent and then you can deploy that agent and use it in external services like your own applications. So if I go to agent'
+
+[10:11] [scene:talk]
+VISUAL: 
+AUDIO: 'library right now I have four different agents that I have set up but I\'m going to show you how you can build your own agent. So for this we\'re going to go to new chat and in here let\'s say I want to'
+
+[10:24] [scene:talk]
+VISUAL: 
+AUDIO: 'build a research agent. So in this case I am asking it to find the parameter count for two open models. Now in order to do this I need to provide tools to this specific agent. Since this is a'
+
+[10:39] [scene:talk]
+VISUAL: 
+AUDIO: 'search task so I\'m going to just connect XA as a tool and for the LLM I can use the Quen 3.8 flash next model. Now this is just a quick example but as you can'
+
+[10:53] [scene:talk]
+VISUAL: 
+AUDIO: 'imagine you can connect multiple different MCP servers to your agent. So right now if you see it\'s able to use the MCP server that we just connected and then it\'s going to do tool calls and'
+
+[11:05] [scene:talk]
+VISUAL: 
+AUDIO: 'do web search. Now imagine if this is an iterative task that you need to do on regular basis then you can simply save this as an agent where you\'re going to'
+
+[11:17] [scene:talk]
+VISUAL: 
+AUDIO: 'provide the name specific instructions specific tools and then you can reuse this agent in your own workflows. I\'ll show you an example in a minute, but this is a concept of managed agents'
+
+[11:30] [scene:ui]
+VISUAL: TrueForge "Agents Library" showing an "on-call" agent's instructions.
+AUDIO: 'where you can create these agents and then host them on your own infrastructure and make API calls to those specific agents. Now, to show you a more practical example, we\'re going to'
+
+[11:43] [scene:talk]
+VISUAL: 
+AUDIO: 'look at one of my agents that I have created. Specifically, we\'re going to look at this on call agent. So this is an agent that is actually looking at real-time infrastructure in the main'
+
+[11:57] [scene:talk]
+VISUAL: 
+AUDIO: 'instruction prompt is that you are an on call engineer agent for checkout API. When an alert fires confirm it, check recent deploys metrics and logs and find the root cause and follow the runbook.'
+
+[12:10] [scene:talk]
+VISUAL: 
+AUDIO: 'So this has access to one of the MCP servers that I specifically created for this service. I\'ll show you that in a moment. The MCP server is called ops which basically gives visibility to this'
+
+[12:24] [scene:ui]
+VISUAL: TrueForge "Use in Code" tab displaying TypeScript SDK code for integrating an agent.
+AUDIO: 'agent on everything that is happening in my infrastructure. Now the great thing about true forge is that it actually gives you a lot of visibility and keeps traces. So for example, these are'
+
+[12:36] [scene:talk]
+VISUAL: 
+AUDIO: 'previous traces that hit the API endpoint and it gives you all the details of what exactly happened. But then once you\'re happy with your agent, you can deploy it in code and they actually give you their SDK on how'
+
+[12:49] [scene:talk]
+VISUAL: 
+AUDIO: 'exactly to incorporate this in your code. This is all the code snippet that you actually need and along with this we also have visibility to all the metrics that are being tracked on the back end.'
+
+[13:03] [scene:talk]
+VISUAL: 
+AUDIO: 'Okay. So for the back end, this MCP server has a number of different services that are running. In total, there are eight different tools that the agent can access through this MCP'
+
+[13:15] [scene:ui]
+VISUAL: Custom UI simulating an "on-call console" with alerts, agent actions, and server status.
+AUDIO: 'server. Now, some of them are read only. So they are going to run automatically, but then there are a few that can perform destructive operations and for these we need to have human in the loop.'
+
+[13:28] [scene:talk]
+VISUAL: 
+AUDIO: 'True Forge actually gives you the ability to deploy these agents with human in the loop. So here I created a UI that is going to simulate uh a new deployment and then there\'s going to be'
+
+[13:40] [scene:talk]
+VISUAL: 
+AUDIO: 'an alert that will fire uh and we\'re going to see what exactly happens on the back end. Okay, to show you how exactly the agent get access to those tools. So we first register the server once in settings with a name and URL. Now True'
+
+[13:52] [scene:talk]
+VISUAL: 
+AUDIO: 'Forge only loads the name of the server but not all of the 10 tools schema. they\'re going to be discovered on the fly and then there are gates for human in the loop that the agent can select to'
+
+[14:04] [scene:result]
+VISUAL: TrueForge UI showing "Incident Resolved - ALT-4821" with steps, status, and remediation details.
+AUDIO: 'use based on the nature of the tool that we are deploying. So first I\'m going to show you an example that we ran before in the UI just to test whether the agent actually works or not. Right? So here an'
+
+[14:16] [scene:talk]
+VISUAL: 
+AUDIO: 'alert fires and then we are asking the agent to investigate find the root cause apply the right fix and then post an incident update and acknowledge the alert. Right? So in the process we can actually see what different tool calls'
+
+[14:29] [scene:talk]
+VISUAL: 
+AUDIO: 'the agent made through our ops MCP server right and at the end it\'s able to resolve the incident by identifying the root cause and then proposing a fix. Now I\'m going to show you a live run here.'
+
+[14:43] [scene:talk]
+VISUAL: 
+AUDIO: 'We can basically fire a new alert. Let\'s assume we have a new deployment right and something happens. So if we fire a new alert here, we can actually see that the agent is going to make start making'
+
+[14:59] [scene:ui]
+VISUAL: TrueForge chat interface showing an agent's reasoning for a database pool exhaustion issue.
+AUDIO: 'tool calls and on the actual true forge UI we see the exact same steps being taken here. Right? So even though we are running this on our own application but'
+
+[15:12] [scene:talk]
+VISUAL: 
+AUDIO: 'we can see this in real time on UI side as well. Now for non-destructive operations um it\'s basically making those tool calls without asking us. But for anything that will uh is going to be'
+
+[15:25] [scene:talk]
+VISUAL: 
+AUDIO: 'destructive. Uh you can set the permission level but right now I want it uh to ask the human uh who is going to be in the loop. Now on the UI we can actually see that it correctly'
+
+[15:38] [scene:talk]
+VISUAL: 
+AUDIO: 'identified the new root cause which is driven by uh a change in an environment variable right and then it attaches the actual evidence as well uh for the user to review but now for fixing it needs to'
+
+[15:50] [scene:result]
+VISUAL: TrueForge UI showing a detailed incident resolution summary, including root cause, fix, and follow-up needed.
+AUDIO: 'update the configurations and this is where human in the loop comes into play right so it\'s asking us to allow this we actually see the same thing on our UI'
+
+[16:02] [scene:talk]
+VISUAL: 
+AUDIO: 'that we created as well. Right? So I can allow this. Okay. So we can actually see that it\'s updating the configurations based on the root cause analysis that it has performed. Now since it\'s using a'
+
+[16:14] [scene:talk]
+VISUAL: 
+AUDIO: 'local model, so it\'s a little slow, but I want to show you a previous run that completed. So here we have a previous run for the same agent. And in here you can see that it first confirmed the'
+
+[16:27] [scene:talk]
+VISUAL: 
+AUDIO: 'alert, found the root cause, applied a specific fix in order to alleviate the issue. Now the thing which I really like about True Forge apart from it being a managed agent harness that you can run'
+
+[16:40] [scene:ui]
+VISUAL: TrueForge "Scheduled Agents" page, currently empty, with a "Create Schedule" button.
+AUDIO: 'on your own infrastructure is that it tracks all the previous sessions for every session. It really gives you the previous traces which is extremely helpful especially for designing better'
+
+[16:53] [scene:talk]
+VISUAL: 
+AUDIO: 'agents and better tools. You can see where the agent failed if there are any issues with the tool schema. Right? So you can basically help improve your agents and tool definitions just by'
+
+[17:07] [scene:talk]
+VISUAL: 
+AUDIO: 'looking at these traces. Now even though I showed you an example of the agent in the code, but you can even schedule your specific agents and then they are going to run on that specific regular interval that you define. So this is an extremely'
+
+[17:22] [scene:talk]
+VISUAL: 
+AUDIO: 'powerful model agnostic open-source agent harness for general purpose agents. I\'ll highly recommend to check it out and if you like what you\'re seeing, do give them a star on GitHub.'
+
+[17:34] [scene:talk]
+VISUAL: 
+AUDIO: 'Anyways, I hope you found this video useful. Thanks for watching and as always, see you in the next one.'
