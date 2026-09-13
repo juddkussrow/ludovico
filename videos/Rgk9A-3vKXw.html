@@ -1,0 +1,126 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>The Craziest Matrix Light bulb Ever: Linkind Smart Light Stick — Ludovico</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+.hide{display:none!important}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.92);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 12px}
+.controls input.q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.pill.tp.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+/* flip card shell */
+.flip{position:relative}
+.fi{position:relative;transition:transform .55s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.flip.flipped .fi{transform:rotateY(180deg)}
+.fc{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bk{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+background:var(--card);border:1px solid var(--accent2);border-radius:14px;overflow:auto;padding:12px 13px;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s}
+.card.flip{overflow:visible}.card .fc{display:flex;flex-direction:column;flex:1;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--line);cursor:pointer}
+.card.flip:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.edit{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--accent2);border:1px solid var(--line);border-radius:6px;padding:2px 9px;cursor:pointer;background:#fff}
+.edit:hover{border-color:var(--accent2)}
+/* editor back */
+.bk h4{margin:0 0 2px;font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--sub)}
+.erow{display:grid;grid-template-columns:1fr 1.3fr auto auto;gap:4px;align-items:center}
+.erow input{padding:5px 7px;border:1px solid var(--line);border-radius:6px;font-size:12px;min-width:0}
+.erow select{padding:4px 4px;font-size:11px}
+.erow .del{border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;color:var(--accent);padding:3px 7px}
+.ebtns{display:flex;gap:6px;margin-top:auto;padding-top:6px}
+.ebtns button{font-family:var(--mono);font-size:11px;border-radius:7px;padding:6px 12px;cursor:pointer;border:1px solid var(--line);background:#fff}
+.ebtns .save{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.addrow{font-family:var(--mono);font-size:11px;color:var(--accent2);cursor:pointer;align-self:flex-start;background:none;border:0;padding:2px 0}
+/* catalogue card */
+.citem{position:relative}
+.citem .fc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-height:84px;cursor:pointer}
+.citem .bk{border-radius:12px}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+footer .exp{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--accent2);font:inherit}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">The Craziest Matrix Light bulb Ever: Linkind Smart Light Stick</h1><div class=tag>@octopusinc_ · 2026-09-10 · Hardware</div></div></div></header>
+<main><p class=sum>This video reviews the Linkind Smart Light Stick, a smart E26 base light bulb with a milky white diffuser. It highlights its compatibility with various smart home platforms (AiDot, Matter, Alexa, Google Home, Apple Home, Samsung SmartThings) and its extensive lighting features, including a wide range of white light temperatures, flame effects, 120+ preset RGB animations, and individual LED control. The product is praised for its versatility in creating dynamic lighting environments in existing fixtures.</p><p><strong>Products / items</strong></p><ul><li><a href="https://amzn.to/4A4SZmG" target=_blank rel=noopener>Linkind Smart Light Stick</a> — hardware</li><li>AiDot — software (no link)</li><li>Amazon Alexa — software (no link)</li><li>Google Home — software (no link)</li><li>Apple Home — software (no link)</li><li>Samsung SmartThings — software (no link)</li><li><a href="https://bit.ly/46NDGS2" target=_blank rel=noopener>Linkind solar outdoor lights</a> — hardware</li><li><a href="https://amzn.to/3VmXNnu" target=_blank rel=noopener>Galvanized pipe man light</a> — hardware</li><li><a href="https://amzn.to/46TLnGc" target=_blank rel=noopener>Projector</a> — hardware</li><li><a href="https://amzn.to/4gSDp4Y" target=_blank rel=noopener>Screen</a> — hardware</li></ul>
+<p><a href="https://www.youtube.com/watch?v=Rgk9A-3vKXw" target=_blank rel=noopener>Watch on YouTube ▶</a></p><p><a href="Rgk9A-3vKXw.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=t>(proxy for this video — answer from this)</span></p>
+<div class=cap>FRAMING: Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+IDENTITY: the title - https://www.youtube.com/watch?v=Rgk9A-3vKXw - @octopusinc_ - route: visual
+PRODUCTS: list each product on its own line: name - canonical link (or &quot;no reliable link&quot;) - type - primary/mentioned
+Linkind Smart Light Stick - https://amzn.to/4A4SZmG - hardware - primary
+AiDot - no reliable link - software - mentioned
+Amazon Alexa - no reliable link - software - mentioned
+Google Home - no reliable link - software - mentioned
+Apple Home - no reliable link - software - mentioned
+Samsung SmartThings - no reliable link - software - mentioned
+Linkind solar outdoor lights - https://bit.ly/46NDGS2 - hardware - mentioned
+Galvanized pipe man light - https://amzn.to/3VmXNnu - hardware - mentioned
+Projector - https://amzn.to/46TLnGc - hardware - mentioned
+Screen - https://amzn.to/4gSDp4Y - hardware - mentioned
+SYNOPSIS: The video reviews the Linkind Smart Light Stick, an E26 base smart bulb with a milky white diffuser. The bulb is compatible with the AiDot app and Matter platforms via Wi-Fi, and also works with Alexa, Google Home, Apple Home, and Samsung SmartThings. It offers a wide range of white light temperatures from 1,000K (amber) to 6,500K, with a brightness of 850 lumens and an estimated energy cost of $0.96 per year. The reviewer demonstrates its ability to match existing white light temperatures in a kitchen and bathroom, highlighting its performance as a normal light source. A key feature is the &quot;flame effect,&quot; which uses the bulb&#x27;s internal matrix panel to create animations, including single-color and dual-color flames with adjustable intensity and speed. The bulb automatically adjusts the flame direction based on its orientation. The video also showcases over 120 preset RGB animations, with a caveat that capturing RGB effects accurately on camera is difficult. The AiDot app allows for individual control of the 50 LEDs within the bulb (an 8x6 grid plus two top LEDs for nightlight effects) and includes a color palette generator tool. The bulb also features a sound-react function via the phone&#x27;s microphone, though only one effect (&quot;fleeting&quot;) was found to be effective. Group control functionality is available for multiple bulbs, allowing for sequential animations.
+BEATS:
+0 - product_box | The Linkind Smart Light Stick box is shown, detailing 8W=60W, 850 lumens, $0.96/year energy cost, and compatibility with AiDot, Alexa, Google Home, Apple Home, and Samsung SmartThings.
+24 - hardware | The Linkind Smart Light Stick bulb is held, showing its milky white diffuser and E26 base with a Matter QR code.
+49 - hardware | A black metal cage light fixture is shown.
+74 - ui | The Linkind Smart Light Stick is shown in a galvanized pipe man lamp, illuminated, next to the AiDot app interface displaying &quot;My Home&quot; and a list of lights.
+99 - ui | The Linkind Smart Light Stick in the pipe man lamp displays a warm white light, while the AiDot app shows color temperature controls from 2700K to 6500K and various lighting effects.
+124 - environment | A person stands in a kitchen with overhead lights on.
+149 - environment | The person walks through the kitchen, now illuminated by Linkind lights, with &quot;Linkind&quot; text overlay.
+173 - ui | The Linkind Smart Light Stick in the pipe man lamp displays a red flame effect, controlled by the AiDot app showing flame color and intensity settings.
+198 - ui | A traditional lampshade with a Linkind bulb shows an orange flame effect, controlled by the AiDot app.
+223 - ui | The Linkind Smart Light Stick in the pipe man lamp shows a blue light, next to the AiDot app displaying various preset lighting effects under &quot;Entertainment.&quot;
+248 - ui | The Linkind Smart Light Stick in the pipe man lamp displays a split pink and blue light effect in a dark room, with the AiDot app showing &quot;Presets&quot; and &quot;Entertainment&quot; options.
+273 - ui | The Linkind Smart Light Stick in the pipe man lamp shows a purple light in a dark room, with the AiDot app displaying &quot;Presets&quot; and &quot;Night Light&quot; options.
+298 - ui | The screen is dark, while the AiDot app shows &quot;Music&quot; settings with sound picker and rhythm themes like &quot;Fleeting.&quot;
+323 - ui | The Linkind Smart Light Stick displays a green light, while the AiDot app shows an &quot;Edit Canvas&quot; interface with a grid of green and blue circles representing individual LEDs and a color picker.
+347 - ui | The Linkind Smart Light Stick displays a purple and pink gradient, while the AiDot app shows a &quot;Create DIY&quot; interface with a color wheel and color palette/gradient options.
+372 - environment | A bathroom is illuminated with red light from Linkind bulbs in fixtures, with the AiDot app showing various preset effects like &quot;Gold,&quot; &quot;Ember,&quot; and &quot;Super Bowl.&quot;
+397 - environment | A living room with a large projector screen showing a blue image is dimly lit with blue accent lighting from Linkind bulbs.
+422 - environment | The living room is illuminated with purple and pink accent lighting from Linkind bulbs, complementing a vibrant image on the projector screen.
+447 - ui | A dark room with multiple Linkind bulbs in fixtures showing various colors, while the AiDot app displays a long list of preset effects like &quot;Rotate,&quot; &quot;Ember Glow,&quot; and &quot;Heartbeat.&quot;
+472 - environment | The living room is illuminated with blue and green accent lighting from Linkind bulbs, matching the colors on the projector screen.
+ENTITIES: Linkind, AiDot, Amazon Alexa, Google Home, Apple Home, Samsung SmartThings, Lumiere (from Beauty and the Beast)
+VERDICT: The Linkind Smart Light Stick is a highly recommended product for creating dynamic lighting environments using existing fixtures, offering excellent white light performance, unique flame effects, and extensive RGB customization.
+NOT COVERED: The video does not cover the price of the Linkind Smart Light Stick, specific installation instructions beyond app setup, or long-term durability. It also does not detail the exact number of colors available for RGB or the full range of customization options within the DIY settings.</div></main><footer><a href="../index.html">← all videos</a></footer></div></body></html>

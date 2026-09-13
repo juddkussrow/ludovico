@@ -1,0 +1,168 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: I recreated Matrix Bullet Time with one phone
+channel: @octopusinc_
+duration: 08:20
+source: https://www.youtube.com/watch?v=nYisoS5wPYQ
+upload_date: 20260911
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'You can now create 40 video of yourself locally for free. Only a few months ago, you needed expensive studios with dozens of cameras [music] filming you at the exact same time. Now, all you need is one phone. I spent the last few weeks building a pipeline around some amazing'
+
+[00:12] [scene:talk]
+VISUAL: 
+AUDIO: 'new research that lets you do this all on consumer hardware. And to show you what\'s possible and how it works, [music] I combine it with our 3D world generator from our last video. So, you can put yourself in pretty much any world you can imagine. But to properly'
+
+[00:24] [scene:talk]
+VISUAL: 
+AUDIO: 'put it to the test, we need to try this with the shot that this technique was basically made for, [music] the Matrix bullet time effect. Now, the research paper explicitly states that weird poses and loose clothes are basically the breaking point for this technique, but'
+
+[00:37] [scene:talk]
+VISUAL: 
+AUDIO: 'let\'s see how far we can push it. Powering all of this is a research paper called 4D Anyone. Normally, to capture someone in 4D, you would need dozens of cameras all pointing at you, filming you at the exact same time. 40 anyone skips'
+
+[00:50] [scene:talk]
+VISUAL: 
+AUDIO: 'this and instead of buying dozens of cameras and sacrificing an entire room to build a rig for them, we simply use AI to generate these new views. Now, plenty of AI models can already generate new angles, but the reconstruction for'
+
+[01:02] [scene:talk]
+VISUAL: 
+AUDIO: 'each frame only works if every angle shows the exact same person as pixel perfect as possible. And most models cannot do that, especially not for like 48 different views. To fix this, 40 anyone first extracts a 3D skeleton of'
+
+[01:16] [scene:talk]
+VISUAL: 
+AUDIO: 'the person. The skeleton locks the pose for every angle, and the fine-tuned video model fills the closed face and the details from your original footage. The trick is that the model keeps all the angles it has already generated on'
+
+[01:28] [scene:talk]
+VISUAL: 
+AUDIO: 'hand, so each new one is created with the previous views inside and also it keeps reshuffling which angles get generated together. Early on, it mixes views from all around the body so they settle on the same overall shape. Then'
+
+[01:41] [scene:talk]
+VISUAL: 
+AUDIO: 'later it groups neighboring angles together so the transitions between them stay smooth. And once we have all these consistent views, we now need to turn them into an actual 3D representation of myself here that we can move around. And'
+
+[01:55] [scene:talk]
+VISUAL: 
+AUDIO: 'that\'s where gshian splatting comes in. Gosh splatting represents a 3D scene using millions of tiny semi-transparent blobs called gshions. Each one has a position in 3D space, a size, a rotation, a color, and transparency. And'
+
+[02:07] [scene:talk]
+VISUAL: 
+AUDIO: 'to train a splat, you start with images of the scene from different angles and their camera positions. The training process then adjusts the gshions, moving, resizing, rotating, adding, and'
+
+[02:20] [scene:talk]
+VISUAL: 
+AUDIO: 'removing them until rendering the scene from those camera angles closely matches the original images. To use this workflow, you first need a video of yourself. And ideally, it should be filmed on a tripod. You can also decide'
+
+[02:33] [scene:talk]
+VISUAL: 
+AUDIO: 'whether you want to film yourself full body or closeup. Of course, if you film closer, your legs and stuff will be missing, but you\'ll also get more detail in the face, for example. I ported 4D anyone to Comi, a free node-based'
+
+[02:45] [scene:talk]
+VISUAL: 
+AUDIO: 'interface for AI models, so it\'s a bit easier to set up. If you don\'t have Comi yet, we have a free guide showing you how to set it up. For porting this to Comi, I ran into two challenges. The first problem was that the original'
+
+[02:57] [scene:talk]
+VISUAL: 
+AUDIO: 'pipeline relied on code for reconstructing the skeletons that isn\'t allowed to be used for commercial production, but I was able to swap it out for SAM 3D body by Meta, which gives us the same kind of data, but with a more permissive license. And a second'
+
+[03:11] [scene:talk]
+VISUAL: 
+AUDIO: 'problem was that G-splat, the renderer that actually trains the gshion splats. Normally, you have to compile it yourself, but I wanted to keep it simple. Drag and drop the workflow JSON file into the CompuI interface. Then you need to install the missing custom nodes'
+
+[03:25] [scene:talk]
+VISUAL: 
+AUDIO: 'and it\'s only these two notepads right here. Next, you need to copy these two files into your Comfy UI folder and run this file. This will set up Gsplit for you. You basically just throw in your'
+
+[03:38] [scene:talk]
+VISUAL: 
+AUDIO: 'video here, and this should be a vertical video, either like a close-up shot or a full body view. And then you need to download these models and put them in the correct folder. In the next group, the synthetic data set will be generated. And you don\'t have to set a'
+
+[03:51] [scene:talk]
+VISUAL: 
+AUDIO: 'lot here. You can select the camera preset and for highest quality I recommend this one. For quick testing you can also do like 16 two rings but quality will be not as good of course. The next important options are Turbo.'
+
+[04:04] [scene:talk]
+VISUAL: 
+AUDIO: 'You should turn this on. This one will not really cost you any quality and it will be a lot faster. Another way to speed this up is to install Sage intension for comi. In this case you can activate Sage. And then we also have'
+
+[04:16] [scene:talk]
+VISUAL: 
+AUDIO: 'this low VRM setting right here. So if you have anything less than 24 GB um definitely make sure to uh turn this on. In the next group here we have some settings for gshion splatting. So first of all we can select how many frames we'
+
+[04:28] [scene:talk]
+VISUAL: 
+AUDIO: 'want to train. So you could lower this number right here for a quick preview. Down here you can switch the quality and I usually use standard. Like all the clips that you\'ve seen are standard and'
+
+[04:40] [scene:talk]
+VISUAL: 
+AUDIO: 'once it\'s done you have this cool preview where you can check out your results. But like talking characters in 3D, I mean it\'s cool, but can we push it even further? So now let\'s try to create the Matrix bullet time effect using this'
+
+[04:52] [scene:talk]
+VISUAL: 
+AUDIO: 'tool. So in the original Matrix movie, they had this entire studio with a line of around 120 cameras all firing in rapid succession to create this amazing camera move that also appears to happen in slow motion. I really tried my best'
+
+[05:04] [scene:talk]
+VISUAL: 
+AUDIO: 'to recreate this in my office. I recorded multiple angles of myself repeatedly jumping onto a mattress to see which one would resolve best. And I used the iPhone\'s slow motion setting for this. So to my neighbors wondering'
+
+[05:16] [scene:talk]
+VISUAL: 
+AUDIO: 'why their ceiling was shaking, that was what I was doing for half an hour. In the end, I ran all the clips through the pipeline with varying degrees of success. Most of them completely break once I hit the mattress. This one was the first one where I was thinking this'
+
+[05:28] [scene:talk]
+VISUAL: 
+AUDIO: 'is sort of okay. At least you can still understand the movement, but yeah, it\'s not great. So then I started experimenting whether I could use Miniax H3, a free open-source video model to clean up those broken renderings. And'
+
+[05:41] [scene:talk]
+VISUAL: 
+AUDIO: 'that one worked pretty much first try. So now pretty confident that I could at least get something viewable uh out of this workflow, I wanted to create the 3D environment to put myself into. Of course, you could scan a real'
+
+[05:53] [scene:talk]
+VISUAL: 
+AUDIO: 'environment, but I relied on the workflow from our latest video. There we developed a pipeline that lets you take an image or prompt and turn it into a full 3D gshian splat environment using virtual AI drones that fly through your'
+
+[06:06] [scene:talk]
+VISUAL: 
+AUDIO: 'scene to map everything out. You should check it out. It\'s a lot of fun. So, I tried importing the environment and the splat sequence into Blender using an add-on called 3DGS render engine by Kiri, but unfortunately it doesn\'t'
+
+[06:20] [scene:talk]
+VISUAL: 
+AUDIO: 'support splat sequences yet. I tried creating a script that loads each frame individually, but it was a bit too heavy for my computer and a bit messy. So, instead, I created the camera move in Blender around the static splat and then'
+
+[06:33] [scene:talk]
+VISUAL: 
+AUDIO: 'asked Claude code to directly merge the splats in G-splat. So, I had it add bullets as well, rendered out the sequence, and it looked like this. Not quite Matrix yet, but then I added my Miniax H3 cleanup workflow, and it'
+
+[06:47] [scene:talk]
+VISUAL: 
+AUDIO: 'worked so well that I was even able to prompt for this helicopter. Now, I would have preferred to add this one in Blender, but I think that we\'ll have to wait until 3D sequence support gets a bit better there. If you have any tips'
+
+[07:00] [scene:talk]
+VISUAL: 
+AUDIO: 'for tools that can do that, please tell me in the comments. Oh, by the way, the 4DN1 pipeline and the workflows are all completely free. But if you want to get your hands on this H3 cleanup workflow and the example files we created for'
+
+[07:12] [scene:talk]
+VISUAL: 
+AUDIO: 'this video, consider becoming an advanced supporter on Patreon. All supporters also get access to exclusive devlogs, beta workflows, and our Discord community. So, thank you so much for making weeks of R&amp;D possible. But now, without further ado, let me present the'
+
+[07:25] [scene:talk]
+VISUAL: 
+AUDIO: 'final shot. Now, I\'m pretty happy with it, even if I had to do this cleanup pass and couldn\'t use the 40 gshion splats completely on'
+
+[07:37] [scene:talk]
+VISUAL: 
+AUDIO: 'their own. But keep in mind, I also really challenged this technique with this type of shot. I mean, the intro footage worked much better straight out of the box. And of course, we can also use the cleanup workflow there for some more amazing results. Also, keep in mind'
+
+[07:50] [scene:talk]
+VISUAL: 
+AUDIO: 'that this is like one of the first synthetic data set workflows of this kind, and it\'s already working quite well with all the other improvements in special AI like World Labs Atlas. I bet the quality is going to improve'
+
+[08:02] [scene:talk]
+VISUAL: 
+AUDIO: 'dramatically over the coming months. So, make sure to subscribe to not miss any developments in this field. See you next time.'
