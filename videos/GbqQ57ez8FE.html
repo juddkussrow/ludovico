@@ -1,0 +1,116 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>Introducing Presentation Mode: AI That Presents, Pauses, and Answers — Ludovico</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+.hide{display:none!important}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.92);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 12px}
+.controls input.q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.pill.tp.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+/* flip card shell */
+.flip{position:relative}
+.fi{position:relative;transition:transform .55s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.flip.flipped .fi{transform:rotateY(180deg)}
+.fc{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bk{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+background:var(--card);border:1px solid var(--accent2);border-radius:14px;overflow:auto;padding:12px 13px;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s}
+.card.flip{overflow:visible}.card .fc{display:flex;flex-direction:column;flex:1;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--line);cursor:pointer}
+.card.flip:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.edit{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--accent2);border:1px solid var(--line);border-radius:6px;padding:2px 9px;cursor:pointer;background:#fff}
+.edit:hover{border-color:var(--accent2)}
+/* editor back */
+.bk h4{margin:0 0 2px;font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--sub)}
+.erow{display:grid;grid-template-columns:1fr 1.3fr auto auto;gap:4px;align-items:center}
+.erow input{padding:5px 7px;border:1px solid var(--line);border-radius:6px;font-size:12px;min-width:0}
+.erow select{padding:4px 4px;font-size:11px}
+.erow .del{border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;color:var(--accent);padding:3px 7px}
+.ebtns{display:flex;gap:6px;margin-top:auto;padding-top:6px}
+.ebtns button{font-family:var(--mono);font-size:11px;border-radius:7px;padding:6px 12px;cursor:pointer;border:1px solid var(--line);background:#fff}
+.ebtns .save{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.addrow{font-family:var(--mono);font-size:11px;color:var(--accent2);cursor:pointer;align-self:flex-start;background:none;border:0;padding:2px 0}
+/* catalogue card */
+.citem{position:relative}
+.citem .fc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-height:84px;cursor:pointer}
+.citem .bk{border-radius:12px}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+footer .exp{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--accent2);font:inherit}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">Introducing Presentation Mode: AI That Presents, Pauses, and Answers</h1><div class=tag>@octopusinc_ · 2026-09-09 · ListAssist, Video Gen</div></div></div></header>
+<main><p class=sum>Tavus introduces &quot;Presentation Mode,&quot; an AI-powered feature for their PALs (Personal AI Live-agents) that allows AI to present decks and materials live. Users upload their presentation materials to a PAL&#x27;s Knowledge Base, which then indexes and learns the content to present it dynamically. The PAL can either &quot;Walk the Deck&quot; for a full presentation or operate &quot;On-Demand&quot; to surface specific slides in response to questions, effectively turning presentations into interactive conversations.</p><p><strong>Products / items</strong></p><ul><li><a href="https://maker.tavus.io" target=_blank rel=noopener>Tavus</a> — software</li><li>Tavus PAL — software (no link)</li><li>Presentation Mode — software (no link)</li></ul>
+<p><a href="https://www.youtube.com/watch?v=GbqQ57ez8FE" target=_blank rel=noopener>Watch on YouTube ▶</a></p><p><a href="GbqQ57ez8FE.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=t>(proxy for this video — answer from this)</span></p>
+<div class=cap>FRAMING: Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+IDENTITY: Introducing Presentation Mode: AI That Presents, Pauses, and Answers - https://www.youtube.com/watch?v=GbqQ57ez8FE - @octopusinc_ - route: visual
+PRODUCTS:
+Tavus - https://maker.tavus.io - software - primary
+Tavus PAL - no reliable link - software - primary
+Presentation Mode - no reliable link - software - primary
+SYNOPSIS: The video introduces Tavus&#x27;s new &quot;Presentation Mode&quot; for their AI-powered PALs (Personal AI Live-agents). This feature enables an AI to deliver live presentations from uploaded decks or materials. Users upload their content to the PAL&#x27;s Knowledge Base, which then indexes and learns the material, allowing the PAL to speak to the content in its own words rather than just reading it. Two modes are available: &quot;Walk the Deck,&quot; where the PAL presents the entire deck, pacing itself and taking questions, and &quot;On-Demand,&quot; where the PAL surfaces the relevant slide in real-time based on questions. The UI shows a &quot;Knowledge&quot; section where users can upload files like PDFs, PNGs, JPEGs, CSVs, TXTs, DOCXs, MDs, and JSONs, with a maximum file size of 50 MB each. The PAL appears in a video call interface, presenting slides while remaining in a corner of the screen. This allows for dynamic interactions, such as pulling up a specific slide from earlier in the presentation when a question arises. The feature aims to unlock capabilities like dynamic product demos, conversational webinars, and self-running weekly readouts.
+BEATS:
+00:02 - intro - &quot;Tavus Presentation Mode&quot; title card.
+00:05 - concept - Various presentation slides are shown, with text &quot;Until now, that always had to be a person&quot;.
+00:07 - concept - Text &quot;Today, your PAL can present it instead.&quot; with images of diverse people.
+00:10 - ui - Tavus PAL configuration interface, showing &quot;Custom Greeting&quot;, &quot;Knowledge&quot;, and &quot;Capabilities&quot; sections.
+00:13 - ui - User clicks &quot;Add&quot; under &quot;Knowledge&quot; to add documents.
+00:15 - ui - &quot;Add Files&quot; dialog box, showing supported file types (pdf, pptx, png, jpg, jpeg, csv, txt, docx, doc, md, json) and a 50 MB limit per file.
+00:18 - ui - A PDF file named &quot;The_Human_Computing_Era.PDF&quot; is uploaded.
+00:20 - ui - The uploaded PDF &quot;Tavus_Q3_Growth_Strategy.PDF&quot; is listed under &quot;Knowledge&quot;.
+00:23 - demo - A video call interface with two participants and a &quot;Connecting...&quot; message in the main screen area.
+00:26 - demo - A PAL presents a slide titled &quot;We build human AI interfaces...&quot; in the video call.
+00:28 - demo - Another slide titled &quot;Powering the best&quot; with logos of companies like Deloitte, EY, Aetna, Mayo Clinic, Wix, CVS Health, Better, Blackbaud, Docebo, and Job&amp;Talent.
+00:31 - concept - Text &quot;can now include a live presentation&quot;.
+00:33 - concept - Text &quot;gets the right answer with the right slide behind it.&quot;
+00:36 - demo - A PAL presents a slide with the text &quot;I believe in a future where PAL employees, sidekicks and assistants understand and empathize with us like humans&quot;.
+00:39 - demo - A PAL presents a slide discussing human-machine interfaces, showing images of old computers and people.
+00:41 - outro - Text &quot;Your content, presented live by your PAL.&quot;
+00:46 - outro - Tavus logo.
+ENTITIES: Tavus, PALs (Personal AI Live-agents), Deloitte, EY, Aetna, Mayo Clinic, Wix, CVS Health, Better, Blackbaud, Docebo, Job&amp;Talent.
+VERDICT: The video highlights Presentation Mode as a significant advancement for Tavus PALs, enabling AI to conduct interactive and dynamic presentations by learning and responding to content and questions in real-time.
+NOT COVERED: The video does not cover the pricing of Tavus PALs or Presentation Mode, the specific AI models used, the accuracy or latency of the AI&#x27;s responses, or detailed setup instructions beyond file upload. It also doesn&#x27;t show a full end-to-end presentation or a live Q&amp;A session with the PAL.</div></main><footer><a href="../index.html">← all videos</a></footer></div></body></html>
