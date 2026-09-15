@@ -1,0 +1,260 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Getting Started with Neon
+channel: @octopusinc_
+duration: 13:03
+source: https://www.youtube.com/watch?v=XtMiMnX0hDg
+upload_date: 20260415
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'Neon is a serverless Postgres database built for the modern developer workflow. And in this video, I\'m going to walk you step-by-step through the process of getting started with Neon. I\'m going to show you how you can create your first database, how to connect your database'
+
+[00:12] [scene:talk]
+VISUAL: 
+AUDIO: 'to an ORM like Drizzle. I\'ll show you how to define a schema and how you can create, read, update, and delete data. And we\'re going to be doing all of this with a little help from AI to streamline'
+
+[00:24] [scene:talk]
+VISUAL: 
+AUDIO: 'the process and get you up and running as quickly as possible. But don\'t worry, if you don\'t want to use a coding agent, I\'ll have all of the code from this video in a GitHub repo linked down in the description. And by the end of this'
+
+[00:36] [scene:talk]
+VISUAL: 
+AUDIO: 'video, you\'ll have created this cool little to-do list app that comes fully equipped with confetti. So, if that sounds interesting, let\'s jump right in. Okay, so first things first, you\'re going to want to create a'
+
+[00:49] [scene:talk]
+VISUAL: 
+AUDIO: 'Neon account. So, head on over to neon.com and come over here to sign up. Once you go through the account creation flow, you\'ll be brought to this screen here where you can create your first project. So, for our to-do list app, I\'m'
+
+[01:02] [scene:talk]
+VISUAL: 
+AUDIO: 'going to call this project to-do list. I\'ll come over here and click create project, and then I\'m going to be presented with the Neon init command. And this is going to be the easiest way'
+
+[01:14] [scene:talk]
+VISUAL: 
+AUDIO: 'to set up Neon in your local environment based on your editor and your coding agent of choice. And it\'ll include things like the VS Code extension, the Neon MCP server, and agent skills. So, I\'m going to copy that here. And if this'
+
+[01:28] [scene:talk]
+VISUAL: 
+AUDIO: 'is not your first project, if you go to your project, you can do the same thing and copy that command right here. And then from here, we can jump on into our actual project. So, here I\'ve got a brand new Next.js app, and the first'
+
+[01:42] [scene:talk]
+VISUAL: 
+AUDIO: 'thing I\'m going to do is open up the terminal and paste in our command right here. Now, when you run this command, what\'s going to happen is Neon is going to open up this authorization screen. And this is how you can authorize the Neon CLI to'
+
+[01:55] [scene:talk]
+VISUAL: 
+AUDIO: 'work with your account. So, down here I\'ll click on authorize. And once that\'s complete, we can jump back on over to our project. Here I\'ll say I want to just configure Cursor. The authentication is successful, and we'
+
+[02:08] [scene:talk]
+VISUAL: 
+AUDIO: 'wait a few seconds. And now we\'ve got everything installed into our project. Alternatively, if you\'re using a tool like Cursor, you can actually just come on over to the chat'
+
+[02:20] [scene:talk]
+VISUAL: 
+AUDIO: 'window here, and if I type in Neon, Cursor is going to give me this little pop-up where I can install the Neon plugin. And what the plugin is going to do is it\'s going to add both the Neon skill and the Neon MCP server to our'
+
+[02:33] [scene:talk]
+VISUAL: 
+AUDIO: 'project. So, this is another way of installing everything. Of course, if you\'re not using Cursor and maybe you\'re using Quad Code, we also have a plugin for Quad, so you can use that there just the same.'
+
+[02:45] [scene:talk]
+VISUAL: 
+AUDIO: 'Either way, once you have everything installed, we\'re going to prompt Cursor. I\'m going to paste in my prompt here. And so, here\'s what we want. I want to create a simple to-do list app using Neon and Drizzle. The app should allow users to create to-dos, delete to-dos,'
+
+[02:58] [scene:talk]
+VISUAL: 
+AUDIO: 'and mark to-dos as completed. And when a to-do is marked as completed, we want to show a small little confetti animation. And of course, we want to make sure we\'re using the right Neon project. Ours is called to-do list. So, I\'m going to give that a run. I\'m going to let Cursor'
+
+[03:12] [scene:talk]
+VISUAL: 
+AUDIO: 'do its thing, and we\'ll come back when this is all finished. In the meantime, you\'ll notice that we\'re using a tool called Drizzle. Drizzle is an object-relational mapper, or ORM. And essentially what that means is Drizzle'
+
+[03:26] [scene:talk]
+VISUAL: 
+AUDIO: 'allows us to interact with our database using TypeScript instead of writing raw SQL queries. So, as we start to go through this app, you\'ll see how we can use Drizzle to simplify our interactions with our database. All right, so Cursor'
+
+[03:38] [scene:talk]
+VISUAL: 
+AUDIO: 'has finished building our app, and here it is. We\'ve got a cool little to-do list app. I can write test right here, and I really like the confetti. &gt;&gt; [laughter]'
+
+[03:51] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; All right, this looks great. So, let\'s jump into the code now and see how we actually build this app. And again, if you\'re not using AI, these are going to be the exact same steps that you would follow to build out this app on your own. So, that being said, the first file that I want to take a look at is this'
+
+[04:05] [scene:talk]
+VISUAL: 
+AUDIO: '.env file. And in here, we\'ve got a environment variable called database URL. And this is going to point to our connection string. And you can essentially think of your'
+
+[04:17] [scene:talk]
+VISUAL: 
+AUDIO: 'connection string as the key to your database. And because we gave Cursor access to our Neon account, our agent was able to pull in this string on our behalf. However, if you do need to grab this yourself, you can always jump on'
+
+[04:31] [scene:talk]
+VISUAL: 
+AUDIO: 'over to your project dashboard. And here, if you click connect, you can get your connection string right over here. Now, in order to actually use Neon and Drizzle, we have to have them installed in our project. So, if I jump back over'
+
+[04:43] [scene:talk]
+VISUAL: 
+AUDIO: 'to our app, in our package.json file, you\'ll see we have a few dependencies here. So, first, we have the Neon serverless driver. And then down here, we have Drizzle ORM. And finally, you\'ll'
+
+[04:55] [scene:talk]
+VISUAL: 
+AUDIO: 'see we\'ve also added this dev dependency called DrizzleKit. And we\'ll get back to that in a minute and see how that works. For now, the next thing that we need in our app is our database schema. So, over'
+
+[05:07] [scene:talk]
+VISUAL: 
+AUDIO: 'here, you\'ll see that we have a folder called DB. This is where we\'re going to store all of our database-related code. So, in there, we have this file called schema.ts.'
+
+[05:19] [scene:talk]
+VISUAL: 
+AUDIO: 'And at the top of this file, we\'re importing a few type helpers from Drizzle. And then we\'re using these helpers to define our to-do schema. So, each to-do is going to have a unique ID. It\'s going to have a text field that'
+
+[05:32] [scene:talk]
+VISUAL: 
+AUDIO: 'indicates what the to-do actually is. We\'ll have a completed field that indicates whether or not the to-do is completed. And then finally, we\'ll have a created at timestamp. Then at the bottom of this file, you\'ll'
+
+[05:44] [scene:talk]
+VISUAL: 
+AUDIO: 'see we\'re creating this to-do type by using infer select. And this is one of those nice things that Drizzle is able to help us with. So, this way our type is always connected or stays in sync with our database schema. Awesome. The'
+
+[05:58] [scene:talk]
+VISUAL: 
+AUDIO: 'next thing our app needs is a connection to our database. So, for that, Cursor has created this index.ts file. And in here, you can see we\'re importing Neon from the Neon serverless driver, Drizzle'
+
+[06:10] [scene:talk]
+VISUAL: 
+AUDIO: 'from the Drizzle ORM, Neon HTTP package, and our schema from the schema file that we just created. And then down here, in order to create our connection, we\'re using Neon and passing it our database'
+
+[06:22] [scene:talk]
+VISUAL: 
+AUDIO: 'URL, which points to our connection string. And then we\'re taking what we get back from that and passing that along to Drizzle to create this DB object. And this is what we\'re going to use to query'
+
+[06:34] [scene:talk]
+VISUAL: 
+AUDIO: 'our database. And because we\'re also passing our schema when we do this, this object is going to give us all kinds of auto-completion and type safety to make querying our database a little bit easier. Now, for this app, we\'re going'
+
+[06:47] [scene:talk]
+VISUAL: 
+AUDIO: 'to be using the Neon serverless driver, which is a great fit if you\'re deploying to any kind of serverless environment. That said, depending on where you\'re deploying your app, another driver or connection method might be more'
+
+[07:01] [scene:talk]
+VISUAL: 
+AUDIO: 'performant. The good news is, if you\'re not sure what to pick for your setup, there\'s actually an easy way for you to find out. Because we have the Neon skill installed in this project, I can actually just go on over to Cursor, and I can ask it what connection method I'
+
+[07:14] [scene:talk]
+VISUAL: 
+AUDIO: 'should use if I\'m deploying to Vercel or Netlify, Cloudflare, whatever you\'re using. And then from here, your agent can go ahead and write your connection code in a way that fits your environment. So, now that we have our'
+
+[07:27] [scene:talk]
+VISUAL: 
+AUDIO: 'connection to our database, and we\'ve defined our to-do schema, we need to actually sync this with our database. And this is where DrizzleKit comes in. DrizzleKit is a tool that handles all of'
+
+[07:39] [scene:talk]
+VISUAL: 
+AUDIO: 'the heavy lifting of our migrations and allows us to push our schema to our Neon database. So, in order to configure Drizzle kit, we have to create a drizzle.config.ts file.'
+
+[07:52] [scene:talk]
+VISUAL: 
+AUDIO: 'And in here, we\'re going to define our config. So, first, we have this out field, which is where we\'re going to store all of our migration files. So, for us, we\'re going to be creating a Drizzle folder.'
+
+[08:04] [scene:talk]
+VISUAL: 
+AUDIO: 'After that, we have this schema, and this just points to our schema file that we defined. And then we have the dialect, and we\'re selecting Postgres because Neon is a Postgres database. And then finally, we are providing Drizzle kit with our'
+
+[08:18] [scene:talk]
+VISUAL: 
+AUDIO: 'database URL. Now, when Cursor built this app, it used the push command from Drizzle kit to sync our schema to our database. Which means if I jump back over to our dashboard and I go to'
+
+[08:30] [scene:talk]
+VISUAL: 
+AUDIO: 'tables, you\'ll see that our to-do\'s table exists right here. And the push command is really great for quick prototyping, but for a real-world app, we want to have versioned migrations,'
+
+[08:42] [scene:talk]
+VISUAL: 
+AUDIO: 'and that\'s going to give us a little more control over our database changes. So, in order to show how that works, I\'m actually going to delete this to-do\'s table and then jump back over into our project. Now, in order to create a'
+
+[08:55] [scene:talk]
+VISUAL: 
+AUDIO: 'migration, the first thing we need to do is run this command NPX Drizzle kit generate. What this is going to do is it\'s going to create this Drizzle folder, and within here, we have this SQL file where'
+
+[09:08] [scene:talk]
+VISUAL: 
+AUDIO: 'we are creating our to-do\'s table. This all looks good, so the next step in the process is running the command NPX Drizzle kit migrate. And what this is going to do is it\'s'
+
+[09:21] [scene:talk]
+VISUAL: 
+AUDIO: 'going to execute the SQL statement that we have in our file. Which means if we jump back on over to our uh console over here, if I refresh, now we have our to-do\'s table again. And'
+
+[09:34] [scene:talk]
+VISUAL: 
+AUDIO: 'you would never do this in a production database, but just for example\'s sake, I can actually come over here and add a record. I\'ll call this test. And now we have a to-do in our database. At this'
+
+[09:47] [scene:talk]
+VISUAL: 
+AUDIO: 'point, we have everything that we need to actually start fetching our to-do\'s. So, if we jump back on over to the app in our page.tsx file, this is where we\'re going to be fetching our to-do\'s.'
+
+[09:59] [scene:talk]
+VISUAL: 
+AUDIO: 'The first thing you\'ll notice here is that we are importing our DB object. And if you remember, this is what we used to query our database. And because this is a server component, we can fetch all of'
+
+[10:11] [scene:talk]
+VISUAL: 
+AUDIO: 'our to-do\'s directly in the component. And we do that by calling db.select.from our to-do\'s table, and then we\'re ordering them by the time they were created at. Once we have all of those to-do\'s, we'
+
+[10:23] [scene:talk]
+VISUAL: 
+AUDIO: 'can actually come down here and we can map through all of them. And for each to-do, we\'re going to display this to-do item component. We will get to this component, but first, I want to scroll back up and show'
+
+[10:35] [scene:talk]
+VISUAL: 
+AUDIO: 'you our form where we are creating our to-do\'s. So here, we have a text input field and a submit button. And when we submit this form, we\'re calling this add to-do action.'
+
+[10:47] [scene:talk]
+VISUAL: 
+AUDIO: 'This action is defined in our actions.ts file. So here, we have our add to-do action, and we\'re taking in the form data. With the form data, we\'re pulling out the text value that we receive. And in order to actually insert this into'
+
+[11:00] [scene:talk]
+VISUAL: 
+AUDIO: 'our database, we\'re going to use the insert function. We\'re inserting into our to-do\'s table, and we\'re inserting the value of the text that we receive from the form. Then finally down here, we\'re just'
+
+[11:12] [scene:talk]
+VISUAL: 
+AUDIO: 'calling revalidate path. And this is to tell Next.js that we want to refresh the page so we can see the new uh to-do that was added. So that\'s how we\'re adding a to-do, but we also have two more actions for toggling and deleting a to-do.'
+
+[11:25] [scene:talk]
+VISUAL: 
+AUDIO: 'For the toggle to-do, we\'re going to use the update function. We\'re going to set completed to the opposite of what it was, and we\'re going to use this where clause with this equals helper, and this allows us to essentially pick out the'
+
+[11:38] [scene:talk]
+VISUAL: 
+AUDIO: 'specific to-do that we want to update. And again, calling revalidate path. Delete is very much the same. We\'re just calling the delete function instead of the update function. So, these are our server actions. And'
+
+[11:50] [scene:talk]
+VISUAL: 
+AUDIO: 'now, with these, the last thing we need to look at is our to-do item component. So, in here, you\'ll see we\'ve created two functions for handling toggle and handling delete. In the toggle, we\'re'
+
+[12:02] [scene:talk]
+VISUAL: 
+AUDIO: 'going to call our toggle to-do action. And then, of course, we\'re going to fire a little confetti for a quick little dopamine hit. And then, in the delete function, we\'re calling our delete to-do action.'
+
+[12:14] [scene:talk]
+VISUAL: 
+AUDIO: 'All we have to do from there is wire those up to a button for the check mark and a button for the X to delete. And now, we\'ve got a working to-do list app. So, one more time, if I come on over to our app, I can add a new to-do like'
+
+[12:27] [scene:talk]
+VISUAL: 
+AUDIO: 'this. I can delete a to-do. And if I click on this check mark, confetti. And just to be sure that everything is working, if we come on over to our console and refresh, we can see that'
+
+[12:39] [scene:talk]
+VISUAL: 
+AUDIO: 'to-do in our database. Now, I know we went through a lot in this video. But, like I said, all of this code is available on GitHub. So, feel free to go and check that out and explore it for'
+
+[12:51] [scene:talk]
+VISUAL: 
+AUDIO: 'yourself. And of course, if you have any questions, please leave them down in the comments. We will be more than happy to answer them. Thank you so much for watching, and I\'ll see you in the next one.'

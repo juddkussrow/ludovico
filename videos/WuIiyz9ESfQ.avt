@@ -1,0 +1,444 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Cloning AI voices with emotion
+channel: @octopusinc_
+duration: 23:05
+source: https://www.youtube.com/watch?v=WuIiyz9ESfQ
+upload_date: 20260910
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'Let\'s say we\'re working on an application that wants to present cloned AI voices to the user. Okay, we can connect our application to a texttospech server to generate that speech and then present it through our application. Great. But uh which texttospech engine should we support? There\'s a bunch to choose from. Okay, why don\'t we just'
+
+[00:12] [scene:talk]
+VISUAL: 
+AUDIO: 'support all of them? Why don\'t we just allow the user to connect to any text to speech engine uh so that they have maximum flexibility? That\'s a great idea, but every texttospech engine supports a slightly different set of options and some TTS engines have options that are unique to that one'
+
+[00:25] [scene:talk]
+VISUAL: 
+AUDIO: 'engine. uh how do we present that to our users in a way that isn\'t confusing? We can either support a lowest common denominator set of options that all of these TTS engines support, in which case we miss out on those unique features that some of them offer, or we present a'
+
+[00:37] [scene:talk]
+VISUAL: 
+AUDIO: 'really long and complicated UI that you\'ve got to scroll through and look for the options that are specific to whatever engine you\'re currently connected to. This is a this is an ugly UI. Can we get the best of both worlds? Can we have a flexible uh application that can connect to any TTS engine and'
+
+[00:50] [scene:talk]
+VISUAL: 
+AUDIO: 'still present options that are only specific to that one TTS engine? I think we can. Let\'s take a look at that. And as a bonus, let\'s take a look at two new TTS engines that claim that we can imbue some emotion into our clone AI voices instead of just going strictly by the'
+
+[01:03] [scene:talk]
+VISUAL: 
+AUDIO: 'reference audio. I think this is going to be a fun one. Let\'s take a look at it. &gt;&gt; No [music] local host. No host.'
+
+[01:15] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; Okay, let\'s do this in sections. Section one, we\'re going to look at the two new TTS engines and the claims that they\'re making. Uh section two, we\'re going to look at the behind the scenes wiring it up. We\'re going to look at a new development methodology that I\'ve been using with my local LLM to make this all happen. And then section three, we\'re'
+
+[01:27] [scene:talk]
+VISUAL: 
+AUDIO: 'going to show the finished product, the uh actual integration of the new TTS engines into our AI group chat application. Let\'s start with the TTS engines. First up is Chatterbox. Both of these, by the way, were were viewer'
+
+[01:39] [scene:talk]
+VISUAL: 
+AUDIO: 'suggestions. I\'m slowly making my way through the long list of uh viewer suggested TTS engines. Chatterbox claims to be able to clone voices with what they call emotion exaggeration control. Uh this is kind of neat. I like the name of it, emotion exaggeration. So, it\'s a number from 0 to two. The Chatterbox, by'
+
+[01:53] [scene:talk]
+VISUAL: 
+AUDIO: 'the way, doesn\'t ship with a uh a default uh web application that we can play with. So, I\'m just going to go with the examples that they publish on their website. Uh I gather one is uh no exaggeration. So, this is the bass uh'
+
+[02:05] [scene:talk]
+VISUAL: 
+AUDIO: 'bass audio with no exaggeration. &gt;&gt; Everybody be cool. This is a robbery. &gt;&gt; You can turn it down to underexaggerate the voice to make it sound a little bit more subdued. Here\'s it. Here it is at 0.5.'
+
+[02:17] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; Everybody be cool. This is a robbery. &gt;&gt; Little bit slower. or a little bit calmer. You can crank it up all the way to two to make the voice sound more animated. &gt;&gt; Everybody be cool. This is a robbery. &gt;&gt; It\'s pretty cool. It sounds pretty cool.'
+
+[02:29] [scene:talk]
+VISUAL: 
+AUDIO: 'Uh so that\'s that\'s a neat neat feat feature. It\'s unique to uh Chatterbox and uh I\'d love to build it into our application. Uh next up is index TTS. Uh this was also a viewer suggestion. Uh index DTS uh does come with a little uh'
+
+[02:42] [scene:talk]
+VISUAL: 
+AUDIO: 'demo application. I\'ve already got it installed. So I\'ve got my Mr. &gt;&gt; I want to raise Starfleet command due to heavy. We\'ve heard that one in previous episodes. Uh if we scroll down to the controls, uh index DTS offers a bunch of emotional controls. This is kind of'
+
+[02:56] [scene:talk]
+VISUAL: 
+AUDIO: 'neat. They claim that you can individually uh amp up specific emotions or provide a combination of emotions by adjusting multiple sliders at the same time. So, I\'m going to I\'m going to turn up the angry slider. And you\'ve got this emotional control weight down here. If'
+
+[03:09] [scene:talk]
+VISUAL: 
+AUDIO: 'we take our Mr. Spock sample and try to make him sound angry, uh we get this. If you call me a half breed one more time, I\'ll Vulcan neck pinch you so hard.'
+
+[03:21] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; So, it starts to sound a little bit less like Spock. If we turn the power down, if I if I don\'t exaggerate it quite that much, if we regenerate with slightly softer settings, I think it\'s going to sound a little bit'
+
+[03:33] [scene:talk]
+VISUAL: 
+AUDIO: 'closer to the reference audio. &gt;&gt; If you call me a half breed one more time, I\'ll Vulcan neck pinch you so hard. And as we continue decreasing the power of it, it has a a diminishing effect, a more subtle effect on the audio.'
+
+[03:46] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; If you call me a half breed one more time, I\'ll Vulcan neck pinch you so hard. &gt;&gt; If you turn it down too much, it stops sounding like the emotion that you\'re trying to convey. But if you crank it, let\'s crank it all the way up and just see what happens. He\'s really angry now.'
+
+[03:58] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; If you call me a half breed one more time, I\'LL VULCAN NECK PINCH YOU SO HARD. &gt;&gt; SO THAT definitely sounds angry, but it doesn\'t sound like Mr. Spock anymore. We\'ve gone too far with it. Let\'s try that again. Let\'s give it a different'
+
+[04:12] [scene:talk]
+VISUAL: 
+AUDIO: 'emotion. Afraid. How about afraid? We\'ll make him sound afraid. And regenerate. &gt;&gt; Captain, I am very, very frightened. Please hold me. [laughter] &gt;&gt; It sounded almost like he had an accent.'
+
+[04:24] [scene:talk]
+VISUAL: 
+AUDIO: 'So, okay. Okay. Let\'s turn it down a little bit. Let\'s not amp it up that much. &gt;&gt; Captain, I am very, very frightened. Please hold me.'
+
+[04:36] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; That\'s not bad. That\'s not bad at all. I kind of like that. Okay, so we\'ve got two DTS engines that allow us to put a little bit of emotion into our AI voices for the first time. If you\'ve watched previous episodes on this subject on this channel, uh we found that the cloned voices that we generate tend to'
+
+[04:50] [scene:talk]
+VISUAL: 
+AUDIO: 'follow the uh the reference audio that you supply very very closely. Let\'s let\'s listen to the reference audio that we gave it. &gt;&gt; Subspace interference. She was attacked by what appears to be essentially a robot.'
+
+[05:02] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; He\'s he\'s just speaking in a completely normal, you know, Vulcan flat tone of voice. He\'s not emphasizing anything in particular. Uh, so our clone voices in previous episodes when we looked at Mr. Spock\'s voice, they all sound like that. They all sound like he\'s just reading a weather report or something. It\'s just'
+
+[05:15] [scene:talk]
+VISUAL: 
+AUDIO: 'there\'s no emotion in it at all. But we can with tools like this, maybe we can imbue some emotion into the clone voices. That\'s pretty cool. Okay, cat. Really? Okay. Uh, let\'s uh let\'s'
+
+[05:27] [scene:talk]
+VISUAL: 
+AUDIO: 'move on to section two. We\'re going to talk about how to wire it up. It\'s going to get a little bit technical, but uh bear with me. All right, section two. We\'re going to talk about some of the behind the scenes stuff and the technical details. Uh let\'s take a look'
+
+[05:39] [scene:talk]
+VISUAL: 
+AUDIO: 'at talk with me version 6. This is the older version that we\'re about to replace. Uh let\'s go to the servers dialogue and look at TTS. You can specify the location of your TTS server. And there\'s some basic most common denominator parameters that apply to'
+
+[05:51] [scene:talk]
+VISUAL: 
+AUDIO: 'most TTS servers except uh these. Not all of them do, but but most of them do. Step count, how hard do you want it to work on generating the voice? Uh CFG, how close or how far do you want it to get from the reference audio that you supply? uh random seed if you want to'
+
+[06:04] [scene:talk]
+VISUAL: 
+AUDIO: 'create a reproducible voice clone. Same input with same seed gives you same output. Uh and request timeout. And then we\'ve got the sentence by sentence mode, which is a talk with me option, not a TTS option. Uh and that\'s it. That\'s it. Uh so where would we slot in something'
+
+[06:17] [scene:talk]
+VISUAL: 
+AUDIO: 'like uh the exaggeration control or the emotion uh values that we just saw in those other TTS engines? Where would we put that here? Uh we could just put it there and have it be not applicable if you\'re not connected to uh Chatterbox or'
+
+[06:30] [scene:talk]
+VISUAL: 
+AUDIO: 'index TTS. If you\'re connected to OmniVoice, those options don\'t exist. So, they just don\'t apply. We could gray them out or maybe we could hide them. We could do selective stuff on the client. But now, the application has got to know intimate details about every TTS engine,'
+
+[06:42] [scene:talk]
+VISUAL: 
+AUDIO: 'which is exactly what I didn\'t want when I first built this application. What I\'ve been doing up to version six up to including version six, I\'ve got a set of server scripts that I stand up in front of each TTS engine and I provide my own'
+
+[06:54] [scene:talk]
+VISUAL: 
+AUDIO: 'REST API uh that provides a kind of a lowest common denominator interface, a standardized interface that talk with me can hit. So, talk with me actually doesn\'t know if it\'s connected to omnivoice or dots.TTS or Quen 3 TTS, the three TTS engines that we support right'
+
+[07:09] [scene:talk]
+VISUAL: 
+AUDIO: 'now. It just knows that it\'s connected to one of those server scripts that provide the same API for each TTS engine. And we could keep doing that. Every time I had a new TTS engine, we could copy paste one of the existing scripts and just modify it for the new'
+
+[07:21] [scene:talk]
+VISUAL: 
+AUDIO: 'TTS engine. But that\'s clunky and it doesn\'t allow us to get access to the custom features that are specific to any one engine. If we use a standardized API, it\'s got to have the same options for each TTS engine, right? Or does it? Let\'s take a look at a new project that'
+
+[07:34] [scene:talk]
+VISUAL: 
+AUDIO: 'I\'ve stood up called TTS serve. That the whole point of this project is to provide a standardized uh API to multiple different TTS servers. The engines we support right now,'
+
+[07:48] [scene:talk]
+VISUAL: 
+AUDIO: 'Chatterbox, Omnivoice, Quen 3, Quen 3TS, DOT.TTS, TTS index TTS will very soon be added to this list uh before I push uh talk with me version 7. We support all of these. But how do we support them? Uh'
+
+[08:00] [scene:talk]
+VISUAL: 
+AUDIO: 'if they all have different options. Here\'s the really fun part. The REST API that\'s published by TTS serve is discoverable. What that means is it\'s got a a /capabilities endpoint. If you hit that endpoint, you get back a big JSON document. In fact, let\'s try it.'
+
+[08:13] [scene:talk]
+VISUAL: 
+AUDIO: 'Let\'s try it right now. Okay, I\'ve got Omnivoice with TTS serve running on my laptop on port 8000. So, if I just do a get on port 8000/capabilities, I get back this big mess of JSON that\'s not'
+
+[08:26] [scene:talk]
+VISUAL: 
+AUDIO: 'very easy to read. But what this is is a list of every parameter that OmniVoice supports through TTS serve. And the client application can read this and understand it and dynamically build a UI for this. TTS serve actually comes with'
+
+[08:38] [scene:talk]
+VISUAL: 
+AUDIO: 'a command line tool that we can use to talk to the server. So, let\'s let\'s try this. I\'m going to talk to local host on port 8000. Exactly the same request we just made, except instead of getting back a big blob of JSON, we\'re going to get back a formatted uh list, nice easy'
+
+[08:51] [scene:talk]
+VISUAL: 
+AUDIO: 'to read list of all of the different parameters, reference audio, reference audio transcript, language, seed, number of steps, guidance, scale, and d noiseise. D noiseis is an option that OmniVoice provides. It tries to uh you know uh filter out noise in the'
+
+[09:03] [scene:talk]
+VISUAL: 
+AUDIO: 'generated audio. It it doesn\'t do a great job, but it does its best. Uh okay, great. So this client uh this command line application is an example of a client that can talk to TTS serve, execute that uh execute a get request on'
+
+[09:15] [scene:talk]
+VISUAL: 
+AUDIO: 'that capabilities endpoint, get back that JSON document and do something with it, parse it for a user display. Uh we can use this we can use this to build a UI on the fly so that when you connect to TTS serve, we ask it, hey, what kind'
+
+[09:28] [scene:talk]
+VISUAL: 
+AUDIO: 'of server are you and what capabilities do you have? And it gives us back that list of parameters and we can build out a UI dynamically specifically for that TTS engine. And the client application doesn\'t need to know in advance the details of that TTS server. In fact,'
+
+[09:40] [scene:talk]
+VISUAL: 
+AUDIO: 'talk with me doesn\'t need to know anything about which TTS servers it supports. It doesn\'t support TTS servers directly. It supports TTS serve and TTS serve supports TTS uh engines. If that\'s a little bit confusing, think of it as'
+
+[09:52] [scene:talk]
+VISUAL: 
+AUDIO: 'like there\'s a layer of of there\'s a layer of abstraction between the client application and the actual engines that we support. And that layer of abstraction is TTS serve. Now, I want to talk just a little bit. I know we\'re getting into the technical details here, but I want to talk just a little bit'
+
+[10:05] [scene:talk]
+VISUAL: 
+AUDIO: 'about the development process for TTS serve. TTS serve is 100% AI generated. And you might think that that\'s uh a vibecoded application, but I\'m I\'m going to coin a new term for this. This is uh specdriven vibe coding. Spec driven vibe'
+
+[10:20] [scene:talk]
+VISUAL: 
+AUDIO: 'coding sounds like an oxymoron because spec driven implies that there\'s engineering rigor and discipline. And vibe coding implies a complete lack of discipline. We\'re just prompting. We\'re just doing one shot prompts and getting the LLM to spit out code. This is the'
+
+[10:33] [scene:talk]
+VISUAL: 
+AUDIO: 'best of both worlds. We get the best of vibe coding where the LLM does all the heavy lifting, but we still have the rigorous uh controls and discipline of software engineering best practices by coming up with detailed specs and getting the LLM to work off of those'
+
+[10:45] [scene:talk]
+VISUAL: 
+AUDIO: 'specs. So, if we go into the docs directory in TTS serve, I\'ve got uh these detailed specifications. We\'re not going to go through these because they\'re huge. If we look at uh the 01 doc for example, this was the big'
+
+[10:57] [scene:talk]
+VISUAL: 
+AUDIO: 'document from which uh TTS serve was first created. I described the problem we\'re trying to solve supporting multiple uh disperate uh TTS engines with different sets of options and then providing uh discoverability of those'
+
+[11:10] [scene:talk]
+VISUAL: 
+AUDIO: 'options so that a client application like talk with me or that command command line app we just saw can dynamically work with that uh that parameter list. And then we talked about the design. We talked about capability discovery. How does it work? strictness.'
+
+[11:23] [scene:talk]
+VISUAL: 
+AUDIO: 'Uh again, we\'re not going to go through this. I gave it a full example from Chatterbox. Uh field reference. I\'m getting right down to the point where I\'m describing the shape of the data that\'s going to go across request and response. I\'m almost at the level where I\'m actually writing the code myself,'
+
+[11:36] [scene:talk]
+VISUAL: 
+AUDIO: 'but not quite. I go I stop one level above that where I\'m just writing a detailed detailed spec and then handing that spec to the LLM and saying, "Okay, now you do it. I don\'t want to write the code. You do it." This is the best of both worlds. We have to be careful in'
+
+[11:51] [scene:talk]
+VISUAL: 
+AUDIO: 'writing our spec. the spec has to be detailed enough for an LLM to work through. But LLM\'s love working through detailed specs. The more detail you give it, the better. And what I found was this technique that I\'m using, specri vibe coding. Uh I I come up with the spec and I I I give it to the LLM and I'
+
+[12:04] [scene:talk]
+VISUAL: 
+AUDIO: 'say, "Don\'t write the code yet. What I want you to do is take a look at this spec doc and if I were to give it to you, would you be able to implement it uh in a in a reasonably competent way or is it vague or ambiguous?" And nine'
+
+[12:16] [scene:talk]
+VISUAL: 
+AUDIO: 'times out of 10, the LLM will push back and say, "Well, no, it\'s this is this part. This part is vague. You said something in section one that is contradicted by something in section 4. You need to sort that out." And uh you didn\'t specify how this is going to'
+
+[12:28] [scene:talk]
+VISUAL: 
+AUDIO: 'work, and you didn\'t account for this edge case. What if the data happens to go in this direction? All these different things. So, we we go back and forth with the document, tightening it up on every iteration until we\'ve got the document locked down tight. And then when the LLM has no more complaints,'
+
+[12:41] [scene:talk]
+VISUAL: 
+AUDIO: 'then I give it to the LLM and the LLM just builds it for me. Uh that\'s great. So, my time is spent writing the docs that specify what I want done, and the LLM deals with the nitty-gritty details of actually implementing it. Now, this'
+
+[12:53] [scene:talk]
+VISUAL: 
+AUDIO: 'is kind of weird for me because I\'ve been writing code since I was 12 years old, and I\'m used to being the guy at the keyboard who actually types in all of the code, but I don\'t have to do it anymore. This is a much faster way of doing it. Talk with me and TTServe didn\'t exist six or seven weeks ago.'
+
+[13:06] [scene:talk]
+VISUAL: 
+AUDIO: 'They\'re they\'re brand new applications and they\'re already fairly mature and reasonably stable. They work and they\'re fun to play with and the development process is so much faster with this specriven vibe coding. I I really love this this uh method of tech of uh of'
+
+[13:20] [scene:talk]
+VISUAL: 
+AUDIO: 'development. The LLM, by the way, is Quen 3.827B. A fantastic fantastic coding model. I really really love it. The more I work with it, the more I\'m just blown away by it. If you\'re curious, you can uh this is it\'s all on'
+
+[13:32] [scene:talk]
+VISUAL: 
+AUDIO: 'my GitHub. It\'s all MIT license. You can do whatever you like with this. You can go in and look at the docs. I I I commit the docs with the code and the docs get updated if the code needs to change. So this is a completely spec driven project and talk with me is also going in the'
+
+[13:44] [scene:talk]
+VISUAL: 
+AUDIO: 'same direction. If I just bring that up real quick. Uh if you go to talk with me on my GitHub, you\'ll see there\'s a docs directory here as well. It\'s a little bit less organized than uh than the TTS serve project, but uh every time I come'
+
+[13:57] [scene:talk]
+VISUAL: 
+AUDIO: 'up with a new feature that is too big to just onehot, I come up with a document first, describe it in great detail, and then hand it to the LLM. And we do that back and forth dance where we refine the doc, and eventually it\'s good enough to actually get implemented. And Quen, uh, my coding buddy here, is doing all of'
+
+[14:11] [scene:talk]
+VISUAL: 
+AUDIO: 'the heavy lifting for me. Great. Okay, enough jibberjabber. Let\'s move on to section three and actually see this thing in action cuz this is really cool. Okay, third and final section. Let\'s see it in action. Let\'s look at talk with me'
+
+[14:23] [scene:talk]
+VISUAL: 
+AUDIO: 'version 7. Either available uh by the time you\'re watching this or available soon. Still working on it. Let\'s look at the servers dialogue. Uh, the TTS section. I\'m going to point it to localhost on 8000 is where I\'ve got'
+
+[14:36] [scene:talk]
+VISUAL: 
+AUDIO: 'omnivoice running. Let\'s refresh. And we see a little uh blurb here. It says we\'re connected to an OmniVoice server. Tells us what model is in use, what device. We got some basic information about the server. That\'s kind of neat. But now we see parameters that are'
+
+[14:49] [scene:talk]
+VISUAL: 
+AUDIO: 'specific to OmniVoice. We see seed. We see number of steps. We see guidance scale. We\'ve got nice sliders for them now instead of just number entry fields. And we\'ve got a little advanced section that folds out. D noiseis is an omni voice specific option. We can turn it on or off. Great. Uh, so if we save that'
+
+[15:01] [scene:talk]
+VISUAL: 
+AUDIO: 'and uh let\'s get uh I don\'t know, let\'s get counselor Troy to say something. Hello, I am the ship\'s counselor. How can I help you today? &gt;&gt; Hello, I am the ship\'s counselor.'
+
+[15:15] [scene:talk]
+VISUAL: 
+AUDIO: 'How can I help you today? &gt;&gt; That was a bit laggy. Oh, we\'re on my laptop. That\'s that\'s why I thought it was going to the server. It\'s going to my laptop. This is OmniVoice running on my laptop. I\'ve got Chatterbox and Index running on my server, but I don\'t have'
+
+[15:29] [scene:talk]
+VISUAL: 
+AUDIO: 'the enough VRAM to run everything at once. So, I\'m running Omnivos on the laptop. That\'s why that was so slow. Okay. Okay, it works. Great. Uh, let\'s, speaking of those other ones, let\'s go and connect to Saturn LM on what do I have? 65 6500. And refresh. Not'
+
+[15:44] [scene:talk]
+VISUAL: 
+AUDIO: 'reachable. That\'s cuz I didn\'t type that correctly. Let me try it again. 6500. Here we go. Okay, so we\'ve got a Chatterbox server. Uh, it\'s running the Chatterbox multilingual model on CUDA.'
+
+[15:56] [scene:talk]
+VISUAL: 
+AUDIO: 'We get a little uh notice here that this engine applies a neural watermark. Some TTS engines apply watermarks. It\'s not a big deal unless you\'re doing something really bad, but uh we\'re just goofing around with a chat application, so it doesn\'t matter. And we if we scroll'
+
+[16:08] [scene:talk]
+VISUAL: 
+AUDIO: 'down, we see we get seed and we\'ve got our little exaggeration slider, which is kind of cool. We\'ve got CFG, temperature, and some advanced settings as well. Uh repetition, penalty, min top P. We can play with these if we want, I'
+
+[16:20] [scene:talk]
+VISUAL: 
+AUDIO: 'guess. So, let\'s try this out. 0.5 is our default exaggeration setting. So, let\'s uh let\'s just try this out. I\'m feeling very unexaggerated today. &gt;&gt; I\'m feeling very unexaggerated today. &gt;&gt; Okay, normal. Perfectly perfectly'
+
+[16:33] [scene:talk]
+VISUAL: 
+AUDIO: 'normal. Let\'s go back in here and let\'s crank that and just see what it sounds like. I\'m feeling extremely enthusiastic today. &gt;&gt; I\'m feeling extremely enthusiastic today.'
+
+[16:45] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; That sounded exactly the same. Let\'s try warf. Captain, today I am a merry man. Captain, today I am a merry man. That &gt;&gt; doesn\'t [laughter] sound any different. That doesn\'t sound any different to me.'
+
+[16:58] [scene:talk]
+VISUAL: 
+AUDIO: 'Uh, I wonder if it\'s temperature. Or CFG, maybe. I don\'t know. Let\'s Let\'s just crank some settings here. Captain, I think that\'s frankly a great idea. &gt;&gt; Captain, I think that\'s frankly a great'
+
+[17:12] [scene:talk]
+VISUAL: 
+AUDIO: 'idea. &gt;&gt; Okay, I got something there. There a little bit of enthusiasm. So, we can we can tweak a little bit. That\'s not bad. But we\'re not done yet. We can go back here and say uh on port 7500 I\'ve got index DTS running and we\'ve got'
+
+[17:25] [scene:talk]
+VISUAL: 
+AUDIO: 'some options specific to index DTS random seed emotion alpha duration factor and if we click advanced we\'ve got those sliders we were looking at in uh in their demo application we can'
+
+[17:38] [scene:talk]
+VISUAL: 
+AUDIO: 'tweak each emotion individually at least allegedly. Let\'s uh let\'s try this out and temperature temp top K repetition penalty. Okay, so the UI here is I just want to harp on this point a little bit.'
+
+[17:50] [scene:talk]
+VISUAL: 
+AUDIO: 'It\'s only showing me the properties that are specific to this TTS engine that we are currently connected to. Notice that the D noiseis option supplied by Omnio is nowhere to be found here. We don\'t clutter the UI with stuff that doesn\'t apply to what you\'re not looking at. So'
+
+[18:02] [scene:talk]
+VISUAL: 
+AUDIO: 'if you\'re only dealing with indexts, you will only see index TTS settings here. And that\'s the magic of TTS serve standing in between the client application and the actual engines that we\'re connecting to. talk with me does have not does not have any idea what'
+
+[18:14] [scene:talk]
+VISUAL: 
+AUDIO: 'options these uh TTS engines supply until it actually speaks to one and says hey give me your capabilities and TTS serve says hey this TTS engine supports these options and we can build this UI this is really cool okay so I\'m going to make Warf sound super happy let\'s uh'
+
+[18:27] [scene:talk]
+VISUAL: 
+AUDIO: 'let\'s give this a shot I am the very model of a modern major general &gt;&gt; I am the very model of a modern major general [laughter] &gt;&gt; I love it I love'
+
+[18:41] [scene:talk]
+VISUAL: 
+AUDIO: 'That was really good actually. And uh I think [snorts] is it is it multilingual? Should we push our luck here? Let\'s try let\'s try something in German. not multilingual. It is most definitely'
+
+[19:03] [scene:talk]
+VISUAL: 
+AUDIO: 'not multilingual. Which Which one was I looking at earlier? I swear this worked earlier. Maybe it was Chatterbox. That was, by the way, that was German with English pronunciation rules, which we\'ve heard before on this channel. It\'s terrible. Terrible. I hate hearing that.'
+
+[19:15] [scene:talk]
+VISUAL: 
+AUDIO: 'Let\'s try that again. Where was my exaggeration slider? Let\'s exaggerate the poop out of it. Let\'s try that again. All right. All right. So,'
+
+[19:32] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; [snorts] &gt;&gt; uh, not bad. I think we can, uh, tweak our AI clone voices now to give them a little bit of emotion. And with TTS serve, we can much more easily, uh, apply, uh, new TTS engines. We can we'
+
+[19:44] [scene:talk]
+VISUAL: 
+AUDIO: 'can hook up to new engines much more rapidly. Let\'s, let\'s take a quick look at that. If we go back to the TTS serve repo, there\'s a skill in here called new TTS engine. You can'
+
+[19:56] [scene:talk]
+VISUAL: 
+AUDIO: 'point your LLM to this skill and it tells it step step by step if you\'ve got a new TTS engine that you want to add to talk with me uh or any client application. It doesn\'t have to be talk with me. You point your uh agent at this'
+
+[20:08] [scene:talk]
+VISUAL: 
+AUDIO: 'skill. This is how I did Chatterbox and index DTS. It took about 1 hour each with Quinn 3.8 running on my server at 36 tokens per second. Not that big of a deal. Uh it g it takes about an hour. It quen can run completely unsupervised. Uh'
+
+[20:21] [scene:talk]
+VISUAL: 
+AUDIO: 'when it\'s done it just says okay done. You can fire it up on the server and it just works like that. Uh this is great and talk with me and TTS serve are not linked to each other. Uh I mean talk with me does use TTS serve but they\'re'
+
+[20:33] [scene:talk]
+VISUAL: 
+AUDIO: 'separate projects. You can use TTS serve in other projects. Uh a simple example would be that command line application we looked at earlier where you can connect to uh TTS serve instance from the command line uh interrogate it and ask it to uh speak things. Did we show'
+
+[20:45] [scene:talk]
+VISUAL: 
+AUDIO: 'that? Maybe I should show that real quick. Okay, so the command line application we looked at earlier can not only connect to a TTS serve instance and interrogate it for its capabilities, it can actually generate speech right from the command line like this.'
+
+[20:58] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; Hello there. I am a sexy Vulcan science officer. &gt;&gt; Great. Uh, and other applications can use TTS serve as well. So if you\'ve got an application that needs to use TTS engines and you want to support more'
+
+[21:12] [scene:talk]
+VISUAL: 
+AUDIO: 'than one TTS engine, guess what? You can import tts serve now and uh write your UI dynamically based on the capabilities endpoint what it returns. So the list of parameters you get back from capabilities tells you what your UI should look like by giving you that list'
+
+[21:25] [scene:talk]
+VISUAL: 
+AUDIO: 'of parameters and their default values and their descriptions and all of that stuff. So TTS serve I think is really versatile and really powerful and over time as we add more and more and more TTS engines to it I still have a list of like half a dozen more that I want to uh throw in there. Uh the client'
+
+[21:38] [scene:talk]
+VISUAL: 
+AUDIO: 'applications get them for free. your client application. For example, talk with me does not need to change at all if if TTS serve adds support for a new TTS engine. Uh because it\'s just another it\'s a standardized REST API. Talk with me connects to it and says, hey, what'
+
+[21:52] [scene:talk]
+VISUAL: 
+AUDIO: 'are you capable of? And it gets back that little blurb that tells it, you know, I\'m server name, my server name is whatever and here are my capabilities and the UI gets built out automatically. We vibe coded it from a spec spec driven vibe coding. I\'m coining that term and I'
+
+[22:06] [scene:talk]
+VISUAL: 
+AUDIO: 'love it. It\'s really really great. So talk with me. Version 7 available very soon on my GitHub. It\'s MIT license. It\'s free. You can do whatever you like with it. TTS serve also available on my GitHub. Also MIT license. You can do whatever you like with it. Uh and I'
+
+[22:19] [scene:talk]
+VISUAL: 
+AUDIO: 'think it\'s really powerful. Uh if you like this crazy kind of content and you want to see more, consider becoming a channel member and or hit me up on Patreon. Greatly appreciate it if you do that. And also, you know, join our Discord. Come by, have a chat if you want. Uh so there you go. Uh I think that was really cool. I hope you do,'
+
+[22:33] [scene:talk]
+VISUAL: 
+AUDIO: 'too. And uh we will see you next time. ation or before online was a thing. Faster, faster, faster, louder, more intense. Three, two, one. What do we do if we want to'
+
+[22:47] [scene:talk]
+VISUAL: 
+AUDIO: 'live in a zoo? Let\'s say we have an application that we want to do something with. Okay, third and final section. Let\'s see it in action. Let\'s Let\'s get'
+
+[22:59] [scene:talk]
+VISUAL: 
+AUDIO: 'this up and running. Up and running.'

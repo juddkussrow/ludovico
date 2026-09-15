@@ -1,0 +1,488 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: YuE2 in ComfyUI: AI Music with an Editable Piano Roll
+channel: @octopusinc_
+duration: 26:49
+source: https://www.youtube.com/watch?v=zciKClmSBtU
+upload_date: 20260911
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'Hey, what is going on guys? Welcome back. Today we got a special one. If you guys have been following any of my previous videos, Miniax Music 3, Heart Moola for Song Gen, the music space has been hurting pretty bad. Just generative'
+
+[00:15] [scene:talk]
+VISUAL: 
+AUDIO: 'tech basically. But I think it was today we got a new music model that is touting Sunseo 5 levels of quality which is just absurd right we\'re already there and'
+
+[00:29] [scene:talk]
+VISUAL: 
+AUDIO: 'I\'ve been playing with it and it\'s pretty good it\'s actually doing the thing and of course the one I am talking about is UE2 however you want to pronounce it UE2 3'
+
+[00:41] [scene:talk]
+VISUAL: 
+AUDIO: 'billion parameter it basically LLM tokenizer whatever to essentially plan out the song in special syntaxed tokens that then gets passed to the the K'
+
+[00:54] [scene:talk]
+VISUAL: 
+AUDIO: 'sampler to generate. So what that allows us to do is kind of and we\'re going to get into that in a little bit here, but let\'s go through this model. So it is a 3 billion parameter. It\'s really small. This can run on 24 gigs nonquantized. Right out of the box, this thing fits on'
+
+[01:08] [scene:talk]
+VISUAL: 
+AUDIO: 'consumer grade hardware. They are touting levels. And I think the reason why it\'s so clean is this right here. 48 kHz song quality. This is huge. This is the first 48 kHz'
+
+[01:22] [scene:talk]
+VISUAL: 
+AUDIO: 'stereo transformer that we\'ve seen open source that fits the bill. It It really sound great. They did this weird thing where it was like uh best eight BO8'
+
+[01:34] [scene:talk]
+VISUAL: 
+AUDIO: 'here. That just means going toe with five eight runs. This one came up a little bit on top. That\'s what they\'re touting. Um, and then you can see UEI2 here, right? Nestled uh in between all'
+
+[01:47] [scene:talk]
+VISUAL: 
+AUDIO: 'the pseudo models. So, this is the architecture guys. Um, looks like we have the symbolic score. Now, that\'s exactly what I was uh talking about this ABC notation as they call it. Now, really big caveat here before we dive'
+
+[01:59] [scene:talk]
+VISUAL: 
+AUDIO: 'in. They have released the decoder decoder but they have not released the encoder which means in its current state just like the other models music music'
+
+[02:12] [scene:talk]
+VISUAL: 
+AUDIO: 'by Miniax that came out we can\'t train it as of today. So what we\'re going to have to do as an open source community is we\'re going to be train the encoder based on the decoder here is we have to'
+
+[02:25] [scene:talk]
+VISUAL: 
+AUDIO: 'generate a absolute truck ton of data to train the encoder to take raw music files and uh get them into that embedding space. So we can\'t do audio'
+
+[02:37] [scene:talk]
+VISUAL: 
+AUDIO: 'right now. Uh we can only decode. So it\'s whatever conditioning they\'ve given us here in the model. So that\'s like the big caveat. But um guys, I\'m not even going to jump into these examples. We\'re going to go right inside of uh Dumpy and'
+
+[02:49] [scene:talk]
+VISUAL: 
+AUDIO: 'we\'re going to dive in here. All right. So, I\'ve put together a custom workflow here. It\'s simple. I This is all all the purple nodes as you guys know are are code that I\'ve written, normal LMS and agents have written. And this workflow'
+
+[03:01] [scene:talk]
+VISUAL: 
+AUDIO: 'is quite simple. Let\'s start with the yellow. I\'m basically using the uh Quen 8 billion parameter to use as encoder. I\'m generating text. As you can see,'
+
+[03:13] [scene:talk]
+VISUAL: 
+AUDIO: 'it\'s a pretty simple prompt. write a capture prop song, do verses. This is kind of what on the other end. You guys can use GPT. You guys can use whatever you want to write this. I\'m just doing it all in the box, you know, keep it'
+
+[03:26] [scene:talk]
+VISUAL: 
+AUDIO: 'simple. And then I\'m going to disconnect this so you can see. But at the top here, this is supposed to be the style. So this is the song descriptors basically like boom bap, bass, dubstep,'
+
+[03:38] [scene:talk]
+VISUAL: 
+AUDIO: 'country, rock, whatever descriptors for the music that\'s going to go in this top box. So as you can see, instrumental, trip hop, boom, bap, you know, etc., et. So that\'s where I\'m going to plug that'
+
+[03:53] [scene:talk]
+VISUAL: 
+AUDIO: 'into there. Now, if you see these at the bottom, this is this special chain of tokens I\'m talking about where all of your prompts basically get converted into this string of tokens that then'
+
+[04:05] [scene:talk]
+VISUAL: 
+AUDIO: 'gets passed uh don\'t worry this yet. It gets passed to the K sampler to interpret. Everything you do in both here and here gets bounced to these tokens and then passed to the K sampler.'
+
+[04:18] [scene:talk]
+VISUAL: 
+AUDIO: 'Which leads to the next big node, which is the piano roll. Now, this node is double purpose. So, if I pull it off a little bit here, you can see that it\'s'
+
+[04:31] [scene:talk]
+VISUAL: 
+AUDIO: 'got an incoming ABC, but it also outputs an ABC scoring uh data type. Now, why this is important is because, as I\'ll demonstrate here, I\'m just going to leave this like this. I\'m going to'
+
+[04:44] [scene:talk]
+VISUAL: 
+AUDIO: 'bypass these and we\'re just going to run it. So, it\'s going it\'s going to now start um running the embeddings, right? And you should see the piano roll because I\'m I\'ve connected the piano'
+
+[04:56] [scene:talk]
+VISUAL: 
+AUDIO: 'roll as the from the output here to the input. And this will now populate based on the calculations or these tokens that this thing has uh computed and this is using the models tokenizer like the'
+
+[05:09] [scene:talk]
+VISUAL: 
+AUDIO: 'official one. And this is an auto download model node. So, you know, download it. It\'ll go to your models folder in Comfy and you\'re off to the races immediately. All right, as we see here, the score ABC was loaded into the'
+
+[05:21] [scene:talk]
+VISUAL: 
+AUDIO: 'piano roll. And uh now we can just like play it. We can hear it as just like simple sine waves basically. Okay. So, here at the top we have'
+
+[05:41] [scene:talk]
+VISUAL: 
+AUDIO: 'instrumental. And so that\'s going to basically be the melody. And the song the sung melody we don\'t actually have anything here. So it\'s just kind of kind of go. This is a simple piano roll. Double click. You know you can out. It\'s'
+
+[05:53] [scene:talk]
+VISUAL: 
+AUDIO: 'kind of small. There we go. Expand them out. Move them around. So you can kind of edit as you go. Yes. It starts with song melody and then the actual sung melody. And then you just basic your tempo your sections. Right. You can see'
+
+[06:07] [scene:talk]
+VISUAL: 
+AUDIO: 'here these are these are generated. I didn\'t create these. Right. So this is the verse which is nothing apparently. It\'s one note chorus three at the end interlude you know I again I didn\'t make these this note at the beginning here it'
+
+[06:20] [scene:talk]
+VISUAL: 
+AUDIO: 'generated all this data and I\'m uh abstracting it into MIDI and so let\'s let\'s give it a listen guys let\'s see what came out the other end here [music]'
+
+[06:38] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; [music] &gt;&gt; I\'m dancing in the moonlight, heart on'
+
+[06:50] [scene:talk]
+VISUAL: 
+AUDIO: 'fire. [music] Got that beat in my chest, can\'t ignore you. You\'re my favorite kind of wild and free. [music]'
+
+[07:03] [scene:talk]
+VISUAL: 
+AUDIO: 'Every step I take, you\'re the only one I [music] see. Oh, we\'re on fire. [singing] Yeah, we\'re on fire. Can\'t stop now. Got that [music] magic in the air. Oh, we\'re'
+
+[07:19] [scene:talk]
+VISUAL: 
+AUDIO: 'on fire. Yeah, [music] we\'re on fire. Dancing till the world. &gt;&gt; That\'s what I\'m talking about. Like,'
+
+[07:34] [scene:talk]
+VISUAL: 
+AUDIO: 'guys, we\'ve arrived. Like I feel we\'ve genuinely gotten to a place where it\'s good enough. It\'s it\'s finally [snorts] there. If it if it\'s this good, oh man,'
+
+[07:46] [scene:talk]
+VISUAL: 
+AUDIO: 'I can\'t wait to just throw data at this thing, you know? Like obviously this thing was was trained on as royaltyfree as it can possibly get. Like literally'
+
+[07:58] [scene:talk]
+VISUAL: 
+AUDIO: 'sugar-free diet music, you know? And so once we get that encoder, once we train this thing, it\'s just going to be bonkers. I\'m super excited. But yeah, let\'s try something different. Let\'s try'
+
+[08:10] [scene:talk]
+VISUAL: 
+AUDIO: 'So I\'m just going to prompt engineer this thing. I mean, again, this is just Quinn, so obviously something like GPT or Claude or whatever can write. Definitely a better song. All right, let\'s see what that works. Let\'s see'
+
+[08:22] [scene:talk]
+VISUAL: 
+AUDIO: 'what that does. Sick. All right, let\'s see what we got. By the bubble gum. Yeah, it\'s sweet in your mouth. Feel the beat. By the bubble gum, can\'t you see? Okay. Yeah, [snorts] it\'s cheesy as hell. Obviously, it\'s nine billion'
+
+[08:34] [scene:talk]
+VISUAL: 
+AUDIO: 'parameter language model and what do you expect? But uh yeah, I mean I\'m benchmarking right now 30 GB of VRAM. Now I am loading a text encoder that I technically don\'t need. Without that, it'
+
+[08:48] [scene:talk]
+VISUAL: 
+AUDIO: '100% fits under 24 gigs. I was running at about 22. Um inference is kind of slow. You know, it\'s still faster than real time. Let\'s see it.'
+
+[09:00] [scene:talk]
+VISUAL: 
+AUDIO: '[music] Oh, we didn\'t actually [music] change'
+
+[09:12] [scene:talk]
+VISUAL: 
+AUDIO: 'the description. [music] Nice.'
+
+[09:27] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; [music] &gt;&gt; Got a bubble gum. Yeah, it\'s sweet. Pop it in your [music] mouth. Feel the beubble. &gt;&gt; I mean, it\'s super usable, guys. It\'s'
+
+[09:42] [scene:talk]
+VISUAL: 
+AUDIO: 'incredibly good. Uh especially for open source. I mean, this is just going to blow up. This one is I think this is the one. This is the one that\'s gonna kick it off. But yeah, let\'s change this to drum and bass. 174 BPM,'
+
+[09:55] [scene:talk]
+VISUAL: 
+AUDIO: 'neuro bass, thick drums, negative space, drum breaks, breakdowns, switchups,'
+
+[10:07] [scene:talk]
+VISUAL: 
+AUDIO: 'stabbing synths, echoes, and panning. Yeah, I want to see with uh with prompting. how good that'
+
+[10:19] [scene:talk]
+VISUAL: 
+AUDIO: 'can be or it just follows basically. By the way, this is Echo. Echo is a little transcription apps. It sits on my local machine here in my tray icon and then I say whatever I want and I hit escape'
+
+[10:32] [scene:talk]
+VISUAL: 
+AUDIO: 'and it writes it all out. So, Echo is awesome. It\'s changed the way I work. 100% local, one time buy, link in the description. But this thing, this model knows like a'
+
+[10:46] [scene:talk]
+VISUAL: 
+AUDIO: 'decent chunk of music, I would say. [music] [singing]'
+
+[11:00] [scene:talk]
+VISUAL: 
+AUDIO: 'Set me free. Bubblegum. Bubblegum. Buy it now. Bubblegum. Bubblegum. Make it glow. Bubblegum. [music] Bubblegum. Hit the floor. [singing]'
+
+[11:12] [scene:talk]
+VISUAL: 
+AUDIO: 'Bubblegum. Bubble bum. I\'m going to [music] bubble. The air is sweet in your mouth.'
+
+[11:28] [scene:talk]
+VISUAL: 
+AUDIO: 'Feel the [music] heat by the bubble. &gt;&gt; [music]'
+
+[11:40] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; Okay. I mean, I didn\'t get really like the neuro bass. Uh, I did get darker examples. Let\'s write a simple drum and bass song. Let\'s write a'
+
+[11:52] [scene:talk]
+VISUAL: 
+AUDIO: 'deep dark. Let\'s try that. And then let\'s also change this seed. And we\'ll do max tokens. We\'ll just crank this 12 12,000. I think it\'ll'
+
+[12:05] [scene:talk]
+VISUAL: 
+AUDIO: 'error actually. Yeah, it does error. Fix that. Just one notch down from the max. And it works. But yeah, we\'re going to play with descriptions here just to see um you know what\'s up with this node.'
+
+[12:20] [scene:talk]
+VISUAL: 
+AUDIO: 'Um you notice that I have it after this. What you could do is from that last song I can just well not not copy it but I can uh just disconnect it and essentially move it to the beginning of'
+
+[12:33] [scene:talk]
+VISUAL: 
+AUDIO: 'the chain. And now if I connect it down into the uh right here where the song score or the score ABC if I connect it there it won\'t rescan and create the tokens. What it\'ll do is'
+
+[12:49] [scene:talk]
+VISUAL: 
+AUDIO: 'it\'ll just pull from here. And so what what that allows us to do is like if you find like writing pattern or song structuring that you\'re like, "Oh wow, this is pretty good, but maybe it\'s like'
+
+[13:01] [scene:talk]
+VISUAL: 
+AUDIO: 'h the tambber\'s kind of crap or the instruments sound like but you can leverage this and just start tweaking the prompt because this is going to drive everything. It\'s driving the BPM, it\'s driving the key, it\'s driving, you'
+
+[13:14] [scene:talk]
+VISUAL: 
+AUDIO: 'know, the the phrases of the song, etc., etc." And it\'s just super super useful. So, we\'ll do that after. But I just wanted to bring that up because it\'s incredibly powerful in that way. So, we\'re just going to let this render.'
+
+[13:26] [scene:talk]
+VISUAL: 
+AUDIO: 'All right. Before we start that, let\'s see what we got. This was autogenerated. So, dark brooding drum and bass 172 crushing neural baselines. Yeah, like glitchy breakdown dissolves. Yeah, that'
+
+[13:39] [scene:talk]
+VISUAL: 
+AUDIO: 'that\'s great. That actually did way better than I thought it would. Let\'s hear it. Nice. Good ambient intro.'
+
+[13:57] [scene:talk]
+VISUAL: 
+AUDIO: '[music]'
+
+[14:12] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; Sick. Hell yeah. I\'m going to skip ahead a little bit. &gt;&gt; See you. Give me the drop.'
+
+[14:25] [scene:talk]
+VISUAL: 
+AUDIO: '[music] &gt;&gt; Let\'s skip ahead a little bit.'
+
+[14:37] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; [singing and music] &gt;&gt; It\'s 100% doing it. Now, I\'m obviously'
+
+[14:52] [scene:talk]
+VISUAL: 
+AUDIO: 'pushing it in realms where like obviously this thing is undertrained on this kind of genre of music, right? Like I\'m being super biased here. Beep like drum and bass, neurobase, like yeah,'
+
+[15:04] [scene:talk]
+VISUAL: 
+AUDIO: 'okay. Like no researcher is going to find a data set aside from a DJ that\'s going to have this stuff. So, of course, like it\'s going to falter a little bit on that, but we\'re going to do some comparisons on things like CFG,'
+
+[15:17] [scene:talk]
+VISUAL: 
+AUDIO: 'guidance, if we can get this thing producing something half decent. All right, let\'s see real quick the prompt. We\'ve got melodic, hard metal, guitar, soaring, harmonizing, chugging. Uh,'
+
+[15:29] [scene:talk]
+VISUAL: 
+AUDIO: 'we\'re still at that 176 BPM, which is kind of wild. Or just like up there, really. I\'m going to buy a paprika bubble gum. Dude, we got to change the bubble gum thing'
+
+[15:41] [scene:talk]
+VISUAL: 
+AUDIO: 'anyway. [music] It\'s almost sad that this lyric is going'
+
+[16:01] [scene:talk]
+VISUAL: 
+AUDIO: 'to be so stupid, but it\'s like perfect already. [music] &gt;&gt; [music]'
+
+[16:24] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; I\'m going to buy a pack of bubble gum. Sweet and sticky. Yeah, I\'m coming through. [music] Going to chew it loud.'
+
+[16:40] [scene:talk]
+VISUAL: 
+AUDIO: 'Make the whole room shake. Bubble gum\'s the only thing that makes me [music] awake. Buy me bubble gum. Yeah, I\'m on [music] fire.'
+
+[16:54] [scene:talk]
+VISUAL: 
+AUDIO: 'Come in my mouth. I\'m breaking [music] higher. I will come free and wild. [music] I\'ll show it to the world on as'
+
+[17:09] [scene:talk]
+VISUAL: 
+AUDIO: 'it [music] Okay, let\'s go, dude. That last note. Chill out, Mariah Carey. Holy crap. All'
+
+[17:22] [scene:talk]
+VISUAL: 
+AUDIO: 'right, let that\'s amazing. Real quick, change this prompt because it\'s horrendous. I don\'t want to hear about Bubblegum anymore. I\'m just going to go straight to 10 on the guidance. We\'ll see how that works. Now, one thing to'
+
+[17:34] [scene:talk]
+VISUAL: 
+AUDIO: 'note, guys, axe duration goes to 360. And for people who don\'t math, that\'s 6 minutes. It\'s a long time. Okay, we are back. Let\'s start off with the uh control song.'
+
+[17:47] [scene:talk]
+VISUAL: 
+AUDIO: '[music] In the dark where data sleeps, a ghostly algorithm wakes. [music] Mirrorets in silence hum through layers'
+
+[17:59] [scene:talk]
+VISUAL: 
+AUDIO: 'they [music and singing] make. Late in space, a hidden realm where pixels softly bleed. Diffusion models rise [music] to break the chains of what'
+
+[18:12] [scene:talk]
+VISUAL: 
+AUDIO: 'seal. Oh, we dance in the lighting haze [music] where noise becomes hard through steps of time. [music] We rewrite fate with every heart.'
+
+[18:26] [scene:talk]
+VISUAL: 
+AUDIO: 'All right. And then this is the next one which is same everything CFG of 10. [music]'
+
+[18:38] [scene:talk]
+VISUAL: 
+AUDIO: 'In the dark where [music] data sleeps, a ghostly algorithm wakes neuronets in silence home through layers they make.'
+
+[18:50] [scene:talk]
+VISUAL: 
+AUDIO: '[singing] Late in space, a hidden realm [music] where pixels softly bleed. DIFFUSION MODELS RISE TO BREAK the chains of [music] what seal.'
+
+[19:03] [scene:talk]
+VISUAL: 
+AUDIO: 'Oh, we dance in the light [music] today. When noise becomes dark through steps of [music] right'
+
+[19:15] [scene:talk]
+VISUAL: 
+AUDIO: 'from [music] &gt;&gt; Okay. Yeah. So, you can tell it was falling apart there for a second. However, it kind of acts like the weirdness slider on.'
+
+[19:28] [scene:talk]
+VISUAL: 
+AUDIO: 'And uh I mean, that\'s dope. I really like that. Honestly, probably split the difference and just call it five. Uh, probably be pretty pretty good, but surprisingly cohesive. Let\'s run a few'
+
+[19:44] [scene:talk]
+VISUAL: 
+AUDIO: 'more genres just so we do our due diligence. Let\'s create a 124 BPM house song where the lyrics are stuttered, chopped, and sampled. All right, we\'re'
+
+[19:59] [scene:talk]
+VISUAL: 
+AUDIO: 'back. We\'re going to try, we\'re going to do the uh five guidance CFG version first and then we\'re going to do the control at the top. By the way, the lyrics are literally just MySpace over'
+
+[20:11] [scene:talk]
+VISUAL: 
+AUDIO: 'and over and over again. This is going to be the 5G CFG first. [music] My space'
+
+[20:25] [scene:talk]
+VISUAL: 
+AUDIO: '[music] my space my space [music] my my space my my space space my space [music] my space my my space my'
+
+[20:42] [scene:talk]
+VISUAL: 
+AUDIO: 'my space space space [music] my space space my my space sh space &gt;&gt; [music]'
+
+[20:58] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; All right. All right. Now, let\'s try the control. [singing] [music] space. [singing]'
+
+[21:13] [scene:talk]
+VISUAL: 
+AUDIO: '[music] My face my my face my my space [music]'
+
+[21:27] [scene:talk]
+VISUAL: 
+AUDIO: 'my my my baby baby [music] my fast my face my face baby baby baby baby baby baby baby baby baby baby baby hey baby hey baby hey'
+
+[21:41] [scene:talk]
+VISUAL: 
+AUDIO: 'baby hey baby hey baby hey baby hey baby [music] My face my baby [music] my my [music] baby my my'
+
+[21:55] [scene:talk]
+VISUAL: 
+AUDIO: '[music] my [music]'
+
+[22:07] [scene:talk]
+VISUAL: 
+AUDIO: 'All right, it looks like it was just that baseline. Wild how different they both were. Let\'s Let\'s play with this for a second. Let\'s move this to the'
+
+[22:20] [scene:talk]
+VISUAL: 
+AUDIO: 'essentially the other side of the fence here. And let\'s put this over here. Like that. This goes in at the bottom. Um, and then now'
+
+[22:35] [scene:talk]
+VISUAL: 
+AUDIO: 'we can just change the prompts. A house song lyric about copy and pasting things on the computer. The person\'s getting'
+
+[22:49] [scene:talk]
+VISUAL: 
+AUDIO: 'upset, an emotional. And so if you notice, it shouldn\'t it should completely skip this. Boom. Go right to rendering. because when it\'s on this side when this is connected into the uh the plan node here that it doesn\'t need'
+
+[23:03] [scene:talk]
+VISUAL: 
+AUDIO: 'to rerender because the MIDI and the um well it\'s not MIDI in this case the score ABC this thing has cached it from the last render and so we can modify this if we want we can change the BPM'
+
+[23:17] [scene:talk]
+VISUAL: 
+AUDIO: 'maybe we can change the key do all sorts of stuff I\'m actually going to delete this so we\'re just back to the one one render cycle Um, but I am going to I\'m going to change the E to like F minor and then'
+
+[23:30] [scene:talk]
+VISUAL: 
+AUDIO: 'I\'m going to bump this down to like 110. I wonder just that what it would do. All right, we\'re back.'
+
+[23:43] [scene:talk]
+VISUAL: 
+AUDIO: 'Let\'s see this same prompt. We did change the things, but we slowed it down and we didn\'t uh we didn\'t rescan it. So, let\'s see what we got. have copy past [singing]'
+
+[23:56] [scene:talk]
+VISUAL: 
+AUDIO: '[music] [singing] broken. [music]'
+
+[24:09] [scene:talk]
+VISUAL: 
+AUDIO: 'That\'s weird. Let me let me hear this.'
+
+[24:21] [scene:talk]
+VISUAL: 
+AUDIO: '[music] &gt;&gt; [music]'
+
+[24:33] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; So, it could have been the key. Could have been the key in this instance. Structure should go first. Let\'s do this. See if that helps. Just so we'
+
+[24:45] [scene:talk]
+VISUAL: 
+AUDIO: 'structure this better. I mean, I\'m pretty surprised at how far we got with just Quen 3 VL. Yeah, I think it didn\'t transpose correctly when I\'m changing the keys. So, I\'m actually going to change that in the code so that that'
+
+[24:58] [scene:talk]
+VISUAL: 
+AUDIO: 'actually you guys don\'t run into that. And and like when you switch a key, everything just kind of falls in line. That\'s the way to do it. Let\'s take a look. Let\'s see what we got. Heat. Heat.'
+
+[25:13] [scene:talk]
+VISUAL: 
+AUDIO: '[music] &gt;&gt; [music]'
+
+[25:36] [scene:talk]
+VISUAL: 
+AUDIO: '&gt;&gt; It\'s weird that the lyrics didn\'t come'
+
+[25:48] [scene:talk]
+VISUAL: 
+AUDIO: 'through on that one. Super strange. But you guys can see the power of of adjusting and and creating your own melodies and and whatnot in here. Massive level of control similar to what Sunno offers with their with their'
+
+[26:00] [scene:talk]
+VISUAL: 
+AUDIO: 'product. But I\'m going to leave it there, guys. The workflow is going to be posted on my Patreon for my my Patreon subscribers. And this is a workflow that I can see myself having a ton of fun with fine-tuning it, training it. Uh it being the the front half of a miniax'
+
+[26:15] [scene:talk]
+VISUAL: 
+AUDIO: 'workflow. I\'m generating music and then I\'m generating beat sync stuff. The beat sync stuff is coming really soon. Laura model workflow. Again, all for my'
+
+[26:28] [scene:talk]
+VISUAL: 
+AUDIO: 'Patreon subscribers. A lot of love put into that one. But thanks so much for watching, guys. And um let me know what else you guys want to see in the comments. There\'s so much to cover in this world. Every single day, I\'m just opening X to just be inundated with'
+
+[26:42] [scene:talk]
+VISUAL: 
+AUDIO: 'model releases. But uh for now, we\'ll see you guys in the next'

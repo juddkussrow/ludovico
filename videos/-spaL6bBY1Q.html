@@ -1,0 +1,117 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>How I Turned One Real Estate Listing Into a Week of AI Content With HeyGen (Full Walkthrough) — Ludovico</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+.hide{display:none!important}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.92);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 12px}
+.controls input.q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.pill.tp.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+/* flip card shell */
+.flip{position:relative}
+.fi{position:relative;transition:transform .55s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.flip.flipped .fi{transform:rotateY(180deg)}
+.fc{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bk{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+background:var(--card);border:1px solid var(--accent2);border-radius:14px;overflow:auto;padding:12px 13px;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s}
+.card.flip{overflow:visible}.card .fc{display:flex;flex-direction:column;flex:1;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--line);cursor:pointer}
+.card.flip:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.edit{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--accent2);border:1px solid var(--line);border-radius:6px;padding:2px 9px;cursor:pointer;background:#fff}
+.edit:hover{border-color:var(--accent2)}
+/* editor back */
+.bk h4{margin:0 0 2px;font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--sub)}
+.erow{display:grid;grid-template-columns:1fr 1.3fr auto auto;gap:4px;align-items:center}
+.erow input{padding:5px 7px;border:1px solid var(--line);border-radius:6px;font-size:12px;min-width:0}
+.erow select{padding:4px 4px;font-size:11px}
+.erow .del{border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;color:var(--accent);padding:3px 7px}
+.ebtns{display:flex;gap:6px;margin-top:auto;padding-top:6px}
+.ebtns button{font-family:var(--mono);font-size:11px;border-radius:7px;padding:6px 12px;cursor:pointer;border:1px solid var(--line);background:#fff}
+.ebtns .save{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.addrow{font-family:var(--mono);font-size:11px;color:var(--accent2);cursor:pointer;align-self:flex-start;background:none;border:0;padding:2px 0}
+/* catalogue card */
+.citem{position:relative}
+.citem .fc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-height:84px;cursor:pointer}
+.citem .bk{border-radius:12px}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+footer .exp{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--accent2);font:inherit}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">How I Turned One Real Estate Listing Into a Week of AI Content With HeyGen (Full Walkthrough)</h1><div class=tag>@octopusinc_ · 2026-08-24 · ListAssist</div></div></div></header>
+<main><p class=sum>This video provides a comprehensive walkthrough of HeyGen, an AI video generation platform, specifically tailored for real estate agents. It demonstrates how to create a personalized AI avatar, including voice and motion cloning, and then leverage this avatar to produce three distinct real estate-focused videos: a market update, a hosted home tour, and a &quot;meet the agent&quot; introduction, all from a single property listing. The video also covers using HeyGen&#x27;s AI Studio for post-generation edits like swapping photos, adjusting captions, and refining scripts.</p><p><strong>Products / items</strong></p><ul><li><a href="https://www.heygen.com/?utm_source=organicyoutube" target=_blank rel=noopener>HeyGen</a> — software</li></ul>
+<p><a href="https://www.youtube.com/watch?v=-spaL6bBY1Q" target=_blank rel=noopener>Watch on YouTube ▶</a></p><p><a href="-spaL6bBY1Q.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=t>(proxy for this video — answer from this)</span></p>
+<div class=cap>FRAMING: Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+IDENTITY: How I Turned One Real Estate Listing Into a Week of AI Content With HeyGen (Full Walkthrough) - https://www.youtube.com/watch?v=-spaL6bBY1Q - @octopusinc_ - route: visual
+PRODUCTS:
+HeyGen - https://www.heygen.com/?utm_source=organicyoutube - software - primary
+SYNOPSIS: The video demonstrates a workflow using HeyGen to generate three distinct real estate videos from a single listing without a camera. The process begins with creating a personalized AI avatar by uploading a photo and a short motion clip, then selecting a voice clone from three generated options. The creator emphasizes the importance of good lighting and clear framing for the initial photo and motion capture. HeyGen offers options to record directly via webcam, upload footage, or record from a phone using a QR code. After avatar creation, the platform generates a &quot;meet your avatar&quot; video for initial review. The video then details creating &quot;looks&quot; and &quot;look packs&quot; for the avatar, allowing it to appear in different outfits and settings, either by AI generation via text prompts (e.g., &quot;navy blazer, white shirt, standing outside a suburban home&quot;) or by uploading reference images. The core demonstration involves generating three video types: a &quot;Market Update&quot; (requiring only a zip code, like 77044, which HeyGen uses to research median prices and market activity), a &quot;Hosted Home Tour&quot; (requiring a listing link from Zillow, Redfin, or MLS, plus optional details to highlight specific features like a theater room or grand foyer), and a &quot;Meet the Agent&quot; video (requiring a link to an agent&#x27;s profile, such as Instagram, and optional focus areas like target buyers or tone). For each video type, the user can review and edit the AI-generated script, adjust voice delivery (speed, pronunciation, with fixes saved to a brand glossary), and select the format (portrait for social media, landscape for YouTube/websites), captions, and edit style (Magic Edit for visuals/music or No Edit for a clean avatar). Finally, the video shows how to refine generated videos in HeyGen&#x27;s AI Studio, allowing users to swap in better listing photos, reposition captions, and change scripts before re-rendering and exporting with burned-in captions. The creator highlights the efficiency of this workflow for real estate agents facing tight deadlines.
+BEATS:
+00:00 - intro - Laptop and phone screens displaying AI-generated real estate videos.
+01:13 - ui - HeyGen dashboard showing &quot;Create your avatar&quot; card and video prompt templates.
+02:27 - ui - HeyGen interface for &quot;Teach it how you move&quot; with options to record or upload footage.
+03:40 - ui - HeyGen interface for &quot;Pick your avatar&#x27;s voice&quot; with three voice clone options.
+04:54 - ui - HeyGen &quot;Review your voice&quot; pop-up with waveform and options to improve or re-record.
+06:07 - talking head - Creator speaking directly to the camera about HeyGen features.
+07:21 - ui - HeyGen &quot;Describe how to edit this look&quot; prompt box with text input for avatar appearance.
+08:34 - ui - HeyGen &quot;Select a look&quot; modal displaying various avatar appearances.
+09:48 - talking head - Creator speaking directly to the camera.
+11:01 - ui - HeyGen &quot;Write your script&quot; interface with AI-generated text for a market update.
+12:15 - ui - HeyGen &quot;Review voice delivery&quot; interface showing script playback and pronunciation fixes.
+13:28 - ui - HeyGen &quot;Pick a format&quot; interface with portrait/landscape options and edit styles.
+14:42 - ui - HeyGen &quot;My Avatars&quot; section showing multiple generated looks for the avatar.
+15:55 - ui - HeyGen &quot;Review voice delivery&quot; for a hosted home tour script.
+17:09 - talking head - Creator speaking directly to the camera.
+18:22 - ui - HeyGen &quot;Write your script&quot; interface for a &quot;Meet the Agent&quot; video.
+19:36 - talking head - Creator speaking directly to the camera.
+20:49 - ui - HeyGen AI Studio interface showing video layers and editing options.
+22:03 - ui - Blank white screen, likely a transition or loading screen.
+23:16 - talking head - Creator speaking directly to the camera, concluding the video.
+ENTITIES: Michael Cunningham (creator), HeyGen (tool).
+VERDICT: The creator highly recommends HeyGen as a game-changer for real estate agents, enabling them to produce high-quality video content efficiently without needing a camera or crew, fitting within tight schedules. The ability to create a personalized avatar, generate diverse content formats, and refine videos in AI Studio makes it a powerful tool for building authority and engaging clients.
+NOT COVERED: Specific pricing tiers for HeyGen, detailed technical specifications of the AI models used, the exact time it takes for each video generation step, or how HeyGen integrates with other real estate CRM or marketing platforms.</div></main><footer><a href="../index.html">← all videos</a></footer></div></body></html>

@@ -1,0 +1,220 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Managed Agents - Don't Get Locked In
+channel: @octopusinc_
+duration: 10:49
+source: https://www.youtube.com/watch?v=e5srAMM1amA
+upload_date: 20260913
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'Okay, have you noticed that over the past 5 months or so, almost every major AI company has shipped a product called managed agents? Alongside people shipping new models, alongside people shipping new frameworks, we\'ve got this'
+
+[00:12] [scene:talk]
+VISUAL: 
+AUDIO: 'whole new area of managed agents. So, Anthropic was the first one to kick it off. They started it in April or even perhaps a little before with some of the ideas there. And I\'ve got to say, most of the other companies have just copied'
+
+[00:24] [scene:talk]
+VISUAL: 
+AUDIO: 'their ideas from the Anthropic offering. So, Google came out in May with their anti-gravity agent, but really followed around the same time with their Gemini managed agents. And then June brought AWS to the game with Agent Core.'
+
+[00:38] [scene:talk]
+VISUAL: 
+AUDIO: 'Microsoft, also June, Foundry hosted agents. And then LangChain came along in mid-August with a managed deep agents public beta. And supposedly, on September 29th, OpenAI\'s Dev Day,'
+
+[00:51] [scene:talk]
+VISUAL: 
+AUDIO: 'they\'re going to roll out their version of managed agents as well. So, this is often on top of other SDKs and other offerings that the companies are actually offering. So, these managed'
+
+[01:03] [scene:talk]
+VISUAL: 
+AUDIO: 'agents are the providers running the harness and the sandbox, not just the model. And what I want to do in this video is open up one of these and show you actually what\'s in the box. And then I\'ll look at why these six companies,'
+
+[01:15] [scene:talk]
+VISUAL: 
+AUDIO: 'all with different businesses, all decided that this was the product they needed to get into. And it kind of tells you a lot about how they\'re thinking about this entire business strategy. Okay, so what actually is a managed'
+
+[01:28] [scene:talk]
+VISUAL: 
+AUDIO: 'agent? You can think of this as three layers. The bottom layer is the model. And of course, that started out with Opus and Claude at the time. Now has moved to Fable on the Anthropic side and the latest GPT models on AWS and Azure.'
+
+[01:41] [scene:talk]
+VISUAL: 
+AUDIO: 'Oh yeah, and then don\'t forget Gemini. But on top of the model, the middle part is the harness. And this basically is the loop. This is what calls the models, what picks the tools, what\'s runs them,'
+
+[01:55] [scene:talk]
+VISUAL: 
+AUDIO: 'and it feeds all the results back in and manages that context window. And then finally on top of these is the actual runtime. So, where does the loop actually run? The sandbox that holds'
+
+[02:07] [scene:talk]
+VISUAL: 
+AUDIO: 'your credentials, that often does observability or tracing, the thing that survives and lives in the cloud by itself. So, the whole managed element in managed agents here means the provider'
+
+[02:19] [scene:talk]
+VISUAL: 
+AUDIO: 'owns level two and level three of this structure. And of course, if you\'re an Anthropic or Open AI, you actually own that model as well. So, the pitch has been quite simple. People have talked about the different APIs for messages,'
+
+[02:31] [scene:talk]
+VISUAL: 
+AUDIO: 'for chats, for completions. They\'re simply what allows you to communicate with the model. The managed agents is for all the long-running async stuff. So, you can kind of think of this as two flavors.'
+
+[02:44] [scene:talk]
+VISUAL: 
+AUDIO: 'Flavor one, they\'ve got the loop, you send in your tasks and a config. You never have to write that loop, you never have to actually call that model. And that\'s basically Claude managed agents, Gemini agents, Agent Kohanas, and even'
+
+[02:56] [scene:talk]
+VISUAL: 
+AUDIO: 'the LangChain managed deep agents. Flavor two on the other hand, you actually bring the loop. So, perhaps this is a loop that you\'ve written yourself with LangGraph or with 80K, or it\'s just your own code from scratch.'
+
+[03:09] [scene:talk]
+VISUAL: 
+AUDIO: 'You put it in a container, they host it for you with some kind of per session isolation, but they also provide the runtime, things like tool execution, memory, and other server-side tools as well. So, that\'s basically things like'
+
+[03:22] [scene:talk]
+VISUAL: 
+AUDIO: 'hosted agents, Agent runtime. Used to be called Agent in your own a few weeks ago, and may change its name again in a few weeks time. And even LangChain has LangSmith deployment for your own LangGraph code. It\'s kind of worth'
+
+[03:35] [scene:talk]
+VISUAL: 
+AUDIO: 'noting that both Google and LangChain are kind of having an each-way bet on both of these, which certainly for Google makes a lot of sense because you\'ve got some things being built by Google DeepMind, and other things being'
+
+[03:47] [scene:talk]
+VISUAL: 
+AUDIO: 'built by Google Cloud. Another access that you should be looking at for some of these things, too, is for the harness itself, is it closed like Claude, antigravity, agent core, etc., or is it something that\'s actually open source'
+
+[04:00] [scene:talk]
+VISUAL: 
+AUDIO: 'like deep agents? All right, so since Claude managed agents seems to be the template that started this all off, let\'s look at the actual concepts in there. So, you\'ve got four things here: agent, environment, session, and events.'
+
+[04:12] [scene:talk]
+VISUAL: 
+AUDIO: 'So, the agent, obviously, is the model, the system prompt, tools, ability to call MCP services, skills, and these are things that you create once and then reference by ID. The second thing is the'
+
+[04:25] [scene:talk]
+VISUAL: 
+AUDIO: 'actual environment. So, this is where it all runs. The cloud sandbox of where it\'s run could either be an Anthropic cloud sandbox, or they are supporting a variety of different other sandboxes,'
+
+[04:38] [scene:talk]
+VISUAL: 
+AUDIO: 'including some self-hosted sandboxes on your own infra. Next up, you have the session. This is one running instance doing one task, and then you have the actual events. The messages that go back and forth, the user turns, the tool'
+
+[04:51] [scene:talk]
+VISUAL: 
+AUDIO: 'results, the status updates. Now, pretty much all of this maps over to the Gemini managed agents, where they\'re giving you a fresh Linux sandbox as a remote environment. And one of the cool things that they\'ve got there is that you can'
+
+[05:03] [scene:talk]
+VISUAL: 
+AUDIO: 'actually customize that file system and mount your own skills or your own agents MD file. So, the managed agents are literally taking care of all these sessions and events and memory and tools'
+
+[05:15] [scene:talk]
+VISUAL: 
+AUDIO: 'and skills and credentials and tracing and scheduling all for you. So, why are they all doing this? Well, basically, it\'s the economics. And if you think'
+
+[05:27] [scene:talk]
+VISUAL: 
+AUDIO: 'about it, the economics of one run of a chat call is just literally a round trip. You call the model, you get something back, maybe your agent uses it, etc. And a good example of this is'
+
+[05:39] [scene:talk]
+VISUAL: 
+AUDIO: 'even Google\'s own docs say that a single antigravity agent interaction typically burns somewhere between 100k and 3 million tokens. And that basically all happens because a single interaction can'
+
+[05:52] [scene:talk]
+VISUAL: 
+AUDIO: 'trigger multiple reasoning and tool loops. You don\'t really have control over that. That\'s all running server-side. Now, currently during preview, Google\'s not actually charging you any extra for the session server,'
+
+[06:04] [scene:talk]
+VISUAL: 
+AUDIO: 'but that certainly hints that that\'s going to come. Just like Anthropic with their Claude managed agents, that\'s charging you a session hour fee on top of the tokens. So, you\'re now paying for'
+
+[06:16] [scene:talk]
+VISUAL: 
+AUDIO: 'time, not just tokens. And you got to think these long-running agents like this are the highest token product a model company can sell. It runs while you\'re asleep. It manages all the'
+
+[06:28] [scene:talk]
+VISUAL: 
+AUDIO: 'different turns itself. You just have to tell it what to do, hope that it actually does that, because most of these agents don\'t have any sort of built-in verification system, and then you just have to pay the bill. Of course, the other thing is with the'
+
+[06:40] [scene:talk]
+VISUAL: 
+AUDIO: 'companies that actually are using their own model, this all becomes a lock-in game to lock you into their suite of models. You want to use Claude managed agents, you\'re going to have to use'
+
+[06:52] [scene:talk]
+VISUAL: 
+AUDIO: 'Claude Fable, Opus, Sonnet, Haiku. You want to use Gemini managed agents, you\'re going to have to use one of the Gemini models. Now, if you look at the cloud companies, whether that\'s AWS, Azure, or even Google Cloud, they\'re'
+
+[07:04] [scene:talk]
+VISUAL: 
+AUDIO: 'taking the opposite bet. Their managed agents, whether that\'s Agent Core, whether that\'s ADK, etc., they\'re making the model interchangeable when the runtime isn\'t. So, of course, you\'re'
+
+[07:17] [scene:talk]
+VISUAL: 
+AUDIO: 'running it on their serving architecture. You\'re going to have to probably use it on their memory system or a memory system that\'s running in their cloud. And then you got LangChain with the deep agents. So, they\'re really a framework company. So, they\'re neither'
+
+[07:29] [scene:talk]
+VISUAL: 
+AUDIO: 'a model nor a cloud. They\'re basically trying to be the control plane. And the cool thing there is that they allow you to use any model, any sandbox. This can be self-hostable if you want it to be, but their locking is going to be'
+
+[07:42] [scene:talk]
+VISUAL: 
+AUDIO: 'operational. Their goal is to get you to use LangSmith. And once your traces, evals, deployments, etc. are all in LangSmith, moving from that is going to be a really big challenge. So, let me make the point. None of these services'
+
+[07:54] [scene:talk]
+VISUAL: 
+AUDIO: 'is inherently bad. They all have things going for them. Running Cloud Managed Agents is an easy way for you to basically get something up, get it hosted, get it running, give it a sandbox, give it a memory, give it'
+
+[08:07] [scene:talk]
+VISUAL: 
+AUDIO: 'access to all the different things that you get with the Cloud Agents SDK. And in many ways, if you\'re already using a lot of the Cloud models, this can often just end up making your life a whole lot'
+
+[08:19] [scene:talk]
+VISUAL: 
+AUDIO: 'easier. You might want to be a little bit more careful with your Cloud providers, though, because they\'re often taking a number of different products that they had going before, and they\'re now bolting them together to make their version of managed agents. So, how'
+
+[08:32] [scene:talk]
+VISUAL: 
+AUDIO: 'should you think about whether you want to go with a managed agent system, or whether you want to take a harness and run it yourself? Well, there are five key questions that you should be asking yourself. First off, do you need state that survives a disconnect and can'
+
+[08:46] [scene:talk]
+VISUAL: 
+AUDIO: 'resume days later? If the answer is yes there, you probably want to go with the managed agents. It just makes things a lot easier. Second, do you need a sandbox for code executions that\'s going to live server-side? Again, if the'
+
+[08:59] [scene:talk]
+VISUAL: 
+AUDIO: 'answer is yes, you probably want to give managed agents a good look. But, what if you\'re designing your own agent? Or what if your loop is actually your product? In cases like that, you definitely want to look at self-hosting, and perhaps'
+
+[09:12] [scene:talk]
+VISUAL: 
+AUDIO: 'just using parts of these managed solutions, like a sandbox in the cloud, or a memory tool, or an observability tool. Lastly, one of the key things you want to make sure that you ask yourself, too, is can your data actually leave your infra? And do you actually need'
+
+[09:25] [scene:talk]
+VISUAL: 
+AUDIO: 'zero data retention? If your data is not allowed to leave your own infra, or you do need zero data retention, that rules out things like Cloud Managed Agents. It\'s just not eligible for zero data retention because session store history'
+
+[09:38] [scene:talk]
+VISUAL: 
+AUDIO: 'and sandbox state are both server-side. And that rules out a lot of enterprises that are actually looking at doing this kind of thing. So, each of these managed agents both has their plusses and their minuses. They each have their own amount'
+
+[09:51] [scene:talk]
+VISUAL: 
+AUDIO: 'of control that you actually get to run your agent in their cloud. And of course, I haven\'t even touched on local AI. If you\'re actually using a locally hosted model, you want to be able to put'
+
+[10:03] [scene:talk]
+VISUAL: 
+AUDIO: 'all of this on your own machine anyway. And then perhaps you want to look at things like Docker sandboxes, which allow you to have a safe and secure sandbox running fully locally. So, over the next few weeks, I\'m planning to have a look at a number of these different'
+
+[10:16] [scene:talk]
+VISUAL: 
+AUDIO: 'managed agent solutions, different harness solutions, both the ones that I\'ve mentioned here, and perhaps the OpenAI one if they ship at the end of September, and also some of the open agent systems that we\'re now seeing'
+
+[10:28] [scene:talk]
+VISUAL: 
+AUDIO: 'start to evolve out there. So, let me know in the comments what if you\'ve tried these out, what you actually found to be the plusses or minuses of the managed agents, and which one seem most interesting to you. Anyway, as always,'
+
+[10:40] [scene:talk]
+VISUAL: 
+AUDIO: 'if you found the video interesting, please click like and subscribe, and I will talk to you in the next video. Bye for now.'

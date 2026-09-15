@@ -1,0 +1,224 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: /GRAFT Skill + Astra: THIS IS ABSOLUTELY CRAZY!
+channel: @octopusinc_
+duration: 11:22
+source: https://www.youtube.com/watch?v=VW58Q8c5F0I
+upload_date: 20260913
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:02] [scene:talk]
+VISUAL: 
+AUDIO: '[music] Hi, welcome to another video. So, if you use AI coding agents, you have probably seen this happen. You open a project, ask for a small fix, and the agent spends the next few minutes searching'
+
+[00:15] [scene:talk]
+VISUAL: 
+AUDIO: 'files, reading imports, and figuring out how everything connects. Then, you start another task, and it does a lot of that work again. Today I want to show you an open source project called Graph that tries to make that process more'
+
+[00:28] [scene:talk]
+VISUAL: 
+AUDIO: 'efficient. It builds a code graph that your agent can query so it has a better starting point when it needs to understand your project. And for this video I actually installed it and used it through Verdant. I prepared a small document service with a permissions bug'
+
+[00:41] [scene:talk]
+VISUAL: 
+AUDIO: 'ran the tests and asked Verdant to investigate it using Graph. So we have a concrete example to look at along with the commands and outputs you can reproduce yourself. So let\'s get right into it. First, what does graft actually'
+
+[00:53] [scene:talk]
+VISUAL: 
+AUDIO: 'do? It reads the source code and records things like functions, imports, and the connections between them. You can ask where something is implemented, look at a files available functions, or trace which parts of the project call a'
+
+[01:06] [scene:talk]
+VISUAL: 
+AUDIO: 'particular function. That information is useful because a coding task usually involves more than finding one matching word. If I change a permissions function, I also want to know which services use it. And if a service behaves incorrectly, I'
+
+[01:19] [scene:talk]
+VISUAL: 
+AUDIO: 'want to follow the path that led to that behavior. Now, graft has two layers and this is an important distinction. The basic build uses tree sitter to analyze code structure. You can build the graph and run the queries we are using today'
+
+[01:32] [scene:talk]
+VISUAL: 
+AUDIO: 'without giving graph an AI provider key. There is also an optional deep build which adds AI written summaries and concept nodes that uses your configured model provider. So there can be API costs depending on the provider you'
+
+[01:46] [scene:talk]
+VISUAL: 
+AUDIO: 'choose. We are using the structural layer in this demo. All the results you will see here work without that additional model call. The project is MIT licensed and the structural graph does not require a separate database'
+
+[01:59] [scene:talk]
+VISUAL: 
+AUDIO: 'server. It keeps its generated files inside a graft folder in your project. The build also adds that folder to git ignore because you can regenerate it from the code. So the basic setup is quite approachable, but free graft'
+
+[02:12] [scene:talk]
+VISUAL: 
+AUDIO: 'queries do not make the coding agent itself free. If your agent or model has usage charges, those still apply. Keep those two costs separate. Now I have Verdant open here. The basic workflow is to open a project folder, create a task,'
+
+[02:25] [scene:talk]
+VISUAL: 
+AUDIO: 'and describe what you want the agent to do. It can inspect files, edit the code, and run terminal commands with the progress and results shown in the task. You also have a model selector and there is plan mode when you want to work'
+
+[02:37] [scene:talk]
+VISUAL: 
+AUDIO: 'through an approach before implementation. For this example, the requirements are already clear. So I\'m giving the agent a specific investigation to carry out. Verdant also gives you file views and change summaries. So once the agent edits something, you can inspect what changed.'
+
+[02:50] [scene:talk]
+VISUAL: 
+AUDIO: 'There is a code review feature as well. And for larger work, its manager can break a goal into subtasks and coordinate workers. One thing to keep in mind is that tasks in the same workspace share the files. Creating another task does not automatically mean every edit'
+
+[03:02] [scene:talk]
+VISUAL: 
+AUDIO: 'is isolated. For this walkthrough, I opened a dedicated demo folder which keeps the example easy to follow. Now, Graph does not currently have a dedicated Verdant entry in its integration installer. What we are doing'
+
+[03:14] [scene:talk]
+VISUAL: 
+AUDIO: 'here is asking Verdant to run the Graph CLI. Verdant also supports MCP and Graph has an MCP server, but the integration I actually tested for this video is the command line workflow. First, I asked'
+
+[03:26] [scene:talk]
+VISUAL: 
+AUDIO: 'Verdant to check the node version and install graft locally. The version I tested is 0.18.0 and it requires node 20 or newer. My machine was running node 22. For a quick setup on your own machine, you can use'
+
+[03:40] [scene:talk]
+VISUAL: 
+AUDIO: 'npx with the at nanonets/graph package. For the recording, I pinned the version and installed it in a separate tooling folder so we can repeat the same example. I have put the exact commands in the companion notes. Once that is'
+
+[03:52] [scene:talk]
+VISUAL: 
+AUDIO: 'installed, we can run graft build inside the code repository. There is no provider key to enter for this part. I also disabled optional telemetry for the demo commands. Now let\'s look at the example. This is a small document'
+
+[04:05] [scene:talk]
+VISUAL: 
+AUDIO: 'service with owners, editors, viewers, and unrelated users. A viewer should be able to read a shared document, but exporting it as a CSV file should require an editor or owner. These are rules for our sample app. A different'
+
+[04:18] [scene:talk]
+VISUAL: 
+AUDIO: 'product could choose a different export policy. The point is to see whether the code follows the policy we have actually defined. So let\'s run the baseline tests. We have nine tests, eight pass and one fails. The failing test says a'
+
+[04:31] [scene:talk]
+VISUAL: 
+AUDIO: 'viewer cannot export a shared document but the handler returns status 200 instead of 403. And if we run the example directly, we can see the same thing. The viewer can read, which is expected. The viewer cannot edit, which'
+
+[04:43] [scene:talk]
+VISUAL: 
+AUDIO: 'is also expected. But the viewer can export the document, which is the bug we put into this fixture. I like using a small example like this because you can follow the entire path. It is synthetic data and we are calling the route'
+
+[04:56] [scene:talk]
+VISUAL: 
+AUDIO: 'handlers locally. There is no production account or deployed service involved. Now for the first graft example, let\'s understand the codebase. Verdant runs graft build and it produces 29 nodes and 66 edges from nine JavaScript files'
+
+[05:10] [scene:talk]
+VISUAL: 
+AUDIO: 'including the tests. Those numbers are from this tiny fixture so they are not a scalability benchmark. Then we run graft map to get an overview and ask where document export permissions are checked.'
+
+[05:22] [scene:talk]
+VISUAL: 
+AUDIO: 'We add the d- source flag. So the results include the relevant code alongside the file locations. Okay. The first result is the export document function. The next result is the export permission helper. We also get the'
+
+[05:35] [scene:talk]
+VISUAL: 
+AUDIO: 'export route handler and the function that loads a document for a user. That is a useful collection of files for this question. We can see the export function fetching the document and immediately turning it into CSV. We can also see a separate helper that'
+
+[05:49] [scene:talk]
+VISUAL: 
+AUDIO: 'permits owners and editors to export. Graph is returning relevant source here. Verdant is still responsible for reading that source and reasoning about whether the behavior is correct. The query itself is deterministic retrieval. So we are not paying another model just to'
+
+[06:02] [scene:talk]
+VISUAL: 
+AUDIO: 'produce these search results. There is also the skeleton command. We run it on the permissions file and it lists the function signatures for checking a document\'s role. Read permission, edit permission, and export permission. That'
+
+[06:14] [scene:talk]
+VISUAL: 
+AUDIO: 'gives us a quick overview of the files API without dumping every function body into the conversation. Now for the second example, let\'s follow the callers. We ask graph which parts of the project call the export document'
+
+[06:26] [scene:talk]
+VISUAL: 
+AUDIO: 'function with a depth of two. It shows the route handler and then the connections to the demo and test. Then we ask the same thing about the export permission helper. And here is the useful clue. The output points to the tests, but there is no call from the'
+
+[06:39] [scene:talk]
+VISUAL: 
+AUDIO: 'export service. So the policy exists and there is even a test checking that policy directly. But the actual export path never uses it. This is why testing a helper alone is not enough. The helper'
+
+[06:52] [scene:talk]
+VISUAL: 
+AUDIO: 'can be correct while the feature using it is still broken. If we follow the source, the export service loads the document through a function that checks read access. A viewer passes that check because viewers are allowed to read. The'
+
+[07:04] [scene:talk]
+VISUAL: 
+AUDIO: 'export service then creates the CSV without checking the stricter export permission. That explains both the failing test and the missing connection in the graph. So we have something concrete for the agent to fix. Now I ask'
+
+[07:16] [scene:talk]
+VISUAL: 
+AUDIO: 'Verdant to enforce the existing export policy inside the export service. The change is small. Import the permission helper. Import the error type and reject the request if the user cannot export. We keep the existing tests exactly as'
+
+[07:28] [scene:talk]
+VISUAL: 
+AUDIO: 'they are. And here is the third example which I think is quite useful. After the edit, we run graph check before rebuilding anything. It reports that the graph is stale and identifies the export service has changed. Then we run the'
+
+[07:40] [scene:talk]
+VISUAL: 
+AUDIO: 'same graft question again without manually running another build. The output says it refreshed the graph because one file changed and the source excerpt now includes the new permission check. If we ask for the callers of the export permission helper again, the'
+
+[07:53] [scene:talk]
+VISUAL: 
+AUDIO: 'export document function now appears. So we can see the connection that was missing before the fix. A subsequent freshness check reports that the graph is current. This matters when an agent is making several changes in a session. You want'
+
+[08:06] [scene:talk]
+VISUAL: 
+AUDIO: 'its next query to reflect the updated code. In this run, that worked with an uncommitted edit. And I also repeated the sequence in a separate temporary copy to verify it. Now, let\'s run the tests again. All nine pass. The viewer'
+
+[08:18] [scene:talk]
+VISUAL: 
+AUDIO: 'gets 403 when trying to export. While the editor can still export successfully, the viewer can still read the document, too. So, we have kept the intended read access. So, that\'s great. The graph helped us find and inspect the'
+
+[08:33] [scene:talk]
+VISUAL: 
+AUDIO: 'relevant connection and the tests verified the resulting behavior. I would still keep both parts of that workflow. A graph showing the new call does not by itself prove the implementation is correct. Graph also has an interactive visualization. I exported the code graph'
+
+[08:46] [scene:talk]
+VISUAL: 
+AUDIO: 'and opened it inside Verden\'s browser panel. You can switch between the graph and a file outline. Select a function and inspect what it depends on and what depends on it. I have included both the before and after exports with the'
+
+[08:58] [scene:talk]
+VISUAL: 
+AUDIO: 'examples. Now there are a few limitations to keep in mind. Static analysis has limits especially with dynamic behavior and graph\'s language support varies in depth. The graph is useful context but you still need to inspect the code when the result is'
+
+[09:10] [scene:talk]
+VISUAL: 
+AUDIO: 'ambiguous. The automatic refresh we tested update structure. It does not regenerate paid AI summaries every time you ask a question. If a refresh fails, graph can fall back to the existing graph. So pay attention to its notices. And if you want the deep layer, make'
+
+[09:24] [scene:talk]
+VISUAL: 
+AUDIO: 'sure it actually ran with your configured provider. A successful command alone does not prove those summaries were generated. You will also see token- saving estimates in some graph outputs. Those compare the returned context with reading the covered files in full. They are'
+
+[09:36] [scene:talk]
+VISUAL: 
+AUDIO: 'estimates and they do not prove that our complete Verdant session used that percentage fewer tokens. The maintainers separately report 42% fewer tokens and 60% less time in their controlled benchmark. Those are their results. This'
+
+[09:49] [scene:talk]
+VISUAL: 
+AUDIO: 'small walk through verifies the commands and the bug fix workflow. It does not reproduce that benchmark or establish a speed up over using Verdant alone. For Verdant\'s pricing, the current monthly'
+
+[10:01] [scene:talk]
+VISUAL: 
+AUDIO: 'options start at $5 for light. Starter is $19, pro is $59, and max is $179. The pricing page also lists 100 free credits valid for 7 days for new users.'
+
+[10:14] [scene:talk]
+VISUAL: 
+AUDIO: 'Check the current limits and model costs when you choose a plan. Personally, I think Graph is worth trying when your agent repeatedly needs to understand relationships across a codebase. You can start with a structural graph, use a few'
+
+[10:28] [scene:talk]
+VISUAL: 
+AUDIO: 'targeted queries, and see whether the results help on your actual project before setting up the optional deep layer. And Verdant gives us a convenient place to run that workflow, inspect the output, review the changes, and keep the tests alongside the task. The complete'
+
+[10:41] [scene:talk]
+VISUAL: 
+AUDIO: 'example includes the original failing version, the fixed version, the graph exports, and a replay script that runs the sequence in a temporary copy. Overall, it\'s pretty cool. Anyway, let me know your thoughts in the comments.'
+
+[10:54] [scene:talk]
+VISUAL: 
+AUDIO: '[music] If you like this video, consider donating through the super thanks option or becoming a member by clicking the [music] join button. Also, give this video a thumbs up and subscribe to my channel. I\'ll see you in the next one. Until then, bye.'
+
+[11:06] [scene:talk]
+VISUAL: 
+AUDIO: '[music] &gt;&gt; [music]'

@@ -1,0 +1,128 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>Getting Started with Neon — Ludovico</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+.hide{display:none!important}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.92);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 12px}
+.controls input.q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.pill.tp.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+/* flip card shell */
+.flip{position:relative}
+.fi{position:relative;transition:transform .55s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.flip.flipped .fi{transform:rotateY(180deg)}
+.fc{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bk{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+background:var(--card);border:1px solid var(--accent2);border-radius:14px;overflow:auto;padding:12px 13px;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s}
+.card.flip{overflow:visible}.card .fc{display:flex;flex-direction:column;flex:1;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--line);cursor:pointer}
+.card.flip:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.edit{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--accent2);border:1px solid var(--line);border-radius:6px;padding:2px 9px;cursor:pointer;background:#fff}
+.edit:hover{border-color:var(--accent2)}
+/* editor back */
+.bk h4{margin:0 0 2px;font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--sub)}
+.erow{display:grid;grid-template-columns:1fr 1.3fr auto auto;gap:4px;align-items:center}
+.erow input{padding:5px 7px;border:1px solid var(--line);border-radius:6px;font-size:12px;min-width:0}
+.erow select{padding:4px 4px;font-size:11px}
+.erow .del{border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;color:var(--accent);padding:3px 7px}
+.ebtns{display:flex;gap:6px;margin-top:auto;padding-top:6px}
+.ebtns button{font-family:var(--mono);font-size:11px;border-radius:7px;padding:6px 12px;cursor:pointer;border:1px solid var(--line);background:#fff}
+.ebtns .save{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.addrow{font-family:var(--mono);font-size:11px;color:var(--accent2);cursor:pointer;align-self:flex-start;background:none;border:0;padding:2px 0}
+/* catalogue card */
+.citem{position:relative}
+.citem .fc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-height:84px;cursor:pointer}
+.citem .bk{border-radius:12px}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+footer .exp{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--accent2);font:inherit}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">Getting Started with Neon</h1><div class=tag>@octopusinc_ · 2026-04-15 · DevOps</div></div></div></header>
+<main><p class=sum>This video demonstrates how to build a full-stack to-do list application using Neon, a serverless Postgres database, integrated with Next.js and Drizzle ORM. It covers setting up a Neon project, connecting the database, defining a schema with Drizzle, handling migrations, and implementing CRUD operations for the to-do items, including a confetti animation on completion. The tutorial leverages AI coding agents like Cursor for streamlined development.</p><p><strong>Products / items</strong></p><ul><li><a href="https://neon.tech" target=_blank rel=noopener>Neon</a> — software</li><li>Next.js — software (no link)</li><li>Drizzle ORM — software (no link)</li><li>Cursor — software (no link)</li><li>Quad Code — software (no link)</li><li><a href="https://github.com/neondatabase/examples/tree/main/neon-getting-started/01-getting-started" target=_blank rel=noopener>GitHub</a> — software</li><li>VS Code — software (no link)</li><li>Vercel — software (no link)</li><li>Netlify — software (no link)</li><li>Cloudflare — software (no link)</li></ul>
+<p><a href="https://www.youtube.com/watch?v=XtMiMnX0hDg" target=_blank rel=noopener>Watch on YouTube ▶</a></p><p><a href="XtMiMnX0hDg.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=t>(proxy for this video — answer from this)</span></p>
+<div class=cap>FRAMING: Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+IDENTITY: Getting Started with Neon - https://www.youtube.com/watch?v=XtMiMnX0hDg - @octopusinc_ - route: visual
+PRODUCTS:
+Neon - https://neon.tech - software - primary
+Next.js - no reliable link - software - mentioned
+Drizzle ORM - no reliable link - software - primary
+Cursor - no reliable link - software - mentioned
+Quad Code - no reliable link - software - mentioned
+GitHub - https://github.com/neondatabase/examples/tree/main/neon-getting-started/01-getting-started - software - mentioned
+VS Code - no reliable link - software - mentioned
+Vercel - no reliable link - software - mentioned
+Netlify - no reliable link - software - mentioned
+Cloudflare - no reliable link - software - mentioned
+SYNOPSIS: The video provides a step-by-step guide to building a to-do list application using Neon, a serverless Postgres database, in conjunction with Next.js and Drizzle ORM. The process begins with creating a Neon account and project, then using the `npx neonctl@latest init` command to set up the local environment, including the VS Code extension, Neon MCP server, and agent skills. The tutorial demonstrates how to use AI coding agents like Cursor (and mentions Quad Code) to scaffold the application, defining a to-do list with create, delete, and mark-as-completed functionalities, including a confetti animation. Key aspects covered include configuring the `.env` file with the `DATABASE_URL` connection string, installing `@neondatabase/serverless` and `drizzle-orm` dependencies, and defining the database schema (`schema.ts`) using Drizzle&#x27;s type helpers for `id`, `text`, `completed`, and `createdAt` fields. The video explains setting up the database connection (`index.ts`) using the Neon serverless driver and Drizzle, emphasizing type safety and auto-completion. It also details DrizzleKit for database migrations, configuring `drizzle.config.ts` with output directory, schema path, Postgres dialect, and database URL. Commands like `npx drizzle-kit generate` and `npx drizzle-kit migrate` are shown for creating and applying migrations. The front-end implementation in `page.tsx` demonstrates fetching to-dos, creating new ones via a form, and mapping them to `TodoItem` components. Server actions in `actions.ts` for `addTodo`, `toggleTodo`, and `deleteTodo` are explained, utilizing Drizzle&#x27;s `insert`, `update`, and `delete` functions, along with `revalidatePath` for Next.js page refreshes. The `todo-item.tsx` component integrates the toggle and delete actions, triggering confetti on completion. The video concludes with a demonstration of the working app and verification of data in the Neon console.
+
+BEATS:
+00:00 - intro - Speaker introducing Neon and the video&#x27;s scope with on-screen text: &quot;create your first database&quot;, &quot;connect database to ORM&quot;, &quot;define a schema&quot;, &quot;create, read, update and delete data&quot;.
+00:39 - ui - Neon Console: &quot;Welcome to Neon&quot; project creation screen, showing fields for Project name, Postgres version, Cloud provider (AWS), and Region (AWS US East 1).
+01:18 - ui - Neon Console: Project dashboard showing &quot;Get started with Neon + AI&quot; modal with the command `npx neonctl@latest init`.
+01:57 - terminal - VS Code terminal showing `~/Development/neon-getting-started` and a notification &quot;Neon MCP Server token has been updated in Cursor&quot;.
+02:36 - ui - VS Code with Cursor chat window, showing a prompt: &quot;I want to create a simple to-do list app using Neon and Drizzle. The app should allow users to create to-dos, delete to-dos, and mark to-dos as completed. When a to-do is marked as completed, show a small confetti animation. Use the Neon project &quot;To Do List&quot;.&quot;
+03:54 - code - VS Code showing `.env` file with `DATABASE_URL` environment variable.
+04:34 - code - VS Code showing `package.json` with dependencies: `@neondatabase/serverless`, `drizzle-orm`, and `drizzle-kit`.
+05:13 - code - VS Code showing `db/schema.ts` defining the `todos` table with `id`, `text`, `completed`, and `createdAt` fields using Drizzle ORM.
+05:52 - code - VS Code showing `db/index.ts` importing `neon` from `@neondatabase/serverless` and `drizzle` from `drizzle-orm/neon-http`, setting up the database connection.
+07:10 - code - VS Code showing `drizzle.config.ts` defining the DrizzleKit configuration with `out`, `schema`, `dialect: &#x27;postgresql&#x27;`, and `dbCredentials.url`.
+07:49 - code - VS Code showing `drizzle.config.ts` again, highlighting the `schema: &quot;./db/schema.ts&quot;` line.
+08:28 - ui - Neon Console: &quot;Tables&quot; view showing the `todos` table with columns `id`, `text`, `completed`, `created_at` and one sample record.
+09:08 - terminal - VS Code terminal showing the output of `npx drizzle-kit generate` and the generated SQL file `0000_talented_inertia.sql` with `CREATE TABLE &quot;todos&quot;`.
+09:47 - code - VS Code showing `app/page.tsx` with code for fetching and displaying to-do items, importing `db` and `todos`.
+10:26 - code - VS Code showing `app/page.tsx` focusing on the form for adding new to-dos, with an input field and an &quot;Add&quot; button.
+11:05 - code - VS Code showing `app/actions.ts` defining `addTodo`, `toggleTodo`, and `deleteTodo` server actions using Drizzle ORM functions.
+11:44 - code - VS Code showing `app/todo-item.tsx` with `handleToggle` and `handleDelete` functions, including `fireConfetti()` for toggle.
+12:23 - result - Neon Console: &quot;Tables&quot; view showing the `todos` table with a newly added to-do item.
+
+ENTITIES: Neon, Drizzle, Next.js, Cursor, Quad Code, GitHub, VS Code, Vercel, Netlify, Cloudflare.
+
+VERDICT: The creator recommends Neon as a serverless Postgres database for modern developer workflows, especially when combined with tools like Drizzle ORM and AI coding agents for streamlined development. The use of `neonctl init` and DrizzleKit for migrations is highlighted as efficient.
+
+NOT COVERED: Detailed pricing of Neon, advanced Drizzle ORM features beyond basic CRUD, specific performance benchmarks for different Neon connection methods, or in-depth comparisons between Cursor and Quad Code.</div></main><footer><a href="../index.html">← all videos</a></footer></div></body></html>

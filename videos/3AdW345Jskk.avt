@@ -1,0 +1,396 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: The OpenSource Managed Agents
+channel: @octopusinc_
+duration: 20:23
+source: https://www.youtube.com/watch?v=3AdW345Jskk
+upload_date: 20260914
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:intro]
+VISUAL: Local vs. Private cloud with question marks, representing agent deployment challenges.
+AUDIO: 'Okay, so vendor neutral MIT licensed on your own hardware without a runtime bill. These are all things that Claude managed agents doesn\'t have. Also, the new OpenAI agent and API or Gemini'
+
+[00:12] [scene:talk]
+VISUAL: 
+AUDIO: 'agents doesn\'t have them. But all of these things are the things that the agent system I\'m going to show you today actually has. Today I want to talk about a way to run managed agents fully'
+
+[00:24] [scene:talk]
+VISUAL: 
+AUDIO: 'locally or in your own private cloud with any model that you want, adding in any tools that you want, skills that you want, MCPs that you want, and being able to do it all really easy without you'
+
+[00:37] [scene:talk]
+VISUAL: 
+AUDIO: 'having to go into low-level code and tinker with every tool call or every skill that you add. Today, I want to talk about a self-managed agent execution harness called True Forge. Now, before we get into it, this video'
+
+[00:50] [scene:intro]
+VISUAL: "Harnesses" text on screen with abstract lines.
+AUDIO: 'is sponsored by True Foundry, the creators of True Forge, but everything I\'m showing you today is in an open-source repo. There\'s no paid tier in anything that you\'ll see. And the ask from them is basically that if you find'
+
+[01:03] [scene:talk]
+VISUAL: 
+AUDIO: 'this useful and interesting and you would like to see them work on it more, just go and start the repo. That\'s it. I wor with True Foundry earlier on in the year and made a video about their gateway platform and it seems to me that'
+
+[01:15] [scene:talk]
+VISUAL: 
+AUDIO: 'as they\'re developing things for enterprise, they\'re also looking at how they can make some of these cool tools available to the open-source community as well. In this video, I want to try and untangle that a little bit. I want'
+
+[01:27] [scene:talk]
+VISUAL: 
+AUDIO: 'to talk about how you should be thinking about the different kinds of harnesses that are out there and how you can be using them for your different kinds of projects. So let\'s start with the word because I think this is where a lot of'
+
+[01:39] [scene:talk]
+VISUAL: 
+AUDIO: 'the confusion is. When most people hear the words agent harness right now they tend to think of coding harnesses. That\'s things like claude codeex pi om open code a whole bunch of these and'
+
+[01:52] [scene:intro]
+VISUAL: "Tedious" text with abstract icons, representing complexity.
+AUDIO: 'those are harnesses right they wrap a model they give it a file system a shell some tools and they run the loop for you but they\'re really built for one job right which is writing code. The second'
+
+[02:04] [scene:talk]
+VISUAL: 
+AUDIO: 'kind of harness that\'s out there at the moment is what I would call the assemble itself framework. So this is Langraph, deep agents perhaps agent SDK or ADK and these give you all the pieces and you'
+
+[02:16] [scene:talk]
+VISUAL: 
+AUDIO: 'write a loop and you wire up everything yourself, right? You decide how the state gets persisted, how approvals work and so on. And I\'ve done quite a number of videos on those over the years, but'
+
+[02:28] [scene:talk]
+VISUAL: 
+AUDIO: 'nowadays can be actually really tedious to use a lot of those frameworks if you\'re trying to build your own harness. The third kind and the one that\'s most recent is what I actually just made a video about recently, which is the whole idea of a hosted runtime harness. So,'
+
+[02:41] [scene:talk]
+VISUAL: 
+AUDIO: 'this is what people are calling managed agents. So, you\'ve got Claude managed agents, you\'ve got Gemini managed agents, and I made a whole video about this talking about the different kinds'
+
+[02:54] [scene:intro]
+VISUAL: "Hosted runtime harness" with two cloud icons, one with an asterisk, the other with a rainbow, both locked.
+AUDIO: 'of managed agents that are out there. But the whole idea with those is that you define an agent, give it a model, almost certainly it\'s going to have to be the provider\'s model. You\'ll have to give it tools, which again will be often'
+
+[03:06] [scene:talk]
+VISUAL: 
+AUDIO: 'provided for you, and a system prompt. And then that company\'s going to run the loop. So session, tool calls, sandboxes, approval, all of that is handled. You just hit an API. And that third category'
+
+[03:19] [scene:talk]
+VISUAL: 
+AUDIO: 'can be really nice to use, right? I\'ve built with it, etc. But here\'s the thing. Up until pretty recently, that category really meant you only had one choice in that it has to be hosted with the actual provider. And perhaps even'
+
+[03:33] [scene:talk]
+VISUAL: 
+AUDIO: 'worse than that, you\'re often just tied down to certain models that may just be not a great fit for what you\'re trying to do. So, True Forge is an open-source version of that third kind. And the'
+
+[03:46] [scene:talk]
+VISUAL: 
+AUDIO: 'readme puts it really nicely. Building an agent is easy, but running one well is not. The running it well part is all about streaming, session persistence, tool servers, sandboxes, approvals, a'
+
+[03:59] [scene:intro]
+VISUAL: Iceberg graphic with a money bag, illustrating hidden costs.
+AUDIO: 'UI. That\'s all the stuff that really honestly most people don\'t want to write. And it\'s the stuff that managed agents have been charging you a premium for. True Forge is that layer as a repo'
+
+[04:11] [scene:talk]
+VISUAL: 
+AUDIO: 'that\'s fully open- source, MIT licensed that you can clone and then run with any particular model that you want to. All right. So the question should be why does it matter what kind of managed'
+
+[04:24] [scene:talk]
+VISUAL: 
+AUDIO: 'agent I\'m using? And this is the bit that I think many people even myself at times have gotten wrong that you tend to think of the cost of all of this as just being related to which model that you\'re'
+
+[04:36] [scene:talk]
+VISUAL: 
+AUDIO: 'using and how much you\'re paying per token. And then often you don\'t think about the harness and all the plumbing that is actually going on around this. But when you start running managed agents at volume, you start to realize'
+
+[04:49] [scene:talk]
+VISUAL: 
+AUDIO: 'that actually that harness really is often the key thing because it\'s that harness that is actually deciding how many tools calls you make, what tool calls you make, in what order, how it\'s'
+
+[05:03] [scene:ui]
+VISUAL: TrueFoundry logo and "trueforge // Open-source, vendor-neutral harness" text.
+AUDIO: 'going to actually decide what goes in the context window. Remember, really what we\'re paying for is whatever\'s in the context window. So, if you\'ve got lots of tool calls in there, if you\'ve got tool bloat, right, where you\'ve just'
+
+[05:15] [scene:talk]
+VISUAL: 
+AUDIO: 'got so many tool definitions and stuff in there, and you\'re not using progressive disclosure and things like that, you\'re going to run up a much bigger bill than you would with a very efficient harness. And this is where the'
+
+[05:28] [scene:talk]
+VISUAL: 
+AUDIO: 'True Foundry team actually put out a benchmark that shows all of this. They took 14 tasks from DevRev\'s enterprise bench, the kind where the agent has to join data across a CRM, an issue'
+
+[05:41] [scene:talk]
+VISUAL: 
+AUDIO: 'tracker, a document store, multiple MCP servers, all with the same prompt. And they ran three trials each and used a blind LLM judge. And here\'s the thing, they didn\'t even go for cheaper models.'
+
+[05:54] [scene:talk]
+VISUAL: 
+AUDIO: 'They actually ran it on Opus through three different harnesses. And you can see from this diagram here, they basically showed with the actual true forge harness that even using the same model, they were able to get the cost'
+
+[06:08] [scene:talk]
+VISUAL: 
+AUDIO: 'down by 30% with the same amount of accuracy. And that\'s because Claude managed agents was using 10 million tokens per run on average versus only 3.8 million tokens on the true forge.'
+
+[06:20] [scene:talk]
+VISUAL: 
+AUDIO: 'And of course, when they moved that to a model like GLM 5.2, suddenly the model cost came down. the whole thing now was down 75% compared to the original claude managed agents version. So even if we'
+
+[06:34] [scene:talk]
+VISUAL: 
+AUDIO: 'skip the GLM 5.2 and just look at the same model, same answers for roughly a third of the tokens, that was all harness decided. So the fact that True Forge is actually open source means that'
+
+[06:48] [scene:talk]
+VISUAL: 
+AUDIO: 'you can pick any model that you want here. You can decide if you want to go for a more expensive clawed model or open AI model, etc. But you can also go for much cheaper open models like I\'m'
+
+[07:01] [scene:ui]
+VISUAL: News headlines about Chinese AI labs using Claude and China-Based AI Companies conducting industrial-scale distillation.
+AUDIO: 'going to show you in here. So, if you just take one thing away from this video, it\'s this. The harness, not the model, is usually what\'s driving your agent costs. And the harness is the part that you\'ve actually got a lot of'
+
+[07:15] [scene:talk]
+VISUAL: 
+AUDIO: 'control over, even if you\'re not running your own models with your own GPUs, etc. Now for me I would say while the cost savings here are the headline for me the lockin thing is probably a bigger deal than a lot of people are watching just'
+
+[07:28] [scene:talk]
+VISUAL: 
+AUDIO: 'in the park sweep we\'ve seen a number of different news items about what user data these people are actually training on and how they\'re actually using user data and you\'ve got things like data retention if you want to have zeroday'
+
+[07:41] [scene:talk]
+VISUAL: 
+AUDIO: 'data retention you cannot use clawed managed agents if your agent definition lives inside a hosted runtime then and the system prompt, the tool wiring, the approval rules, the session history, all'
+
+[07:53] [scene:talk]
+VISUAL: 
+AUDIO: 'of that sits on someone else\'s product. And perhaps that\'s fine up until the day you want to try a different model or you want to try a different sandbox or you want to try a different configuration,'
+
+[08:06] [scene:ui]
+VISUAL: Diagram showing a central TrueForge icon connected to various other icons (models, tools, etc.) with a "/v1/chat/completions" endpoint.
+AUDIO: 'etc. You don\'t want to get locked into these services where you become dependent on them for a lot of things beyond the model. We\'re already seeing open models get so good that really high levels of intelligence are now being'
+
+[08:20] [scene:talk]
+VISUAL: 
+AUDIO: 'democratized so you can access it over lots of different providers. Even if you have objections or legal things around sending your data to certain countries, the cool thing now is with open weights models, there are providers popping up'
+
+[08:34] [scene:talk]
+VISUAL: 
+AUDIO: 'everywhere. They\'re running the same weights with the same API endpoints. And I hear this a lot from people building inside larger companies. They often have a mandate to run things on prem or at least inside their own cloud account and'
+
+[08:46] [scene:talk]
+VISUAL: 
+AUDIO: 'a hosted agent system just isn\'t going to get through procurement through compliance no matter how good it is. So they fall back into a category of trying to write the entire loop themselves and that can also become both an inefficient'
+
+[09:00] [scene:ui]
+VISUAL: TrueForge documentation page, showing `npx @truefoundry/trueforge@latest` command for local installation.
+AUDIO: 'and expensive option. And then of course if you do have some local hardware that you can run some local models on we\'re already seeing the smaller models get better and better and this whole system allows you to integrate with things like'
+
+[09:13] [scene:talk]
+VISUAL: 
+AUDIO: 'Olama with things like LM studio to run models locally. All right so True Forge is a MIT licensed TypeScript repo from the True Foundry team with one MPX command. You can basically spin this up.'
+
+[09:27] [scene:talk]
+VISUAL: 
+AUDIO: 'It takes care of a local SQL light database. all your data is staying locally and it\'s running on a local host. There are also hosted modes if you want to do it with things like Postgress or Reddus and Docker, but the whole'
+
+[09:39] [scene:talk]
+VISUAL: 
+AUDIO: 'local mode is a very deliberate step on True Foundry\'s part to make this as easy as possible for you to get started trying it out. Now, they have a whole chat UI, but don\'t be fooled into thinking that this is another chatbot.'
+
+[09:51] [scene:talk]
+VISUAL: 
+AUDIO: 'It\'s not. The chat interface there is the test bench. It\'s where you poke around and play with the agent and test things out before you actually save it. The actual main thing here is the runtime and it\'s actually exposed a few'
+
+[10:04] [scene:ui]
+VISUAL: Diagram showing users interacting with TrueForge API, which connects to tools, documents, and settings.
+AUDIO: 'different ways. You\'ve got the UI that you can start off with, but you\'ve also got an HTT API endpoint and then also you can use that with a TypeScript SDK. This means that you can build something'
+
+[10:18] [scene:talk]
+VISUAL: 
+AUDIO: 'in this very quickly, expose the API endpoint, and then have other apps ping it. So, this makes it ideal if you\'ve got people on your team, for example, that you want them to basically run'
+
+[10:31] [scene:talk]
+VISUAL: 
+AUDIO: 'different agent workflows, but you don\'t want them having to worry about how to configure the tools, how to actually prompt it, right? How to do all of that. You can actually just bake this into'
+
+[10:43] [scene:talk]
+VISUAL: 
+AUDIO: 'something like Slack, a mobile app, any sort of software that you wanted to write. So, let\'s jump in, have a look at how this actually is all put together. All right, so to get started here, this is pretty simple. We\'re just going to go'
+
+[10:57] [scene:talk]
+VISUAL: 
+AUDIO: 'to the readme docs and see go to the quick start and then I\'m going to just install this locally to get started. And you can see this this will basically install all the components in here. everything from being able to deal with'
+
+[11:10] [scene:ui]
+VISUAL: TrueForge UI showing "Models" configuration, listing OpenAI, Anthropic, Google-Gemini, Fireworks, and a custom DeepSeek model.
+AUDIO: 'sandboxes, MCPs, skills, all those sorts of things and it\'s actually now running locally so that I can get started. Okay, so once you\'re in the actual interface in here, you can come into the settings'
+
+[11:22] [scene:talk]
+VISUAL: 
+AUDIO: 'and you can set up models, connectors, skills, and sandboxes. So models here, you\'ve got your standard sort of offthe-shelf models. If you do want to use Claude, you can use Claude. If you'
+
+[11:35] [scene:talk]
+VISUAL: 
+AUDIO: 'want to use Gemini, you can use Gemini, etc. You\'ve also got a bunch of open providers or you can configure something totally private. Here I\'ve configured up my own API endpoint to run DeepSeek Flash 4.1. So this model is just out.'
+
+[11:49] [scene:talk]
+VISUAL: 
+AUDIO: 'The previous four Flash was one of my favorite models. So I think like a lot of people I\'m quite excited to see how this new model goes. But you could configure lots of different models in here. Next up you\'ve got connectors. So'
+
+[12:01] [scene:talk]
+VISUAL: 
+AUDIO: 'you can see I\'ve already gone and configured Tavilli which is a really good search tool. You can get a free API call. I think you get a thousand calls a month or something for free. Also, Deep Wiki is one of the ones that I like, but'
+
+[12:13] [scene:ui]
+VISUAL: TrueForge UI showing "Skills" configuration, listing various skills like "algorithmic-art", "skill-creator", "mcp-builder", "web-artifacts-builder", "supabase", "wiki-architect", "wiki-ga".
+AUDIO: 'there are lots of others in here. So, if I wanted to add my notion, I can go ahead and do that. If I wanted to add bright data for doing any sort of scraping or things like that, I\'ve got that in here. Or I can just come in here and totally configure up a personal MCP'
+
+[12:27] [scene:talk]
+VISUAL: 
+AUDIO: 'server. So, that could be running locally, that could be running in the cloud, etc. And then you\'ve got skills. Now skills is obviously one of the best ways to actually get started. So I\'m going to put in the Tavi research skill'
+
+[12:39] [scene:talk]
+VISUAL: 
+AUDIO: 'there. So I\'m going to enable that so that the folder contains the skill.md. I can then just import that and use that as well. And then lastly, we\'ve got sandbox providers. So they\'re a bit'
+
+[12:51] [scene:talk]
+VISUAL: 
+AUDIO: 'light on this at the moment. I think True Foundryy\'s also got some interesting things around sandboxes that you might see coming in the near future. But once I\'ve got this set up, you can see I can just come along and I can do a new chat. Now the chat ID here is really'
+
+[13:04] [scene:ui]
+VISUAL: TrueForge chat interface showing agent reasoning and tool calls, including a sandbox failure.
+AUDIO: 'just to allow you to test that everything\'s connected up and stuff like that. So you can see I\'ve got my DeepSeek VFL.1 flash model in there. I\'ve put on to Villi as a tool in there. And if I'
+
+[13:18] [scene:talk]
+VISUAL: 
+AUDIO: 'wanted to import some files or something like that, I can use this just like a normal chat interface. But it\'s very important that you understand that this is not the product, right? This is just to basically test the product. So the'
+
+[13:31] [scene:talk]
+VISUAL: 
+AUDIO: 'idea here is that okay, now I can see that okay, everything looks like it\'s running. I\'m getting reasoning tokens back from 4.1 flash. I can see that it\'s running through the different tests and'
+
+[13:45] [scene:talk]
+VISUAL: 
+AUDIO: 'we\'ve got the ability now to run and see what actually is going on here. You can see that the agent has gone off and just me saying that this is basically a test to wire things up. I actually was just planning on testing the actual LLM, but'
+
+[13:58] [scene:talk]
+VISUAL: 
+AUDIO: 'it\'s gone through the whole system. And this is the cool thing of this, right? All of these things are now integrated as an agent. So, it\'s acting as an agent with these tool steps and with this'
+
+[14:10] [scene:ui]
+VISUAL: TrueForge chat interface with "How can I help you today?" prompt and an input field.
+AUDIO: 'thinking. So, it\'s taken this as like my task that hey, we want to check that everything\'s set up. It\'s gone through. It says right, yep, we\'ve got the date time, we\'ve got the MCP setup, we\'ve got our tool execution, everything on that'
+
+[14:24] [scene:talk]
+VISUAL: 
+AUDIO: 'is working. We can see it failed on a sandbox because I haven\'t set up a sandbox yet, right? So, it\'s good to know that this is already starting to work. Okay, so if I want to build a new agent, let\'s say I want to build an'
+
+[14:38] [scene:talk]
+VISUAL: 
+AUDIO: 'agent that\'s going to go and get AI news for me. So, I\'m just going to do a very quick one here just to sort of show you how you would do it. Okay. So, you can see I\'ve got my prompt there. And what I\'m doing here is basically just going'
+
+[14:52] [scene:talk]
+VISUAL: 
+AUDIO: 'through this, letting it work out the different things to do. And the cool thing is it\'s doing all this in the background. It\'s using Tilly. I didn\'t need to tell it to do that. It basically worked out to do that. It\'s also then'
+
+[15:04] [scene:talk]
+VISUAL: 
+AUDIO: 'gone to the VengeB site, which is the link that I gave it. Worked out that okay, we probably want the category A in there. Now I don\'t have a sandbox set up so it\'s obviously working out that that\'s going to be an issue but you can'
+
+[15:16] [scene:ui]
+VISUAL: TrueForge chat interface showing agent's detailed reasoning and search queries.
+AUDIO: 'see very quickly it\'s basically worked out itself what it needs to do like extracting the homepage trying out different things etc for doing this and then the cool thing is it\'s then used to villi to actually do searches passing in'
+
+[15:29] [scene:talk]
+VISUAL: 
+AUDIO: 'info knowing that I\'m just looking for the last 48 hours we can see what it\'s actually done there with Tavilli and you can see that finally it goes through it finds out like the Deepseek v 4.1 flash'
+
+[15:42] [scene:talk]
+VISUAL: 
+AUDIO: 'release different releases that have come up chat GPT for financial services etc. And then even for other ones it\'s then focused on checking the date right to see if those are right now once we\'ve got that we can then come over here to'
+
+[15:56] [scene:talk]
+VISUAL: 
+AUDIO: 'actually save this I then basically put in my instructions which is like my system prompt here for doing this. I can add any skills that I want. So I\'m going to put in the actual Tilly research'
+
+[16:08] [scene:ui]
+VISUAL: TrueForge chat interface showing agent steps and reasoning for "get me the news" task.
+AUDIO: 'skill in there. And then I\'ve got to decide some things like, okay, do I want the agent to ask clarifying questions? Do I want it to have dynamic sub agents? Do I want it to have basically like'
+
+[16:20] [scene:talk]
+VISUAL: 
+AUDIO: 'return a generative UI? Actually, I don\'t want the generative UI or the clarifying questions on this. I just want to sort of ping it and basically have it return the result. So now I can save the changes and it will go through'
+
+[16:32] [scene:talk]
+VISUAL: 
+AUDIO: 'and create this agent for me. And you can see now if I want to basically just try this out, I can come in here and put in the prompt to kick it off. And you'
+
+[16:44] [scene:talk]
+VISUAL: 
+AUDIO: 'can see sure enough it\'s going off. Even though I wrote just get me the news, it understands that this is going to be AI news. I actually changed it to be 72 hours in the system prompt there. It\'s got today\'s date. It\'s got the different'
+
+[16:57] [scene:talk]
+VISUAL: 
+AUDIO: 'parts that it\'s going to basically get there. And you can see that already it\'s got a bunch of sort of the recent stories that have come up. And so now it\'s going to basically check the dates of those. And all of this is running'
+
+[17:09] [scene:code]
+VISUAL: VS Code showing Python code interacting with a local TrueForge instance via HTTP API.
+AUDIO: 'with the deepse model, right? So this is a very cheap model to run. And you can see that its final output is coming back with the actual stories with a summary and with the the source URL for each of'
+
+[17:22] [scene:talk]
+VISUAL: 
+AUDIO: 'these. So this is pretty good, right? If I check something like this, sure enough, this was written in the past day or so. And then it\'s also put in some honorable mentions there. Okay. So if I want to use this with Python, I can'
+
+[17:34] [scene:talk]
+VISUAL: 
+AUDIO: 'actually just come in here and basically set up a a little UV project with just a single Python file. If we look at this, it\'s just going to basically call the local host version of this. This is'
+
+[17:47] [scene:talk]
+VISUAL: 
+AUDIO: 'where the agent is currently being hosted. You could actually have it running in the cloud if you wanted to do that. Obviously, I think going forward you\'ll see True Foundry have their own sort of managed versions of this which'
+
+[17:59] [scene:talk]
+VISUAL: 
+AUDIO: 'lets you prototype everything locally and then ship it to their cloud to run regularly at scale kind of thing. But you can see if I want to basically run this now, all I have to do is UV run main.py. It will basically set it up. It'
+
+[18:12] [scene:ui]
+VISUAL: "Agent Harness" diagram illustrating user goal, agent harness, model, tools, sandbox, approval gates, and final response.
+AUDIO: 'will go through setting up the different tools, etc. And then it will go off and do the task. And here I\'m just streaming all the things back. But if you wanted to, you could get it to basically just'
+
+[18:24] [scene:talk]
+VISUAL: 
+AUDIO: 'give you an output file or to save to a database or something like that at the end. And you can see now that it\'s finished off here. We\'ve got all the results back. We\'ve got the Open AI launches financial services. We\'ve got'
+
+[18:38] [scene:talk]
+VISUAL: 
+AUDIO: 'Deepseek V4.1 Flash in there. And for each of these, we\'ve got the Venturebe article. We\'ve got the date. We\'ve got the different information in there. So just to finish up, I would say this is'
+
+[18:50] [scene:talk]
+VISUAL: 
+AUDIO: 'definitely worth checking out if you wanted to run agents locally on your own machine, etc. And the cool thing is once you\'ve actually created these agents, they\'re stored there. So you could actually install this in the cloud and'
+
+[19:03] [scene:talk]
+VISUAL: 
+AUDIO: 'import them in there and use that. Now looking at their road map, it looks like they\'ve got a bunch of things coming up. You can see that they\'ve planned to have a gateway integration, which totally makes sense. True Foundry has a lot of sort of gateway features both for'
+
+[19:15] [scene:ui]
+VISUAL: TrueForge README showing architecture diagram and deployment modes (Local, Hosted).
+AUDIO: 'models, for MCPs, for locking things down like that. It looks like they\'re addressing probably my biggest issue with it is that I would like them to have a local sandbox execution and it looks like that\'s coming. It\'d be great'
+
+[19:27] [scene:talk]
+VISUAL: 
+AUDIO: 'if you could also lock that down with Docker sandboxes or something like it just to make it fully safe and secure. And looking at the rest of the road map, it all seems very sensible stuff if you wanted to do this kind of thing. And a'
+
+[19:39] [scene:talk]
+VISUAL: 
+AUDIO: 'lot of it is perhaps stuff that is in the lockdown versions of managed agent. So it\'s great to see that this is all coming in the near future. So go give it a star on GitHub. The links are in the description. Really this is giving you'
+
+[19:51] [scene:talk]
+VISUAL: 
+AUDIO: 'all the advantages of a managed solution without the vendor lockin and without the downsides etc. So let me know in the comments what are the biggest features you would like to see added to this. Talking to the team at True Foundry,'
+
+[20:05] [scene:talk]
+VISUAL: 
+AUDIO: 'they do seem very committed to making this work, both for their customers who are using it, but also for the general open-source community. Anyway, as always, if you found the video useful, please click like and subscribe, and I'
+
+[20:18] [scene:talk]
+VISUAL: 
+AUDIO: 'will talk to you in the next video. Bye for now.'

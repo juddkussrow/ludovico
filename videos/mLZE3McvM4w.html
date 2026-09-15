@@ -1,0 +1,115 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>This program can download almost anything — Ludovico</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+.hide{display:none!important}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.92);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 12px}
+.controls input.q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.pill.tp.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+/* flip card shell */
+.flip{position:relative}
+.fi{position:relative;transition:transform .55s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.flip.flipped .fi{transform:rotateY(180deg)}
+.fc{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bk{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+background:var(--card);border:1px solid var(--accent2);border-radius:14px;overflow:auto;padding:12px 13px;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s}
+.card.flip{overflow:visible}.card .fc{display:flex;flex-direction:column;flex:1;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--line);cursor:pointer}
+.card.flip:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.edit{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--accent2);border:1px solid var(--line);border-radius:6px;padding:2px 9px;cursor:pointer;background:#fff}
+.edit:hover{border-color:var(--accent2)}
+/* editor back */
+.bk h4{margin:0 0 2px;font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--sub)}
+.erow{display:grid;grid-template-columns:1fr 1.3fr auto auto;gap:4px;align-items:center}
+.erow input{padding:5px 7px;border:1px solid var(--line);border-radius:6px;font-size:12px;min-width:0}
+.erow select{padding:4px 4px;font-size:11px}
+.erow .del{border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;color:var(--accent);padding:3px 7px}
+.ebtns{display:flex;gap:6px;margin-top:auto;padding-top:6px}
+.ebtns button{font-family:var(--mono);font-size:11px;border-radius:7px;padding:6px 12px;cursor:pointer;border:1px solid var(--line);background:#fff}
+.ebtns .save{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.addrow{font-family:var(--mono);font-size:11px;color:var(--accent2);cursor:pointer;align-self:flex-start;background:none;border:0;padding:2px 0}
+/* catalogue card */
+.citem{position:relative}
+.citem .fc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-height:84px;cursor:pointer}
+.citem .bk{border-radius:12px}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+footer .exp{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--accent2);font:inherit}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">This program can download almost anything</h1><div class=tag>@octopusinc_ · 2026-09-11 · DevOps</div></div></div></header>
+<main><p class=sum>This video introduces aria2, a multi-protocol command-line download utility for Linux, highlighting its versatility in handling various download types including HTTP/S, FTP, BitTorrent, and Metalink. The creator demonstrates its installation, basic usage for single file downloads, torrent downloads, and its ability to split downloads across multiple sources for increased speed. The video also mentions the libaria2 C++ library for programmatic integration.</p><p><strong>Products / items</strong></p><ul><li><a href="https://github.com/aria2/aria2/" target=_blank rel=noopener>aria2</a> — software</li><li><a href="https://aria2.github.io/manual/en/html/libaria2.html" target=_blank rel=noopener>libaria2</a> — software</li><li>Gentoo Linux — software (no link)</li><li>Arch Linux — software (no link)</li></ul>
+<p><a href="https://www.youtube.com/watch?v=mLZE3McvM4w" target=_blank rel=noopener>Watch on YouTube ▶</a></p><p><a href="mLZE3McvM4w.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=t>(proxy for this video — answer from this)</span></p>
+<div class=cap>FRAMING: Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+IDENTITY: the title - https://www.youtube.com/watch?v=mLZE3McvM4w - @octopusinc_ - route: visual
+PRODUCTS:
+aria2 - https://github.com/aria2/aria2/ - software - primary
+libaria2 - https://aria2.github.io/manual/en/html/libaria2.html - software - mentioned
+SYNOPSIS: The video introduces aria2, a multi-protocol command-line download utility for Linux, emphasizing its speed and versatility. The creator demonstrates installing aria2 on Gentoo Linux using `emerge -pv aria2`. The `aria2c` command is the primary interface. The help menu (`aria2c -h`) reveals support for URI, magnet, torrent, and metalink files. Initial demonstrations show downloading a single file (a tarball from GitHub releases) using `aria2c &lt;link&gt;` and then specifying an output filename with `-o aria2.tar.gz`. The video then moves to torrent downloads, showing `aria2c &lt;magnet link&gt;` for an Arch Linux ISO. After a long wait for the magnet link, the creator switches to a direct torrent file download, which completes smoothly. A key feature demonstrated is splitting downloads across multiple sources using `aria2c --split=&lt;number&gt; &lt;link1&gt; &lt;link2&gt; ...`. The creator shows an example with `--split=2` using two HTTP mirrors and a torrent, noting that aria2 correctly splits the first two URLs and ignores subsequent ones if not configured for more splits. A final demonstration uses `--split=4` with multiple HTTP mirrors and torrents, showing aria2 consolidating traffic from all entry points into one file. The video also briefly mentions the `libaria2` C++ library for programmatic interaction, highlighting its documentation on github.io.
+BEATS:
+00:16 - ui - The video shows the aria2 GitHub repository page, highlighting &quot;aria2 - The ultra fast download utility&quot; and its features.
+00:33 - terminal - The command `emerge -pv aria2` is shown for installing aria2 on Gentoo Linux.
+00:49 - terminal - The creator types `aria2c` in the terminal, preparing to show its usage.
+01:06 - terminal - The output of `aria2c --help` is displayed, detailing usage, options, and supported tags like #basic, #http, #https, #ftp, #bittorrent.
+01:15 - terminal - The command `aria2c https://github.com/aria2/aria2/archive/refs/release-1.37.0.tar.gz` is executed to download a tarball.
+01:39 - terminal - The contents of the downloaded tarball are listed after extraction, showing aria2 source files.
+01:55 - terminal - The command `aria2c https://github.com/aria2/aria2/archive/refs/release-1.37.0.tar.gz -o aria2.tar.gz` is shown, demonstrating saving a download to a specified file.
+02:28 - terminal - A magnet link for an Arch Linux ISO is used with `aria2c`, initiating a torrent download.
+02:45 - terminal - The terminal shows the completion of the Arch Linux ISO download via torrent, along with download results and status.
+03:02 - ui - A browser window displays an index of `/iso/2026.09.01/` on `fastly.mirror.pkgbuild.com`, showing various Arch Linux ISO files and torrents.
+03:18 - ui - A browser window shows a list of Arch Linux mirrors by country.
+03:35 - terminal - The command `aria2c --split=2 &lt;URL1&gt; &lt;URL2&gt; &lt;torrent_URL&gt;` is entered, demonstrating splitting a download across multiple sources.
+03:51 - terminal - The output shows a download in progress with `--split=2`, including an error for one of the mirrors but successful download from others.
+04:08 - terminal - The command `aria2c --split=4 &lt;URL1&gt; &lt;URL2&gt; &lt;URL3&gt; &lt;URL4&gt;` is entered, attempting to split a download across four sources.
+04:24 - terminal - The terminal shows the successful completion of the Arch Linux ISO download using `--split=4`, consolidating traffic from multiple entry points.
+04:41 - ui - The `libaria2` documentation page on `aria2.github.io` is displayed, showing its C++ API.
+04:57 - text - On-screen text reads &quot;think of any scenario that involves downloading anything&quot;.
+ENTITIES: dacctal, aria2, libaria2, Gentoo Linux, Arch Linux, GitHub, Fastly, pkgbuild.com, guillaumea.fr, jcut.edu.cn
+VERDICT: The creator highly recommends aria2, stating it can handle almost any download scenario by default, and if not, it can likely be extended with a little code using the libaria2 library.
+NOT COVERED: Specific performance benchmarks, comparison with other download managers (e.g., `wget`, `curl`), advanced configuration options, GUI frontends for aria2, cross-platform installation details beyond Linux.</div></main><footer><a href="../index.html">← all videos</a></footer></div></body></html>
