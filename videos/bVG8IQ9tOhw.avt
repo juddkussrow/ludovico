@@ -1,0 +1,144 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Run Firecrawl for Free in the Cloud (No Credit Card, No API Keys)
+channel: @octopusinc_
+duration: 07:05
+source: https://www.youtube.com/watch?v=bVG8IQ9tOhw
+upload_date: 20260622
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:intro]
+VISUAL: Animated graphic showing a messy webpage being processed into clean markdown by Firecrawl.
+AUDIO: 'I\'ve got an M1 Pro MacBook Pro. Base model. 16 gigs of RAM — which I figured was plenty. So I read a tutorial about Firecrawl — the open-source tool that turns messy web pages into clean, LLM-ready markdown — and I ran docker compose up without'
+
+[00:14] [scene:ui]
+VISUAL: macOS Activity Monitor showing 14.21 GB memory usage and "Caution - memory pressure".
+AUDIO: 'a second thought. Then I opened Activity Monitor. Fourteen-plus gigs of RAM. Three gigs spilling into swap. Memory pressure glowing yellow — the macOS version'
+
+[00:26] [scene:talk]
+VISUAL: 
+AUDIO: 'of a check-engine light. Because Firecrawl\'s stack isn\'t one container — it\'s five services at once: the API server, a Playwright browser cluster, Redis, RabbitMQ, and Postgres.'
+
+[00:39] [scene:concept]
+VISUAL: Animated graphic illustrating moving Firecrawl from a maxed-out 16GB laptop to a free GitHub Codespace.
+AUDIO: 'That landed on top of VS Code, Chrome, and a dev server I already had running. Firecrawl can grab up to twelve gigs on its own — and that\'s the part most tutorials skip. Here\'s the move.'
+
+[00:51] [scene:talk]
+VISUAL: 
+AUDIO: 'GitHub Codespaces gives you a 16-gig, four-core cloud machine — for free. The free tier is thirty hours a month, which for development and on-demand scraping is plenty. So instead of fighting my laptop for RAM, Firecrawl runs up there.'
+
+[01:05] [scene:talk]
+VISUAL: 
+AUDIO: 'And I\'ve packaged the whole thing into a template repo you can fork — it\'s called firecrawl-codespaces. Five minutes from zero to a working Firecrawl instance, wired straight into Claude Code on your local machine. No API keys, no credit card.'
+
+[01:18] [scene:ui]
+VISUAL: Screen showing prerequisites: "A GitHub account" and "The GitHub CLI - gh", with "No need: Docker Desktop Homebrew Node".
+AUDIO: 'Let me show you exactly how. The prerequisites are almost nothing. You need a GitHub account — free tier is fine — and the GitHub CLI, gh, installed locally. That\'s it.'
+
+[01:30] [scene:talk]
+VISUAL: 
+AUDIO: 'No Docker Desktop, no Homebrew, no Node. The entire stack runs inside the Codespace; the only thing your laptop needs is gh, for one tunnel command at the end. Head straight to github.com slash codespaces slash new.'
+
+[01:44] [scene:ui]
+VISUAL: GitHub Codespaces creation page, with a dropdown showing machine types: "2-core (8GB RAM)", "4-core (16GB RAM)", "8-core (32GB RAM)", "16-core (64GB RAM)". "Pick 4-core - 16 GB" is highlighted.
+AUDIO: 'Pick the firecrawl-codespaces repo from the dropdown, leave the branch on main, and the dev container config loads itself. One thing actually matters here: the machine type. Pick the four-core, 16-gig option.'
+
+[01:56] [scene:ui]
+VISUAL: VS Code terminal showing "Running postStartCommand... bash setup.sh".
+AUDIO: 'The two-core only has eight gigs of RAM — and Firecrawl will run out of memory on it. So four-core. Then hit create. The moment the Codespace boots, it runs a setup script automatically — and because it\'s wired'
+
+[02:09] [scene:talk]
+VISUAL: 
+AUDIO: 'into the dev container as a post-start command, it runs every time the Codespace starts, not just the first. Here\'s what it\'s doing: it clones Firecrawl, writes a minimal dot-env on port 3663 with no auth and'
+
+[02:22] [scene:ui]
+VISUAL: VS Code terminal showing `docker ps` output listing five Firecrawl containers (API, Playwright, Redis, RabbitMQ, Postgres), with a popup listing setup script actions.
+AUDIO: 'no API keys, swaps in pre-built Docker images so it doesn\'t compile from source, brings the stack up, and waits for the health check. First run is a couple of minutes while it pulls'
+
+[02:34] [scene:talk]
+VISUAL: 
+AUDIO: 'images; after that, resuming takes about thirty seconds. And when it\'s done — the Ports tab lights up green on 3663. Run docker ps and there they are: all five containers, healthy.'
+
+[02:47] [scene:terminal]
+VISUAL: Local terminal showing `gh codespace list` command.
+AUDIO: 'The API, Playwright, Redis, RabbitMQ, Postgres. Firecrawl is live inside your Codespace. Now we just need to reach it from your machine. Now switch to your local terminal — not the Codespace, your actual machine.'
+
+[03:00] [scene:ui]
+VISUAL: Browser showing `localhost:3663` responding with "Firecrawl API" message, with "localhost:3663 responding" in green.
+AUDIO: 'Run gh codespace list to grab the name, and then one command does everything: gh codespace ports forward 3663 to 3663. That\'s it. Firecrawl is now at localhost 3663 on your laptop'
+
+[03:12] [scene:talk]
+VISUAL: 
+AUDIO: '— exactly as if it were running locally. No public URL, no auth tokens, nothing exposed to the internet. Open it in the browser and you get the Firecrawl API responding.'
+
+[03:25] [scene:terminal]
+VISUAL: VS Code terminal showing `firecrawl setup skills --agent claude-code` command output, listing skills being copied to Claude Code.
+AUDIO: 'And here\'s the bonus: that tunnel keeps the Codespace awake as long as it\'s running. Hold that thought. Firecrawl\'s running — now let\'s make Claude Code actually use it. Three quick steps.'
+
+[03:37] [scene:talk]
+VISUAL: 
+AUDIO: 'First, install the Firecrawl CLI globally with npm. Then run firecrawl setup skills, with agent claude-code. That pulls the Firecrawl skills straight from the official CLI repo — one per capability: scrape a page, search the web, crawl a site, map'
+
+[03:51] [scene:ui]
+VISUAL: VS Code terminal showing "Skills installed - in Claude Code" and a popup listing Firecrawl skills: "scrape a page", "search the web", "crawl a site", "map URLs", "interact with a live page".
+AUDIO: 'URLs, interact with a live page. It runs a quick security check on each, you approve, and they get copied into Claude Code\'s skills folder.'
+
+[04:03] [scene:talk]
+VISUAL: 
+AUDIO: 'Now Claude knows the moves. Third step — and this is the one that actually makes it work: add a Firecrawl block to your project\'s CLAUDE dot MD. Here\'s why it matters. Out of the box, the Firecrawl skill assumes you\'re'
+
+[04:15] [scene:concept]
+VISUAL: Animated graphic explaining that "DEFAULT -> FIRECRAWL CLOUD needs an API key" vs. "THIS BLOCK -> SELF-HOSTED localhost:3663".
+AUDIO: 'using Firecrawl\'s cloud service — so it goes looking for an API key. But ours isn\'t in the cloud; it\'s the self-hosted instance running on localhost. So without this block, the skill reaches for the cloud, hits an auth wall, and just fails — even'
+
+[04:28] [scene:concept]
+VISUAL: Animated graphic showing the command `FIRECRAWL_API_URL=http://localhost:3663 <cmd>`.
+AUDIO: 'though your own Firecrawl is sitting right there, running fine. The big line: always prefix the command with FIRECRAWL_API_URL pointing at localhost 3663 — that\'s what says, talk to my local instance, not the cloud.'
+
+[04:43] [scene:talk]
+VISUAL: 
+AUDIO: 'There are a couple more gotchas — like never running firecrawl status — and I\'ve put the full block, copy-paste ready, in the description below. Okay — theory\'s nice, let\'s watch it work. I asked Claude Code to read a FluentCart REST'
+
+[04:57] [scene:demo]
+VISUAL: VS Code with Claude Code open, showing a prompt: `/firecrawl-scrape Read this page: https://dev.fluentcart.com/restapi/products.html and tell me how to bulk insert products...`.
+AUDIO: 'API docs page and tell me how to bulk-insert products — exactly the kind of thing you\'d do before writing an integration. Claude reaches for the firecrawl-scrape skill. First it checks that Firecrawl\'s actually up on'
+
+[05:10] [scene:result]
+VISUAL: VS Code showing the output from Claude Code: clean markdown with endpoint, parameter table, and curl example, saved as `fluentcart-products.md`.
+AUDIO: 'localhost 3663, then it runs the scrape with that FIRECRAWL_API_URL prefix we set. And what comes back is clean, structured markdown — the endpoint, a full parameter table with types'
+
+[05:23] [scene:talk]
+VISUAL: 
+AUDIO: 'and descriptions, and a ready-to-use curl example. No HTML soup. Just the part you actually need. And it doesn\'t just hand you the answer and forget it — it saves the scraped page as a markdown file'
+
+[05:35] [scene:concept]
+VISUAL: Animated graphic showing "120 core-hours / month ÷ 4 cores at once".
+AUDIO: 'in a dot-firecrawl folder, so it\'s there for next time. Quick word on the free tier so it doesn\'t surprise you. GitHub gives you 120 core-hours a month — and because a four-core machine burns them four at'
+
+[05:48] [scene:talk]
+VISUAL: 
+AUDIO: 'a time, that\'s about thirty actual hours. Call it hundreds of doc pages. And here\'s the thing — Codespaces auto-stops when it\'s idle, which sounds like a downside but is actually the model: you spin it up when you need'
+
+[06:01] [scene:ui]
+VISUAL: GitHub Codespaces UI showing "Stop Current Codespace" in the command palette and "Stop & restart" button.
+AUDIO: 'it, and stop it when you don\'t. Stop it right from the command palette. Next time, you restart it from github.com under Codespaces, the setup script re-runs on its own, and you just re-run the tunnel.'
+
+[06:13] [scene:concept]
+VISUAL: Animated graphic showing a laptop tunneling to a GitHub Codespace cloud icon.
+AUDIO: 'Stopped storage costs pennies a month. So that yellow memory warning on my MacBook? Gone from the equation. Firecrawl runs on a 16-gig cloud machine that costs nothing, and my laptop goes back to doing'
+
+[06:25] [scene:talk]
+VISUAL: 
+AUDIO: 'laptop things. But the real takeaway is bigger than Firecrawl. The pattern is this: instead of installing heavy tools on every machine you own, run them once in the cloud and tunnel to them from wherever you are.'
+
+[06:38] [scene:outro]
+VISUAL: Animated graphic showing the tunneling concept with the repo link `github.com/nathanonn/firecrawl-codespaces`, "5 min", and "zero API keys".
+AUDIO: 'GitHub built that tunneling right into the CLI — and your AI coding assistant now has live web access for anything it needs to read before it writes code. If you want to try it, the repo\'s linked below — firecrawl-codespaces. Fork it, spin up a four-core Codespace, run the'
+
+[06:51] [scene:talk]
+VISUAL: 
+AUDIO: 'tunnel, drop the block into your CLAUDE.md. Five minutes, zero API keys. Go build something with it.'
