@@ -1,0 +1,123 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>I Cancelled ManyChat &amp; Made It Free Forever — Ludovico</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+.hide{display:none!important}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.92);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 12px}
+.controls input.q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.pill.tp.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+/* flip card shell */
+.flip{position:relative}
+.fi{position:relative;transition:transform .55s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.flip.flipped .fi{transform:rotateY(180deg)}
+.fc{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bk{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+background:var(--card);border:1px solid var(--accent2);border-radius:14px;overflow:auto;padding:12px 13px;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s}
+.card.flip{overflow:visible}.card .fc{display:flex;flex-direction:column;flex:1;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--line);cursor:pointer}
+.card.flip:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.edit{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--accent2);border:1px solid var(--line);border-radius:6px;padding:2px 9px;cursor:pointer;background:#fff}
+.edit:hover{border-color:var(--accent2)}
+/* editor back */
+.bk h4{margin:0 0 2px;font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--sub)}
+.erow{display:grid;grid-template-columns:1fr 1.3fr auto auto;gap:4px;align-items:center}
+.erow input{padding:5px 7px;border:1px solid var(--line);border-radius:6px;font-size:12px;min-width:0}
+.erow select{padding:4px 4px;font-size:11px}
+.erow .del{border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;color:var(--accent);padding:3px 7px}
+.ebtns{display:flex;gap:6px;margin-top:auto;padding-top:6px}
+.ebtns button{font-family:var(--mono);font-size:11px;border-radius:7px;padding:6px 12px;cursor:pointer;border:1px solid var(--line);background:#fff}
+.ebtns .save{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.addrow{font-family:var(--mono);font-size:11px;color:var(--accent2);cursor:pointer;align-self:flex-start;background:none;border:0;padding:2px 0}
+/* catalogue card */
+.citem{position:relative}
+.citem .fc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-height:84px;cursor:pointer}
+.citem .bk{border-radius:12px}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+footer .exp{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--accent2);font:inherit}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">I Cancelled ManyChat &amp; Made It Free Forever</h1><div class=tag>@octopusinc_ · 2026-09-11 · DevOps</div></div></div></header>
+<main><p class=sum>This video demonstrates how to set up and self-host OpenReply, an open-source alternative to ManyChat, for automating Instagram direct messages. The creator provides a &quot;skill&quot; file for AI agents like Claude or Codeex to automate the complex installation process, allowing users to avoid ManyChat&#x27;s subscription fees. The setup involves hosting OpenReply on a VPS or a dedicated PC, configuring a domain, and integrating with Meta Business Suite, Resend for email, and Healthchecks for monitoring.</p><p><strong>Products / items</strong></p><ul><li>ManyChat — software (no link)</li><li><a href="https://github.com/drewstone/openreply" target=_blank rel=noopener>OpenReply</a> — software</li><li>Claude — software (no link)</li><li>Codeex — software (no link)</li><li>Hostinger — software (no link)</li><li>GoDaddy — software (no link)</li><li><a href="https://resend.com" target=_blank rel=noopener>Resend</a> — software</li><li><a href="https://healthchecks.io" target=_blank rel=noopener>Healthchecks</a> — software</li><li>Meta Business Suite — software (no link)</li><li><a href="https://skool.com/vic" target=_blank rel=noopener>Skool</a> — software</li></ul>
+<p><a href="https://www.youtube.com/watch?v=EtU-ISULo2Q" target=_blank rel=noopener>Watch on YouTube ▶</a></p><p><a href="EtU-ISULo2Q.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=t>(proxy for this video — answer from this)</span></p>
+<div class=cap>FRAMING: Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+IDENTITY: the title - https://www.youtube.com/watch?v=EtU-ISULo2Q - @octopusinc_ - route: visual
+PRODUCTS:
+ManyChat - no reliable link - software - mentioned
+OpenReply - https://github.com/drewstone/openreply - software - primary
+Claude - no reliable link - software - mentioned
+Codeex - no reliable link - software - mentioned
+Hostinger - no reliable link - software - mentioned
+GoDaddy - no reliable link - software - mentioned
+Resend - https://resend.com - software - mentioned
+Healthchecks - https://healthchecks.io - software - mentioned
+Meta Business Suite - business.facebook.com - software - mentioned
+Skool - https://skool.com/vic - software - mentioned
+SYNOPSIS: The video presents OpenReply as a free, open-source alternative to ManyChat for automating Instagram DMs, aiming to save users from ManyChat&#x27;s potentially high costs. The creator highlights the complexity of OpenReply&#x27;s manual installation and offers a &quot;skill&quot; file for AI agents (Claude or Codeex) to automate the setup. The installation process requires either self-hosting on a dedicated Windows 11 PC (with Cloudflare for security) or using a Virtual Private Server (VPS), with Hostinger being the recommended provider at $6.99/month for a KVM1 instance. A domain is also necessary, with GoDaddy suggested for its compatibility with the automated setup. Two Instagram accounts are needed: one for operating DMs (connected to Meta Business Suite) and a second for testing. Additional services include Resend (free) for sending magic login links and other important emails, and Healthchecks (free) for monitoring the service and sending alerts via Resend if issues arise. The creator emphasizes the importance of creating all necessary accounts and logging in beforehand to allow the AI agent to control the browser for a streamlined setup. API keys and access tokens should be handled securely via an .env file, not directly in the conversation. After setup, a test campaign is created, and the functionality is verified by commenting on an Instagram post from the second account and receiving an instant DM. The creator plans to move his own setup from a VPS to a local PC for completely free operation. The &quot;skill&quot; file for automated installation is available in the creator&#x27;s free Skool community, &quot;AI Systems for Human Content,&quot; under the &quot;Classroom&quot; section.
+BEATS:
+00:00 - ui - The video opens with the ManyChat pricing page, showing plans ranging from $39/month to $199/month, while the creator introduces the problem of expensive DM automation.
+00:47 - ui - A slide titled &quot;IN THIS VIDEO&quot; outlines the content: &quot;Exactly how OpenReply works&quot; and &quot;Install it without the manual steps.&quot;
+01:35 - ui - The creator shows the OpenReply GitHub repository page, highlighting its open-source nature and describing it as a ManyChat alternative.
+03:11 - ui - A slide titled &quot;HOSTING: TWO PATHS&quot; details options: &quot;Path one: self-host on your own PC&quot; requiring &quot;A PC that is always on&quot; and &quot;Windows 11, nothing crazy.&quot;
+03:59 - ui - The Hostinger VPS dashboard is displayed, showing existing VPS instances and options for game panel and self-hosting, with the creator discussing VPS hosting.
+04:47 - ui - The GoDaddy website is shown, specifically the domain search and account dashboard, as the creator explains the need for a domain.
+05:35 - ui - A slide titled &quot;REQUIREMENT: INSTAGRAM&quot; specifies needing &quot;Two Instagram accounts,&quot; with &quot;Account one: operates the DMs.&quot;
+06:23 - ui - The Meta Business Suite interface is displayed, showing a &quot;Systems by Vic&quot; page with notifications, a to-do list, and messages, illustrating the platform&#x27;s integration.
+07:11 - ui - The Resend.com homepage is shown, featuring &quot;Email for developers,&quot; as the creator explains its role in sending emails for OpenReply.
+07:59 - ui - The Healthchecks.io website is displayed, promoting &quot;Simple and Effective Cron Job Monitoring,&quot; with the creator detailing its function for service monitoring.
+09:34 - ui - A text document (Obsidian) titled &quot;Manychat killer fresh install&quot; is shown, outlining a questionnaire for the AI agent regarding hosting, domain, and email setup.
+10:22 - ui - The Hostinger SSH keys management page is displayed, showing how to add an SSH key, as the creator explains this step in the setup process.
+11:10 - ui - A Gmail inbox is shown with an OpenReply login email in the spam folder, demonstrating a common issue and its resolution.
+11:58 - ui - The Meta &quot;Create an app&quot; page is displayed, showing various use cases like &quot;Create &amp; manage ads with Marketing API,&quot; as the creator explains setting up an Instagram app.
+13:34 - ui - An Instagram post from &quot;systemsbyvic&quot; is shown with comments, and a DM from the main account to the test account is displayed, confirming the automation works.
+15:10 - ui - The Skool community &quot;AI Systems for Human Content&quot; is shown, specifically the &quot;Classroom&quot; section with &quot;AI Automations&quot; and a &quot;Perfect Cuts / Video Editor [Skill],&quot; where the ManyChat killer skill can be downloaded.
+ENTITIES: ManyChat, Instagram, OpenReply, GitHub, Claude, Codeex, Hostinger, Cloudflare, GoDaddy, Meta Business Suite, Facebook, Resend, Healthchecks, Obsidian, Gmail, Skool, Systems by Vic, Ricky Acosta, Vic Laranja.
+VERDICT: The creator strongly recommends using OpenReply with the provided AI agent skill to automate Instagram DMs for free or at a fraction of the cost of ManyChat, highlighting its continuous updates and integrations.
+
+NOT COVERED: Specific technical details of the &quot;skill&quot; file, exact commands used by the AI agent, detailed security implications of self-hosting, or a direct comparison of feature sets between ManyChat and OpenReply.</div></main><footer><a href="../index.html">← all videos</a></footer></div></body></html>
