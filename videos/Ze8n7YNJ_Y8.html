@@ -1,0 +1,116 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>How to Create Your Own Cover Songs Easily - YuE2 Music ComfyUI Tutorial — Ludovico</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+.hide{display:none!important}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.92);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 12px}
+.controls input.q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.pill.tp.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+/* flip card shell */
+.flip{position:relative}
+.fi{position:relative;transition:transform .55s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.flip.flipped .fi{transform:rotateY(180deg)}
+.fc{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bk{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+background:var(--card);border:1px solid var(--accent2);border-radius:14px;overflow:auto;padding:12px 13px;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s}
+.card.flip{overflow:visible}.card .fc{display:flex;flex-direction:column;flex:1;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--line);cursor:pointer}
+.card.flip:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.edit{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--accent2);border:1px solid var(--line);border-radius:6px;padding:2px 9px;cursor:pointer;background:#fff}
+.edit:hover{border-color:var(--accent2)}
+/* editor back */
+.bk h4{margin:0 0 2px;font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--sub)}
+.erow{display:grid;grid-template-columns:1fr 1.3fr auto auto;gap:4px;align-items:center}
+.erow input{padding:5px 7px;border:1px solid var(--line);border-radius:6px;font-size:12px;min-width:0}
+.erow select{padding:4px 4px;font-size:11px}
+.erow .del{border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;color:var(--accent);padding:3px 7px}
+.ebtns{display:flex;gap:6px;margin-top:auto;padding-top:6px}
+.ebtns button{font-family:var(--mono);font-size:11px;border-radius:7px;padding:6px 12px;cursor:pointer;border:1px solid var(--line);background:#fff}
+.ebtns .save{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.addrow{font-family:var(--mono);font-size:11px;color:var(--accent2);cursor:pointer;align-self:flex-start;background:none;border:0;padding:2px 0}
+/* catalogue card */
+.citem{position:relative}
+.citem .fc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-height:84px;cursor:pointer}
+.citem .bk{border-radius:12px}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+footer .exp{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--accent2);font:inherit}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">How to Create Your Own Cover Songs Easily - YuE2 Music ComfyUI Tutorial</h1><div class=tag>@octopusinc_ · 2026-09-15 · Music Gen</div></div></div></header>
+<main><p class=sum>This video demonstrates how to create AI-generated cover songs using YuE2 Music Generator within ComfyUI, focusing on syncing audio references and changing vocal styles. The process involves using an existing song&#x27;s melody, generating new lyrics with ChatGPT, and then feeding these into the ComfyUI workflow to produce a new song. The creator highlights the ability to change the singer&#x27;s gender by simplifying the style prompt.</p><p><strong>Products / items</strong></p><ul><li>YuE2 Music Generator — software (no link)</li><li>ComfyUI — software (no link)</li><li>ChatGPT — software (no link)</li><li>Claude — software (no link)</li><li><a href="https://link.amazon/B05yEOQV3" target=_blank rel=noopener>Logitech MX Master 4 Mouse</a> — hardware</li><li><a href="https://link.amazon/B00sML41Z" target=_blank rel=noopener>Apple Airpods Pro 3 Headphones</a> — hardware</li><li><a href="https://link.amazon/B0gCGmjPm" target=_blank rel=noopener>Nvidia Graphics Card 4070 TI Super 16gb Vram</a> — hardware</li><li><a href="https://link.amazon/B0egSfFaE" target=_blank rel=noopener>Samsung 4K M7 Smart Monitor</a> — hardware</li><li><a href="https://link.amazon/B0cerJd5t" target=_blank rel=noopener>Wolfbox Compressed Air Electronic Duster</a> — hardware</li><li><a href="https://link.amazon/B05QhWRDA" target=_blank rel=noopener>FlexiSpot 72x30 Adjustable Standing Desk</a> — hardware</li><li><a href="https://link.amazon/B0fGxJpZ7" target=_blank rel=noopener>FlexiKing Office Chair</a> — hardware</li><li><a href="https://link.amazon/B0cbqNcH0" target=_blank rel=noopener>Apple Ipad Pro with Lidar Scanner</a> — hardware</li><li><a href="https://link.amazon/B0gx54RwT" target=_blank rel=noopener>Apple Pencil Pro</a> — hardware</li></ul>
+<p><a href="https://www.youtube.com/watch?v=Ze8n7YNJ_Y8" target=_blank rel=noopener>Watch on YouTube ▶</a></p><p><a href="Ze8n7YNJ_Y8.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=t>(proxy for this video — answer from this)</span></p>
+<div class=cap>FRAMING: Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+IDENTITY: the title - https://www.youtube.com/watch?v=Ze8n7YNJ_Y8 - @octopusinc_ - route: visual
+PRODUCTS: list each product on its own line: name - canonical link (or &quot;no reliable link&quot;) - type - primary/mentioned
+YuE2 Music Generator - no reliable link - software - primary
+ComfyUI - no reliable link - software - primary
+ChatGPT - no reliable link - software - mentioned
+Claude - no reliable link - software - mentioned
+SYNOPSIS: The video demonstrates how to create cover songs using the YuE2 Music Generator within ComfyUI. The process begins by loading an audio reference into the &quot;Load Audio Encoder&quot; node in ComfyUI, which then converts the audio to ABC notation. The user then copies the ABC notation and the original song&#x27;s lyrics. These are fed into ChatGPT with a prompt to change the lyrics while matching the original sheet music/melody. ChatGPT generates new lyrics, ensuring they fit the melodic structure. The new lyrics are then pasted into the &quot;lyrics&quot; node in ComfyUI. The &quot;style&quot; prompt, initially detailed (e.g., &quot;hard-driving modern alternative rock, aggressive post-grunge energy, female vocals&quot;), is simplified to just &quot;female vocals&quot; to demonstrate changing the singer&#x27;s gender. The workflow includes nodes like &quot;Load Checkpoint,&quot; &quot;YuE2 Generate Music,&quot; &quot;KSampler,&quot; and &quot;VAE Decode Audio.&quot; The video shows toggles that need to be turned off for the process to work correctly. The generation process takes about 2 minutes on a 16GB VRAM card. The generated song is played, and the creator notes minor mispronunciations (e.g., &quot;combinations&quot; and &quot;bread into mush&quot;) which can be fixed by editing the lyrics. The creator emphasizes the ability to change lyrics and vocal style/gender while retaining the original melody.
+BEATS:
+00:00 - ui - The ComfyUI interface is shown with various nodes connected, including &quot;Load Checkpoint,&quot; &quot;YuE2 Generate Music,&quot; &quot;KSampler,&quot; and &quot;Load Audio Encoder.&quot;
+00:21 - ui - The &quot;Load Audio Encoder&quot; node is highlighted, showing an audio waveform and options for &quot;Sheet2abc Audio to ABC&quot; and &quot;Preview as Text.&quot;
+00:42 - ui - The &quot;Load Audio Encoder&quot; and &quot;Preview as Text&quot; nodes are visible, displaying the ABC notation generated from the audio.
+01:04 - ui - A closer look at the &quot;Preview as Text&quot; node, showing the ABC notation output.
+01:25 - ui - A ChatGPT interface is overlaid, showing a prompt asking to change lyrics while matching sheet music.
+01:47 - ui - ChatGPT&#x27;s response is shown, detailing how it processed the lyrics and melody structure.
+02:08 - ui - ChatGPT displays the newly generated lyrics for the cover song.
+02:30 - ui - The ComfyUI workflow is shown again, with the &quot;lyrics&quot; node updated with the new lyrics.
+02:51 - ui - The &quot;style&quot; node is highlighted, showing a simplified prompt &quot;female vocals.&quot;
+03:13 - ui - The ComfyUI workflow is displayed, with attention drawn to various toggles and connections.
+03:34 - result - On-screen text displays the lyrics &quot;PUT THAT JELLY JAR BACK AWAY POUR THE HONEY OUT AND SPREAD IT AROUND SWEET AND GOLDEN, DRIPPING ON THE BREAD PEANUT BUTTER KNOWS WHAT IT HAS FOUND&quot; as the generated song plays.
+03:55 - ui - The ComfyUI interface is shown during the song playback.
+04:17 - ui - The ComfyUI interface continues to be displayed during the song playback.
+04:38 - result - On-screen text displays the lyrics &quot;BEST COMBINATIONS BALANCE OUT WHILE THE JELLY TURNS THE BREAD INTO MUSH PEANUT BUTTER, HONEY, TAKE A BITE TASTE THE REASON JELLY LOST THE FIGHT&quot; as the generated song plays.
+05:00 - ui - The ComfyUI interface is shown after the song generation.
+05:21 - ui - The ComfyUI interface is shown, with the &quot;Save Audio (Advanced)&quot; node visible.
+ENTITIES: Benji (workflow creator), ChatGPT, Claude, Foo Fighters (original song artist).
+VERDICT: The creator is very excited about the YuE2 Music Generator, finding it effective for creating cover songs, changing lyrics, and altering vocal styles/gender while preserving the melody. They plan to make a more in-depth video.
+NOT COVERED: The specific versions of ComfyUI or YuE2 Music Generator used, detailed installation instructions, the exact prompts used for ChatGPT beyond the initial request, or how to fix the minor mispronunciations in detail.</div></main><footer><a href="../index.html">← all videos</a></footer></div></body></html>
