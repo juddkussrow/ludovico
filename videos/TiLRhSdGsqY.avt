@@ -1,0 +1,288 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Learn How to Build a Gaussian Splat Game with World Labs, Three.js & Spark
+channel: @octopusinc_
+duration: 15:03
+source: https://www.youtube.com/watch?v=TiLRhSdGsqY
+upload_date: 20260915
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:02] [scene:talk]
+VISUAL: 
+AUDIO: '[music] &gt;&gt; Hi folks, Isaac here. Let\'s create a little sci-fi role-playing game website set in a world created in Marble. So, here\'s the idea. We\'ll use the'
+
+[00:14] [scene:talk]
+VISUAL: 
+AUDIO: 'JavaScript libraries 3.js and Splat to display our sci-fi world Gaussian Splat that was created in Marble. We\'ll add first-person controls so we can explore the world and talk to the characters.'
+
+[00:26] [scene:talk]
+VISUAL: 
+AUDIO: 'Maybe we\'ll solve a little mystery. Each character will accuse one another of something and as they do, they\'ll join the accusation conga line. Then, we\'ll have a reveal cutscene at the end where'
+
+[00:38] [scene:talk]
+VISUAL: 
+AUDIO: 'the mystery is solved. I\'ll bring up code of interest as we go, but this tutorial is going to be really focused on foundational concepts rather than using particular agentic coding tools or code deep dives.'
+
+[00:51] [scene:talk]
+VISUAL: 
+AUDIO: 'By the end though, you should feel really well equipped to dive into the repo with your favorite tools of choice, understand how everything\'s put together, and remix it into something of your own. So, let\'s get started. This world was created by the talented'
+
+[01:05] [scene:talk]
+VISUAL: 
+AUDIO: 'Britney from Wild Labs by splicing together different splats into one. And there\'s another video that goes into how this process works. So, for displaying the world, we\'re going to use some libraries called 3.js'
+
+[01:17] [scene:talk]
+VISUAL: 
+AUDIO: 'and Splat, which is a library that helps us render Gaussian Splats. And this Splat is pretty big, so we\'re going to use Splat\'s level of detail feature. This will help us have our game load'
+
+[01:29] [scene:talk]
+VISUAL: 
+AUDIO: 'faster because we can stream in splats instead of loading them all up front. And it\'s going to make our game run faster cuz Splat can do a better job of only rendering what we\'re looking at. This script in the GitHub repo is what I'
+
+[01:41] [scene:talk]
+VISUAL: 
+AUDIO: 'used to generate the LOD from my original.spz. And between 3.js and Splat, once we\'ve got this file, getting it on the screen and having a camera that can move around and render the world is pretty'
+
+[01:54] [scene:talk]
+VISUAL: 
+AUDIO: 'straightforward. So, we have a wonderful looking world and a camera that can move around, but this isn\'t really a game yet. Let\'s work on that. This scene is made up of millions of individual splats. It would be really'
+
+[02:07] [scene:talk]
+VISUAL: 
+AUDIO: 'hard to make sense of this information alone to ask a question like, "Am I on the floor?" or "How do I walk from here to there?" So, we\'ll need to take the splat and turn it into something that can help us answer those questions more'
+
+[02:20] [scene:talk]
+VISUAL: 
+AUDIO: 'easily. We\'ll make something called a triangle collider mesh. This is a simpler description of the surfaces that are physical, made out of these big triangles instead of millions of individual points. And there\'s a bunch'
+
+[02:32] [scene:talk]
+VISUAL: 
+AUDIO: 'of ways to do this. For individual scenes created in Marble, there is a feature for exporting a collider mesh that gets you going pretty quickly. I was able to use it here for this cute little scene that had not too much going'
+
+[02:44] [scene:talk]
+VISUAL: 
+AUDIO: 'on, and it did a really good job. There\'s not yet a feature though for generating a collider mesh in Marble for stitched scenes. That might change soon, but at the moment there\'s some other options. For stitched splats that are'
+
+[02:56] [scene:talk]
+VISUAL: 
+AUDIO: 'largely flat, there\'s an open source tool that this other video shows you how to use that will give you a really high quality good result. Unfortunately, or fortunately, our scene is really interesting and has this'
+
+[03:09] [scene:talk]
+VISUAL: 
+AUDIO: 'uneven terrain and these rooms of different elevations, so this isn\'t going to work for us this time. It\'s of course always possible to use something like Blender to hand create a collider mesh that fits perfect. Here you could'
+
+[03:22] [scene:talk]
+VISUAL: 
+AUDIO: 'also be really conscious of how many triangles you use to express things so that the physics can run as fast as possible, but I\'m going to try and do something a little bit more automatic. I created this experimental tool called'
+
+[03:34] [scene:talk]
+VISUAL: 
+AUDIO: 'splat mesh, which you could also use. To help us make the collider mesh quickly, the editor is first going to do something called voxelization. This is purposefully throwing away a lot of information so that we have something'
+
+[03:46] [scene:talk]
+VISUAL: 
+AUDIO: 'simpler to work with. With this, we can tidy some things up. As a start, let\'s delete the voxels around these plants. They got voxelized along with everything else, but I feel like we should just be able to walk through them. I found this'
+
+[03:59] [scene:talk]
+VISUAL: 
+AUDIO: 'process strangely relaxing, so I spent a little bit more time simplifying some of the geometry here, so that things like the bar stools would have simpler whole shapes, uh and I could block out areas that I'
+
+[04:12] [scene:talk]
+VISUAL: 
+AUDIO: 'didn\'t really want characters to be able to get into. So, I\'m going to do some cleanup now on the sky. This blue sky is made up of individual splats, and that\'s not really relevant for the collision mesh. So, we\'re just going to go in with'
+
+[04:25] [scene:talk]
+VISUAL: 
+AUDIO: 'this tool and delete a bunch of this. Now that we\'ve got our voxels, we\'ll use something called isosurface extraction. This is going to wrap a smooth shape around the voxels. This is going to be a lot nicer to walk around on. This'
+
+[04:38] [scene:talk]
+VISUAL: 
+AUDIO: 'collider mesh is by no means perfect, but I\'m pretty happy with using this to start in the game. Now, finally, we\'ve got our collider mesh. A bunch of triangles in the world that we\'re saying should be solid things we can walk on.'
+
+[04:50] [scene:talk]
+VISUAL: 
+AUDIO: 'Now we need to give this to something that can make sense of it. Physics is hard, so usually you\'ll use something called a physics engine that solves these problems for you. There\'s a lot of options, but we\'ll use Crash Cat. We\'re'
+
+[05:02] [scene:talk]
+VISUAL: 
+AUDIO: 'going to take from Crash Cat something called the kinematic character controller, and this is going to be what we use to walk along the ground and walk into walls and things like that. I\'m going to pretty much verbatim lift some things from the Crash Cat examples, and'
+
+[05:16] [scene:talk]
+VISUAL: 
+AUDIO: 'this is working pretty well. No big surprises here. I can walk around, I get stopped when I start walking into walls. Everything seems to be working. I\'m pretty happy. But, it would still be pretty generous to call this a game.'
+
+[05:29] [scene:talk]
+VISUAL: 
+AUDIO: 'Let\'s bring in some other signs of life. Quaternius is an awesome provider of free game assets, and I think these guys are perfect for our sci-fi world. I also really love this cat. We\'re just going'
+
+[05:43] [scene:talk]
+VISUAL: 
+AUDIO: 'to have to write this guy into the story somehow. These models came with animations, so we\'re ready to pull them into three.js. We\'re not going to do anything too crazy here. There\'s another great video on the World Labs channel that goes deeper into specifically this.'
+
+[05:57] [scene:talk]
+VISUAL: 
+AUDIO: 'If you want to look at the specifics of what I\'m doing, you can open up the character visuals file. I\'m using the three. GLTF loader to load the models into the scene, and then I\'m using three\'s animation mixer to blend between'
+
+[06:10] [scene:talk]
+VISUAL: 
+AUDIO: 'different clips based on what the character is going to be doing. So, we have our character in the game, which is great, but we have a new problem. How are we going to make this character follow us around the world? Maybe'
+
+[06:22] [scene:talk]
+VISUAL: 
+AUDIO: 'naively, we would just make this character a physics object that just moves towards us, but the world isn\'t a wide-open flat space. There\'s obstacles everywhere, walls, slopes. We\'re going'
+
+[06:35] [scene:talk]
+VISUAL: 
+AUDIO: 'to need a clever solution. A common solve in games is to use something called a nav mesh. It\'s sort of like a collision mesh, where a collision mesh describes what we can collide with, but'
+
+[06:47] [scene:talk]
+VISUAL: 
+AUDIO: 'a nav mesh describes the grounds that we can walk on. They\'re really good for answering pathfinding questions of how do I get from here to there? They let you treat that as a search problem across the parts of the floor that are'
+
+[07:00] [scene:talk]
+VISUAL: 
+AUDIO: 'connected. It\'s still a bit complicated, but it\'s a lot simpler now. Lucky for us, we have another cat that can help us. Navcat is a JavaScript library that can take the collision mesh we created earlier and figure out from that what is'
+
+[07:13] [scene:talk]
+VISUAL: 
+AUDIO: 'the ground that a character could walk on. It also has a bunch of APIs for answering questions like how do I get from here to there? But rather than build something ourselves on this'
+
+[07:25] [scene:talk]
+VISUAL: 
+AUDIO: 'foundation, we can get moving really quickly with this crowd API. It helps us simulate a bunch of agents on one nav mesh together. The nav mesh generation process itself is a bit complicated, too'
+
+[07:37] [scene:talk]
+VISUAL: 
+AUDIO: 'much to talk about right now, but using this tool isn\'t that complicated. There\'s a build navmesh script in the repo that uses NavCut. It loads in the collider, passes in some options, and'
+
+[07:49] [scene:talk]
+VISUAL: 
+AUDIO: 'out spits the navmesh. This process does make our computer work a little bit, so rather than doing it at runtime, we\'re just going to load the result. Once we\'ve done that, creating a crowd,'
+
+[08:01] [scene:talk]
+VISUAL: 
+AUDIO: 'filling it with agents, updating it, and telling agents where to go is pretty quick and easy. It didn\'t take long to set up the navmesh, the crowd, and the animation mixer from before to play walking animations when they\'re moving'
+
+[08:14] [scene:talk]
+VISUAL: 
+AUDIO: 'and idle animations when they\'re still. So, now you\'ve got these characters running around the world following us. This is pretty cool. But, as it often goes, we\'ve got new problems. In some areas of the scene, it really looks like'
+
+[08:28] [scene:talk]
+VISUAL: 
+AUDIO: 'the characters have just been photoshopped in. There\'s no shadows really grounding them in the scene, and the cool, warm, and blue, and bright outdoor lights don\'t really show up on the characters at all. Let\'s try some'
+
+[08:40] [scene:talk]
+VISUAL: 
+AUDIO: 'things to improve this. To start, it would be grand if there were some simple drop shadows falling from these characters. Even if it\'s not awfully realistic, anything will help with better communicating depth in the scene.'
+
+[08:53] [scene:talk]
+VISUAL: 
+AUDIO: 'But, similar to our earlier conundrums, how we would cast a shadow with a bunch of individual points in a splat is a bit hard. If only we had something simpler to work with. Thankfully, that collision mesh we created earlier is exactly what'
+
+[09:06] [scene:talk]
+VISUAL: 
+AUDIO: 'we need. Instead of trying to do something with the splat, we can use the collision mesh as a sort of shadow impostor to cast shadows onto instead. And this looks pretty good. The collision mesh is close enough to the'
+
+[09:19] [scene:talk]
+VISUAL: 
+AUDIO: 'surface of the splats that it sells the illusion. But, when I go behind this wall, I can still see the shadows for some reason. For those not in the know, rendering transparent things is a really, really hard graphics problem.'
+
+[09:32] [scene:talk]
+VISUAL: 
+AUDIO: 'This is hitting us because both the splats and the shadows are partially transparent and 3.js doesn\'t have any clever out-of-the-box solutions for dealing with this kind of occlusion. We can approximate if we should be able to'
+
+[09:46] [scene:talk]
+VISUAL: 
+AUDIO: 'see the shadows based on whether the character is in view. We\'ll use our handy collision mesh again to answer whether they\'re in view with a physics ray cast. There\'s a lot of situations where this might not work so well, but'
+
+[09:58] [scene:talk]
+VISUAL: 
+AUDIO: 'for our situation with smaller characters, it\'s a neat little solution. So, we have simple drop shadows now, but I still don\'t really get the impression these characters are inside this world. There\'s all of this cool sci-fi neon'
+
+[10:12] [scene:talk]
+VISUAL: 
+AUDIO: 'lighting in this scene. We\'re not getting the warm oranges or cool blues or intense outside light showing on the characters. Let\'s take a stab at this, too. More advanced and also demanding techniques like ray tracing that would'
+
+[10:25] [scene:talk]
+VISUAL: 
+AUDIO: 'give us really accurate light and probably outside the purview of what we\'re going to do here, but it would still be great if we could somehow know what light we are near, if we\'re near blue or orange and sort of tint the'
+
+[10:37] [scene:talk]
+VISUAL: 
+AUDIO: 'characters accordingly. For this, we\'re going to use something called a light probe grid, which is a grid of points in the scene that describe the light passing through that area. The code for this is an adaptation of three\'s own'
+
+[10:51] [scene:talk]
+VISUAL: 
+AUDIO: 'light probe square utility, but changed to be able to work with Spark. We get this information by effectively taking a bunch of photos or cube map renders from different positions in the scene. All'
+
+[11:03] [scene:talk]
+VISUAL: 
+AUDIO: 'this information gets packed into a GPU texture, which moving objects can then sample to get the approximate lighting around that position. The end result of the baking process is relatively small,'
+
+[11:15] [scene:talk]
+VISUAL: 
+AUDIO: 'but the baking process itself takes a while. Here, I turn the effect on and off and it\'s definitely a big improvement. I would hesitate to call it perfect, but it really helps getting some of the environment light on the'
+
+[11:27] [scene:talk]
+VISUAL: 
+AUDIO: 'characters. We\'ve now got a bit of life in our scene, but it\'s still not quite a game yet. Maybe a walking simulator at best. We have built though a bunch of the things we would need to facilitate'
+
+[11:39] [scene:talk]
+VISUAL: 
+AUDIO: 'some simple gameplay. So, we\'ll build a simple little quest. Say perhaps these characters came in the spaceship. They stopped on this weird cat infested planet just for a pitstop. And right'
+
+[11:52] [scene:talk]
+VISUAL: 
+AUDIO: 'when they\'re ready to leave, they can\'t find the keys for their spaceship. So, they start blaming each other. And we have to find out who done it. We\'ll start with making it possible to interact with characters. We already'
+
+[12:04] [scene:talk]
+VISUAL: 
+AUDIO: 'have the crash cat physics engine set up, so it\'s easy for us to add some more rigid bodies that instead of controlling characters movement, follow the characters crowd during movement and act as a sensor. We can then set up'
+
+[12:17] [scene:talk]
+VISUAL: 
+AUDIO: 'something often called a view ray. A ray cast that goes out of our camera towards where the camera is looking. With a bit of bookkeeping mapping the bodies we created for the characters to the'
+
+[12:29] [scene:talk]
+VISUAL: 
+AUDIO: 'characters information, we now know what we\'re looking at and we can add a little interact UI. This gives us everything we need to throw together a click to talk interaction. Here I had Claude throw together this simple dialogue UI. We\'ll'
+
+[12:43] [scene:talk]
+VISUAL: 
+AUDIO: 'string together a simple linear quest of accusation stages and after each character accuses the next, we\'ll use the nav cat crowd to make them follow us around. This isn\'t a tiny map, so we'
+
+[12:55] [scene:talk]
+VISUAL: 
+AUDIO: 'might want to guide the players the next objective. We can use nav cat to find a path from where we are to the quest target using the nav mesh we created earlier and that the crowd is using. So,'
+
+[13:07] [scene:talk]
+VISUAL: 
+AUDIO: 'as I move around or as the target moves around, this quest ribbon is going to update following that path. I\'m going to start the game with some good old fashioned forced exposition dialogue'
+
+[13:19] [scene:talk]
+VISUAL: 
+AUDIO: 'where we pan around and comment on the scene. And of course, we need our big reveal at the end where we find out it wasn\'t one of the crew members who lost the keys. The cats took the keys and they\'re taking the spaceship. Then we\'ll'
+
+[13:33] [scene:talk]
+VISUAL: 
+AUDIO: 'have the crew kind of sheepishly apologize to each other to wrap up our silly little story. I think we can call this a game now. I don\'t think it\'s going to win any awards anytime soon,'
+
+[13:45] [scene:talk]
+VISUAL: 
+AUDIO: 'but it\'s clear how we could extend what we\'ve created here to tell a richer story with more choice or to take the game play building blocks of physics and navigation to make a game of a different genre. Maybe a platformer or a shooter'
+
+[13:58] [scene:talk]
+VISUAL: 
+AUDIO: 'game. We have the ray casts for projectiles and the characters for NPC enemies. So much is possible in our little splat world now. Again, all of the code can be found on GitHub for this'
+
+[14:11] [scene:talk]
+VISUAL: 
+AUDIO: 'and it\'s free for you to dig into for learning, to create your own version in this world, or to bring the same setup into a different splat world. I\'d be curious to see what new antics the cats might get up to in your own quest game.'
+
+[14:24] [scene:talk]
+VISUAL: 
+AUDIO: 'That\'s about it for this time. If there\'s more things you\'d like to see, let us know in the comments and thanks for watching.'
