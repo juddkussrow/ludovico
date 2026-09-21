@@ -1,0 +1,128 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>Gaussian Splatting This Week: SuperSplat 3.0, three.js Goes Native, 4DGS at Home — Ludovico</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+.hide{display:none!important}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.92);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 12px}
+.controls input.q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.pill.tp.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+/* flip card shell */
+.flip{position:relative}
+.fi{position:relative;transition:transform .55s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.flip.flipped .fi{transform:rotateY(180deg)}
+.fc{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bk{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+background:var(--card);border:1px solid var(--accent2);border-radius:14px;overflow:auto;padding:12px 13px;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s}
+.card.flip{overflow:visible}.card .fc{display:flex;flex-direction:column;flex:1;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--line);cursor:pointer}
+.card.flip:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.edit{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--accent2);border:1px solid var(--line);border-radius:6px;padding:2px 9px;cursor:pointer;background:#fff}
+.edit:hover{border-color:var(--accent2)}
+/* editor back */
+.bk h4{margin:0 0 2px;font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--sub)}
+.erow{display:grid;grid-template-columns:1fr 1.3fr auto auto;gap:4px;align-items:center}
+.erow input{padding:5px 7px;border:1px solid var(--line);border-radius:6px;font-size:12px;min-width:0}
+.erow select{padding:4px 4px;font-size:11px}
+.erow .del{border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;color:var(--accent);padding:3px 7px}
+.ebtns{display:flex;gap:6px;margin-top:auto;padding-top:6px}
+.ebtns button{font-family:var(--mono);font-size:11px;border-radius:7px;padding:6px 12px;cursor:pointer;border:1px solid var(--line);background:#fff}
+.ebtns .save{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.addrow{font-family:var(--mono);font-size:11px;color:var(--accent2);cursor:pointer;align-self:flex-start;background:none;border:0;padding:2px 0}
+/* catalogue card */
+.citem{position:relative}
+.citem .fc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-height:84px;cursor:pointer}
+.citem .bk{border-radius:12px}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+footer .exp{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--accent2);font:inherit}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">Gaussian Splatting This Week: SuperSplat 3.0, three.js Goes Native, 4DGS at Home</h1><div class=tag>@octopusinc_ · 2026-09-14 · ListAssist, Up Next</div></div></div></header>
+<main><p class=sum>This video provides a comprehensive update on Gaussian splatting, highlighting significant advancements across web platforms, hardware, and 4D applications. Key updates include PlayCanvas&#x27;s SuperSplat 3.0 with global sorting and WebGPU integration, native Gaussian splatting support in three.js r186, and World Labs&#x27; Spark 2.2 with upcoming Atlas early access. The video also covers new capture hardware like the Pocket 3D SLAM scanner and Sony&#x27;s fisheye zoom lens, alongside diverse 4DGS implementations from professional rigs to DIY Raspberry Pi setups and its use in film production.</p><p><strong>Products / items</strong></p><ul><li><a href="https://github.com/playcanvas/supersplat/releases" target=_blank rel=noopener>SuperSplat 3.0</a> — software</li><li><a href="https://github.com/mrdoob/three.js/releases/tag/r186" target=_blank rel=noopener>three.js r186</a> — software</li><li><a href="https://github.com/sparkjsdev/spark" target=_blank rel=noopener>Spark 2.2</a> — software</li><li><a href="https://www.worldlabs.ai/blog/atlas" target=_blank rel=noopener>Atlas</a> — software</li><li>FrameBoy — software (no link)</li><li><a href="https://slamscanner.com/product/pocket-3d-professional-3dgs-scanner/?ref=kdizz6nnjx" target=_blank rel=noopener>Pocket 3D SLAM scanner</a> — hardware</li><li><a href="https://electronics.sony.com/imaging/lenses/all-e-mount/p/sel814g" target=_blank rel=noopener>Sony FE 8-14mm F3.5 Fisheye G</a> — hardware</li><li>Meridian rig — hardware (no link)</li><li><a href="https://www.youtube.com/watch?v=nYisoS5wPYQ" target=_blank rel=noopener>4DAnyone</a> — software</li><li><a href="https://x.com/SpenserFX/status/2097744080725774586" target=_blank rel=noopener>Panthera Spelaea splat</a> — software</li><li>God&#x27;s Eye — software (no link)</li><li><a href="https://playcanv.as/p/LGQgYidA/" target=_blank rel=noopener>Rostro Harakbut v2</a> — software</li><li><a href="https://github.com/LiBinZyu/blender-3dgs-oil-paint" target=_blank rel=noopener>3DGS Oil Painting Stylizer</a> — software</li><li>VRED — software (no link)</li><li><a href="https://circle-group.github.io/research/HeatKernelTextures/" target=_blank rel=noopener>Heat Kernel Textures</a> — software</li><li>Gaussian Light Transport — software (no link)</li><li>ENEAS — software (no link)</li><li>NVIDIA NuRec — software (no link)</li><li>NVIDIA Omniverse — software (no link)</li></ul>
+<p><a href="https://www.youtube.com/watch?v=xtu-6sL7Ygs" target=_blank rel=noopener>Watch on YouTube ▶</a></p><p><a href="xtu-6sL7Ygs.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=t>(proxy for this video — answer from this)</span></p>
+<div class=cap>FRAMING: Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+IDENTITY: Gaussian Splatting This Week: SuperSplat 3.0, three.js Goes Native, 4DGS at Home - https://www.youtube.com/watch?v=xtu-6sL7Ygs - @octopusinc_ - route: visual
+PRODUCTS:
+SuperSplat 3.0 - https://github.com/playcanvas/supersplat/releases - software - primary
+three.js r186 - https://github.com/mrdoob/three.js/releases/tag/r186 - software - primary
+Spark 2.2 - https://github.com/sparkjsdev/spark - software - primary
+Atlas - https://www.worldlabs.ai/blog/atlas - software - primary
+FrameBoy - no reliable link - software - mentioned
+Pocket 3D SLAM scanner - https://slamscanner.com/product/pocket-3d-professional-3dgs-scanner/?ref=kdizz6nnjx - hardware - primary
+Sony FE 8-14mm F3.5 Fisheye G - https://electronics.sony.com/imaging/lenses/all-e-mount/p/sel814g - hardware - primary
+Meridian rig - no reliable link - hardware - mentioned
+4DAnyone - https://www.youtube.com/watch?v=nYisoS5wPYQ - software - mentioned
+Panthera Spelaea splat - https://x.com/SpenserFX/status/2097744080725774586 - software - mentioned
+God&#x27;s Eye - no reliable link - software - mentioned
+Rostro Harakbut v2 - https://playcanv.as/p/LGQgYidA/ - software - mentioned
+3DGS Oil Painting Stylizer - https://github.com/LiBinZyu/blender-3dgs-oil-paint - software - mentioned
+VRED - no reliable link - software - mentioned
+Heat Kernel Textures - https://circle-group.github.io/research/HeatKernelTextures/ - software - mentioned
+Gaussian Light Transport - no reliable link - software - mentioned
+ENEAS - no reliable link - software - mentioned
+NVIDIA NuRec - no reliable link - software - primary
+NVIDIA Omniverse - no reliable link - software - mentioned
+SYNOPSIS: The video provides a weekly update on Gaussian splatting advancements. PlayCanvas released SuperSplat 3.0, featuring global sorting for improved render stability on the web, especially for high splat count captures, and completed its move to WebGPU, requiring compatible browsers like Chrome, Edge, or Safari 26 (Firefox users need to enable flags). Three.js r186 now includes native Gaussian splatting support, a significant integration for web development. World Labs updated Spark to version 2.2, enhancing level of detail changes and leveraging Rust, and announced early access for Atlas, a reprocessing tool for captures. They also showcased FrameBoy for real-time frame generation. New hardware includes the Pocket 3D SLAM scanner from Fema Robotics, a more affordable lidar and 360 camera combination, and Sony&#x27;s 8-14mm fisheye zoom lens, which requires uncentered transform processing for wider focal lengths. In 4D Gaussian splatting (4DGS), the video highlights a test shoot with Radiant Images&#x27; Meridian rig (56 iPhone 17 Pros) processed by Gracia, and DIY rigs like one made from four Raspberry Pi cameras by Tessie675. It also mentions 4DAnyone for single-camera bullet time effects, and the success of three 4DGS films at Venice Immersive, processed by 4D View. The MCK &quot;OM=T&quot; music video utilized 4DGS, and Framestore&#x27;s use of 4DGS in Superman is discussed, with a webinar announced. Community projects include Spencer Dickerson&#x27;s Panthera Spelaea splat, Bilawal Sidhu&#x27;s God&#x27;s Eye reconstruction of an Amazon plane crash, Krisber Aguilar&#x27;s immersive Harakbut Face v2 experience in PlayCanvas, and a 3DGS oil painting stylizer by LiBinZyu. Autodesk demonstrated a car composite using Sony&#x27;s Zin platform and VRED. Research papers mentioned are &quot;Heat Kernel Textures&quot; (ECCV 2026 Best Paper), &quot;Gaussian Light Transport,&quot; and Stability Labs&#x27; ENEAS model for segmentation. NVIDIA&#x27;s NuRec (neural reconstruction) is being used by partners like Li Auto for autonomous vehicle simulation, doubling simulation runs while halving costs.
+BEATS:
+0 - intro | Creator speaking | The creator introduces the weekly update on Gaussian splatting.
+36 - ui | SuperSplat 3.0 UI | A UI showing &quot;Scene Manager&quot; with options for Transform and Colors, demonstrating color adjustments on a selected object within a 3D scene.
+145 - ui | FrameBoy Advance UI | A screen displaying &quot;FRAMEBOY ADVANCE&quot; with a 360-degree view of a room, showing &quot;Streaming&quot; status and &quot;MOVE&quot; and &quot;LOOK&quot; joysticks.
+218 - hardware | Fisheye lens view | A wide-angle, fisheye view of a large, circular architectural interior.
+254 - branding | Radiant Images and Gracia logos | A black screen with &quot;RADIANT IMAGES&quot; logo and &quot;In Partnership with&quot; text, followed by logos for &quot;R&quot; and &quot;Gracia&quot;.
+291 - result | 4DAnyone bullet time effect | A split screen showing a person in a dynamic pose, with the left side showing a stylized effect and the right side showing the original.
+364 - result | 4DGS in Superman | A scene from Superman with two figures in a crystalline environment, with on-screen text &quot;4D Gaussian splatting&quot; and &quot;FRAMESTORE&quot; logo.
+400 - result | Crash-site reconstruction | A 3D reconstruction of an airplane crash site with labels like &quot;Impacted Vehicle,&quot; &quot;engine damage,&quot; &quot;Under the wing,&quot; and &quot;21 Air Flight 7598.&quot;
+436 - ui | Harakbut Face v2 UI | A UI showing a misty forest scene with controls for &quot;Tour&quot; and &quot;WEATHER&quot; (Natural, Fog, Rain, Density, Opacity).
+473 - research | Heat Kernel Textures paper website | A webpage titled &quot;Heat Kernel Textures: the Geodesic Gaussians That Do Not Splat&quot; with paper, arXiv, video, and code links, and a visual example.
+546 - ui | NVIDIA Li Auto case study | A webpage detailing a case study of Li Auto integrating NVIDIA Omniverse NuRec for ADAS simulation, highlighting &quot;Key Takeaways&quot; like Simulation Scale, Reconstruction Efficiency, and Simulation Quality.
+618 - ui | Radiancefields.com job board | A webpage displaying a job board with listings for various AI and engineering roles from companies like NVIDIA, Biofourmis, Micron Technology, and Symbolic.
+691 - hardware | Creator with camera rig | The creator sitting in front of a multi-camera array setup, appearing to be a test rig.
+ENTITIES: PlayCanvas, SuperSplat, three.js, World Labs, Spark, Atlas, FrameBoy, Intergeo, Fema Robotics, Pocket 3D, Sony, Radiant Images, Meridian rig, Gracia, Tessie675, Raspberry Pi, 4DAnyone, Venice Biennale, Venice Immersive, 4D View, MCK, Phương Vũ, Antiantiart, Framestore, Kevin Sears, Superman, Otoy, Spencer Dickerson, Blender, Bilawal Sidhu, God&#x27;s Eye, NTSB, Krisber Aguilar, Harakbut Face, Curie Engine, 3DGS oil painting stylizer, Autodesk, Zin, VRED, ECCV, Heat Kernel Textures, Gaussian Light Transport, Stability Labs, ENEAS, NVIDIA, NuRec, Li Auto, Meta, Amazon.
+VERDICT: The creator is highly enthusiastic about the rapid advancements in Gaussian splatting, particularly 4DGS, comparing its current stage to the early days of Instant NGP. He believes the technology is quickly maturing and finding diverse applications across industries, from web graphics and filmmaking to journalism and autonomous vehicle simulation. He is personally invested in pushing the technology forward, aiming to transition his own content into dynamic 3D.
+NOT COVERED: Specific pricing for any of the hardware or software mentioned, detailed technical specifications beyond general features, exact release dates for upcoming features like Atlas early access, or comprehensive tutorials on how to use the tools (though one is promised for SuperSplat).</div></main><footer><a href="../index.html">← all videos</a></footer></div></body></html>
