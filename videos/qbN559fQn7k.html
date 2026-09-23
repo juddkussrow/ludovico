@@ -1,0 +1,134 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>Needle 3: You Don&#x27;t Need an LLM for Function Calling — Ludovico</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+.hide{display:none!important}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.92);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 12px}
+.controls input.q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.pill.tp.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+/* flip card shell */
+.flip{position:relative}
+.fi{position:relative;transition:transform .55s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.flip.flipped .fi{transform:rotateY(180deg)}
+.fc{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bk{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+background:var(--card);border:1px solid var(--accent2);border-radius:14px;overflow:auto;padding:12px 13px;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s}
+.card.flip{overflow:visible}.card .fc{display:flex;flex-direction:column;flex:1;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--line);cursor:pointer}
+.card.flip:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.edit{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--accent2);border:1px solid var(--line);border-radius:6px;padding:2px 9px;cursor:pointer;background:#fff}
+.edit:hover{border-color:var(--accent2)}
+/* editor back */
+.bk h4{margin:0 0 2px;font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--sub)}
+.erow{display:grid;grid-template-columns:1fr 1.3fr auto auto;gap:4px;align-items:center}
+.erow input{padding:5px 7px;border:1px solid var(--line);border-radius:6px;font-size:12px;min-width:0}
+.erow select{padding:4px 4px;font-size:11px}
+.erow .del{border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;color:var(--accent);padding:3px 7px}
+.ebtns{display:flex;gap:6px;margin-top:auto;padding-top:6px}
+.ebtns button{font-family:var(--mono);font-size:11px;border-radius:7px;padding:6px 12px;cursor:pointer;border:1px solid var(--line);background:#fff}
+.ebtns .save{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.addrow{font-family:var(--mono);font-size:11px;color:var(--accent2);cursor:pointer;align-self:flex-start;background:none;border:0;padding:2px 0}
+/* catalogue card */
+.citem{position:relative}
+.citem .fc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-height:84px;cursor:pointer}
+.citem .bk{border-radius:12px}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+footer .exp{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--accent2);font:inherit}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">Needle 3: You Don&#x27;t Need an LLM for Function Calling</h1><div class=tag>@octopusinc_ · 2026-09-18 · DevOps</div></div></div></header>
+<main><p class=sum>This video introduces Needle 3, a 35MB parameter model from Cactus designed for on-device function calling and automation. It demonstrates Needle 3&#x27;s ability to process natural language commands into structured function calls for home automation with low latency on a CPU, without needing a GPU or JSON parser. The video also details the model&#x27;s architecture, its slicing capability for different hardware constraints, and crucial &quot;gotchas&quot; for developers.</p><p><strong>Products / items</strong></p><ul><li><a href="https://cactuscompute.com/needle" target=_blank rel=noopener>Needle 3</a> — software</li><li>Cactus — other (no link)</li><li>Type-Safe AI — other (no link)</li><li>Jeff — software (no link)</li><li>Whisper small — software (no link)</li><li>Google Colab — software (no link)</li><li>Hugging Face Hub — software (no link)</li><li>pydantic — software (no link)</li></ul>
+<p><a href="https://www.youtube.com/watch?v=qbN559fQn7k" target=_blank rel=noopener>Watch on YouTube ▶</a></p><p><a href="qbN559fQn7k.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=t>(proxy for this video — answer from this)</span></p>
+<div class=cap>FRAMING: Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+IDENTITY: the title - https://www.youtube.com/watch?v=qbN559fQn7k - @octopusinc_ - route: visual
+PRODUCTS:
+Needle 3 - https://cactuscompute.com/needle - software - primary
+Cactus - no reliable link - other - mentioned
+Type-Safe AI - no reliable link - other - mentioned
+Jeff - no reliable link - software - mentioned
+Whisper small - no reliable link - software - mentioned
+Google Colab - no reliable link - software - mentioned
+Hugging Face Hub - no reliable link - software - mentioned
+pydantic - no reliable link - software - mentioned
+SYNOPSIS: The video introduces Needle 3, a 35MB parameter model from Cactus, designed for on-device automation and function calling. It&#x27;s highlighted as an alternative to traditional LLMs for structured output generation, running on a CPU in 66 milliseconds for a home automation task, without requiring a GPU or JSON parser. The model&#x27;s architecture is a &quot;simple attention network&quot; that removes the feed-forward network of a standard transformer, replacing it with a multi-layer perceptron (225.6k parameters) and an n-gram for embeddings. A key feature is &quot;model slicing,&quot; allowing deployment of subsets of the 20-layer model (e.g., 2 layers for 13MB) to suit hardware constraints, such as a modern phone.
+
+A live demo shows Needle 3 converting a natural language command (&quot;I&#x27;m feeling really hot today. Can you turn on the fan? Turn down the temperature to 10° C, and also turn on the bedroom light.&quot;) into structured JSON function calls for `set_fan`, `set_thermostat`, and `set_lights`. The model provides a confidence score and decode speed (82 tok/s on Colab).
+
+The video covers several &quot;gotchas&quot;:
+1.  **State Reset:** Needle 3 retains conversation history. Without explicit `reset()` calls between unrelated requests, it can generate inaccurate function calls (e.g., &quot;order me a pizza&quot; after a thermostat command).
+2.  **Default Function Values:** Functions should always include good default values to prevent confusion and ensure proper results when arguments are not explicitly provided in the prompt.
+3.  **Refusal to Generate:** The model will produce empty responses if no corresponding tool definition exists for a query (e.g., &quot;What is the capital of France?&quot;). This is presented as a feature, preventing hallucination.
+4.  **Structured Extraction Limits:** While capable of structured extraction from clean text (e.g., an invoice description), it struggles with messy or conversational text, potentially generating `None` results.
+5.  **Classification Limits:** Unlike larger models like Type-Safe AI&#x27;s Jeff, Needle 3 is not optimized for direct intent classification and may struggle with such tasks.
+6.  **Embeddings:** Needle 3 can generate embeddings, enabling cosine similarity for semantic search, showing decent performance (e.g., 4/6 or 5/6 for mean-centered queries).
+
+The model is loaded from Hugging Face Hub. The Python code examples use a `@needle.tool` decorator for function definitions, including docstrings for model understanding.
+BEATS:
+00:00 - intro | Doom game footage with code and flow chart overlay
+00:40 - demo | Home automation UI with a house layout
+01:20 - demo | Home automation UI showing predicted JSON calls and room changes
+02:01 - ui | Slide comparing Needle 3 (35MB) to a 7B model (4000MB) and Whisper small (75MB)
+02:41 - ui | Slide comparing how &quot;every other model&quot; generates JSON vs. Needle 3 generating direct function calls
+04:43 - ui | Slide showing examples of queries Needle 3 will not respond to
+05:23 - ui | Google Colab notebook showing Python code for defining tools with `@needle.tool`
+06:04 - ui | Google Colab notebook showing model loading from Hugging Face Hub
+06:44 - ui | Google Colab notebook displaying JSON output for `set_lights` and `lock_door` functions
+07:24 - ui | Google Colab notebook highlighting confidence and decode speed metrics
+08:05 - ui | Google Colab notebook demonstrating the &quot;reset&quot; gotcha with code
+08:45 - ui | Google Colab notebook showing output comparison for calls with and without reset
+09:26 - ui | Google Colab notebook demonstrating refusal to generate for unsupported queries
+10:06 - ui | Google Colab notebook showing structured extraction from an invoice using pydantic
+10:47 - ui | Google Colab notebook showing intent classification example
+11:27 - ui | Google Colab notebook showing embedding generation and cosine similarity
+12:08 - ui | Cactus website showing Needle 3 sandbox for smart home automation
+12:48 - ui | Cactus website showing the smart home environment in the sandbox
+ENTITIES: Cactus, Type-Safe AI, Jeff, Needle 3, Whisper small, Google Colab, Hugging Face Hub, pydantic
+VERDICT: The creator is excited about Needle 3 for on-device automation due to its local, CPU-only operation and small size. They plan to incorporate it into personal automation tasks and emphasize the importance of understanding a model&#x27;s limitations.
+NOT COVERED: Specific training data for Needle 3, detailed comparison of Needle 3&#x27;s embedding quality against dedicated embedding models, the exact cost of running Needle 3 in production, or how to fine-tune Needle 3 for custom tasks.</div></main><footer><a href="../index.html">← all videos</a></footer></div></body></html>

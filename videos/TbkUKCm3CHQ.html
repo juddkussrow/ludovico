@@ -1,0 +1,134 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>An ex-OpenAI researcher just deleted language from the LLM... — Ludovico</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+.hide{display:none!important}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.92);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 12px}
+.controls input.q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.pill.tp.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+/* flip card shell */
+.flip{position:relative}
+.fi{position:relative;transition:transform .55s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.flip.flipped .fi{transform:rotateY(180deg)}
+.fc{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bk{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+background:var(--card);border:1px solid var(--accent2);border-radius:14px;overflow:auto;padding:12px 13px;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s}
+.card.flip{overflow:visible}.card .fc{display:flex;flex-direction:column;flex:1;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--line);cursor:pointer}
+.card.flip:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.edit{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--accent2);border:1px solid var(--line);border-radius:6px;padding:2px 9px;cursor:pointer;background:#fff}
+.edit:hover{border-color:var(--accent2)}
+/* editor back */
+.bk h4{margin:0 0 2px;font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--sub)}
+.erow{display:grid;grid-template-columns:1fr 1.3fr auto auto;gap:4px;align-items:center}
+.erow input{padding:5px 7px;border:1px solid var(--line);border-radius:6px;font-size:12px;min-width:0}
+.erow select{padding:4px 4px;font-size:11px}
+.erow .del{border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;color:var(--accent);padding:3px 7px}
+.ebtns{display:flex;gap:6px;margin-top:auto;padding-top:6px}
+.ebtns button{font-family:var(--mono);font-size:11px;border-radius:7px;padding:6px 12px;cursor:pointer;border:1px solid var(--line);background:#fff}
+.ebtns .save{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.addrow{font-family:var(--mono);font-size:11px;color:var(--accent2);cursor:pointer;align-self:flex-start;background:none;border:0;padding:2px 0}
+/* catalogue card */
+.citem{position:relative}
+.citem .fc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-height:84px;cursor:pointer}
+.citem .bk{border-radius:12px}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+footer .exp{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--accent2);font:inherit}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">An ex-OpenAI researcher just deleted language from the LLM...</h1><div class=tag>@octopusinc_ · 2026-09-21 · Code Gen</div></div></div></header>
+<main><p class=sum>This video introduces Jev, a new AI model developed by an ex-OpenAI researcher, designed to be a &quot;System 1&quot; model that is 200x faster and 400x cheaper than traditional LLMs. Jev achieves this by &quot;deleting language&quot; and focusing on type-safe, gut-instinct decisions, returning choices, scores, or nulls with calibrated confidence. The video also discusses an open-source alternative, OpenJeb, which claims to reproduce Jev&#x27;s functionality using a Qwen-4B model.</p><p><strong>Products / items</strong></p><ul><li>Jev — software (no link)</li><li>TypeSafe AI — other (no link)</li><li>OpenJeb — software (no link)</li><li>Qwen-4B — software (no link)</li><li><a href="https://mux.com/fireship" target=_blank rel=noopener>Mux</a> — software</li><li>ChatGPT — software (no link)</li><li>GPT-6 — software (no link)</li><li>Claude Fable — software (no link)</li><li>Fable — software (no link)</li><li>Astra — software (no link)</li><li>TypeScript — software (no link)</li><li>Daniel Kahneman&#x27;s Thinking Fast and Slow — other (no link)</li><li>Horse Tinder — software (no link)</li><li>RLCD — other (no link)</li><li>Jin Yang — other (no link)</li><li>Perplexity — software (no link)</li><li>Patreon — software (no link)</li><li>FFmpeg — software (no link)</li></ul>
+<p><a href="https://www.youtube.com/watch?v=TbkUKCm3CHQ" target=_blank rel=noopener>Watch on YouTube ▶</a></p><p><a href="TbkUKCm3CHQ.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=t>(proxy for this video — answer from this)</span></p>
+<div class=cap>FRAMING: Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+IDENTITY: An ex-OpenAI researcher just deleted language from the LLM... - https://www.youtube.com/watch?v=TbkUKCm3CHQ - @octopusinc_ - route: visual
+PRODUCTS:
+Jev - no reliable link - software - primary
+TypeSafe AI - no reliable link - other - mentioned
+OpenJeb - no reliable link - software - mentioned
+Qwen-4B - no reliable link - software - mentioned
+Mux - https://mux.com/fireship - software - mentioned
+ChatGPT - no reliable link - software - mentioned
+GPT-6 - no reliable link - software - mentioned
+Claude Fable - no reliable link - software - mentioned
+Fable - no reliable link - software - mentioned
+Astra - no reliable link - software - mentioned
+TypeScript - no reliable link - software - mentioned
+Daniel Kahneman&#x27;s Thinking Fast and Slow - no reliable link - other - mentioned
+Horse Tinder - no reliable link - software - mentioned
+RLCD - no reliable link - other - mentioned
+Jin Yang - no reliable link - other - mentioned
+Perplexity - no reliable link - software - mentioned
+Patreon - no reliable link - software - mentioned
+FFmpeg - no reliable link - software - mentioned
+SYNOPSIS: The video introduces Jev, a new AI model developed by ex-OpenAI researcher Diogo Almeida and his company TypeSafe AI, which recently raised $40 million. Jev is presented as a &quot;System 1&quot; model, inspired by Daniel Kahneman&#x27;s &quot;Thinking Fast and Slow,&quot; designed for fast, gut-instinct decisions. Unlike traditional LLMs that can be verbose and costly, Jev &quot;deletes language&quot; and focuses on type-safe outputs: a choice, a score, or a null (yes/no). This approach makes it 200 times faster, 400 times cheaper, with free output tokens and zero hallucinations, according to its developers. The model provides a calibrated confidence number for each response, derived from RLCD (reinforcement learning for calibrated decisions), indicating the percentage of time it&#x27;s expected to be correct. While Jev&#x27;s architecture is proprietary, an open-source alternative called OpenJeb is mentioned, which claims to reproduce Jev&#x27;s interface by reading option probabilities from a frozen Qwen-4B model in a single forward pass, requiring no new training and runnable on a 3090 GPU, with a web GPU demo available. The video also highlights Mux, a video API that offers features like transcripts, storyboards, thumbnails, and AI-powered workflows (Mux robots) for tasks like language translation and content moderation, which can be automated with &quot;directives.&quot; Mux offers a free plan including 10 videos and 100,000 delivery minutes per month.
+BEATS:
+0 - intro | Jev vs. other LLMs performance graph
+16 - ui | Terminal showing &quot;auto mode on&quot; and a text input
+32 - ui | Terminal showing text output and &quot;true or false;&quot; input
+49 - ui | &quot;TYPESAFE AI MODEL&quot; UI with confidence levels and thresholds, showing a grid of grayscale squares
+65 - visual | &quot;Jev&quot; text overlaid on a car driving through a field
+81 - visual | &quot;$40 MILLION&quot; text with a stack of money
+98 - ui | Code editor showing a JSON structure for &quot;Questions&quot; with &quot;isHorse&quot; as a key
+114 - visual | &quot;JEV&quot; text with a green loading bar
+130 - ui | Mobile app UI resembling a dating app, showing a horse profile named &quot;Maple, 7&quot;
+147 - ui | Jev playground UI with &quot;State&quot; input, &quot;Questions&quot; JSON, and a response panel showing &quot;isHorse&quot; with 17% true, 83% false
+163 - ui | Twitter post by Michal Pierzchala showing Jev playing Flappy Bird
+179 - ui | Jev playground UI and a comment section discussing &quot;Type safety is not factual correctness.&quot;
+196 - visual | Kanye West tweet and news footage
+212 - ui | Doom game screen with a complex node-based AI system diagram
+228 - ui | Laptop screen showing code and a mobile app displaying &quot;Hotdog&quot; with a checkmark
+245 - diagram | Flowchart showing &quot;Unstructured state,&quot; &quot;Runtime criteria,&quot; &quot;Typed options&quot; feeding into a &quot;4B model&quot;
+261 - ui | Mux API documentation for &quot;Update an asset&quot;
+277 - ui | Mux dashboard showing options for &quot;thumbnails,&quot; &quot;transcripts,&quot; &quot;storyboards,&quot; and &quot;clips&quot;
+294 - ui | Mux dashboard showing &quot;DIRECTIVES&quot; and options to &quot;Add Workflow&quot; like &quot;Translate Audio&quot;
+310 - branding | Mux logo
+ENTITIES: OpenAI, ChatGPT, Jev, Fable, Astra, Diogo Almeida, TypeSafe AI, Daniel Kahneman, GPT-6, Claude Fable, Horse Tinder, Kanye, RLCD, Jin Yang, OpenJeb, Qwen-4B, Mux, FFmpeg, Perplexity, Patreon.
+VERDICT: Jev offers a compelling alternative to traditional LLMs for specific use cases, being significantly faster and cheaper by focusing on type-safe, gut-instinct decisions with calibrated confidence. While its architecture is proprietary, the existence of OpenJeb suggests that similar functionality can be achieved with existing models. Mux is recommended as a robust video API solution for developers.
+NOT COVERED: Specific pricing details for Jev or OpenJeb beyond the general &quot;cheaper&quot; claim, technical details of Jev&#x27;s proprietary architecture, the exact link or availability of OpenJeb or its web GPU demo, or the specific commands to interact with Jev or OpenJeb.</div></main><footer><a href="../index.html">← all videos</a></footer></div></body></html>

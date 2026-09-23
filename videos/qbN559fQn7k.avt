@@ -1,0 +1,264 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Needle 3: You Don't Need an LLM for Function Calling
+channel: @octopusinc_
+duration: 13:29
+source: https://www.youtube.com/watch?v=qbN559fQn7k
+upload_date: 20260918
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'We\'re seeing an emergence of a new class of foundation models specifically designed for automation, which produces only structured outputs really fast and like token by token text generation of a large language model. That means you can directly'
+
+[00:14] [scene:talk]
+VISUAL: 
+AUDIO: 'translate these structured outputs into actions like this model playing Doom. Uh, but it\'s not text generation. And Jeff our system one model from Type-Safe AI is a perfect example of this,'
+
+[00:28] [scene:talk]
+VISUAL: 
+AUDIO: 'which is extremely fast and it\'s very cost-efficient. But now we\'re seeing some open-source alternatives as well. The one that I want to look at is Needle 3. It\'s an automation foundation model for tiny devices. It\'s only uh, 53'
+
+[00:41] [scene:talk]
+VISUAL: 
+AUDIO: 'million parameter model, which means you can literally run this on a phone. Now, before showing you how it works and walking you through a code notebook, let me show you a quick demo.'
+
+[00:54] [scene:talk]
+VISUAL: 
+AUDIO: 'In this case, I have a living room with different appliances. And I can produce some complex query like this. I\'m feeling really hot today. Can you turn on the fan?'
+
+[01:06] [scene:talk]
+VISUAL: 
+AUDIO: 'Turn down the temperature to 10° C, and also turn on the bedroom light. Okay, so this was real-time transcription. Now, if we send this, look at this. It actually'
+
+[01:19] [scene:talk]
+VISUAL: 
+AUDIO: 'turned down the temperature to exactly 10° C that we wanted, only turned on the fan. Now, this whole thing took about 66 milliseconds.'
+
+[01:31] [scene:talk]
+VISUAL: 
+AUDIO: 'But I want you to focus on this structured output that the model generated. And if you look at this, this looks like function call, where the model is simply generating JSON schema based on unstructured data that is'
+
+[01:45] [scene:talk]
+VISUAL: 
+AUDIO: 'coming in. Okay, so in the rest of the video, I want to talk about how exactly they\'re doing it, and then I\'ll show you a code example, and also some caveats where you need to be careful on using this model. So, this is just 35 MB. If you compare'
+
+[01:59] [scene:talk]
+VISUAL: 
+AUDIO: 'it with something like a 7B model that is about 4 GB in 4-bit, it\'s actually smaller than Whisper small,'
+
+[02:11] [scene:talk]
+VISUAL: 
+AUDIO: 'but it\'s specifically tuned for function calling. And it can do two function calls under 97 milliseconds on a CPU. You don\'t even need GPU to run this. Now, this is a third model from a'
+
+[02:25] [scene:talk]
+VISUAL: 
+AUDIO: 'company called Cactus, and their whole focus has been building these powerful but tiny models for automation or function calling. Okay, but you might be thinking you can'
+
+[02:37] [scene:talk]
+VISUAL: 
+AUDIO: 'actually do exactly the same thing with uh normal large language model, and that is true. Uh but the problem is a large language model is going to generate text one token at a time. It is going to also'
+
+[02:50] [scene:talk]
+VISUAL: 
+AUDIO: 'have uh text description, and you need a parser to parse that JSON schema. But, Needle 3 is specifically designed to generate these structured outputs directly from your raw unstructured text'
+
+[03:04] [scene:talk]
+VISUAL: 
+AUDIO: 'input. You don\'t need a parser on top of it. Now, in the demo that I showed you, it takes this unstructured string, and based on the function definitions'
+
+[03:17] [scene:talk]
+VISUAL: 
+AUDIO: 'that you have, which we\'re going to look at in a minute, it simply extracts the most relevant inputs and set them in your schema. That means it cannot hallucinate just like the'
+
+[03:31] [scene:talk]
+VISUAL: 
+AUDIO: 'System 1 Jeff model from TypeChat. And it can directly validate the schema and the expected input values. Okay, so in terms of architecture, they\'re calling it simple attention'
+
+[03:44] [scene:talk]
+VISUAL: 
+AUDIO: 'network. So, in a standard transformer, they remove the feed forward network and simply replace that with a multi-layer perceptron with a total of 225.6'
+
+[03:58] [scene:talk]
+VISUAL: 
+AUDIO: 'thousand parameters. Along with an n-gram, which can actually give you embedding if you\'re looking up something directly. So, it\'s substantially smaller compared to a standard transformer model. But,'
+
+[04:11] [scene:talk]
+VISUAL: 
+AUDIO: 'here\'s the beauty. Even though it\'s a 20 layers model, but each one of them or a combination of them can be used as a separate model. So, for example,'
+
+[04:24] [scene:talk]
+VISUAL: 
+AUDIO: 'you can slice it in any way you want, and that will become your network. So, if you\'re using just the two layers, that\'s going to be 13 megabytes, which is perfect to be run on something like a modern phone. Or, you can use the'
+
+[04:38] [scene:talk]
+VISUAL: 
+AUDIO: 'whole 20 layers. Still, it\'s just a 35 megabyte file, which is incredible. But again, this is specifically designed for automation. It cannot do anything'
+
+[04:50] [scene:talk]
+VISUAL: 
+AUDIO: 'else. And this limitation is a feature, not a bug. So, for example, if you ask it something like, "What is the capital of France?" it\'s going to produce empty responses because the tool definition is not there. But, you need to be careful'
+
+[05:04] [scene:talk]
+VISUAL: 
+AUDIO: 'about the type of instructions that you provide because it can actually confuse some of the instructions since it\'s a very tiny model.'
+
+[05:16] [scene:talk]
+VISUAL: 
+AUDIO: 'I\'ll show you some examples when we look at the notebook. Okay, so here\'s a demo if you want to try directly on their website. And also, you can to look at the tool definition, but I\'m going to show you a Python example because I'
+
+[05:28] [scene:talk]
+VISUAL: 
+AUDIO: 'think that\'s going to be easier to run in a Google Colab notebook. Okay, so let me show you how exactly this work. Link to the notebook is going to be in the video description. Okay, so everything starts with a simple normal'
+
+[05:42] [scene:talk]
+VISUAL: 
+AUDIO: 'Python function. Within the fine-tune function, you need define what your inputs are going to be. You also need to include a docstring. This is the description that the model uses for selecting a specific function'
+
+[05:55] [scene:talk]
+VISUAL: 
+AUDIO: 'when it needs to generate the input schema. Well, you want to define what are the type of inputs that are going to go into that specific function. The only other thing that you need is'
+
+[06:10] [scene:talk]
+VISUAL: 
+AUDIO: 'this decorator. So, for any function that you want the model to use, you need to define this decorator. Okay. So, right now we have two different functions. One is for setting lights. The second one is for locking'
+
+[06:22] [scene:talk]
+VISUAL: 
+AUDIO: 'doors. And we also have the output schema. So, the output is going to contain rooms, the status, then the brightness value. And for lock doors, it\'s going to be the status of whether it is locked or'
+
+[06:36] [scene:talk]
+VISUAL: 
+AUDIO: 'unlocked, and then which exact door. Okay, to explain the structure of how exactly does this look like, we can actually look at how we define the agent itself. And then we provide the user'
+
+[06:48] [scene:talk]
+VISUAL: 
+AUDIO: 'prompts. In this case, we are asking "Dim the living room lights to 30 and lock the front door." Okay. It selected living room based on the user prompt. Set the'
+
+[07:00] [scene:talk]
+VISUAL: 
+AUDIO: 'argument on to true and brightness is set to 30, right? So, it\'s able to actually decompose that unstructured raw text into structured output. And then it does exactly the same for'
+
+[07:13] [scene:talk]
+VISUAL: 
+AUDIO: 'locking the door, right? So, you can have pretty complex queries that can go in and it will be able to produce the structured JSON schema out of those. Now, a couple of things to consider'
+
+[07:25] [scene:talk]
+VISUAL: 
+AUDIO: 'here. The first one is that it also gives you a confidence score. Now, this is different than the probability that is generated by the system one or Jev model from'
+
+[07:37] [scene:talk]
+VISUAL: 
+AUDIO: 'TypeSafe. But this shows you how confident the model is about a specific decision. Also, the decode speed is pretty good given that\'s a CPU running on Google'
+
+[07:49] [scene:talk]
+VISUAL: 
+AUDIO: 'Colab notebook. Okay, in the rest of the video I\'m going to talk about certain gotchas that you need to be careful about if you decide to use this because I was running into certain issues and I actually want to highlight those. The'
+
+[08:02] [scene:talk]
+VISUAL: 
+AUDIO: 'first one is that it keeps history of the conversation. Uh so, if you ask multiple different actions to perform and you don\'t reset in between them,'
+
+[08:14] [scene:talk]
+VISUAL: 
+AUDIO: 'sometimes it will produce wrong calls. So, for example, here are three different queries. One is make the office 21 degrees, then order me a pizza, and what\'s the capital of France? Now, the functions that we define we'
+
+[08:27] [scene:talk]
+VISUAL: 
+AUDIO: 'don\'t have a function that can enable the model to order a pizza. Okay, so there are two sets of outputs. The first one is where we are not resetting the state after making a call'
+
+[08:39] [scene:talk]
+VISUAL: 
+AUDIO: 'and you can actually see that for order me a pizza it did generate an input schema that is inaccurate, although the confidence level is pretty'
+
+[08:51] [scene:talk]
+VISUAL: 
+AUDIO: 'low here. For capital of France, since there is no relevant function to it, it didn\'t generate any output schema at all. Now, if we reset in between the calls, it actually produces the right schema'
+
+[09:04] [scene:talk]
+VISUAL: 
+AUDIO: 'that is expected. Second, as a good programming practice, you should always and I mean always include good defaults to the functions that you\'re defining.'
+
+[09:16] [scene:talk]
+VISUAL: 
+AUDIO: 'Otherwise, it can get confused. Now, in the first set thermostat, we didn\'t provide any default values uh but in this version we did provide default values. And if we look at the predictions, you can actually see that'
+
+[09:30] [scene:talk]
+VISUAL: 
+AUDIO: 'even though the function was correctly called, since there were no default values, it didn\'t produce any results with default values on. It actually generates proper results. Now, I talked about this earlier.'
+
+[09:43] [scene:talk]
+VISUAL: 
+AUDIO: 'It\'s going to refuse to generate responses if you don\'t have the corresponding function for it. So, for example, if you ask a factual question like water the plants and there is no default or there\'s no corresponding tool call, it is not going to generate'
+
+[09:57] [scene:talk]
+VISUAL: 
+AUDIO: 'anything at all. Okay, it can do structured extraction from raw text, but you need to be careful on what type of text you\'re providing. So, for example, in here, we have defined a JSON schema uh that we'
+
+[10:09] [scene:talk]
+VISUAL: 
+AUDIO: 'want to be extracting. And the incoming text in this case is just uh a description of an invoice. And we actually see that the model or the agent is able to correctly'
+
+[10:24] [scene:talk]
+VISUAL: 
+AUDIO: 'produce the output from this specific request. But now, if you have a really messy text where uh it seems like it\'s a message rather than the description, it cannot'
+
+[10:36] [scene:talk]
+VISUAL: 
+AUDIO: 'properly parse it. And in some cases, it\'s going to start generating none results. So, you need to be careful of what exactly you\'re feeding into it. Now, one more thing. The system one or'
+
+[10:49] [scene:talk]
+VISUAL: 
+AUDIO: 'Java model seems to be a much bigger model, uh but that is specifically trained to do classification. This model can actually have struggled with that. So, here is an example uh that you can'
+
+[11:01] [scene:talk]
+VISUAL: 
+AUDIO: 'go through where we have a tuple of different cases and what exactly it\'s supposed to uh detect, but it\'s not as good as directly intent classification. So, I'
+
+[11:13] [scene:talk]
+VISUAL: 
+AUDIO: 'won\'t use it for something like this. Now, another thing that I found really interesting was that it can generate embeddings. So, you could potentially do something like cosine similarity based'
+
+[11:25] [scene:talk]
+VISUAL: 
+AUDIO: 'on top of the embeddings that it produces, and then you can directly compare text. So here I have a corpus and then the corresponding queries, right? And I was thinking'
+
+[11:37] [scene:talk]
+VISUAL: 
+AUDIO: 'whether it would be able to do cosine similarity directly on the queries versus the text, right? It does a decent job 4 by 6, 5 by 6 mean centered, right? So I think there is a'
+
+[11:51] [scene:talk]
+VISUAL: 
+AUDIO: 'potential you can use something like this for direct cosine similarity or semantic similarity if you\'re doing something like retrieval. Now I already showed you this, but you'
+
+[12:03] [scene:talk]
+VISUAL: 
+AUDIO: 'can basically take sizes of the model which is going to give you a different sizes of the model that you can use based on the hardware requirements that you have. Now I think'
+
+[12:15] [scene:talk]
+VISUAL: 
+AUDIO: 'this is going to be great for on-device automation. We\'re going to see more and more examples of these, but I\'m actually pretty excited about this. I\'m going to probably incorporate it in simple automation tasks that I run for'
+
+[12:27] [scene:talk]
+VISUAL: 
+AUDIO: 'myself because it\'s completely local and on-device. Now I did want to highlight some of the interesting gotchas because if you are going to be designing systems around it,'
+
+[12:39] [scene:talk]
+VISUAL: 
+AUDIO: 'it\'s more important to know the limitations than the strengths of the models these days. Anyways, do let me know what you think. If there are any specific use cases that you have in mind, please put'
+
+[12:52] [scene:talk]
+VISUAL: 
+AUDIO: 'them in the comment section below. Also, I\'m going to be creating more code-oriented content. We\'re going to still cover the model releases, but I really want to focus back on the'
+
+[13:04] [scene:talk]
+VISUAL: 
+AUDIO: 'engineering aspect. And I\'m designing some new tests which I think are going to be good representative of the actual performance that you can expect, especially on these multimodal models.'
+
+[13:16] [scene:talk]
+VISUAL: 
+AUDIO: 'But let me know if there are any specific models or releases or techniques that you want me to cover. Happy to do so. Thanks for watching and as always, see you in the next one.'

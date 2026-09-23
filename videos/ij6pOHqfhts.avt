@@ -1,0 +1,136 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: Goodbye HTMX: Why Alpine Ajax is My New Go-To Library
+channel: @octopusinc_
+duration: 06:37
+source: https://www.youtube.com/watch?v=ij6pOHqfhts
+upload_date: 20250527
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:intro]
+VISUAL: Svelte website is shown, but the audio discusses HTMX and Alpine Ajax.
+AUDIO: 'Today, we\'re gonna compare HTMX to Alpine Ajax. Now, if you\'re like me and you\'re experienced using React, Vue, or any other modern JavaScript framework, then you might not have heard of these tiny libraries. But if you care about progressive enhancement'
+
+[00:13] [scene:intro]
+VISUAL: The presenter is on screen, encouraging viewers to subscribe.
+AUDIO: 'or just don\'t like writing lots of JavaScript and want to sprinkle in some Ajax magic to your web app, then you should pay close attention to this comparison because the winner just might surprise you. Oh, and before I get into it,'
+
+[00:27] [scene:talk]
+VISUAL: 
+AUDIO: 'make sure you hit that subscribe button. So, HTMX was released in 2020, which lets you make requests from the client to the server and update the client with HTML from the server\'s response without doing a page refresh.'
+
+[00:41] [scene:talk]
+VISUAL: 
+AUDIO: 'It does this using specific HTML attributes, and the whole library comes to under 14 kilobytes minified and gzipped. But if you want to add some client-side reactivity or state management,'
+
+[00:53] [scene:intro]
+VISUAL: The presenter is on screen, discussing Alpine.js and Alpine Ajax.
+AUDIO: 'you\'re going to have to actually write some JavaScript. This is where Alpine comes in, which also works by adding HTML attributes so you write zero JavaScript. It\'s actually quite common to see HTMX and Alpine.js'
+
+[01:05] [scene:talk]
+VISUAL: 
+AUDIO: 'used in the same project. But then there\'s Alpine Ajax, which is an Alpine plugin released in 2023. That does a lot of what HTMX does, works really well with Alpine,'
+
+[01:18] [scene:demo]
+VISUAL: A "Todo List App" is shown in a browser, with the Network tab open, demonstrating full page refreshes.
+AUDIO: 'and comes in at just under 3KB gzipped. Wow. So which one should you use? Let\'s put them both to the test. This is a super basic to-do list app that is server-rendered using Express.js'
+
+[01:30] [scene:demo]
+VISUAL: The "Todo List App" is shown again, this time with HTMX, demonstrating adding/deleting tasks without full page refreshes.
+AUDIO: 'with EJS templates. So as you can see in the Network tab and based on the requests, every single form of submission that\'s made causes a page refresh. And this is the exact same app using HTMX.'
+
+[01:43] [scene:talk]
+VISUAL: 
+AUDIO: 'Now, it doesn\'t look like much has changed, but you can see here when I press Delete, it sends a request and it updates really quickly without refreshing the browser. I can add a few more test items,'
+
+[01:55] [scene:code]
+VISUAL: Code for `index.ejs` is displayed, showing HTMX attributes like `hx-post`, `hx-target`, and `hx-on::after-request`.
+AUDIO: 'and you can see that there\'s more requests and none of them have triggered a page refresh, which makes the app feel really snappy. So how is this done? After importing HTMX, I replaced all the code in the form'
+
+[02:08] [scene:code]
+VISUAL: The `index.ejs` code is still visible, focusing on the input and button elements with HTMX attributes.
+AUDIO: 'with these three attributes. And the first one here makes a POST request, hence the HXPOST, to this slash-to-dos endpoint. It targets the HTML element with the to-do list ID, and after the request is sent,'
+
+[02:23] [scene:talk]
+VISUAL: 
+AUDIO: 'it refreshes the input so that it\'s empty. Now, the target is actually an ejs partial, and there\'s a really good reason for that. So if you go back to the browser, whenever a new to-do is added,'
+
+[02:35] [scene:ui]
+VISUAL: The "Todo List App" is shown in the browser, with the Network tab open, displaying the HTML response for a todo item.
+AUDIO: 'it returns just the HTML from the partial that has been updated instead of the HTML from the whole code. So this is just the list item that was changed. And similarly over here,'
+
+[02:47] [scene:code]
+VISUAL: Server-side code in `server.ts` is displayed, showing `res.render` calls for partials instead of `res.redirect`.
+AUDIO: 'we have the new list items that were added that were replaced with this code. This also meant making adjustments to the server code. So whereas before it was doing a redirect, now it\'s rendering a partial to-dos for the POST call,'
+
+[02:59] [scene:talk]
+VISUAL: 
+AUDIO: 'so submitting a to-do. And over here, for toggling a to-do, it\'s returning the to-do partial and not the to-dos partial. Deleting a to-do works in a similar way.'
+
+[03:12] [scene:ui]
+VISUAL: The "Todo List App" is shown in the browser, with the Network tab open, displaying the HTML response for a deleted todo item.
+AUDIO: 'I use the HXDELETE attribute to make a call to this endpoint, and with the response, I update this HTML element. And we can see in the browser that works in a similar way, returning the HTML that has been changed.'
+
+[03:26] [scene:talk]
+VISUAL: 
+AUDIO: 'Now let\'s look at the exact same app with Alpine AJAX. Again, with Alpine AJAX, if I make some changes to the site, it makes a request and updates it without a refresh. And if I delete, it does the same thing.'
+
+[03:40] [scene:talk]
+VISUAL: 
+AUDIO: 'But I\'ve got it to work in a different way from HTMX. So if we look at what\'s being returned here, we can see we get the whole thing, all the HTML from the server, and Alpine AJAX updates it correctly.'
+
+[03:53] [scene:ui]
+VISUAL: The "Todo List App" with Alpine Ajax is shown, demonstrating adding a new task.
+AUDIO: 'This means that I can do things like click on the toggle without doing a page refresh, which I struggled to do with HTMX. And also, if we turn off JavaScript, the site still works as expected.'
+
+[04:06] [scene:talk]
+VISUAL: 
+AUDIO: 'And the reason this works is because I made absolutely zero changes to the server file. All I did was change the EJS file. Now, as with HTMX, if I wanted to, I could just send the updated HTML to Alpine AJAX,'
+
+[04:19] [scene:talk]
+VISUAL: 
+AUDIO: 'and it would figure things out. But leaving the server code as is allows for some really nice progressive enhancement. So taking a look at the EJS file, we can see we have more custom attributes in the form here'
+
+[04:32] [scene:code]
+VISUAL: Code for `index.ejs` is displayed, showing Alpine.js and Alpine Ajax attributes like `x-target`, `x-data`, `x-model`, and `x-on:ajax:success`.
+AUDIO: 'than we had with HTMX. So we\'ve kept the form action and the method attributes, and we\'ve added these three extra attributes, one from Alpine AJAX and two from Alpine JS.'
+
+[04:44] [scene:talk]
+VISUAL: 
+AUDIO: 'Here, we\'re targeting the element with the ID of to-dos, which is this unordered list down here. So we\'re saying once you\'ve made this call, only update the to-dos block with the new data.'
+
+[04:57] [scene:code]
+VISUAL: The `index.ejs` code is still visible, focusing on the form attributes for Alpine Ajax.
+AUDIO: 'Then we\'re creating Alpine elements with this X data for this form, so we have more control over it. And we\'ve created an object with a key of task and a value of an empty string.'
+
+[05:10] [scene:ui]
+VISUAL: The "Todo List App" with Alpine Ajax is shown, demonstrating adding a task and the input clearing.
+AUDIO: 'Now, this task key is linked to this input via this X model attribute, which means we can control it with Alpine. And when the AJAX form has succeeded, so when this submission is done,'
+
+[05:22] [scene:talk]
+VISUAL: 
+AUDIO: 'we can change the task value to an empty string. And this is why when I type something into here and hit add task, this goes back to an empty string. For deleting, we\'re doing a similar thing. So we\'re saying after this post call is made,'
+
+[05:35] [scene:code]
+VISUAL: The `index.ejs` code is displayed, showing the more complex checkbox implementation with Alpine Ajax and Alpine.js.
+AUDIO: 'only update the to-dos element with the new data. And the checkbox up here is much more complicated, but it\'s a nice way to show how Alpine AJAX and Alpine JS work together.'
+
+[05:47] [scene:conclusion]
+VISUAL: A diagram illustrating a browser making a "REQUEST" to a server and receiving an "HTML" "RESPONSE" is shown.
+AUDIO: 'Now, bear in mind, I\'m not a HTMX or Alpine expert. So for me using these libraries, I had to think in a completely different way. Instead of sending JSON data to the client and adjusting the view based on the data,'
+
+[06:00] [scene:talk]
+VISUAL: 
+AUDIO: 'I had to shift my mind to doing all the updates on the server and only sending the client the HTML that has changed. But even after messing about with these two libraries for a few hours, I found Alpine AJAX'
+
+[06:12] [scene:conclusion]
+VISUAL: The presenter is on screen, giving final thoughts and recommendations.
+AUDIO: 'much easier to work with. Now, will I be using any of these two libraries for my personal projects? Probably not, because I\'m very comfortable with React. However, if I had to create an app'
+
+[06:24] [scene:talk]
+VISUAL: 
+AUDIO: 'that needed to work really well with JavaScript turned on or off, then honestly, I\'d much rather use Alpine AJAX with Hono than Next.js.'
