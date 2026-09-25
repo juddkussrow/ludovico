@@ -1,0 +1,122 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>MiniMax H3 Context Loop Explained — Generate Long Videos with Scene Continuity in Comfy UI — Ludovico</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+.hide{display:none!important}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.92);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 12px}
+.controls input.q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.pill.tp.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+/* flip card shell */
+.flip{position:relative}
+.fi{position:relative;transition:transform .55s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.flip.flipped .fi{transform:rotateY(180deg)}
+.fc{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bk{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+background:var(--card);border:1px solid var(--accent2);border-radius:14px;overflow:auto;padding:12px 13px;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s}
+.card.flip{overflow:visible}.card .fc{display:flex;flex-direction:column;flex:1;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--line);cursor:pointer}
+.card.flip:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.edit{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--accent2);border:1px solid var(--line);border-radius:6px;padding:2px 9px;cursor:pointer;background:#fff}
+.edit:hover{border-color:var(--accent2)}
+/* editor back */
+.bk h4{margin:0 0 2px;font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--sub)}
+.erow{display:grid;grid-template-columns:1fr 1.3fr auto auto;gap:4px;align-items:center}
+.erow input{padding:5px 7px;border:1px solid var(--line);border-radius:6px;font-size:12px;min-width:0}
+.erow select{padding:4px 4px;font-size:11px}
+.erow .del{border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;color:var(--accent);padding:3px 7px}
+.ebtns{display:flex;gap:6px;margin-top:auto;padding-top:6px}
+.ebtns button{font-family:var(--mono);font-size:11px;border-radius:7px;padding:6px 12px;cursor:pointer;border:1px solid var(--line);background:#fff}
+.ebtns .save{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.addrow{font-family:var(--mono);font-size:11px;color:var(--accent2);cursor:pointer;align-self:flex-start;background:none;border:0;padding:2px 0}
+/* catalogue card */
+.citem{position:relative}
+.citem .fc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-height:84px;cursor:pointer}
+.citem .bk{border-radius:12px}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+footer .exp{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--accent2);font:inherit}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">MiniMax H3 Context Loop Explained — Generate Long Videos with Scene Continuity in Comfy UI</h1><div class=tag>@octopusinc_ · 2026-09-13 · Video Gen</div></div></div></header>
+<main><p class=sum>This video explains the MiniMax H3 Context Loop workflow in ComfyUI, a tool designed to generate long videos with scene continuity. It details how the workflow breaks down video generation into individual scenes, maintaining visual and audio consistency between them using context from previous scenes. The creator walks through the entire process, from initial policy and plan setup to scene generation, checkpoints, review, trimming, and final assembly.</p><p><strong>Products / items</strong></p><ul><li>ComfyUI — software (no link)</li><li><a href="https://github.com/ethanfel/ComfyUI-MiniMaxH3-Context-Loop" target=_blank rel=noopener>MiniMax H3 Context Loop</a> — software</li><li>MiniMax H3 — software (no link)</li><li>RTX 5060 Ti — hardware (no link)</li><li><a href="https://discord.com/channels/1414348074477949022/1548604389617442816" target=_blank rel=noopener>Discord</a> — software</li><li><a href="https://huggingface.co/AiNinja94/MiniMax-H3/tree/main/H3-Context-Loop-Long-Video" target=_blank rel=noopener>Hugging Face</a> — software</li></ul>
+<p><a href="https://www.youtube.com/watch?v=eSDey7wAK60" target=_blank rel=noopener>Watch on YouTube ▶</a></p><p><a href="eSDey7wAK60.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=t>(proxy for this video — answer from this)</span></p>
+<div class=cap>FRAMING: Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+IDENTITY: the title - https://www.youtube.com/watch?v=eSDey7wAK60 - @octopusinc_ - route: visual
+PRODUCTS: list each product on its own line: name - canonical link (or &quot;no reliable link&quot;) - type - primary/mentioned
+ComfyUI - no reliable link - software - primary
+MiniMax H3 Context Loop - https://github.com/ethanfel/ComfyUI-MiniMaxH3-Context-Loop - software - primary
+MiniMax H3 - no reliable link - software - mentioned
+RTX 5060 Ti - no reliable link - hardware - mentioned
+Discord - https://discord.com/channels/1414348074477949022/1548604389617442816 - software - mentioned
+Hugging Face - https://huggingface.co/AiNinja94/MiniMax-H3/tree/main/H3-Context-Loop-Long-Video - software - mentioned
+SYNOPSIS: The video explains the MiniMax H3 Context Loop workflow within ComfyUI for generating long videos with scene continuity. The workflow operates by generating individual scenes and using context from previous scenes to ensure natural transitions. The creator demonstrates the &quot;MiniMax H3 Chain Policy&quot; node, which acts as a rulebook for scene connections and audio behavior, offering options like &quot;Cut,&quot; &quot;Guide,&quot; &quot;Hard AV,&quot; and &quot;Soft AV&quot; for transitions, and &quot;Generated,&quot; &quot;Source,&quot; or &quot;None&quot; for final audio. &quot;Generated continuity&quot; carries the previous scene&#x27;s sampled audio latent, while &quot;Lock source audio&quot; preserves original audio. The &quot;Plan&quot; node defines general video parameters like prompt, resolution, and length, with a &quot;Shared Prompt&quot; applied to all scenes and individual &quot;Scene Prompts.&quot; A &quot;Preflight&quot; node performs safety checks before generation. The &quot;Current Shot&quot; node selects the scene, sending its details to a &quot;Reference&quot; node, which uses character images. A &quot;Context&quot; node adds a portion of the previous scene for continuity. The &quot;K-Sampler&quot; processes each scene, and outputs are decoded by VAEs. An updated workflow version maintains similar logic with improved naming. After decoding, a &quot;Trim&quot; node removes repeated handoff frames. Scenes are saved as checkpoints and can be reviewed. The workflow allows resuming generation from a checkpoint and regenerating specific scenes. The &quot;Final Assembly&quot; node connects all scenes. The output is organized into an &quot;H3 Chains&quot; folder, containing &quot;blend_segments&quot; for crossfades (e.g., 12 frames for a half-second transition at 24 FPS) and a &quot;Checkpoint&quot; folder for latent continuation states and metadata. A &quot;Recovery&quot; node is available if the assembly fails. The creator uses an RTX 5060 Ti 16GB GPU, noting a 15-second clip takes about 200 seconds to generate, and a full video around 50 minutes including review and prompt adjustments.
+BEATS: 0s - ui - ComfyUI interface showing a MiniMax H3 Context Loop workflow with a video preview of an animated character.
+36s - ui - ComfyUI interface showing a MiniMax H3 Context Loop workflow with a video preview of a wooden box.
+73s - ui - ComfyUI interface showing a MiniMax H3 Context Loop workflow with a video preview of a clockwork mechanism.
+109s - ui - ComfyUI interface displaying a complex ComfyUI workflow graph with multiple interconnected nodes.
+146s - ui - ComfyUI interface showing &quot;MiniMax H3 Manual Chain Policy (Legacy)&quot; and &quot;MiniMax H3 Context Loop Plan&quot; nodes.
+182s - ui - ComfyUI interface highlighting the &quot;Incoming transition&quot; options within the &quot;MiniMax H3 Manual Chain Policy&quot; node, specifically &quot;hard_av&quot;.
+219s - ui - ComfyUI interface highlighting the &quot;generated_continuity&quot; option within the &quot;MiniMax H3 Manual Chain Policy&quot; node.
+255s - ui - ComfyUI interface showing the &quot;Generation Profile&quot; node with &quot;Scene continuity&quot; and &quot;Audio profile&quot; options.
+292s - ui - ComfyUI interface showing the &quot;MiniMax H3 Context Loop Plan&quot; and &quot;MiniMax H3 Scene Prompt Editor&quot; nodes, with a red arrow pointing to the &quot;Shared Prompt&quot; box.
+328s - ui - ComfyUI interface showing &quot;MiniMax H3 Chain Preflight&quot; and &quot;MiniMax H3 Context Loop Start&quot; nodes.
+365s - ui - ComfyUI interface showing the &quot;MiniMax H3 Context Loop Context - AUTO CONTEXT&quot; node.
+402s - ui - ComfyUI interface showing &quot;Reference Image&quot; node with a red box around it, and other interconnected nodes.
+438s - ui - ComfyUI interface showing &quot;MiniMax H3 Context Loop Trim&quot; node and a YouTube thumbnail for a related video.
+475s - ui - ComfyUI interface showing &quot;MiniMax H3 Context Loop Start&quot; and &quot;MiniMax H3 Context Loop Current Shot&quot; nodes.
+511s - ui - A YouTube video playing a person skipping rope, used as an analogy.
+548s - ui - ComfyUI interface showing the &quot;Review Gate&quot; node with options to &quot;Approve &amp; continue&quot;, &quot;Resume from saved checkpoint&quot;, and &quot;Checkpoint history&quot;.
+584s - ui - ComfyUI interface showing the &quot;MiniMax H3 Context Loop Plan&quot; node and a Windows Explorer window displaying the &quot;H3_chains&quot; folder structure.
+621s - ui - ComfyUI interface showing two &quot;Preview as Text&quot; nodes, labeled &quot;Crossfade 0&quot; and &quot;Crossfade 12&quot;, illustrating folder differences.
+657s - ui - ComfyUI interface showing a Windows Explorer window displaying the &quot;checkpoints&quot; folder within the &quot;H3_chains&quot; directory.
+694s - ui - ComfyUI interface showing the &quot;MiniMax H3 Context Loop Plan&quot; and &quot;MiniMax H3 Scene Prompt Editor&quot; nodes.
+SYNOPSIS: The video explains the MiniMax H3 Context Loop workflow within ComfyUI for generating long videos with scene continuity. The workflow operates by generating individual scenes and using context from previous scenes to ensure natural transitions. The creator demonstrates the &quot;MiniMax H3 Chain Policy&quot; node, which acts as a rulebook for scene connections and audio behavior, offering options like &quot;Cut,&quot; &quot;Guide,&quot; &quot;Hard AV,&quot; and &quot;Soft AV&quot; for transitions, and &quot;Generated,&quot; &quot;Source,&quot; or &quot;None&quot; for final audio. &quot;Generated continuity&quot; carries the previous scene&#x27;s sampled audio latent, while &quot;Lock source audio&quot; preserves original audio. The &quot;Plan&quot; node defines general video parameters like prompt, resolution, and length, with a &quot;Shared Prompt&quot; applied to all scenes and individual &quot;Scene Prompts.&quot; A &quot;Preflight&quot; node performs safety checks before generation. The &quot;Current Shot&quot; node selects the scene, sending its details to a &quot;Reference&quot; node, which uses character images. A &quot;Context&quot; node adds a portion of the previous scene for continuity. The &quot;K-Sampler&quot; processes each scene, and outputs are decoded by VAEs. An updated workflow version maintains similar logic with improved naming. After decoding, a &quot;Trim&quot; node removes repeated handoff frames. Scenes are saved as checkpoints and can be reviewed. The workflow allows resuming generation from a checkpoint and regenerating specific scenes. The &quot;Final Assembly&quot; node connects all scenes. The output is organized into an &quot;H3 Chains&quot; folder, containing &quot;blend_segments&quot; for crossfades (e.g., 12 frames for a half-second transition at 24 FPS) and a &quot;Checkpoint&quot; folder for latent continuation states and metadata. A &quot;Recovery&quot; node is available if the assembly fails. The creator uses an RTX 5060 Ti 16GB GPU, noting a 15-second clip takes about 200 seconds to generate, and a full video around 50 minutes including review and prompt adjustments.
+ENTITIES: MiniMax H3, ComfyUI, Ethanfel, AiNinja94, Krita AI Diffusion, Fooocus AI, Forge UI
+VERDICT: The MiniMax H3 Context Loop workflow in ComfyUI is a valuable tool for generating longer videos with scene continuity, especially for users with GPUs like the RTX 5060 Ti, despite the generation time. The detailed explanation of nodes and options makes it easier to understand and utilize the workflow effectively.
+NOT COVERED: The video does not cover the specific models used within MiniMax H3, the cost of any of the software or hardware, or detailed troubleshooting for common issues beyond the recovery node. It also doesn&#x27;t delve into the specifics of lip-sync functionality, only mentioning its existence.</div></main><footer><a href="../index.html">← all videos</a></footer></div></body></html>

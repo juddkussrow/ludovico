@@ -1,0 +1,184 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: MiniMax H3 Context Loop Explained — Generate Long Videos with Scene Continuity in Comfy UI
+channel: @octopusinc_
+duration: 12:11
+source: https://www.youtube.com/watch?v=eSDey7wAK60
+upload_date: 20260913
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'In this video, we will be looking at a&nbsp; custom node group called “Context Loop.”&nbsp;&nbsp; It is designed to join multiple clips&nbsp; while maintaining character consistency&nbsp;&nbsp; throughout each scene, allowing&nbsp; you to create a longer video.&nbsp;&nbsp; The total time taken to generate this&nbsp; video was around 50 minutes, which I think&nbsp;&nbsp;'
+
+[02:04] [scene:talk]
+VISUAL: 
+AUDIO: 'is acceptable. I wouldn\'t recommend a workflow&nbsp; that takes an extremely long time to generate,&nbsp;&nbsp; especially on my relatively lower-end GPU.&nbsp; The 50-minute total includes the time I&nbsp;&nbsp; spent verifying each 15-second clip as it was&nbsp; chained together, as well as making changes&nbsp;&nbsp;'
+
+[02:19] [scene:talk]
+VISUAL: 
+AUDIO: 'to the prompts when I found mistakes.&nbsp; A single 15-second clip took around 200&nbsp;&nbsp; seconds to generate on my RTX 5060 Ti with 16&nbsp; Gigabyte of VRAM. I have organized the workflow&nbsp;&nbsp;'
+
+[02:31] [scene:talk]
+VISUAL: 
+AUDIO: 'provided by the developer to make it easier to&nbsp; understand. Let\'s take a look at how it works. The MiniMax H3 Chain Policy node here is&nbsp; a continuity rulebook. It tells the Video&nbsp;&nbsp;'
+
+[02:45] [scene:talk]
+VISUAL: 
+AUDIO: 'Chain Plan how every new scene should connect to&nbsp; the preceding one, and how sound should behave&nbsp;&nbsp; across those joins. Let’s look at the options, the&nbsp; Incoming transition is like a dropdown with few&nbsp;&nbsp; options to select. And first is the Cut option,&nbsp; which will start the next scene fresh; no visual&nbsp;&nbsp;'
+
+[03:01] [scene:talk]
+VISUAL: 
+AUDIO: 'carry-over. Second is Guide which is selected&nbsp; by default and recommended for continuation;&nbsp;&nbsp; this will give a short visual handoff that&nbsp; helps to preserve the look and motion. Third is Hard AV is a stronger&nbsp; lock between scenes, meaning&nbsp;&nbsp;'
+
+[03:17] [scene:talk]
+VISUAL: 
+AUDIO: 'it will carry both picture and audio more firmly.&nbsp; Last is the Soft AV - keeps the strong&nbsp; visual handoff but allows the carried&nbsp;&nbsp; audio to blend out more gently. Next is the Final audio:&nbsp; The option “Generated”, uses the H3’s&nbsp; created voices, ambience, and music.&nbsp;'
+
+[03:32] [scene:talk]
+VISUAL: 
+AUDIO: 'The second option Source - uses the original&nbsp; supplied soundtrack in the final export.&nbsp; And third is, None - that exports a silent video. Source reference: On, will let an existing&nbsp;&nbsp; audio become reference and inspire&nbsp; style, without copying it directly.&nbsp;'
+
+[03:49] [scene:talk]
+VISUAL: 
+AUDIO: 'The generated_continuity is about carrying&nbsp; the previous scene’s sampled audio latent,&nbsp;&nbsp; into the next scene, which should help&nbsp; generate ambience, music, and voice tone&nbsp;&nbsp; continue more naturally across the join. Lock source audio: preserve the exact&nbsp;&nbsp;'
+
+[04:03] [scene:talk]
+VISUAL: 
+AUDIO: 'original audio for that scene; a use case&nbsp; can be of a music or dialogue that must&nbsp;&nbsp; not change. This option, when enabled,&nbsp; overrides the above generated continuity. Recently, the developer updated the workflows,&nbsp; and this is the new version. The logic remains the&nbsp;&nbsp;'
+
+[04:18] [scene:talk]
+VISUAL: 
+AUDIO: 'same, but the naming convention has been improved&nbsp; to make the workflow easier to understand.&nbsp;&nbsp; The Scene Continuity option works similarly to&nbsp; the one we saw before, and the audio options&nbsp;&nbsp;'
+
+[04:30] [scene:talk]
+VISUAL: 
+AUDIO: 'are similar to the ones I talked about earlier.&nbsp; There is also an option to add a voice, but I&nbsp;&nbsp; haven\'t tested lip-sync with this workflow yet. So, now that you know - how the Video Chain&nbsp;&nbsp;'
+
+[04:42] [scene:talk]
+VISUAL: 
+AUDIO: 'Policy works, you should have a rough idea&nbsp; of what’s happening in the workflow. First,&nbsp;&nbsp; we decide the video generation rules. Then, there&nbsp; is a Plan. The Plan contains general information,&nbsp;&nbsp;'
+
+[04:54] [scene:talk]
+VISUAL: 
+AUDIO: 'such as the video prompt, resolution, default&nbsp; length, and sampling steps. Inside the node,&nbsp;&nbsp; we have a Shared Prompt box. The prompt entered&nbsp; here is automatically added to the beginning&nbsp;&nbsp;'
+
+[05:06] [scene:talk]
+VISUAL: 
+AUDIO: 'of the prompt for every scene. Below that is the&nbsp; Scene Prompt, which is used to generate the first&nbsp;&nbsp; 15-second scene. These are the only input fields&nbsp; I interacted with to generate a 15-second scene,&nbsp;&nbsp; and the input fields I’ve pointed&nbsp; out are pretty self-explanatory.&nbsp;'
+
+[05:23] [scene:talk]
+VISUAL: 
+AUDIO: 'Select the scene from the dropdown and modify&nbsp; the prompt here. Once you’re done with the plan,&nbsp;&nbsp; the Preflight node performs a safety check&nbsp; before the costly generation begins. It&nbsp;&nbsp;'
+
+[05:36] [scene:talk]
+VISUAL: 
+AUDIO: 'catches invalid timing, missing media, and&nbsp; other possible problems. And then the loop&nbsp;&nbsp; begins. The Current Shot selects the scene that&nbsp; is currently being created and sends its prompt,&nbsp;&nbsp; duration, size, and seed further to the&nbsp; Reference node. And the Reference node&nbsp;&nbsp;'
+
+[05:54] [scene:talk]
+VISUAL: 
+AUDIO: 'is the same one we use in the default&nbsp; reference-to-video generation workflow.&nbsp; The Reference node takes the images of both&nbsp; characters, and then the Context node adds a&nbsp;&nbsp; small amount of the previous scene to the next&nbsp; one, which helps maintain continuity. This is&nbsp;&nbsp;'
+
+[06:08] [scene:talk]
+VISUAL: 
+AUDIO: 'only possible starting from the second scene.&nbsp; But regardless of which scene is being generated,&nbsp;&nbsp; the important point is that the reference&nbsp; images, models, and all the necessary details&nbsp;&nbsp;'
+
+[06:20] [scene:talk]
+VISUAL: 
+AUDIO: 'must be in place before the data reaches&nbsp; the Guider node. Then we have the K-Sampler,&nbsp;&nbsp; which processes one scene in each loop.&nbsp; The output is then decoded using both VAEs. Similarly, in the updated workflow, after&nbsp; selecting the policy, the plan needs to be&nbsp;&nbsp;'
+
+[06:37] [scene:talk]
+VISUAL: 
+AUDIO: 'created by providing some general information&nbsp; and the Shared Prompt which is like a prefix&nbsp;&nbsp; to all the individual scene prompts. The Preflight node performs the checks,&nbsp;&nbsp; followed by the Loop Start node. The Current Scene&nbsp; node gets the details of the scene being generated&nbsp;&nbsp;'
+
+[06:53] [scene:talk]
+VISUAL: 
+AUDIO: 'and sends them to the Reference Conditioning node. There are also a few other connections that handle&nbsp;&nbsp; the reference images. Further, the Scene Context&nbsp; provides a few frames from the previous scene to&nbsp;&nbsp; maintain continuity, starting from the second&nbsp; round of the loop. All of this information&nbsp;&nbsp;'
+
+[07:10] [scene:talk]
+VISUAL: 
+AUDIO: 'then goes into the K-Sampler, and the output&nbsp; is decoded using the Audio and Video VAEs.&nbsp; After decoding, the Trim node removes the&nbsp; repeated handoff frames that are used to&nbsp;&nbsp;'
+
+[07:22] [scene:talk]
+VISUAL: 
+AUDIO: 'maintain continuity. Leaving the frames will&nbsp; give as duplicate footage around the joins.&nbsp;&nbsp; This is very similar to the workflow I&nbsp; explained in the previous video. Even the&nbsp;&nbsp; input fields in this node are similar. After trimming, the scene is ready to&nbsp;&nbsp;'
+
+[07:36] [scene:talk]
+VISUAL: 
+AUDIO: 'be saved as a checkpoint, and it can&nbsp; also be played back in the Review node.&nbsp; One scene is generated in each loop so at this&nbsp; point you can change the seed ID or the prompt&nbsp;&nbsp; and try again by running the same loop again using&nbsp; these options. If there are scenes remaining to be&nbsp;&nbsp;'
+
+[07:52] [scene:talk]
+VISUAL: 
+AUDIO: 'generated, you can approve the current scene and&nbsp; stop the process which can later be continued. Continuing later means even after you start your&nbsp; computer the next day. This is possible because&nbsp;&nbsp; of this node and the “MiniMax H3 Context Loop&nbsp; Start” node. It takes a value for “start-clip,”&nbsp;&nbsp;'
+
+[08:08] [scene:talk]
+VISUAL: 
+AUDIO: 'which is automatically incremented when&nbsp; you approve a scene in the Review node.&nbsp; After all the loops between the “Loop&nbsp; Start” and “Loop End” nodes are completed,&nbsp;&nbsp;'
+
+[08:20] [scene:talk]
+VISUAL: 
+AUDIO: 'the Final Assembly node connects all the&nbsp; scenes together to create the final video.&nbsp; The same process happens in the newer workflow. After decoding and trimming, the “Save&nbsp;&nbsp; Segment + Checkpoint” node saves the necessary&nbsp; files. We can then review the scene and decide&nbsp;&nbsp;'
+
+[08:34] [scene:talk]
+VISUAL: 
+AUDIO: 'whether to continue or stop the loop. And&nbsp; then the assembly node for the final video. If you don\'t understand how the loops work,&nbsp; you can refer to this skipping-rope example.&nbsp;'
+
+[08:46] [scene:talk]
+VISUAL: 
+AUDIO: 'The two hands controlling the rope represent&nbsp; the Start and End Loop nodes. Each time the&nbsp;&nbsp; rope completes one skip, it represents&nbsp; one loop, and one scene is generated.&nbsp; So, inside each rope skip, the Save Checkpoint&nbsp; node temporarily saves the result and the review&nbsp;&nbsp;'
+
+[09:01] [scene:talk]
+VISUAL: 
+AUDIO: 'node stops the loop so we can verify. Once the scene is approved, it is saved,&nbsp;&nbsp; and the loop moves on to the next&nbsp; scene. After all the skipping—or,&nbsp;&nbsp; in our case, all the loops for&nbsp; all the scenes—are completed,&nbsp;&nbsp;'
+
+[09:15] [scene:talk]
+VISUAL: 
+AUDIO: 'the Assembly node connects everything&nbsp; together and gives us the final video.&nbsp; This option is for generating a scene - again.&nbsp; For example, if I want to generate Scene 2 again,&nbsp;&nbsp; which should start after Checkpoint 1, So&nbsp; I will load the Checkpoint 1. Optionally,&nbsp;&nbsp;'
+
+[09:30] [scene:talk]
+VISUAL: 
+AUDIO: 'I can delete Scene 3 after loading Checkpoint&nbsp; 1, and the reason can be that the workflow&nbsp;&nbsp; will generate Scene 2 again, and Scene 3 should&nbsp; then be based on the newly generated Scene 2.'
+
+[09:43] [scene:talk]
+VISUAL: 
+AUDIO: 'This node saves each scene one by&nbsp; one during every loop and creates&nbsp;&nbsp; some files and folders inside the H3&nbsp; Chains folder in the output directory.&nbsp; The new folder is created using&nbsp; the Run Name we type for each plan.&nbsp;'
+
+[10:00] [scene:talk]
+VISUAL: 
+AUDIO: 'The first folder inside this plan is the&nbsp; “blend_segments” folder. This folder will be empty&nbsp;&nbsp; if you run the workflow with the default values. However, if you want a smooth dissolve between&nbsp;&nbsp; your scenes instead of an instant hard cut,&nbsp; you can try setting the Crossfade Frames to&nbsp;&nbsp;'
+
+[10:17] [scene:talk]
+VISUAL: 
+AUDIO: 'something like 12. At 24 FPS, 12 frames&nbsp; gives you a clean half-second transition. And then the node will save each scene starting&nbsp; from the second scene inside this folder&nbsp;'
+
+[10:29] [scene:talk]
+VISUAL: 
+AUDIO: 'This copy has an extra 12-frame cushion&nbsp; at the beginning, so the Final Assembly&nbsp;&nbsp; node can smoothly fade the two scenes&nbsp; together, creating a dissolve effect.&nbsp; The Blend Video VAE is optional. It\'s only&nbsp; needed if you want a longer crossfade during&nbsp;&nbsp;'
+
+[10:44] [scene:talk]
+VISUAL: 
+AUDIO: 'assembly than what was originally saved in&nbsp; the blend_segments folder. It allows the&nbsp;&nbsp; workflow to decode extra frames from the saved&nbsp; checkpoint without regenerating the scene. The Checkpoint folder saves the latent&nbsp; continuation state, which contains the information&nbsp;&nbsp;'
+
+[11:02] [scene:talk]
+VISUAL: 
+AUDIO: 'needed for the next scene to continue naturally.&nbsp; It also saves records such as file paths, prompts,&nbsp;&nbsp; seeds, timing, and other necessary metadata&nbsp; for revisions. The Segments folder contains&nbsp;&nbsp; each scene generated during every loop. For every&nbsp; new video generation, make sure you change the Run&nbsp;&nbsp;'
+
+[11:18] [scene:talk]
+VISUAL: 
+AUDIO: 'Name in the Plan node, and set Start-Clip to 1&nbsp; in the “Loop Start” node. You can also refresh&nbsp;&nbsp; this value in the “Loop Review Gate” node.&nbsp; Finally, let\'s look at the Recovery nodes. &nbsp;'
+
+[11:32] [scene:talk]
+VISUAL: 
+AUDIO: 'Make sure your plan name is&nbsp; the same you were working on,&nbsp;&nbsp; and I have disabled the output node. And the&nbsp; recovery nodes should collect all the scenes&nbsp;&nbsp; generated and should give you the final result. This is for in case the assembly node fails,&nbsp;&nbsp;'
+
+[11:46] [scene:talk]
+VISUAL: 
+AUDIO: 'which happened once with me but&nbsp; the problem has been fixed now.&nbsp; The video is in process, you should bypass&nbsp; the entire loop to get the recovery work. So that was it in this video,&nbsp;&nbsp;'
+
+[12:03] [scene:talk]
+VISUAL: 
+AUDIO: 'hope the video was interesting and or&nbsp; useful, I wish you an excellent day.'

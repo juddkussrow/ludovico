@@ -1,0 +1,132 @@
+AGENTIC-VT 1.0
+
+[metadata]
+title: How to Create a RefMod for MiniMax H3 — No Training Required
+channel: @octopusinc_
+duration: 06:31
+source: https://www.youtube.com/watch?v=2K6-OtV_Vbc
+upload_date: 20260912
+transcript_source: captions+frames
+route: visual
+
+---
+
+[00:00] [scene:talk]
+VISUAL: 
+AUDIO: 'In this video, we\'re going to look at how to train a ref mod for MiniMax H3. To accomplish this, we will need two custom nodes and one optional node. Open a terminal where you have ComfyUI installed, then change directories into the custom nodes folder.'
+
+[00:13] [scene:talk]
+VISUAL: 
+AUDIO: 'Next, we will click on the green code button and copy the URL. Now we will use the command get clone'
+
+[00:32] [scene:talk]
+VISUAL: 
+AUDIO: 'and paste the URL to clone the repository into our custom nodes folder. I have already installed these nodes, so that is why it displays an error saying it already exists. And now we will do the exact same thing with the second node. Click the green'
+
+[00:45] [scene:talk]
+VISUAL: 
+AUDIO: 'code button, copy the URL, then use the get clone command in the terminal. The final node is optional, but it will speed up generation times. If you do want to install it, just follow the exact same steps as the previous node'
+
+[00:58] [scene:talk]
+VISUAL: 
+AUDIO: 'again. I already have it installed, so that is why this message is displayed. Now start ComfyUI and open up a blank workflow. Now in ComfyUI, double-click anywhere on'
+
+[01:11] [scene:talk]
+VISUAL: 
+AUDIO: 'the canvas and search for create H3 ref mod from folder. As you can see, we will need a video and audio VAE. Just search for the load VAE node and'
+
+[01:24] [scene:talk]
+VISUAL: 
+AUDIO: 'select the MiniMax H3 VAE. Now place another load VAE node, so we can load the MiniMax audio VAE. And connect the respective VAE nodes to'
+
+[01:38] [scene:talk]
+VISUAL: 
+AUDIO: 'the inputs of the ref mod node. I figured the best way to demonstrate this was to create a ref mod of myself. One, because I am not in the base MiniMax training data, and two, because'
+
+[01:50] [scene:talk]
+VISUAL: 
+AUDIO: 'I control the rights to my image. So I collected images of myself. You will just want to place the images into a folder. No captioning is needed. You can also provide videos, but in the interest of time, I am only using images for now.'
+
+[02:03] [scene:talk]
+VISUAL: 
+AUDIO: 'From my understanding, you can do audio as well. Then, in the ref mod node, in the folder field, you provide it with the path to your collection of images. If you have subfolders containing images, then click use subfolders. Since'
+
+[02:15] [scene:talk]
+VISUAL: 
+AUDIO: 'I have just a single folder, I will leave it unchecked. In the use folder as name field, I will uncheck it since my folder is named test. To make things easy, I will just'
+
+[02:27] [scene:talk]
+VISUAL: 
+AUDIO: 'place my name in this field. And then, for the extraction preset, since I am creating a ref mod of myself, I will leave it at identity and code,'
+
+[02:40] [scene:talk]
+VISUAL: 
+AUDIO: 'but you can also create ref mods based on styles or motion. And finally, make sure you have the save field enabled, so it will save the generated save tensors file after we run it.'
+
+[02:54] [scene:talk]
+VISUAL: 
+AUDIO: 'And now, I will run the ref mod node. And as we can see, it generated our ref'
+
+[03:09] [scene:talk]
+VISUAL: 
+AUDIO: 'mod file using 24 images in only 5 and 1/2 seconds. Now, let\'s look at how to actually use the file. Here we have a workflow, which don\'t'
+
+[03:23] [scene:talk]
+VISUAL: 
+AUDIO: 'worry, I will link it in the description, so you don\'t have to recreate it. Uh essentially, you will want all of the typical nodes when using MiniMax H3, the video and audio VAE, and the clip. I will be using the MiniMax H3 reference'
+
+[03:36] [scene:talk]
+VISUAL: 
+AUDIO: 'to video in eight version, but for my testing, this will work with other fine-tunes. And in the load H3 ref mods node, we can'
+
+[03:48] [scene:talk]
+VISUAL: 
+AUDIO: 'select our ref mods file. The node creator also provided an example file. You can also combine multiple ref mods such as in the mod 2 field, but for now we will only be using one.'
+
+[04:00] [scene:talk]
+VISUAL: 
+AUDIO: 'For our prompt, the general Minimax H3 prompting guide works well. The creator of the Minimax H3 mod nodes also has a much more in-depth guide on how to prompt. In this case, we\'re just going with a simple prompt. While this is'
+
+[04:12] [scene:talk]
+VISUAL: 
+AUDIO: 'running, I thought it would be good to actually describe the difference between a ref mod and a LoRA. A LoRA works by training on a set of images or videos and learning small changes to the model\'s weights. Those learned changes are saved into a lightweight file that'
+
+[04:25] [scene:talk]
+VISUAL: 
+AUDIO: 'can later be applied to recreate a character, style, or concept. A ref mod takes a different approach. Instead of training the model, it runs your reference images or videos through Minimax H3\'s VAE and converts them into latent representations. Those reference'
+
+[04:38] [scene:talk]
+VISUAL: 
+AUDIO: 'latents are then saved into a small file that can be reused during generation. That also makes ref mods dramatically faster to create. Training a LoRA can take hours depending on the dataset, hardware, and settings. Creating a ref'
+
+[04:50] [scene:talk]
+VISUAL: 
+AUDIO: 'mod mostly involves encoding the references, so it can often be produced in seconds or minutes instead. The files can also be much smaller. A video model LoRA can easily be tens or hundreds of megabytes, while ref mods can be only a'
+
+[05:02] [scene:talk]
+VISUAL: 
+AUDIO: 'few megabytes. So, while a LoRA teaches the model something new by modifying its weights, a ref mod essentially saves a reusable representation of your references in H3\'s latent space. It is faster to create, much smaller, and'
+
+[05:15] [scene:talk]
+VISUAL: 
+AUDIO: 'doesn\'t require a traditional training process. All right. Now, let\'s have a look at the finished video. &gt;&gt; This is demonstration of the EIE Minimax H3 ref mod. &gt;&gt; So, it gets the identity down well, but'
+
+[05:30] [scene:talk]
+VISUAL: 
+AUDIO: 'as you can probably tell, it does not sound like me. However, there are ways to fix that, such as with an audio ref mod. It is not a limitation of ref mods, just beyond the scope of this video. For comparison, here is a video'
+
+[05:43] [scene:talk]
+VISUAL: 
+AUDIO: 'generated by a LoRA from a separate project I was working on. How can a file that is only a few hundred megabytes or sometimes much smaller teach a multi-billion parameter AI model an entirely new character, visual style,'
+
+[05:56] [scene:talk]
+VISUAL: 
+AUDIO: 'product, or behavior? Ref mods are still a very new technique and I am sure many improvements will be made. I still have a lot to learn about them myself. All the credit goes to the node authors shown throughout this video. They'
+
+[06:08] [scene:talk]
+VISUAL: 
+AUDIO: 'created these techniques. I just saw people were having trouble with this and figured a video may help. being said, things move very quickly in the AI space. So, depending on when you watch this, ref mods may have already changed or improved. But for now, they\'re an'
+
+[06:21] [scene:talk]
+VISUAL: 
+AUDIO: 'interesting new option for getting consistent characters and concepts in Min Max H3 without the time and complexity of training a Laura.'
