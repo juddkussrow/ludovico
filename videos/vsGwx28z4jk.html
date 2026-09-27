@@ -1,0 +1,129 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>Anthropic Just Revealed 12 New Rules for Prompting Opus 5.5 — Ludovico</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+.hide{display:none!important}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.92);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 12px}
+.controls input.q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.pill.tp.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+/* flip card shell */
+.flip{position:relative}
+.fi{position:relative;transition:transform .55s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.flip.flipped .fi{transform:rotateY(180deg)}
+.fc{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bk{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+background:var(--card);border:1px solid var(--accent2);border-radius:14px;overflow:auto;padding:12px 13px;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s}
+.card.flip{overflow:visible}.card .fc{display:flex;flex-direction:column;flex:1;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--line);cursor:pointer}
+.card.flip:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.edit{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--accent2);border:1px solid var(--line);border-radius:6px;padding:2px 9px;cursor:pointer;background:#fff}
+.edit:hover{border-color:var(--accent2)}
+/* editor back */
+.bk h4{margin:0 0 2px;font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--sub)}
+.erow{display:grid;grid-template-columns:1fr 1.3fr auto auto;gap:4px;align-items:center}
+.erow input{padding:5px 7px;border:1px solid var(--line);border-radius:6px;font-size:12px;min-width:0}
+.erow select{padding:4px 4px;font-size:11px}
+.erow .del{border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;color:var(--accent);padding:3px 7px}
+.ebtns{display:flex;gap:6px;margin-top:auto;padding-top:6px}
+.ebtns button{font-family:var(--mono);font-size:11px;border-radius:7px;padding:6px 12px;cursor:pointer;border:1px solid var(--line);background:#fff}
+.ebtns .save{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.addrow{font-family:var(--mono);font-size:11px;color:var(--accent2);cursor:pointer;align-self:flex-start;background:none;border:0;padding:2px 0}
+/* catalogue card */
+.citem{position:relative}
+.citem .fc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-height:84px;cursor:pointer}
+.citem .bk{border-radius:12px}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+footer .exp{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--accent2);font:inherit}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">Anthropic Just Revealed 12 New Rules for Prompting Opus 5.5</h1><div class=tag>@octopusinc_ · 2026-09-24 · DevOps</div></div></div></header>
+<main><p class=sum>This video provides 12 product-focused tips for optimizing prompt engineering with Anthropic&#x27;s Claude Opus 5.5, aiming to reduce costs and improve efficiency. Key recommendations include adjusting effort levels, leveraging new file support in Claude Code, and utilizing features like accumulated limit resets and time budgeting. The video emphasizes adapting prompting strategies to the updated model&#x27;s behavior to achieve better results.</p><p><strong>Products / items</strong></p><ul><li>Claude Opus 5.5 — software (no link)</li><li>Anthropic — other (no link)</li><li>Claude Code — software (no link)</li><li>Codex — software (no link)</li><li>PIL — software (no link)</li><li>OpenCV — software (no link)</li><li><a href="https://www.skool.com/robonuggets-free/classroom/750914f0?md=e0f658365d334d7b818855074b2c9847" target=_blank rel=noopener>Skool</a> — software</li><li><a href="https://blotato.com/?ref=robonuggets" target=_blank rel=noopener>Blotato</a> — software</li><li><a href="https://n8n.partnerlinks.io/o3jqtj032c02" target=_blank rel=noopener>n8n</a> — software</li><li><a href="https://www.make.com/en/register?pc=robonuggets" target=_blank rel=noopener>Make</a> — software</li><li><a href="https://try.elevenlabs.io/m5mn2jkv5rzk" target=_blank rel=noopener>ElevenLabs</a> — software</li><li><a href="https://www.apify.com?fpr=sffv1" target=_blank rel=noopener>Apify</a> — software</li><li><a href="https://www.getrubric.app/" target=_blank rel=noopener>RUBRIC</a> — software</li></ul>
+<p><a href="https://www.youtube.com/watch?v=vsGwx28z4jk" target=_blank rel=noopener>Watch on YouTube ▶</a></p><p><a href="vsGwx28z4jk.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=t>(proxy for this video — answer from this)</span></p>
+<div class=cap>FRAMING: Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+IDENTITY: the title - https://www.youtube.com/watch?v=vsGwx28z4jk - @octopusinc_ - route: visual
+PRODUCTS: list each product on its own line: name - canonical link (or &quot;no reliable link&quot;) - type - primary/mentioned
+Claude Opus 5.5 - no reliable link - software - primary
+Anthropic - no reliable link - other - mentioned
+Claude Code - no reliable link - software - mentioned
+Codex - no reliable link - software - mentioned
+PIL - no reliable link - software - mentioned
+OpenCV - no reliable link - software - mentioned
+Skool - https://www.skool.com/robonuggets-free/classroom/750914f0?md=e0f658365d334d7b818855074b2c9847 - software - mentioned
+Blotato - https://blotato.com/?ref=robonuggets - software - mentioned
+n8n - https://n8n.partnerlinks.io/o3jqtj032c02 - software - mentioned
+Make - https://www.make.com/en/register?pc=robonuggets - software - mentioned
+ElevenLabs - https://try.elevenlabs.io/m5mn2jkv5rzk - software - mentioned
+Apify - https://www.apify.com?fpr=sffv1 - software - mentioned
+RUBRIC - https://www.getrubric.app/ - software - mentioned
+SYNOPSIS: The video presents 12 tips for effective prompt engineering with Anthropic&#x27;s Claude Opus 5.5, based on official documentation. The first tip recommends starting with a &quot;medium&quot; effort level, which is the new default for Opus 5.5, balancing speed and quality. Users can test and customize this effort level for specific tasks. Claude Code now supports `agents.md` files, allowing for a single instruction file across multiple agents if `CLAUD.md` is absent. A PDF guide containing all tips and prompts is available via Skool. Opus 5.5 allows changing effort levels mid-conversation without clearing the cache, a feature noted as being in beta. Users can accumulate and reset usage limits, with a free reset provided upon 5.5 launch, expiring October 23. Opus 5.5 now blocks queries that force it to show its thought process, potentially to prevent model copying. To prevent Opus 5.5 from rephrasing earlier answers in long chats, users can add instructions to `Claude.md` or use a skill to mark previous answers as final. For long tasks, Opus 5.5 might stop prematurely; using a checklist prompt can ensure full completion. Users can set time limits for tasks, and adding &quot;time is of the essence&quot; can speed up task completion. When generating designs, Opus 5.5 has default aesthetic preferences (cream backgrounds, italics); providing a design system or style guide is recommended for unique results. For complex visual inputs like technical drawings, giving Opus access to cropping and scaling tools like PIL and OpenCV can improve accuracy and reduce token usage.
+BEATS:
+00:00 - intro | The video introduces Claude Opus 5.5 and the need for new prompting strategies.
+00:21 - ui | A screenshot of `platform.claude.com/docs` is shown, highlighting text about &quot;medium&quot; effort level for Claude Opus 5.5.
+00:42 - ui | A slider with &quot;low&quot;, &quot;medium&quot;, &quot;high&quot;, &quot;extra high&quot;, &quot;max&quot; effort levels is displayed.
+01:03 - ui | A text prompt is shown, instructing Opus to pick a real task and test effort levels.
+01:24 - ui | A tweet from Tariq about `AGENTS.md` support in Claude Code is displayed.
+01:45 - ui | A visual of an &quot;OPUS 5.5 Prompting Guide&quot; PDF is shown.
+02:06 - ui | A UI element showing &quot;Before Opus 5.5&quot; and &quot;Effort Extra high&quot; with a cache indicator is displayed.
+02:28 - ui | A Claude Code interface shows &quot;tokens read from cache&quot; and &quot;tokens written to cache&quot;.
+02:49 - ui | A &quot;Weekly limits&quot; section with a &quot;Reset for free&quot; button is shown.
+03:10 - ui | A screenshot of `platform.claude.com/docs` detailing biology and cybersecurity safeguards is shown.
+03:31 - ui | A comparison graphic shows &quot;Opus 5&quot; with &quot;reasoning&quot; available and &quot;Opus 5.5&quot; with &quot;reasoning&quot; &quot;not available&quot;.
+03:52 - ui | A `CLAUDE.md` file content is displayed, advising to treat answers as done.
+04:13 - ui | A progress bar with a pixelated alien shows &quot;60%&quot; and &quot;Stopped&quot; for Claude Opus 5.5.
+04:34 - ui | A checklist with completed and uncompleted items is shown, labeled &quot;3 of 5 done&quot;.
+04:56 - ui | A prompt &quot;Finish the task in three minutes.&quot; is shown with a timer counting down.
+05:17 - visual | The speaker is shown.
+05:38 - ui | A website design with &quot;Studio&quot; and &quot;Make something beautiful&quot; is displayed, illustrating default design looks.
+05:59 - visual | The speaker is shown.
+06:20 - ui | A screenshot of `platform.claude.com/docs` mentions PIL and OpenCV libraries for visual inputs.
+06:41 - outro | An animated logo appears.
+ENTITIES: Anthropic, Claude Opus 5.5, Claude Code, Codex, PIL, OpenCV, Tariq (on X/Twitter), Jay (the presenter).
+VERDICT: Claude Opus 5.5 is a powerful model, but users need to adapt their prompting strategies to its new behaviors and features to optimize cost and performance. The video recommends using the provided tips to make the model faster and cheaper to use.
+NOT COVERED: Specific pricing details for Claude Opus 5.5, detailed code examples for implementing the tips, or a direct comparison of performance metrics between Opus 5 and Opus 5.5 beyond general statements.</div></main><footer><a href="../index.html">← all videos</a></footer></div></body></html>
