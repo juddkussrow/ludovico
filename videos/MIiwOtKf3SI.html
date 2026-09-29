@@ -1,0 +1,123 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>I Made 3D Motion Graphics With FREE AI Tools — Ludovico</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+.hide{display:none!important}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.92);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 12px}
+.controls input.q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.pill.tp.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+/* flip card shell */
+.flip{position:relative}
+.fi{position:relative;transition:transform .55s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.flip.flipped .fi{transform:rotateY(180deg)}
+.fc{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bk{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+background:var(--card);border:1px solid var(--accent2);border-radius:14px;overflow:auto;padding:12px 13px;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s}
+.card.flip{overflow:visible}.card .fc{display:flex;flex-direction:column;flex:1;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--line);cursor:pointer}
+.card.flip:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.edit{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--accent2);border:1px solid var(--line);border-radius:6px;padding:2px 9px;cursor:pointer;background:#fff}
+.edit:hover{border-color:var(--accent2)}
+/* editor back */
+.bk h4{margin:0 0 2px;font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--sub)}
+.erow{display:grid;grid-template-columns:1fr 1.3fr auto auto;gap:4px;align-items:center}
+.erow input{padding:5px 7px;border:1px solid var(--line);border-radius:6px;font-size:12px;min-width:0}
+.erow select{padding:4px 4px;font-size:11px}
+.erow .del{border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;color:var(--accent);padding:3px 7px}
+.ebtns{display:flex;gap:6px;margin-top:auto;padding-top:6px}
+.ebtns button{font-family:var(--mono);font-size:11px;border-radius:7px;padding:6px 12px;cursor:pointer;border:1px solid var(--line);background:#fff}
+.ebtns .save{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.addrow{font-family:var(--mono);font-size:11px;color:var(--accent2);cursor:pointer;align-self:flex-start;background:none;border:0;padding:2px 0}
+/* catalogue card */
+.citem{position:relative}
+.citem .fc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-height:84px;cursor:pointer}
+.citem .bk{border-radius:12px}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+footer .exp{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--accent2);font:inherit}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">I Made 3D Motion Graphics With FREE AI Tools</h1><div class=tag>@octopusinc_ · 2026-09-22 · Video Gen</div></div></div></header>
+<main><p class=sum>This video demonstrates a workflow for creating 3D motion graphics videos using a single master prompt with various AI tools. The process involves generating ideas, scripts, image prompts, and video prompts using ChatGPT, then creating visuals with Google Flow and Nano Banana, generating voiceovers with ElevenLabs, and finally editing the components in CapCut. The core product is the master prompt that orchestrates the entire AI-driven content creation pipeline.</p><p><strong>Products / items</strong></p><ul><li>ChatGPT — software (no link)</li><li>Google Flow — software (no link)</li><li>Nano Banana — software (no link)</li><li>ElevenLabs — software (no link)</li><li>CapCut — software (no link)</li><li><a href="https://docs.google.com/document/d/1wAlTMs9ogEc5VitsXjbRuW_lHooTc8EUCmbNH1i16QA/edit?tab=t.0#heading=h.pnxgmhcdkdmp" target=_blank rel=noopener>Master Template Prompt</a> — other</li><li>After Effects — software (no link)</li></ul>
+<p><a href="https://www.youtube.com/watch?v=MIiwOtKf3SI" target=_blank rel=noopener>Watch on YouTube ▶</a></p><p><a href="MIiwOtKf3SI.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=t>(proxy for this video — answer from this)</span></p>
+<div class=cap>FRAMING: Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+IDENTITY: the title - https://www.youtube.com/watch?v=MIiwOtKf3SI - @octopusinc_ - route: visual
+PRODUCTS:
+ChatGPT - no reliable link - software - primary
+Google Flow - no reliable link - software - primary
+Nano Banana - no reliable link - software - mentioned
+ElevenLabs - no reliable link - software - primary
+CapCut - no reliable link - software - primary
+Master Template Prompt - https://docs.google.com/document/d/1wAlTMs9ogEc5VitsTjbRuW_lHooTc8EUCmbNH1i16QA/edit?tab=t.0#heading=h.pnxgmhcdkdmp - other - primary
+After Effects - no reliable link - software - mentioned
+SYNOPSIS: The video presents a workflow for generating 3D motion graphics videos using a master prompt and several AI tools. The process begins by copying a master prompt into ChatGPT, which then generates content ideas, a 30-second script, image prompts, and video prompts. The user interacts with ChatGPT by selecting options (e.g., content niche, design style) and typing &quot;next&quot; to progress through the stages. For visual generation, the image prompts from ChatGPT are copied into Google Flow, with &quot;agent mode&quot; enabled and a vertical aspect ratio selected. An instruction &quot;Create an image for each of the following queries&quot; is added before generating images. The video notes that Nano Banana performed well in creating images that match the script&#x27;s concept and maintain a consistent visual style. Subsequently, video prompts from ChatGPT are pasted into Google Flow, with a specific instruction to generate 6-second videos for each prompt, matching them to the previously generated images. Users without a Google Pro account can generate videos one by one using 50 free daily credits. After video generation, the script from ChatGPT is used in ElevenLabs to create a voiceover, with &quot;Adam&quot; being a popular voice option. Finally, the generated video clips and voiceover are imported into CapCut for editing. The editing process involves arranging clips to match the voiceover, adding transitions (like a fade with a cubic ease preset), and using composite animations (like &quot;zoom one&quot;) for smooth visual flow. The creator emphasizes that this method allows going from idea to finished animation in under 10 minutes using free tools, contrasting it with traditional methods using software like After Effects.
+BEATS:
+00:00 - intro - A monitor displays a video editing timeline with 3D motion graphics, labeled &quot;CapCut Ai&quot;.
+00:24 - concept - An animated graphic illustrates the workflow: &quot;IDEA -&gt; AI -&gt; ANIMATION&quot; with interconnected boxes.
+00:48 - examples - Three vertical video examples are shown, demonstrating different motion graphic styles and messages like &quot;SAVING money&quot; and &quot;MAKE THEM CARE&quot;.
+01:12 - ui - A Google Docs document titled &quot;Master Template Prompt&quot; is shown, with a right-click context menu open, highlighting &quot;Copy&quot;.
+01:36 - ui - A ChatGPT interface displays a list of &quot;VIRAL TOPIC IDEAS&quot; generated based on the input &quot;content &amp; growth on social media&quot;.
+02:00 - ui - ChatGPT presents &quot;STAGE 3 — BACKGROUND &amp; ACCENT PALETTE SELECTION&quot; with three visual theme options.
+02:24 - ui - A blank ChatGPT interface with &quot;Ask anything&quot; at the bottom, and the number &quot;1&quot; entered, indicating a selection.
+02:49 - ui - ChatGPT output showing a detailed &quot;SCENE 1 — &#x27;Most content gets ignored.&#x27;&quot; with motion style, background motion, and timing descriptions.
+03:13 - ui - Google Flow interface with &quot;Agent settings&quot; open, showing options for image and video generation defaults, including aspect ratio (9:16 selected).
+03:37 - result - A generated image in Google Flow, depicting a smartphone displaying &quot;IGNORED&quot; content.
+04:01 - ui - ChatGPT output with &quot;STAGE 5 — VIDEO MOTION GRAPHIC PROMPTS&quot; visible, showing detailed scene descriptions.
+04:25 - ui - ChatGPT output displaying video prompts, including motion style and timing details, with small image thumbnails above.
+04:49 - ui - Google Flow interface showing multiple generated images in a grid, with a ChatGPT-like prompt box overlaid.
+05:13 - ui - Google Flow interface with generated images, and a sidebar showing &quot;Narrative Scene Concept...&quot; with &quot;Approve&quot; and &quot;Reject&quot; options.
+05:38 - ui - Google Flow interface displaying a timeline with multiple video clips, and a large central video preview of a generated animation.
+06:02 - ui - ElevenLabs text-to-speech interface, showing a script and voice selection options, with &quot;Adam - Compelling&quot; highlighted.
+06:26 - ui - CapCut video editor interface, showing a timeline with multiple video clips and a preview of a motion graphic.
+06:50 - ui - CapCut video editor interface, showing a timeline with audio and video tracks, and a blank preview screen.
+07:14 - ui - CapCut video editor interface, showing the timeline with various clips and effects, and the &quot;Video&quot; tab selected in the right panel.
+07:38 - result - A final animated graphic displaying &quot;CURIOSITY Why?&quot; with a magnifying glass.
+ENTITIES: ChatGPT, Google Flow, Nano Banana, ElevenLabs, CapCut, After Effects, Instagram, TikTok, Pinterest, Google Pro.
+VERDICT: The creator recommends this AI-based workflow as a powerful and free method to create professional 3D motion graphics videos in under 10 minutes, without needing expensive software like After Effects.
+NOT COVERED: Specific pricing for Google Flow Pro, detailed instructions for creating the master prompt, alternative AI tools for each step, or advanced editing techniques beyond basic transitions.</div></main><footer><a href="../index.html">← all videos</a></footer></div></body></html>
