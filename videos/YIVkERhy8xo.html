@@ -1,0 +1,117 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>I Turned Coding Agents Into a Strategy Game — Ido Salomon, AgentCraft — Ludovico</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#15140f;--body:#44423a;--sub:#7a776c;--line:#e7e3d8;
+--accent:#c8541f;--accent2:#1f7a52;--mono:ui-monospace,Menlo,Consolas,monospace;
+--sw:#1f7a52;--sw-bg:rgba(31,122,82,.10);--hw:#c8541f;--hw-bg:rgba(200,84,31,.10);--ot:#7a776c;--ot-bg:rgba(122,119,108,.12)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);
+font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px 60px}
+.hide{display:none!important}
+header{position:sticky;top:0;z-index:5;background:rgba(250,249,245,.92);backdrop-filter:blur(10px);
+border-bottom:1px solid var(--line);margin:0 -20px 18px;padding:14px 20px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:40px;height:40px;border-radius:9px;image-rendering:pixelated;border:1px solid var(--line)}
+.brand h1{margin:0;font-size:21px;color:var(--ink);letter-spacing:-.01em}.brand .tag{color:var(--sub);font-size:13px}
+.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:6px 16px;font-size:13px;cursor:pointer}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 12px}
+.controls input.q{flex:1;min-width:200px;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 16px}
+.pill{border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:4px 12px;font-size:12px;cursor:pointer;font-family:var(--mono)}
+.pill.on{background:var(--sw-bg);border-color:var(--accent2);color:var(--accent2)}
+.pill.tp.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.count{color:var(--sub);font-size:12px;font-family:var(--mono);margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.catgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+/* flip card shell */
+.flip{position:relative}
+.fi{position:relative;transition:transform .55s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.flip.flipped .fi{transform:rotateY(180deg)}
+.fc{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.bk{position:absolute;inset:0;transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+background:var(--card);border:1px solid var(--accent2);border-radius:14px;overflow:auto;padding:12px 13px;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s}
+.card.flip{overflow:visible}.card .fc{display:flex;flex-direction:column;flex:1;border-radius:14px;overflow:hidden;background:var(--card);border:1px solid var(--line);cursor:pointer}
+.card.flip:hover{box-shadow:0 6px 24px rgba(0,0,0,.07)}
+.thumb{position:relative;aspect-ratio:16/9;background:#eee;overflow:hidden;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .ov{position:absolute;inset:auto 0 0 0;padding:26px 12px 10px;color:#fff;font-weight:600;font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.82))}
+.cbody{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.meta{font-family:var(--mono);font-size:11px;color:var(--sub)}.sum{font-size:13.5px;color:var(--body)}
+.items{display:flex;gap:5px;flex-wrap:wrap}
+.item{font-size:11.5px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;background:#fff}
+.item.hw{border-color:rgba(200,84,31,.4)}
+.tagrow{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-top:auto}
+.t{font-family:var(--mono);font-size:10.5px;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--sub)}
+.edit{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--accent2);border:1px solid var(--line);border-radius:6px;padding:2px 9px;cursor:pointer;background:#fff}
+.edit:hover{border-color:var(--accent2)}
+/* editor back */
+.bk h4{margin:0 0 2px;font-size:12px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--sub)}
+.erow{display:grid;grid-template-columns:1fr 1.3fr auto auto;gap:4px;align-items:center}
+.erow input{padding:5px 7px;border:1px solid var(--line);border-radius:6px;font-size:12px;min-width:0}
+.erow select{padding:4px 4px;font-size:11px}
+.erow .del{border:1px solid var(--line);background:#fff;border-radius:6px;cursor:pointer;color:var(--accent);padding:3px 7px}
+.ebtns{display:flex;gap:6px;margin-top:auto;padding-top:6px}
+.ebtns button{font-family:var(--mono);font-size:11px;border-radius:7px;padding:6px 12px;cursor:pointer;border:1px solid var(--line);background:#fff}
+.ebtns .save{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.addrow{font-family:var(--mono);font-size:11px;color:var(--accent2);cursor:pointer;align-self:flex-start;background:none;border:0;padding:2px 0}
+/* catalogue card */
+.citem{position:relative}
+.citem .fc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;display:flex;flex-direction:column;gap:9px;min-height:84px;cursor:pointer}
+.citem .bk{border-radius:12px}
+.cname{font-weight:600;color:var(--ink);font-size:14px;line-height:1.3}.cname a{color:var(--ink)}.cname .ext{color:var(--accent);font-size:11px;font-weight:400}
+.cname.nolink{color:var(--sub)}
+.cbadges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:auto}
+.bub{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;border-radius:999px;padding:3px 10px}
+.bub::before{content:"";width:7px;height:7px;border-radius:50%}
+.bub.software{background:var(--sw-bg);color:var(--sw)}.bub.software::before{background:var(--sw)}
+.bub.hardware{background:var(--hw-bg);color:var(--hw)}.bub.hardware::before{background:var(--hw)}
+.bub.other{background:var(--ot-bg);color:var(--ot)}.bub.other::before{background:var(--ot)}
+.seen{font-family:var(--mono);font-size:11px;color:var(--sub);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.pager{display:flex;justify-content:center;margin:26px 0}
+.more{border:1px solid var(--line);background:#fff;color:var(--body);border-radius:999px;padding:10px 22px;font-size:13px;cursor:pointer;font-family:var(--mono)}
+.more:hover{border-color:var(--accent2);color:var(--accent2)}
+.llm-handoff{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:normal;border:0}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);color:var(--sub);font-family:var(--mono);font-size:11.5px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+footer .exp{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--accent2);font:inherit}
+
+body{padding:0}.wrap{max-width:760px}.cap{white-space:pre-wrap;font:13px/1.5 var(--mono);background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;color:var(--body)}</style></head>
+<body><div class=wrap><header><div class=brand><a href="../index.html"><img src="../assets/ludovico.png" alt="Ludovico"></a>
+<div><h1 style="font-size:17px">I Turned Coding Agents Into a Strategy Game — Ido Salomon, AgentCraft</h1><div class=tag>@octopusinc_ · 2026-09-27 · DevOps, Favorites</div></div></div></header>
+<main><p class=sum>Ido Salomon introduces AgentCraft, an agent orchestrator designed like a real-time strategy game, to address the bottleneck of managing AI agents. It visualizes agents as units on a map representing the file system, enhancing visibility, autonomy through orchestrators and a review kit, and collaboration via shared &quot;war rooms.&quot; The video also previews &quot;Loopers,&quot; a simplified, mobile-game-style interface aimed at making agent management accessible to a broader audience.</p><p><strong>Products / items</strong></p><ul><li>AgentCraft — software (no link)</li><li><a href="https://mcp-ui.dev" target=_blank rel=noopener>MCP-UI</a> — software</li><li>MCP Apps — software (no link)</li><li>Warcraft — other (no link)</li><li>StarCraft — other (no link)</li><li>Sims — other (no link)</li><li>Civilization — other (no link)</li><li>Loopers — software (no link)</li><li>Telegram — software (no link)</li><li>GitHub — software (no link)</li><li>Twitter — software (no link)</li><li>NPX — software (no link)</li></ul>
+<p><a href="https://www.youtube.com/watch?v=YIVkERhy8xo" target=_blank rel=noopener>Watch on YouTube ▶</a></p><p><a href="YIVkERhy8xo.avt" target=_blank rel=noopener>Full transcript — AGENTIC-VT (.avt) ↗</a></p>
+<p><strong>AI context capsule</strong> <span class=t>(proxy for this video — answer from this)</span></p>
+<div class=cap>FRAMING: Pre-digested, AI-readable context standing in for one YouTube video. Answer only from this text; if a detail isn&#x27;t here, it isn&#x27;t covered by the video. Don&#x27;t invent links, specs, prices, commands, or timestamps.
+IDENTITY: I Turned Coding Agents Into a Strategy Game — Ido Salomon, AgentCraft - https://www.youtube.com/watch?v=YIVkERhy8xo - @octopusinc_ - route: visual
+PRODUCTS:
+AgentCraft - no reliable link - software - primary
+MCP-UI - https://mcp-ui.dev - software - mentioned
+MCP Apps - no reliable link - software - mentioned
+Loopers - no reliable link - software - mentioned
+SYNOPSIS: The video presents AgentCraft, an agent orchestrator that re-imagines agent management as a real-time strategy game. The creator, Ido Salomon, argues that humans are the bottleneck in scaling AI agent use due to the exhaustion of steering, directing, and reviewing them. AgentCraft addresses this by providing a game-like interface where agents are represented as units on a map, with the file system serving as the terrain. Key features include a sidebar for agent status and tasks, runes on the map representing files agents are working on, and heat maps to visualize activity. A &quot;spacebar&quot; function allows users to quickly jump to agents requiring attention. For autonomy, AgentCraft incorporates orchestrators and loops, enabling agents to perform tasks like scanning GitHub or Twitter and building features in the background. A &quot;review kit&quot; offers visual evidence (videos or photos) of changes made by agents, allowing for quick review and even parallel execution of multiple agent instances to pick the best outcome. Collaboration is facilitated through &quot;war rooms&quot; where multiple users and agents can work together in a shared workspace, complete with chat functionality for both humans and agents. This shared environment aims to reduce reliance on traditional version control like Git for collaborative agent work. The video also introduces &quot;Loopers,&quot; an early, experimental mode designed to lower the barrier to entry for non-technical users, presenting agent interactions in a simpler, mobile-game-like interface, focusing on project-level tasks rather than granular file details. AgentCraft is available for installation as a website on NPX.
+BEATS:
+00:44 - ui - A tweet about hiring 25 founding engineers is shown, with multiple monitors displaying code.
+02:13 - ui - A &quot;Loading...&quot; screen with a game-like progress bar is displayed, transitioning into the AgentCraft UI.
+02:58 - ui - The AgentCraft UI shows a game map with agent units and a chat-like input field for prompting agents.
+03:42 - ui - The AgentCraft UI displays &quot;MY AGENTS&quot; list with agent names, missions, status, and context usage, alongside the game map.
+04:27 - ui - The AgentCraft UI shows the game map with agents, file system paths, and a code editor window displaying a TypeScript file.
+05:11 - ui - A map with a highlighted castle labeled &quot;Visibility&quot; is shown, illustrating a concept.
+05:56 - ui - The AgentCraft UI displays a &quot;Quests&quot; interface with tasks like &quot;Environment &amp; API Payload Validation&quot; and &quot;Websocket Event Rate Limiting,&quot; with &quot;Accept Quest&quot; buttons.
+06:40 - ui - The AgentCraft UI shows a &quot;QUESTS&quot; panel with &quot;CAMPAIGN,&quot; &quot;TRACES,&quot; &quot;ANALYTICS,&quot; and &quot;MEMORY&quot; tabs, displaying a history of agent actions.
+07:25 - ui - A &quot;Review Kit&quot; UI is shown, with tabs for &quot;Workpad,&quot; &quot;Changes,&quot; &quot;Per Task,&quot; &quot;Evidence,&quot; and &quot;Activity,&quot; indicating a loading state for &quot;calculate delta.&quot;
+08:09 - ui - A map with highlighted castles labeled &quot;Autonomy&quot; and &quot;Visibility&quot; connected by a path is shown, illustrating progress.
+08:54 - ui - The AgentCraft UI displays a &quot;HALL&quot; panel for collaboration, showing connected users, a QR code, and a copy link option.
+09:38 - ui - The AgentCraft UI shows the game map with multiple agents, a mini-map, and a chat window, demonstrating collaborative work.
+10:23 - text - On-screen text reads &quot;We raised the ceiling.&quot;
+11:07 - ui - A series of user comments are displayed, praising AgentCraft and relating it to RTS games like StarCraft.
+11:52 - ui - The &quot;Loopers&quot; UI is shown, a simplified, mobile-game-style interface with projects and agent interactions on a map.
+12:36 - ui - The &quot;Loopers&quot; UI shows multiple projects (&quot;Heartfelt wedding vow draft,&quot; &quot;summarize my emails&quot;) with agent responses and actions.
+13:21 - text - On-screen text reads &quot;We&#x27;re the bottleneck But we don&#x27;t have to be.&quot;
+ENTITIES: Ido Salomon, MCPY, MCP-Apps, MCP Steering Committee, Saksham, Microsoft, Amazon AGI Lab, OpenAI, Google DeepMind, Red Hat, Fiddler, DigitalOcean, Modular, Zed, Vercel, Amazon, Microsoft, Braintrust, Minimax, Browserbase, Octopus, GitHub, Twitter, Telegram
+VERDICT: AgentCraft is a promising solution for managing AI agents, offering enhanced visibility, autonomy, and collaboration through a game-inspired interface. It successfully raises the ceiling for advanced users and has the potential to lower the floor for broader adoption with its simplified &quot;Loopers&quot; mode.
+NOT COVERED: The video does not cover the specific technical implementation details of AgentCraft, its pricing model, system requirements, or a detailed roadmap for future features beyond the mention of &quot;Loopers&quot; being experimental. It also doesn&#x27;t delve into the types of agents supported beyond &quot;cloud code or open cloud&quot; or specific integration methods with existing development workflows.</div></main><footer><a href="../index.html">← all videos</a></footer></div></body></html>
